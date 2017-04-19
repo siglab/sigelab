@@ -1,0 +1,37 @@
+{
+
+  "chats": {
+    "one": {
+      "title": "Historical Tech Pioneers",
+      "lastMessage": "ghopper: Relay malfunction found. Cause: moth.",
+      "timestamp": 1459361875666
+    },
+    "two": {  },
+    "three": {  }
+  },
+
+
+  "members": {
+    "one": {
+      "ghopper": true,
+      "alovelace": true,
+      "eclarke": true
+    },
+    "two": {  },
+    "three": {  }
+  },
+
+  "messages": {
+    "one": {
+      "m1": {
+        "name": "eclarke",
+        "message": "The relay seems to be malfunctioning.",
+        "timestamp": 1459361875337
+      },
+      "m2": {  },
+      "m3": {  }
+    },
+    "two": {  },
+    "three": {  }
+  }
+}

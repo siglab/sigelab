@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>Siglab</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="dist/css/myStyle.css">
+
+  <style type="text/css">
+
+
+
+  </style>
+
+   <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+   <script src="https://apis.google.com/js/platform.js" async defer></script>
+   <script>
+   // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAu-oPzG9QqUtzZD46IxwXBLfcPW2cXZNo",
+        authDomain: "siglab-2bdb6.firebaseapp.com",
+        databaseURL: "https://siglab-2bdb6.firebaseio.com",
+        storageBucket: "siglab-2bdb6.appspot.com",
+        messagingSenderId: "774972434470"
+      };
+      firebase.initializeApp(config);
+
+		var ref = firebase.database();
+		var provider = new firebase.auth.GoogleAuthProvider();
+	</script>
+
+    <script src="dist/js/firebaseui/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="dist/js/firebaseui/firebaseui.css">
+
+</head>
+
+<body>
+	<nav class="navbar" id="menuSuperior">
+		<div class="container-fluid" style="padding-right:0px">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="sr-only">Desplegar / Ocultar</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="http://www.univalle.edu.co/"><strong>Universidad del Valle</strong></a>
+			</div>
+
+			<!-- BARRA DE BUSQUEDA -->
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Buscar...">
+				</div>
+				<button type="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</form>
+
+			<!-- MENU SECUNDARIO SUPERIOR DERECHO -->
+			<div class="collapse navbar-collapse navbar-right" style="background-color:#808285; padding:0px;" id="myNavbar">
+				<ul class="nav navbar-nav" id="listaMenuSuperior">
+					<li><a class="btn-ttc menu-secundario-lateral-iz" href="http://www.univalle.edu.co/directorio-univalle">Directorio</a></li>
+					<li><a class="btn-ttc menu-secundario-lateral-iz" href="http://www.univalle.edu.co/index.php/correo-electronico-institucional">Correo</a></li>
+					<li><a class="btn-ttc menu-secundario-lateral-iz" href="http://biblioteca.univalle.edu.co/">Biblioteca</a></li>
+					<li><a class="btn-ttc menu-secundario-lateral-iz" href="http://atencionalciudadano.univalle.edu.co/">Atención al Ciudadano</a></li>
+					<li><a class="btn-ttc menu-secundario-lateral-iz" href="http://www.univalle.edu.co/index.php/mapa-del-sitio">Mapa del Sitio</a></li>
+					<li><a class="btn-ttc menu-secundario-lateral-iz" href="http://www.univalle.edu.co/english/index.html">Englis Version</a></li>
+				</ul>
+			</div>
+	  </div>
+	</nav>
+	<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<!-- LOGO DE UNIVALLE -->
+	<div class="jumbotron" style="background-color:white">
+	  <div class="container text-center">
+	  	<div class="row">
+	  		<div class="col-md-6 col-md-offset-3">
+	  			<br>
+			  	<a href="http://www.univalle.edu.co/">
+			  		<img class="responsive" src="images/logo.jpg">
+			  	</a>
+			  	<p class="subtitulos-seccion">Vicerectoría de Investigaciones</p>
+	  		</div>
+	  	</div>
+	  </div>
+	</div>
+	<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<!-- MENU PRINCIPAL -->
+	<nav class="navbar fondo-menu-principal">
+	  <div class="container">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#coleccion" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	    </div>
+	    <!-- MENU PRINCIPAL -->
+	    <div class="collapse navbar-collapse center-block" id="coleccion">
+	      <ul class="nav navbar-nav">
+	      	<!-- Inicio -->
+	        <li>
+	        	<a class="item-menu-principal btn-ttc" href="http://www.univalle.edu.co/">Inicio</a>
+	        </li>
+	        <!-- La Universidad -->
+	        <li class="dropdown">
+
+	          <a class="item-menu-principal btn-ttc" href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/mision/" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">La Universidad</a>
+
+	          <ul class="dropdown-menu">
+	            <li><a href="http://secretariageneral.univalle.edu.co/consejo-superior/index.html">Consejos superior y académico</a></li>
+	            <li><a href="http://secretariageneral.univalle.edu.co/consejo-academico/index.html">Consejos académico</a></li>
+
+	            <li><a  href="http://www.univalle.edu.co/la-universidad/rectoria">Rectoría <span class="glyphicon glyphicon-triangle-right"></span></a>
+
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://www.univalle.edu.co/la-universidad/rectoria">El Rector</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/rectoria/funciones-del-rector">Funciones del Rector</a></li>
+					    <li><a href="http://secretariageneral.univalle.edu.co/rectoria/resoluciones/index.html">Resoluciones de rectoría</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-rectoria/rectores-universidad-del-valle-1945-2014">Rectores de la Universidad del Valle</a></li>
+					    <li><a href="http://secretariageneral.univalle.edu.co/">Secretaria General</a></li>
+					    <li><a href="http://regionalizacion.univalle.edu.co/">Dirección de Regionalización</a></li>
+					    <li><a href="http://www.univalle.edu.co/control-interno">Oficina de Control Interno<span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://www.univalle.edu.co/control-interno/introduccion">Introducción</a></li>
+					    		<li><a href="">¿Qué es la Oficina de Control Interno?</a></li>
+					    		<li><a href="#">Comité de Coordinación</a></li>
+					    		<li><a href="#">Funcionarios</a></li>
+					    		<li><a href="#">Normas que nos rigen</a></li>
+					    		<li><a href="#">Informes de Control Interno</a></li>
+					    		<li><a href="#">Entes Regeuladores</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://planeacion.univalle.edu.co/">Oficina de Planeación y Desarrollo Institucional</a></li>
+					    <li><a href="http://oitel.univalle.edu.co/">Oficina de Informatica y Telecomunicaciones</a></li>
+					    <li><a href="http://juridica.univalle.edu.co/">Oficina Jurídica</a></li>
+					    <li><a href="http://www.univalle.edu.co/direccion-de-comunicaciones">Dirección de Comunicaciones</a></li>
+					</ul>
+	            </li>
+
+	            <li><a href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/himno-univalle">Nuestros Símbolos <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/himno-univalle">Himno</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/logosimbolo">LogoSímbolo</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/la-bandera">Bandera</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/manual-de-identidad-visual-corporativa">Manual de Identidad Visual Corporativa</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/normas-de-diseno-de-paginas-web">Normas de Diseño de Páginas Web</a></li>
+					</ul>
+				</li>
+	            <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/mision">Acerca de univalle <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/mision">Misión</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/vision">Visión</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/organigrama">Organigrama</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/nombre">Nombre</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/rectores">Rectores</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/administracion-central">Administración Central</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/ubicacion">Ubicación</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/convenios">Convenios</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/estados-financieros">Estados Financieros</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/potencial-investigativo">Potencial Investigativo</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/instituciones-relacionadas">Instituciones Relacionadas</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/entes-de-control">Entes de Control</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/video-institucional">Video Institucional</a></li>
+					</ul>
+	            </li>
+
+	            <li><a href="http://www.univalle.edu.co/la-universidad/dependencias/vicerrectorias">Dependencias <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://www.univalle.edu.co/la-universidad/dependencias/vicerrectorias">Vicerectorias <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/vicerrectorias/academica">Académica</a></li>
+					    		<li><a href="http://viceadministrativa.univalle.edu.co/">Administrativa</a></li>
+					    		<li><a href="http://vicebienestar.univalle.edu.co/">Bienestar Universitario</a></li>
+					    		<li><a href="http://viceinvestigaciones.univalle.edu.co/">Investigaciones</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/dependencias/2014-01-31-13-46-50">Facultades <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/2014-01-31-13-46-50/artes-integradas">Artes Integradas</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/2014-01-31-13-46-50/ciencias-naturales-y-exactas">Ciencias Naturales y Exactas</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/">Ciencias de la Administración</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/2014-01-31-13-46-50/salud">Salud</a></li>
+					    		<li><a href="http://socioeconomia.univalle.edu.co/">Ciencias Sociales y Económicas</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/2014-01-31-13-46-50/humanidades">Humanidades</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/2014-01-31-13-46-50/ingenieria">Ingeniería</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/dependencias/institutos">Institutos <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/institutos/educacion-y-pedagogia">Educación y Pedagogía</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/dependencias/institutos/instituto-psicologia">Psicología</a></li>
+				    		</ul>
+					    </li>
+
+					    <li><a href="http://www.univalle.edu.co/la-universidad/dependencias/escuelas">Escuelas <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://arquitectura.univalle.edu.co/">Arquitectura</a></li>
+					    		<li><a href="http://lenguaje.univalle.edu.co/">Ciencias Básicas</a></li>
+					    		<li><a href="http://comunicacionsocial.univalle.edu.co/">Comunicación Social</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/bacteriologia/">Bacteriología y Laboratorio Clínico</a></li>
+					    		<li><a href="http://lenguaje.univalle.edu.co/">Ciencias del Lenguaje</a></li>
+					    		<li><a href="http://uvsalud.univalle.edu.co//index.php?option=com_content&task=view&id=65&Itemid=26&categoria=Ofertas%20Acad%E9micas&seccion=Escuelas">Enfermeria</a></li>
+					    		<li><a href="http://escuelaestadistica.univalle.edu.co/">Estadística</a></li>
+					    		<li><a href="http://estudiosliterarios.univalle.edu.co/">Estudios Literarios</a></li>
+					    		<li><a href="http://eicg.univalle.edu.co/">Ingeniería Civil y Geomática</a></li>
+					    		<li><a href="http://ingealimentos.univalle.edu.co/">Ingeniería de Alimentos</a></li>
+					    		<li><a href="http://eimat.univalle.edu.co/">Ingeniería de Materiales</a></li>
+					    		<li><a href="http://eidenar.univalle.edu.co/">Ingeniería de Recursos Naturales y del Medio Ambiente</a></li>
+					    		<li><a href="http://eisc.correounivalle.edu.co/">Ingeniería de Sistemas y Computación</a></li>
+					    		<li><a href="http://eiee.univalle.edu.co/">Ingeniería Eléctrica y Electrónica</a></li>
+					    		<li><a href="http://industrial.univalle.edu.co/">Ingeniería Industrial</a></li>
+					    		<li><a href="http://eime.univalle.edu.co/">Ingeniería Mecanica</a></li>
+					    		<li><a href="http://ing-quimica.univalle.edu.co/">Ingeniería Química</a></li>
+					    		<li><a href="http://salud.univalle.edu.co//index.php?option=com_content&task=view&id=66&Itemid=26&categoria=Ofertas%20Acad%E9micas&seccion=Escuelas">Medicina</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/odontologia/">Odontología</a></li>
+					    		<li><a href="http://escuelademusica.univalle.edu.co/">Música</a></li>
+					    		<li><a href="http://uvsalud.univalle.edu.co//index.php?option=com_content&task=view&id=68&Itemid=26&categoria=Ofertas%20Acad%E9micas&seccion=Escuelas">Rehabilitación Humana</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/salud_publica/">Salud Pública</a></li>
+					    		<li><a href="http://trabajosocial.univalle.edu.co/">Trabajo Social y Desarrollo Humano</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/dependencias/departamentos">Departamentos <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://escenicas.univalle.edu.co/">Artes Escénicas</a></li>
+					    		<li><a href="http://artesvisualesyestetica.univalle.edu.co/">Artes Visuales y Estética</a></li>
+					    		<li><a href="http://biologia.univalle.edu.co/">Biología</a></li>
+					    		<li><a href="http://socioeconomia.univalle.edu.co/la-facultad/departamentos/ciencias-sociales">Ciencias Sociales</a></li>
+					    		<li><a href="http://diseno.univalle.edu.co/">Diseño</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/">Dirección y Gestión Administrativa</a></li>
+					    		<li><a href="http://socioeconomia.univalle.edu.co/la-facultad/departamentos/economia">Economía</a></li>
+					    		<li><a href="http://paginasweb.univalle.edu.co/~filosofia/">Filosofía</a></li>
+					    		<li><a href="http://fisica.univalle.edu.co/">Física</a></li>
+					    		<li><a href="http://geografia.univalle.edu.co/">Geografía</a></li>
+					    		<li><a href="http://historia.univalle.edu.co/">Historia</a></li>
+					    		<li><a href="http://matematicas.univalle.edu.co/">Matemáticas</a></li>
+					    		<li><a href="http://medinterna.univalle.edu.co/">Medicina Interna</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/">Procesos, Información, Contabilidad y Finanzas</a></li>
+					    		<li><a href="http://quimica.univalle.edu.co/">Química</a></li>
+				    		</ul>
+					    </li>
+					</ul>
+	            </li>
+	            <li><a href="http://www.univalle.edu.co/la-universidad/2014-01-30-23-53-03">Museos y Colecciones <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://museoarqueologico.univalle.edu.co/museo.html">Museo Arqueológico</a></li>
+					    <li><a href="http://biologia.univalle.edu.co/docs/coleccion/coleccionEntomologia.pdf">Insectario: Colección de Entología</a></li>
+					    <li><a href="http://biologia.univalle.edu.co/docs/coleccion/herbarioCUVC.pdf">Herbario CUVC</a></li>
+					    <li><a href="http://biologia.univalle.edu.co/docs/coleccion/coleccionMamiferos.pdf">Colección de Mamíferos</a></li>
+					    <li><a href="http://biologia.univalle.edu.co/docs/coleccion/coleccionBiologiaMarina.pdf">Colección de Biología Marina</a></li>
+					    <li><a href="http://biologia.univalle.edu.co/docs/coleccion/coleccionOrnitologia.pdf">Colección Ornitológica</a></li>
+					</ul>
+	            </li>
+	            <li><a href="https://www.facebook.com/pg/universidaddelvalle/photos/?tab=photos_albums">Fotos de la universidad</a></li>
+	            <li><a href="http://www.univalle.edu.co/mapas/index.html">Mapa del Campus</a></li>
+	            <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad">Tour por la universidad <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-20-33">Administración Central</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-14-59-10">Entrada Peatonal</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/biblioteca-fotos2">Biblioteca</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-00-12">Restaurante Universitario</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/edificio-del-cree">Edificio del CREE</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-22-45">Entorno Natural <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-22-45/2014-01-31-15-36-51">El Lago</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-22-45/2014-01-31-15-37-35">Para Estudiar</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/facultad-de-ciencias">Facultad de Ciencias</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-20-09">Plazoleta de Ingenierías</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/sede-san-fernando">Sede San Fernando</a></li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/torre-ingenierias">Torre de Ingenierías</a></li>
+					    <li><a href="http://www.univalle.edu.co/#">Vida U <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://www.univalle.edu.co/tour/sld09.html">Cuenteros</a></li>
+					    		<li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/2014-01-31-15-21-14/descanso">Descanso</a></li>
+					    		<li><a href="http://www.univalle.edu.co/tour/sld019.html">Entretenimiento</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad/vide-clip">Video Clip</a></li>
+					    <li><a href="http://www.univalle.edu.co/mapas/mapoteca/mapa-ciudad-universitaria-melendez.pdf">Vista Área Campus Melendez</a></li>
+					</ul>
+	            </li>
+	            <li><a href="http://secretariageneral.univalle.edu.co/">Normatividad</a></li>
+	            <li><a href="http://www.univalle.edu.co/la-universidad/horarios-de-atencion">Horarios de Atención</a></li>
+	            <li><a href="http://portaldeninos.univalle.edu.co/">Portal de Niños</a></li>
+
+	          </ul>
+	        </li>
+	        <!-- Formación -->
+	        <li class="dropdown">
+	          <a class="item-menu-principal btn-ttc" href="http://www.univalle.edu.co/formacion/pregrado" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Estudia en Univalle</a>
+	          <ul class="dropdown-menu">
+	            <li><a href="http://www.univalle.edu.co/formacion/pregrado">Pregrado</a></li>
+	            <li><a href="http://www.univalle.edu.co/formacion/postgrado">Postgrado <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://fai.univalle.edu.co/">Artes Integradas <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://arquitectura.univalle.edu.co/index.php/especializacion-de-administracion-de-empresas-de-la-construccion/pensum-especializacion-en-administracion-de-empresas-de-la-construccion/">Especialización en Administración de Empresas de la Construcción</a></li>
+					    		<li><a href="http://www.univalle.edu.co/#">Especialización en Docencia Musical</a></li>
+					    		<li><a href="http://paisajismo.univalle.edu.co/">Especialización en Paisajismo</a></li>
+					    		<li><a href="http://arquitectura.univalle.edu.co/index.php/mau/">Maestría en Arquitectura y Urbanismo</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://ciencias.univalle.edu.co/">Ciencias Naturales <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://biologia.univalle.edu.co/index.php/doctorado-ciencias-ambiental">Doctorado en Ciencias Ambientales</a></li>
+					    		<li><a href="http://biologia.univalle.edu.co/index.php/presentacion-doctorado/52-doctorado-en-ciencias-biologia">Doctorado en Ciencias - Biología</a></li>
+					    		<li><a href="http://biologia.univalle.edu.co/index.php/presentacion-posgrado/40-doctorado-en-ciencias-del-mar">Doctorado en Ciencias del Mar</a></li>
+					    		<li><a href="http://fisica.univalle.edu.co/index.php/presentacion-doctorado">Doctorado en Ciencias Física</a></li>
+					    		<li><a href="http://matematicas.univalle.edu.co/posgrado/">Doctorado en Ciencias Matemáticas</a></li>
+					    		<li><a href="http://quimica.univalle.edu.co/index.php/presentacion-doctorado">Doctorado en Ciencias - Química</a></li>
+					    		<li><a href="http://www.univalle.edu.co/#">Especialización Tecnología Química</a></li>
+					    		<li><a href="http://www.univalle.edu.co/#">Especialización en Etnobiología</a></li>
+					    		<li><a href="http://biologia.univalle.edu.co/index.php/presentacion-maestria">Maestría en Ciencias - Biología</a></li>
+					    		<li><a href="http://fisica.univalle.edu.co/index.php/presentacion-maestria">Maestría en Ciencias - Física</a></li>
+					    		<li><a href="http://matematicas.univalle.edu.co/posgrado/">Maestría en Ciencias - Matemáticas</a></li>
+					    		<li><a href="http://quimica.univalle.edu.co/index.php/presentacion-maestria">Magíster en Ciencias - Química</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://administracion.univalle.edu.co/?id=402">Ciencia de la Administración <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://administracion.univalle.edu.co/doctorado">Doctorado en Administración</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/maestria-administracion">Maestría en Administración</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/maestrias/maestria-en-comercio-internacional">Maestría en Comercio Internacional</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/maestrias/maestria-en-contabilidad-modalidad-investigacion">Maestría en Contabilidad (Modalidad Investigación)</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/maestrias/maestria-en-contabilidad-modalidad-profundizacion">Maestría en Contabilidad (Modalidad Profundización)</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/maestrias/maestria-en-ciencias-de-la-organizacion">Maestría en Ciencias de la Organización</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/maestrias/maestria-en-politicas-publicas">Maestría en Políticas Públicas</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/especializaciones/especializacion-en-administracion-publica">Especialización en Administración Pública</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/especializaciones/especializacion-en-administracion-de-la-calidad-total-y-la-productividad-tulua">Especialización en Administración de la Calidad Total y la Productividad (Tuluá)</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/especializaciones/especializacion-en-finanzas">Especialización en Finanzas</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/especializaciones/especializacion-en-gerencia-de-marketing-estrategico">Especialización en Márketing Estratégico</a></li>
+					    		<li><a href="http://administracion.univalle.edu.co/especializaciones/especializacion-en-gestion-de-la-calidad-total-y-la-productividad-cali">Especialización en Gestión de la Calidad Total y la Productividad (Cali)</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://salud.univalle.edu.co/">Salud <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/bacteriologia/index.php?m=programa&accion=informacion_postgrado&autoredirect=no">Bacteriología y Laboratorio Clínico</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/ciencias_basicas/index.php?m=programa&accion=informacion_postgrado&autoredirect=no">Ciencias Básicas</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/enfermeria/index.php?m=programa&accion=informacion_postgrado&autoredirect=no">Enfermería</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/medicina/index.php?m=programa&accion=informacion_postgrado&autoredirect=no">Medicina</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/odontologia/index.php?m=programa&accion=informacion_postgrado&autoredirect=no">Odontología</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/rehabilitacion/index.php?m=programa&accion=informacion_postgrado&autoredirect=no">Rehabilitación Humana</a></li>
+					    		<li><a href="http://salud.univalle.edu.co/escuelas/salud_publica/index.php?m=programa">Salud Pública</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://socioeconomia.univalle.edu.co/">Ciencias Sociales y Económicas <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://socioeconomia.univalle.edu.co/especializacion-en-procesos-de-intervencion-social">Especialización en Procesos de Intervención Social</a></li>
+					    		<li><a href="http://socioeconomia.univalle.edu.co/maestria-economia-aplicada">Maestría en Economía Aplicada</a></li>
+					    		<li><a href="http://socioeconomia.univalle.edu.co/maestria-en-sociologia">Maestría en Sociología</a></li>
+					    		<li><a href="http://socioeconomia.univalle.edu.co/doctorado-en-sociologia">Doctorado en Sociología</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Humanidades <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://doctoradohumanidades.univalle.edu.co/">Doctorado en Humanidades</a></li>
+					    		<li><a href="http://paginasweb.univalle.edu.co/~filosofia/">Filosofía</a></li>
+					    		<li><a href="http://www.univalle.edu.co/~dgeograf/">Geografía</a></li>
+					    		<li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Especialización en Educación Bilingüe</a></li>
+					    		<li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Especialización en Enseñanza de la Lectura y la Escritura</a></li>
+					    		<li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Especialización en Intervención con Familias</a></li>
+					    		<li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Especialización en Traducción</a></li>
+					    		<li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Especialización en Teoría, Métodos y Técnicas de Investigación Social</a></li>
+					    		<li><a href="http://lenguaje.univalle.edu.co/index.php/programas-academicos/posgrado/maestria-estudios-interlinguisticos-interculturales-ecl">Maestría en Estudios Interlinguísticos e Interculturales</a></li>
+					    		<li><a href="http://historia.univalle.edu.co/MaestriaModalidades.html">Maestría en Historia</a></li>
+					    		<li><a href="http://www.univalle.edu.co/programas/postgrado/humanidades.html">Maestría en Linguistica y Español</a></li>
+					    		<li><a href="http://estudiosliterarios.univalle.edu.co/maestria-literaturas-colombiana-latinoamericana">Maestría en Literaturas Colombiana y Latinoamericana</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://ingenieria.univalle.edu.co/programaposgrados.php">Ingeniería <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://escuelaestadistica.univalle.edu.co/pregrado-en-estadistica">Estadística</a></li>
+					    		<li><a href="http://ingealimentos.univalle.edu.co/index.php">Ingeniería Alimentos</a></li>
+					    		<li><a href="http://eicg.univalle.edu.co/index.html">Ingeniería Civil</a></li>
+					    		<li><a href="http://ingenieria.univalle.edu.co/postgrados.html">Ingeniería de Materiales</a></li>
+					    		<li><a href="https://sites.google.com/a/correounivalle.edu.co/univalle_eisc/home">Ingeniería de Sistemas</a></li>
+					    		<li><a href="http://ppiee.univalle.edu.co/">Ingeniería Electrónica</a></li>
+					    		<li><a href="http://ingenieria.univalle.edu.co/postgrados.html">Ingeniería Química</a></li>
+					    		<li><a href="http://pisa.univalle.edu.co/programasacademicos.htm">Ingeniería Sanitaria y Ambiental</a></li>
+					    		<li><a href="http://industrial.univalle.edu.co/index.php/programas-academicos/programas-postgrado">Ingeniería Industrial</a></li>
+					    		<li><a href="http://eime.univalle.edu.co/index.html">Ingeniería Mecánica</a></li>
+					    		<li><a href="http://ppiee.univalle.edu.co/">Ingeniería Eléctrica</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://iep.univalle.edu.co/index.php/posgrado">Educación y Pedagogía <span class="glyphicon glyphicon-triangle-right"></a>
+					    	<ul class="dropdown-menu sub-sub-menu">
+					    		<li><a href="http://iep.univalle.edu.co/index.php/doctorado-en-educacion">Doctorado en Educación</a></li>
+					    		<li><a href="http://iep.univalle.edu.co/index.php/maestria-en-educacion">Maestría en Educación</a></li>
+				    		</ul>
+					    </li>
+					    <li><a href="http://www.univalle.edu.co/formacion/postgrado/postgrado-psicologia">Psicología</a></li>
+					</ul>
+	            </li>
+	            <li><a href="http://www.univalle.edu.co/formacion/diplomados">Diplomados</a></li>
+	            <li><a href="http://www.univalle.edu.co/formacion/cursos-y-talleres">Cursos y talleres</a></li>
+	          </ul>
+	        </li>
+	        <!-- Sedes regionales -->
+	        <li class="dropdown">
+	          <a class="item-menu-principal btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Sedes regionales</a>
+	          <ul class="dropdown-menu">
+	            <li><a href="http://tulua.univalle.edu.co">Tuluá</a></li>
+	            <li><a href="http://190.6.162.84/docs_uvbuga/buga.univalle.edu.co/index.php">Buga</a></li>
+	            <li><a href="http://www.univallecaicedonia.edu.co/web/index.html">Caicedonia</a></li>
+	            <li><a href="http://cartago.univalle.edu.co/">Cartago</a></li>
+	            <li><a href="http://nortedelcauca.univalle.edu.co/">Norte del Cauca</a></li>
+	            <li><a href="http://pacifico.univalle.edu.co/">Pacífico</a></li>
+	            <li><a href="http://palmira.univalle.edu.co/">Palmira</a></li>
+	            <li><a href="http://yumbo.univalle.edu.co/">Yumbo</a></li>
+	            <li><a href="http://zarzal.univalle.edu.co/WebNueva/index.html">Zarzal</a></li>
+	            <li><a href="http://www.univalle.edu.co/direccion-de-regionalizacion">Regionalización</a></li>
+	          </ul>
+	        </li>
+	        <!-- Investigación -->
+	        <li class="dropdown">
+	          <a class="item-menu-principal btn-ttc" href="#" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Investigación</a>
+	          <ul class="dropdown-menu">
+	            <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/acerca-de-la-vicerrectoria-de-investigacion">Acerca de la Vicerrectoría de investigaciones</a></li>
+	            <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/institutos-centros-y-grupos">Institutos, Centros y Grupos</a></li>
+	            <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/convocatorias">Convocatorias</a></li>
+	            <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/universidad-empresa-otri">Universidad - Empresa (OTRI)</a></li>
+	            <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/becas">Posgrados y Becas <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://www.univalle.edu.co/formacion/postgrado">Oferta de posgrados</a></li>
+					    <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/becas">Becas</a></li>
+					</ul>
+	            </li>
+	            <li><a href="http://viceinvestigaciones.univalle.edu.co/index.php/gestion-de-la-investigacion-y-formacion">Gestión de la investigación y formación</a></li>
+	            <li><a href="http://dri.univalle.edu.co/">Direccion de Relaciones Internacionales</a></li>
+	            <li><a href="http://programaeditorial.univalle.edu.co/">Programa editorial</a></li>
+	          </ul>
+	        </li>
+	        <!-- Internacionalización -->
+	        <li class="dropdown">
+	          <a class="item-menu-principal btn-ttc" href="http://dri.univalle.edu.co/" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Internacionalización</a>
+	          <ul class="dropdown-menu">
+	            <li><a href="http://dri.univalle.edu.co/index.php/convocatorias">Convocatorias</a></li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-univalle">Estudia en Univalle <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior#intercambio">Semestre de Intercambio</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-univalle#pasantia">Pasantía</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-univalle#lectores">Asistentes / lectores de idiomas</a></li>
+					    <li><a href="http://ele.univalle.edu.co/">Cursos de español</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-univalle/preguntas-frecuentes-univalle">Preguntas frecuentes</a></li>
+					</ul>
+	            </li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior">Estudia en el exterior <span class="glyphicon glyphicon-triangle-right"></a>
+					<ul class="dropdown-menu sub-menu">
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior#intercambio">Semestre de Intercambio</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior#pasantia">Pasantía - Práctica</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior#investigacion">Estancia de investigación</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior/doble-titulacion">Doble titulación</a></li>
+					    <li><a href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior/preguntas-frecuentes-extranjero">Preguntas frecuentes</a></li>
+					</ul>
+	            </li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/conveniosinternacionales">Convenios internacionales</a></li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/investiga-en-univalle">Investiga en Univalle</a></li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/solicitudes-tramites">Solicitudes / Trámites</a></li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/about-univalle">About Univalle</a></li>
+	            <li><a href="http://dri.univalle.edu.co/index.php/contactos">Contactos</a></li>
+	          </ul>
+	        </li>
+	        <!-- Servicios Tecnológicos -->
+	        <li class="dropdown">
+	          <a class="item-menu-principal btn-ttc" href="http://programaeditorial.univalle.edu.co/" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Publicaciones</a>
+	        </li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+	 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+ 	<section class="main fondo-main">
+		<div class="container bg-3 text-center" style="background-color:white">
+		  	<div class="row">
+		  		<div class="col-md-4 col-md-offset-4 text-center">
+		  			<div>
+		  				<img class="img-responsive"src="images/logosigelab.png" style="width:100%; height:100%;">
+		  			</div>
+				  	<br>
+				  	<hr class="barraHorizontal">
+				  	<p class="subtitulos-seccion">Sistema Integrado De Gestión Estratégica De Laboratorios De La Universidad Del Valle</p>
+				  	<hr class="barraHorizontal">
+				  	<a href="pages/map.html" class="btn btn-default links">Consultar Servicios</a>
+				  	<a id='btn-interno' class="btn btn-default links">Gestionar Laboratorio</a>
+		  		</div>
+		  	</div>
+		  <br>
+		</div>
+ 	</section>
+
+	<footer class="container-fluid text-center">
+		<!-- FOOTER 1 -->
+		<div class="row footer1">
+	        <div class="row" style="color:white;">
+            <div class="col-md-2 col-md-offset-1">
+              <div class="footer-logo">
+                <img class="responsive" style="width:70%; height:70%;" src="images/logo-footer.png">
+              </div>
+            </div>
+            <div class="col-md-3">
+                <h2 style="color:white; font-size:16px; text-align:left;"><strong>Información Contacto</strong></h2>
+                <ul style="list-style:none; text-align:left; padding:0px">
+                  <li>Vicerrectoria de investigaciones</li>
+                  <li>laboratorios.sig@correounivalle.edu.co</li>
+                  <li>Ciudad Universitaria Melendez</li>
+                  <li>Teléfono +57 2 3212100 </li>
+                  <li>Universidad del Valle</li>
+                  <li>Cali - Colombia</li>
+
+                </ul>
+            </div>
+
+	            <!-- /.col-md-4 -->
+	            <div class="col-md-3">
+	                <h2 style="color:white; font-size:16px; text-align:left;"><strong>Dirección</strong></h2>
+	                <ul style="list-style:none; text-align:left; padding:0px">
+	                	<li>Calle 13 # 100-00</li>
+	                	<li>Sede San Fernando</li>
+	                	<li>Calle 4B N° 36-00</li>
+	                </ul>
+                  <h2 style="color:white; font-size:16px; text-align:left;"><strong>PBX</strong></h2>
+	                <ul style="list-style:none; text-align:left; padding:0px">
+	                	<li>+57 2 3212100</li>
+	                	<li>A.A.25360</li>
+	                </ul>
+	            </div>
+
+	            <div class="col-md-2">
+	                <h2 style="color:white; font-size:16px; text-align:left;"><strong>Redes Sociales</strong></h2>
+	                <div class="row">
+	                	<div class="col-md-4">
+	                		<a href="https://www.facebook.com/universidaddelvalle"><img src="images/facebook.png"></a>
+	                	</div>
+	                	<div class="col-md-4">
+	                		<a href="https://www.youtube.com/user/universidaddelvalle1"><img src="images/youtube.png"></a>
+	                	</div>
+	                	<div class="col-md-4">
+	                		<a href="https://twitter.com/univallecol"><img src="images/twitter.png"></a>
+	                	</div>
+	                </div>
+	            </div>
+	        </div>
+		</div>
+
+		<!-- FOOTER 2 -->
+		<div class="row footer2">
+	        <div class="row" style="color:white; font-size:12px;">
+	        	<div class="col-md-6">
+		            <div class="col-md-4">
+		            	<div style=""></div>
+		                <h2 style="color:white; color:#FBB040; font-size:15px; text-align:left;">La Universidad</h2>
+		                <ul style="list-style:none; text-align:left; padding:0px">
+		                	<li><a class="btn-ttc" href="http://secretariageneral.univalle.edu.co/consejo-superior/">Consejo Superior</a></li>
+		                	<li><a class="btn-ttc" href="http://secretariageneral.univalle.edu.co/consejo-academico/">Consejo Académico</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/rectoria">Rectoría</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/nuestros-simbolos/himno-univalle">Nuestros Símbolos</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/acerca-de-univalle/mision">Acerca de Univalle</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/dependencias/vicerrectorias">Dependencias</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/2014-01-30-23-53-03">Museos y Colecciones</a></li>
+		                	<li><a class="btn-ttc" href="https://www.facebook.com/pg/universidaddelvalle/photos/?tab=photos_albums">Fotos de la Universidad</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/mapas/index.html">Mapa del Campus</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/tour-por-la-universidad">Tour por la Universidad</a></li>
+		                	<li><a class="btn-ttc" href="http://secretariageneral.univalle.edu.co/">Normatividad</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/la-universidad/horarios-de-atencion">Horarios de Atención</a></li>
+		                </ul>
+		            </div>
+		            <!-- /.col-md-4 -->
+		            <div class="col-md-4">
+		                <h2 style="color:white; color:#FBB040; font-size:15px; text-align:left;">Estudia en Univalle</h2>
+		                <ul style="list-style:none; text-align:left; padding:0px">
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/formacion/pregrado">Pregrado</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/formacion/postgrado">Postgrado</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/formacion/diplomados">Diplomados</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/formacion/cursos-y-talleres">Cursos y Talleres</a></li>
+		                </ul>
+		            </div>
+		            <!-- /.col-md-4 -->
+		            <div class="col-md-4">
+		                <h2 style="color:white; color:#FBB040; font-size:15px; text-align:left;">Sedes Regionales</h2>
+		                <ul style="list-style:none; text-align:left; padding:0px">
+				            <li><a class="btn-ttc" href="http://tulua.univalle.edu.co">Tuluá</a></li>
+				            <li><a class="btn-ttc" href="http://190.6.162.84/docs_uvbuga/buga.univalle.edu.co/index.php">Buga</a></li>
+				            <li><a class="btn-ttc" href="http://www.univallecaicedonia.edu.co/web/index.html">Caicedonia</a></li>
+				            <li><a class="btn-ttc" href="http://cartago.univalle.edu.co/">Cartago</a></li>
+				            <li><a class="btn-ttc" href="http://nortedelcauca.univalle.edu.co/">Norte del Cauca</a></li>
+				            <li><a class="btn-ttc" href="http://pacifico.univalle.edu.co/">Pacifico</a></li>
+				            <li><a class="btn-ttc" href="http://palmira.univalle.edu.co/">Palmira</a></li>
+				            <li><a class="btn-ttc" href="http://yumbo.univalle.edu.co/">Yumbo</a></li>
+				            <li><a class="btn-ttc" href="http://zarzal.univalle.edu.co/WebNueva/index.html">Zarzal</a></li>
+				            <li><a class="btn-ttc" href="http://www.univalle.edu.co/direccion-de-regionalizacion">Regionalización</a></li>
+		                </ul>
+		            </div>
+	        	</div>
+
+	        	<div class="col-md-6">
+		            <div class="col-md-5">
+		                <h2 style="color:white; color:#FBB040; font-size:15px; text-align:left;">Investigación</h2>
+		                <ul style="list-style:none; text-align:left; padding:0px">
+		                	<li><a class="btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/index.php/acerca-de-la-vicerrectoria-de-investigacion">Acerca de la Vicerrectoría de Investigaciones</a></li>
+		                	<li><a class="btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/index.php/institutos-centros-y-grupos">Institutos, Centros y Grupos</a></li>
+		                	<li><a class="btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/index.php/convocatorias">Convocatorias</a></li>
+		                	<li><a class="btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/index.php/universidad-empresa-otri">Universidad - Empresa (OTRI)</a></li>
+		                	<li><a class="btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/index.php/becas">Becas</a></li>
+		                	<li><a class="btn-ttc" href="http://viceinvestigaciones.univalle.edu.co/index.php/gestion-de-la-investigacion-y-formacion">Gestión de la Investigación y Formación</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/">Dirección de Relaciones Internacionales</a></li>
+		                	<li><a class="btn-ttc" href="http://programaeditorial.univalle.edu.co/">Programa Editorial</a></li>
+		                </ul>
+		            </div>
+
+		            <div class="col-md-4">
+		                <h2 style="color:white; color:#FBB040; font-size:15px; text-align:left;">Internacionalización</h2>
+		                <ul style="list-style:none; text-align:left; padding:0px">
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/convocatorias">Convocatorias</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/estudia-en-univalle">Estudia en Univalle</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/estudia-en-el-exterior">Estudia en el Exterior</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/conveniosinternacionales">Convenios Internacionales</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/investiga-en-univalle">Investiga en Univalle</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/solicitudes-tramites">Solicitudes / Trámites</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/about-univalle">About Univalle</a></li>
+		                	<li><a class="btn-ttc" href="http://dri.univalle.edu.co/index.php/contactos">Contactos</a></li>
+		                </ul>
+		            </div>
+
+		            <div class="col-md-3">
+		                <h2 style="color:white; color:#FBB040; font-size:15px; text-align:left;">Publicaciones</h2>
+		                <ul style="list-style:none; text-align:left; padding:0px">
+		                	<li><a class="btn-ttc" href="http://programaeditorial.univalle.edu.co/">Libros</a></li>
+		                	<li><a class="btn-ttc" href="http://programaeditorial.univalle.edu.co/revistas-univalle">Revistas y boletines</a></li>
+		                	<li><a class="btn-ttc" href="http://mafalda.univalle.edu.co/publicaciones/otraspublicaciones.html">Otras publicaciones</a></li>
+		                	<li><a class="btn-ttc" href="http://www.univalle.edu.co/2014-03-31-13-55-29/periodico-campus">Periódico Campus</a></li>
+		                </ul>
+		            </div>
+	        	</div>
+	        </div>
+		</div>
+
+		<!-- FOOTER 3 -->
+		<div class="row footer3">
+			<div class="col-md-12" style="text-align:center; color:white;">
+				<p>Copyright 2015 <span><a style="color:#FBB040;" href="http://www.univalle.edu.co/">Universidad del Valle</a> - <a style="color:#FBB040;"href="http://www.univalle.edu.co/index.php/la-universidad/horarios-de-atencion">Horarios de atención</a></span> / Última Actualización: 16-03-2017</p>
+			</div>
+		</div>
+
+	</footer>
+
+	  <script src="dist/js/jquery/jquery.js"></script>
+	  <script src="bootstrap/js/bootstrap.min.js"></script>
+	  <script>
+		$(document).ready(function () {
+
+		      $('#btn-interno').click(function(){
+		        firebase.auth().signInWithPopup(provider).then(function(result) {
+		        // This gives you a Google Access Token. You can use it to access the Google API.
+		        var token = result.credential.accessToken;
+		        // The signed-in user info.
+		        var user = result.user;
+
+
+		        // ...
+		        }).catch(function(error) {
+		        // Handle Errors here.
+		        var errorCode = error.code;
+		        var errorMessage = error.message;
+		        // The email of the user's account used.
+		        var email = error.email;
+		        // The firebase.auth.AuthCredential type that was used.
+		        var credential = error.credential;
+		        // ...
+		        });
+		      });
+		      firebase.auth().onAuthStateChanged(function(user) {
+
+		        if (user) {
+		          console.log("user",user);
+		          // User is signed in.
+		          var refmail = ref.ref("/informacion_laboratorios/");
+
+		          refmail
+		          .orderByChild('email_univalle')
+		            .equalTo(user.email)
+		            .once('value')
+		            .then(function(emailsnashot){
+		                var refUser = ref.ref("/usuarios/"+user.uid);
+
+		                refUser.once('value')
+		                  .then(function(dataSnapshot) {
+		                    if (dataSnapshot.val()!== null && emailsnashot.val() !== null) {
+		                        window.location=dataSnapshot.val().url;
+		                    }else if(dataSnapshot.val() === null && emailsnashot.val() !== null) {
+		                      refUser.set({
+		                        email:user.email,
+		                        displayname:user.displayName,
+		                        url:"nivel2/index.html"
+		                      });
+
+		                      window.location="nivel2/index.html";
+
+		                    }else if (dataSnapshot.val() === null && emailsnashot.val() === null) {
+                          refUser.set({
+		                        email:user.email,
+		                        displayname:user.displayName,
+		                        url:"pages/map.html"
+		                      });
+
+		                      window.location="pages/map.html";
+		                    }
+
+		                  });
+		            });
+
+		      }
+		    });
+
+
+		});
+	  </script>
+</body>
+</html>

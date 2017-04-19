@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="">
+
+    <title>Generador de Códigos QR</title>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Custom styles for this template -->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../dist/css/skins/skin-red-light.css">
+
+	<!-- Range Slider css -->
+	<link href="range-slider/css/nouislider.min.css" type="text/css" rel="stylesheet"/>
+
+	<!-- Nouislider css-->
+	<link href="range-slider/css/range-slider.css" type="text/css" rel="stylesheet"/>
+
+    <!-- Alert css -->
+	<link href="alert/css/alert.css" type="text/css" rel="stylesheet" />
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+    <script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+    <script>
+       // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAu-oPzG9QqUtzZD46IxwXBLfcPW2cXZNo",
+            authDomain: "siglab-2bdb6.firebaseapp.com",
+            databaseURL: "https://siglab-2bdb6.firebaseio.com",
+            storageBucket: "siglab-2bdb6.appspot.com",
+            messagingSenderId: "774972434470"
+        };
+        firebase.initializeApp(config);
+        var email;
+        function initApp() {
+          // Listening for auth state changes.
+          // [START authstatelistener]
+          firebase.auth().onAuthStateChanged(function(user) {
+
+            if (user) {
+              // User is signed in.
+              var displayName = user.displayName;
+                  email = user.email;
+              var emailVerified = user.emailVerified;
+              var photoURL = user.photoURL;
+              var isAnonymous = user.isAnonymous;
+              var uid = user.uid;
+              var providerData = user.providerData;
+                user.getToken().then(function(accessToken) {
+                  $("#msg").text(displayName);
+                 $("#my_image").attr("src",photoURL);
+                  detalailscount = JSON.stringify({
+                    displayName: displayName,
+                    email: email,
+                    emailVerified: emailVerified,
+                    photoURL: photoURL,
+                    uid: uid,
+                    accessToken: accessToken,
+                    providerData: providerData
+                  }, null, '  ');
+                });
+              } else {
+              // User is signed out.
+                window.location="../index.html";
+
+                $('body').html('');
+
+            }
+
+          });
+
+        }
+        window.onload = function() {
+          initApp();
+
+        };
+    </script>
+
+
+  </head>
+
+  <body class="hold-transition skin-red-light sidebar-mini">
+    <header class="main-header">
+      <!-- Logo -->
+      <a href="#" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels
+        <span class="logo-mini"><b>A</b>LT</span>-->
+        <!-- logo for regular state and mobile devices -->
+        <span  class="logo-lg"><b>SIGE</b>LAB</span>
+      </a>
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar navbar-static-top">
+
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <li class="dropdown notifications-menu">
+              <a href="../admin/informes.html" title="Reportes">
+                <i class="fa  fa-bar-chart">Reportes</i>
+              </a>
+            </li>
+
+            <li class="dropdown notifications-menu">
+              <a href="../nivel2/index.html" title="Acceso a tu laboratorio">
+                <i class="fa fa-home">laboratorio</i>
+              </a>
+            </li>
+            <li class="dropdown notifications-menu">
+              <a href="../pages/admon.html" title="Administracion">
+                <i class="fa  fa-gears">Administracion</i>
+              </a>
+            </li>
+
+            <li class="dropdown notifications-menu">
+              <a href="#" title="Salir" id="logout">
+                <i class="fa fa-sign-out">Salir</i>
+              </a>
+            </li>
+            <li class="dropdown notifications-menu">
+              <div class="logo-image hidden-xs">
+                       <a id="logo" href="http://www.univalle.edu.co/" >
+                         <img longdesc="http://www.seapp724.com/" class="img-responsive"  src="../images/logo.jpg" width="424" height="51" alt="Universidad del Valle">
+
+                       </a>
+
+                     </div>
+            </li>
+
+          </ul>
+
+        </div>
+      </nav>
+    </header>
+  <!--  <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Generador de Códigos QR</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>-->
+
+    <br>
+
+    <div class="container">
+
+        <!--
+        <div class="starter-template">
+            <h1>Bootstrap starter template</h1>
+            <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        </div>
+        -->
+
+        <!--Message Alert -->
+	    <button id="btn-alert" style="display: none" type="button" data-positionX="center" data-positionY="top" data-effect="fadeInUp" data-message="Heads up! This alert needs your attention, but it's not super important." data-type="information" data-revert="fadeOutUp" class="btn pmd-ripple-effect btn-info pmd-btn-raised pmd-alert-toggle">Message Alert</button>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Cantidad de Códigos QR</h3>
+                    </div>
+                    <div class="panel-body" id="panel-cantidad">
+                        <!-- Default Tooltip with single Handler -->
+                        <div class=" component-box">
+                            <!-- slider example -->
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <!--Default Tooltip with single Slider card -->
+                                    <div class="pmd-card pmd-z-depth">
+                                        <div class="pmd-card-body">
+                                            <!-- Horisontal Slider -->
+                                            <div id="pmd-slider-tooltip"  class="pmd-range-slider pmd-range-tooltip"></div>
+                                        </div>
+                                    </div>
+                                    <!--Default Tooltip with single Slider card -->
+                                </div>
+                            </div>
+                            <p class="component-desc"><strong>Seleccione la cantidad de códigos QR que desea generar.</strong></p>
+                            <!-- slider example end -->
+                        </div>
+                        <!-- end default tooltip with single Handler -->
+                        <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                        <p>
+                            <button id="btn-generar" type="button" class="btn btn-primary">Generar</button>
+                        </p>
+                        <div class="progress">
+                            <div id="progreso-generador" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Código QR</h3>
+                    </div>
+                    <div class="panel-body" id="panel-qr">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Cross-Browser QRCode generator for Javascript -->
+    <script type="text/javascript" src="qrcode.min.js"></script>
+    <!-- JSZip Create, read and edit .zip files with Javascript -->
+    <script type="text/javascript" src="jszip.min.js"></script>
+    <!-- A saveAs() FileSaver implementation. -->
+    <script type="text/javascript" src="FileSaver.js"></script>
+    <!-- Slider js -->
+    <script src="range-slider/js/wNumb.js"></script>
+    <script src="range-slider/js/nouislider.js"></script>
+    <!-- Propeller alerts js -->
+    <script type="text/javascript" src="alert/js/alert.js"></script>
+
+  </body>
+
+
+
+    <!-- Generacion de Codigos QR -->
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            console.log( "ready!" );
+
+
+/// ===============================================================================================
+
+
+            // Firebase
+            var rootRef = firebase.database();
+            //console.log('rootRef = ' + rootRef.ref());
+            var qrgenRef = rootRef.ref('qrgen');
+            //console.log('qrgenRef = ' + qrgenRef);
+
+
+            // Cantidad de codigos QR que se van a generar
+            var cant_qr = -1;
+            // Objeto para generar codigo QR
+            var qrcode = null;
+            // Objeto para Range Slider
+            var pmdSliderTooltip = null;
+            // Numero de codigos QR guardados en Firebase
+            var sizeqrgen = -1;
+            // Lista de codigos QR generados en base64
+            var list_qr = [];
+            // Rango se codigos QR que pueden ser generados
+            var rango_list_qr = {};
+            // Iterados del id del codigo QR generado
+            var id_qr_it = -1;
+
+
+
+
+            // single range slider with default tooltip open
+            pmdSliderTooltip = document.getElementById('pmd-slider-tooltip');
+            noUiSlider.create(pmdSliderTooltip, {
+                start: [ 0 ],
+                connect: 'lower',
+                tooltips: [wNumb({ decimals: 0 }) ],
+                format: wNumb({
+                    decimals: 0
+                }),
+                range: {
+                    'min': 0,
+                    'max': 100
+                }
+            });
+
+
+
+            // Funcion para mostrar mensaje en un alert
+            function showMessageAlert(tipo, mensaje) {
+                // tipo = [information, warning, success, error]
+                $( "#btn-alert" ).attr('data-type', tipo);
+                $( "#btn-alert" ).attr('data-message', mensaje);
+                $( "#btn-alert" ).trigger( "click" );
+            }
+
+
+
+            // Inicializa elemento Range Slider
+            function initRangeSlide() {
+                qrgenRef.once("value").then(function(snapshot) {
+                    sizeqrgen = snapshot.numChildren();
+                    rango_list_qr.min = [ sizeqrgen ];
+                    rango_list_qr.max = [ (sizeqrgen + 100) ];
+                    // Inicializa el iterador del id QR generado
+                    id_qr_it = sizeqrgen + 1;
+                    // Actualiza el rango del slider
+                    pmdSliderTooltip.noUiSlider.updateOptions({
+                        range: rango_list_qr
+                    });
+                    //console.log('rango_list_qr.min = ' + rango_list_qr.min);
+                    //console.log('rango_list_qr.min = ' + rango_list_qr.max);
+                });
+            }
+
+
+            // Funcion que inicializa el generar QR
+            function initGenerador() {
+                cant_qr = -1;
+                sizeqrgen = -1;
+                list_qr = [];
+                rango_list_qr = {};
+                id_qr_it = -1;
+                // Habilita el boton para generar QR
+                $('#btn-generar').removeAttr('disabled');
+                // Limpia panel QR
+                if(qrcode != null)qrcode.clear();
+                $('#panel-qr').empty();
+                initRangeSlide();
+            }
+            initGenerador();
+
+
+            // Actualiza la barra de progreso del generador QR
+            function updateProgressBar() {
+                var progreso = Math.ceil(((id_qr_it) / cant_qr) * 100);
+                //console.log('progreso = ' + progreso + '%');
+                $('#progreso-generador').show();
+                $('#progreso-generador').attr('aria-valuenow', progreso);
+                $('#progreso-generador').width(progreso + '%');
+            }
+
+
+            // Evento al hacer click sobre boton generar
+            $('#btn-generar').on('click', function (event) {
+                //console.log('Click sobre boton generar');
+                // Obtiene la cantidad de codigos QR
+                cant_qr = pmdSliderTooltip.noUiSlider.get();
+                //console.log('Cantidad de QR para generar = ' + cant_qr);
+
+                // limpia la barra de progreso
+                $('#progreso-generador').hide();
+                $('#progreso-generador').attr('aria-valuenow', 0);
+                $('#progreso-generador').width('0%');
+
+                // deshabilita el boton
+                $('#btn-generar').attr('disabled', 'disabled');
+
+                // Genera el primer codigo QR
+                var url_qr = "https://sigelab.univalle.edu.co/inventario/?codigo=" + id_qr_it;
+                qrcode = new QRCode(document.getElementById("panel-qr"), {
+                    text: url_qr
+                });
+            });
+
+
+            // Funcion que valida si todos los QR se agregaron a la lista
+            function isCompleteListQR() {
+                //console.log('list_qr.length = ' + list_qr.length + ' cant_qr = ' + cant_qr);
+                if(id_qr_it >= cant_qr) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+
+            // Evento para ejecutar al crear elemento de QR en el DOM
+            $('#panel-qr').on('DOMNodeInserted', 'img', function (event) {
+                $('#panel-qr img').on('load', function(event){
+                    var str_data = $('#panel-qr img').attr('src');
+                    var str_base64 = str_data.split(",")[1];
+                    //console.log(str_data);
+                    //console.log(str_base64);
+
+                    // Objeto que sera guardado en Firebase
+                    var obj_qrgen = {
+                        sec_qr: id_qr_it,
+                        url_qr: "https://sigelab.univalle.edu.co/inventario/?codigo=" + id_qr_it,
+                        num_inventario: -1,
+                        str_base64: str_base64
+                    }
+
+                    // Agrega el objeto en la lista
+                    list_qr.push(obj_qrgen);
+                    //console.log('list_qr size = ' + list_qr.length);
+
+                    // actualiza la barra de progreso
+                    updateProgressBar();
+
+                    // Valida si no ha completado de generar la lista de QR
+                    if(!isCompleteListQR()) {
+                        qrcode.clear();
+                        $('#panel-qr').removeAttr( "title" );
+                        // Actualiza el iterador del id QR generado
+                        id_qr_it++;
+                        var url_qr = "https://sigelab.univalle.edu.co/inventario/?codigo=" + id_qr_it;
+                        qrcode.makeCode(url_qr);
+                    } else {
+                        saveListQR();
+                    }
+
+                });
+            });
+
+
+
+            // Funcion que guarda los codigos QR generados en Firebase
+            function saveListQR() {
+                // Objeto que sera usado para guardar todos los QR generado en Firebase
+                var updates = {};
+                // Objeto que sera usado para guardar las imagenes de los QR generados
+                var zip = new JSZip();
+                var img = zip.folder("images");
+                // Itera en la lista de QR generados
+                for(var i = 0; i < list_qr.length; i++) {
+                    var obj_qrgen = list_qr[i];
+                    // Objeto que sera guardado en Firebase
+                    var elem_qrgenRef = rootRef.ref(qrgenRef.key + '/' + obj_qrgen.sec_qr);
+                    updates[elem_qrgenRef.key] = {
+                        sec_qr: obj_qrgen.sec_qr,
+                        url_qr: obj_qrgen.url_qr,
+                        num_inventario: obj_qrgen.num_inventario
+                    };
+                    // String base64 del QR generado
+                    img.file('qrcode' + obj_qrgen.sec_qr + '.png', obj_qrgen.str_base64, {base64: true});
+                }
+                // Guarda los objetos en Firebase
+                qrgenRef.update(updates).then(
+                    function(resp) {
+                        //console.log('Exito al guardar todos los objetos QR generados en Firebase');
+                        showMessageAlert("success", "Exito al generar todos los códigos QR ;)");
+                        // Genera archivo zip y descarga
+                        zip.generateAsync({type:"blob"})
+                        .then(function(content) {
+                            // see FileSaver.js
+                            saveAs(content, "qrcodes.zip");
+                        });
+                        // Inicializa Generador QR
+                        initGenerador();
+                    },
+                    function(error) {
+                        // console.log('Error al guardar objetos QR generados en Firebase ' + err);
+                        showMessageAlert("error", "Error al generar todos los códigos QR :'(");
+                    }
+                );
+            }
+
+
+/// ===========================================================================================
+
+
+        });
+    </script>
+    <script lenguaje='text/javascript' >
+
+      $('#logout').click(function(){
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+            window.location="../index.html";
+
+        }, function(error) {
+          window.location="../index.html";
+        });
+      });
+
+    </script>
+
+</html>

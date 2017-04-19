@@ -1,0 +1,1912 @@
+[ {
+  "Porcentaje" : "8%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 1,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "51%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 2,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 3,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "24%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 4,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "100%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 5,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "33%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 6,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "100%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 7,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 8,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 9,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 10,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 11,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "25%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 12,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29%",
+  "año" : 2016,
+  "cod_lab" : 13,
+  "id_pce" : 13,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "25%",
+  "año" : 2016,
+  "cod_lab" : 14,
+  "id_pce" : 14,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "100%",
+  "año" : 2016,
+  "cod_lab" : 15,
+  "id_pce" : 15,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "21%",
+  "año" : 2016,
+  "cod_lab" : 16,
+  "id_pce" : 16,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "21%",
+  "año" : 2016,
+  "cod_lab" : 17,
+  "id_pce" : 17,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "16%",
+  "año" : 2016,
+  "cod_lab" : 18,
+  "id_pce" : 18,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17%",
+  "año" : 2016,
+  "cod_lab" : 19,
+  "id_pce" : 19,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "32%",
+  "año" : 2016,
+  "cod_lab" : 20,
+  "id_pce" : 20,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "16%",
+  "año" : 2016,
+  "cod_lab" : 21,
+  "id_pce" : 21,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "47%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 22,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "46%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 23,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "25%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 24,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 25,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "48%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 26,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "45%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 27,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "9%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 28,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "19%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 29,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "21%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 30,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "7%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 31,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "39%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 32,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "26%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 33,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 34,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 35,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "67%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 36,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "1%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 37,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 38,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "54%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 39,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 40,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 41,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "50%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 42,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 43,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 44,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 45,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 46,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "16%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 47,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "18%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 48,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "18%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 49,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 50,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 51,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 52,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 53,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "21%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 54,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "21%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 55,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "16%",
+  "año" : 2016,
+  "cod_lab" : 13,
+  "id_pce" : 56,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "6%",
+  "año" : 2016,
+  "cod_lab" : 14,
+  "id_pce" : 57,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27%",
+  "año" : 2016,
+  "cod_lab" : 15,
+  "id_pce" : 58,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "36%",
+  "año" : 2016,
+  "cod_lab" : 16,
+  "id_pce" : 59,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 17,
+  "id_pce" : 60,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 18,
+  "id_pce" : 61,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "37%",
+  "año" : 2016,
+  "cod_lab" : 19,
+  "id_pce" : 62,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "36%",
+  "año" : 2016,
+  "cod_lab" : 20,
+  "id_pce" : 63,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15%",
+  "año" : 2016,
+  "cod_lab" : 21,
+  "id_pce" : 64,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "16%",
+  "año" : 2016,
+  "cod_lab" : 22,
+  "id_pce" : 65,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "1%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 66,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 67,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 68,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "76%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 69,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "34%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 70,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 71,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "3%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 72,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 73,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 74,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 75,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "8%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 76,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "6%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 77,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 78,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 79,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 80,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 81,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "18%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 82,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 83,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "54%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 84,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 85,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "52%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 86,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "3%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 87,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "3%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 88,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "3%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 89,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 90,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 91,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 92,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "26%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 93,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 94,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 95,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "32%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 96,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 97,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 98,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "6%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 99,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "39,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 100,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "48,7%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 101,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "40,4%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 102,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27,3%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 103,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "39,0%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 104,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 105,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17,0%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 106,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17,0%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 107,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "45,9%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 108,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,6%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 109,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11,8%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 110,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 111,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "4,8%",
+  "año" : 2016,
+  "cod_lab" : 13,
+  "id_pce" : 112,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11,8%",
+  "año" : 2016,
+  "cod_lab" : 14,
+  "id_pce" : 113,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 15,
+  "id_pce" : 114,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 16,
+  "id_pce" : 115,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 17,
+  "id_pce" : 116,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 18,
+  "id_pce" : 117,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "47,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 118,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "40,9%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 119,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,7%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 120,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,7%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 121,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "42,2%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 122,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 123,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,8%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 124,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 125,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "45,2%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 126,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "13,7%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 127,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "20,7%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 128,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "20,7%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 129,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "9,0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 130,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "1,7%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 131,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "2,5%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 132,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "2,5%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 133,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "2,5%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 134,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "1,7%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 135,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17,8%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 136,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "25,7%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 137,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 138,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "8,2%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 139,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "19,6%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 140,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 141,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22,0%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 142,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "35,2%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 143,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 144,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 145,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "34,88%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 146,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "37,00%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 147,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "49,00%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 148,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "85,00%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 149,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,59%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 150,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,22%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 151,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,46%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 152,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "77,10%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 153,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "67,77%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 154,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "77,10%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 155,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,50%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 156,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15,47%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 157,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,83%",
+  "año" : 2016,
+  "cod_lab" : 13,
+  "id_pce" : 158,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "53,20%",
+  "año" : 2016,
+  "cod_lab" : 14,
+  "id_pce" : 159,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "57,04%",
+  "año" : 2016,
+  "cod_lab" : 15,
+  "id_pce" : 160,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "No participa",
+  "año" : 2016,
+  "cod_lab" : 16,
+  "id_pce" : 161,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "57,04%",
+  "año" : 2016,
+  "cod_lab" : 17,
+  "id_pce" : 162,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,30%",
+  "año" : 2016,
+  "cod_lab" : 18,
+  "id_pce" : 163,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "24,49%",
+  "año" : 2016,
+  "cod_lab" : 19,
+  "id_pce" : 164,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15,42%",
+  "año" : 2016,
+  "cod_lab" : 20,
+  "id_pce" : 165,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "19,51%",
+  "año" : 2016,
+  "cod_lab" : 21,
+  "id_pce" : 166,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11,00%",
+  "año" : 2016,
+  "cod_lab" : 22,
+  "id_pce" : 167,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "18,73%",
+  "año" : 2016,
+  "cod_lab" : 23,
+  "id_pce" : 168,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "3,33%",
+  "año" : 2016,
+  "cod_lab" : 24,
+  "id_pce" : 169,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15,29%",
+  "año" : 2016,
+  "cod_lab" : 25,
+  "id_pce" : 170,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "18,92%",
+  "año" : 2016,
+  "cod_lab" : 26,
+  "id_pce" : 171,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15,29%",
+  "año" : 2016,
+  "cod_lab" : 27,
+  "id_pce" : 172,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,00%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 173,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22,70%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 174,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "87,30%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 175,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "20,80%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 176,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,21%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 177,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22,26%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 178,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,00%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 179,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,76%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 180,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "79,00%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 181,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "19,75%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 182,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,95%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 183,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,89%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 184,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15,69%",
+  "año" : 2016,
+  "cod_lab" : 13,
+  "id_pce" : 185,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "37,10%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 186,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "40,40%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 187,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11,13%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 188,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "23,00%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 189,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "42,00%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 190,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "65,15%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 191,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "25,47%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 192,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,00%",
+  "año" : 2016,
+  "cod_lab" : 8,
+  "id_pce" : 193,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,84%",
+  "año" : 2016,
+  "cod_lab" : 9,
+  "id_pce" : 194,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "24,00%",
+  "año" : 2016,
+  "cod_lab" : 10,
+  "id_pce" : 195,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "83,45%",
+  "año" : 2016,
+  "cod_lab" : 11,
+  "id_pce" : 196,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,83%",
+  "año" : 2016,
+  "cod_lab" : 12,
+  "id_pce" : 197,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "16,18%",
+  "año" : 2016,
+  "cod_lab" : 13,
+  "id_pce" : 198,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "64,60%",
+  "año" : 2016,
+  "cod_lab" : 14,
+  "id_pce" : 199,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "8,75%",
+  "año" : 2016,
+  "cod_lab" : 15,
+  "id_pce" : 200,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "7,97%",
+  "año" : 2016,
+  "cod_lab" : 16,
+  "id_pce" : 201,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "23,30%",
+  "año" : 2016,
+  "cod_lab" : 17,
+  "id_pce" : 202,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "29,93%",
+  "año" : 2016,
+  "cod_lab" : 18,
+  "id_pce" : 203,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17,75%",
+  "año" : 2016,
+  "cod_lab" : 19,
+  "id_pce" : 204,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "63,80%",
+  "año" : 2016,
+  "cod_lab" : 20,
+  "id_pce" : 205,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "34,19%",
+  "año" : 2016,
+  "cod_lab" : 21,
+  "id_pce" : 206,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "22,17%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 207,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11,3%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 208,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "11,8%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 209,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "15,5%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 210,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "12,5%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 211,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "13,9%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 212,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17,5%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 213,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,5%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 214,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,4%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 215,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17,5%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 216,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27,4%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 217,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "27,4%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 218,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 219,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "18,3%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 220,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 221,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 222,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 223,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 224,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "8,0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 225,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "7,1%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 226,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 227,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,5%",
+  "año" : 2016,
+  "cod_lab" : 7,
+  "id_pce" : 228,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,5%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 229,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 230,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,5%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 231,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 232,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "10,5%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 233,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 234,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 235,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 236,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 237,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 238,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 239,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 240,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 241,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 242,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 243,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 244,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 245,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0,0%",
+  "año" : 2016,
+  "cod_lab" : 6,
+  "id_pce" : 246,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "33,3%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 247,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 248,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 2,
+  "id_pce" : 249,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 3,
+  "id_pce" : 250,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 4,
+  "id_pce" : 251,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "5,0%",
+  "año" : 2016,
+  "cod_lab" : 5,
+  "id_pce" : 252,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "20%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 253,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "9%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 254,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "72%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 255,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "72%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 256,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "72%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 257,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "0%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 258,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "17%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 259,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "36%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 260,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "_",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 261,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "4%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 262,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "39%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 263,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "39%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 264,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "39%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 265,
+  "periodo" : 2,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "14,00%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 266,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "42,70%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 267,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "42,70%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 268,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "35,00%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 269,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "28,90%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 270,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "56,70%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 271,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "37,50%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 272,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+}, {
+  "Porcentaje" : "57,50%",
+  "año" : 2016,
+  "cod_lab" : 1,
+  "id_pce" : 273,
+  "periodo" : 1,
+  "tipo_de_asignacion" : ""
+} ]

@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Laboratorios | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="../qrcode.js"></script>
+<script type="text/javascript" src="../cartodb.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+<script>
+   // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAu-oPzG9QqUtzZD46IxwXBLfcPW2cXZNo",
+    authDomain: "siglab-2bdb6.firebaseapp.com",
+    databaseURL: "https://siglab-2bdb6.firebaseio.com",
+    storageBucket: "siglab-2bdb6.appspot.com",
+    messagingSenderId: "774972434470"
+  };
+  firebase.initializeApp(config);
+
+
+
+
+
+  var ref = firebase.database().ref("ensayos");
+
+
+
+
+</script>
+    <style type="text/css">
+
+#tabla{	border: solid 1px #333;	width: 500px; }
+
+
+.eliminar{ cursor: pointer; color: #000; }
+input[type="text"]{ width: 115px; } /* ancho a los elementos input="text" */
+
+</style>
+  </head>
+  <body>
+
+
+
+
+    <script>
+    $( document ).ready(function() {
+
+  var codigo;
+    var db = firebase.database();
+db.ref("informacion_laboratorios").on("child_added", function(snapshot){
+     // console.log(snapshot.val());
+      $("#consulta").append('<option value="'+snapshot.val().cod_lab+'" selected="selected">'+snapshot.val().cod_lab+'</option>');
+    });
+    console.log("Inicio de aplicacion")
+
+$(document).on("click",".eliminar",function(){
+		var parent = $(this).parents().get(0);
+		update_qrcode()
+	});
+
+    /*db.ref("edificios").on("child_added", function(snapshot){
+     // console.log(snapshot.val());
+      L.marker([snapshot.val().Latitud, snapshot.val().Longitud]).bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup().addTo(map);
+    });
+  $('#table').on('change', function(){
+    $("img").remove(".leaflet-marker-icon");
+    $(".leaflet-marker-shadow").remove();
+    //$(".leaflet-clickable").remove();
+   //console.log(parseInt($('#consultalab').val()));
+    /*db.child('ensayos').orderByKey().equalTo('no').on("child_added", function(snapshot) {
+    console.log(snapshot.val());
+    });
+    db.ref("informacion_laboratorios").orderByChild('cod_lab').equalTo(parseInt($('#consultalab').val())).on("child_added", function(snapshot) {
+    db.ref("edificios").orderByChild("edif").equalTo(snapshot.val().cod_escuela).on("child_added", function(snapshot) {
+      console.log(snapshot.val());
+
+
+    });
+
+    });
+  });*/
+
+ $('#consulta').on('change', function(){
+   console.log("Inicio")
+a =0;
+  db.ref("informacion_laboratorios").orderByChild('cod_lab').equalTo(parseInt($('#consulta').val())).on("child_added", function(snapshot) {
+
+    codigo = snapshot.val().cod_lab;
+     $("#lab").val(snapshot.val().cod_escuela);
+    console.log("codigo de lab " + codigo);
+    db.ref("equipo robusto").orderByChild("cod_lab").equalTo(codigo).on("child_added", function(snapshot2) {
+      console.log(snapshot2.val().cod_lab);
+      a=a+1;
+      console.log("ciclo "+a)
+      $("#msg").val("http://localhost:5000/appqr/?cod="+ snapshot2.val().Id_equipo);
+      $("#id_equipo").val(snapshot2.val().Id_equipo);
+      $("#msg3").val(snapshot2.val().Descripcion);
+
+
+    });
+       });
+     });
+});
+    </script>
+
+ <div id="layer_selector" class="cartodb-infobox">
+    <ul id="selector">
+
+      <li id="all" class="selected">
+        <label for="consulta">Seleccione un Laboratorio</label>
+        <br>
+        <select id='consulta'>
+          <option value="-1">selecciona</option>
+
+        </select>
+      </li>
+
+    </ul>
+  </div>
+
+<div id="table">
+
+<form>
+<table id="tabla">
+	<!-- Cabecera de la tabla -->
+	<thead>
+		<tr>
+      <th>&nbsp;</th>
+			<th>Id Equipo</th>
+			<th>Descripcion</th>
+			<th>Observaciones</th>
+			<th>Edificio</th>
+		</tr>
+	</thead>
+
+	<!-- Cuerpo de la tabla con los campos -->
+	<tbody>
+
+		<!-- fila base para clonar y agregar al final -->
+		<tr class="fila-base">
+        <td><input type="hidden" class="msg" name="msg"  id="msg"/></td>
+        <td><input type="text" class="msg2" name="msg2"  id="id_equipo"/></td>
+			<td><input type="text" class="msg2" name="msg2"  id="msg3"/></td>
+			<td><input type="text" class="apellidos" id="msg2" /></td>
+			<td><input type="text" class="apellidos" id="lab"/></td>
+			<td class="eliminar">Generar codigo Qr</td>
+		</tr>
+		<!-- fin de código: fila base -->
+
+		<!-- Fila de ejemplo
+		<tr>
+			<td><input type="text" class="nombre" /></td>
+			<td><input type="text" class="apellidos" /></td>
+			<td>
+				<select class="sexo">
+					<option value="0">- Sexo -</option>
+					<option value="M">Masculino</option>
+					<option value="F">Femenino</option>
+				</select>
+			</td>
+			<td class="eliminar">Eliminar</td>
+		</tr>
+		 fin de código: fila de ejemplo -->
+
+	</tbody>
+</table>
+</form>
+</div>
+<div id="qr"></div>
+
+
+  <script type="text/javascript" src="../js/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="../js/leaflet/leaflet.js"></script>
+  <script type="text/javascript" src="../asset/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/DataTables/js/jquery.dataTables.min.js"></script>
+  </body>
+</html>

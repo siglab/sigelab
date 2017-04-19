@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="Laboratorio SIGELAB" content="">
+  <meta name="univalle" content="">
+  <link href="http://www.univalle.edu.co/templates/t3_bs3_blank/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+
+
+  <title>SIGElab | Consultas</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="../dist/css/autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/autocomplete/easy-autocomplete.themes.min.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap CSS  -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../dist/js/DataTables/css/jquery.dataTables.min.css"/>
+
+    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+    <script>
+   // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAu-oPzG9QqUtzZD46IxwXBLfcPW2cXZNo",
+    authDomain: "siglab-2bdb6.firebaseapp.com",
+    databaseURL: "https://siglab-2bdb6.firebaseio.com",
+    storageBucket: "siglab-2bdb6.appspot.com",
+    messagingSenderId: "774972434470"
+  };
+  firebase.initializeApp(config);
+  var email;
+  function initApp() {
+    // Listening for auth state changes.
+    // [START authstatelistener]
+    firebase.auth().onAuthStateChanged(function(user) {
+
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+            email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        var providerData = user.providerData;
+          user.getToken().then(function(accessToken) {
+            $("#msg").text(displayName);
+           $("#my_image").attr("src",photoURL);
+            detalailscount = JSON.stringify({
+              displayName: displayName,
+              email: email,
+              emailVerified: emailVerified,
+              photoURL: photoURL,
+              uid: uid,
+              accessToken: accessToken,
+              providerData: providerData
+            }, null, '  ');
+          });
+        } else {
+        // User is signed out.
+          window.location="../index.html";
+
+          $('body').html('');
+
+      }
+
+    });
+
+  }
+  window.onload = function() {
+    initApp();
+
+  };
+  </script>
+
+    <link href="../dist/js/leaflet/leaflet.css" rel="stylesheet" type="text/css" />
+    <link href="../dist/css/stylemap.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../dist/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../dist/js/leaflet/leaflet.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../dist/css/skins/skin-red-light.css">
+  <script type="text/javascript" src="../dist/js/DataTables/js/jquery.dataTables.min.js"></script>
+
+
+
+
+
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition skin-red-light sidebar-mini">
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="#" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels
+      <span class="logo-mini"><b>A</b>LT</span>-->
+      <!-- logo for regular state and mobile devices -->
+      <span  class="logo-lg"><b>SIGE</b>lab</span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+
+          <!-- Tasks: style can be found in dropdown.less -->
+          <li class="dropdown tasks-menu">
+            <a href="#" id="notificaciones" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell"></i>
+              <span class="label label-success" id="numero-notificaciones"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                  <li><!-- Task item -->
+                    <a href="#">
+                      <h3>
+                        Design some buttons
+                      </h3>
+
+                    </a>
+                  </li>
+                  <!-- end task item -->
+                </ul>
+              </li>
+
+            </ul>
+          </li>
+          <li class="dropdown notifications-menu">
+            <a href="#" title="Salir" id="logout">
+              <i class="fa fa-sign-out">Salir</i>
+            </a>
+
+          </li>
+          <li class="dropdown notifications-menu">
+            <div class="logo-image hidden-xs">
+                     <a id="logo" href="http://www.univalle.edu.co/" >
+                       <img longdesc="http://www.seapp724.com/" class="img-responsive"  src="../images/logo.jpg" width="424" height="51" alt="Universidad del Valle">
+
+                     </a>
+
+                   </div>
+          </li>
+
+        </ul>
+
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+     <div class="user-panel">
+       <div class="pull-left image">
+         <img src="" id="my_image" class="img-circle" alt="User Image">
+       </div>
+       <div class="pull-left info">
+         <p id="msg"></p>
+         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+       </div>
+     </div>
+
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header">Menu de navegacion</li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa  fa-flask"></i> <span>Informacion laboratorio</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a class='menubusqueda ' tabindex="-1" href="#" id="menu-ubicacion-lab-usuario"><i class="fa fa-circle-o"></i> Ubicacion laboratorio</a></li>
+            <li><a class='menubusqueda' tabindex="-1" href="#" id="menu-busqueda-por-director-usuario"><i class="fa fa-circle-o"></i>Director</a></li>
+            <li ><a class='menubusqueda' tabindex="-1" href="#" id="menu-general-laboratorio"><i class="fa fa-circle-o"></i> General</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-eyedropper"></i> <span>Servicios que presta</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a class='menubusqueda' tabindex="-1" href="#" id="menu-ensayoslaboratorio-usuario"><i class="fa fa-circle-o"></i> Ensayos o Pruebas<br> por laboratorio</a></li>
+            <li><a class='menubusqueda' tabindex="-1" href="#" id="menu-nuevoservicio-laboratorio"><i class="fa fa-circle-o"></i> Agregar un nuevo <br> servicio</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-gears"></i> <span>Inventario de activos</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a class='menubusqueda' tabindex="-1" href="#" id="menu-busqueda-equipo-laboratorio"><i class="fa fa-circle-o"></i> Consultar equipo<br></a></li>
+          </ul>
+        </li>
+        <li><a href="../pages/Manual_Usuario_Interno.pdf"><i class="fa fa-book"></i> <span>Manual de usuario</span></a></li>
+        <li><a class='menubusqueda' tabindex="-1" href="#" id="menu-contacto"><i class="fa fa-mouse-pointer"></i>  <span>Contactenos</span></a></li>
+
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+
+        <!-- /.Left col -->
+        <!-- right col (We are only adding the ID to make the widgets sortable)-->
+        <section class="col-lg-12 connectedSortable">
+
+          <!-- Map box -->
+          <div class="box box-solid ">
+              <!-- tools box -->
+              <div id="map" style="height: 500px; width: 100%;"></div>
+
+
+            </div>
+        <!-- right col -->
+      </div>
+      <!-- /.row (main row) -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Busquedas</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+              <div class="col-md-2 col-xs-12">
+
+              </div>
+              <div class="col-md-10 col-xs-12">
+                <form id="form" role="form">
+                  <div class="form-group">
+                    <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="Nombre del laboratorio" id="infolab-ubicacion-laboratorio-por-nombre">
+
+
+                  </div>
+                  <div id="btns-buscar">
+                  </div>
+
+                </form>
+
+              </div>
+
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>-->
+<!-- jQuery UI 1.11.4 -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Slimscroll -->
+<script src="../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/app.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="../dist/js/pages/dashboard.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
+<script lenguaje='text/javascript' src="../dist/js/spin/spin.min.js"></script>
+<script lenguaje='text/javascript' src="../dist/js/spin/spinerconfig.js"></script>
+<script lenguaje='text/javascript' src="../dist/js/map/maplvl2.js"></script>
+<script lenguaje='text/javascript' >
+
+  $('#logout').click(function(){
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        window.location="../index.html";
+
+    }, function(error) {
+      window.location="../index.html";
+    });
+  });
+
+</script>
+</body>
+</html>

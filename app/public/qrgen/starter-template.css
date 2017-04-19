@@ -1,0 +1,16 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+#panel-qr {
+  
+}
+#progreso-generador {
+  display: none;
+}
+#btn-alert {
+  display: none;
+}

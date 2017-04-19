@@ -1,0 +1,19 @@
+{
+    "qrgen": {
+        "0": {
+            "sec_qr": "1",
+            "url_qr": "https://sigelab.univalle.edu.co/inventario/?codigo=1",
+            "num_inventario": 42770700
+        },
+        "1": {
+            "sec_qr": "2",
+            "url_qr": "https://sigelab.univalle.edu.co/inventario/?codigo=2",
+            "num_inventario": 42770701
+        },
+        "2": {
+            "sec_qr": "3",
+            "url_qr": "https://sigelab.univalle.edu.co/inventario/?codigo=3",
+            "num_inventario": -1
+        }
+    }
+}
