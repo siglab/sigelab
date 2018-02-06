@@ -9,10 +9,8 @@
 
 
 
-------------
 
 ### Estructura del Repositorio
-
     sigelab/
         backend/
             README.md
@@ -23,8 +21,6 @@
         .gitignore
         LICENSE
         README.md
-
-------------
 
 
 
