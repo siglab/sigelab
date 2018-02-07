@@ -1,9 +1,11 @@
+import { PrincipalComponent } from './shared/components/dashboard/principal/principal.component';
+import { RouterRoutingModule } from './router/router-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { DataTablesModule } from 'angular-datatables';
 import { AppComponent } from './app.component';
-import { PrincipalComponent } from './components/dashboard/principal/principal.component';
+
 
 
 @NgModule({
@@ -13,7 +15,8 @@ import { PrincipalComponent } from './components/dashboard/principal/principal.c
   ],
   imports: [
     BrowserModule,
-    DataTablesModule
+    DataTablesModule,
+    RouterRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
