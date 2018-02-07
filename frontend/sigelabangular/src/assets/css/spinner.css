@@ -1,27 +1,3 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <title>Sigelabangular</title>
-  <base href="/">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
-
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="assets/css/skins/skin-red.css">
-
-  <!-- Ionicons -->
-  <link href="assets/css/spinner.css" rel="stylesheet">
-  <link href="assets/leaflet/leaflet.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<style>
-
 .loader {
   color: #ffffff;
   font-size: 90px;
@@ -102,18 +78,3 @@
     transform: rotate(360deg);
   }
 }
-
-</style>
-<body class="hold-transition skin-red sidebar-mini">
-  <app-root><div class="loader">Loading...</div></app-root>
-</body>
-<!--
-
-<!-- AdminLTE App -->
-<script src="assets/js/fastclick.js"></script>
-<script src="assets/js/adminlte.js"></script>
-<script src="assets/js/jquery.slimscroll.min.js"></script>
-<script src="assets/js/jquery-ui.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-
-</html>
