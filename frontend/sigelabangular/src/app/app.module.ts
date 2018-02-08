@@ -2,6 +2,7 @@ import { PrincipalComponent } from './shared/components/dashboard/principal/prin
 import { RouterRoutingModule } from './router/router-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { DataTablesModule } from 'angular-datatables';
 import { AppComponent } from './app.component';
@@ -30,7 +31,8 @@ import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.compone
   imports: [
     BrowserModule,
     DataTablesModule,
-    RouterRoutingModule
+    RouterRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

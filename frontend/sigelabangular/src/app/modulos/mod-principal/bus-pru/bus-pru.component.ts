@@ -7,9 +7,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BusPruComponent implements OnInit {
 
+  dtOptions: any = {};
   constructor() { }
 
   ngOnInit() {
+    this.loadtable();
   }
 
+  loadtable() {
+    this.dtOptions = {
+      ajax: 'assets/data.json',
+      columns: [{
+        title: 'ID',
+        data: 'id'
+      }, {
+        title: 'First name',
+        data: 'firstName'
+      }, {
+        title: 'Last name',
+        data: 'lastName'
+      }],
+      // Declare the use of the extension in the dom parameter
+      dom: 'Bfrtip',
+      // Configure the buttons
+      buttons: [
+        'print',
+        'copy',
+        'csv',
+        'excel',
+        'pdfHtml5'
+      ]
+    };
+  }
 }
