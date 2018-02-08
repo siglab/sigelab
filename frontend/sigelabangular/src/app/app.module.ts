@@ -13,7 +13,7 @@ import { BusLabComponent } from './modulos/mod-principal/bus-lab/bus-lab.compone
 import { BusServComponent } from './modulos/mod-principal/bus-serv/bus-serv.component';
 import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.component';
 
-
+import { Ng2CompleterModule } from 'ng2-completer';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,8 @@ import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.compone
   imports: [
     BrowserModule,
     DataTablesModule,
-    RouterRoutingModule
+    RouterRoutingModule,
+    Ng2CompleterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

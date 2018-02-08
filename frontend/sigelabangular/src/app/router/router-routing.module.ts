@@ -15,7 +15,7 @@ const routes: Routes = [
       { path: 'busquedaprueba', component: BusPruComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
-  { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalab'}
+  { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}
 ];
 
 @NgModule({
