@@ -15,6 +15,9 @@ import { BusServComponent } from './modulos/mod-principal/bus-serv/bus-serv.comp
 import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.component';
 
 import { Ng2CompleterModule } from 'ng2-completer';
+import { BarAdminSolicitudesComponent } from './shared/components/dashboard/left-sidebar/bar-admin-solicitudes/bar-admin-solicitudes.component';
+import { AdminSolicitudesComponent } from './modulos/mod-autenticado/admin-solicitudes/admin-solicitudes.component';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { Ng2CompleterModule } from 'ng2-completer';
     BarBusquedaComponent,
     BusLabComponent,
     BusServComponent,
-    BusPruComponent
+    BusPruComponent,
+    BarAdminSolicitudesComponent,
+    AdminSolicitudesComponent
   ],
   imports: [
     BrowserModule,

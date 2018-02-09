@@ -5,6 +5,7 @@ import { PrincipalComponent } from './../shared/components/dashboard/principal/p
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BusLabComponent } from '../modulos/mod-principal/bus-lab/bus-lab.component';
+import { AdminSolicitudesComponent } from '../modulos/mod-autenticado/admin-solicitudes/admin-solicitudes.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: 'busquedalaboratorio', component: BusLabComponent},
       { path: 'busquedaservicio', component: BusServComponent},
       { path: 'busquedaprueba', component: BusPruComponent},
+      { path: 'adminsolicitudes', component: AdminSolicitudesComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}
