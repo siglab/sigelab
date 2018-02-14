@@ -1,3 +1,4 @@
+import { ObservablesService } from './shared/services/observables.service';
 import { PrincipalComponent } from './shared/components/dashboard/principal/principal.component';
 import { RouterRoutingModule } from './router/router-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,6 +18,10 @@ import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.compone
 import { Ng2CompleterModule } from 'ng2-completer';
 import { BarAdminSolicitudesComponent } from './shared/components/dashboard/left-sidebar/bar-admin-solicitudes/bar-admin-solicitudes.component';
 import { AdminSolicitudesComponent } from './modulos/mod-autenticado/admin-solicitudes/admin-solicitudes.component';
+import { AdminLaboratoriosComponent } from './modulos/mod-nivel2/admin-laboratorios/admin-laboratorios.component';
+import { BarAdminLaboratoriosComponent } from './shared/components/dashboard/left-sidebar/bar-admin-laboratorios/bar-admin-laboratorios.component';
+import { AdminEquiposComponent } from './modulos/mod-nivel2/admin-equipos/admin-equipos.component';
+
 
 
 @NgModule({
@@ -31,7 +36,10 @@ import { AdminSolicitudesComponent } from './modulos/mod-autenticado/admin-solic
     BusServComponent,
     BusPruComponent,
     BarAdminSolicitudesComponent,
-    AdminSolicitudesComponent
+    AdminSolicitudesComponent,
+    AdminLaboratoriosComponent,
+    BarAdminLaboratoriosComponent,
+    AdminEquiposComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +48,7 @@ import { AdminSolicitudesComponent } from './modulos/mod-autenticado/admin-solic
     Ng2CompleterModule,
     FormsModule
   ],
-  providers: [],
+  providers: [ObservablesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
