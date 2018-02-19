@@ -21,6 +21,10 @@ import { AdminSolicitudesComponent } from './modulos/mod-autenticado/admin-solic
 import { AdminLaboratoriosComponent } from './modulos/mod-nivel2/admin-laboratorios/admin-laboratorios.component';
 import { BarAdminLaboratoriosComponent } from './shared/components/dashboard/left-sidebar/bar-admin-laboratorios/bar-admin-laboratorios.component';
 import { AdminEquiposComponent } from './modulos/mod-nivel2/admin-equipos/admin-equipos.component';
+import { AdminEspaciosComponent } from './modulos/mod-nivel2/admin-espacios/admin-espacios.component';
+import { AdminServiciosComponent } from './modulos/mod-nivel2/admin-servicios/admin-servicios.component';
+import { AdminProyectosComponent } from './modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
+import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/admin-practicas.component';
 
 
 
@@ -39,7 +43,11 @@ import { AdminEquiposComponent } from './modulos/mod-nivel2/admin-equipos/admin-
     AdminSolicitudesComponent,
     AdminLaboratoriosComponent,
     BarAdminLaboratoriosComponent,
-    AdminEquiposComponent
+    AdminEquiposComponent,
+    AdminEspaciosComponent,
+    AdminServiciosComponent,
+    AdminProyectosComponent,
+    AdminPracticasComponent
   ],
   imports: [
     BrowserModule,

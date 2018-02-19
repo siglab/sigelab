@@ -17,8 +17,8 @@ export class AdminEquiposComponent implements OnInit {
              {nombre:"YODO",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 8"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
              {nombre:"CIANURO",servicios:[{nombre:"QUIMICA"},{nombre:"TERMODINAMICA"},{nombre:"FISICA"}],practicas:[{nombre:"EXSS"},{nombre:"FGFGFG"}],componentes:[],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
              {nombre:"SODIO",servicios:[{nombre:"QUIMICA"},{nombre:"TERMODINAMICA"},{nombre:"FISICA"}],practicas:[{nombre:"EXSS"},{nombre:"FGFGFG"}],componentes:[{nombre:"componente 9"},{nombre:"componente 10"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
-             {nombre:"CREMA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}]},
-             {nombre:"BATOLA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}]}];
+             {nombre:"CREMA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
+             {nombre:"BATOLA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}}];
 
   constructor(private obs:ObservablesService) { 
     this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
@@ -26,8 +26,8 @@ export class AdminEquiposComponent implements OnInit {
   }
 
   itemsel:Observable<Array<any>>;
-  equiposel={nombre:"", servicios:[],practicas:[],componentes:[]};
-
+  equiposel={nombre:"", servicios:[],practicas:[],componentes:[],info:{dir:"",tel:"",cel:"",email:""}};
+  //equiposel:any;
   ngOnInit() {
 
     this.obs.currentObject.subscribe(data=>{
@@ -39,7 +39,7 @@ export class AdminEquiposComponent implements OnInit {
 
 
   cambiardataEquipos(item){
-    this.equiposel = this.buscarDato(item);
+   this.equiposel = this.buscarDato(item);
   }
 
 

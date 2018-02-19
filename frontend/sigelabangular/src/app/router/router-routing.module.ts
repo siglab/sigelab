@@ -1,3 +1,5 @@
+import { AdminPracticasComponent } from './../modulos/mod-nivel2/admin-practicas/admin-practicas.component';
+import { AdminEspaciosComponent } from './../modulos/mod-nivel2/admin-espacios/admin-espacios.component';
 import { AdminLaboratoriosComponent } from './../modulos/mod-nivel2/admin-laboratorios/admin-laboratorios.component';
 import { BusPruComponent } from './../modulos/mod-principal/bus-pru/bus-pru.component';
 import { BusServComponent } from './../modulos/mod-principal/bus-serv/bus-serv.component';
@@ -8,6 +10,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { BusLabComponent } from '../modulos/mod-principal/bus-lab/bus-lab.component';
 import { AdminSolicitudesComponent } from '../modulos/mod-autenticado/admin-solicitudes/admin-solicitudes.component';
 import { AdminEquiposComponent } from '../modulos/mod-nivel2/admin-equipos/admin-equipos.component';
+import { AdminServiciosComponent } from '../modulos/mod-nivel2/admin-servicios/admin-servicios.component';
+import { AdminProyectosComponent } from '../modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
 
 
 const routes: Routes = [
@@ -19,6 +23,10 @@ const routes: Routes = [
       { path: 'adminsolicitudes', component: AdminSolicitudesComponent},
       { path: 'adminlaboratorios', component: AdminLaboratoriosComponent},
       { path: 'adminequipos', component: AdminEquiposComponent},
+      { path: 'adminespacios', component: AdminEspaciosComponent},
+      { path: 'adminpracticas', component: AdminPracticasComponent},
+      { path: 'adminservicios', component: AdminServiciosComponent},
+      { path: 'adminproyectos', component: AdminProyectosComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}

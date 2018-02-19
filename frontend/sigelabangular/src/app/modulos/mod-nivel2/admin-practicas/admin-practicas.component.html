@@ -1,0 +1,144 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Laboratorios</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#">
+            <i class="fa fa-dashboard"></i> Home</a>
+        </li>
+        <li class="active">Dashboard laboratorios</li>
+      </ol>
+    </section>
+  
+    <!-- Main content -->
+    <section class="content" *ngIf="itemsel | async; let itemsel">
+  
+      <!-- Componente central de busquedad -->
+  
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="box box-danger">
+            <div class="box-header" >
+              <i class="fa fa-search"></i>
+              <h3 class="box-title">fgdfhd</h3>
+            </div>
+  
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-danger">
+      
+                          <!-- /.box-header -->
+                          <div class="box-body">
+                    
+                              <div class="col-md-6">
+                                  <div class="box box-danger">
+                                    <div class="box-header">
+                                      <i class="fa fa-map"></i>
+                  
+                                      <h3 class="box-title">PRACTICAS ACTIVAS SEMESTRE</h3>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="box-body divScroll">
+                                          <div *ngIf="this.itemsel.practicas.length == 0">
+                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                                            </div>
+                                          <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
+                                              <table class=" table row-border hover table-condensed">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Nombre</th>
+                                                          <th>Materia</th>
+                                                      </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                                          <td>
+                                                              {{item.nombre}}
+                                                          </td>
+                                                          <td>
+                                                              {{item.nombre}}
+                                                          </td>
+                                                      </tr>
+                                                      </tbody>
+                                                  
+                                              </table>  
+                                             
+                                          </div>
+                                        </div>
+                                    </div>
+                                  <!-- /.box-body -->
+                                  </div>
+                                
+                              </div>
+    
+                              <div class="col-md-6">
+                                  <div class="box box-danger">
+                                    <div class="box-header">
+                                      <i class="fa fa-map"></i>
+                  
+                                      <h3 class="box-title">PRACTICAS INACTIVAS</h3>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="box-body divScroll">
+                                          <div *ngIf="this.itemsel.practicas.length == 0">
+                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS3</h3>
+                                            </div>
+                                          <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
+                                              <table class=" table row-border hover table-condensed">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Nombre</th>
+                                                          <th>Materia</th>
+                                                          <th>Ultimo semestre</th>
+                                                      </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                                          <td>
+                                                              {{item.nombre}}
+                                                          </td>
+                                                          <td>
+                                                              {{item.nombre}}
+                                                          </td>
+                                                          <td>
+                                                              {{item.nombre}}
+                                                          </td>
+                                                      </tr>
+                                                      </tbody>
+                                                  
+                                              </table>  
+                                          </div>
+                                        </div>
+                                    </div>
+                                  <!-- /.box-body -->
+                                  </div>
+                                
+                              </div>
+                       
+      
+                          </div>
+                          <!-- /.box-body -->
+        
+                        </div>
+                      </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      
+  
+    </section>
+  
+      
+  
+  </div>
