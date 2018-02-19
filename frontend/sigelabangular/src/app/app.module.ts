@@ -16,9 +16,11 @@ import { BusServComponent } from './modulos/mod-principal/bus-serv/bus-serv.comp
 import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.component';
 
 import { Ng2CompleterModule } from 'ng2-completer';
+// tslint:disable-next-line:max-line-length
 import { BarAdminSolicitudesComponent } from './shared/components/dashboard/left-sidebar/bar-admin-solicitudes/bar-admin-solicitudes.component';
 import { AdminSolicitudesComponent } from './modulos/mod-autenticado/admin-solicitudes/admin-solicitudes.component';
 import { AdminLaboratoriosComponent } from './modulos/mod-nivel2/admin-laboratorios/admin-laboratorios.component';
+// tslint:disable-next-line:max-line-length
 import { BarAdminLaboratoriosComponent } from './shared/components/dashboard/left-sidebar/bar-admin-laboratorios/bar-admin-laboratorios.component';
 import { AdminEquiposComponent } from './modulos/mod-nivel2/admin-equipos/admin-equipos.component';
 import { AdminEspaciosComponent } from './modulos/mod-nivel2/admin-espacios/admin-espacios.component';
@@ -27,6 +29,9 @@ import { AdminProyectosComponent } from './modulos/mod-nivel2/admin-proyectos/ad
 import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/admin-practicas.component';
 
 
+// Necesario para angularfire2
+import { environment } from '../environments/environment';
+import { AngularFireModule } from 'angularfire2';
 
 @NgModule({
   declarations: [
@@ -50,11 +55,14 @@ import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/ad
     AdminPracticasComponent
   ],
   imports: [
+
     BrowserModule,
     DataTablesModule,
     RouterRoutingModule,
     Ng2CompleterModule,
-    FormsModule
+    AngularFireModule.initializeApp(environment.firebase),
+    FormsModule,
+
   ],
   providers: [ObservablesService],
   bootstrap: [AppComponent]
