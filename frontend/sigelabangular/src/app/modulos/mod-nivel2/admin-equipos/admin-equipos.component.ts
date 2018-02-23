@@ -20,9 +20,9 @@ export class AdminEquiposComponent implements OnInit {
              {nombre:"CREMA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
              {nombre:"BATOLA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}}];
 
-  constructor(private obs:ObservablesService) { 
-    this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
-    servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
+  constructor(private obs:ObservablesService) {
+    // this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
+    // servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
   }
 
   itemsel:Observable<Array<any>>;

@@ -9,15 +9,16 @@ import { Observable } from 'rxjs/Observable';
 })
 export class AdminPracticasComponent implements OnInit {
 
-  itemsel:Observable<Array<any>>;;
+  itemsel: Observable<Array<any>>;
 
-  constructor(private obs:ObservablesService) {
-    this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
-    servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
+  constructor(private obs: ObservablesService) {
+    // tslint:disable-next-line:max-line-length
+    // this.obs.changeObject({nombre: 'SELECCIONE UN LABORATORIO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: '', tel: '', cel: '4', email: ''},
+    // servicios: [], practicas: [], equipos: [], personal: [], proyectos: [], solicitudes: []});
    }
 
   ngOnInit() {
-    this.obs.currentObject.subscribe(data=>{
+    this.obs.currentObject.subscribe(data => {
       console.log(data);
       this.itemsel = Observable.of(data);
       console.log(this.itemsel);

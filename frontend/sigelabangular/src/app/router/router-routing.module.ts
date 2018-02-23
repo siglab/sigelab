@@ -10,8 +10,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { BusLabComponent } from '../modulos/mod-principal/bus-lab/bus-lab.component';
 import { AdminSolicitudesComponent } from '../modulos/mod-autenticado/admin-solicitudes/admin-solicitudes.component';
 import { AdminEquiposComponent } from '../modulos/mod-nivel2/admin-equipos/admin-equipos.component';
-import { AdminServiciosComponent } from '../modulos/mod-nivel2/admin-servicios/admin-servicios.component';
 import { AdminProyectosComponent } from '../modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
+import { SolicitudesServicioComponent } from '../modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
 
 
 const routes: Routes = [
@@ -25,7 +25,7 @@ const routes: Routes = [
       { path: 'adminequipos', component: AdminEquiposComponent},
       { path: 'adminespacios', component: AdminEspaciosComponent},
       { path: 'adminpracticas', component: AdminPracticasComponent},
-      { path: 'adminservicios', component: AdminServiciosComponent},
+      { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent},
       { path: 'adminproyectos', component: AdminProyectosComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},

@@ -24,7 +24,6 @@ import { AdminLaboratoriosComponent } from './modulos/mod-nivel2/admin-laborator
 import { BarAdminLaboratoriosComponent } from './shared/components/dashboard/left-sidebar/bar-admin-laboratorios/bar-admin-laboratorios.component';
 import { AdminEquiposComponent } from './modulos/mod-nivel2/admin-equipos/admin-equipos.component';
 import { AdminEspaciosComponent } from './modulos/mod-nivel2/admin-espacios/admin-espacios.component';
-import { AdminServiciosComponent } from './modulos/mod-nivel2/admin-servicios/admin-servicios.component';
 import { AdminProyectosComponent } from './modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
 import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/admin-practicas.component';
 
@@ -32,7 +31,8 @@ import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/ad
 // Necesario para angularfire2
 import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
-import { firebase } from "./tokens";
+import { firebase } from './tokens';
+import { SolicitudesServicioComponent } from './modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
 
 @NgModule({
   declarations: [
@@ -51,9 +51,9 @@ import { firebase } from "./tokens";
     BarAdminLaboratoriosComponent,
     AdminEquiposComponent,
     AdminEspaciosComponent,
-    AdminServiciosComponent,
     AdminProyectosComponent,
-    AdminPracticasComponent
+    AdminPracticasComponent,
+    SolicitudesServicioComponent
   ],
   imports: [
 
