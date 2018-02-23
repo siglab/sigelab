@@ -32,6 +32,7 @@ import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/ad
 // Necesario para angularfire2
 import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
+import { firebase } from "./tokens";
 
 @NgModule({
   declarations: [
@@ -60,7 +61,7 @@ import { AngularFireModule } from 'angularfire2';
     DataTablesModule,
     RouterRoutingModule,
     Ng2CompleterModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(firebase),
     FormsModule,
 
   ],
