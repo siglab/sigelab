@@ -20,7 +20,7 @@
       "prefix": "app",
       "styles": [
         "../node_modules/leaflet/dist/leaflet.css",
-        "../node_modules/sweealer2/dist/sweetalert2.min.css",
+
         "../node_modules/datatables.net-dt/css/jquery.dataTables.css",
         "../node_modules/datatables.net-select-dt/css/select.dataTables.css",
         "../node_modules/font-awesome/css/font-awesome.css",
@@ -29,7 +29,6 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
-        "../node_modules/sweealer2/dist/sweetalert2.min.js",
         "../node_modules/datatables.net/js/jquery.dataTables.js",
         "../node_modules/datatables.net-buttons/js/dataTables.buttons.js",
         "../node_modules/datatables.net-select/js/dataTables.select.js",
