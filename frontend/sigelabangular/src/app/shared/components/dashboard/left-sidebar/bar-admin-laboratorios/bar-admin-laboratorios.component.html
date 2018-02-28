@@ -20,13 +20,13 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li class="treeview">
-                  <a href="#" [routerLink]="['adminlaboratorios']" (click)="enviaritem(item)">
+                <li class="treeview" (click)="enviaritem(item)">
+                  <a href="#" [routerLink]="['adminlaboratorios']" >
                     <i class="fa fa-circle-o"></i>DashBoard
                   </a>
                 </li>
-                <li class="treeview">
-                  <a [routerLink]="['adminequipos']" (click)="enviaritem(item)" >
+                <li class="treeview" (click)="enviaritem(item)">
+                  <a [routerLink]="['adminequipos']" >
                     <i class="fa fa-circle-o"></i>Administracion de Equipos
                   </a>
                 </li>
@@ -35,21 +35,36 @@
                     <i class="fa fa-circle-o"></i>Administracion de Personal
                   </a>
                 </li>
-                <li class="treeview">
-                  <a [routerLink]="['adminespacios']" (click)="enviaritem(item)">
+                <li class="treeview" (click)="enviaritem(item)">
+                  <a [routerLink]="['adminespacios']" >
                     <i class="fa fa-circle-o"></i>Administracion de Espacios
                   </a>
                 </li>
-                <li class="treeview">
-                  <a [routerLink]="['adminpracticas']" (click)="enviaritem(item)">
+                <li class="treeview" (click)="enviaritem(item)">
+                  <a [routerLink]="['adminpracticas']" >
                     <i class="fa fa-circle-o"></i>Administracion de Practicas
                   </a>
                 </li>
                 <li class="treeview">
-                  <a [routerLink]="['adminservicios']" (click)="enviaritem(item)">
-                    <i class="fa fa-circle-o"></i>Administracion de Servicios
+                  <a href="#">
+                    <i class="fa fa-circle-o"></i> Administracion de Servicios
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                   </a>
+                  <ul class="treeview-menu">
+                    <li>
+                      <a>
+                        <i class="fa fa-circle-o" ></i>
+                         Servicios asociados</a>
+                    </li>
+                    <li (click)="enviaritem(item)">
+                      <a [routerLink]="['adminserviciosolicitud']">
+                        <i class="fa fa-circle-o"></i> Solicitudes de servicios</a>
+                    </li>
+                  </ul>
                 </li>
+
                 <li class="treeview">
                   <a [routerLink]="['adminproyectos']" (click)="enviaritem(item)">
                     <i class="fa fa-circle-o"></i>Administracion de Proyectos
@@ -62,9 +77,8 @@
                 </li>
               </ul>
             </li>
-     
+
           </ul>
         </li>
 
       </ul>
-  
