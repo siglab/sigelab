@@ -33,6 +33,8 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
 import { firebase } from './tokens';
 import { SolicitudesServicioComponent } from './modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
+import { ServiciosAsociadosComponent } from './modulos/mod-nivel2/admin-servicios/servicios-asociados/servicios-asociados.component';
+
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { SolicitudesServicioComponent } from './modulos/mod-nivel2/admin-servici
     AdminEspaciosComponent,
     AdminProyectosComponent,
     AdminPracticasComponent,
-    SolicitudesServicioComponent
+    SolicitudesServicioComponent,
+    ServiciosAsociadosComponent
   ],
   imports: [
 

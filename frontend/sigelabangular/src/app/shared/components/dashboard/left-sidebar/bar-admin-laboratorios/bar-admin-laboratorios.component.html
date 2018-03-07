@@ -53,8 +53,8 @@
                     </span>
                   </a>
                   <ul class="treeview-menu">
-                    <li>
-                      <a>
+                    <li (click)="enviaritem(item)">
+                      <a [routerLink]="['adminserviciosasociados']">
                         <i class="fa fa-circle-o" ></i>
                          Servicios asociados</a>
                     </li>

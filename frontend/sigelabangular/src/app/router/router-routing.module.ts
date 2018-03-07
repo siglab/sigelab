@@ -1,3 +1,4 @@
+
 import { AdminPracticasComponent } from './../modulos/mod-nivel2/admin-practicas/admin-practicas.component';
 import { AdminEspaciosComponent } from './../modulos/mod-nivel2/admin-espacios/admin-espacios.component';
 import { AdminLaboratoriosComponent } from './../modulos/mod-nivel2/admin-laboratorios/admin-laboratorios.component';
@@ -12,6 +13,7 @@ import { AdminSolicitudesComponent } from '../modulos/mod-autenticado/admin-soli
 import { AdminEquiposComponent } from '../modulos/mod-nivel2/admin-equipos/admin-equipos.component';
 import { AdminProyectosComponent } from '../modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
 import { SolicitudesServicioComponent } from '../modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
+import { ServiciosAsociadosComponent } from '../modulos/mod-nivel2/admin-servicios/servicios-asociados/servicios-asociados.component';
 
 
 const routes: Routes = [
@@ -26,6 +28,7 @@ const routes: Routes = [
       { path: 'adminespacios', component: AdminEspaciosComponent},
       { path: 'adminpracticas', component: AdminPracticasComponent},
       { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent},
+      { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent},
       { path: 'adminproyectos', component: AdminProyectosComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
