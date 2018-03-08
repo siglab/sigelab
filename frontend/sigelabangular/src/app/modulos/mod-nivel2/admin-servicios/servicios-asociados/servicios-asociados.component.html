@@ -38,15 +38,15 @@
                     <i class="fa fa-map"></i>
 
                     <h3 class="box-title">Servicios Asociados</h3>
-                    <h3 class="box-title" style="float: right;">{{this.itemsel.practicas.length}} SERVICIOS</h3>
+                    <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} SERVICIOS</h3>
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
                       <div class="box-body divScroll">
-                        <div *ngIf="this.itemsel.practicas.length == 0">
+                        <div *ngIf="this.itemsel.servicios.length == 0">
                             <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
                           </div>
-                        <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
+                        <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
                             <table class=" table row-border hover table-condensed">
                                 <thead>
                                     <tr>
@@ -55,7 +55,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.servicios">
                                         <td>
                                             {{item.nombre}}
                                         </td>
@@ -88,15 +88,15 @@
                             <i class="fa fa-map"></i>
 
                             <h3 class="box-title">Variaciones de servicio</h3>
-                            <h3 class="box-title" style="float: right;">{{this.itemsel.practicas.length}} SERVICIOS</h3>
+                            <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} SERVICIOS</h3>
                           </div>
                           <!-- /.box-header -->
                           <div class="box-body">
                               <div class="box-body divScroll">
-                                <div *ngIf="this.itemsel.practicas.length == 0">
+                                <div *ngIf="this.itemsel.servicios.length == 0">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
                                   </div>
-                                <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
+                                <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
                                     <table class=" table row-border hover table-condensed">
                                         <thead>
                                             <tr>
@@ -105,7 +105,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                            <tr style="cursor:pointer" *ngFor="let item of this.itemsel.servicios">
                                                 <td>
                                                     {{item.nombre}}
                                                 </td>
@@ -128,15 +128,15 @@
                               <i class="fa fa-map"></i>
 
                               <h3 class="box-title">Equipos Vinculados</h3>
-                              <h3 class="box-title" style="float: right;">{{this.itemsel.practicas.length}} SERVICIOS</h3>
+                              <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} SERVICIOS</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
                                 <div class="box-body divScroll">
-                                  <div *ngIf="this.itemsel.practicas.length == 0">
+                                  <div *ngIf="this.itemsel.servicios.length == 0">
                                       <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
                                     </div>
-                                  <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
+                                  <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
                                       <table class=" table row-border hover table-condensed">
                                           <thead>
                                               <tr>
@@ -145,7 +145,7 @@
                                               </tr>
                                               </thead>
                                               <tbody>
-                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.servicios">
                                                   <td>
                                                       {{item.nombre}}
                                                   </td>

@@ -34,6 +34,14 @@ import { AngularFireModule } from 'angularfire2';
 import { firebase } from './tokens';
 import { SolicitudesServicioComponent } from './modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
 import { ServiciosAsociadosComponent } from './modulos/mod-nivel2/admin-servicios/servicios-asociados/servicios-asociados.component';
+import { AdminPersonalComponent } from './modulos/mod-nivel2/admin-personal/admin-personal.component';
+import { SolicitudMantenimientoComponent } from './modulos/mod-nivel2/admin-solicitudes/solicitud-mantenimiento/solicitud-mantenimiento.component';
+import { SolicitudBajaComponent } from './modulos/mod-nivel2/admin-solicitudes/solicitud-baja/solicitud-baja.component';
+import { BarAdminLaboratorioSuperiorComponent } from './shared/components/dashboard/left-sidebar/bar-admin-laboratorio-superior/bar-admin-laboratorio-superior.component';
+import { BarAdminUsuariosComponent } from './shared/components/dashboard/left-sidebar/bar-admin-usuarios/bar-admin-usuarios.component';
+import { BarIndicadoresComponent } from './shared/components/dashboard/left-sidebar/bar-indicadores/bar-indicadores.component';
+import { BarComunicacionMasivaComponent } from './shared/components/dashboard/left-sidebar/bar-comunicacion-masiva/bar-comunicacion-masiva.component';
+import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
 
 @NgModule({
@@ -56,7 +64,15 @@ import { ServiciosAsociadosComponent } from './modulos/mod-nivel2/admin-servicio
     AdminProyectosComponent,
     AdminPracticasComponent,
     SolicitudesServicioComponent,
-    ServiciosAsociadosComponent
+    ServiciosAsociadosComponent,
+    AdminPersonalComponent,
+    SolicitudMantenimientoComponent,
+    SolicitudBajaComponent,
+    BarAdminLaboratorioSuperiorComponent,
+    BarAdminUsuariosComponent,
+    BarIndicadoresComponent,
+    BarComunicacionMasivaComponent,
+    AdminLaboratorios25Component
   ],
   imports: [
 

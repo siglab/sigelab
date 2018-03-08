@@ -1,0 +1,395 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Dashboard
+      <small>Laboratorios</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <a href="#">
+          <i class="fa fa-dashboard"></i> Home</a>
+      </li>
+      <li class="active">Dashboard laboratorios</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content" *ngIf="itemsel | async; let itemsel">
+
+    <!-- Componente central de busquedad -->
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger">
+          <div class="box-header">
+            <i class="fa fa-search"></i>
+
+            <h3 class="box-title">Busquedad</h3>
+
+          </div>
+
+          <div class="box-body">
+            <form action="#" method="post">
+              <div class="input-group">
+                <div class="input-group-btn">
+
+                  <input type="text" class="form-control" name="busquedad" placeholder="Buscar">
+                </div>
+              </div>
+            </form>
+
+
+            <div class="row" style="margin-top:30px;">
+                <div class="col-md-12">
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <i class="fa fa-flask"></i>
+
+                            <h3 class="box-title">LABORATORIOS</h3>
+                        </div>
+                        <div class="box-body divScroll">
+                            <div class="list-group">
+                                <a *ngFor="let item of this.convenios" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger">
+          <div class="box-body">
+
+            <div class="row" style="margin-top:20px;">
+               <!-- INFORMACION LABORATORIO -->
+                <div class="col-md-5">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-address-card-o"></i>
+
+                      <h3 class="box-title">Informacion Laboratorio</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body divScroll">
+                      <form id="form-work" class="" name="form-work" action="#">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="nac"><strong>Telefono: {{this.itemsel.info.tel}}</strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="ciuor"><strong>Celular: {{this.itemsel.info.cel}}</strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="ciudes"><strong>Email: {{this.itemsel.info.email}}</strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="nac"><strong>Telefono: {{this.itemsel.info.tel}}</strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="ciuor"><strong>Celular: {{this.itemsel.info.cel}}</strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="ciudes"><strong>Email: {{this.itemsel.info.email}}</strong></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12" style="margin-left: 70%; max-width: 120px;">
+                                    <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >Editar</button>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                    </div>
+
+                  </div>
+                </div>
+              <div class="col-md-7">
+                <div class="box box-danger">
+
+                  <!-- /.box-header -->
+                  <div class="box-body">
+
+                      <div class="col-md-12">
+                          <div class="box box-danger">
+                            <div class="box-header">
+                              <i class="fa fa-map"></i>
+
+                              <h3 class="box-title">Equipos Vinculados</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="box-body divScroll1">
+                                  <div *ngIf="this.itemsel.equipos.length == 0">
+                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                                    </div>
+                                  <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
+                                      <a *ngFor="let item of this.itemsel.equipos" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+                                  </div>
+                                </div>
+                            </div>
+                          <!-- /.box-body -->
+                          </div>
+
+                      </div>
+
+
+                        <div class="col-md-12">
+                          <div class="box box-danger">
+                            <div class="box-header">
+                              <i class="fa fa-map"></i>
+
+                              <h3 class="box-title">Personal Vinculado</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="box-body divScroll1">
+                                    <div *ngIf="this.itemsel.personal.length == 0">
+                                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PERSONAL</h3>
+                                      </div>
+                                    <div *ngIf="this.itemsel.personal.length != 0" class="list-group">
+                                        <a *ngFor="let item of this.itemsel.personal" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+                                    </div>
+                                  </div>
+                            </div>
+                            <!-- /.box-body -->
+
+                          </div>
+                        </div>
+
+
+                  </div>
+                  <!-- /.box-body -->
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:20px;">
+                <!-- INFORMACION LABORATORIO -->
+                 <div class="col-md-5">
+                   <div class="box box-danger">
+                     <div class="box-header">
+                       <i class="fa fa-address-card-o"></i>
+
+                       <h3 class="box-title">Informacion de espacios asociados al Laboratorio</h3>
+                     </div>
+                     <!-- /.box-header -->
+                     <div class="box-body divScroll">
+                         <form id="form-work" class="" name="form-work" action="#">
+                             <fieldset>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
+
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="nac"><strong>Telefono: {{this.itemsel.info.tel}}</strong></label>
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="ciuor"><strong>Celular: {{this.itemsel.info.cel}}</strong></label>
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="ciudes"><strong>Email: {{this.itemsel.info.email}}</strong></label>
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
+
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="nac"><strong>Telefono: {{this.itemsel.info.tel}}</strong></label>
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="ciuor"><strong>Celular: {{this.itemsel.info.cel}}</strong></label>
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                     <div class="col-md-12">
+                                       <label class="control-label" for="ciudes"><strong>Email: {{this.itemsel.info.email}}</strong></label>
+                                     </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <div class="col-md-12" style="margin-left: 70%; max-width: 140px;">
+                                        <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >Ver mas</button>
+                                    </div>
+                                </div>
+
+                             </fieldset>
+                         </form>
+
+                     </div>
+
+                   </div>
+                 </div>
+               <div class="col-md-7">
+                 <div class="box box-danger">
+
+                   <!-- /.box-header -->
+                   <div class="box-body">
+
+                       <div class="col-md-12">
+                           <div class="box box-danger">
+                             <div class="box-header">
+                               <i class="fa fa-map"></i>
+
+                               <h3 class="box-title">Servicios</h3>
+                             </div>
+                             <!-- /.box-header -->
+                             <div class="box-body">
+                                 <div class="box-body divScroll1">
+                                   <div *ngIf="this.itemsel.servicios.length == 0">
+                                       <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
+                                     </div>
+                                   <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
+                                       <a *ngFor="let item of this.itemsel.servicios" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+                                   </div>
+                                 </div>
+                             </div>
+                           <!-- /.box-body -->
+                           </div>
+
+                       </div>
+
+
+                      <div class="col-md-12">
+                        <div class="box box-danger">
+                          <div class="box-header">
+                            <i class="fa fa-map"></i>
+
+                            <h3 class="box-title">Proyectos</h3>
+                          </div>
+                          <!-- /.box-header -->
+                          <div class="box-body">
+                              <div class="box-body divScroll1">
+                                  <div *ngIf="this.itemsel.proyectos.length == 0">
+                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
+                                    </div>
+                                  <div *ngIf="this.itemsel.proyectos.length != 0" class="list-group">
+                                      <a *ngFor="let item of this.itemsel.proyectos" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+                                  </div>
+                                </div>
+                          </div>
+                          <!-- /.box-body -->
+
+                        </div>
+                      </div>
+
+
+
+                   </div>
+                   <!-- /.box-body -->
+
+                 </div>
+               </div>
+
+            </div>
+
+
+            <div class="row" style="margin-top:20px;">
+
+                <div class="col-md-6">
+                    <div class="box box-danger">
+                      <div class="box-header">
+                        <i class="fa fa-map"></i>
+
+                        <h3 class="box-title">Practicas</h3>
+                      </div>
+                      <!-- /.box-header -->
+                      <div class="box-body">
+                          <div class="box-body divScroll1">
+                            <div *ngIf="this.itemsel.practicas.length == 0">
+                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRACTICAS</h3>
+                              </div>
+                            <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
+                                <a *ngFor="let item of this.itemsel.practicas" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+                            </div>
+                          </div>
+                      </div>
+                    <!-- /.box-body -->
+                    </div>
+
+                </div>
+
+
+              <div class="col-md-6">
+                <div class="box box-danger">
+                  <div class="box-header">
+                    <i class="fa fa-map"></i>
+
+                    <h3 class="box-title">Solicitudes sin atender</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                      <div class="box-body divScroll1">
+                          <div *ngIf="this.itemsel.solicitudes.length == 0">
+                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES SIN ATENDER</h3>
+                            </div>
+                          <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
+                              <a *ngFor="let item of this.itemsel.solicitudes" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
+                          </div>
+                        </div>
+                  </div>
+                  <!-- /.box-body -->
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+
+  </section>
+
+
+
+</div>

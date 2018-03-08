@@ -1,13 +1,14 @@
-import { Observable } from 'rxjs/Observable';
+import { ObservablesService } from './../../../shared/services/observables.service';
 import { Component, OnInit } from '@angular/core';
-import { ObservablesService } from '../../../shared/services/observables.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-admin-proyectos',
-  templateUrl: './admin-proyectos.component.html',
-  styleUrls: ['./admin-proyectos.component.css']
+  selector: 'app-admin-personal',
+  templateUrl: './admin-personal.component.html',
+  styleUrls: ['./admin-personal.component.css']
 })
-export class AdminProyectosComponent implements OnInit {
+export class AdminPersonalComponent implements OnInit {
+
   itemsel: Observable<Array<any>>;
 
   constructor(private obs: ObservablesService) { }

@@ -1,3 +1,4 @@
+import { AdminLaboratorios25Component } from './../modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
 import { AdminPracticasComponent } from './../modulos/mod-nivel2/admin-practicas/admin-practicas.component';
 import { AdminEspaciosComponent } from './../modulos/mod-nivel2/admin-espacios/admin-espacios.component';
@@ -14,6 +15,10 @@ import { AdminEquiposComponent } from '../modulos/mod-nivel2/admin-equipos/admin
 import { AdminProyectosComponent } from '../modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
 import { SolicitudesServicioComponent } from '../modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
 import { ServiciosAsociadosComponent } from '../modulos/mod-nivel2/admin-servicios/servicios-asociados/servicios-asociados.component';
+import { AdminPersonalComponent } from '../modulos/mod-nivel2/admin-personal/admin-personal.component';
+// tslint:disable-next-line:max-line-length
+import { SolicitudMantenimientoComponent } from '../modulos/mod-nivel2/admin-solicitudes/solicitud-mantenimiento/solicitud-mantenimiento.component';
+import { SolicitudBajaComponent } from '../modulos/mod-nivel2/admin-solicitudes/solicitud-baja/solicitud-baja.component';
 
 
 const routes: Routes = [
@@ -27,9 +32,14 @@ const routes: Routes = [
       { path: 'adminequipos', component: AdminEquiposComponent},
       { path: 'adminespacios', component: AdminEspaciosComponent},
       { path: 'adminpracticas', component: AdminPracticasComponent},
+      { path: 'adminpersonal', component: AdminPersonalComponent},
       { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent},
       { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent},
       { path: 'adminproyectos', component: AdminProyectosComponent},
+      { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent},
+      { path: 'adminsolicitudbaja', component: SolicitudBajaComponent},
+
+      { path: 'adminlaboratorios25', component: AdminLaboratorios25Component},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}

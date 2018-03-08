@@ -30,8 +30,8 @@
                     <i class="fa fa-circle-o"></i>Administracion de Equipos
                   </a>
                 </li>
-                <li class="treeview">
-                  <a>
+                <li class="treeview" (click)="enviaritem(item)">
+                  <a [routerLink]="['adminpersonal']" >
                     <i class="fa fa-circle-o"></i>Administracion de Personal
                   </a>
                 </li>
@@ -72,8 +72,36 @@
                 </li>
                 <li class="treeview">
                   <a>
-                    <i class="fa fa-circle-o"></i>Solicitudes
+                    <i class="fa fa-circle-o"></i>
+                    <span>Solicitudes</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                   </a>
+                  <ul class="treeview-menu">
+                    <li class="treeview">
+                      <a [routerLink]="['adminsolicitudmantenimiento']" (click)="enviaritem(item)">
+                        <i class="fa fa-circle-o"></i>Solicitud de Mantenimiento
+                      </a>
+                    </li>
+                    <li class="treeview">
+                      <a>
+                        <i class="fa fa-circle-o"></i>Solicitud de Reposicion
+                      </a>
+                    </li>
+                    <li class="treeview">
+                      <a [routerLink]="['adminsolicitudbaja']" (click)="enviaritem(item)">
+                        <i class="fa fa-circle-o"></i>Solicitud de Baja
+                      </a>
+                    </li>
+                    <li class="treeview">
+                      <a>
+                        <i class="fa fa-circle-o"></i>Recoleccion de Residuos
+                      </a>
+                    </li>
+
+                  </ul>
+
                 </li>
               </ul>
             </li>
@@ -81,4 +109,4 @@
           </ul>
         </li>
 
-      </ul>
+</ul>
