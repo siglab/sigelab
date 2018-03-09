@@ -1,3 +1,4 @@
+import { ComunicacionMasivaComponent } from './../modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
 import { AdminLaboratorios25Component } from './../modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
 import { AdminPracticasComponent } from './../modulos/mod-nivel2/admin-practicas/admin-practicas.component';
@@ -40,6 +41,8 @@ const routes: Routes = [
       { path: 'adminsolicitudbaja', component: SolicitudBajaComponent},
 
       { path: 'adminlaboratorios25', component: AdminLaboratorios25Component},
+
+      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}

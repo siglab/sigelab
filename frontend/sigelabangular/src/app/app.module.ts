@@ -42,6 +42,7 @@ import { BarAdminUsuariosComponent } from './shared/components/dashboard/left-si
 import { BarIndicadoresComponent } from './shared/components/dashboard/left-sidebar/bar-indicadores/bar-indicadores.component';
 import { BarComunicacionMasivaComponent } from './shared/components/dashboard/left-sidebar/bar-comunicacion-masiva/bar-comunicacion-masiva.component';
 import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
+import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-labor
     BarAdminUsuariosComponent,
     BarIndicadoresComponent,
     BarComunicacionMasivaComponent,
-    AdminLaboratorios25Component
+    AdminLaboratorios25Component,
+    ComunicacionMasivaComponent
   ],
   imports: [
 
