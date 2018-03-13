@@ -43,7 +43,8 @@ import { BarIndicadoresComponent } from './shared/components/dashboard/left-side
 import { BarComunicacionMasivaComponent } from './shared/components/dashboard/left-sidebar/bar-comunicacion-masiva/bar-comunicacion-masiva.component';
 import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
-
+import { IndicadoresGraficasReportesComponent } from './modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-m
     BarIndicadoresComponent,
     BarComunicacionMasivaComponent,
     AdminLaboratorios25Component,
-    ComunicacionMasivaComponent
+    ComunicacionMasivaComponent,
+    IndicadoresGraficasReportesComponent
   ],
   imports: [
 
@@ -82,6 +84,7 @@ import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-m
     DataTablesModule,
     RouterRoutingModule,
     Ng2CompleterModule,
+    NgxChartsModule,
     AngularFireModule.initializeApp(firebase),
     FormsModule,
 

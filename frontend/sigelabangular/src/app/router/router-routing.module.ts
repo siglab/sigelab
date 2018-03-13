@@ -20,11 +20,13 @@ import { AdminPersonalComponent } from '../modulos/mod-nivel2/admin-personal/adm
 // tslint:disable-next-line:max-line-length
 import { SolicitudMantenimientoComponent } from '../modulos/mod-nivel2/admin-solicitudes/solicitud-mantenimiento/solicitud-mantenimiento.component';
 import { SolicitudBajaComponent } from '../modulos/mod-nivel2/admin-solicitudes/solicitud-baja/solicitud-baja.component';
+// tslint:disable-next-line:max-line-length
+import { IndicadoresGraficasReportesComponent } from '../modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 
 
 const routes: Routes = [
   { path: 'principal', component: PrincipalComponent,
-    children:[
+    children: [
       { path: 'busquedalaboratorio', component: BusLabComponent},
       { path: 'busquedaservicio', component: BusServComponent},
       { path: 'busquedaprueba', component: BusPruComponent},
@@ -41,6 +43,7 @@ const routes: Routes = [
       { path: 'adminsolicitudbaja', component: SolicitudBajaComponent},
 
       { path: 'adminlaboratorios25', component: AdminLaboratorios25Component},
+      { path: 'indicadores25', component: IndicadoresGraficasReportesComponent},
 
       { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
