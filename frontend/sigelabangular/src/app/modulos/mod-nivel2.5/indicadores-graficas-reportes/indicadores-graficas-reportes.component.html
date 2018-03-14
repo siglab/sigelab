@@ -117,72 +117,83 @@
 
                 <div class="box-body">
 
-                  <div class="row">
-                    <div class="col-md-5 col-lg-5">
-                      <div class="box box-danger">
+                  <div class="col-md-12 col-lg-12">
+                    <div class="box box-danger">
+                      <div class="box-header" >
+                        <i class="fa fa-search"></i>
+                        <h3 class="box-title">LABORATORIOS</h3>
+                      </div>
+
+                      <div class="box-body divScroll1">
+                          <ngx-charts-advanced-pie-chart
+                          [view]="view"
+                          [scheme]="colorScheme"
+                          [results]="single"
+                          [label]="titulo"
+                          (select)="onSelect($event)">
+                        </ngx-charts-advanced-pie-chart>
+                        <!-- <div class="col-md-2 col-sm-2 col-xs-2">
+                            <div class="box box-solid box-info">
+                                <div class="box-header">
+                                  <h4 class="box-title">DATA</h4>
+                                </div>
+
+                                <div class="box-body">
+                                    <h2>{{itemsel.servicios.length}}</h2>
+                                </div>
+                            </div>
+
+                        </div>
+              -->
+
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <div class="col-md-12 col-lg-12">
+                    <div class="box box-danger">
                         <div class="box-header" >
-                          <i class="fa fa-search"></i>
-                          <h3 class="box-title">LABORATORIOS</h3>
-                        </div>
-
-                        <div class="box-body">
-                          <div class="col-md-2 col-sm-2 col-xs-2">
-                              <h4>DATA</h4>
-                              <span class="info-box-number">{{itemsel.servicios.length}}</span>
-                          </div>
-                          <div class="col-md-3 col-sm-3 col-xs-3">
-                            <h4>GRAFICAA</h4>
+                            <i class="fa fa-search"></i>
+                            <h3 class="box-title">SERVICIOS</h3>
                           </div>
 
-
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-7 col-lg-7">
-                      <div class="box box-danger">
-                          <div class="box-header" >
-                              <i class="fa fa-search"></i>
-                              <h3 class="box-title">SERVICIOS</h3>
-                            </div>
-
-                        <div class="box-body">
+                      <div class="box-body">
 
 
-                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-5 col-lg-5">
-                      <div class="box box-danger">
-                          <div class="box-header" >
-                              <i class="fa fa-search"></i>
-                              <h3 class="box-title">OTROS INDICADORES</h3>
-                            </div>
+                  <div class="col-md-12 col-lg-12">
+                    <div class="box box-danger">
+                        <div class="box-header" >
+                            <i class="fa fa-search"></i>
+                            <h3 class="box-title">OTROS INDICADORES</h3>
+                          </div>
 
-                        <div class="box-body">
-
-
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-7 col-lg-7">
-                      <div class="box box-danger">
-                          <div class="box-header" >
-                              <i class="fa fa-search"></i>
-                              <h3 class="box-title">GRAFICO</h3>
-                            </div>
-
-                        <div class="box-body">
+                      <div class="box-body">
 
 
-                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <div class="col-md-12 col-lg-12">
+                    <div class="box box-danger">
+                        <div class="box-header" >
+                            <i class="fa fa-search"></i>
+                            <h3 class="box-title">GRAFICO</h3>
+                          </div>
+
+                      <div class="box-body">
+
+
+                      </div>
+                    </div>
+                  </div>
+
 
                   <div class="row">
                     <div class="col-md-12 col-lg-12">
@@ -193,6 +204,7 @@
                             </div>
 
                         <div class="box-body">
+
 
 
                         </div>

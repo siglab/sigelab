@@ -45,7 +45,7 @@ import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-labor
 import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
 import { IndicadoresGraficasReportesComponent } from './modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,6 +85,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     RouterRoutingModule,
     Ng2CompleterModule,
     NgxChartsModule,
+    BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebase),
     FormsModule,
 

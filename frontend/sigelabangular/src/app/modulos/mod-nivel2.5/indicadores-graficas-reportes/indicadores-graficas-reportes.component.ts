@@ -24,9 +24,43 @@ export class IndicadoresGraficasReportesComponent implements OnInit {
 
   itemsel: Observable<Array<any>>;
 
+ //  GRAFICAS
+  single = [
+    {
+      'name': 'Laboratorios Activos',
+      'value': 170
+    },
+    {
+      'name': 'Laboratorios Inactivos',
+      'value': 68
+    }
+  ];
+
+
+
+
+
+  view: any[] = [800, 300];
+  titulo = 'Laboratorios Registrados';
+  // options
+  showLegend = false;
+
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
+  // pie
+  showLabels = true;
+  explodeSlices = false;
+  doughnut = false;
+
+
+
+
   constructor(private obs: ObservablesService) {
     // this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
     // servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
+
   }
 
   ngOnInit() {
@@ -37,5 +71,8 @@ export class IndicadoresGraficasReportesComponent implements OnInit {
     });
   }
 
+  onSelect(event) {
+   console.log(event);
+  }
 
 }
