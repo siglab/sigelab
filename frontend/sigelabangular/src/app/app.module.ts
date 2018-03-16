@@ -46,6 +46,8 @@ import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-m
 import { IndicadoresGraficasReportesComponent } from './modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
+import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,7 +78,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BarComunicacionMasivaComponent,
     AdminLaboratorios25Component,
     ComunicacionMasivaComponent,
-    IndicadoresGraficasReportesComponent
+    IndicadoresGraficasReportesComponent,
+    SolicitudesNivel3Component,
+    BarSolicitudesNivel3Component
   ],
   imports: [
 

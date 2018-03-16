@@ -117,7 +117,7 @@
 
                 <div class="box-body">
 
-                  <div class="col-md-12 col-lg-12">
+                  <div class="col-md-7 col-lg-7">
                     <div class="box box-danger">
                       <div class="box-header" >
                         <i class="fa fa-search"></i>
@@ -126,31 +126,83 @@
 
                       <div class="box-body divScroll1">
                           <ngx-charts-advanced-pie-chart
-                          [view]="view"
-                          [scheme]="colorScheme"
-                          [results]="single"
-                          [label]="titulo"
-                          (select)="onSelect($event)">
+                          [view]="viewLabs"
+                          [scheme]="colorSchemeLabs"
+                          [results]="singleLabs"
+                          [label]="tituloLabs"
+                          (select)="onSelectLabs($event)">
                         </ngx-charts-advanced-pie-chart>
-                        <!-- <div class="col-md-2 col-sm-2 col-xs-2">
-                            <div class="box box-solid box-info">
-                                <div class="box-header">
-                                  <h4 class="box-title">DATA</h4>
-                                </div>
-
-                                <div class="box-body">
-                                    <h2>{{itemsel.servicios.length}}</h2>
-                                </div>
-                            </div>
-
-                        </div>
-              -->
 
                       </div>
                     </div>
                   </div>
 
+                  <div class="col-md-5 col-lg-5">
+                    <div class="box box-danger">
+                      <div class="box-header" >
+                        <i class="fa fa-search"></i>
+                        <h3 class="box-title">OTROS INDICADORES</h3>
+                      </div>
 
+                      <div class="box-body divScroll1">
+
+                        <div class="row">
+                            <div class="col-md-2 col-lg-5" style="text-align: center;">
+                                <div class="box box-solid box-info">
+                                    <div class="box-header">
+                                      <h1 class="box-title">100</h1>
+                                    </div>
+
+                                    <div class="box-body">
+                                        <h5>PRACTICAS ACTIVAS SEMESTRE ACTUAL</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-lg-7" style="text-align: center;">
+                                <div class="box box-solid box-warning">
+                                    <div class="box-header">
+                                      <h1 class="box-title">1799</h1>
+                                    </div>
+
+                                    <div class="box-body">
+                                        <h5>ESTUDIANTES ATENDIDOS EN PRACTICAS DEL SEMESTRE ACTUAL</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 col-lg-5" style="text-align: center;">
+                                <div class="box box-solid box-success">
+                                    <div class="box-header">
+                                      <h1 class="box-title">180</h1>
+                                    </div>
+
+                                    <div class="box-body">
+                                        <h5>PROYECTOS ACTIVOS</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-lg-7">
+                                <div class="box box-solid box-primary" style="text-align: center;">
+                                    <div class="box-header">
+                                      <h1 class="box-title">789</h1>
+                                    </div>
+
+                                    <div class="box-body">
+                                        <h5>ETUDIANTES VINCULADOS A PROYECTOS Y LABORATORIOS</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                      </div>
+                    </div>
+                  </div>
 
                   <div class="col-md-12 col-lg-12">
                     <div class="box box-danger">
@@ -159,21 +211,46 @@
                             <h3 class="box-title">SERVICIOS</h3>
                           </div>
 
-                      <div class="box-body">
+                      <div class="box-body divScroll1">
+                        <div class="col-md-8 col-lg-8">
+                            <ngx-charts-advanced-pie-chart
+                            [view]="viewServs"
+                            [scheme]="colorSchemeServs"
+                            [results]="singleServs"
+                            [label]="tituloServs"
+                            (select)="onSelectServs($event)">
+                          </ngx-charts-advanced-pie-chart>
 
+                        </div>
 
-                      </div>
-                    </div>
-                  </div>
+                        <div class="col-md-4 col-lg-4" style="text-align: center;">
+                          <div class="row">
+                              <div class="box box-solid box-info">
+                                  <div class="box-header">
+                                    <h1 class="box-title">1759</h1>
+                                  </div>
 
-                  <div class="col-md-12 col-lg-12">
-                    <div class="box box-danger">
-                        <div class="box-header" >
-                            <i class="fa fa-search"></i>
-                            <h3 class="box-title">OTROS INDICADORES</h3>
+                                  <div class="box-body">
+                                      <h5>SERVICIOS PRESTADOS AÑO ACTUAL</h5>
+                                  </div>
+                              </div>
+
                           </div>
 
-                      <div class="box-body">
+                          <div class="row">
+                              <div class="box box-solid box-primary">
+                                  <div class="box-header">
+                                    <h1 class="box-title">$ 50988000</h1>
+                                  </div>
+
+                                  <div class="box-body">
+                                      <h5>MONTO RECAUDADO RECORRIDO DEL AÑO </h5>
+                                  </div>
+                              </div>
+
+                          </div>
+
+                        </div>
 
 
                       </div>
@@ -187,7 +264,47 @@
                             <h3 class="box-title">GRAFICO</h3>
                           </div>
 
-                      <div class="box-body">
+                      <div class="box-body divScroll2">
+                          <ul class="nav nav-tabs" style="margin-bottom: 20px;">
+                              <li><a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(1)">
+                                HISTORIAL SERVICIOS</a></li>
+                              <li><a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(2)">
+                                HISTORIAL PRACTICAS</a></li>
+                                <li><a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(3)">
+                                HISTORIAL</a></li>
+                          </ul>
+
+                          <div id="home" class="tab-pane fade in active" style="margin-top: 10px; height: 100%;">
+
+                            <ngx-charts-line-chart
+                            [view]="viewLine"
+                            [scheme]="colorSchemeLine"
+                            [results]="multiLine"
+                            [gradient]="gradientLine"
+                            [xAxis]="showXAxis"
+                            [yAxis]="showYAxis"
+                            [legend]="showLegend"
+                            [showXAxisLabel]="showXAxisLabel"
+                            [showYAxisLabel]="showYAxisLabel"
+                            [xAxisLabel]="xAxisLabel"
+                            [yAxisLabel]="yAxisLabel"
+                            [autoScale]="autoScale"
+                            [xAxisTickFormatting]="xAxisTickFormatting"
+                            [timeline]="timeline"
+                            (select)="onSelectLine($event)">
+
+                          </ngx-charts-line-chart>
+                          <button (click)="monto()" style="margin-top:10px;">Monto</button>
+
+                          </div>
+
+                          <div id="menu1" class="tab-pane fade">
+                         <h1>PRACTICAS</h1>
+                          </div>
+
+                          <div id="menu2" class="tab-pane fade">
+                          <h1>OTROS</h1>
+                          </div>
 
 
                       </div>
@@ -203,7 +320,125 @@
                               <h3 class="box-title">INDICADORES DE CLASIFICACION DE LABORATORIOS</h3>
                             </div>
 
-                        <div class="box-body">
+                        <div class="box-body divScroll3">
+                          <div class="row">
+                              <ngx-charts-bar-vertical-2d
+                              [view]="viewBar"
+                              [scheme]="colorSchemeBar"
+                              [results]="singleBar"
+                              [gradient]="gradientBar"
+                              [xAxis]="showXAxisBar"
+                              [yAxis]="showYAxisBar"
+                              [legend]="showLegendBar"
+                              [showXAxisLabel]="showXAxisLabelBar"
+                              [showYAxisLabel]="showYAxisLabelBar"
+                              [xAxisLabel]="xAxisLabelBar"
+                              [yAxisLabel]="yAxisLabelBar"
+                              (select)="onSelectBar($event)">
+                            </ngx-charts-bar-vertical-2d>
+
+                          </div>
+
+                          <div class="row">
+                              <div class="col-md-12 col-lg-12">
+                                  <div class="box box-danger">
+                                    <div class="box-header" >
+                                      <h3 class="box-title">INDICADORES</h3>
+                                    </div>
+
+                                    <div class="box-body">
+
+                                      <div class="row">
+                                          <div class="col-md-3 col-lg-3" style="text-align: center;">
+                                              <div class="box box-solid box-info">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">70</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN ACTIVIDADES DE DOCENCIA</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-3 col-lg-3" style="text-align: center;">
+                                              <div class="box box-solid box-warning">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">35</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN ACTIVIDADES DE EXTENSION</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-3 col-lg-3">
+                                              <div class="box box-solid box-primary" style="text-align: center;">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">90</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN ACTIVIDADES DE INVESTIGACION</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-3 col-lg-3">
+                                              <div class="box box-solid box-primary" style="text-align: center;">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">25</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN LAS 3 ACTIVIDADES</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+                                      </div>
+
+                                      <div class="row">
+                                          <div class="col-md-4 col-lg-4" style="text-align: center;">
+                                              <div class="box box-solid box-success">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">26</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN SOLAMENTE ACTIVIDADES DE DOCENCIA E INVESTIGACION</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-4 col-lg-4">
+                                              <div class="box box-solid box-primary" style="text-align: center;">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">40</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN SOLAMENTE ACTIVIDADES DE EXTENSION E INVESTIGACION</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-4 col-lg-4">
+                                              <div class="box box-solid box-primary" style="text-align: center;">
+                                                  <div class="box-header">
+                                                    <h1 class="box-title">36</h1>
+                                                  </div>
+
+                                                  <div class="box-body">
+                                                      <h5>REALIZAN SOLAMENTE ACTIVIDADES DE DOCENCIA Y EXTENSION</h5>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+                                      </div>
+
+
+
+                                    </div>
+                                  </div>
+                                </div>
+                          </div>
 
 
 
