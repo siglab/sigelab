@@ -25,7 +25,7 @@
             <div class="box-header" >
               <div class="form-group">
                 <div class="col-md-12">
-                    <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Nuevo practica, prueba y/o ensayo</button>
+                    <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#myModal2" >Nuevo practica, prueba y/o ensayo</button>
                 </div>
               </div>
             </div>
@@ -133,3 +133,57 @@
 
 
   </div>
+
+
+  <div class="modal fade" id="myModal2" role="dialog">
+      <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+          <div class="modal-body">
+              <div class="box box-danger">
+                  <div class="box-header text-center">
+                    <i class="fa fa-address-card-o"></i>
+
+                    <h1 class="box-title">Nueva Practica</h1>
+
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                      <form id="form-work2" class="" name="form-work2" action="#">
+                          <fieldset>
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <div class="col-md-12">
+                                        <div class="form-group row">
+                                          <label for="nompru" class="col-sm-4 col-form-label">Nombre de la Practica:</label>
+                                          <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="nompru" placeholder="Ingrese nombre de la practica">
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <div class="col-md-12">
+                                          <div class="form-group row">
+                                            <label for="codmat" class="col-sm-4 col-form-label">Codigo de materia:</label>
+                                            <div class="col-sm-8">
+                                              <input type="text" class="form-control" id="codmat" placeholder="Ingrese codigo de materia">
+                                            </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                          </fieldset>
+                  </form>
+                  </div>
+
+                </div>
+          </div>
+        </div>
+
+      </div>
+    </div>

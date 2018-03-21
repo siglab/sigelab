@@ -47,7 +47,7 @@ const routes: Routes = [
       { path: 'indicadores25', component: IndicadoresGraficasReportesComponent},
 
       { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent},
-      { path: 'solicitudes3', component: SolicitudesNivel3Component}
+      { path: 'solicitudes3', component: SolicitudesNivel3Component},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}

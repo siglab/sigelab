@@ -23,13 +23,13 @@
     <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
-                <div class="box-header">
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Nuevo espacio</button>
-                            </div>
-                        </div>
+              <div class="box-header">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#myModal">Nuevo espacio</button>
                     </div>
+                </div>
+              </div>
             <div class="box-body">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-12"  *ngIf="itemsel | async; let itemsel">
@@ -83,8 +83,8 @@
 
                             <h3 class="box-title">Ficha tecnica de espacio seleccionado</h3>
                             <div class="form-group">
-                                    <div class="col-md-12" style="float: right;">
-                                        <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >ver programacion actividades</button>
+                                    <div class="col-md-12">
+                                        <button class="btn2 btn-danger btn-lg danger" style="float: right;" type="button" >ver programacion actividades</button>
                                     </div>
                                 </div>
                           </div>
@@ -180,37 +180,126 @@
                                         <form id="form-work" class="" name="form-work" action="#">
                                                 <fieldset>
                                                     <div class="form-group">
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                              <div class="form-group row">
+                                                                <label for="facultad" class="col-sm-2 col-form-label">Facultad:</label>
+                                                                <div class="col-sm-10">
+                                                                  <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group row">
+                                                                  <label for="facultad" class="col-sm-2 col-form-label">Campus:</label>
+                                                                  <div class="col-sm-10">
+                                                                    <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                                                  </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="col-md-12">
-                                                        <label class="control-label" for="ccpas"><strong>Espacio: {{this.espaciosel.espacio}}</strong></label>
+                                                            <div class="form-group row">
+                                                              <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
+                                                              <div class="col-sm-2">
+                                                                <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                                              </div>
+                                                              <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
+                                                              <div class="col-sm-2">
+                                                                <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                                              </div>
+                                                              <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
+                                                              <div class="col-sm-2">
+                                                                <input type="text" value="{{this.espaciosel.espacio}}" class="form-control" id="espac">
+                                                              </div>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group row">
+                                                              <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
+                                                              <div class="col-sm-10">
+                                                                <input type="text" value="{{this.espaciosel.info.area}}" class="form-control" id="area" placeholder="Password">
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group row">
+                                                              <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
+                                                              <div class="col-sm-10">
+                                                                <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <div class="form-group row">
+                                                            <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
+                                                            <div class="col-sm-10">
+                                                              <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group row">
+                                                              <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
+                                                              <div class="col-sm-10">
+                                                                <input type="text" value="{{this.espaciosel.info.capacidad}}" class="form-control" id="arealibre" placeholder="Password">
+                                                              </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <div class="form-group row">
+                                                            <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
+                                                            <div class="col-sm-10">
+                                                              <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <div class="form-group row">
+                                                            <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
+                                                            <div class="col-sm-7">
+                                                              <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="indice" placeholder="Password">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <label for="Activo" class="col-sm-3 col-form-label">Activo:</label>
+                                                            <div class="col-sm-9">
+                                                                <label class="switch">
+                                                                  <input id="activo" type="checkbox" checked>
+                                                                  <span class="slider round"></span>
+                                                                </label>
+                                                            </div>
 
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                        <label class="control-label" for="nac"><strong>Edificio: {{this.espaciosel.edificio}}</strong></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                        <label class="control-label" for="ccpas"><strong>Facultad: {{this.espaciosel.info.facultad}}</strong></label>
 
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                        <label class="control-label" for="nac"><strong>Area: {{this.espaciosel.info.area}}</strong></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                        <label class="control-label" for="ciuor"><strong>Area Libre: {{this.espaciosel.info.arealibre}}</strong></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                        <label class="control-label" for="ciudes"><strong>Capacidad: {{this.espaciosel.info.capacidad}}</strong></label>
-                                                        </div>
-                                                    </div>
+
 
                                                     <div class="form-group">
                                                             <div class="col-md-12" >
@@ -219,7 +308,7 @@
                                                         </div>
 
                                                 </fieldset>
-                                            </form>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -279,7 +368,163 @@
 
   </section>
 
-
-
 </div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <div class="modal-body">
+            <div class="box box-danger">
+                <div class="box-header text-center">
+                  <i class="fa fa-address-card-o"></i>
+
+                  <h1 class="box-title">Nuevo Espacio</h1>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <form id="form-work" class="" name="form-work" action="#">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                      <div class="form-group row">
+                                        <label for="facultad" class="col-sm-2 col-form-label">Facultad:</label>
+                                        <div class="col-sm-10">
+                                          <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="form-group row">
+                                          <label for="facultad" class="col-sm-2 col-form-label">Campus:</label>
+                                          <div class="col-sm-10">
+                                            <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                      <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
+                                      <div class="col-sm-2">
+                                        <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                      </div>
+                                      <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
+                                      <div class="col-sm-2">
+                                        <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                      </div>
+                                      <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
+                                      <div class="col-sm-2">
+                                        <input type="text" value="{{this.espaciosel.espacio}}" class="form-control" id="espac">
+                                      </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                      <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
+                                      <div class="col-sm-10">
+                                        <input type="text" value="{{this.espaciosel.info.area}}" class="form-control" id="area" placeholder="Password">
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                      <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
+                                      <div class="col-sm-10">
+                                        <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <div class="form-group row">
+                                    <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                      <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
+                                      <div class="col-sm-10">
+                                        <input type="text" value="{{this.espaciosel.info.capacidad}}" class="form-control" id="arealibre" placeholder="Password">
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <div class="form-group row">
+                                    <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <div class="form-group row">
+                                    <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
+                                    <div class="col-sm-7">
+                                      <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="indice" placeholder="Password">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="Activo" class="col-sm-3 col-form-label">Activo:</label>
+                                    <div class="col-sm-9">
+                                        <label class="switch">
+                                          <input id="activo" type="checkbox" checked>
+                                          <span class="slider round"></span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                    <div class="col-md-12" >
+                                        <button style="float: right;" class="btn2 btn-danger btn-lg  danger" type="button" >Guardar</button>
+                                    </div>
+                                </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+              </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 
