@@ -48,6 +48,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
+import { LoginComponent } from './modulos/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -80,7 +81,8 @@ import { BarSolicitudesNivel3Component } from './shared/components/dashboard/lef
     ComunicacionMasivaComponent,
     IndicadoresGraficasReportesComponent,
     SolicitudesNivel3Component,
-    BarSolicitudesNivel3Component
+    BarSolicitudesNivel3Component,
+    LoginComponent
   ],
   imports: [
 
