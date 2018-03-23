@@ -58,7 +58,7 @@ h1,h2,h3,h4,h5,h6 {
 
 p {
 	font-family: Ubuntu-Regular;
-	font-size: 14px;
+	font-size: 11px;
 	line-height: 1.7;
 	color: #666666;
 	margin: 0px;
@@ -205,7 +205,7 @@ iframe {
   display: block;
   width: 100%;
   background: transparent;
-  height: 62px;
+  height: 42px;
   padding: 0 20px 0 38px;
 }
 /*------------------------------------------------------------------
@@ -340,7 +340,7 @@ iframe {
   align-items: center;
   padding: 0 20px;
   width: 100%;
-  height: 62px;
+  height: 42px;
   background-color: #f10d0d;;
   border-radius: 3px;
 
