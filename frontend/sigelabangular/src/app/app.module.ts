@@ -52,6 +52,7 @@ import { BarSolicitudesNivel3Component } from './shared/components/dashboard/lef
 
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule } from '@angular/material';
 
+import { LoginComponent } from './modulos/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -84,7 +85,8 @@ import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatP
     ComunicacionMasivaComponent,
     IndicadoresGraficasReportesComponent,
     SolicitudesNivel3Component,
-    BarSolicitudesNivel3Component
+    BarSolicitudesNivel3Component,
+    LoginComponent
   ],
   imports: [
 

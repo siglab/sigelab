@@ -23,9 +23,11 @@ import { SolicitudBajaComponent } from '../modulos/mod-nivel2/admin-solicitudes/
 // tslint:disable-next-line:max-line-length
 import { IndicadoresGraficasReportesComponent } from '../modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 import { SolicitudesNivel3Component } from '../modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
+import { LoginComponent } from '../modulos/login/login.component';
 
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent},
   { path: 'principal', component: PrincipalComponent,
     children: [
       { path: 'busquedalaboratorio', component: BusLabComponent},
