@@ -5,13 +5,7 @@
       Dashboard
       <small>Laboratorios</small>
     </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
+
   </section>
 
   <!-- Main content -->
@@ -48,10 +42,53 @@
                                       <h3 class="box-title">SERVICIOS ACTIVOS</h3>
                                   </div>
                                   <div class="box-body divScroll">
-                                      <table datatable [dtOptions]="dtOptions"  class="row-border hover">
 
+                                      <div class="table-responsive">
 
-                                      </table>
+                                          <div class="example-container mat-elevation-z8">
+                                            <div class="example-header">
+                                              <mat-form-field>
+                                                <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                              </mat-form-field>
+                                            </div>
+
+                                            <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
+
+                                              <!-- Position Column -->
+                                              <ng-container matColumnDef="nombre">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                              </ng-container>
+
+                                              <!-- Name Column -->
+                                              <ng-container matColumnDef="telefono">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Telefono </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.telefono}} </mat-cell>
+                                              </ng-container>
+
+                                              <!-- Weight Column -->
+                                              <ng-container matColumnDef="email">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                              </ng-container>
+
+                                              <!-- Symbol Column -->
+                                              <ng-container matColumnDef="estado">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                <mat-cell *matCellDef="let element" > {{element.estado}} </mat-cell>
+                                              </ng-container>
+
+                                              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="mostrardata(row)"></mat-row>
+                                            </mat-table>
+
+                                            <mat-paginator #paginator="matPaginator"
+                                              [pageSize]="4"
+                                              [pageSizeOptions]="[2, 3, 4]"
+                                              [showFirstLastButtons]="true">
+                                          </mat-paginator>
+                                          </div>
+                                      </div>
                                   </div>
                               </div>
 
@@ -62,10 +99,52 @@
                                       <h3 class="box-title">HISTORIAL DE SERVICIOS</h3>
                                   </div>
                                   <div class="box-body divScroll">
-                                      <table style="width: 100%;" datatable [dtOptions]="dtOptions1"  class="row-border hover">
+                                    <div class="table-responsive">
+                                      <div class="example-container mat-elevation-z8">
+                                        <div class="example-header">
+                                          <mat-form-field>
+                                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                                          </mat-form-field>
+                                        </div>
 
+                                        <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
 
-                                      </table>
+                                          <!-- Position Column -->
+                                          <ng-container matColumnDef="nombre">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          </ng-container>
+
+                                          <!-- Name Column -->
+                                          <ng-container matColumnDef="telefono">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Telefono </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.telefono}} </mat-cell>
+                                          </ng-container>
+
+                                          <!-- Weight Column -->
+                                          <ng-container matColumnDef="email">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          </ng-container>
+
+                                          <!-- Symbol Column -->
+                                          <ng-container matColumnDef="fecha">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                            <mat-cell *matCellDef="let element" > {{element.fecha}} </mat-cell>
+                                          </ng-container>
+
+                                          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                          <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="mostrardata(row)"></mat-row>
+                                        </mat-table>
+
+                                        <mat-paginator #paginator2="matPaginator"
+                                          [pageSize]="4"
+                                          [pageSizeOptions]="[2, 3, 4]"
+                                          [showFirstLastButtons]="true">
+                                      </mat-paginator>
+                                      </div>
+                                    </div>
+
                                   </div>
                               </div>
                             </div>
@@ -80,6 +159,7 @@
       </div>
     </div>
 
+    <button class="btn-danger btn-lg btn-block danger" type="button" (click)="cambiarData()">CANCELAR</button>
     <div *ngIf="!moduloinfo" class="row">
         <div class="col-md-12 col-lg-12">
             <div class="box box-danger">
@@ -104,6 +184,7 @@
               <!-- /.box-header -->
               <div class="box-body">
                   <h3 class="box-title">{{this.itemsel.nombre}}</h3>
+
                   <form id="form-work" class="" name="form-work" action="#">
 
                       <fieldset>
@@ -140,7 +221,7 @@
                           </div>
                           <div *ngIf="this.itemsel.estado == 'NO ACEPTADO'" class="form-group">
                               <div class="col-md-12">
-                                  <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >CANCELAR</button>
+                                  <button class="btn2 btn-danger btn-lg btn-block danger" type="button" (click)="prueba()">CANCELAR</button>
                               </div>
                           </div>
                       </fieldset>
@@ -159,4 +240,125 @@
 
 
 
+</div>
+
+<!-- MODAL DE INFORMACION DE SERVICIOS -->
+<div class="modal fade" id="myModal4" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <div class="modal-body">
+            <div class="box box-danger">
+                <div class="box-header text-center">
+                  <i class="fa fa-address-card-o"></i>
+
+                  <h1 class="box-title">PRACTICA SELECCIONADA</h1>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" >
+
+                  <div class="col-md-6">
+
+                      <div class="box box-danger">
+                          <div class="box-header">
+
+                            <h1 class="box-title">Informacion de la Practica</h1>
+
+                          </div>
+                          <!-- /.box-header -->
+                          <div class="box-body">
+
+                            <form  id="form-work" class="" name="form-work" action="#">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ccpas"><strong>Nombre Practica:</strong></label>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="nac"><strong>Facultad: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciuor"><strong>Campus: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Edificio: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Planta: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Espacio: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Materia: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Estado: </strong></label>
+                                        </div>
+                                    </div>
+                                    <!-- <div *ngIf="this.interfaz" class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Ultimo semestre dictada: </strong></label>
+                                        </div>
+                                    </div> -->
+
+                                </fieldset>
+                            </form>
+
+                            <!-- <div *ngIf="!this.interfaz" class="form-group text-center" style="margin-top: 20px;">
+                                <div class="col-md-12">
+                                    <button class="btn2 btn-danger btn-lg danger" type="button" >Ver Programacion</button>
+                                </div>
+                            </div> -->
+
+                          </div>
+
+                        </div>
+                  </div>
+
+
+                  <div class="col-md-6" >
+                      <div class="box box-danger">
+                        <div class="box-header">
+                          <i class="fa fa-map"></i>
+
+                          <h3 class="box-title">EQUIPOS VINCULADOS</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <h1>dfdfdsf</h1>
+                        </div>
+                      <!-- /.box-body -->
+                      </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+              </div>
+        </div>
+      </div>
+
+    </div>
 </div>

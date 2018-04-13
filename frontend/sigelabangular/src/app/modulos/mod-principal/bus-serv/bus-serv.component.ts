@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -6,7 +7,7 @@ import * as L from 'leaflet';
   templateUrl: './bus-serv.component.html',
   styleUrls: ['./bus-serv.component.css']
 })
-export class BusServComponent implements OnInit {
+export class BusServComponent implements OnInit, AfterViewInit {
 
   corx = 3.42158;
   cory = -76.5205;
@@ -19,19 +20,34 @@ export class BusServComponent implements OnInit {
               {nombre:"MODELADO",coord:{lat:"3.420380",lon:"-76.510105"},info:{dir:"cra54 sfdfsdfs",tel:"35345435",cel:"436574676537",email:"fgjh@univalle.edu.co"}
               },
               {nombre:"YODURO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"cra54 dfsdfsdf",tel:"46363565",cel:"4357547656537",email:"hkjkhjjh@univalle.edu.co"}}];
-              
-  itemsel:any;
-  
+
+   itemsel:any;
+
     moduloinfo = false;
     layer=null;
-  
+
     DefaultIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
       shadowUrl: 'assets/leaflet/images/marker-shadow.png'
     });
+
+
+
+    // INICIALIZACION DATATABLE lABORATORIOS
+    displayedColumns = ['nombre'];
+    dataSource = new MatTableDataSource(this.servicios);
+    @ViewChild('paginator') paginator: MatPaginator;
+    @ViewChild('sort') sort: MatSort;
+
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
 
@@ -51,10 +67,10 @@ export class BusServComponent implements OnInit {
       this.moduloinfo = true;
       var ambiente = this;
       setTimeout(function(){
-        ambiente.loadMap(item);    
+        ambiente.loadMap(item);
       },1000);
      }else{
-      
+
       this.removerMarker();
       this.agregarMarker(item);
      }
@@ -68,11 +84,16 @@ export class BusServComponent implements OnInit {
     .openPopup();
   }
 
-  removerMarker(){
-    if(this.layer!=null){
-      console.log("remover");
+  removerMarker() {
+    if (this.layer != null) {
       this.layer.remove();
     }
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
 }

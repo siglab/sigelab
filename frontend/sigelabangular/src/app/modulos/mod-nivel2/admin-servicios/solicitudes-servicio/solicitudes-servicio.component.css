@@ -1,6 +1,6 @@
 .divScroll {
   overflow-y: scroll;
-  height: 300px;
+  height: 400px;
 }
 divScroll::-webkit-scrollbar-track
 {
@@ -64,12 +64,12 @@ label {
   margin-top: 15px;
 }
 
-input {
+/* input {
   border: 2px solid #CCC !important;
   height: 35px;
   border-radius: 3px;
   max-width: 100%;
-}
+} */
 
 .input-group-addon {
   border: 2px solid #CCC !important;
@@ -86,4 +86,39 @@ input {
   margin-bottom: 0;
   text-align: left;
 }
+
+.tablas:hover{
+  background-color: rgba(253, 251, 251, 0.979);
+}
+.tablas{
+  background-color: rgba(184, 16, 16, 0.938);border-color: rgb(87, 83, 83);color: rgb(255, 255, 255);font-weight: bold;
+}
+
+
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
+}
+
 

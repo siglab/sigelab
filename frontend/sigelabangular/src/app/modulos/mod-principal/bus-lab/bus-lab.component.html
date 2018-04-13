@@ -5,13 +5,6 @@
       Dashboard
       <small>Laboratorios</small>
     </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
   </section>
 
   <!-- Main content -->
@@ -30,34 +23,55 @@
           </div>
 
           <div class="box-body">
-            <form action="#" method="post">
-              <div class="input-group">
-                <div class="input-group-btn">
 
-                  <input type="text" class="form-control" name="busquedad" placeholder="Buscar">
+            <div class="box-body divScroll">
+              <div class="table-responsive">
+                <div class="example-container mat-elevation-z8">
+                  <div class="example-header">
+                    <mat-form-field>
+                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+                  </div>
+
+                  <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="nombre">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="escuela">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Escuela </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.escuela}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="investigacion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Investigacion </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.inves}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="director">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Director </mat-header-cell>
+                      <mat-cell *matCellDef="let element" > {{element.director}} </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)"></mat-row>
+                  </mat-table>
+
+                  <mat-paginator #paginator="matPaginator"
+                    [pageSize]="5"
+                    [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
                 </div>
               </div>
-            </form>
-          
-    
-            <div class="row" style="margin-top:30px;">
-                <div class="col-md-12">
-                    <div class="box box-danger">
-                        <div class="box-header">
-                            <i class="fa fa-flask"></i>
-                            
-                            <h3 class="box-title">LABORATORIOS</h3>
-                        </div>
-                        <div class="box-body divScroll">
-                            <div class="list-group">
-                                <a *ngFor="let item of this.convenios" (click)="cambiardata(item)" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
-                              
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
+            </div>
 
           </div>
         </div>
@@ -71,82 +85,67 @@
                     <h3>SIN DATOS SELECCIONADOS</h3>
                 </div>
             </div>
-          
+
         </div>
     </div>
 
-    <div *ngIf="moduloinfo" class="row">
+      <div *ngIf="moduloinfo" class="row">
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
             <div class="box-body">
-         
+
               <div class="row" style="margin-top:20px;">
                  <!-- INFORMACION LABORATORIO -->
                   <div class="col-md-6">
                     <div class="box box-danger">
                       <div class="box-header">
                         <i class="fa fa-address-card-o"></i>
-    
+
                         <h3 class="box-title">Informacion Laboratorio</h3>
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
-                          <form id="form-work" class="" name="form-work" action="#">
-                              
-                              <fieldset>
-                              
-                                  <div class="form-group">
-                                      <div class="col-md-6">
-                                        <label class="control-label" for="ccpas"><strong>Direccion</strong></label>
-                                        <input name="dir" [(ngModel)]="this.itemsel.info.dir" class="form-control"  type="text" readonly>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-md-6">
-                                        <label class="control-label" for="nac"><strong>Telefono</strong></label>
-                                        <input name="tel" [(ngModel)]="this.itemsel.info.tel" class="form-control"  type="text" readonly>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-md-6">
-                                        <label class="control-label" for="ciuor"><strong>Celular</strong></label>
-                                        <input name="cel" [(ngModel)]="this.itemsel.info.cel" class="form-control"  type="text" readonly>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-md-6">
-                                        <label class="control-label" for="ciudes"><strong>Email</strong></label>
-                                        <input name="email" [(ngModel)]="this.itemsel.info.email" class="form-control" type="text" readonly>
-                                      </div>
-                                  </div>
-                                  <!-- <div class="form-group">
-                                      <div class="col-md-6">
-                                        <label class="control-label" for="paor"><strong>Pais Origen</strong></label>
-                                        <input name="paor" class="form-control"  type="text" readonly>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-md-6">
-                                        <label class="control-label" for="pades"><strong>Pais Destino</strong></label>
-                                        <input name="pades"  class="form-control" type="text" readonly>
-                                      </div>
-                                  </div> -->
-            
+                        <form  id="form-work" class="" name="form-work" action="#">
+                          <fieldset>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="dir"><strong>Direccion: {{itemsel.info.dir}}</strong></label>
 
-                          
-                                  
-                              </fieldset> 
-                            </form>
-                         
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="tel"><strong>Telefono: {{itemsel.info.tel}}</strong></label>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="cel"><strong>Celular: {{itemsel.info.cel}}</strong></label>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="email"><strong>Email: {{itemsel.info.email}}</strong></label>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="estado"><strong>Estado: {{itemsel.estado}}</strong></label>
+                                  </div>
+                              </div>
+
+                          </fieldset>
+                        </form>
+
                       </div>
-    
+
                     </div>
                   </div>
                 <div class="col-md-6">
                   <div class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-map"></i>
-  
+
                       <h3 class="box-title">Ubicación</h3>
                     </div>
                     <!-- /.box-header -->
@@ -155,36 +154,55 @@
                       <div id="mapaa" style="height:250px"></div>
                     </div>
                     <!-- /.box-body -->
-  
+
                   </div>
                 </div>
-               
+
               </div>
-  
-  
+
+
               <div class="col-md-12">
                   <div class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-map"></i>
-  
+
                       <h3 class="box-title">SERVICIOS</h3>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
-                    
-                        <div class="box-body divScroll">
-                            <div *ngIf="this.itemsel.servicios.length == 0">
-                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
-                              </div>
-                            <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
-                                <a *ngFor="let item of this.itemsel.servicios" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
-                              
-                            </div>
+                    <div class="box-body divScroll">
+                      <div *ngIf="dataSource2.data.length == 0">
+                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
+                      </div>
+
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSource2.data.length != 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                          </mat-form-field>
                         </div>
-                      
-                    </div>
+
+                        <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+
+                          <!-- Position Column -->
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
+
+                          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginator2="matPaginator"
+                          [pageSize]="5"
+                          [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true">
+                        </mat-paginator>
+                      </div>
+
+                  </div>
                     <!-- /.box-body -->
-  
+
                   </div>
               </div>
 
@@ -192,28 +210,51 @@
                   <div class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-map"></i>
-  
+
                       <h3 class="box-title">PRACTICAS</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="box-body">
-                            
-                                <div class="box-body divScroll">
-                                  <div *ngIf="this.itemsel.practicas.length == 0">
-                                    <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRACTICAS</h3>
-                                  </div>
-                                    <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
-                                        <a *ngFor="let item of this.itemsel.practicas" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
-                                      
-                                    </div>
+
+                          <div class="box-body divScroll">
+                              <div *ngIf="dataSource3.data.length == 0">
+                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
+                              </div>
+
+                               <div class="example-container mat-elevation-z8" *ngIf="dataSource3.data.length != 0">
+                                <div class="example-header">
+                                  <mat-form-field>
+                                    <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Filter">
+                                  </mat-form-field>
                                 </div>
-                              
+
+                                <mat-table #tablepract #sort3="matSort" [dataSource]="dataSource3" matSort>
+
+
+                                  <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  </ng-container>
+
+                                  <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
+                                  <mat-row *matRowDef="let row; columns: displayedColumns3;"></mat-row>
+                                </mat-table>
+
+                                <mat-paginator #paginator3="matPaginator"
+                                  [pageSize]="5"
+                                  [pageSizeOptions]="[5, 10, 20]"
+                                  [showFirstLastButtons]="true">
+                              </mat-paginator>
+                              </div>
+
+                          </div>
+
                         </div>
-                      
+
                     </div>
                     <!-- /.box-body -->
-  
+
                   </div>
               </div>
             </div>
@@ -223,6 +264,6 @@
 
   </section>
 
-    
+
 
 </div>

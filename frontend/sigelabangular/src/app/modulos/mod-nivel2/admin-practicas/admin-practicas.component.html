@@ -54,7 +54,7 @@
                                       </tr>
                                       </thead>
                                       <tbody>
-                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas" (click)="equipoSeleccionado(item, false)" data-toggle="modal" data-target="#myModal3">
                                           <td>
                                               {{item.nombre}}
                                           </td>
@@ -97,7 +97,7 @@
                                       </tr>
                                       </thead>
                                       <tbody>
-                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas">
+                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas" (click)="equipoSeleccionado(item , true)" data-toggle="modal" data-target="#myModal3">
                                           <td>
                                               {{item.nombre}}
                                           </td>
@@ -134,8 +134,9 @@
 
   </div>
 
-
-  <div class="modal fade" id="myModal2" role="dialog">
+  <!-- MODAL PARA NUEVAS PRACTICAS -->
+  <section class="content" *ngIf="itemsel | async; let itemsel">
+    <div class="modal fade" id="myModal2" role="dialog">
       <div class="modal-dialog modal-lg">
 
         <!-- Modal content-->
@@ -178,7 +179,119 @@
                               </div>
 
                           </fieldset>
-                  </form>
+                      </form>
+
+                      <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                          <div class="box box-danger">
+                            <div class="box-header">
+
+                            </div>
+
+                            <div class="box-body">
+
+                              <div class="col-md-6">
+                                  <div class="box box-danger">
+                                    <div class="box-header">
+                                      <i class="fa fa-map"></i>
+
+                                      <h3 class="box-title">EQUIPOS VINCULADOS</h3>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="box-body divScroll">
+                                          <div *ngIf="this.itemsel.equipos.length == 0">
+                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                                            </div>
+                                          <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
+                                              <table class=" table row-border hover table-condensed">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Nombre de equipos</th>
+
+                                                      </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
+                                                          <td>
+                                                              {{item.nombre}}
+                                                          </td>
+
+                                                      </tr>
+                                                      </tbody>
+
+                                              </table>
+
+                                          </div>
+                                          <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >vincular equipo</button>
+                                        </div>
+                                    </div>
+                                  <!-- /.box-body -->
+                                  </div>
+
+                              </div>
+
+                              <div class="col-md-6">
+                                  <div class="box box-danger">
+                                    <div class="box-header">
+                                      <i class="fa fa-map"></i>
+
+                                      <h3 class="box-title">ESPACIOS VINCULADOS</h3>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="box-body divScroll">
+                                          <div *ngIf="this.itemsel.espacios.length == 0">
+                                            <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS</h3>
+                                          </div>
+                                          <div *ngIf="this.itemsel.espacios.length != 0" class="list-group">
+                                              <table class=" table row-border hover table-condensed">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Edificio</th>
+                                                          <th>Planta</th>
+                                                          <th>Espacio</th>
+                                                      </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.espacios">
+                                                          <td>
+                                                              {{item.edificio}}
+                                                          </td>
+                                                          <td>
+                                                              {{item.planta}}
+                                                          </td>
+                                                          <td>
+                                                              {{item.espacio}}
+                                                          </td>
+                                                      </tr>
+                                                      </tbody>
+
+                                              </table>
+                                          </div>
+                                          <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >vincular espacio</button>
+                                        </div>
+                                    </div>
+                                  <!-- /.box-body -->
+                                  </div>
+
+                              </div>
+
+
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-4">
+                          <input class="form-control" type="date">
+                        </div>
+                        <div class="col-md-8">
+                            <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Guardar</button>
+                          </div>
+                      </div>
                   </div>
 
                 </div>
@@ -187,3 +300,155 @@
 
       </div>
     </div>
+  </section>
+
+<!-- MODAL PARA VER INFORMACION DE PRACTICAS -->
+<div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <div class="modal-body">
+            <div class="box box-danger">
+                <div class="box-header text-center">
+                  <i class="fa fa-address-card-o"></i>
+
+                  <h1 class="box-title">PRACTICA SELECCIONADA</h1>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" *ngIf="itemsel | async; let itemsel">
+
+                  <div class="col-md-6">
+
+                      <div class="box box-danger">
+                          <div class="box-header">
+
+                            <h1 class="box-title">Informacion de la Practica</h1>
+
+                          </div>
+                          <!-- /.box-header -->
+                          <div class="box-body">
+
+                            <form  id="form-work" class="" name="form-work" action="#">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ccpas"><strong>Nombre Practica: {{this.practica.nombre}}</strong></label>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="nac"><strong>Facultad: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciuor"><strong>Campus: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Edificio: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Planta: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Espacio: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Materia: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Estado: </strong></label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="this.interfaz" class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="ciudes"><strong>Ultimo semestre dictada: </strong></label>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </form>
+
+                            <div *ngIf="!this.interfaz" class="form-group text-center" style="margin-top: 20px;">
+                                <div class="col-md-12">
+                                    <button class="btn2 btn-danger btn-lg danger" type="button" >Ver Programacion</button>
+                                </div>
+                            </div>
+
+                          </div>
+
+                        </div>
+                  </div>
+
+
+                  <div class="col-md-6" >
+                      <div class="box box-danger">
+                        <div class="box-header">
+                          <i class="fa fa-map"></i>
+
+                          <h3 class="box-title">EQUIPOS VINCULADOS</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="box-body divScroll">
+                              <div *ngIf="this.itemsel.equipos.length == 0">
+                                  <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                                </div>
+                              <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
+                                  <table class=" table row-border hover table-condensed">
+                                      <thead>
+                                          <tr>
+                                              <th>Nombre de equipos</th>
+
+                                          </tr>
+                                          </thead>
+                                          <tbody>
+                                          <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
+                                              <td>
+                                                  {{item.nombre}}
+                                              </td>
+
+                                          </tr>
+                                          </tbody>
+
+                                  </table>
+
+                              </div>
+
+                            </div>
+                        </div>
+                      <!-- /.box-body -->
+                      </div>
+
+
+                      <div *ngIf="this.interfaz" class="form-group text-center" style="margin-top: 20px;">
+                          <div class="col-md-12">
+                              <button class="btn2 btn-danger btn-lg danger" type="button" >Reactivar</button>
+                          </div>
+                      </div>
+
+                  </div>
+
+
+                </div>
+
+              </div>
+        </div>
+      </div>
+
+    </div>
+</div>

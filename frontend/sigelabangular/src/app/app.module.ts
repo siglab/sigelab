@@ -1,11 +1,12 @@
+import { DataTablesModule } from 'angular-datatables';
 import { ObservablesService } from './shared/services/observables.service';
 import { PrincipalComponent } from './shared/components/dashboard/principal/principal.component';
 import { RouterRoutingModule } from './router/router-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { DataTablesModule } from 'angular-datatables';
+
 import { AppComponent } from './app.component';
 import { DashCenterComponent } from './shared/layouts/dash-center/dash-center.component';
 import { HeaderComponent } from './shared/layouts/header/header.component';
@@ -48,6 +49,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
+
+import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule } from '@angular/material';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -92,6 +96,12 @@ import { BarSolicitudesNivel3Component } from './shared/components/dashboard/lef
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebase),
     FormsModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule
 
   ],
   providers: [ObservablesService],

@@ -1,5 +1,6 @@
 import { ObservablesService } from './../../../../services/observables.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bar-admin-laboratorios',
@@ -34,13 +35,32 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                 servicios: [], practicas: [], equipos: [], personal: [], proyectos: [], solicitudes: [], espacios: []}];
 
 
-  constructor(private obs: ObservablesService) { }
+  servicioshechos = [{nombre: 'QUIMICA', coord: {lat: '3.425906', lon: '-76.540446'}, info: {dir: 'cra54 cambulos', tel: '53454636', cel: '43656537', email: 'jkhkhjk@univalle.edu.co'}, fecha: '08/09/2017'},
+                      {nombre: 'INVESTIGACION', coord: {lat: '3.419737', lon: '-76.540275'}, info: {dir: 'cra54 san fernado', tel: '53454543gdf636', cel: '43656537', email: 'fdgfgjh@univalle.edu.co'}, fecha: '18/09/2017'},
+                      {nombre: 'MODELADO', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'}, fecha: '11/10/2017'},
+                      {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, fecha: '08/03/2017'}];
+
+    servicioso = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir: "cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},estado:"NO ACEPTADO"},
+                  {nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir: "cra54 san fernado", tel:'53454543gdf636',cel:'43656537',email:'fdgfgjh@univalle.edu.co'},estado:'NO ACEPTADO'},
+                  {nombre:'MODELADO', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'}, estado: 'NO ACEPTADO'},
+                  {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, estado: 'ACEPTADO'}];
+
+
+  constructor(private obs: ObservablesService, private route: Router) { }
 
   ngOnInit() {
   }
 
   enviaritem(item) {
     this.obs.changeObject(item);
+  }
+
+
+  enviaritemSolicitudServicios(item) {
+
+    this.obs.changeSolServ(this.servicioso);
+    this.obs.changeHistoSolserv(this.servicioshechos);
+
   }
 
 }

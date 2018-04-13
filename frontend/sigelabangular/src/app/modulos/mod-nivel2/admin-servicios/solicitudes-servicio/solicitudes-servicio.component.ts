@@ -1,125 +1,171 @@
-import { Component, OnInit } from '@angular/core';
+
+import { ObservablesService } from './../../../../shared/services/observables.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+
+declare var $: any;
 
 @Component({
   selector: 'app-solicitudes-servicio',
   templateUrl: './solicitudes-servicio.component.html',
   styleUrls: ['./solicitudes-servicio.component.css']
 })
-export class SolicitudesServicioComponent implements OnInit {
+export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDestroy  {
 
-
-  servicios = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},estado:"NO ACEPTADO"},
-  {nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"},estado:"NO ACEPTADO"},
-  {nombre:"MODELADO",coord:{lat:"3.420380",lon:"-76.510105"},info:{dir:"cra54 sfdfsdfs",tel:"35345435",cel:"436574676537",email:"fgjh@univalle.edu.co"},estado:"NO ACEPTADO"},
-  {nombre:"YODURO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"cra54 dfsdfsdf",tel:"46363565",cel:"4357547656537",email:"hkjkhjjh@univalle.edu.co"},estado:"ACEPTADO"}];
-
-
-servicioshechos = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},fecha:"08/09/2017"},
-{nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"},fecha:"18/09/2017"},
-{nombre:"MODELADO",coord:{lat:"3.420380",lon:"-76.510105"},info:{dir:"cra54 sfdfsdfs",tel:"35345435",cel:"436574676537",email:"fgjh@univalle.edu.co"},fecha:"11/10/2017"},
-{nombre:"YODURO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"cra54 dfsdfsdf",tel:"46363565",cel:"4357547656537",email:"hkjkhjjh@univalle.edu.co"},fecha:"08/03/2017"}];
-
-
-dtOptions:any = {};
-dtOptions1:any = {};
 
 moduloinfo = false;
 
-itemsel:any;
+itemsel: any;
 
-constructor() { }
+// service: Observable<Array<any>>;
+service: any;
+histoservice: any;
 
-ngOnInit() {
-this.loadtable1();
-this.loadtable2();
+
+servicioso = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir: "cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},estado:"NO ACEPTADO"},
+                {nombre:"INVESTIGACION",coord: {lat:'3.419737',lon:'-76.540275'}, info:{dir: 'cra54 san fernado', tel:'53454543gdf636',cel:'43656537',email:'fdgfgjh@univalle.edu.co'},estado:'NO ACEPTADO'},
+                {nombre:'MODELADO', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'}, estado: 'NO ACEPTADO'},
+                {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, estado: 'ACEPTADO'}];
+
+
+  displayedColumns = ['nombre', 'telefono', 'email', 'estado'];
+  displayedColumns2 = ['nombre', 'telefono', 'email', 'fecha'];
+
+  dataSource = new MatTableDataSource([]);
+  dataSource2 = new MatTableDataSource([]);
+
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('sort') sort: MatSort;
+
+  @ViewChild('paginator2') paginator2: MatPaginator;
+  @ViewChild('sort2') sort2: MatSort;
+
+
+constructor(private obs: ObservablesService) {
+ //this.obs.changeSolServ(this.servicioso);
 }
 
-  loadtable1() {
-    this.dtOptions = {
-    data:this.servicios,
-    columns: [{
-    title: 'Nombre',
-    data: 'nombre'
-    }, {
-    title: 'Email',
-    data: 'info.email'
-    }, {
-    title: 'Telefono',
-    data: 'info.tel'
-    }, {
-    title: 'Estado',
-    data: 'estado'}],
-    rowCallback: (row: Node, data: any[] | Object, index: number) => {
-    const self = this;
-    // Unbind first in order to avoid any duplicate handler
-    // (see https://github.com/l-lin/angular-datatables/issues/87)
-    $('td', row).unbind('click');
-    $('td', row).bind('click', () => {
-    self.mostrardata(data);
+  ngOnInit() {
+
+    this.obs.currentSolServ.subscribe(data => {
+     this.service = data;
+     this.dataSource.data = this.estrucutrarArray(data);
     });
-    return row;
-    },
-    // Declare the use of the extension in the dom parameter
-    dom: 'Bfrtip',
-    // Configure the buttons
-    buttons: [
-    'print',
-    'copy',
-    'csv',
-    'excel',
-    'pdfHtml5'
-    ],
-    select:true
-    };
+
+    this.obs.currentHistoSolserv.subscribe(data => {
+      this.histoservice = data;
+      this.dataSource2.data = this.estrucutrarArray2(data);
+    });
+
   }
 
-  loadtable2() {
-    this.dtOptions1 = {
-    data:this.servicioshechos,
-    columns: [{
-    title: 'Nombre',
-    data: 'nombre'
-    }, {
-    title: 'Email',
-    data: 'info.email'
-    }, {
-    title: 'Telefono',
-    data: 'info.tel'
-    }, {
-    title: 'Fecha',
-    data: 'fecha'}],
-    rowCallback: (row: Node, data: any[] | Object, index: number) => {
-    const self = this;
-    // Unbind first in order to avoid any duplicate handler
-    // (see https://github.com/l-lin/angular-datatables/issues/87)
-    $('td', row).unbind('click');
-    $('td', row).bind('click', () => {
-    self.mostrardata(data);
-    });
-    return row;
-    },
-    // Declare the use of the extension in the dom parameter
-    dom: 'Bfrtip',
-    // Configure the buttons
-    buttons: [
-    'print',
-    'copy',
-    'csv',
-    'excel',
-    'pdfHtml5'
-    ],
-    select:true
-    };
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    this.dataSource2.sort = this.sort2;
+    this.dataSource2.paginator = this.paginator2;
+
+  }
+
+  ngOnDestroy() {
+
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  applyFilter2(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource2.filter = filterValue;
+  }
+
+
+  estrucutrarArray(item: Array<any>): Array<any> {
+    const informacion = [];
+    for (let i = 0; i < item.length; i++) {
+      informacion.push({
+        nombre: item[i].nombre,
+        telefono: item[i].info.tel,
+        email: item[i].info.email,
+        estado: item[i].estado
+      });
     }
-    mostrardata(item){
-    this.itemsel = item;
+    return informacion;
+  }
+
+  estrucutrarArray2(item: Array<any>): Array<any> {
+    const informacion = [];
+    for (let i = 0; i < item.length; i++) {
+      informacion.push({
+        nombre: item[i].nombre,
+        telefono: item[i].info.tel,
+        email: item[i].info.email,
+        fecha: item[i].fecha
+      });
+    }
+    return informacion;
+  }
+
+
+  ocultar() {
+   this.moduloinfo = false;
+  }
+
+  prueba() {
+    // tslint:disable-next-line:max-line-length
+    this.obs.changeSolServ([{nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, fecha: '08/03/2017'}]);
+   }
+
+  cambiarData() {
+    // this.obs.changeSolServ([{nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, fecha: '08/03/2017'}]);
+  }
+
+
+
+  mostrardata(item) {
+
+    for (let i = 0; i < this.service.length; i++) {
+      if (this.service[i].nombre === item.nombre) {
+        this.itemsel = this.service[i];
+        break;
+      }
+    }
+
     this.moduloinfo = true;
+
     console.log(item);
 
   }
 
-  ocultar(){
-  this.moduloinfo = false;
-  }
+
 
 }
+
+
+// export interface Element {
+//   nombre: string;
+//   telefono: string;
+//   email: string;
+//   estado: string;
+// }
+
+// const ELEMENT_DATA: Element[] = [
+//   // tslint:disable-next-line:max-line-length
+//   {nombre: 'QUIMICA',  telefono: '53454636', email: 'jkhkhjk@univalle.edu.co', estado: 'NO ACEPTADO'},
+//                 // tslint:disable-next-line:max-line-length
+//   {nombre: 'INVESTIGACION', telefono: '5345454636',  email: 'fdgfgjh@univalle.edu.co', estado: 'NO ACEPTADO'},
+//   // tslint:disable-next-line:max-line-length
+//   {nombre: 'MODELADO', telefono: '35345435', email: 'fgjh@univalle.edu.co', estado: 'NO ACEPTADO'},
+//   // tslint:disable-next-line:max-line-length
+//   {nombre: 'YODURO', telefono: '46363565',  email: 'hkjkhjjh@univalle.edu.co', estado: 'ACEPTADO'}
+// ];
+
+

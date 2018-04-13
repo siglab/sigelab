@@ -10,6 +10,9 @@ import { Observable } from 'rxjs/Observable';
 export class AdminPracticasComponent implements OnInit {
 
   itemsel: Observable<Array<any>>;
+  interfaz: boolean;
+  practica = {nombre: ''};
+  info: any;
 
   constructor(private obs: ObservablesService) {
     // tslint:disable-next-line:max-line-length
@@ -23,6 +26,14 @@ export class AdminPracticasComponent implements OnInit {
       this.itemsel = Observable.of(data);
       console.log(this.itemsel);
     });
+  }
+
+
+  equipoSeleccionado(item, bool) {
+    this.interfaz = bool;
+    this.practica = item;
+    console.log(item);
+
   }
 
 }

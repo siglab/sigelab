@@ -1,6 +1,6 @@
 .divScroll {
     overflow-y: scroll;
-    height: 120px;
+    height: 400px;
   }
   divScroll::-webkit-scrollbar-track
   {
@@ -23,24 +23,24 @@
     background-color: #ECF1F3;
     cursor: pointer;
   }
-  
-  
+
+
 body {
     font-family: 'Open Sans', sans-serif;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
   }
-  
+
   p {
     color: #999;
   }
-  
+
   strong {
     color: #333;
   }
-  
+
   #wrapper {
     width: 100%;
     max-width: 800px;
@@ -48,43 +48,62 @@ body {
     text-align: center;
     padding: 30px 0;
   }
-  
-  
+
+
   .page-head-image img {
     border-radius: 50%;
   }
-  
+
   #form-trabalhe {
     margin-top: 30px;
     text-align: left;
   }
-  
+
   label {
     font-weight: normal;
     margin-top: 15px;
   }
-  
-  input {
-    border: 2px solid #CCC !important;
-    height: 35px;
-    border-radius: 3px;
-    max-width: 100%;
-  }
-  
+
   .input-group-addon {
     border: 2px solid #CCC !important;
     border-right: 0px !important;
   }
-  
+
   .btn2 {
     border: 0;
     border-radius: 3px;
     margin-top: 20px;
   }
-  
+
   .form-group {
     margin-bottom: 0;
     text-align: left;
   }
-  
-  
+
+
+
+  .example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+  }
+
+  .example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+  }
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+
+  .mat-header-cell.mat-sort-header-sorted {
+    color: black;
+  }
+
