@@ -1,21 +1,27 @@
+
+import { element } from 'protractor';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 
 @Component({
   selector: 'app-bus-lab',
   templateUrl: './bus-lab.component.html',
   styleUrls: ['./bus-lab.component.css']
 })
-export class BusLabComponent implements OnInit, AfterViewInit{
 
 
+export class BusLabComponent implements OnInit, AfterViewInit {
 
   corx = 3.42158;
   cory = -76.5205;
   map: any;
 
-  convenios = [{nombre: 'LABORATORIO CIENCIAS', escuela: 'ESCUELA 1', inves: 'INVESTIGACION 1', director: 'JEFFERSON',coord: {lat: '3.425906', lon: '-76.540446'}, info: {dir: 'cra54 cambulos', tel: '53454636', cel: '43656537', email: 'jkhkhjk@univalle.edu.co'},
+  convenios = [{nombre: 'LABORATORIO CIENCIAS', escuela: 'ESCUELA 1, ESCUELA 2, ESCUELA 3, ESCUELA 4, ESCUELA 5, ESCUELA 6, ESCUELA 7', inves: 'INVESTIGACION 1', director: 'JEFFERSON',coord: {lat: '3.425906', lon: '-76.540446'}, info: {dir: 'cra54 cambulos', tel: '53454636', cel: '43656537', email: 'jkhkhjk@univalle.edu.co'},
                servicios: [{nombre: 'QUIMICA'}, {nombre: 'TERMODINAMICA'}, {nombre: 'FISICA'}], practicas: [{nombre: 'EXSS'}, {nombre: 'FGFGFG'}]},
                {nombre: 'LABORATORIO SOCIAES', escuela: 'ESCUELA 2', inves: 'INVESTIGACION 2',  director: 'JHON JAIRO', coord: {lat: '3.419737', lon: '-76.540275'}, info: {dir: 'cra54 san fernado', tel: '53454543gdf636', cel: '43656537', email: 'fdgfgjh@univalle.edu.co'},
                servicios: [{nombre: 'CUANTICA'}, {nombre: 'MATE'}, {nombre: 'BIOLOGIA'}], practicas: [{nombre: 'DFGDFGDF'}]},
@@ -29,10 +35,11 @@ export class BusLabComponent implements OnInit, AfterViewInit{
   moduloinfo = false;
   layer = null;
 
+  datosEstructurados = [];
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
-  dataSource = new MatTableDataSource(this.convenios);
+  dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
 
@@ -53,14 +60,54 @@ export class BusLabComponent implements OnInit, AfterViewInit{
     shadowUrl: 'assets/leaflet/images/marker-shadow.png'
   });
 
-  constructor() {
+  // INICIALIZACION DE CONSULTAS
+  private itemsCollection: AngularFirestoreCollection<any>;
+  items: Observable<any[]>;
+
+
+  // OBSERVABLES PARA DATATABLES
+  private object = new BehaviorSubject<any>([]);
+  currentObject = this.object.asObservable();
+
+
+  changeObject(object: any) {
+    this.object.next(object);
+  }
+
+  addItem(item: any) {
+    this.itemsCollection.add(item);
+  }
+
+
+
+  constructor(private afs: AngularFirestore) {
+
+
   }
 
   ngOnInit() {
     this.dataSource2.data = this.convenios[0].servicios;
+
+    this.getLaboratorios().subscribe(data => {
+
+      this.changeObject(this.estructurarData(data));
+
+    });
+
+    this.currentObject.subscribe(datos => {
+
+      console.log(datos);
+      this.dataSource.data = datos;
+
+      console.log(this.dataSource.data);
+     });
+
+
+
   }
 
   ngAfterViewInit(): void {
+
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -75,6 +122,13 @@ export class BusLabComponent implements OnInit, AfterViewInit{
     }).addTo(this.map);
 
     this.agregarMarker(item);
+  }
+
+  getLaboratorios(){
+    this.itemsCollection = this.afs.collection<any>('cfFacil');
+    this.items = this.itemsCollection.valueChanges();
+
+    return this.items;
   }
 
   cambiardata(item) {
@@ -110,6 +164,56 @@ export class BusLabComponent implements OnInit, AfterViewInit{
       ambiente.dataSource3.sort = ambiente.sort3;
       ambiente.dataSource3.paginator = ambiente.paginator3;
     }, 1000);
+
+  }
+
+  estructurarData(data: Array<any>) {
+
+    for (let index = 0; index < data.length; index++) {
+      const elemento = data[index];
+
+      this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
+        const duenoLab = dueno.payload.data();
+        if (duenoLab) {
+
+          const laboratorio = {
+            nombre: elemento.cfName,
+            escuela: elemento.knowledgeArea,
+            inves: elemento.researchGroup,
+            director: duenoLab.cfFirstNames + duenoLab.cfFamilyNames,
+            coord: {lat: '', lon: ''},
+            info: {dir: '', tel: '', cel: '', email: ''},
+            servicios: [],
+            practicas: []
+          };
+
+           this.datosEstructurados.push(laboratorio);
+
+        }
+     });
+
+    }
+
+
+    return this.datosEstructurados;
+  }
+
+  jsonKeys(id) {
+    for (const clave in id) {
+      // Controlando que json realmente tenga esa propiedad
+      if (id.hasOwnProperty(clave)) {
+        return id[clave];
+      }
+    }
+  }
+
+  buscarEspacio(idlab) {
+
+
+  }
+
+  buscarDirector(iddirector) {
+    return this.afs.doc('cfPers/' + iddirector).snapshotChanges();
 
   }
 

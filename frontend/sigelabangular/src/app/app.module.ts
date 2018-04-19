@@ -1,3 +1,5 @@
+import {AngularFirestoreModule} from 'angularfire2/firestore';
+
 import { DataTablesModule } from 'angular-datatables';
 import { ObservablesService } from './shared/services/observables.service';
 import { PrincipalComponent } from './shared/components/dashboard/principal/principal.component';
@@ -97,6 +99,7 @@ import { LoginComponent } from './modulos/login/login.component';
     NgxChartsModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebase),
+    AngularFirestoreModule,
     FormsModule,
     MatNativeDateModule,
     ReactiveFormsModule,
