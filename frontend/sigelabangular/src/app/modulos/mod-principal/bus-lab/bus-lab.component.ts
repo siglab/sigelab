@@ -6,6 +6,8 @@ import * as L from 'leaflet';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ObserverPrincipalService } from '../services/observer-principal.service';
+import { QuerysPrincipalService } from '../services/querys-principal.service';
 
 
 @Component({
@@ -43,13 +45,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
 
-  // INICIALIZACION DATATABLE
+  // INICIALIZACION DATATABLE SERVICIOS
   displayedColumns2 = ['nombre'];
   dataSource2 = new MatTableDataSource([]);
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
 
-  // INICIALIZACION DATATABLE
+  // INICIALIZACION DATATABLE PRUEBAS
   displayedColumns3 = ['nombre'];
   dataSource3 = new MatTableDataSource([]);
   @ViewChild('paginator3') paginator3: MatPaginator;
@@ -60,56 +62,39 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     shadowUrl: 'assets/leaflet/images/marker-shadow.png'
   });
 
-  // INICIALIZACION DE CONSULTAS
-  private itemsCollection: AngularFirestoreCollection<any>;
-  items: Observable<any[]>;
 
-
-  // OBSERVABLES PARA DATATABLES
-  private object = new BehaviorSubject<any>([]);
-  currentObject = this.object.asObservable();
-
-
-  changeObject(object: any) {
-    this.object.next(object);
-  }
-
-  addItem(item: any) {
-    this.itemsCollection.add(item);
-  }
-
-
-
-  constructor(private afs: AngularFirestore) {
+  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) {
 
 
   }
+
 
   ngOnInit() {
-    this.dataSource2.data = this.convenios[0].servicios;
+    this.query.getLaboratorios().subscribe(data => {
 
-    this.getLaboratorios().subscribe(data => {
-
-      this.changeObject(this.estructurarData(data));
+      this.observer.changeDatatableLabs(this.query.estructurarData(data));
 
     });
-
-    this.currentObject.subscribe(datos => {
-
-      console.log(datos);
-      this.dataSource.data = datos;
-
-      console.log(this.dataSource.data);
-     });
-
-
 
   }
 
   ngAfterViewInit(): void {
 
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.observer.currentDatatableLab.subscribe(datos => {
+
+      console.log(datos);
+      this.dataSource.data = datos;
+
+      const ambiente = this;
+      setTimeout(function() {
+        ambiente.dataSource.sort = ambiente.sort;
+        ambiente.dataSource.paginator = ambiente.paginator;
+      }, 1000);
+
+      console.log(this.dataSource.data);
+     });
+
+
   }
 
 
@@ -124,12 +109,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.agregarMarker(item);
   }
 
-  getLaboratorios(){
-    this.itemsCollection = this.afs.collection<any>('cfFacil');
-    this.items = this.itemsCollection.valueChanges();
-
-    return this.items;
-  }
 
   cambiardata(item) {
 
@@ -166,57 +145,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     }, 1000);
 
   }
-
-  estructurarData(data: Array<any>) {
-
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index];
-
-      this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
-        const duenoLab = dueno.payload.data();
-        if (duenoLab) {
-
-          const laboratorio = {
-            nombre: elemento.cfName,
-            escuela: elemento.knowledgeArea,
-            inves: elemento.researchGroup,
-            director: duenoLab.cfFirstNames + duenoLab.cfFamilyNames,
-            coord: {lat: '', lon: ''},
-            info: {dir: '', tel: '', cel: '', email: ''},
-            servicios: [],
-            practicas: []
-          };
-
-           this.datosEstructurados.push(laboratorio);
-
-        }
-     });
-
-    }
-
-
-    return this.datosEstructurados;
-  }
-
-  jsonKeys(id) {
-    for (const clave in id) {
-      // Controlando que json realmente tenga esa propiedad
-      if (id.hasOwnProperty(clave)) {
-        return id[clave];
-      }
-    }
-  }
-
-  buscarEspacio(idlab) {
-
-
-  }
-
-  buscarDirector(iddirector) {
-    return this.afs.doc('cfPers/' + iddirector).snapshotChanges();
-
-  }
-
 
   agregarMarker(item) {
     this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});

@@ -1,3 +1,5 @@
+import { QuerysPrincipalService } from './modulos/mod-principal/services/querys-principal.service';
+import { ObserverPrincipalService } from './modulos/mod-principal/services/observer-principal.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 
 import { DataTablesModule } from 'angular-datatables';
@@ -109,7 +111,7 @@ import { LoginComponent } from './modulos/login/login.component';
     MatSortModule
 
   ],
-  providers: [ObservablesService],
+  providers: [ObservablesService, ObserverPrincipalService, QuerysPrincipalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
