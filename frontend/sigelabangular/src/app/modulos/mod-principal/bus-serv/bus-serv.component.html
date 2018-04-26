@@ -23,9 +23,9 @@
 
             </div>
 
-            <div class="box-body divScroll">
+            <div class="box-body">
 
-              <div class="example-container mat-elevation-z8" *ngIf="dataSource.data.length != 0">
+              <div class="example-container mat-elevation-z8">
                 <div class="example-header">
                   <mat-form-field>
                     <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
@@ -35,9 +35,13 @@
                 <mat-table #tableserv #sort="matSort" [dataSource]="dataSource" matSort>
 
                   <!-- Position Column -->
-                  <ng-container matColumnDef="nombre">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                  <ng-container matColumnDef="nombreserv">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Servicio </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.nombreserv}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="nombrelab">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
                   </ng-container>
 
                   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -89,30 +93,30 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <form  id="form-work" class="" name="form-work" action="#">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="dir"><strong>Direccion: {{itemsel.info.dir}}</strong></label>
+                              <fieldset>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{itemsel.nombreserv}}</label>
 
-                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="tel"><strong>Telefono: {{itemsel.info.tel}}</strong></label>
-                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{itemsel.infoServ.descripcion}}</label>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="cel"><strong>Celular: {{itemsel.info.cel}}</strong></label>
-                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="precioserv"><strong>Precio:</strong> {{itemsel.infoServ.precio}}</label>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="email"><strong>Email: {{itemsel.info.email}}</strong></label>
-                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{itemsel.infoServ.estado}}</label>
                                     </div>
+                                </div>
 
-                                </fieldset>
+                              </fieldset>
                             </form>
                         </div>
 
@@ -127,8 +131,48 @@
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
-                        <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
-                        <div id="mapaaser" style="height:250px"></div>
+                        <form  id="form-work" class="" name="form-work" action="#">
+                          <fieldset>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="dir"><strong>Direccion:</strong> {{itemsel.infoLab.dir}}</label>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="tel"><strong>Telefono:</strong> {{itemsel.infoLab.tel}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="cel"><strong>Celular:</strong> {{itemsel.infoLab.cel}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="email"><strong>Email:</strong> {{itemsel.infoLab.email}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="director"><strong>Director:</strong> {{itemsel.infoLab.director}}</label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="escuela"><strong>Escuela: </strong> {{itemsel.infoLab.escuela}}</label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="inves"><strong>Investigacion:</strong> {{itemsel.infoLab.inves}}</label>
+                              </div>
+                            </div>
+
+                          </fieldset>
+                        </form>
+                        <div id="mapaaser" style="height:250px; margin-top: 20px;"></div>
                       </div>
                       <!-- /.box-body -->
 

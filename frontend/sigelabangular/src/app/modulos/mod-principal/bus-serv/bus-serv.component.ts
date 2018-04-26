@@ -1,6 +1,8 @@
 import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import { ObserverPrincipalService } from '../services/observer-principal.service';
+import { QuerysPrincipalService } from '../services/querys-principal.service';
 
 @Component({
   selector: 'app-bus-serv',
@@ -34,20 +36,36 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
 
     // INICIALIZACION DATATABLE lABORATORIOS
-    displayedColumns = ['nombre'];
-    dataSource = new MatTableDataSource(this.servicios);
+    displayedColumns = ['nombreserv', 'nombrelab'];
+    dataSource = new MatTableDataSource([]);
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
 
 
-  constructor() { }
+  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) { }
 
   ngOnInit() {
+
+    this.query.getServicios().subscribe(data => {
+
+      this.observer.changeDatatableServs(this.query.estructurarDataServ(data));
+
+    });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+
+    this.observer.currentDatatableServs.subscribe(datos => {
+
+      const ambiente = this;
+      setTimeout(function() {
+        ambiente.dataSource.data = datos;
+        ambiente.dataSource.sort = ambiente.sort;
+        ambiente.dataSource.paginator = ambiente.paginator;
+      }, 1000);
+
+     });
+
   }
 
 
@@ -61,15 +79,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.agregarMarker(item);
   }
 
-  cambiardata(item){
+  cambiardata(item) {
     this.itemsel = item;
-    if(!this.moduloinfo){
+    if (!this.moduloinfo) {
       this.moduloinfo = true;
-      var ambiente = this;
-      setTimeout(function(){
+      const ambiente = this;
+      setTimeout(function() {
         ambiente.loadMap(item);
-      },1000);
-     }else{
+      }, 1000);
+     } else {
 
       this.removerMarker();
       this.agregarMarker(item);
@@ -77,10 +95,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
 
-  agregarMarker(item){
+  agregarMarker(item) {
     this.layer = L.marker([item.coord.lat, item.coord.lon],{icon:this.DefaultIcon});
     this.layer.addTo(this.map)
-    .bindPopup(item.nombre)
+    .bindPopup(item.nombrelab)
     .openPopup();
   }
 

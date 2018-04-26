@@ -16,13 +16,13 @@ export class BarBusquedaComponent implements OnInit {
 
   }
 
-  cargarLabs() {
-    this.query.getLaboratorios().subscribe(data => {
+  // cargarLabs() {
+  //   this.query.getLaboratorios().subscribe(data => {
 
-      this.observer.changeDatatableLabs(this.query.estructurarData(data));
+  //     this.observer.changeDatatableLabs(this.query.estructurarData(data));
 
-    });
-  }
+  //   });
+  // }
 
 
 

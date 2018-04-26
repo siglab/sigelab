@@ -65,14 +65,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) {
 
-
+    this.query.getPruebas();
   }
 
 
   ngOnInit() {
     this.query.getLaboratorios().subscribe(data => {
 
-      this.observer.changeDatatableLabs(this.query.estructurarData(data));
+      this.observer.changeDatatableLabs(this.query.estructurarDataLab(data));
 
     });
 
@@ -83,15 +83,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.observer.currentDatatableLab.subscribe(datos => {
 
       console.log(datos);
-      this.dataSource.data = datos;
-
       const ambiente = this;
       setTimeout(function() {
+        ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
       }, 1000);
-
-      console.log(this.dataSource.data);
      });
 
 
@@ -117,6 +114,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
 
+    console.log(item.practicas);
     const ambiente = this;
 
     if (!this.moduloinfo) {

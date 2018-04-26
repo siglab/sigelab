@@ -1,6 +1,8 @@
 import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import { ObserverPrincipalService } from '../services/observer-principal.service';
+import { QuerysPrincipalService } from '../services/querys-principal.service';
 @Component({
   selector: 'app-bus-pru',
   templateUrl: './bus-pru.component.html',
@@ -34,19 +36,35 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
     // INICIALIZACION DATATABLE lABORATORIOS
     displayedColumns = ['nombre'];
-    dataSource = new MatTableDataSource(this.servicios);
+    dataSource = new MatTableDataSource([]);
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
 
 
-  constructor() { }
+  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) { }
 
   ngOnInit() {
+
+    this.query.getPruebas().subscribe(data => {
+
+      this.observer.changeDatatablePrueba(this.query.estructurarDataPruebas(data));
+
+    });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+
+    this.observer.currentDatatablePruebas.subscribe(datos => {
+
+      const ambiente = this;
+      setTimeout(function() {
+        ambiente.dataSource.data = datos;
+        ambiente.dataSource.sort = ambiente.sort;
+        ambiente.dataSource.paginator = ambiente.paginator;
+      }, 1500);
+
+     });
+
   }
 
 
@@ -79,7 +97,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   agregarMarker(item) {
     this.layer = L.marker([item.coord.lat, item.coord.lon],{icon:this.DefaultIcon});
     this.layer.addTo(this.map)
-    .bindPopup(item.nombre)
+    .bindPopup(item.nombreprub)
     .openPopup();
 
 
