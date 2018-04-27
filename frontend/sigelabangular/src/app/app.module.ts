@@ -58,6 +58,9 @@ import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatP
 
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
+
+//angular fireauth
+import { AngularFireAuth } from 'angularfire2/auth';
 @NgModule({
   declarations: [
     AppComponent,
@@ -112,7 +115,13 @@ import { LoginService } from './modulos/login/login-service/login.service';
     MatSortModule
 
   ],
-  providers: [ObservablesService, ObserverPrincipalService, QuerysPrincipalService , LoginService],
+  providers: [
+    ObservablesService, 
+    ObserverPrincipalService, 
+    QuerysPrincipalService , 
+    LoginService,
+    AngularFireAuth
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
