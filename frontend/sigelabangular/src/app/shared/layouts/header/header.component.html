@@ -24,7 +24,7 @@
 
 
          <!-- OCULTAR MENU PARA MENSAJES -->
-        <li class="dropdown messages-menu"  *ngIf="itemsHeader">
+        <li class="dropdown messages-menu"  *ngIf="itemNotificacion">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-envelope-o"></i>
             <span class="label label-success">4</span>
@@ -113,7 +113,7 @@
         </li>
 
          <!-- OCULTAR MENU PARA NOTIFICACIONES -->
-        <li class="dropdown notifications-menu"  *ngIf="itemsHeader">
+        <li class="dropdown notifications-menu"  *ngIf="itemNotificacion">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-bell-o"></i>
             <span class="label label-warning">10</span>
@@ -235,16 +235,20 @@
           </ul>
         </li>
 
-          <li  *ngIf="itemsHeader"  >
-              <a class="btn " title="Ingresar" id="logout"  style="cursor:pointer; padding-right: 30px; padding-top: 20px;">
-                  <i class= "fa fa-sign-in" style="font-size: 17px;"> Ingresar</i>
+          <li class="dropdown messages-menu" *ngIf="itemLogout"  >
+              <a  [routerLink]="['/login']"    class="btn " title="Ingresar" id="logout"  style="cursor:pointer;">
+                  <i class= "fa fa-sign-in" style="font-size: 14px;"> Ingresar </i>
                 </a>
               
-
           </li>
           
-  
-  
+          <li class="dropdown messages-menu" *ngIf="itemNotificacion"  >
+              <a (click)= "salir()" class="btn " title="Salir" id="logout"  style="cursor:pointer; ">
+                  <i class= "fa fa-sign-in" style="font-size: 14px;"> Salir </i>
+                </a>
+              
+          </li>
+         
       
         <a>
           <img src="assets/img/logo.jpg">

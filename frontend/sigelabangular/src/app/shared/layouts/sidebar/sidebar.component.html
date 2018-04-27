@@ -5,10 +5,10 @@
   <!-- Sidebar user panel  ocultar imagen de usuario -->
   <div class="user-panel" *ngIf="imgUsr" >
       <div class="pull-left image">
-        <img src="usuario.photoURL" class="img-circle" alt="User Image">
+        <img src="{{this.usuario.photoURL}}" class="img-circle" alt="User Image">
       </div>
       <div class="pull-left info">
-        <p>Usuario</p>
+        <p> {{this.usuario.displayName}} </p>
         <a href="#">
           <i class="fa fa-circle text-success"></i> Online</a>
       </div>
@@ -19,7 +19,7 @@
     <app-bar-admin-laboratorios  *ngIf="false"></app-bar-admin-laboratorios>
     <app-bar-admin-laboratorio-superior *ngIf="false"></app-bar-admin-laboratorio-superior>
     <app-bar-admin-usuarios  *ngIf="false" ></app-bar-admin-usuarios>
-    <app-bar-indicadores *ngIf="false"></app-bar-indicadores>
+    <app-bar-indicadores  *ngIf="false"></app-bar-indicadores>
    <!--  <li style="color: #FFFFFF;">nivel 3</li> -->
     <app-bar-solicitudes-nivel3 *ngIf="false"></app-bar-solicitudes-nivel3>
     <app-bar-comunicacion-masiva *ngIf="false" ></app-bar-comunicacion-masiva>
