@@ -13,12 +13,8 @@ export class LoginService {
 
   async login() {
 
-  
-
    return   this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then();
       
-   
-
   }
   logout() {
     this.afAuth.auth.signOut();

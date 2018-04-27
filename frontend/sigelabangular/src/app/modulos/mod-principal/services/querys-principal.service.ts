@@ -306,6 +306,10 @@ console.log(this.datosPrubEstructurados);
   }
 
 
+  addSolicitudServicio(item) {
+
+  }
+
 
   addItem(item: any) {
     this.labsCollection.add(item);

@@ -33,6 +33,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                servicios: [], practicas: []}];
 
   itemsel: any;
+  servsel: any;
+  prubsel: any;
 
   moduloinfo = false;
   layer = null;
@@ -142,6 +144,16 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       ambiente.dataSource3.paginator = ambiente.paginator3;
     }, 1000);
 
+  }
+
+  cambiarDataServicio(item) {
+    this.servsel = item;
+    console.log(item);
+  }
+
+  cambiarDataPrueba(item) {
+    this.prubsel = item;
+    console.log(item);
   }
 
   agregarMarker(item) {

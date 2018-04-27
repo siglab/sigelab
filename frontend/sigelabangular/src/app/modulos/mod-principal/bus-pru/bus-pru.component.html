@@ -3,7 +3,7 @@
     <section class="content-header">
       <h1>
         Dashboard
-        <small>Servicios</small>
+        <small>Pruebas</small>
       </h1>
 
     </section>
@@ -41,7 +41,7 @@
                   </ng-container>
 
                   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)"></mat-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style = "cursor: pointer;"></mat-row>
                 </mat-table>
 
                 <mat-paginator #paginator="matPaginator"
@@ -189,14 +189,6 @@
                   </div>
 
                 </div>
-
-                <div class="row" style="margin-top:20px;">
-                  <div class="col-md-12 text-center form-group">
-                    <button class="btn-danger btn-lg btn-block danger" type="button" >SOLICITAR SERVICIO</button>
-
-                  </div>
-                </div>
-
 
               </div>
             </div>

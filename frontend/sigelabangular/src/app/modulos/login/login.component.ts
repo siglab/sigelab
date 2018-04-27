@@ -16,22 +16,22 @@ export class LoginComponent implements OnInit {
 
 
   ingresar() {
-    
+
      this._loginService.login().then( ()=>
-     {    
+     {
        // mensaje de bienvenida
       swal({
         type: 'success',
         title: 'Acceso Exitoso',
         showConfirmButton: true
+      }).then( () => {
+          // navegar al dashboard
+          this.ruta.navigate(['principal']);
       });
 
-     // navegar al dashboard
-     this.ruta.navigate(['principal']);
+
 
      });
-  
-
 
   }
 }
