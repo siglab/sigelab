@@ -57,6 +57,7 @@ import { BarSolicitudesNivel3Component } from './shared/components/dashboard/lef
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule } from '@angular/material';
 
 import { LoginComponent } from './modulos/login/login.component';
+import { LoginService } from './modulos/login/login-service/login.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -111,7 +112,7 @@ import { LoginComponent } from './modulos/login/login.component';
     MatSortModule
 
   ],
-  providers: [ObservablesService, ObserverPrincipalService, QuerysPrincipalService],
+  providers: [ObservablesService, ObserverPrincipalService, QuerysPrincipalService , LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

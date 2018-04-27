@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router';
+import { LoginService } from './login-service/login.service';
+import swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -7,9 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor( private ruta: Router, private _loginService: LoginService  ) { }
 
   ngOnInit() {
   }
 
+
+  ingresar() {
+    
+     this._loginService.login().then( ()=>
+     {    
+       // mensaje de bienvenida
+      swal({
+        type: 'success',
+        title: 'Acceso Exitoso',
+        showConfirmButton: true
+      });
+
+     // navegar al dashboard
+     this.ruta.navigate(['principal']);
+
+     });
+  
+
+
+  }
 }
