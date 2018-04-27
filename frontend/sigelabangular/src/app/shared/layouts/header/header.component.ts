@@ -7,9 +7,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  usuario;
+  itemsHeader:boolean; 
+
+  constructor() { 
+   if(   localStorage.getItem('usuario')  )
+        {
+      
+         this.usuario = JSON.parse(localStorage.getItem('usuario'));
+
+         console.log( this.usuario );
+            //se visualizan los elementos
+         this.itemsHeader = false;
+          
+        } else {
+          
+          // no se visualizan los elementos
+          this.itemsHeader = true;
+          console.log('no existe un usuario logueado');
+        }
+  }
 
   ngOnInit() {
+     
+    if(   localStorage.getItem('usuario')  )
+    {
+  
+     this.usuario = JSON.parse(localStorage.getItem('usuario'));
+     console.log( this.usuario );
+        //se visualizan los elementos
+     this.itemsHeader = false;
+      
+    } else {
+      // no se visualizan los elementos
+      this.itemsHeader = true;
+    
+      console.log('no existe un usuario logueado');
+    }
+
   }
 
 }

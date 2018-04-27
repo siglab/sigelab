@@ -68,7 +68,13 @@ export class QuerysPrincipalService {
           this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
 
             const espacioLab = espacio.payload.data();
-
+             // convertir boolean a cadena de caracteres para estado del laboratorio
+            let estadoLab;
+             if(elemento.active == true) {
+              estadoLab = 'Activo';
+             } else if( elemento.active == false ) {
+              estadoLab = 'Inactivo';
+             }
             const laboratorio = {
               nombre: elemento.cfName,
               escuela: elemento.knowledgeArea,
@@ -78,7 +84,7 @@ export class QuerysPrincipalService {
               info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
               servicios: this.estructurarServicios(elemento.relatedServices),
               practicas: this.estructurarPracticas(elemento.relatedPractices),
-              estado: elemento.active
+              estado: estadoLab
             };
 
               this.datosLabsEstructurados.push(laboratorio);
@@ -114,13 +120,21 @@ export class QuerysPrincipalService {
 
               const espacioLab = espacio.payload.data();
 
+              // convertir boolean a cadena de caracteres para estado del laboratorio
+              let estadoServ;
+              if(elemento.active == true) {
+                estadoServ = 'Activo';
+              } else if( elemento.active == false ) {
+                estadoServ = 'Inactivo';
+              }
+
               const servicios = {
                 nombreserv: elemento.cfName,
                 nombrelab: labencontrado.cfName,
                 infoServ: {
                   descripcion: elemento.cfDesc,
                   precio: elemento.cfPrice,
-                  estado: elemento.active
+                  estado: estadoServ
                 },
                 infoLab: {
                   dir: labencontrado.otros.direccion,
@@ -176,7 +190,15 @@ export class QuerysPrincipalService {
               this.buscarEspacio(labencontrado.mainSpace).subscribe(espacio => {
 
                 const espacioLab = espacio.payload.data();
+                  let estado;
+                 // cambiar variable boolean a cadena de caracteres
+                 if(elemento.active === true) {
+                    estado = 'activo'
+                 } else if(elemento.active === false ){
+                   'inactivo'
 
+                 }
+                 
                 const pruebas = {
                   nombreprub: elemento.practiceName,
                   nombrelab: labencontrado.cfName,
@@ -186,7 +208,8 @@ export class QuerysPrincipalService {
                       diahora: prog['schedule'],
                       semestre: prog['semester']
                     },
-                    activo: elemento.active
+                    
+                    activo: estado
                   },
                   infoLab: {
                     dir: labencontrado.otros.direccion,
