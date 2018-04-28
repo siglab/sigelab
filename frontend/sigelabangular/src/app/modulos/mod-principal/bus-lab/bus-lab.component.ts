@@ -90,7 +90,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-      }, 1000);
+      }, 1500);
      });
 
 

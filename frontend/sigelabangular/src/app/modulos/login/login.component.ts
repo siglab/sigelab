@@ -17,8 +17,7 @@ export class LoginComponent implements OnInit {
 
   ingresar() {
 
-     this._loginService.login().then( ()=>
-     {
+     this._loginService.login().then( () =>{
        // mensaje de bienvenida
       swal({
         type: 'success',
@@ -28,9 +27,8 @@ export class LoginComponent implements OnInit {
           // navegar al dashboard
           this.ruta.navigate(['principal']);
       });
-
-
-
+     }).catch(error => {
+        this.ingresar();
      });
 
   }
