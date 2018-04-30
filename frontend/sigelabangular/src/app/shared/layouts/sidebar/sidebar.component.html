@@ -15,7 +15,7 @@
     </div>
      <!-- Sidebar user panel  ocultar  componentes segun el nivel  -->
     <app-bar-busqueda></app-bar-busqueda>
-    <app-bar-admin-solicitudes></app-bar-admin-solicitudes>
+    <app-bar-admin-solicitudes *ngIf="moduloPrincipal"></app-bar-admin-solicitudes>
     <app-bar-admin-laboratorios  *ngIf="false"></app-bar-admin-laboratorios>
     <app-bar-admin-laboratorio-superior *ngIf="false"></app-bar-admin-laboratorio-superior>
     <app-bar-admin-usuarios  *ngIf="false" ></app-bar-admin-usuarios>

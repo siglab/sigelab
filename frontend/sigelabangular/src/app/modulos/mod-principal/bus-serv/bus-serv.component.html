@@ -45,7 +45,7 @@
                   </ng-container>
 
                   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)"></mat-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style = "cursor: pointer;"></mat-row>
                 </mat-table>
 
                 <mat-paginator #paginator="matPaginator"
@@ -183,7 +183,7 @@
 
                 <div class="row" style="margin-top:20px;">
                   <div class="col-md-12 text-center form-group">
-                    <button class="btn-danger btn-lg btn-block danger" type="button" >SOLICITAR SERVICIO</button>
+                    <button class="btn-danger btn-lg btn-block danger" type="button" data-toggle="modal" data-target="#myMod2">SOLICITAR SERVICIO</button>
 
                   </div>
                 </div>
@@ -196,6 +196,19 @@
 
     </section>
 
+</div>
 
 
+<div class="modal fade" id="myMod2" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <h1>Login</h1>
+      </div>
+    </div>
+
+  </div>
 </div>

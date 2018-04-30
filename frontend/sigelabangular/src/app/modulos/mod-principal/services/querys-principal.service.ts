@@ -198,7 +198,7 @@ export class QuerysPrincipalService {
                    'inactivo'
 
                  }
-                 
+
                 const pruebas = {
                   nombreprub: elemento.practiceName,
                   nombrelab: labencontrado.cfName,
@@ -208,7 +208,7 @@ export class QuerysPrincipalService {
                       diahora: prog['schedule'],
                       semestre: prog['semester']
                     },
-                    
+
                     activo: estado
                   },
                   infoLab: {
@@ -234,9 +234,6 @@ export class QuerysPrincipalService {
 
 
     }
-
-console.log(this.datosPrubEstructurados);
-
     return this.datosPrubEstructurados;
   }
 
@@ -328,6 +325,23 @@ console.log(this.datosPrubEstructurados);
     return arr;
   }
 
+
+  // METODO QUE AGREGA UNA NUEVA SOLICITUD DE SERVICIO
+  addSolicitudServicio(item) {
+    const cfSrvReserv = {
+      cfSrv: '',
+      user: '',
+      selectedVariations: [],
+      cfStartDate: '',
+      cfEndDate: '',
+      cfClass: '',
+      cfClassScheme: '',
+      status: 'created/accepted/completed/canceled',
+      createdAt: '',
+      updatedAt:  '',
+      conditionsLog: [{ conditionText: '', accepted: ''} ]
+   };
+  }
 
 
   addItem(item: any) {
