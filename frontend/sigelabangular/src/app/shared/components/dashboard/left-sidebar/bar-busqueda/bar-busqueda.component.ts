@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ObserverPrincipalService } from '../../../../../modulos/mod-principal/services/observer-principal.service';
 import { QuerysPrincipalService } from '../../../../../modulos/mod-principal/services/querys-principal.service';
 
@@ -7,22 +7,16 @@ import { QuerysPrincipalService } from '../../../../../modulos/mod-principal/ser
   templateUrl: './bar-busqueda.component.html',
   styleUrls: ['./bar-busqueda.component.css']
 })
-export class BarBusquedaComponent implements OnInit {
+export class BarBusquedaComponent implements OnDestroy {
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) { }
+  constructor() { }
 
-  ngOnInit() {
+  ngOnDestroy() {
 
 
   }
 
-  // cargarLabs() {
-  //   this.query.getLaboratorios().subscribe(data => {
-
-  //     this.observer.changeDatatableLabs(this.query.estructurarData(data));
-
-  //   });
-  // }
+  
 
 
 

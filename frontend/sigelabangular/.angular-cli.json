@@ -28,6 +28,7 @@
         "styles.css"
       ],
       "scripts": [
+        "../node_modules/jquery-slimscroll/jquery.slimscroll.min.js",
         "../node_modules/jquery/dist/jquery.js",
         "../node_modules/datatables.net/js/jquery.dataTables.js",
         "../node_modules/datatables.net-buttons/js/dataTables.buttons.js",
