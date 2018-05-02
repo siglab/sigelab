@@ -23,7 +23,7 @@
     background-color: #ECF1F3;
     cursor: pointer;
   }
-  
+
   .tablas:hover{
     background-color: rgba(253, 251, 251, 0.979);
   }
@@ -38,42 +38,59 @@
     text-align: center;
     padding: 30px 0;
   }
-  
-  
+
+
   .page-head-image img {
     border-radius: 50%;
   }
-  
+
   #form-trabalhe {
     margin-top: 30px;
     text-align: left;
   }
-  
+
   label {
     font-weight: normal;
     margin-top: 15px;
   }
-  
-  input {
-    border: 2px solid #CCC !important;
-    height: 35px;
-    border-radius: 3px;
-    max-width: 100%;
+
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
   }
-  
-  .input-group-addon {
-    border: 2px solid #CCC !important;
-    border-right: 0px !important;
+
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
   }
-  
-  .btn2 {
-    border: 0;
-    border-radius: 3px;
-    margin-top: 20px;
+
+  .mat-header-cell.mat-sort-header-sorted {
+    color: black;
   }
-  
-  .form-group {
-    margin-bottom: 0;
-    text-align: left;
+
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid red;
+    border-bottom: 16px solid red;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
   }
-  
+
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+
+
+

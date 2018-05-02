@@ -61,6 +61,8 @@ import { LoginService } from './modulos/login/login-service/login.service';
 
 //angular fireauth
 import { AngularFireAuth } from 'angularfire2/auth';
+import { QuerysAutenticadoService } from './modulos/mod-autenticado/services/querys-autenticado.service';
+import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/observer-autenticado.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -116,9 +118,11 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
   ],
   providers: [
-    ObservablesService, 
-    ObserverPrincipalService, 
-    QuerysPrincipalService , 
+    ObservablesService,
+    ObserverPrincipalService,
+    QuerysPrincipalService,
+    QuerysAutenticadoService,
+    ObserverAutenticadoService,
     LoginService,
     AngularFireAuth
   ],

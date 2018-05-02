@@ -37,9 +37,9 @@ export class QuerysPrincipalService {
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
   getServicios() {
     this.servsCollection = this.afs.collection<any>('cfSrv');
-    this.servs = this.servsCollection.valueChanges();
+    //this.servs = this.servsCollection.valueChanges();
 
-    return this.servs;
+    return this.servsCollection.snapshotChanges();
 
   }
 
@@ -107,7 +107,7 @@ export class QuerysPrincipalService {
     this.datosServEstructurados = [];
 
     for (let index = 0; index < data.length; index++) {
-      const elemento = data[index];
+      const elemento = data[index].payload.doc.data();
 
       this.buscarLaboratorio(elemento.cfFacil).subscribe(lab => {
         const labencontrado = lab.payload.data();
@@ -134,7 +134,8 @@ export class QuerysPrincipalService {
                 infoServ: {
                   descripcion: elemento.cfDesc,
                   precio: elemento.cfPrice,
-                  estado: estadoServ
+                  estado: estadoServ,
+                  uid: data[index].payload.doc.id
                 },
                 infoLab: {
                   dir: labencontrado.otros.direccion,
@@ -268,11 +269,13 @@ export class QuerysPrincipalService {
         if (item[clave]) {
           this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
            const servicio =  data.payload.data();
+
              const serv = {
               nombre: servicio.cfName,
               descripcion: servicio.cfDesc,
               precio: servicio.cfPrice,
-              activo: servicio.active
+              activo: servicio.active,
+              uid: data.payload.id
              };
              arr.push(serv);
            });
@@ -328,19 +331,7 @@ export class QuerysPrincipalService {
 
   // METODO QUE AGREGA UNA NUEVA SOLICITUD DE SERVICIO
   addSolicitudServicio(item) {
-    const cfSrvReserv = {
-      cfSrv: '',
-      user: '',
-      selectedVariations: [],
-      cfStartDate: '',
-      cfEndDate: '',
-      cfClass: '',
-      cfClassScheme: '',
-      status: 'created/accepted/completed/canceled',
-      createdAt: '',
-      updatedAt:  '',
-      conditionsLog: [{ conditionText: '', accepted: ''} ]
-   };
+    return this.afs.collection('cfSrvReserv').add(item);
   }
 
 

@@ -3,7 +3,10 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { ObserverPrincipalService } from '../services/observer-principal.service';
 import { QuerysPrincipalService } from '../services/querys-principal.service';
+import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
+declare var $: any;
 @Component({
   selector: 'app-bus-serv',
   templateUrl: './bus-serv.component.html',
@@ -11,17 +14,11 @@ import { QuerysPrincipalService } from '../services/querys-principal.service';
 })
 export class BusServComponent implements OnInit, AfterViewInit {
 
+  user: any;
+
   corx = 3.42158;
   cory = -76.5205;
   map: any;
-
-  servicios = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}
-              },
-              {nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"}
-              },
-              {nombre:"MODELADO",coord:{lat:"3.420380",lon:"-76.510105"},info:{dir:"cra54 sfdfsdfs",tel:"35345435",cel:"436574676537",email:"fgjh@univalle.edu.co"}
-              },
-              {nombre:"YODURO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"cra54 dfsdfsdf",tel:"46363565",cel:"4357547656537",email:"hkjkhjjh@univalle.edu.co"}}];
 
    itemsel:any;
 
@@ -42,10 +39,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
     @ViewChild('sort') sort: MatSort;
 
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) { }
+  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
+    if (localStorage.getItem('usuario')) {
+      this.user = JSON.parse(localStorage.getItem('usuario'));
+    }
+  }
 
   ngOnInit() {
-
+    $('#modal1').modal('show');
     this.query.getServicios().subscribe(data => {
 
       this.observer.changeDatatableServs(this.query.estructurarDataServ(data));
@@ -62,12 +63,85 @@ export class BusServComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
+
+        if (datos.length !== 0) {
+          $('#modal1').modal('hide');
+        }
+
       }, 1000);
 
      });
 
   }
 
+  agregarSolicitudServicio() {
+    console.log(this.itemsel);
+    console.log(this.user);
+    if (this.user) {
+      const cfSrvReserv = {
+        cfSrv: this.itemsel.infoServ.uid,
+        user: this.user.uid,
+        selectedVariations: [],
+        cfStartDate: '',
+        cfEndDate: '',
+        cfClass: '',
+        cfClassScheme: '',
+        status: 'creada',
+        createdAt: '',
+        updatedAt:  '',
+        conditionsLog: [{ conditionText: '', accepted: ''} ]
+      };
+
+      swal({
+        type: 'warning',
+        title: 'Esta seguro que desea solicitar este servicio',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Solciitar',
+        cancelButtonText: 'No, Cancelar'
+      }).then((result) => {
+        if (result.value) {
+          this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+            swal({
+              type: 'success',
+              title: 'Solicitud Creada Exitosamente',
+              showConfirmButton: true
+            });
+
+          }).catch(error => {
+
+            swal({
+              type: 'error',
+              title: error,
+              showConfirmButton: true
+            });
+
+          });
+        } else if (
+          // Read more about handling dismissals
+          result.dismiss === swal.DismissReason.cancel
+        ) {
+          swal(
+            'Solicitud Cancelada',
+            '',
+            'error'
+          );
+        }
+
+      });
+
+
+      } else {
+
+        swal({
+          type: 'error',
+          title: 'Debe ingresar al sistema para poder solicitar este servicio',
+          showConfirmButton: true
+        }).then(() => {
+          this.ruta.navigate(['login']);
+        });
+      }
+
+  }
 
   loadMap(item) {
     this.map = L.map('mapaaser').setView([this.corx, this.cory], 13);

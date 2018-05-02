@@ -24,23 +24,24 @@ login() {
 
           this.consultarPermisos(this.usuario.uid).then(() => {
            localStorage.setItem('usuario', JSON.stringify(this.usuario));
-          resolve();
+            resolve();
           }).catch(() => {
           swal({
             type: 'error',
             title: 'Ocurrio un error al intentar ingresar',
             showConfirmButton: true
           });
+
         });
 
-      }).catch( () => {
+      }).catch( error => {
        // alerta en caso de error
         swal({
           type: 'error',
-          title: 'Ocurrio un error al intentar ingresar',
+          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
           showConfirmButton: true
         });
-
+        console.log(error);
      });
   });
 
@@ -50,6 +51,7 @@ login() {
   async logout() {
 
     localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
      return  this.afAuth.auth.signOut();
 
   }
@@ -75,6 +77,8 @@ login() {
                     //   console.log(modulo);
                     // });
                     resolve();
+                  } else {
+                    this.consultarPermisos(id);
                   }
                 }
               } else {

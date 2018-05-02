@@ -1,123 +1,169 @@
-import { Component, OnInit } from '@angular/core';
+import { ObserverAutenticadoService } from './../services/observer-autenticado.service';
+import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { QuerysAutenticadoService } from './../services/querys-autenticado.service';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
+import swal from 'sweetalert2';
+
+declare var $: any;
 @Component({
   selector: 'app-admin-solicitudes',
   templateUrl: './admin-solicitudes.component.html',
   styleUrls: ['./admin-solicitudes.component.css']
 })
-export class AdminSolicitudesComponent implements OnInit {
+export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
-  servicios = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},estado:"NO ACEPTADO"},
-                {nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"},estado:"NO ACEPTADO"},
-                {nombre:"MODELADO",coord:{lat:"3.420380",lon:"-76.510105"},info:{dir:"cra54 sfdfsdfs",tel:"35345435",cel:"436574676537",email:"fgjh@univalle.edu.co"},estado:"NO ACEPTADO"},
-                {nombre:"YODURO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"cra54 dfsdfsdf",tel:"46363565",cel:"4357547656537",email:"hkjkhjjh@univalle.edu.co"},estado:"ACEPTADO"}];
+  user: any;
 
-
-  servicioshechos = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},fecha:"08/09/2017"},
-              {nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"},fecha:"18/09/2017"},
-              {nombre:"MODELADO",coord:{lat:"3.420380",lon:"-76.510105"},info:{dir:"cra54 sfdfsdfs",tel:"35345435",cel:"436574676537",email:"fgjh@univalle.edu.co"},fecha:"11/10/2017"},
-              {nombre:"YODURO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"cra54 dfsdfsdf",tel:"46363565",cel:"4357547656537",email:"hkjkhjjh@univalle.edu.co"},fecha:"08/03/2017"}];
+  // INICIALIZACION DATATABLE SERVICIO ACTIVOS
+  displayedColumns = ['nombre', 'precio', 'estado'];
+  dataSource = new MatTableDataSource([]);
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('sort') sort: MatSort;
 
 
-  dtOptions:any = {};
-  dtOptions1:any = {};
+  // INICIALIZACION DATATABLE SERVICIOS
+  displayedColumns2 = ['nombre', 'precio', 'estado'];
+  dataSource2 = new MatTableDataSource([]);
+  @ViewChild('paginator2') paginator2: MatPaginator;
+  @ViewChild('sort2') sort2: MatSort;
+
+  dtOptions: any = {};
+  dtOptions1: any = {};
 
   moduloinfo = false;
 
-  itemsel:any;
+  servsel: any;
 
-  constructor() { }
+  // servicios: any;
+  datos: any;
+  histodatos: any;
+
+  buttoncancel = false;
+
+  constructor(private querys: QuerysAutenticadoService, private observer: ObserverAutenticadoService) {
+
+   }
 
   ngOnInit() {
-    this.loadtable1();
-    this.loadtable2();
+    $('#modal1').modal('show');
+
+    if (localStorage.getItem('usuario')) {
+      this.user = JSON.parse(localStorage.getItem('usuario'));
+      this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
+        this.datos = this.querys.estructurarServiciosActivos(data);
+        this.observer.changeDatatableServsAct(this.datos);
+        console.log(this.datos);
+      });
+
+      this.querys.getCollectionsHisto(this.user.uid).subscribe(data => {
+        this.histodatos = this.querys.estructurarHistoriaServicios(data);
+        this.observer.changeDatatableHistoServs(this.histodatos);
+        console.log(this.histodatos);
+      });
+    }
+
+
+
   }
 
-  loadtable1() {
-    this.dtOptions = {
-      data:this.servicios,
-      columns: [{
-        title: 'Nombre',
-        data: 'nombre'
-        }, {
-          title: 'Email',
-          data: 'info.email'
-        }, {
-          title: 'Telefono',
-          data: 'info.tel'
-        }, {
-          title: 'Estado',
-          data: 'estado'}],
-      rowCallback: (row: Node, data: any[] | Object, index: number) => {
-        const self = this;
-        // Unbind first in order to avoid any duplicate handler
-        // (see https://github.com/l-lin/angular-datatables/issues/87)
-        $('td', row).unbind('click');
-        $('td', row).bind('click', () => {
-          self.mostrardata(data);
-        });
-        return row;
-      },
-      // Declare the use of the extension in the dom parameter
-      dom: 'Bfrtip',
-      // Configure the buttons
-      buttons: [
-        'print',
-        'copy',
-        'csv',
-        'excel',
-        'pdfHtml5'
-      ],
-      select:true
-    };
+  ngAfterViewInit() {
+
+    this.observer.currentDatatableServActi.subscribe(data => {
+      const ambiente = this;
+      this.dataSource.data = data;
+
+      setTimeout(function() {
+        ambiente.dataSource.sort = ambiente.sort;
+        ambiente.dataSource.paginator = ambiente.paginator;
+
+        $('#modal1').modal('hide');
+      }, 1000);
+
+    });
+
+    this.observer.currentDatatableHistoServs.subscribe(data2 => {
+      const ambiente = this;
+      this.dataSource2.data = data2;
+
+      setTimeout(function() {
+        ambiente.dataSource2.sort = ambiente.sort2;
+        ambiente.dataSource2.paginator = ambiente.paginator2;
+
+        $('#modal1').modal('hide');
+      }, 1000);
+
+    });
+
   }
 
-  loadtable2() {
-    this.dtOptions1 = {
-      data:this.servicioshechos,
-      columns: [{
-        title: 'Nombre',
-        data: 'nombre'
-        }, {
-          title: 'Email',
-          data: 'info.email'
-        }, {
-          title: 'Telefono',
-          data: 'info.tel'
-        }, {
-          title: 'Fecha',
-          data: 'fecha'}],
-      rowCallback: (row: Node, data: any[] | Object, index: number) => {
-        const self = this;
-        // Unbind first in order to avoid any duplicate handler
-        // (see https://github.com/l-lin/angular-datatables/issues/87)
-        $('td', row).unbind('click');
-        $('td', row).bind('click', () => {
-          self.mostrardata(data);
-        });
-        return row;
-      },
-      // Declare the use of the extension in the dom parameter
-      dom: 'Bfrtip',
-      // Configure the buttons
-      buttons: [
-        'print',
-        'copy',
-        'csv',
-        'excel',
-        'pdfHtml5'
-      ],
-      select:true
-    };
-  }
-  mostrardata(item){
-    this.itemsel = item;
+
+
+  mostrardata(item) {
+    this.servsel = item;
+    this.buttoncancel = false;
     this.moduloinfo = true;
     console.log(item);
 
   }
 
-  ocultar(){
+  mostrardata2(item) {
+    this.servsel = item;
+    this.moduloinfo = true;
+    this.buttoncancel = true;
+    console.log(item);
+
+  }
+
+  cancelarSolicitudServicio() {
+    swal({
+      type: 'warning',
+      title: 'Esta seguro que desea cancelar este servicio',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.querys.cancerlarSolicitud(this.servsel.uidreserv).then(() => {
+
+          swal({
+            type: 'success',
+            title: 'Solicitud de servicio Cancelada',
+            showConfirmButton: true
+          });
+
+          this.moduloinfo = false;
+
+        });
+
+      } else if (
+        // Read more about handling dismissals
+        result.dismiss === swal.DismissReason.cancel
+      ) {
+        swal(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+
+    });
+
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  applyFilter2(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource2.filter = filterValue;
+  }
+
+  ocultar() {
     this.moduloinfo = false;
   }
 }
