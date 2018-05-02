@@ -21,26 +21,27 @@ login() {
       response => {
 
         this.usuario = response.user;
+        localStorage.setItem('usuario', JSON.stringify(this.usuario));
 
           this.consultarPermisos(this.usuario.uid).then(() => {
-           localStorage.setItem('usuario', JSON.stringify(this.usuario));
-          resolve();
+            resolve();
           }).catch(() => {
           swal({
             type: 'error',
             title: 'Ocurrio un error al intentar ingresar',
             showConfirmButton: true
           });
+
         });
 
-      }).catch( () => {
+      }).catch( error => {
        // alerta en caso de error
         swal({
           type: 'error',
-          title: 'Ocurrio un error al intentar ingresar',
+          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
           showConfirmButton: true
         });
-
+        console.log(error);
      });
   });
 
@@ -58,33 +59,41 @@ login() {
   consultarPermisos(id) {
     const promise = new Promise((resolve, reject) => {
       this.getUser(id).subscribe(data => {
-        const use = data.payload.data().appRoles;
-        for (const clave in use) {
-          if (use[clave]) {
-            this.getRol(clave).subscribe( datarol => {
-              const rol = datarol.payload.data().permissions;
-              console.log(rol);
-              if (rol) {
-                // tslint:disable-next-line:forin
-                for (const llave in rol) {
+        if (data.payload.data()) {
+          const use = data.payload.data().appRoles;
+          console.log(use);
+          for (const clave in use) {
+            if (use[clave]) {
+              this.getRol(clave).subscribe( datarol => {
+                const rol = datarol.payload.data().permissions;
+                console.log(rol);
+                if (rol) {
+                  // tslint:disable-next-line:forin
+                  for (const llave in rol) {
 
-                  if (rol[llave]) {
-                     localStorage.setItem('rol', JSON.stringify(rol));
-                    // this.getModulo(llave).subscribe( datamod => {
-                    //   const modulo = datamod.payload.data().value;
+                    if (rol[llave]) {
+                       localStorage.setItem('rol', JSON.stringify(rol));
+                      // this.getModulo(llave).subscribe( datamod => {
+                      //   const modulo = datamod.payload.data().value;
 
-                    //   console.log(modulo);
-                    // });
-                    resolve();
+                      //   console.log(modulo);
+                      // });
+                      resolve();
+                    } else {
+                      this.consultarPermisos(id);
+                    }
                   }
+                } else {
+                  this.consultarPermisos(id);
                 }
-              } else {
-                this.consultarPermisos(id);
-              }
 
 
-            });
+              });
+            }
           }
+
+        } else {
+          this.consultarPermisos(id);
         }
 
       });

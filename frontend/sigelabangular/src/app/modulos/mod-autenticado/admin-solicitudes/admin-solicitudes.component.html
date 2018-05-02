@@ -5,15 +5,8 @@
     <section class="content-header">
       <h1>
         Dashboard
-        <small>Laboratorios</small>
+        <small>Servicios Solicitados</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a>
-            <i class="fa fa-dashboard"></i> Home</a>
-        </li>
-        <li class="active">Dashboard laboratorios</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -49,11 +42,47 @@
 
                                         <h3 class="box-title">SERVICIOS ACTIVOS</h3>
                                     </div>
-                                    <div class="box-body divScroll">
-                                        <table datatable [dtOptions]="dtOptions"  class="row-border hover">
+                                    <div class="box-body">
+                                      <div class="table-responsive">
+                                        <div class="example-container mat-elevation-z8">
+                                          <div class="example-header">
+                                            <mat-form-field>
+                                              <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                            </mat-form-field>
+                                          </div>
+
+                                          <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
+
+                                            <!-- Position Column -->
+                                            <ng-container matColumnDef="nombre">
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                              <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                            </ng-container>
+
+                                            <!-- Name Column -->
+                                            <ng-container matColumnDef="precio">
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+                                              <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                                            </ng-container>
+
+                                            <!-- Weight Column -->
+                                            <ng-container matColumnDef="estado">
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                              <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                            </ng-container>
 
 
-                                        </table>
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="mostrardata2(row)" style = "cursor: pointer;"></mat-row>
+                                          </mat-table>
+
+                                          <mat-paginator #paginator="matPaginator"
+                                            [pageSize]="5"
+                                            [pageSizeOptions]="[5, 10, 20]"
+                                            [showFirstLastButtons]="true">
+                                        </mat-paginator>
+                                        </div>
+                                      </div>
                                     </div>
                                 </div>
 
@@ -63,11 +92,48 @@
 
                                         <h3 class="box-title">HISTORIAL DE SERVICIOS</h3>
                                     </div>
-                                    <div class="box-body divScroll">
-                                        <table style="width: 100%;" datatable [dtOptions]="dtOptions1"  class="row-border hover">
+                                    <div class="box-body">
+                                        <div class="table-responsive">
+                                            <div class="example-container mat-elevation-z8">
+                                              <div class="example-header">
+                                                <mat-form-field>
+                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                                                </mat-form-field>
+                                              </div>
+
+                                              <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+
+                                                <!-- Position Column -->
+                                                <ng-container matColumnDef="nombre">
+                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                </ng-container>
+
+                                                <!-- Name Column -->
+                                                <ng-container matColumnDef="precio">
+                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+                                                  <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                                                </ng-container>
+
+                                                <!-- Weight Column -->
+                                                <ng-container matColumnDef="estado">
+                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                  <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                                </ng-container>
 
 
-                                        </table>
+                                                <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                                <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="mostrardata(row)" style = "cursor: pointer;" ></mat-row>
+                                              </mat-table>
+
+                                              <mat-paginator #paginator2="matPaginator"
+                                                [pageSize]="5"
+                                                [pageSizeOptions]="[5, 10, 20]"
+                                                [showFirstLastButtons]="true">
+                                              </mat-paginator>
+                                            </div>
+                                          </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -105,49 +171,38 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <h3 class="box-title">{{this.itemsel.nombre}}</h3>
-                    <form id="form-work" class="" name="form-work" action="#">
+                    <form  id="form-workserv" class="" name="form-workserv" action="#">
+                      <fieldset>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                              <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{servsel.nombre}}</label>
 
-                        <fieldset>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                              <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servsel.descripcion}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                              <label class="control-label" for="precioserv"><strong>Precio:</strong> {{servsel.precio}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="estado"><strong>Estado:</strong> {{servsel.status}}</label>
+                          </div>
+                      </div>
 
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                  <label class="control-label" for="ccpas"><strong>Direccion</strong></label>
-                                  <input name="dir" [(ngModel)]="this.itemsel.info.dir" class="form-control"  type="text" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                  <label class="control-label" for="nac"><strong>Telefono</strong></label>
-                                  <input name="tel" [(ngModel)]="this.itemsel.info.tel" class="form-control"  type="text" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                  <label class="control-label" for="ciuor"><strong>Celular</strong></label>
-                                  <input name="cel" [(ngModel)]="this.itemsel.info.cel" class="form-control"  type="text" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                  <label class="control-label" for="ciudes"><strong>Email</strong></label>
-                                  <input name="email" [(ngModel)]="this.itemsel.info.email" class="form-control" type="text" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                  <label class="control-label" for="ciudes"><strong>Estado</strong></label>
-                                  <input name="esta" [(ngModel)]="this.itemsel.estado" class="form-control" type="text" readonly>
-                                </div>
-                            </div>
-                            <div *ngIf="this.itemsel.estado == 'NO ACEPTADO'" class="form-group">
-                                <div class="col-md-12">
-                                    <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >CANCELAR</button>
-                                </div>
-                            </div>
-                        </fieldset>
-                      </form>
+                      <div class="row" style="margin-top:20px;">
+                        <div class="col-md-12 text-center form-group">
+                          <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SERVICIO</button>
+                        </div>
+                      </div>
 
+                      </fieldset>
+                    </form>
                 </div>
 
               </div>
@@ -161,4 +216,18 @@
 
 
 
+</div>
+
+<div class="modal fade" id="modal1" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="loader"></div>
+        <h1>CARGANDO...</h1>
+      </div>
+    </div>
+
+  </div>
 </div>

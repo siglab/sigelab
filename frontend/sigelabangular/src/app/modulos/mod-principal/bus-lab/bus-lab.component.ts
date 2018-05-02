@@ -9,7 +9,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ObserverPrincipalService } from '../services/observer-principal.service';
 import { QuerysPrincipalService } from '../services/querys-principal.service';
 
+import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
+declare var $: any;
 @Component({
   selector: 'app-bus-lab',
   templateUrl: './bus-lab.component.html',
@@ -19,19 +22,13 @@ import { QuerysPrincipalService } from '../services/querys-principal.service';
 
 export class BusLabComponent implements OnInit, AfterViewInit {
 
+  user: any;
+
   corx = 3.42158;
   cory = -76.5205;
   map: any;
 
-  convenios = [{nombre: 'LABORATORIO CIENCIAS', escuela: 'ESCUELA 1, ESCUELA 2, ESCUELA 3, ESCUELA 4, ESCUELA 5, ESCUELA 6, ESCUELA 7', inves: 'INVESTIGACION 1', director: 'JEFFERSON',coord: {lat: '3.425906', lon: '-76.540446'}, info: {dir: 'cra54 cambulos', tel: '53454636', cel: '43656537', email: 'jkhkhjk@univalle.edu.co'},
-               servicios: [{nombre: 'QUIMICA'}, {nombre: 'TERMODINAMICA'}, {nombre: 'FISICA'}], practicas: [{nombre: 'EXSS'}, {nombre: 'FGFGFG'}]},
-               {nombre: 'LABORATORIO SOCIAES', escuela: 'ESCUELA 2', inves: 'INVESTIGACION 2',  director: 'JHON JAIRO', coord: {lat: '3.419737', lon: '-76.540275'}, info: {dir: 'cra54 san fernado', tel: '53454543gdf636', cel: '43656537', email: 'fdgfgjh@univalle.edu.co'},
-               servicios: [{nombre: 'CUANTICA'}, {nombre: 'MATE'}, {nombre: 'BIOLOGIA'}], practicas: [{nombre: 'DFGDFGDF'}]},
-               {nombre: 'LABORATORIO X', escuela: 'ESCUELA 3', inves: 'INVESTIGACION 3', director: 'SEBAXTIAN', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'},
-               servicios: [{nombre: 'BUSQUEDA'}, {nombre: 'INVESTIGACION'}], practicas: [{nombre: 'HJGHJHJ'}]},
-               {nombre: 'LABORATORIO Y', escuela: 'ESCUELA 4', inves: 'INVESTIGACION 4',  director: 'FRANCISCO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'},
-               servicios: [], practicas: []}];
-
+  // VARIABLES QUE SE UTILIZAN PARA LOS DATATABLES DE SERVICIOS Y PRACTICAS
   itemsel: any;
   servsel: any;
   prubsel: any;
@@ -39,7 +36,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   moduloinfo = false;
   layer = null;
 
-  datosEstructurados = [];
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
@@ -65,13 +61,16 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   });
 
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) {
-
-    this.query.getPruebas();
+  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
+    if (localStorage.getItem('usuario')) {
+      this.user = JSON.parse(localStorage.getItem('usuario'));
+    }
   }
 
 
   ngOnInit() {
+    $('#modal1').modal('show');
+
     this.query.getLaboratorios().subscribe(data => {
 
       this.observer.changeDatatableLabs(this.query.estructurarDataLab(data));
@@ -90,24 +89,85 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
+
+        $('#modal1').modal('hide');
+
       }, 1500);
+
      });
 
 
+
+
   }
 
 
+  agregarSolicitudServicio() {
 
-  loadMap(item) {
-    this.map = L.map('mapaa').setView([this.corx, this.cory], 13);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
+    if (this.user) {
+      const cfSrvReserv = {
+        cfSrv: this.servsel.uid,
+        user: this.user.uid,
+        selectedVariations: [],
+        cfStartDate: '',
+        cfEndDate: '',
+        cfClass: '',
+        cfClassScheme: '',
+        status: 'created',
+        createdAt: '',
+        updatedAt:  '',
+        conditionsLog: [{ conditionText: '', accepted: ''} ]
+      };
 
-    this.agregarMarker(item);
+      swal({
+        type: 'warning',
+        title: 'Esta seguro que desea solicitar este servicio',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Solciitar',
+        cancelButtonText: 'No, Cancelar'
+      }).then((result) => {
+        if (result.value) {
+          this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+            swal({
+              type: 'success',
+              title: 'Solicitud Creada Exitosamente',
+              showConfirmButton: true
+            });
+
+          }).catch(error => {
+
+            swal({
+              type: 'error',
+              title: error,
+              showConfirmButton: true
+            });
+
+          });
+        } else if (
+          // Read more about handling dismissals
+          result.dismiss === swal.DismissReason.cancel
+        ) {
+          swal(
+            'Solicitud Cancelada',
+            '',
+            'error'
+          );
+        }
+
+      });
+
+
+      } else {
+
+        swal({
+          type: 'error',
+          title: 'Debe ingresar al sistema para poder solicitar este servicio',
+          showConfirmButton: true
+        });
+
+      }
+
   }
-
 
   cambiardata(item) {
 
@@ -154,6 +214,17 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   cambiarDataPrueba(item) {
     this.prubsel = item;
     console.log(item);
+  }
+
+
+  loadMap(item) {
+    this.map = L.map('mapaa').setView([this.corx, this.cory], 13);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.map);
+
+    this.agregarMarker(item);
   }
 
   agregarMarker(item) {

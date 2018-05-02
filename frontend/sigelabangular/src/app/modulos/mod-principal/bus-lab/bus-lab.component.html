@@ -310,7 +310,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#myMod" >Solicitar Servicio</button>
+                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" (click)="agregarSolicitudServicio()" >Solicitar Servicio</button>
                             </div>
                         </div>
 
@@ -385,16 +385,17 @@
     </div>
 </div>
 
-<div class="modal fade" id="myMod" role="dialog">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="modal1" role="dialog">
+  <div class="modal-dialog modal-lg">
 
-      <!-- Modal content-->
-      <div class="modal-content">
+    <!-- Modal content-->
+    <div class="modal-content">
 
-        <div class="modal-body">
-          <h1>Login</h1>
-        </div>
+      <div class="modal-body">
+        <div class="loader"></div>
+        <h1>CARGANDO...</h1>
       </div>
-
     </div>
+
+  </div>
 </div>

@@ -29,7 +29,7 @@
             <i class="fa fa-envelope-o"></i>
             <span class="label label-success">4</span>
           </a>
-         
+
            <!-- OCULTAR MENU PARA MENSAJES -->
           <ul class="dropdown-menu" >
             <li class="header">You have 4 messages</li>
@@ -109,7 +109,7 @@
               <a href="#">See All Messages</a>
             </li>
           </ul>
-       
+
         </li>
 
          <!-- OCULTAR MENU PARA NOTIFICACIONES -->
@@ -156,7 +156,7 @@
           </ul>
         </li>
          <!-- OCULTAR MENU PARA NOTIFICACIONES -->
-        <li class="dropdown tasks-menu" *ngIf="itemsHeader" >
+        <li class="dropdown tasks-menu" *ngIf="itemNotificacion" >
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-flag-o"></i>
             <span class="label label-danger">9</span>
@@ -239,17 +239,17 @@
               <a  [routerLink]="['/login']"    class="btn " title="Ingresar" id="logout"  style="cursor:pointer;">
                   <i class= "fa fa-sign-in" style="font-size: 14px;"> Ingresar </i>
                 </a>
-              
+
           </li>
-          
+
           <li class="dropdown messages-menu" *ngIf="itemNotificacion"  >
               <a (click)= "salir()" class="btn " title="Salir" id="logout"  style="cursor:pointer; ">
                   <i class= "fa fa-sign-in" style="font-size: 14px;"> Salir </i>
                 </a>
-              
+
           </li>
-         
-      
+
+
         <a>
           <img src="assets/img/logo.jpg">
         </a>
