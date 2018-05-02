@@ -90,11 +90,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
 
-        if (datos.length !== 0) {
-          $('#modal1').modal('hide');
-        }
+        $('#modal1').modal('hide');
+
       }, 1500);
+
      });
+
+
 
 
   }

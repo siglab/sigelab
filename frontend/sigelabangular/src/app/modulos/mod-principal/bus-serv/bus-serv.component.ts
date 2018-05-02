@@ -63,11 +63,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-
-        if (datos.length !== 0) {
-          $('#modal1').modal('hide');
-        }
-
+        $('#modal1').modal('hide');
       }, 1000);
 
      });

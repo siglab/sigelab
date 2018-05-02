@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,17 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
+
+  public static updateUserStatus: Subject<boolean> = new Subject();
+
    usuario;
    imgUsr;
-
    moduloPrincipal = false;
-
    rolUser: any;
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit() {
 
+
+         
     this.rolUser = JSON.parse(localStorage.getItem('rol'));
 
     for (const clave in this.rolUser) {
@@ -26,9 +29,9 @@ export class SidebarComponent implements OnInit {
         }
       }
     }
-
+     
     console.log(this.moduloPrincipal);
-
+    
     if(   localStorage.getItem('usuario')  )
     {
 
@@ -46,6 +49,21 @@ export class SidebarComponent implements OnInit {
     }
 
 
+
+
+
+
+
+
+  }
+   
+
+  ngOnInit() {
+
+  }
+
+  ngOnDestroy() {
+    // ...
   }
 
 }

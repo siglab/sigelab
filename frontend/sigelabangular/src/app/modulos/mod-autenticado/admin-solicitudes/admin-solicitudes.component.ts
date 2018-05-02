@@ -76,7 +76,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       setTimeout(function() {
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-
         $('#modal1').modal('hide');
       }, 1000);
 
@@ -89,8 +88,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       setTimeout(function() {
         ambiente.dataSource2.sort = ambiente.sort2;
         ambiente.dataSource2.paginator = ambiente.paginator2;
-
-        $('#modal1').modal('hide');
       }, 1000);
 
     });
