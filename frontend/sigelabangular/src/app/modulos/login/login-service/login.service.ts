@@ -59,6 +59,7 @@ login() {
   consultarPermisos(id) {
     const promise = new Promise((resolve, reject) => {
       this.getUser(id).subscribe(data => {
+        console.log(data.payload.data());
         if (data.payload.data()) {
           const use = data.payload.data().appRoles;
           console.log(use);
@@ -80,7 +81,7 @@ login() {
                       // });
                       resolve();
                     } else {
-                      this.consultarPermisos(id);
+                      reject();
                     }
                   }
                 } else {
