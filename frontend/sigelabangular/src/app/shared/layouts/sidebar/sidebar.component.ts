@@ -18,8 +18,7 @@ export class SidebarComponent implements OnInit {
   constructor() {
 
   // obtener usuario luego su rol
-    this.getUser();
-    this.getRol();
+    this.getUser().then(  () => this.getRol()  );
 
 
 
@@ -51,7 +50,7 @@ export class SidebarComponent implements OnInit {
 
   }
 
-  getUser() {
+ async getUser() {
 
     if (localStorage.getItem('usuario')) {
 
