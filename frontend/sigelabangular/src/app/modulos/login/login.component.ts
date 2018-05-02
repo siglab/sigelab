@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   ingresar() {
 
-     this._loginService.login().then( () =>{
+     this._loginService.login().then( () => {
        // mensaje de bienvenida
 
         swal({
@@ -44,6 +44,5 @@ export class LoginComponent implements OnInit {
      }).catch(error => {
         //this.ingresar();
      });
-
   }
 }

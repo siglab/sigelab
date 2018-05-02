@@ -10,16 +10,33 @@ export class SidebarComponent implements OnInit {
 
   public static updateUserStatus: Subject<boolean> = new Subject();
 
-   usuario;
-   imgUsr;
-   moduloPrincipal = false;
-   rolUser: any;
+  usuario;
+  imgUsr;
+  moduloPrincipal = false;
+  rolUser: any;
 
   constructor() {
 
+  // obtener usuario luego su rol
+    this.getUser();
+    this.getRol();
 
 
-         
+
+  }
+
+
+  ngOnInit() {
+    $(document).ready(() => {
+      const trees: any = $('[data-widget="tree"]');
+      trees.tree();
+    });
+  }
+
+
+
+  getRol() {
+
     this.rolUser = JSON.parse(localStorage.getItem('rol'));
 
     for (const clave in this.rolUser) {
@@ -29,41 +46,32 @@ export class SidebarComponent implements OnInit {
         }
       }
     }
-     
-    console.log(this.moduloPrincipal);
-    
-    if(   localStorage.getItem('usuario')  )
-    {
 
-     this.usuario = JSON.parse(localStorage.getItem('usuario'));
+  //  console.log(this.moduloPrincipal);
+
+  }
+
+  getUser() {
+
+    if (localStorage.getItem('usuario')) {
+
+      this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
 
-        //se visualizan los elementos
-     this.imgUsr = true;
+      // se visualizan los elementos
+      return this.imgUsr = true;
 
     } else {
 
       // no se visualizan los elementos
-      this.imgUsr = false;
-      console.log('no existe un usuario logueado');
+      return this.imgUsr = false;
+      // console.log('no existe un usuario logueado');
     }
 
 
-
-
-
-
-
-
-  }
-   
-
-  ngOnInit() {
-
   }
 
-  ngOnDestroy() {
-    // ...
-  }
+
+
 
 }

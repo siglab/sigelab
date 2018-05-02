@@ -53,9 +53,7 @@ body {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   position: relative;
 }
-.layout-boxed {
-  background: url('../img/boxed-bg.jpg') repeat fixed;
-}
+
 /*
  * Content Wrapper - contains the main content
  */
