@@ -19,26 +19,25 @@ export class LoginComponent implements OnInit {
 
   ingresar() {
 
-     this._loginService.login().then( () =>{
+     this._loginService.login().then( () => {
        // mensaje de bienvenida
 
           // navegar al dashboard
          // this.ruta.navigateByUrl('principal/busquedalaboratorio');
-          this.ruta.navigate(['principal/busquedalaboratorio' ]);
-          
-           /*.then(  ()=> {   swal({
-            
+
+
+         this.ruta.navigate(['principal/busquedalaboratorio' ]).then(  () => {   swal({
+
             type: 'success',
             title: 'Bienvenido a sigelab',
             showConfirmButton: true
-          });  
-        
+          });
+
         });
-*/
-    
+
+
      }).catch(error => {
         this.ingresar();
      });
-
   }
 }

@@ -50,6 +50,7 @@ login() {
   async logout() {
 
     localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
      return  this.afAuth.auth.signOut();
 
   }
