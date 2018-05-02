@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { ObserverPrincipalService } from '../services/observer-principal.service';
 import { QuerysPrincipalService } from '../services/querys-principal.service';
-
+import swal from 'sweetalert2';
 declare var $: any;
 @Component({
   selector: 'app-bus-pru',
@@ -38,8 +38,14 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) { }
 
   ngOnInit() {
-    $('#modal1').modal('show');
+         // abre loading mientras se cargan los datos
+     swal({
+      title: 'Cargando un momento...',
+      onOpen: () => {
+        swal.showLoading();
+      }
 
+    }) ;
     this.query.getPruebas().subscribe(data => {
 
       this.observer.changeDatatablePrueba(this.query.estructurarDataPruebas(data));
@@ -56,7 +62,8 @@ export class BusPruComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-        $('#modal1').modal('hide');
+       // cierra loading luego de cargados los datos
+       swal.close();
       }, 1500);
 
      });
@@ -91,7 +98,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
 
   agregarMarker(item) {
-    this.layer = L.marker([item.coord.lat, item.coord.lon],{icon:this.DefaultIcon});
+    this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
     this.layer.addTo(this.map)
     .bindPopup(item.nombreprub)
     .openPopup();

@@ -20,10 +20,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
   cory = -76.5205;
   map: any;
 
-   itemsel:any;
+   itemsel: any;
 
     moduloinfo = false;
-    layer=null;
+    layer = null;
 
     DefaultIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
@@ -46,7 +46,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    $('#modal1').modal('show');
+    // abrer loading mientras se cargan los datos
+    swal({
+      title: 'Cargando un momento...',
+      onOpen: () => {
+        swal.showLoading();
+      }
+
+    });
+
     this.query.getServicios().subscribe(data => {
 
       this.observer.changeDatatableServs(this.query.estructurarDataServ(data));
@@ -63,7 +71,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-        $('#modal1').modal('hide');
+        // cierra loading luego de cargados los datos
+        swal.close();
       }, 1000);
 
      });
@@ -166,7 +175,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
 
   agregarMarker(item) {
-    this.layer = L.marker([item.coord.lat, item.coord.lon],{icon:this.DefaultIcon});
+    this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
     this.layer.addTo(this.map)
     .bindPopup(item.nombrelab)
     .openPopup();

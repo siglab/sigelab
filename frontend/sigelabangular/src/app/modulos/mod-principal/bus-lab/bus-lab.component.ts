@@ -69,9 +69,17 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-    $('#modal1').modal('show');
+     // abre loading mientras se cargan los datos
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
 
-    this.query.getLaboratorios().subscribe(data => {
+    }) ;
+    // trae los datos de los laboratorios
+      this.query.getLaboratorios().subscribe(data => {
 
       this.observer.changeDatatableLabs(this.query.estructurarDataLab(data));
 
@@ -89,8 +97,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.data = datos;
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-
-        $('#modal1').modal('hide');
+    // cierra loading luego de cargados los datos
+        swal.close();
 
       }, 1500);
 
