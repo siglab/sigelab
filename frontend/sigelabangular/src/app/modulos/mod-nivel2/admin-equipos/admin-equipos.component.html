@@ -2,8 +2,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Dashboard
-      <small>Laboratorios</small>
+    Laboratorios
     </h1>
     <ol class="breadcrumb">
       <li>
@@ -18,20 +17,20 @@
   <!-- <section class="content" *ngIf="itemsel | async; let itemsel"> -->
 
     <section class="content">
-    <!-- Componente central de busquedad -->
+    <!-- Componente central de busqueda -->
 
     <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
             <div class="box-body">
-         
+
               <div class="row" style="margin-top:20px;">
                  <!-- INFORMACION LABORATORIO -->
                   <div class="col-md-6" *ngIf="itemsel | async; let itemsel">
                     <div class="box box-danger">
                       <div class="box-header">
                         <i class="fa fa-search"></i>
-    
+
                         <h3 class="box-title">Lista de equipos vinculados</h3>
                       </div>
                       <!-- /.box-header -->
@@ -39,19 +38,19 @@
                         <form action="#" method="post">
                           <div class="input-group">
                             <div class="input-group-btn">
-            
-                              <input type="text" class="form-control" name="busquedad" placeholder="Buscar">
+
+                              <input type="text" class="form-control" name="busqueda" placeholder="Buscar">
                             </div>
                           </div>
                         </form>
-                      
-                
+
+
                         <div class="row" style="margin-top:30px;">
                             <div class="col-md-12">
                                 <div class="box box-danger">
                                     <div class="box-header">
                                         <i class="fa fa-flask"></i>
-                                        
+
                                         <h3 class="box-title">EQUIPOS</h3>
                                     </div>
                                     <div class="box-body divScroll2">
@@ -65,9 +64,9 @@
                                 </div>
                             </div>
                         </div>
-            
+
                       </div>
-    
+
                     </div>
                   </div>
                 <div class="col-md-6">
@@ -75,23 +74,23 @@
 
                     <!-- /.box-header -->
                     <div class="box-body">
-              
+
                         <div class="col-md-12">
                             <div class="box box-danger">
                               <div class="box-header">
                                 <i class="fa fa-address-card-o"></i>
-            
+
                                 <h3 class="box-title">Informacion de Equipo Seleccionado</h3>
                               </div>
                               <!-- /.box-header -->
                               <div class="box-body divScroll">
-                              
+
                                   <form  id="form-work" class="" name="form-work" action="#">
                                       <fieldset>
                                           <div class="form-group">
                                               <div class="col-md-12">
                                                 <label class="control-label" for="ccpas"><strong>Direccion: {{this.equiposel.info.dir}}</strong></label>
-                                                
+
                                               </div>
                                           </div>
                                           <div class="form-group">
@@ -119,11 +118,11 @@
                                                   <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >Sol Mantenimiento</button>
                                               </div>
                                           </div>
-                                      </fieldset> 
+                                      </fieldset>
                                   </form>
-                                 
+
                               </div>
-            
+
                             </div>
                           </div>
 
@@ -131,7 +130,7 @@
                             <div class="box box-danger">
                               <div class="box-header">
                                 <i class="fa fa-map"></i>
-            
+
                                 <h3 class="box-title">Partes y/o componentes : {{this.equiposel.componentes.length}}</h3>
                               </div>
                               <!-- /.box-header -->
@@ -147,14 +146,14 @@
                               </div>
                             <!-- /.box-body -->
                             </div>
-                          
+
                         </div>
-                 
+
                         <div class="col-md-12">
                           <div class="box box-danger">
                             <div class="box-header">
                               <i class="fa fa-map"></i>
-          
+
                               <h3 class="box-title">Servicios Vinculados : {{equiposel.servicios.length}}</h3>
                             </div>
                             <!-- /.box-header -->
@@ -169,15 +168,15 @@
                                   </div>
                             </div>
                             <!-- /.box-body -->
-          
+
                           </div>
                         </div>
-                
+
                         <div class="col-md-12">
                             <div class="box box-danger">
                               <div class="box-header">
                                 <i class="fa fa-map"></i>
-            
+
                                 <h3 class="box-title">Pruebas Vinculadas : {{equiposel.practicas.length}}</h3>
                               </div>
                               <!-- /.box-header -->
@@ -192,19 +191,19 @@
                                     </div>
                               </div>
                               <!-- /.box-body -->
-            
+
                             </div>
                         </div>
 
                     </div>
                     <!-- /.box-body -->
-  
+
                   </div>
                 </div>
-               
+
               </div>
 
-  
+
             </div>
           </div>
         </div>
@@ -212,6 +211,6 @@
 
   </section>
 
-    
+
 
 </div>

@@ -18,22 +18,28 @@ export class LoginComponent implements OnInit {
 
 
   ingresar() {
+    // loading mientras se crea el usuario
+    swal({
+      title: 'Un momento estamos creando su cuenta de usuario , no cierre la pestaña ...',
+      onOpen: () => {
+        swal.showLoading();
+      }
+
+    });
 
      this._loginService.login().then( () => {
        // mensaje de bienvenida
 
 
 
-          this.ruta.navigate(['principal' ]).then ( () => {    swal({
-            type: 'success',
-            title: 'Acceso Exitoso',
-            showConfirmButton: true
-          });     }          );
+          this.ruta.navigate(['principal' ]).then ( () => {
+                swal.close();
+          });
 
 
 
      }).catch(error => {
-        //this.ingresar();
+        // this.ingresar();
      });
   }
 }
