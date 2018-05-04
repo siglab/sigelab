@@ -46,7 +46,14 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
    }
 
   ngOnInit() {
-    $('#modal1').modal('show');
+     // abre loading mientras se cargan los datos
+     swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
 
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
@@ -76,7 +83,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       setTimeout(function() {
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
-        $('#modal1').modal('hide');
+        // cerrar modal una vez se cargan los datos
+        swal.close();
       }, 1000);
 
     });

@@ -76,8 +76,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       onOpen: () => {
         swal.showLoading();
       }
-
-    }) ;
+    });
     // trae los datos de los laboratorios
       this.query.getLaboratorios().subscribe(data => {
 

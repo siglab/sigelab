@@ -32,7 +32,7 @@ function crearUsuario(event){
         createdAt: fecha.toISOString(),
         email: email,
         updatedAt: "2018-04-17T21:41:31.027Z"
-    }).then(exito =>{
+    }).then( exito => {
       console.log('EL USUARIO SE CREO CON EXITO', exito);
     }).catch(error => {
       console.log('SE GENERO UN ERROR AL INTENTAR CREAR USUARIO');

@@ -2,8 +2,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Dashboard
-      <small>Laboratorios</small>
+     Laboratorios
     </h1>
     <ol class="breadcrumb">
       <li>
@@ -17,7 +16,7 @@
   <!-- Main content -->
   <section class="content" *ngIf="itemsel | async; let itemsel">
 
-    <!-- Componente central de busquedad -->
+    <!-- Componente central de busqueda -->
 
     <div class="row">
       <div class="col-md-12 col-lg-12">
@@ -32,7 +31,7 @@
                   <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-o-up"></i></span>
-          
+
                       <div class="info-box-content">
                         <span class="info-box-text">SERVICIOS <br>ACTIVOS</span>
                         <span class="info-box-number">{{itemsel.servicios.length}}</span>
@@ -45,7 +44,7 @@
                   <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-red"><i class="fa fa-suitcase"></i></span>
-          
+
                       <div class="info-box-content">
                         <span class="info-box-text">PROYECTOS <br>ACTIVOS</span>
                         <span class="info-box-number">{{itemsel.proyectos.length}}</span>
@@ -55,14 +54,14 @@
                     <!-- /.info-box -->
                   </div>
                   <!-- /.col -->
-          
+
                   <!-- fix for small devices only -->
                   <div class="clearfix visible-sm-block"></div>
-          
+
                   <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-green"><i class="fa fa-group"></i></span>
-          
+
                       <div class="info-box-content">
                         <span class="info-box-text">PERSONAL <br>ACTIVO</span>
                         <span class="info-box-number">{{itemsel.personal.length}}</span>
@@ -75,7 +74,7 @@
                   <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-ok"></i></span>
-          
+
                       <div class="info-box-content">
                         <span class="info-box-text">PRACTICAS <br>ACTIVAS</span>
                         <span class="info-box-number">{{itemsel.practicas.length}}</span>
@@ -97,14 +96,14 @@
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
             <div class="box-body">
-         
+
               <div class="row" style="margin-top:20px;">
                  <!-- INFORMACION LABORATORIO -->
                   <div class="col-md-5">
                     <div class="box box-danger">
                       <div class="box-header">
                         <i class="fa fa-address-card-o"></i>
-    
+
                         <h3 class="box-title">Informacion Laboratorio</h3>
                       </div>
                       <!-- /.box-header -->
@@ -114,7 +113,7 @@
                               <div class="form-group">
                                   <div class="col-md-12">
                                     <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
-                                    
+
                                   </div>
                               </div>
                               <div class="form-group">
@@ -135,7 +134,7 @@
                               <div class="form-group">
                                   <div class="col-md-12">
                                     <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
-                                    
+
                                   </div>
                               </div>
                               <div class="form-group">
@@ -158,11 +157,11 @@
                                       <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >Editar</button>
                                   </div>
                               </div>
-                              
-                          </fieldset> 
+
+                          </fieldset>
                       </form>
                       </div>
-    
+
                     </div>
                   </div>
                 <div class="col-md-7">
@@ -170,12 +169,12 @@
 
                     <!-- /.box-header -->
                     <div class="box-body">
-              
+
                         <div class="col-md-12">
                             <div class="box box-danger">
                               <div class="box-header">
                                 <i class="fa fa-map"></i>
-            
+
                                 <h3 class="box-title">Equipos Vinculados</h3>
                               </div>
                               <!-- /.box-header -->
@@ -191,15 +190,15 @@
                               </div>
                             <!-- /.box-body -->
                             </div>
-                          
+
                         </div>
-                 
+
 
                           <div class="col-md-12">
                             <div class="box box-danger">
                               <div class="box-header">
                                 <i class="fa fa-map"></i>
-            
+
                                 <h3 class="box-title">Personal Vinculado</h3>
                               </div>
                               <!-- /.box-header -->
@@ -214,26 +213,26 @@
                                     </div>
                               </div>
                               <!-- /.box-body -->
-            
+
                             </div>
                           </div>
-                  
+
 
                     </div>
                     <!-- /.box-body -->
-  
+
                   </div>
                 </div>
-               
+
               </div>
-  
+
               <div class="row" style="margin-top:20px;">
                   <!-- INFORMACION LABORATORIO -->
                    <div class="col-md-5">
                      <div class="box box-danger">
                        <div class="box-header">
                          <i class="fa fa-address-card-o"></i>
-     
+
                          <h3 class="box-title">Informacion de espacios asociados al Laboratorio</h3>
                        </div>
                        <!-- /.box-header -->
@@ -243,7 +242,7 @@
                                    <div class="form-group">
                                        <div class="col-md-12">
                                          <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
-                                         
+
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -264,7 +263,7 @@
                                    <div class="form-group">
                                        <div class="col-md-12">
                                          <label class="control-label" for="ccpas"><strong>Direccion: {{this.itemsel.info.dir}}</strong></label>
-                                         
+
                                        </div>
                                    </div>
                                    <div class="form-group">
@@ -287,25 +286,25 @@
                                           <button class="btn2 btn-danger btn-lg btn-block danger" type="button" >Ver mas</button>
                                       </div>
                                   </div>
-                                   
-                               </fieldset> 
+
+                               </fieldset>
                            </form>
-                          
+
                        </div>
-     
+
                      </div>
                    </div>
                  <div class="col-md-7">
                    <div class="box box-danger">
- 
+
                      <!-- /.box-header -->
                      <div class="box-body">
-               
+
                          <div class="col-md-12">
                              <div class="box box-danger">
                                <div class="box-header">
                                  <i class="fa fa-map"></i>
-             
+
                                  <h3 class="box-title">Servicios</h3>
                                </div>
                                <!-- /.box-header -->
@@ -321,15 +320,15 @@
                                </div>
                              <!-- /.box-body -->
                              </div>
-                           
+
                          </div>
-                  
- 
+
+
                         <div class="col-md-12">
                           <div class="box box-danger">
                             <div class="box-header">
                               <i class="fa fa-map"></i>
-          
+
                               <h3 class="box-title">Proyectos</h3>
                             </div>
                             <!-- /.box-header -->
@@ -344,20 +343,20 @@
                                   </div>
                             </div>
                             <!-- /.box-body -->
-          
+
                           </div>
                         </div>
-                   
-                        
- 
+
+
+
                      </div>
                      <!-- /.box-body -->
-   
+
                    </div>
                  </div>
-                
+
               </div>
-   
+
 
               <div class="row" style="margin-top:20px;">
 
@@ -365,7 +364,7 @@
                       <div class="box box-danger">
                         <div class="box-header">
                           <i class="fa fa-map"></i>
-      
+
                           <h3 class="box-title">Practicas</h3>
                         </div>
                         <!-- /.box-header -->
@@ -381,15 +380,15 @@
                         </div>
                       <!-- /.box-body -->
                       </div>
-                    
+
                   </div>
-          
+
 
                 <div class="col-md-6">
                   <div class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-map"></i>
-  
+
                       <h3 class="box-title">Solicitudes sin atender</h3>
                     </div>
                     <!-- /.box-header -->
@@ -404,12 +403,12 @@
                           </div>
                     </div>
                     <!-- /.box-body -->
-  
+
                   </div>
                 </div>
-          
+
               </div>
-  
+
             </div>
           </div>
         </div>
@@ -417,6 +416,6 @@
 
   </section>
 
-    
+
 
 </div>
