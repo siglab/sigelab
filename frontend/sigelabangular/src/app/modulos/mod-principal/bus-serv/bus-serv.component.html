@@ -8,7 +8,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content divScroll">
 
       <!-- Componente central de busqueda -->
 
@@ -27,7 +27,7 @@
               <div class="example-container mat-elevation-z8">
                 <div class="example-header">
                   <mat-form-field>
-                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar servicio">
                   </mat-form-field>
                 </div>
 
@@ -182,7 +182,7 @@
 
                 <div class="row" style="margin-top:20px;">
                   <div class="col-md-12 text-center form-group">
-                    <button class="btn-danger btn-lg btn-block danger" type="button" (click)="agregarSolicitudServicio()">SOLICITAR SERVICIO</button>
+                    <button class="btn-danger btn-lg btn-block danger" type="button" (click)="agregarSolicitudServicio()">HACER SOLICITUD</button>
 
                   </div>
                 </div>

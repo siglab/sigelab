@@ -120,7 +120,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         cfEndDate: '',
         cfClass: '',
         cfClassScheme: '',
-        status: 'created',
+        status: 'creada',
         createdAt: '',
         updatedAt:  '',
         conditionsLog: [{ conditionText: '', accepted: ''} ]
