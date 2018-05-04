@@ -23,7 +23,7 @@ declare var $: any;
 export class BusLabComponent implements OnInit, AfterViewInit {
 
   user: any;
-
+  selectedRowIndex = -1;
   corx = 3.42158;
   cory = -76.5205;
   map: any;
@@ -120,7 +120,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         cfEndDate: '',
         cfClass: '',
         cfClassScheme: '',
-        status: 'created',
+        status: 'creada',
         createdAt: '',
         updatedAt:  '',
         conditionsLog: [{ conditionText: '', accepted: ''} ]
@@ -177,6 +177,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) {
+
 
     this.itemsel  = item;
 

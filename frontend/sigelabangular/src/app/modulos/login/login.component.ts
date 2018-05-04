@@ -20,7 +20,9 @@ export class LoginComponent implements OnInit {
   ingresar() {
     // loading mientras se crea el usuario
     swal({
-      title: 'Un momento estamos creando su cuenta de usuario , no cierre la pestaña ...',
+      allowOutsideClick: false,
+      title: 'Un momento  ...',
+      text: 'Estamos creando su cuenta de usuario , no cierre la pestaña',
       onOpen: () => {
         swal.showLoading();
       }

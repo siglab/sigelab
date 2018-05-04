@@ -59,7 +59,7 @@
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style = "cursor: pointer;"></mat-row>
+                    <mat-row        *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)"   style = "cursor: pointer   "></mat-row>
                   </mat-table>
 
                   <mat-paginator #paginator="matPaginator"
@@ -76,6 +76,7 @@
         </div>
       </div>
     </div>
+
 
     <div *ngIf="!moduloinfo" class="row">
         <div class="col-md-12 col-lg-12">
