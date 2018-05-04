@@ -1,6 +1,6 @@
 .divScroll {
     overflow-y: scroll;
-    height: 400px;
+    height: 600px;
   }
   divScroll::-webkit-scrollbar-track
   {

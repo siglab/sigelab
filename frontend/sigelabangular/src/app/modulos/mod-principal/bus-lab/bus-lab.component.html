@@ -7,7 +7,7 @@
   </section>
 
   <!-- Main content -->
-  <section class="content">
+  <section class="content divScroll">
 
     <!-- Componente central de busqueda -->
 
@@ -28,7 +28,7 @@
                 <div class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
-                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por laboratorio, escuela, director e investigacion">
                     </mat-form-field>
                   </div>
 
@@ -93,6 +93,11 @@
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
             <div class="box-body">
+              <div class="box-header">
+                <i class="fa fa-building"></i>
+
+                <h3 class="box-title">Detalles del laboratorio</h3>
+              </div>
 
               <div class="row" style="margin-top:20px;">
                  <!-- INFORMACION LABORATORIO -->
@@ -177,7 +182,7 @@
                       <div class="example-container mat-elevation-z8" *ngIf="dataSource2.data.length != 0">
                         <div class="example-header">
                           <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar">
+                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar servicio">
                           </mat-form-field>
                         </div>
 
@@ -225,7 +230,7 @@
                                <div class="example-container mat-elevation-z8" *ngIf="dataSource3.data.length != 0">
                                 <div class="example-header">
                                   <mat-form-field>
-                                    <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar">
+                                    <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar practica">
                                   </mat-form-field>
                                 </div>
 
@@ -310,7 +315,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" (click)="agregarSolicitudServicio()" >Solicitar Servicio</button>
+                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" (click)="agregarSolicitudServicio()" >Solicitar el Servicio</button>
                             </div>
                         </div>
 
