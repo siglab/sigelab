@@ -90,7 +90,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
     this.observer.currentDatatableLab.subscribe(datos => {
 
-      console.log(datos);
       const ambiente = this;
       setTimeout(function() {
         ambiente.dataSource.data = datos;
@@ -184,7 +183,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
 
-    console.log(item.practicas);
     const ambiente = this;
 
     if (!this.moduloinfo) {
@@ -216,12 +214,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   cambiarDataServicio(item) {
     this.servsel = item;
-    console.log(item);
+
   }
 
   cambiarDataPrueba(item) {
     this.prubsel = item;
-    console.log(item);
   }
 
 

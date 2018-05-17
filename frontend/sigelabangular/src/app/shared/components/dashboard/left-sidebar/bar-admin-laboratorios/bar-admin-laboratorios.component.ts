@@ -1,6 +1,8 @@
 import { ObservablesService } from './../../../../services/observables.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from '@firebase/util';
 
 @Component({
   selector: 'app-bar-admin-laboratorios',
@@ -46,9 +48,202 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                   {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, estado: 'ACEPTADO'}];
 
 
-  constructor(private obs: ObservablesService, private route: Router) { }
+
+  laboratorios2 = [];
+  // INICIALIZACION DE CONSULTAS PARA LABORATORIOS
+  private labsColection: AngularFirestoreCollection<any>;
+  labs: Observable<any[]>;
+
+  datosLabsEstructurados = [];
+
+  user: any;
+
+  constructor(private obs: ObservablesService, private route: Router, private afs: AngularFirestore) { }
 
   ngOnInit() {
+    if (localStorage.getItem('usuario')) {
+      this.getUserId();
+      this.getPersonId(this.user.uid).subscribe(person => {
+        this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
+          this.laboratorios2 = this.estructurarDataLab(labs);
+          console.log(this.laboratorios2);
+
+        });
+
+      });
+
+
+
+    }
+  }
+
+  getUserId() {
+    this.user = JSON.parse(localStorage.getItem('usuario'));
+  }
+
+  getPersonId(userid) {
+    return this.afs.doc('user/' + userid).snapshotChanges();
+  }
+
+  // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
+  getLaboratorios(persid) {
+    this.labsColection = this.afs.collection<any>('cfFacil',
+      ref => ref.where('facilityAdmin', '==', persid));
+    return this.labsColection.valueChanges();
+  }
+
+    // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
+  estructurarDataLab(data: any) {
+    console.log(data);
+      this.datosLabsEstructurados = [];
+
+      for (let index = 0; index < data.length; index++) {
+        const elemento = data[index];
+
+        this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
+          const duenoLab = dueno.payload.data();
+          if (duenoLab && elemento.mainSpace) {
+
+            this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
+
+              const espacioLab = espacio.payload.data();
+               // convertir boolean a cadena de caracteres para estado del laboratorio
+              let estadoLab;
+               if(elemento.active == true) {
+                estadoLab = 'Activo';
+               } else if( elemento.active == false ) {
+                estadoLab = 'Inactivo';
+               }
+              const laboratorio = {
+                nombre: this.ajustarTexto(elemento.cfName),
+                escuela: elemento.knowledgeArea,
+                inves: elemento.researchGroup,
+                director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
+                info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
+                servicios: this.estructurarServicios(elemento.relatedServices),
+                practicas: this.estructurarPracticas(elemento.relatedPractices),
+                equipos: [],
+                personal: [],
+                proyectos: [],
+                solicitudes: [],
+                estado: estadoLab
+              };
+
+                this.datosLabsEstructurados.push(laboratorio);
+            });
+
+          }
+       });
+
+      }
+
+     // this.estructurarServicios(data[0].relatedServices);
+
+
+      return this.datosLabsEstructurados;
+    }
+
+
+
+  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  buscarDirector(iddirector) {
+    return this.afs.doc('cfPers/' + iddirector).snapshotChanges();
+
+  }
+
+  // METODO QUE TRAE UN ESPACIO ESPECIFICO DEPENDIENDO EL ID-ESPACIO
+  buscarEspacio(idespacio) {
+    return this.afs.doc('space/' + idespacio).snapshotChanges();
+  }
+
+   // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
+  estructurarServicios(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+          this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
+           const servicio =  data.payload.data();
+
+             const serv = {
+              nombre: servicio.cfName,
+              descripcion: servicio.cfDesc,
+              precio: servicio.cfPrice,
+              activo: servicio.active,
+              uid: data.payload.id
+             };
+             arr.push(serv);
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarPracticas(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
+           const practica =  data.payload.data();
+            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              const prog = data2[0];
+
+              const pract = {
+                nombre: practica.practiceName,
+                programacion: {
+                  estudiantes: prog['noStudents'],
+                  diahora: prog['schedule'],
+                  semestre: prog['semester']
+                },
+                activo: practica.active
+               };
+
+               arr.push(pract);
+
+              });
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+
+  // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
+  ajustarTexto(nombre) {
+    const nombreArr = nombre.split(' ');
+    let name1 = '';
+    let name2 = '';
+    for (let i = 0; i < nombreArr.length; i++) {
+      if (i < 3) {
+        name1 += nombreArr[i] + ' ';
+      } else {
+        name2 += nombreArr[i] + ' ';
+      }
+    }
+
+    return {nom1: name1, nom2: name2};
   }
 
   enviaritem(item) {

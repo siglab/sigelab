@@ -1,0 +1,26 @@
+.divScroll {
+  overflow-y: scroll;
+  height: 600px;
+  max-height: auto;
+}
+divScroll::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 3px #222d32;;
+    border-radius: 2px;
+    background-color: #222d32;
+}
+.divScroll::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #222d32;
+}
+.divScroll::-webkit-scrollbar-thumb
+{
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 0 3px#222d32;;
+    background-color:#babec0;
+}
+.sombra:hover{
+  background-color: #222d32;;
+  cursor: pointer;
+}

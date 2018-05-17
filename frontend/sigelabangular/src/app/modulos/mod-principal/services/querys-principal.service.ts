@@ -63,7 +63,7 @@ export class QuerysPrincipalService {
 
       this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
         const duenoLab = dueno.payload.data();
-        if (duenoLab && elemento.mainSpace) {
+        if (duenoLab && elemento.otros) {
 
           this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
 
@@ -75,6 +75,7 @@ export class QuerysPrincipalService {
              } else if( elemento.active == false ) {
               estadoLab = 'Inactivo';
              }
+             console.log(elemento);
             const laboratorio = {
               nombre: elemento.cfName,
               escuela: elemento.knowledgeArea,

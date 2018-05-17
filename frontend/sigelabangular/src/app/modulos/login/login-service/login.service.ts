@@ -59,7 +59,7 @@ login() {
   consultarPermisos(id) {
     const promise = new Promise((resolve, reject) => {
       this.getUser(id).subscribe(data => {
-        console.log(data.payload.data());
+        localStorage.setItem('persona', JSON.stringify(data.payload.data()));
         if (data.payload.data()) {
           const use = data.payload.data().appRoles;
           console.log(use);
@@ -67,7 +67,6 @@ login() {
             if (use[clave]) {
               this.getRol(clave).subscribe( datarol => {
                 const rol = datarol.payload.data().permissions;
-                console.log(rol);
                 if (rol) {
                   // tslint:disable-next-line:forin
                   for (const llave in rol) {

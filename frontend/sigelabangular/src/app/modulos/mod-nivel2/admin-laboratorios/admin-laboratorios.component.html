@@ -14,7 +14,7 @@
   </section>
 
   <!-- Main content -->
-  <section class="content divScroll" *ngIf="itemsel | async; let itemsel" >
+  <section class="content" *ngIf="itemsel | async; let itemsel" >
 
     <!-- Componente central de busqueda -->
 
@@ -23,7 +23,7 @@
         <div class="box box-danger">
           <div class="box-header" >
             <i class="fa fa-search"></i>
-            <h3 class="box-title">{{itemsel.nombre}}</h3>
+            <h3 class="box-title">{{itemsel.nombre.nom1 + itemsel.nombre.nom2}}</h3>
           </div>
 
           <div class="box-body">
