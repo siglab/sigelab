@@ -1,3 +1,4 @@
+import { AngularFirestore } from 'angularfire2/firestore';
 import { ObservablesService } from './../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -27,7 +28,7 @@ export class AdminLaboratoriosComponent implements OnInit {
   itemsel: Observable<Array<any>>;
 
 
-  constructor(private obs: ObservablesService) {
+  constructor(private obs: ObservablesService, private afs: AngularFirestore) {
     // this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
     // servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
   }
@@ -42,5 +43,18 @@ export class AdminLaboratoriosComponent implements OnInit {
 
   cambiardata(item) {
 
+  }
+
+  addEquipo() {
+    const eq = {
+     cfOrgUnit: '',
+     ciNumber: '87696898',
+     projectDesc: 'proyecto que busca la geomatizacion de zonas urbanas de cali',
+     projectName: 'PROYECTO CARTOGRAPHER',
+     relatedFacilities: {cfFacilId: true},
+     relaedPers: {cfPersId: true}
+    };
+
+    this.afs.collection('project').add(eq);
   }
 }

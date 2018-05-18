@@ -123,9 +123,9 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                 info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
                 servicios: this.estructurarServicios(elemento.relatedServices),
                 practicas: this.estructurarPracticas(elemento.relatedPractices),
-                equipos: [],
-                personal: [],
-                proyectos: [],
+                equipos: this.estructurarEquipos(elemento.relatedEquipments),
+                personal: this.estructurarPersonas(elemento.relatedPers),
+                proyectos: this.estructurarProyectos(elemento.relatedProjects),
                 solicitudes: [],
                 estado: estadoLab
               };
@@ -219,6 +219,108 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                arr.push(pract);
 
               });
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarEquipos(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
+           const equip =  data.payload.data();
+
+             // funciona con una programacion, cuando hayan mas toca crear otro metodo
+
+                const equipo = {
+                  nombre: equip.cfName,
+                  activo: equip.active,
+                  precio: equip.price
+                };
+
+                arr.push(equipo);
+
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+
+    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarPersonas(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers =  data.payload.data();
+
+            this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+
+              const persona = {
+                nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                activo: pers.active,
+                email: dataper.payload.data().email
+              };
+
+              arr.push(persona);
+            });
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+
+    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarProyectos(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
+            const project =  data.payload.data();
+
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              const proyecto = {
+                nombre: project.projectName,
+                descripcion: project.projectDesc,
+                id: project.ciNumber
+              };
+
+              arr.push(proyecto);
 
            });
         }

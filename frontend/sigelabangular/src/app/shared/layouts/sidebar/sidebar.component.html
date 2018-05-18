@@ -16,7 +16,7 @@
      <!-- Sidebar user panel  ocultar  comoduloPrincipalmponentes segun el nivel  -->
     <app-bar-busqueda></app-bar-busqueda>
 
-    <app-bar-admin-solicitudes *ngIf="moduloPrincipal"></app-bar-admin-solicitudes>
+    <app-bar-admin-solicitudes *ngIf="moduloPrincipal || moduloNivel2"></app-bar-admin-solicitudes>
     <app-bar-admin-laboratorios  *ngIf="moduloNivel2"></app-bar-admin-laboratorios>
     <app-bar-admin-laboratorio-superior *ngIf="moduloNivel2"></app-bar-admin-laboratorio-superior>
     <app-bar-admin-usuarios  *ngIf="false" ></app-bar-admin-usuarios>
