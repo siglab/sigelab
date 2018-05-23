@@ -82,6 +82,10 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) {
+
+    /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
+    $('html, body').animate({ scrollTop: '400px' }, 'slow');
+
     this.itemsel = item;
     if (!this.moduloinfo) {
       this.moduloinfo = true;
