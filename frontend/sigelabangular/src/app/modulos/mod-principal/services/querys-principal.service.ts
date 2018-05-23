@@ -61,38 +61,41 @@ export class QuerysPrincipalService {
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index];
 
-      this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
-        const duenoLab = dueno.payload.data();
-        if (duenoLab && elemento.otros) {
+      if(elemento.cfName) {
+        this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
+          const duenoLab = dueno.payload.data();
+          if (duenoLab && elemento.otros) {
 
-          this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
+            this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
 
-            const espacioLab = espacio.payload.data();
-             // convertir boolean a cadena de caracteres para estado del laboratorio
-            let estadoLab;
-             if(elemento.active == true) {
-              estadoLab = 'Activo';
-             } else if( elemento.active == false ) {
-              estadoLab = 'Inactivo';
-             }
-             console.log(elemento);
-            const laboratorio = {
-              nombre: elemento.cfName,
-              escuela: elemento.knowledgeArea,
-              inves: elemento.researchGroup,
-              director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-              coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
-              info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
-              servicios: this.estructurarServicios(elemento.relatedServices),
-              practicas: this.estructurarPracticas(elemento.relatedPractices),
-              estado: estadoLab
-            };
+              const espacioLab = espacio.payload.data();
+               // convertir boolean a cadena de caracteres para estado del laboratorio
+              let estadoLab;
+               if(elemento.active == true) {
+                estadoLab = 'Activo';
+               } else if( elemento.active == false ) {
+                estadoLab = 'Inactivo';
+               }
 
-              this.datosLabsEstructurados.push(laboratorio);
-          });
+              const laboratorio = {
+                nombre: elemento.cfName,
+                escuela: elemento.knowledgeArea,
+                inves: elemento.researchGroup,
+                director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
+                info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
+                servicios: this.estructurarServicios(elemento.relatedServices),
+                practicas: this.estructurarPracticas(elemento.relatedPractices),
+                estado: estadoLab
+              };
 
-        }
-     });
+                this.datosLabsEstructurados.push(laboratorio);
+            });
+
+          }
+       });
+      }
+
 
     }
 
@@ -271,7 +274,8 @@ export class QuerysPrincipalService {
           this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
            const servicio =  data.payload.data();
 
-             const serv = {
+           if (servicio.cfName) {
+            const serv = {
               nombre: servicio.cfName,
               descripcion: servicio.cfDesc,
               precio: servicio.cfPrice,
@@ -279,6 +283,8 @@ export class QuerysPrincipalService {
               uid: data.payload.id
              };
              arr.push(serv);
+           }
+
            });
         }
 
