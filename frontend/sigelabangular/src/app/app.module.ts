@@ -9,7 +9,7 @@ import { RouterRoutingModule } from './router/router-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { LocationStrategy, HashLocationStrategy} from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { DashCenterComponent } from './shared/layouts/dash-center/dash-center.component';
@@ -118,6 +118,7 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
 
   ],
   providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     ObservablesService,
     ObserverPrincipalService,
     QuerysPrincipalService,
