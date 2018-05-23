@@ -11,44 +11,6 @@ import { Observable } from '@firebase/util';
 })
 export class BarAdminLaboratoriosComponent implements OnInit {
 
-  laboratorios = [{nombre: 'LABORATORIO CIENCIAS', coord: {lat: '3.425906', lon: '-76.540446'}, info: {dir: 'cra54 cambulos', tel: '53454636', cel: '43656537', email: 'jkhkhjk@univalle.edu.co'},
-                   // tslint:disable-next-line:max-line-length
-                   servicios: [{nombre: 'QUIMICA'}, {nombre: 'TERMODINAMICA'}, {nombre: 'FISICA'}], practicas: [{nombre: 'EXSS'}, {nombre: 'FGFGFG'}],
-                   equipos: [{nombre: 'PORTATIL HP'}, {nombre: 'TELESCOPIO'}, {nombre: 'MICROSCOPIO'}],
-                   personal: [{nombre: 'MBAPPE HERNANDEZ'}, {nombre: 'SAMIR ALBERTO'}, {nombre: 'FRANCISCO JULIAN'}],
-                   proyectos: [{nombre: 'PROYECTO X'}, {nombre: 'PROYECTO Y'}, {nombre: 'PROYECTO Z'}],
-                   solicitudes: [{nombre: 'SUR CALI'}, {nombre: 'AUTONOMA'}, {nombre: 'ICESI'}],
-                   espacios: [{edificio: '1', planta: '002', espacio: '9002', estado: 'ACTIVO'}, {edificio: '2', planta: '004', espacio: '9006', estado: 'ACTIVO'}, {edificio: '9', planta: '004', espacio: '9009', estado: 'INACTIVO'}]},
-                {nombre: 'LABORATORIO SOCIAES', coord: {lat: '3.419737', lon: '-76.540275'}, info: {dir: 'cra54 san fernado', tel: '53454543gdf636', cel: '43656537', email: 'fdgfgjh@univalle.edu.co'},
-                  servicios: [{nombre: 'CUANTICA'}, {nombre: 'MATE'}, {nombre: 'BIOLOGIA'}], practicas: [{nombre: 'DFGDFGDF'}],
-                  equipos: [{nombre: 'MARACA'}, {nombre: 'YODO'}, {nombre: 'CIANURO'}],
-                  personal: [{nombre: 'JHON DIAZ'}, {nombre: 'JUAN ROBERTO'}, {nombre: 'JULIAN'}],
-                  proyectos: [{nombre: 'PROYECTO R'}, {nombre: 'PROYECTO D'}, {nombre: 'PROYECTO G'}],
-                  solicitudes: [{nombre: 'SANTIAGO'}, {nombre: 'AUTONOMA'}, {nombre: 'SANBUENAVENTURA'}],
-                  espacios: [{edificio: '1', planta: '002', espacio: '9002', estado: 'ACTIVO'}]},
-                {nombre: 'LABORATORIO X', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'},
-                  servicios: [{nombre: 'BUSQUEDA'}, {nombre: 'INVESTIGACION'}], practicas: [{nombre: 'HJGHJHJ'}],
-                  equipos: [{nombre: 'SODIO'}, {nombre: 'CREMA'}, {nombre: 'BATOLA'}],
-                  personal: [{nombre: 'SEBASTIAN'}, {nombre: 'JIGGY DRAMA'}, {nombre: 'FRANCISCO'}],
-                  proyectos: [{nombre: 'PROYECTO DFGDF'}, {nombre: 'PROYECTO GFD'}, {nombre: 'PROYECTO FUE'}],
-                  solicitudes: [{nombre: 'SUR CALI'}, {nombre: 'AUTONOMA'}, {nombre: 'ICESI'}],
-                  espacios: [{edificio: '6', planta: '0FD2', espacio: '945302', estado: 'ACTIVO'}, {edificio: '8', planta: '00354', espacio: '92346', estado: 'INACTIVO'}, {edificio: '9', planta: '004', espacio: '9009', estado: 'INACTIVO'}]},
-                {nombre: 'LABORATORIO Y', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'},
-                servicios: [], practicas: [], equipos: [], personal: [], proyectos: [], solicitudes: [], espacios: []}];
-
-
-  servicioshechos = [{nombre: 'QUIMICA', coord: {lat: '3.425906', lon: '-76.540446'}, info: {dir: 'cra54 cambulos', tel: '53454636', cel: '43656537', email: 'jkhkhjk@univalle.edu.co'}, fecha: '08/09/2017'},
-                      {nombre: 'INVESTIGACION', coord: {lat: '3.419737', lon: '-76.540275'}, info: {dir: 'cra54 san fernado', tel: '53454543gdf636', cel: '43656537', email: 'fdgfgjh@univalle.edu.co'}, fecha: '18/09/2017'},
-                      {nombre: 'MODELADO', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'}, fecha: '11/10/2017'},
-                      {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, fecha: '08/03/2017'}];
-
-    servicioso = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir: "cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},estado:"NO ACEPTADO"},
-                  {nombre:"INVESTIGACION",coord:{lat:"3.419737",lon:"-76.540275"},info:{dir: "cra54 san fernado", tel:'53454543gdf636',cel:'43656537',email:'fdgfgjh@univalle.edu.co'},estado:'NO ACEPTADO'},
-                  {nombre:'MODELADO', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'}, estado: 'NO ACEPTADO'},
-                  {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, estado: 'ACEPTADO'}];
-
-
-
   laboratorios2 = [];
   // INICIALIZACION DE CONSULTAS PARA LABORATORIOS
   private labsColection: AngularFirestoreCollection<any>;
@@ -66,7 +28,6 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       this.getPersonId(this.user.uid).subscribe(person => {
         this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
           this.laboratorios2 = this.estructurarDataLab(labs);
-          console.log(this.laboratorios2);
 
         });
 
@@ -94,7 +55,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataLab(data: any) {
-    console.log(data);
+
       this.datosLabsEstructurados = [];
 
       for (let index = 0; index < data.length; index++) {
@@ -121,12 +82,12 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                 director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                 coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
                 info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
-                servicios: this.estructurarServicios(elemento.relatedServices),
+                servicios: this.estructurarServicios(elemento.relatedServices).arr,
                 practicas: this.estructurarPracticas(elemento.relatedPractices),
                 equipos: this.estructurarEquipos(elemento.relatedEquipments),
                 personal: this.estructurarPersonas(elemento.relatedPers),
                 proyectos: this.estructurarProyectos(elemento.relatedProjects),
-                solicitudes: [],
+                solicitudes: this.estructurarServicios(elemento.relatedServices).arr2,
                 estado: estadoLab
               };
 
@@ -157,11 +118,14 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     return this.afs.doc('space/' + idespacio).snapshotChanges();
   }
 
+
+
    // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
   estructurarServicios(item) {
 
     const arr = [];
+    const arr2 = [];
 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
@@ -169,23 +133,49 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
         if (item[clave]) {
           this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
-           const servicio =  data.payload.data();
+            const servicio =  data.payload.data();
 
-             const serv = {
-              nombre: servicio.cfName,
-              descripcion: servicio.cfDesc,
-              precio: servicio.cfPrice,
-              activo: servicio.active,
-              uid: data.payload.id
-             };
-             arr.push(serv);
+            this.afs.collection<any>('cfSrvReserv',
+            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'creada'))
+            .snapshotChanges().subscribe(dataSol => {
+
+              const serv = {
+               nombre: servicio.cfName,
+               descripcion: servicio.cfDesc,
+               precio: servicio.cfPrice,
+               activo: servicio.active,
+               uid: data.payload.id
+              };
+              arr.push(serv);
+
+              for (let i = 0; i < dataSol.length; i++) {
+                const element = dataSol[i].payload.doc.data();
+                this.getPersonId(element.user).subscribe(usuario => {
+                  const solicitud = {
+                    nombreServ: servicio.cfName,
+                    descripcionServ: servicio.cfDesc,
+                    precioServ: servicio.cfPrice,
+                    activoServ: servicio.active,
+                    email: usuario.payload.data().email,
+                    uidServ: dataSol[i].payload.doc.id,
+                    estado: element.status
+                  };
+
+                  arr2.push(solicitud);
+                });
+
+              }
+
+
+            });
+
            });
         }
 
       }
     }
 
-    return arr;
+    return {arr, arr2};
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -280,7 +270,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
             this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-
+              console.log(dataper.payload.data());
               const persona = {
                 nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                 activo: pers.active,
@@ -331,6 +321,27 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     return arr;
   }
 
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarSolicitudesActivas(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+
+
+
+        }
+
+      }
+    }
+
+    return arr;
+  }
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {

@@ -1,54 +1,86 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ObservablesService } from '../../../shared/services/observables.service';
 
+import swal from 'sweetalert2';
+import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
   styleUrls: ['./admin-equipos.component.css']
 })
-export class AdminEquiposComponent implements OnInit {
+export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
 
-  equipos = [{nombre:"PORTATIL HP", servicios:[{nombre:"QUIMICA"},{nombre:"TERMODINAMICA"},{nombre:"FISICA"}],practicas:[{nombre:"EXSS"},{nombre:"FGFGFG"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
-             {nombre:"TELESCOPIO", servicios:[{nombre:"CUANTICA"},{nombre:"MATE"},{nombre:"BIOLOGIA"}],practicas:[{nombre:"DFGDFGDF"}],componentes:[{nombre:"componente 3"},{nombre:"componente 4"}],info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"}},
-             {nombre:"MICROSCOPIO", servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 5"}],info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"}},
-             {nombre:"MARACA",servicios:[{nombre:"CUANTICA"},{nombre:"MATE"},{nombre:"BIOLOGIA"}],practicas:[{nombre:"DFGDFGDF"}],componentes:[{nombre:"componente 6"},{nombre:"componente 7"}],info:{dir:"cra54 san fernado",tel:"53454543gdf636",cel:"43656537",email:"fdgfgjh@univalle.edu.co"}},
-             {nombre:"YODO",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 8"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
-             {nombre:"CIANURO",servicios:[{nombre:"QUIMICA"},{nombre:"TERMODINAMICA"},{nombre:"FISICA"}],practicas:[{nombre:"EXSS"},{nombre:"FGFGFG"}],componentes:[],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
-             {nombre:"SODIO",servicios:[{nombre:"QUIMICA"},{nombre:"TERMODINAMICA"},{nombre:"FISICA"}],practicas:[{nombre:"EXSS"},{nombre:"FGFGFG"}],componentes:[{nombre:"componente 9"},{nombre:"componente 10"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
-             {nombre:"CREMA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}},
-             {nombre:"BATOLA",servicios:[{nombre:"BUSQUEDA"},{nombre:"INVESTIGACION"}],practicas:[{nombre:"HJGHJHJ"}],componentes:[{nombre:"componente 1"},{nombre:"componente 2"}],info:{dir:"cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"}}];
+
+    // INICIALIZACION DATATABLE PRUEBAS
+    displayedColumnsEquip = ['nombre'];
+    dataSourceEquip = new MatTableDataSource([]);
+    @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
+    @ViewChild('sortEquip') sortEquip: MatSort;
+
+
+    itemsel = false;
+    //equiposel = {nombre:"", servicios:[],practicas:[],componentes:[],info:{dir:"",tel:"",cel:"",email:""}};
+
+    equiposel:any;
 
   constructor(private obs:ObservablesService) {
     // this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
     // servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
   }
 
-  itemsel:Observable<Array<any>>;
-  equiposel={nombre:"", servicios:[],practicas:[],componentes:[],info:{dir:"",tel:"",cel:"",email:""}};
-  //equiposel:any;
   ngOnInit() {
+      // abre loading mientras se cargan los datos
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
+  }
 
-    this.obs.currentObject.subscribe(data=>{
-      console.log(data);
-      this.itemsel = Observable.of(data);
-      console.log(this.itemsel);
-    });
+  ngAfterViewInit(): void {
+
+    this.obs.currentObject.subscribe(datos => {
+
+      if (datos.length === 0) {
+        this.itemsel = true;
+      }
+
+      const ambiente = this;
+      setTimeout(function() {
+   
+        ambiente.dataSourceEquip.data = datos;
+        ambiente.dataSourceEquip.sort = ambiente.sortEquip;
+        ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
+    // cierra loading luego de cargados los datos
+        swal.close();
+
+      }, 1500);
+
+     });
   }
 
 
-  cambiardataEquipos(item){
+  cambiardataEquipos(item) {
    this.equiposel = this.buscarDato(item);
   }
 
 
  buscarDato(item){
-   for(let i=0;i<this.equipos.length;i++){
-     if(item.nombre == this.equipos[i].nombre){
-       return this.equipos[i];
-     }
-   }
+  //  for(let i=0;i<this.equipos.length;i++){
+  //    if(item.nombre == this.equipos[i].nombre){
+  //      return this.equipos[i];
+  //    }
+  //  }
  }
+
+   applyFilterEquip(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceEquip.filter = filterValue;
+  }
 
 }

@@ -16,7 +16,7 @@
   <!-- Main content -->
   <!-- <section class="content" *ngIf="itemsel | async; let itemsel"> -->
 
-    <section class="content">
+    <section class="content" *ngIf="itemsel">
     <!-- Componente central de busqueda -->
 
     <div class="row">
@@ -26,7 +26,7 @@
 
               <div class="row" style="margin-top:20px;">
                  <!-- INFORMACION LABORATORIO -->
-                  <div class="col-md-6" *ngIf="itemsel | async; let itemsel">
+                  <div class="col-md-6" >
                     <div class="box box-danger">
                       <div class="box-header">
                         <i class="fa fa-search"></i>
@@ -35,35 +35,35 @@
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
-                        <form action="#" method="post">
-                          <div class="input-group">
-                            <div class="input-group-btn">
-
-                              <input type="text" class="form-control" name="busqueda" placeholder="Buscar">
+                          <div *ngIf="dataSourceEquip.data.length == 0">
+                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
                             </div>
-                          </div>
-                        </form>
 
+                            <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquip.data.length != 0">
+                              <div class="example-header">
+                                <mat-form-field>
+                                  <input style="outline: none;" matInput (keyup)="applyFilterEquip($event.target.value)" placeholder="Buscar servicio">
+                                </mat-form-field>
+                              </div>
 
-                        <div class="row" style="margin-top:30px;">
-                            <div class="col-md-12">
-                                <div class="box box-danger">
-                                    <div class="box-header">
-                                        <i class="fa fa-flask"></i>
+                              <mat-table #tableEquip #sortEquip="matSort" [dataSource]="dataSourceEquip" matSort>
 
-                                        <h3 class="box-title">EQUIPOS</h3>
-                                    </div>
-                                    <div class="box-body divScroll2">
-                                        <div *ngIf="this.itemsel.equipos.length == 0">
-                                            <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                        </div>
-                                        <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                            <a *ngFor="let item of this.itemsel.equipos" (click)="cambiardataEquipos(item)" style="cursor: pointer;" class="list-group-item">{{item.nombre}}</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="nombre">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumnsEquip;" style = "cursor: pointer;" (click)="cambiarDataEquipo(row)" data-toggle="modal" data-target="#myModalLabs" ></mat-row>
+                              </mat-table>
+
+                              <mat-paginator #paginatorEquip="matPaginator"
+                                [pageSize]="5"
+                                [pageSizeOptions]="[5, 10, 20]"
+                                [showFirstLastButtons]="true">
+                              </mat-paginator>
                             </div>
-                        </div>
 
                       </div>
 
