@@ -40,18 +40,23 @@ import { firebase } from './tokens';
 import { SolicitudesServicioComponent } from './modulos/mod-nivel2/admin-servicios/solicitudes-servicio/solicitudes-servicio.component';
 import { ServiciosAsociadosComponent } from './modulos/mod-nivel2/admin-servicios/servicios-asociados/servicios-asociados.component';
 import { AdminPersonalComponent } from './modulos/mod-nivel2/admin-personal/admin-personal.component';
+// tslint:disable-next-line:max-line-length
 import { SolicitudMantenimientoComponent } from './modulos/mod-nivel2/admin-solicitudes/solicitud-mantenimiento/solicitud-mantenimiento.component';
 import { SolicitudBajaComponent } from './modulos/mod-nivel2/admin-solicitudes/solicitud-baja/solicitud-baja.component';
+// tslint:disable-next-line:max-line-length
 import { BarAdminLaboratorioSuperiorComponent } from './shared/components/dashboard/left-sidebar/bar-admin-laboratorio-superior/bar-admin-laboratorio-superior.component';
 import { BarAdminUsuariosComponent } from './shared/components/dashboard/left-sidebar/bar-admin-usuarios/bar-admin-usuarios.component';
 import { BarIndicadoresComponent } from './shared/components/dashboard/left-sidebar/bar-indicadores/bar-indicadores.component';
+// tslint:disable-next-line:max-line-length
 import { BarComunicacionMasivaComponent } from './shared/components/dashboard/left-sidebar/bar-comunicacion-masiva/bar-comunicacion-masiva.component';
 import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
+// tslint:disable-next-line:max-line-length
 import { IndicadoresGraficasReportesComponent } from './modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
+// tslint:disable-next-line:max-line-length
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
 
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule } from '@angular/material';
@@ -59,7 +64,7 @@ import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatP
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
 
-//angular fireauth
+// angular fireauth
 import { AngularFireAuth } from 'angularfire2/auth';
 import { QuerysAutenticadoService } from './modulos/mod-autenticado/services/querys-autenticado.service';
 import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/observer-autenticado.service';

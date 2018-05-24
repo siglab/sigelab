@@ -70,9 +70,9 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               const espacioLab = espacio.payload.data();
                // convertir boolean a cadena de caracteres para estado del laboratorio
               let estadoLab;
-               if(elemento.active == true) {
+               if (elemento.active === true) {
                 estadoLab = 'Activo';
-               } else if( elemento.active == false ) {
+               } else if ( elemento.active === false ) {
                 estadoLab = 'Inactivo';
                }
               const laboratorio = {
@@ -191,7 +191,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
         if (item[clave]) {
            this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
            const practica =  data.payload.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('itempractice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
               const prog = data2[0];
@@ -365,9 +365,9 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
 
   enviaritemSolicitudServicios(item) {
-
+/*
     this.obs.changeSolServ(this.servicioso);
-    this.obs.changeHistoSolserv(this.servicioshechos);
+    this.obs.changeHistoSolserv(this.servicioshechos); */
 
   }
 
