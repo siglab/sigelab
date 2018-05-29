@@ -274,7 +274,9 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               const persona = {
                 nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                 activo: pers.active,
-                email: dataper.payload.data().email
+                email: dataper.payload.data().email,
+                idpers: clave,
+                iduser: pers.user
               };
 
               arr.push(persona);
