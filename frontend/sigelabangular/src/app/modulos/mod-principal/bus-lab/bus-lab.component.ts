@@ -36,6 +36,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   moduloinfo = false;
   layer = null;
 
+  campoCondicion = '';
+
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
@@ -122,7 +124,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         status: 'creada',
         createdAt: '',
         updatedAt:  '',
-        conditionsLog: [{ conditionText: '', accepted: ''} ]
+        conditionsLog: [{ conditionText: this.campoCondicion, accepted: ''} ]
       };
 
       swal({

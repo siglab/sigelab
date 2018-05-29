@@ -4,6 +4,7 @@ import { ObservablesService } from '../../../shared/services/observables.service
 
 import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { AngularFirestore } from 'angularfire2/firestore';
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
@@ -19,15 +20,33 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
     @ViewChild('sortEquip') sortEquip: MatSort;
 
+    // INICIALIZACION DATATABLE COMPONENTES
+    displayedColumnsComponentes = ['nombre'];
+    dataSourceComponentes = new MatTableDataSource([]);
+    @ViewChild('paginatorComponentes') paginatorComponentes: MatPaginator;
+    @ViewChild('sortComponentes') sortComponentes: MatSort;
 
-    itemsel = false;
-    //equiposel = {nombre:"", servicios:[],practicas:[],componentes:[],info:{dir:"",tel:"",cel:"",email:""}};
+    // INICIALIZACION DATATABLE SERVICIOS
+    displayedColumnsServicios = ['nombre'];
+    dataSourceServicios = new MatTableDataSource([]);
+    @ViewChild('paginatorServicios') paginatorServicios: MatPaginator;
+    @ViewChild('sortServicios') sortServicios: MatSort;
+
+    // INICIALIZACION DATATABLE PRACTICAS
+    displayedColumnsPracticas = ['nombre'];
+    dataSourcePracticas = new MatTableDataSource([]);
+    @ViewChild('paginatorPracticas') paginatorPracticas: MatPaginator;
+    @ViewChild('sortPracticas') sortPracticas: MatSort;
+
+
 
     equiposel:any;
+    tablesel:any;
+    seleccionado:any;
+    itemsel: Observable<Array<any>>;
 
-  constructor(private obs:ObservablesService) {
-    // this.obs.changeObject({nombre:"SELECCIONE UN LABORATORIO",coord:{lat:"3.403437",lon:"-76.511292"},info:{dir:"",tel:"",cel:"4",email:""},
-    // servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
+  constructor(private obs:ObservablesService, private afs: AngularFirestore) {
+   
   }
 
   ngOnInit() {
@@ -39,33 +58,79 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
           swal.showLoading();
         }
       });
+
+
+    this.obs.currentObject.subscribe(datos => {
+
+      this.iniciliazarTablas();
+
+      if(datos.equipos){
+        this.itemsel = Observable.of(datos);
+
+        console.log(datos.equipos);
+        this.dataSourceEquip.data = datos.equipos;
+
+        const ambiente = this;
+        setTimeout(function() {
+          
+          if(datos.equipos.data !== 0){
+            ambiente.dataSourceEquip.sort = ambiente.sortEquip;
+            ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;    
+            
+          }
+
+        // cierra loading luego de cargados los datos
+        swal.close();
+
+        }, 1500);
+      }
+      
+
+
+     });
   }
 
   ngAfterViewInit(): void {
 
-    this.obs.currentObject.subscribe(datos => {
-
-      if (datos.length === 0) {
-        this.itemsel = true;
-      }
-
-      const ambiente = this;
-      setTimeout(function() {
-   
-        ambiente.dataSourceEquip.data = datos;
-        ambiente.dataSourceEquip.sort = ambiente.sortEquip;
-        ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
-    // cierra loading luego de cargados los datos
-        swal.close();
-
-      }, 1500);
-
-     });
   }
 
 
   cambiardataEquipos(item) {
    this.equiposel = this.buscarDato(item);
+  
+  }
+
+  cambiarDataEquipo(item){
+    const ambiente = this;
+    this.equiposel = item;
+    this.dataSourceComponentes.data = item.componentes;
+    this.dataSourceServicios.data = item.servicios;
+    this.dataSourcePracticas.data = item.practicas;
+    console.log(this.dataSourceComponentes.data);
+    setTimeout(function(){
+      ambiente.dataSourceComponentes.sort = ambiente.sortComponentes;
+      ambiente.dataSourceComponentes.paginator = ambiente.paginatorComponentes;
+
+      ambiente.dataSourceServicios.sort = ambiente.sortServicios;
+      ambiente.dataSourceServicios.paginator = ambiente.paginatorServicios;
+
+      ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
+      ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
+    },1000);
+   
+  
+  }
+
+  iniciliazarTablas(){
+    this.equiposel = undefined;
+    this.dataSourceComponentes.data = [];
+    this.dataSourcePracticas.data = [];
+    this.dataSourceServicios.data = [];
+  }
+
+  cambiarInfoModal(row, table){
+    this.tablesel = table;
+    this.seleccionado = row;
   }
 
 
@@ -83,4 +148,79 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     this.dataSourceEquip.filter = filterValue;
   }
 
+  applyFilterComponentes(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceComponentes.filter = filterValue;
+  }
+
+  subir(){
+    const equipos = {
+
+      cfAcro: '',
+      cfUri: '',
+      cfName: '',
+      cfDescr: '',
+      cfKey: '',
+      cfClass: '',
+      cfClassScheme: '',
+      cfFacil: '',
+      cfPers: '',
+      relatedSrv:  {} ,
+      realatedPract: {},
+      relatedMeas: {},
+      qr: '',
+      space: '',
+      brand: '',
+      model: '',
+      price : 0,
+      timeUnit:'minutes',
+      workingHours:'',
+      timeBeforeBooking: '',
+      cfConditions: [],
+      active: true,
+      createdAt:'',
+      updatedAt:''
+    
+    }
+
+
+
+
+        // METODO QUE AGREGA UNA NUEVA SOLICITUD DE SERVICIO
+
+        this.afs.collection('cfEquipment').add(equipos).then(data => {
+          console.log(data);
+          this.subirComp(); 
+        });
+      
+
+  }
+
+  subirComp(){
+
+    const fecha =new Date();
+    const components = {
+
+      cfName: 'bola de iones',
+      cfClass : '',
+      cfClassScheme: '',
+      cfConditions: [],
+      cfDescription: 'elemento que se usa para contener la implosion',
+      cfPrice: 12300000,
+      brand: 'SAMSUNG',
+      model: '2018',
+      active:true,
+      createdAt: fecha.toISOString(),
+      updatedAt: fecha.toISOString()
+
+
+    }
+    this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta =>{
+      console.log('se hizo menar');
+    })
+  }
+
 }
+
+

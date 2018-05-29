@@ -238,7 +238,10 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                 const equipo = {
                   nombre: equip.cfName,
                   activo: equip.active,
-                  precio: equip.price
+                  precio: equip.price,
+                  componentes:this.estructurarComponents(clave),
+                  servicios:this.estructurarServicios(equip.relatedSrv).arr,
+                  practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
 
                 arr.push(equipo);
@@ -251,6 +254,36 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     }
 
     return arr;
+  }
+
+      // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarComponents(item){
+    const arr = [];
+
+    this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i].payload.doc.data();
+
+          const componente = {
+            id: data[i].payload.doc.id,
+            nombre: element.cfName,
+            descripcion: element.cfDescription,
+            precio: element.cfPrice,
+            marca: element.brand,
+            modelo: element.model,
+            estado: element.active
+          };
+  
+          arr.push(componente);
+     
+
+        
+      }
+
+     });
+
+     return arr;
   }
 
 
@@ -272,6 +305,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
               console.log(dataper.payload.data());
               const persona = {
+                id: clave,
                 nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                 activo: pers.active,
                 email: dataper.payload.data().email
@@ -321,27 +355,6 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     return arr;
   }
 
-  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
-  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarSolicitudesActivas(item) {
-
-    const arr = [];
-
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
-
-        if (item[clave]) {
-
-
-
-        }
-
-      }
-    }
-
-    return arr;
-  }
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
@@ -366,8 +379,8 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
   enviaritemSolicitudServicios(item) {
 
-    this.obs.changeSolServ(this.servicioso);
-    this.obs.changeHistoSolserv(this.servicioshechos);
+    // this.obs.changeSolServ(this.servicioso);
+    // this.obs.changeHistoSolserv(this.servicioshechos);
 
   }
 

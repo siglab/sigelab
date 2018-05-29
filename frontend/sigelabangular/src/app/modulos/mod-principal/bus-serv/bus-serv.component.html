@@ -182,8 +182,28 @@
 
                 <div class="row" style="margin-top:20px;">
                   <div class="col-md-12 text-center form-group">
-                    <button class="btn-danger btn-lg btn-block danger" type="button" (click)="agregarSolicitudServicio()">HACER SOLICITUD</button>
+                      <div class="box box-danger">
+                          <div class="box-header">
+                            <i class="fa fa-map"></i>
+    
+                            <h3 class="box-title">Solictud del servicio</h3>
+                          </div>
+                          <!-- /.box-header -->
+                          <div class="box-body">
+   
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="condiciones"><strong>Comentarios:</strong></label>
+                                    <textarea name="condiciones" rows="6" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;"></textarea>
+                                  </div>
+                              </div>
+                            <button class="btn-danger btn-lg btn-block danger" style="margin-top: 20px;" type="button" (click)="agregarSolicitudServicio()">HACER SOLICITUD</button>
+        
 
+                          </div>
+                          <!-- /.box-body -->
+    
+                        </div>
                   </div>
                 </div>
 
@@ -198,4 +218,3 @@
 </div>
 
 
-s

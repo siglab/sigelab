@@ -317,7 +317,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" (click)="agregarSolicitudServicio()" >Solicitar el Servicio</button>
+                              <label class="control-label" for="condiciones"><strong>Comentarios:</strong></label>
+                              <textarea name="condiciones" rows="10" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 text-center">
+                                <button  class="btn2 btn-danger btn-lg danger" type="button" (click)="agregarSolicitudServicio()" >Solicitar el Servicio</button>
                             </div>
                         </div>
 

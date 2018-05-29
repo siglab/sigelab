@@ -30,7 +30,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
       shadowUrl: 'assets/leaflet/images/marker-shadow.png'
     });
 
-
+    campoCondicion = '';
 
     // INICIALIZACION DATATABLE lABORATORIOS
     displayedColumns = ['nombreserv', 'nombrelab'];
@@ -94,7 +94,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         status: 'creada',
         createdAt: '',
         updatedAt:  '',
-        conditionsLog: [{ conditionText: '', accepted: ''} ]
+        conditionsLog: [{ conditionText: this.campoCondicion, accepted: ''} ]
       };
 
       swal({
