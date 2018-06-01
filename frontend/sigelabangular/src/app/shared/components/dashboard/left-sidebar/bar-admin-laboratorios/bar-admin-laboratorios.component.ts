@@ -76,6 +76,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                 estadoLab = 'Inactivo';
                }
               const laboratorio = {
+
                 nombre: this.ajustarTexto(elemento.cfName),
                 escuela: elemento.knowledgeArea,
                 inves: elemento.researchGroup,
