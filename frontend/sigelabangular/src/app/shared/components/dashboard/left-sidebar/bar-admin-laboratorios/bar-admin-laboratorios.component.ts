@@ -76,6 +76,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                 estadoLab = 'Inactivo';
                }
               const laboratorio = {
+
                 nombre: this.ajustarTexto(elemento.cfName),
                 escuela: elemento.knowledgeArea,
                 inves: elemento.researchGroup,
@@ -191,7 +192,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
         if (item[clave]) {
            this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
            const practica =  data.payload.data();
-            this.afs.doc('itempractice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
               const prog = data2[0];

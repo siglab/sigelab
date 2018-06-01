@@ -34,42 +34,37 @@
                     <div class="col-md-12"  *ngIf="itemsel | async; let itemsel">
                         <div class="box box-danger">
                             <div class="box-header">
-                                <i class="fa fa-flask"></i>
+                                <i class="fa fa-map"></i>
 
-                                <h3 class="box-title">EQUIPOS</h3>
+                                <h3 class="box-title">Espacios vinculados</h3>
                             </div>
-                            <div class="box-body divScroll2">
+                            <div class="box-body">
                                 <!-- <div *ngIf="this.itemsel.espacios.length == 0">
                                     <h3>SELECCIONE UN LABORATORIO</h3>
                                 </div> -->
+                              <!--   <div class="example-container mat-elevation-z8" *ngIf="">
+                                    <div class="example-header">
+                                      <mat-form-field>
+                                        <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
+                                      </mat-form-field>
+                                    </div>
 
-                                    <table datatable [dtOptions]="dtOptions"  class=" table row-border hover table-condensed" [dtTrigger]= "dtTrigger">
-                                        <thead>
-                                            <tr>
-                                              <th>Edificio</th>
-                                              <th>Planta</th>
-                                              <th>Espacio</th>
-                                              <th>Estado</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr style="cursor:pointer" *ngFor="let item of this.itemsel.espacios" (click)="cambiardataEspacios(item)">
-                                              <td>
-                                                 {{item.edificio}}
-                                              </td>
-                                              <td>
-                                                  {{item.planta}}
-                                              </td>
-                                              <td>
-                                                  {{item.espacio}}
-                                              </td>
-                                              <td>
-                                                 {{item.estado}}
-                                              </td>
-                                            </tr>
-                                          </tbody>
+                                    <mat-table #tableSpace #sortSpace="matSort" [dataSource]="dataSourcePersIn" matSort>
 
-                                    </table>
+
+                                      <ng-container matColumnDef="nombre">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                      </ng-container>
+
+                                      <mat-header-row *matHeaderRowDef="displayedColumnsPersIn"></mat-header-row>
+                                      <mat-row *matRowDef="let row; columns: displayedColumnsPersIn;" style="cursor: pointer;" (click)="cambiardata(row, 'inactivos')"
+                                        data-toggle="modal" data-target="#modal"></mat-row>
+                                    </mat-table>
+
+                                    <mat-paginator #paginatorPersIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                    </mat-paginator>
+                                  </div> -->
 
                             </div>
                         </div>

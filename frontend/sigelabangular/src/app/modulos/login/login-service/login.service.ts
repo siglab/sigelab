@@ -6,8 +6,8 @@ import swal from 'sweetalert2';
 
 @Injectable()
 export class LoginService {
-    usuario;
-  constructor( public afAuth: AngularFireAuth, private afs: AngularFirestore ) {
+  usuario;
+  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) {
 
     if (localStorage.getItem('usuario')) {
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
@@ -15,46 +15,111 @@ export class LoginService {
     }
   }
 
-login() {
-  const promise = new Promise((resolve, reject) => {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
-      response => {
+  login() {
+    const promise = new Promise((resolve, reject) => {
+      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
+        response => {
 
-        this.usuario = response.user;
-        localStorage.setItem('usuario', JSON.stringify(this.usuario));
+          this.usuario = response.user;
+          localStorage.setItem('usuario', JSON.stringify(this.usuario));
 
           this.consultarPermisos(this.usuario.uid).then(() => {
             resolve();
           }).catch(() => {
-          swal({
-            type: 'error',
-            title: 'Ocurrio un error al intentar ingresar',
-            showConfirmButton: true
+            swal({
+              type: 'error',
+              title: 'Ocurrio un error al intentar ingresar',
+              showConfirmButton: true
+            });
+
           });
 
+        }).catch(error => {
+          // alerta en caso de error
+          swal({
+            type: 'error',
+            title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
+            showConfirmButton: true
+          });
+          console.log(error);
         });
+    });
 
-      }).catch( error => {
-       // alerta en caso de error
-        swal({
-          type: 'error',
-          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
-          showConfirmButton: true
-        });
-        console.log(error);
-     });
-  });
-
-  return promise;
-}
+    return promise;
+  }
 
   async logout() {
 
     localStorage.removeItem('usuario');
     localStorage.removeItem('rol');
-     return  this.afAuth.auth.signOut();
+    return this.afAuth.auth.signOut();
 
   }
+
+
+  /* login usando email y password */
+  loginEmail(email: string, pass: string) {
+
+    // tslint:disable-next-line:prefer-const
+    let promise = new Promise((resolve, reject) => {
+
+      this.afAuth.auth.signInWithEmailAndPassword(email, pass)
+        .then(data => {
+          console.log('login');
+          this.usuario = data;
+          localStorage.setItem('usuario', JSON.stringify(data));
+
+          resolve();
+        });
+    });
+  }
+
+  /* envia un email a un usuario para restablecer su pass*/
+
+  sendEmail(email: string) {
+
+    return new Promise((resolve, reject) => {
+      this.afAuth.auth.sendPasswordResetEmail(email)
+        .then(() => {
+          swal({
+            type: 'success',
+            title: 'Se envio un correo al nuevo usuario para establece su contraseña ',
+            showConfirmButton: true
+          });
+        });
+
+    });
+
+  }
+
+  createUser(email: string, pass: string) {
+
+
+    const promise = new Promise((resolve, reject) => {
+      this.afAuth.auth.createUserWithEmailAndPassword(email, pass).then(
+        () => {
+          console.log('usuario creado');
+          resolve();
+        }).catch(function (error) {
+          console.log(error.message);
+        });
+    });
+    return promise;
+  }
+
+
+
+    /* convierte un id en un objeto id:true */
+
+     setBoolean(campo) {
+
+      const string = '{"' + campo + '":true}';
+      return JSON.parse(string);
+
+    }
+
+
+
 
   consultarPermisos(id) {
     const promise = new Promise((resolve, reject) => {
@@ -65,14 +130,14 @@ login() {
           console.log(use);
           for (const clave in use) {
             if (use[clave]) {
-              this.getRol(clave).subscribe( datarol => {
+              this.getRol(clave).subscribe(datarol => {
                 const rol = datarol.payload.data().permissions;
                 if (rol) {
                   // tslint:disable-next-line:forin
                   for (const llave in rol) {
 
                     if (rol[llave]) {
-                       localStorage.setItem('rol', JSON.stringify(rol));
+                      localStorage.setItem('rol', JSON.stringify(rol));
                       // this.getModulo(llave).subscribe( datamod => {
                       //   const modulo = datamod.payload.data().value;
 
@@ -98,7 +163,7 @@ login() {
 
       });
     });
-   return promise;
+    return promise;
   }
 
   getRol(idrol) {
