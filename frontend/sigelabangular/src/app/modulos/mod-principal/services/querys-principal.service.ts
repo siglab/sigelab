@@ -29,7 +29,7 @@ export class QuerysPrincipalService {
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
   getLaboratorios() {
     this.labsCollection = this.afs.collection<any>('cfFacil');
-    this.labs = this.labsCollection.valueChanges();
+    this.labs = this.labsCollection.snapshotChanges();
 
     return this.labs;
   }
@@ -59,7 +59,8 @@ export class QuerysPrincipalService {
     this.datosLabsEstructurados = [];
 
     for (let index = 0; index < data.length; index++) {
-      const elemento = data[index];
+
+      const elemento = data[index].payload.doc.data();;
 
       if(elemento.cfName) {
         this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
@@ -78,6 +79,7 @@ export class QuerysPrincipalService {
                }
 
               const laboratorio = {
+                uid: data[index].payload.doc.id,
                 nombre: elemento.cfName,
                 escuela: elemento.knowledgeArea,
                 inves: elemento.researchGroup,
@@ -99,8 +101,7 @@ export class QuerysPrincipalService {
 
     }
 
-   // this.estructurarServicios(data[0].relatedServices);
-
+   console.log(this.datosLabsEstructurados);
 
     return this.datosLabsEstructurados;
   }
