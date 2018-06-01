@@ -31,6 +31,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
     });
 
     campoCondicion = '';
+    condicionesobjeto = {};
+
+    variation:any;
+    variacionSel = "";
 
     // INICIALIZACION DATATABLE lABORATORIOS
     displayedColumns = ['nombreserv', 'nombrelab'];
@@ -38,6 +42,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
 
+
+    listaVariaciones = [];
 
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
     if (localStorage.getItem('usuario')) {
@@ -79,74 +85,199 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
+   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+   buscarVariacion(item){
+    for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
+      const element = this.itemsel.infoServ.variaciones[i];
+      if(element.id == item){
+        return element;
+      }   
+    }
+  }
+
+  cambiarVariacion(item){
+
+    if(item != 'inicial'){
+      this.variation = this.buscarVariacion(item);
+      console.log(this.variation);
+      this.estructurarVariaciones(this.variation.data.cfConditions);
+    } else {
+      this.variation = undefined;
+    }
+
+
+  }
+
+  //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
+  estructuraCondiciones(variations){
+    const arr = [];
+    for (let i = 0; i < variations.length; i++) {
+      const element = variations[i];
+
+      const vari = {
+        condicion: variations[i],
+        aceptada: this.condicionesobjeto["checkbox"+i]
+      }
+      arr.push(vari);
+    }
+    return arr;
+  }
+
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarVariaciones(condiciones){
+    this.condicionesobjeto = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      //const element = condiciones[i];
+      this.condicionesobjeto["checkbox"+i] = true;
+    }
+  }
+
   agregarSolicitudServicio() {
-    console.log(this.itemsel);
-    console.log(this.user);
+    const encontrado = this.listaVariaciones.find((element, index) => {
+      if(element.id == this.variation.id){
+        return true;
+      }
+      return false;
+    });
+
+    if(!encontrado){
+      this.listaVariaciones.push({
+        data: this.variation,
+        condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
+      }); 
+
+      swal({
+        type: 'success',
+        title: 'Variacion agregada',
+        showConfirmButton: true
+      }); 
+    }else{
+      swal({
+        type: 'error',
+        title: 'Esta variacion ya se encuentra agregada',
+        showConfirmButton: true
+      });
+    }
+   
+  }
+
+  quitarVariacion(id){
+    const encontrado = this.listaVariaciones.find((element, index) => {
+
+      console.log(element);
+      if(element.data.id == id){
+
+        console.log(index);
+        this.listaVariaciones.splice(index, 1);
+        return true;
+      }
+      return false;
+    });
+
+    if(encontrado){
+      swal({
+        type: 'success',
+        title: 'Variacion Eliminada',
+        showConfirmButton: true
+      });
+    }
+
+  }
+
+  enviarSolicitudServicio(reserva){
+
+    const fecha = new Date();
+
     if (this.user) {
+
       const cfSrvReserv = {
         cfSrv: this.itemsel.infoServ.uid,
         user: this.user.uid,
-        selectedVariations: [],
+        selectedVariations: {},
         cfStartDate: '',
         cfEndDate: '',
         cfClass: '',
         cfClassScheme: '',
-        status: 'creada',
-        createdAt: '',
-        updatedAt:  '',
-        conditionsLog: [{ conditionText: this.campoCondicion, accepted: ''} ]
+        status: 'pendiente',
+        createdAt: fecha.toISOString(),
+        updatedAt:  fecha.toISOString(),
+        conditionsLog: [],
+        comments:[]
       };
 
-      swal({
-        type: 'warning',
-        title: 'Esta seguro que desea solicitar este servicio',
-        showCancelButton: true,
-        confirmButtonText: 'Si, Solciitar',
-        cancelButtonText: 'No, Cancelar'
-      }).then((result) => {
-        if (result.value) {
-          this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-            swal({
-              type: 'success',
-              title: 'Solicitud Creada Exitosamente',
-              showConfirmButton: true
+        swal({
+
+          type: 'warning',
+          title: 'Esta seguro que desea solicitar este servicio',
+          showCancelButton: true,
+          confirmButtonText: 'Si, Solicitar',
+          cancelButtonText: 'No, Cancelar'
+
+        }).then((result) => {
+
+          if (result.value) {
+            if(reserva == 'convariaciones'){
+          
+              for (let j = 0; j < this.listaVariaciones.length; j++) {
+                const element = this.listaVariaciones[j];
+                cfSrvReserv.selectedVariations[element.data.id] = true; 
+                cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
+                
+              }
+    
+            } else {
+              cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.itemsel.infoServ.variaciones.data.cfConditions);
+            }
+
+            cfSrvReserv.comments.push({commentText: this.campoCondicion, status: 'sin leer', uid: this.user.uid});
+
+            console.log(cfSrvReserv);
+           
+            this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+              swal({
+                type: 'success',
+                title: 'Solicitud Creada Exitosamente',
+                showConfirmButton: true
+              }).then(()=>{
+                $('#myModalLabs').modal('hide');
+              });
+
+             
+  
+            }).catch(error => {
+  
+              swal({
+                type: 'error',
+                title: error,
+                showConfirmButton: true
+              });
+  
             });
+          } else if (
+            // Read more about handling dismissals
+            result.dismiss === swal.DismissReason.cancel
+          ) {
+            swal(
+              'Solicitud Cancelada',
+              '',
+              'error'
+            );
+          }
+  
+        });
 
-          }).catch(error => {
-
-            swal({
-              type: 'error',
-              title: error,
-              showConfirmButton: true
-            });
-
-          });
-        } else if (
-          // Read more about handling dismissals
-          result.dismiss === swal.DismissReason.cancel
-        ) {
-          swal(
-            'Solicitud Cancelada',
-            '',
-            'error'
-          );
-        }
-
-      });
-
-
-      } else {
+    } else {
 
         swal({
           type: 'error',
           title: 'Debe ingresar al sistema para poder solicitar este servicio',
           showConfirmButton: true
-        }).then(() => {
-          this.ruta.navigate(['login']);
         });
-      }
+
+    }
 
   }
+
 
   loadMap(item) {
     this.map = L.map('mapaaser').setView([this.corx, this.cory], 13);
@@ -158,11 +289,22 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.agregarMarker(item);
   }
 
-  cambiardata(item) {
-
+  cambiardata(item) { 
+    console.log(item);
+    this.variation = undefined;
+    this.campoCondicion = '';
      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
    $('html, body').animate({ scrollTop: '400px' }, 'slow');
     this.itemsel = item;
+
+    if(item.infoServ.variaciones.length == 0){
+      if(item.infoServ.condiciones.length !== 0){
+        this.estructurarVariaciones(item.infoServ.condiciones);
+      }
+
+    }
+    
+
     if (!this.moduloinfo) {
       this.moduloinfo = true;
       const ambiente = this;

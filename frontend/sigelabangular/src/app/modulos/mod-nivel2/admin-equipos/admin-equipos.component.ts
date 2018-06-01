@@ -101,6 +101,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
   }
 
   cambiarDataEquipo(item){
+    console.log(item);
     const ambiente = this;
     this.equiposel = item;
     this.dataSourceComponentes.data = item.componentes;
@@ -152,6 +153,18 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceComponentes.filter = filterValue;
+  }
+
+  applyFilterPracticas(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourcePracticas.filter = filterValue;
+  }
+
+  applyFilterServicios(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceServicios.filter = filterValue;
   }
 
   subir(){
@@ -217,6 +230,23 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
     }
     this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta =>{
+      console.log('se hizo menar');
+    })
+  }
+
+  subirVar(){
+    const fecha =new Date();
+    const va = {
+      cfName: 'servicio banda ancha',
+      cfConditions:["debe traer cedula", "debe traer recibo"],
+      cfDescription:'para utilizar la sala de computo',
+      cfPrice: '1200',
+      active: true,
+      createdAt:fecha.toISOString(),
+      updateAt:fecha.toISOString()
+    }
+
+    this.afs.collection('cfSrv/IkDMCt1fpuP8xg2iIXwA/variations').add(va).then(dta =>{
       console.log('se hizo menar');
     })
   }

@@ -41,6 +41,10 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   buttoncancel = false;
 
+  variation:any;
+  condicion:any;
+  condicionesobjeto = {};
+
   constructor(private querys: QuerysAutenticadoService, private observer: ObserverAutenticadoService) {
 
    }
@@ -105,19 +109,78 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
 
   mostrardata(item) {
+    console.log(item);
     this.servsel = item;
+    this.variation = undefined;
+    this.condicion = undefined;
+    this.estructurarCondiciones(item.condiciones);
     this.buttoncancel = false;
     this.moduloinfo = true;
-    console.log(item);
-
+   
+ 
   }
 
   mostrardata2(item) {
     this.servsel = item;
+    this.variation = undefined;
+    this.condicion = undefined;
+    this.estructurarCondiciones(item.condiciones);
     this.moduloinfo = true;
     this.buttoncancel = true;
     console.log(item);
+  }
 
+  cambiarVariacion(item){
+
+    if(item != 'inicial'){
+      this.variation = this.buscarVariacion(item);
+      this.condicion =  this.buscarCondicion(item);
+      console.log(this.condicion);
+      this.estructurarCondiciones(this.condicion.condicion);
+    } else {
+      this.variation = undefined;
+      this.condicion = undefined;
+    }
+
+    console.log(item);
+
+  }
+
+   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+   buscarVariacion(item){
+    for (let i = 0; i < this.servsel.variaciones.length; i++) {
+      const element = this.servsel.variaciones[i];
+      if(element.id == item){
+        return element;
+      }   
+    }
+  }
+
+  buscarCondicion(item){
+    for (let i = 0; i < this.servsel.condiciones.length; i++) {
+      const element = this.servsel.condiciones[i];
+      if(element.idvariacion == item){
+        return element;
+      }   
+    }
+  }
+
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarCondiciones(condiciones){
+    this.condicionesobjeto = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      //const element = condiciones[i];
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+    }
+  }
+
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarVariacionesCond(condiciones){
+    this.condicionesobjeto = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      //const element = condiciones[i];
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+    }
   }
 
   cancelarSolicitudServicio() {

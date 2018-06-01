@@ -70,9 +70,9 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               const espacioLab = espacio.payload.data();
                // convertir boolean a cadena de caracteres para estado del laboratorio
               let estadoLab;
-               if(elemento.active == true) {
+               if (elemento.active === true) {
                 estadoLab = 'Activo';
-               } else if( elemento.active == false ) {
+               } else if ( elemento.active === false ) {
                 estadoLab = 'Inactivo';
                }
               const laboratorio = {
@@ -100,8 +100,6 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       }
 
      // this.estructurarServicios(data[0].relatedServices);
-
-
       return this.datosLabsEstructurados;
     }
 
@@ -144,6 +142,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                descripcion: servicio.cfDesc,
                precio: servicio.cfPrice,
                activo: servicio.active,
+               variaciones: this.variations(clave),
                uid: data.payload.id
               };
               arr.push(serv);
@@ -196,17 +195,20 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
               const prog = data2[0];
 
-              const pract = {
-                nombre: practica.practiceName,
-                programacion: {
-                  estudiantes: prog['noStudents'],
-                  diahora: prog['schedule'],
-                  semestre: prog['semester']
-                },
-                activo: practica.active
-               };
-
-               arr.push(pract);
+              if(prog){
+                const pract = {
+                  nombre: practica.practiceName,
+                  programacion: {
+                    estudiantes: prog['noStudents'],
+                    diahora: prog['schedule'],
+                    semestre: prog['semester']
+                  },
+                  activo: practica.active
+                 };
+  
+                 arr.push(pract);
+              }
+   
 
               });
 
@@ -218,6 +220,8 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     return arr;
   }
+
+
 
    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
@@ -234,7 +238,6 @@ export class BarAdminLaboratoriosComponent implements OnInit {
            const equip =  data.payload.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-
                 const equipo = {
                   nombre: equip.cfName,
                   activo: equip.active,
@@ -243,6 +246,8 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                   servicios:this.estructurarServicios(equip.relatedSrv).arr,
                   practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
+
+              
 
                 arr.push(equipo);
 
@@ -301,18 +306,22 @@ export class BarAdminLaboratoriosComponent implements OnInit {
            this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers =  data.payload.data();
 
-            this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              console.log(dataper.payload.data());
-              const persona = {
-                id: clave,
-                nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
-                activo: pers.active,
-                email: dataper.payload.data().email
-              };
+            if(pers){
+              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                const persona = {
+                  id: clave,
+                  nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                  activo: pers.active,
+                  email: dataper.payload.data().email,
+                  idpers: clave,
+                  iduser: pers.user
+                };
+  
+                arr.push(persona);
+              });
+            }
 
-              arr.push(persona);
-            });
            });
         }
 
@@ -353,6 +362,23 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     }
 
     return arr;
+  }
+
+  // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
+  variations(clave){
+    const variaciones = [];
+    this.afs.doc('cfSrv/' + clave).collection('variations').snapshotChanges().subscribe(data => {
+      if(data){
+        for (let i = 0; i < data.length; i++) {
+          const element = data[i].payload.doc.data();
+          variaciones.push(element);
+        }
+      } else {
+        return variaciones;
+      }
+      
+    });
+    return variaciones;
   }
 
 
