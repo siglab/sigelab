@@ -31,15 +31,17 @@ export class QuerysAutenticadoService {
   }
 
 
-  estructurarServiciosActivos(data) {
+  estructurarServiciosActivos(email, data) {
     const datos = [];
 
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();
-
+        console.log(elemento);
           const Reserv = {
+            email: email,
+            lab: elemento.cfFacil,
             status: elemento.status,
             nombre: servicio.cfName,
             descripcion: servicio.cfDesc,
@@ -47,6 +49,7 @@ export class QuerysAutenticadoService {
             activo: servicio.active,
             variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
             condiciones: elemento.conditionsLog,
+            comentario: elemento.comments,
             uid: data2.payload.id,
             uidreserv: data[index].payload.doc.id
           };
@@ -59,7 +62,7 @@ export class QuerysAutenticadoService {
     return datos;
   }
 
-  estructurarHistoriaServicios(data) {
+  estructurarHistoriaServicios(email, data) {
     const histodatos = [];
 
     for (let index = 0; index < data.length; index++) {
@@ -69,6 +72,8 @@ export class QuerysAutenticadoService {
 
         if(elemento.status != 'pendiente'){
           const HistoReserv = {
+            email: email,
+            lab: elemento.cfFacil,
             status: elemento.status,
             nombre: servicio.cfName,
             descripcion: servicio.cfDesc,
@@ -76,6 +81,7 @@ export class QuerysAutenticadoService {
             activo: servicio.active,
             variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
             condiciones: elemento.conditionsLog,
+            comentario: elemento.comments,
             uid: data2.payload.id,
             uidreserv: data[index].payload.doc.id
           };
@@ -118,6 +124,15 @@ export class QuerysAutenticadoService {
     }
 
     return arr;
+  }
+
+  consultarLaboratorio(idlab){
+    let nombre = '';
+    this.afs.doc('cfFacil/' + idlab).snapshotChanges().subscribe(data => {
+      nombre = data.payload.data().cfName;
+        console.log(nombre);
+    });
+    return nombre;
   }
 
   cancerlarSolicitud(reservuid) {
