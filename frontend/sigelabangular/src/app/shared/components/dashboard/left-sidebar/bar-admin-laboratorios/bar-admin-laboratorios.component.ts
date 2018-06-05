@@ -273,8 +273,10 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
               console.log(dataper.payload.data());
               const persona = {
-                nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                nombre:  pers.cfFirstNames,
+                apellidos: pers.cfFamilyNames,
                 activo: pers.active,
+                tipo: pers.type,
                 email: dataper.payload.data().email,
                 idpers: clave,
                 iduser: pers.user

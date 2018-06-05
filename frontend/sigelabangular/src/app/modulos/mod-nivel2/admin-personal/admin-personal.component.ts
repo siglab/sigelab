@@ -17,6 +17,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
+  apellido;
+  rol;
   email;
   estado;
   idu;
@@ -60,14 +62,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre'];
+  displayedColumnsPers = ['nombre', 'email', 'tipo' ];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
   @ViewChild('sortPers') sortPers: MatSort;
 
   // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre'];
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo'];
   dataSourcePersIn = new MatTableDataSource([]);
 
   @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
@@ -170,6 +172,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.nombre = item.nombre;
     this.estado = item.activo;
     this.email = item.email;
+    this.apellido = item.apellidos;
+    this.rol = item.tipo;
     this.idp = item.idpers;
     this.idu = item.iduser;
 
@@ -180,13 +184,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  actualizarPers(idU, idP, nombre?, email?, estado?) {
-    // cierra el model
+  actualizarPers() {
+    // cierra el model this.idu, this.idp,this.nombre, this.email,  this.estado
     $('#modal').modal('hide');
 
     let state: boolean;
 
-    if (estado === 'false') {
+    if ( this.estado === 'false') {
 
       state = false;
 
@@ -197,26 +201,29 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /* validar  */
-    console.log(idU, idP, nombre, email, estado);
+   //  console.log(idU, idP, nombre, email, estado);
 
     /* objeto para persona  */
     const pers = {
       active: state,
-      cfFirstNames : nombre
+      cfFirstNames : this.nombre,
+      cfFamilyNames: this.apellido
     };
     /* objeto para usuario */
     const user = {
-      estado
+      estado : state
     };
 
     /* metodo firebase para subir una persona actualizada */
-    this.afs.collection('cfPers/').doc(idP).update(pers).then(
+    this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
        () => {
         swal({
           type: 'success',
           title: 'usuario actualizado correctamente',
           showConfirmButton: true
         });
+
+        /* elimina de array  inactivos <-> activos */
         this.setArray();
        }
 

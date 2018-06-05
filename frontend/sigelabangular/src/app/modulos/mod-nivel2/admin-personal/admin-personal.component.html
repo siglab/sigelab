@@ -87,6 +87,21 @@
                                           <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
 
+
+
+                                        <ng-container matColumnDef="email">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="tipo">
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                              <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                            </ng-container>
+
+
+
+
                                         <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
                                         <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"
                                           data-toggle="modal" data-target="#modal"></mat-row>
@@ -136,6 +151,16 @@
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                           <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
+
+                                        <ng-container matColumnDef="email">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="tipo">
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                              <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                            </ng-container>
 
                                         <mat-header-row *matHeaderRowDef="displayedColumnsPersIn"></mat-header-row>
                                         <mat-row *matRowDef="let row; columns: displayedColumnsPersIn;" style="cursor: pointer;" (click)="cambiardata(row, 'inactivos')"
@@ -211,6 +236,26 @@
                   </div>
                 </div>
                 <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Apellidos :</strong>
+                      </label>
+                      <input [(ngModel)]="this.apellido"   id="escuelaedit" name="apellido" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="nombreprub">
+                          <strong>tipo:</strong>
+                        </label>
+                        <input [(ngModel)]="this.rol"   id="escuelaedit" name="rol" class="form-control" type="text">
+                      </div>
+                    </div>
+
+
+
+                <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
                       <strong>Email:</strong>
@@ -224,8 +269,8 @@
                       <strong>Estado:</strong>
                     </label>
                      <select    class="form-control" [(ngModel)]="estado" name = "estado"  >
-                      <option   value="true"> Activo </option>
-                      <option   value="false">Inactivo</option>
+                      <option   value="true">  Activo </option>
+                      <option   value="false"> Inactivo</option>
 
                     </select>
                   </div>
@@ -247,7 +292,7 @@
 
           </div>
           <div class="modal-footer">
-            <button type="button" (click)="actualizarPers( this.idu, this.idp,this.nombre, this.email,  this.estado)"  class="btn btn-danger">Guardar</button>
+            <button type="button" (click)="actualizarPers()"  class="btn btn-danger">Guardar</button>
 
           </div>
         </div>
