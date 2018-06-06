@@ -13,8 +13,8 @@
     </ol>
   </section>
 
-  <!-- Main content -->
-  <section class="content" *ngIf="itemsel | async; let itemsel">
+   <!-- Main content -->
+   <section class="content" *ngIf="itemsel | async; let itemsel">
 
     <!-- Componente central de busqueda -->
 
@@ -566,6 +566,8 @@
 
   </section>
 
+ 
+
 </div>
 
 
@@ -819,7 +821,7 @@
                     <label class="control-label" for="escuelaedit">
                       <strong>Escuela:</strong>
                     </label>
-                    <input id="escuelaedit" name="escuelaedit" class="form-control" type="text">
+                    <input id="escuelaedit"  name="escuelaedit" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
@@ -835,7 +837,7 @@
                     <label class="control-label" for="emailedit">
                       <strong>Email:</strong>
                     </label>
-                    <input id="emailedit" name="emailedit" class="form-control" type="text">
+                    <input id="emailedit" [(ngModel)]="this.infolab.otros.email" name="emailedit" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
@@ -843,7 +845,7 @@
                     <label class="control-label" for="teledit">
                       <strong>Telefono:</strong>
                     </label>
-                    <input id="teledit" name="teledit" class="form-control" type="text">
+                    <input id="teledit" [(ngModel)]="this.infolab.otros.telefono" name="teledit" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
@@ -851,8 +853,12 @@
                     <label class="control-label" for="diredit">
                       <strong>Direccion:</strong>
                     </label>
-                    <input id="diredit" name="diredit" class="form-control" type="text">
-
+                    <input id="diredit" [(ngModel)]="this.infolab.otros.direccion" name="diredit" class="form-control" type="text">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                   <button (click)="editar()">Enviar</button>
                   </div>
                 </div>
               </fieldset>
