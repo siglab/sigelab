@@ -34,13 +34,13 @@ export class AdminEspaciosComponent implements OnInit {
 
     this.obs.currentObject.subscribe(data => {
 
-      console.log(data);
+
       if (data) {
 
         this.itemsel = Observable.of(data);
 
         this.dataSourceSpace.data = data.espacios;
-
+        console.log(data.espacios);
         console.log('si hay un espacio', data.espacios );
 
         setTimeout(() => {

@@ -90,7 +90,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               personal: this.estructurarPers(elemento.relatedPers),
               personalInactivo: this.estructurarPersIna(elemento.relatedPers),
               proyectos: this.estructurarProyectos(elemento.relatedProjects),
-              espacios: espacioLab,
+              espacios: this.estructurarSpace( elemento.relatedSpaces),
               solicitudes: this.estructurarServicios(elemento.relatedServices).arr2,
               estado: estadoLab,
               id_lab: data[index].payload.doc.id
