@@ -177,6 +177,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     if (this.user) {
 
       const cfSrvReserv = {
+        cfFacil: this.itemsel.nombre,
         cfSrv: this.servsel.uid,
         user: this.user.uid,
         selectedVariations: {},
@@ -214,7 +215,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
             }
 
-            cfSrvReserv.comments.push({commentText: this.campoCondicion, status: 'sin leer', uid: this.user.uid});
+            cfSrvReserv.comments.push({
+              commentText: this.campoCondicion, 
+              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+              uid: this.user.uid});
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
               swal({

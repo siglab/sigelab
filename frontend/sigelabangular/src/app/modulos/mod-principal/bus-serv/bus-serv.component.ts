@@ -115,7 +115,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
       const element = variations[i];
 
       const vari = {
-        condicion: variations[i],
+        conditionText: variations[i],
         aceptada: this.condicionesobjeto["checkbox"+i]
       }
       arr.push(vari);
@@ -226,12 +226,13 @@ export class BusServComponent implements OnInit, AfterViewInit {
               }
     
             } else {
-              cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.itemsel.infoServ.variaciones.data.cfConditions);
+              cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.itemsel.infoServ.condiciones);
             }
 
-            cfSrvReserv.comments.push({commentText: this.campoCondicion, status: 'sin leer', uid: this.user.uid});
-
-            console.log(cfSrvReserv);
+            cfSrvReserv.comments.push({
+              commentText: this.campoCondicion, 
+              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+              uid: this.user.uid});
            
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
               swal({

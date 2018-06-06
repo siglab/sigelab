@@ -45,6 +45,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   condicion:any;
   condicionesobjeto = {};
 
+  comentario = '';
+
   constructor(private querys: QuerysAutenticadoService, private observer: ObserverAutenticadoService) {
 
    }
@@ -62,13 +64,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
-        this.datos = this.querys.estructurarServiciosActivos(data);
+        this.datos = this.querys.estructurarServiciosActivos(this.user.email, data);
         this.observer.changeDatatableServsAct(this.datos);
         console.log(this.datos);
       });
 
       this.querys.getCollectionsHisto(this.user.uid).subscribe(data => {
-        this.histodatos = this.querys.estructurarHistoriaServicios(data);
+        this.histodatos = this.querys.estructurarHistoriaServicios(this.user.email, data);
         this.observer.changeDatatableHistoServs(this.histodatos);
         console.log(this.histodatos);
       });
@@ -218,6 +220,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     });
 
   }
+
+  // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
+  enviarComentario(){
+    console.log(this.comentario);
+    console.log(this.servsel);
+  }
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
