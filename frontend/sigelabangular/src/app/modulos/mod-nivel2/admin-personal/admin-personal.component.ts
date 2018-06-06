@@ -23,6 +23,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   estado;
   idu;
   idp;
+  idlab;
   activos = [];
   inactivos = [];
   fecha = new Date();
@@ -88,11 +89,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit() {
     this.obs.currentObject.subscribe(data => {
+
       if (data.personal) {
-        console.log(data);
+        this.idlab = data.id_lab;
         this.itemsel = Observable.of(data);
 
-        data.personal.forEach(element => {
+  /*       data.personal.forEach(element => {
 
           if (element.activo === true) {
 
@@ -108,18 +110,17 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             }
           }
 
-        });
+        }); */
 
 
-        console.log('entro');
-        this.dataSourcePers.data = this.activos;
-        this.dataSourcePersIn.data = this.inactivos;
+        this.dataSourcePers.data = data.personal;
+        this.dataSourcePersIn.data = data.personalInactivo;
 
 
       }
 
 
-      console.log('datos personal', data);
+      console.log('datos del observer', data);
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
@@ -224,7 +225,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         /* elimina de array  inactivos <-> activos */
-        this.setArray();
        }
 
     );
@@ -241,7 +241,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   setPers() {
 
     const pers = this.person;
-
+    pers.cfFacil = this.idlab;
     console.log(pers);
     this.afs.collection('cfPers').add(pers)
       .then(ok => {
@@ -265,6 +265,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
    //  agrega un nuevo usuario a firestore
    this.afs.collection('user').add(user).then( ok => {
        // actualiza el campo idusuario en el document persona
+     this.updateFaciliti(  idP );
      this.updatePers( ok.id, idP  );
      }) ;
 
@@ -286,23 +287,26 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   updatePers( idU, pathP ) {
 
-    this.afs.collection('cfPers' ).doc(pathP).update( { user: idU  } );
+    this.afs.collection('cfPers' ).doc(pathP).update( { user: idU  } ) ;
 
   }
 
   /* actualizar el laboratorio con el nuevo id del document pers */
 
-  updateFaciliti( idP, pathF ) {
+  updateFaciliti( idP ) {
+
+    console.log('entrooooooo');
 
     const  relatedPers = this.register.setBoolean(  idP );
 
     console.log(relatedPers);
-    this.afs.collection('cfFacil' ).doc(pathF).set({   relatedPers   }  , { merge: true });
+    console.log('revisar este lab', this.idlab);
+    this.afs.collection('cfFacil' ).doc(this.idlab).set({   relatedPers   }  , { merge: true });
 
   }
 
   /* metodo para mover personal inactivo a personal activo */
-  setArray() {
+/*   setArray() {
 
     const activo = this.activos;
     const inactivo = this.inactivos;
@@ -339,7 +343,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     }
 
-  }
+  } */
 }
 
 

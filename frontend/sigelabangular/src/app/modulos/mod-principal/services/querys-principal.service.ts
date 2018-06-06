@@ -29,7 +29,7 @@ export class QuerysPrincipalService {
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
   getLaboratorios() {
     this.labsCollection = this.afs.collection<any>('cfFacil');
-    this.labs = this.labsCollection.valueChanges();
+    this.labs = this.labsCollection.snapshotChanges();
 
     return this.labs;
   }
@@ -59,7 +59,8 @@ export class QuerysPrincipalService {
     this.datosLabsEstructurados = [];
 
     for (let index = 0; index < data.length; index++) {
-      const elemento = data[index];
+
+      const elemento = data[index].payload.doc.data();
 
       if(elemento.cfName) {
         this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
@@ -78,6 +79,7 @@ export class QuerysPrincipalService {
                }
 
               const laboratorio = {
+                uid: data[index].payload.doc.id,
                 nombre: elemento.cfName,
                 escuela: elemento.knowledgeArea,
                 inves: elemento.researchGroup,
@@ -99,8 +101,7 @@ export class QuerysPrincipalService {
 
     }
 
-   // this.estructurarServicios(data[0].relatedServices);
-
+   console.log(this.datosLabsEstructurados);
 
     return this.datosLabsEstructurados;
   }
@@ -139,6 +140,8 @@ export class QuerysPrincipalService {
                   descripcion: elemento.cfDesc,
                   precio: elemento.cfPrice,
                   estado: estadoServ,
+                  variaciones: this.variations(data[index].payload.doc.id),
+                  condiciones: elemento.cfCondition,
                   uid: data[index].payload.doc.id
                 },
                 infoLab: {
@@ -164,9 +167,6 @@ export class QuerysPrincipalService {
 
 
     }
-
-   // this.estructurarServicios(data[0].relatedServices);
-
 
     return this.datosServEstructurados;
   }
@@ -280,6 +280,8 @@ export class QuerysPrincipalService {
               descripcion: servicio.cfDesc,
               precio: servicio.cfPrice,
               activo: servicio.active,
+              condiciones: servicio.cfCondition,
+              variaciones: this.variations(clave),
               uid: data.payload.id
              };
              arr.push(serv);
@@ -333,6 +335,25 @@ export class QuerysPrincipalService {
     }
 
     return arr;
+  }
+
+  // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
+  variations(clave){
+
+    const variaciones = [];
+    this.afs.doc('cfSrv/' + clave).collection('variations').snapshotChanges().subscribe(data => {
+      if(data){
+        for (let i = 0; i < data.length; i++) {
+          const element = data[i].payload.doc.data();
+
+          variaciones.push({data: element, id: data[i].payload.doc.id});
+        }
+      } else {
+        return variaciones;
+      }
+
+    });
+    return variaciones;
   }
 
 

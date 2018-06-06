@@ -18,7 +18,7 @@ export class QuerysAutenticadoService {
 
   getCollectionReserv(userid) {
     this.collectionReserv = this.afs.collection('cfSrvReserv',
-      ref => ref.where('user', '==', userid).where('status', '==', 'creada'));
+      ref => ref.where('user', '==', userid).where('status', '==', 'pendiente'));
 
     return this.collectionReserv.snapshotChanges();
   }
@@ -45,6 +45,8 @@ export class QuerysAutenticadoService {
             descripcion: servicio.cfDesc,
             precio: servicio.cfPrice,
             activo: servicio.active,
+            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+            condiciones: elemento.conditionsLog,
             uid: data2.payload.id,
             uidreserv: data[index].payload.doc.id
           };
@@ -65,22 +67,57 @@ export class QuerysAutenticadoService {
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();
 
+        if(elemento.status != 'pendiente'){
           const HistoReserv = {
             status: elemento.status,
             nombre: servicio.cfName,
             descripcion: servicio.cfDesc,
             precio: servicio.cfPrice,
             activo: servicio.active,
+            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+            condiciones: elemento.conditionsLog,
             uid: data2.payload.id,
             uidreserv: data[index].payload.doc.id
           };
 
           histodatos.push(HistoReserv);
-        });
+      
+        }
+      });
 
     }
 
     return histodatos;
+  }
+
+  estructurarVariaciones(idser,item){
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {        
+          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
+           const variacion =  data.payload.data();
+       
+            const vari = {
+              id: clave,
+              nombre: variacion.cfName,
+              descripcion: variacion.cfDescription,
+              precio: variacion.cfPrice,
+              activo: variacion.active
+              };
+
+              arr.push(vari);      
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
   }
 
   cancerlarSolicitud(reservuid) {
