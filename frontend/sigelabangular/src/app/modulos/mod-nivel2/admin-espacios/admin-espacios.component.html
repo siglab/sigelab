@@ -16,7 +16,7 @@
   <!-- Main content -->
   <!-- <section class="content" *ngIf="itemsel | async; let itemsel"> -->
 
-    <section class="content">
+    <section  *ngIf="itemsel | async; let itemsel"  class="content">
     <!-- Componente central de busquedad -->
 
     <div class="row">
@@ -25,13 +25,13 @@
               <div class="box-header">
                 <div class="form-group">
                     <div class="col-md-12">
-                        <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#myModal">Nuevo espacio</button>
+                      <button data-toggle="modal" data-target="#myModal"   style="float: right;" class="btn btn-danger" type="button">Nuevo Espacio</button>
                     </div>
                 </div>
               </div>
             <div class="box-body">
                 <div class="row" style="margin-top:10px;">
-                    <div class="col-md-12"  *ngIf="itemsel | async; let itemsel">
+                    <div class="col-md-12"  >
                         <div class="box box-danger">
                             <div class="box-header">
                                 <i class="fa fa-map"></i>
@@ -42,7 +42,7 @@
                                 <!-- <div *ngIf="this.itemsel.espacios.length == 0">
                                     <h3>SELECCIONE UN LABORATORIO</h3>
                                 </div> -->
-                                 <div class="example-container mat-elevation-z8">
+                                 <div class="example-container mat-elevation-z8" *ngIf="dataSourceSpace.data.length > 0"  >
                                     <div class="example-header">
                                       <mat-form-field>
                                         <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Espacio">
@@ -52,14 +52,39 @@
                                     <mat-table #tableSpace #sortSpace="matSort" [dataSource]="dataSourceSpace" matSort>
 
 
-                                      <ng-container matColumnDef="nombre">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                      <ng-container matColumnDef="capacidad">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Capacidad </mat-header-cell>
                                         <mat-cell *matCellDef="let element"> {{element.capacity}} </mat-cell>
                                       </ng-container>
 
+                                      <ng-container matColumnDef="arealibre">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Area libre </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.freeArea}} </mat-cell>
+                                      </ng-container>
+
+                                      <ng-container matColumnDef="totalarea">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Total Area </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.totalArea}} </mat-cell>
+                                      </ng-container>
+
+
+
+                                      <ng-container matColumnDef="edificio">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Edificio </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.spaceData.building}} </mat-cell>
+                                      </ng-container>
+
+                                      <ng-container matColumnDef="espacio">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Espacio </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.spaceData.place}} </mat-cell>
+                                      </ng-container>
+
+
+
                                       <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
-                                      <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardata(row, 'inactivos')"
-                                        data-toggle="modal" data-target="#modal"></mat-row>
+                                      <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;"
+                                        (click)="cambiardata(row)"
+                                        data-toggle="modal" data-target="#myModal"></mat-row>
                                     </mat-table>
 
                                     <mat-paginator #paginatorSpace="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
@@ -149,7 +174,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="box box-danger">
                             <div class="box-header">
                                 <i class="fa fa-address-card-o"></i>
@@ -158,9 +183,9 @@
                             </div>
 
                             <div class="box-body">
-                                <div class="row divScroll3">
-                                 <img style="width: 600px;height: 400px;" src="../../../../assets/img/ejemplo.jpg" alt="">
-                                </div>
+
+                                 <img style=" float: center; width: 600px;height: 400px;" src="https://firebasestorage.googleapis.com/v0/b/develop-univalle.appspot.com/o/plano1.png?alt=media&token=d0d0907b-940f-40a9-a45d-ff8f4e23c3c7" alt="">
+
                             </div>
 
                         </div>
@@ -170,7 +195,7 @@
                             <div class="box box-danger">
 
                                 <div class="box-body">
-                                    <div class="row  divScroll3">
+                                    <div class="row">
                                         <form id="form-work" class="" name="form-work" action="#">
                                                 <fieldset>
                                                     <div class="form-group">
@@ -375,7 +400,7 @@
                 <div class="box-header text-center">
                   <i class="fa fa-address-card-o"></i>
 
-                  <h1 class="box-title">Nuevo Espacio</h1>
+                  <h1 class="box-title">Editar Espacio</h1>
 
                 </div>
                 <!-- /.box-header -->
@@ -383,23 +408,18 @@
                     <form id="form-work" class="" name="form-work" action="#">
                         <fieldset>
                             <div class="form-group">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <div class="form-group row">
-                                        <label for="facultad" class="col-sm-2 col-form-label">Facultad:</label>
-                                        <div class="col-sm-10">
-                                          <input type="text" value="" class="form-control" id="facultad" placeholder="Password">
-                                        </div>
-                                      </div>
-                                    </div>
-                                </div>
+
 
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="form-group row">
-                                          <label for="facultad" class="col-sm-2 col-form-label">Campus:</label>
+                                          <label for="facultad" class="col-sm-2 col-form-label">Sede:</label>
                                           <div class="col-sm-10">
-                                            <input type="text" value="" class="form-control" id="facultad" placeholder="Password">
+                                            <select    class="form-control" [(ngModel)]="this.sede" name = "estado"  >
+                                              <option   value="san fernando">san fernando</option>
+                                              <option   value="ciudad universitaria melendez">ciudad universitaria melendez</option>
+
+                                            </select>
                                           </div>
                                         </div>
                                     </div>
@@ -409,15 +429,15 @@
                                     <div class="form-group row">
                                       <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                                       <div class="col-sm-2">
-                                        <input type="text" value="" class="form-control" id="edificio">
+                                        <input name= "edificio" [(ngModel)]="this.space.spaceData.building "  type="text" value="" class="form-control" id="edificio">
                                       </div>
                                       <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                                       <div class="col-sm-2">
-                                        <input type="text" value="" class="form-control" id="edificio">
+                                        <input name = "planta" [(ngModel)]="this.space.spaceData.floor " type="text" value="" class="form-control" id="edificio">
                                       </div>
                                       <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                                       <div class="col-sm-2">
-                                        <input type="text" value="" class="form-control" id="espac">
+                                        <input name = "espacio" [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
                                       </div>
                                     </div>
 
@@ -432,7 +452,7 @@
                                     <div class="form-group row">
                                       <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
                                       <div class="col-sm-10">
-                                        <input type="text" value="" class="form-control" id="area" placeholder="Password">
+                                        <input name = "areatotal" [(ngModel)]="this.space.totalArea"  type="text" value="" class="form-control" id="area" placeholder="Password">
                                       </div>
                                     </div>
                                 </div>
@@ -442,7 +462,7 @@
                                     <div class="form-group row">
                                       <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
                                       <div class="col-sm-10">
-                                        <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
+                                        <input name = "ocupedarea" [(ngModel)]="this.space.ocupedArea"  type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                       </div>
                                     </div>
                                 </div>
@@ -452,7 +472,7 @@
                                   <div class="form-group row">
                                     <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
                                     <div class="col-sm-10">
-                                      <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
+                                      <input   name = "arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                     </div>
                                   </div>
                                 </div>
@@ -462,7 +482,7 @@
                                     <div class="form-group row">
                                       <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
                                       <div class="col-sm-10">
-                                        <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
+                                        <input  name = "capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                       </div>
                                     </div>
                                 </div>
@@ -472,7 +492,7 @@
                                   <div class="form-group row">
                                     <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
                                     <div class="col-sm-10">
-                                      <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
+                                      <input name = "areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                     </div>
                                   </div>
                                 </div>
@@ -483,7 +503,7 @@
                                   <div class="form-group row">
                                     <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
                                     <div class="col-sm-7">
-                                      <input type="text" value="" class="form-control" id="indice" placeholder="Password">
+                                      <input name = "indxsa" [(ngModel)]="this.space.indxSa"  type="text" value="" class="form-control" id="indice" placeholder="Password">
                                     </div>
                                   </div>
                                 </div>
@@ -494,7 +514,7 @@
                                     <label for="Activo" class="col-sm-3 col-form-label">Activo:</label>
                                     <div class="col-sm-9">
                                         <label class="switch">
-                                          <input id="activo" type="checkbox" checked>
+                                          <input name = "active" [(ngModel)]="this.space.active"     id="activo" type="checkbox" checked>
                                           <span class="slider round"></span>
                                         </label>
                                     </div>
@@ -506,7 +526,7 @@
 
                             <div class="form-group">
                                     <div class="col-md-12" >
-                                        <button style="float: right;" class="btn2 btn-danger btn-lg  danger" type="button" >Guardar</button>
+                                        <button (click)="actualizarEspacio()"  style="float: right;" class="btn2 btn-danger btn-lg  danger" type="button" >Guardar</button>
                                     </div>
                                 </div>
 
@@ -522,3 +542,95 @@
   </div>
 
 
+<!--  modal editar informacion del personal -->
+<div class="modal fade" id="modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+            <h3 class="box-title">Informacion del Personal</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-dash2equip" class="" name="form-dash2equip">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Nombre :</strong>
+                    </label>
+                    <input    id="escuelaedit" name="nombre" class="form-control" type="text">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Apellidos :</strong>
+                      </label>
+                      <input   id="escuelaedit" name="apellido" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="nombreprub">
+                          <strong>tipo:</strong>
+                        </label>
+                        <input    id="escuelaedit" name="rol" class="form-control" type="text">
+                      </div>
+                    </div>
+
+
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Email:</strong>
+                    </label>
+                    <input   id="escuelaedit" name="email" class="form-control" type="email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Estado:</strong>
+                    </label>
+                     <select    class="form-control"  name = "estado"  >
+                      <option   value="true">  Activo </option>
+                      <option   value="false"> Inactivo</option>
+
+                    </select>
+                  </div>
+
+
+                </div>
+
+
+
+
+
+              </fieldset>
+
+
+            </form>
+
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" (click)="actualizarEspacio()"  class="btn btn-danger">Guardar</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

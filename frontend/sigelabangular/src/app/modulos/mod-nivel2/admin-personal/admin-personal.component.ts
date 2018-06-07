@@ -13,7 +13,7 @@ declare var $: any;
   styleUrls: ['./admin-personal.component.css']
 })
 export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy {
-
+  rolc = 'auxiliar';
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
@@ -158,7 +158,19 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 
+  consultarRol() {
 
+    return new Promise((resolve, reject) => {
+      this.afs.collection<any>('appRoles',
+      ref => ref.where('roleName', '==', this.rolc))
+     .snapshotChanges().subscribe(data => {
+       const idnuevo = data[0].payload.doc.id;
+
+       console.log(idnuevo);
+       resolve(idnuevo);
+     });
+    });
+  }
 
   applyFilterPers(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -179,8 +191,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.idu = item.iduser;
 
 
-
-    // this.actualizarPers( item.iduser, item.idpers, item.nombre, item.email, item.activo  );
     // this.seleccionado = item;
 
   }
@@ -212,24 +222,35 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     };
     /* objeto para usuario */
     const user = {
-      estado : state
+      estado : state,
+      appRoles: ''
     };
 
-    /* metodo firebase para subir una persona actualizada */
-    this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
-       () => {
-        swal({
-          type: 'success',
-          title: 'usuario actualizado correctamente',
-          showConfirmButton: true
-        });
+    /* metodo que consulta el rol */
 
-        /* elimina de array  inactivos <-> activos */
-       }
+    this.consultarRol().then((ok) => {
 
-    );
-    /* metodo firebase para subir un usuario actualizado */
-    // this.afs.collection('user/').doc( idU ).update (user);
+     user.appRoles = this.register.setBoolean (ok);
+     /* metodo firebase para subir un usuario actualizado */
+     this.afs.collection('user').doc( this.idu ).set (user, { merge: true} );
+
+     console.log( 'usuario con el rol', user);
+
+    }).then(() => {
+       /* metodo firebase para subir una persona actualizada */
+      this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
+        () => {
+         swal({
+           type: 'success',
+           title: 'usuario actualizado correctamente',
+           showConfirmButton: true
+         });
+
+        }
+
+     );
+    });
+
 
 
 

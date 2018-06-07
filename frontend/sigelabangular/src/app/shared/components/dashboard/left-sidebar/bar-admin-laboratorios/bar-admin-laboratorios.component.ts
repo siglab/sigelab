@@ -347,15 +347,16 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
             if (pers) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
-
+                const user = dataper.payload.data();
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 console.log(pers);
                 const persona = {
+                  roles: user.appRoles,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   activo: pers.active,
                   tipo: pers.type,
-                  email: dataper.payload.data().email,
+                  email: user.email,
                   idpers: clave,
                   iduser: pers.user,
                 };
@@ -405,6 +406,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                   activo: pers.active,
                   tipo: pers.type,
                   email: dataper.payload.data().email,
+                  roles: dataper.payload.data().appRoles ,
                   idpers: clave,
                   iduser: pers.user,
                 };
