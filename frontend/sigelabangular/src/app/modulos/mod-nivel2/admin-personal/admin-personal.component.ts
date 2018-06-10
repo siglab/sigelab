@@ -53,7 +53,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   usuario = {
     email: '',
     cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
-    roles: { V3zDhknEIY0vbjok3Ntq: true   },
+    appRoles: { IKLoR5biu1THaAMG4JOz: true   },
     cfPers: '',
     active: true,
     createdAt: this.fecha.toISOString(),
@@ -255,6 +255,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   }
+
 
 
   /* metodo para crear una  nueva persona dentro dl lab*/

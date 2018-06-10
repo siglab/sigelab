@@ -245,6 +245,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
               if (espacio) {
                 const space = {
+                  id_space: data.payload.id,
                   capacity: espacio.capacity,
                   createdAt: espacio.createdAt,
                   freeArea: espacio.freeArea,

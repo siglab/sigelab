@@ -5,5 +5,4 @@ export const firebase = {
         projectId: 'develop-univalle',
         storageBucket: 'develop-univalle.appspot.com',
         messagingSenderId: '731094417333'
-}
-   
+};
