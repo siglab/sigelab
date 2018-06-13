@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from '@firebase/util';
+import { AdminLaboratorios25Component } from '../../../../../modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
 @Component({
   selector: 'app-bar-admin-laboratorios',
@@ -85,7 +86,8 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               coord: { lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud },
               info: { dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email },
               servicios: this.estructurarServicios(elemento.relatedServices).arr,
-              practicas: this.estructurarPracticas(elemento.relatedPractices),
+              practicas: this.estructurarPracticas(elemento.relatedPractices).arr,
+              eventos: this.estructurarPracticas(elemento.relatedPractices).arr2,
               equipos: this.estructurarEquipos(elemento.relatedEquipments),
               personal: this.estructurarPers(elemento.relatedPers),
               personalInactivo: this.estructurarPersIna(elemento.relatedPers),
@@ -188,7 +190,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   estructurarPracticas(item) {
 
     const arr = [];
-
+    const arr2 = [];
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
@@ -211,8 +213,16 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                   },
                   activo: practica.active
                 };
+                 // construye los eventos para el calendario de cada laboratorio
+                const evento = {
+
+                    title: this.ajustarTexto(practica.practiceName).nom1 ,
+                    start: prog['schedule'],
+                    color: 'green',
+                };
 
                 arr.push(pract);
+                arr2.push(evento);
               }
 
 
@@ -224,7 +234,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       }
     }
 
-    return arr;
+    return {arr, arr2};
   }
 
 
@@ -272,25 +282,6 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     return arr;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS

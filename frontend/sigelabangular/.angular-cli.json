@@ -26,6 +26,9 @@
         "../node_modules/font-awesome/css/font-awesome.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../node_modules/fullcalendar/dist/fullcalendar.min.css",
+        "../node_modules/fullcalendar-scheduler/dist/scheduler.css",
+        "../node_modules/qtip2/dist/jquery.qtip.css",
+
         "styles.css"
 
       ],
@@ -35,6 +38,9 @@
         "../node_modules/datatables.net/js/jquery.dataTables.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js",
         "../node_modules/leaflet/dist/leaflet.js",
+        "../node_modules/fullcalendar-scheduler/dist/scheduler.js",
+        "../node_modules/qtip2/dist/jquery.qtip.js",
+
         "../node_modules/fullcalendar/dist/fullcalendar.min.js"
       ],
       "environmentSource": "environments/environment.ts",
