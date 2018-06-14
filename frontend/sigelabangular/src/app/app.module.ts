@@ -1,6 +1,7 @@
 import { QuerysPrincipalService } from './modulos/mod-principal/services/querys-principal.service';
 import { ObserverPrincipalService } from './modulos/mod-principal/services/observer-principal.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 import { DataTablesModule } from 'angular-datatables';
 import { ObservablesService } from './shared/services/observables.service';
@@ -68,6 +69,10 @@ import { LoginService } from './modulos/login/login-service/login.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { QuerysAutenticadoService } from './modulos/mod-autenticado/services/querys-autenticado.service';
 import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/observer-autenticado.service';
+
+// librerias calendario
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -119,7 +124,8 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
     MatTableModule,
     MatInputModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+
 
   ],
   providers: [
@@ -130,7 +136,8 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
     QuerysAutenticadoService,
     ObserverAutenticadoService,
     LoginService,
-    AngularFireAuth
+    AngularFireAuth,
+    AngularFireStorage
   ],
   bootstrap: [AppComponent]
 })
