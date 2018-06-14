@@ -60,7 +60,7 @@ export class QuerysPrincipalService {
 
     for (let index = 0; index < data.length; index++) {
 
-      const elemento = data[index].payload.doc.data();;
+      const elemento = data[index].payload.doc.data();
 
       if(elemento.cfName) {
         this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
@@ -345,13 +345,13 @@ export class QuerysPrincipalService {
       if(data){
         for (let i = 0; i < data.length; i++) {
           const element = data[i].payload.doc.data();
-          
+
           variaciones.push({data: element, id: data[i].payload.doc.id});
         }
       } else {
         return variaciones;
       }
-      
+
     });
     return variaciones;
   }

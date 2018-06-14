@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import swal from 'sweetalert2';
-import { reject } from 'q';
+
+declare var $: any;
 
 @Component({
   selector: 'app-admin-laboratorios',
@@ -59,30 +60,44 @@ export class AdminLaboratoriosComponent implements OnInit {
 
 
     user:any;
-    datosLabsEstructurados = [];
+
     labestructurado:any;
 
     infolab = {
+      facilityAdmin:'',
       otros: {
         direccion: '',
         email: '',
         telefono: ''
-      }
-      
+      }    
     };
+
+   
+    checks = {};
+
+    cambios = [];
+
+    sugerencia:any;
+
+    encargado = '';
+
+    moduloNivel2 = false;
+    moduloPermiso = false;
+    rol: any;
+
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) {
   }
 
   ngOnInit() {
+    this.getUserId();
+    this.getRoles();
     this.obs.currentObject.subscribe(data => {
       console.log(data);
       if(data.length != 0){
          this.estructurarLab(data.uid).then(() => {
           this.itemsel = Observable.of(this.labestructurado);
-          this.infolab.otros.email = this.labestructurado.info.email;
-          this.infolab.otros.direccion = this.labestructurado.info.dir;
-          this.infolab.otros.telefono = this.labestructurado.info.tel;
+          this.limpiarData();
           const ambiente = this;
         
           swal({
@@ -184,6 +199,7 @@ export class AdminLaboratoriosComponent implements OnInit {
               escuela: laboratorio.knowledgeArea,
               inves: laboratorio.researchGroup,
               director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+              iddueno: laboratorio.facilityAdmin,
               coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
               info: {dir: laboratorio.otros.direccion, tel: laboratorio.otros.telefono, cel: '', email: laboratorio.otros.email},
               servicios: this.estructurarServicios(laboratorio.relatedServices).arr,
@@ -192,8 +208,11 @@ export class AdminLaboratoriosComponent implements OnInit {
               personal: this.estructurarPersonas(laboratorio.relatedPers),
               proyectos: this.estructurarProyectos(laboratorio.relatedProjects),
               solicitudes: this.estructurarServicios(laboratorio.relatedServices).arr2,
+              cambios: laboratorio.suggestedChanges,
               estado: estadoLab
             };
+
+            this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
             resolve();
 
@@ -209,56 +228,6 @@ export class AdminLaboratoriosComponent implements OnInit {
 
   }
 
-  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
-  estructurarDataLab(data: any) {
-
-    this.datosLabsEstructurados = [];
-
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index];
-
-      this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
-        const duenoLab = dueno.payload.data();
-        if (duenoLab && elemento.mainSpace) {
-
-          this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
-
-            const espacioLab = espacio.payload.data();
-              // convertir boolean a cadena de caracteres para estado del laboratorio
-            let estadoLab;
-              if (elemento.active === true) {
-              estadoLab = 'Activo';
-              } else if ( elemento.active === false ) {
-              estadoLab = 'Inactivo';
-              }
-            const laboratorio = {
-
-              nombre: this.ajustarTexto(elemento.cfName),
-              escuela: elemento.knowledgeArea,
-              inves: elemento.researchGroup,
-              director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-              coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
-              info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
-              servicios: this.estructurarServicios(elemento.relatedServices).arr,
-              practicas: this.estructurarPracticas(elemento.relatedPractices),
-              equipos: this.estructurarEquipos(elemento.relatedEquipments),
-              personal: this.estructurarPersonas(elemento.relatedPers),
-              proyectos: this.estructurarProyectos(elemento.relatedProjects),
-              solicitudes: this.estructurarServicios(elemento.relatedServices).arr2,
-              estado: estadoLab
-            };
-
-              this.datosLabsEstructurados.push(laboratorio);
-          });
-
-        }
-      });
-
-    }
-
-    // this.estructurarServicios(data[0].relatedServices);
-    return this.datosLabsEstructurados;
-  }
 
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
@@ -467,20 +436,23 @@ export class AdminLaboratoriosComponent implements OnInit {
         if (item[clave]) {
            this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers =  data.payload.data();
-
             if(pers){
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                const persona = {
-                  id: clave,
-                  nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
-                  activo: pers.active,
-                  email: dataper.payload.data().email,
-                  idpers: clave,
-                  iduser: pers.user
-                };
-  
-                arr.push(persona);
+                if(dataper.payload.data()){
+
+                  const persona = {
+                    id: clave,
+                    nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                    activo: pers.active,
+                    email: dataper.payload.data().email,
+                    idpers: clave,
+                    iduser: pers.user
+                  };
+    
+                  arr.push(persona);
+                }
+              
               });
             }
 
@@ -526,6 +498,9 @@ export class AdminLaboratoriosComponent implements OnInit {
     return arr;
   }
 
+
+
+
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
   variations(clave){
     const variaciones = [];
@@ -552,9 +527,13 @@ export class AdminLaboratoriosComponent implements OnInit {
     return this.afs.doc('user/' + userid).snapshotChanges();
   }
 
+  getPersona(persid) {
+    return  this.afs.doc('cfPers/'+persid).snapshotChanges();
+  }
+
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
   getLaboratorios(persid) {
-  return this.afs.collection<any>('cfFacil',
+    return this.afs.collection<any>('cfFacil',
       ref => ref.where('facilityAdmin', '==', persid)).snapshotChanges();
 
   }
@@ -577,10 +556,244 @@ export class AdminLaboratoriosComponent implements OnInit {
     return {nom1: name1, nom2: name2};
   }
 
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.rol = JSON.parse(localStorage.getItem('rol'));
+    
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
+
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+        if ((clave === 'moduloDosPermiso')) {
+          this.moduloPermiso = true;
+        }
+      }
+    }
+  }
+
 
   editar(){
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{console.log(data);});
-    this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+
+    if(this.moduloNivel2){
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se ejecuta la solicitud',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
+      this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
+        this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+       
+        swal.close();
+        swal({
+          type: 'success',
+          title: 'Sugerencia de cambios ingresada',
+          showConfirmButton: true
+        }).then(()=>{
+          $('#modal2').modal('hide');
+        });
+
+      });
+    } else {
+      let aux = {
+        suggestedChanges: this.labestructurado.cambios
+      };
+
+      if(this.estructurarDataCambios().length != 0){
+
+        swal({
+          title: 'Cargando un momento...',
+          text: 'espere mientras se ejecuta la solicitud',
+          onOpen: () => {
+            swal.showLoading();
+          }
+        });
+
+        this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
+          console.log(person.payload.data());
+          aux.suggestedChanges.push({
+            data: this.estructurarDataCambios(),
+            uid: this.user.uid,
+            nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
+            estado: 'desaprobado'
+          });    
+          
+          this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
+              swal.close();
+              swal({
+                type: 'success',
+                title: 'Sugerencia de cambios ingresada',
+                showConfirmButton: true
+              }).then(()=>{
+                $('#modal2').modal('hide');
+              });
+          });
+        });
+
+      } else {
+        swal({
+          type: 'error',
+          title: 'No ha sugerido ningun cambio',
+          showConfirmButton: true
+        });
+      }
+
+    }
+    
+  }
+
+  enviarSugerencia(){
+
+    let cont = 0;
+    const cambio = this.infolab;
+    for (const key in this.checks) {
+      if (this.checks.hasOwnProperty(key)) {
+        const element = this.checks[key];
+        if(element){
+          const aux = this.sugerencia.data[cont].llave.split('.');
+
+          if(aux.length != 2){          
+            cambio[aux[0]] = this.sugerencia.data[cont].info;          
+          } else {           
+            cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
+          }
+         
+        }
+        cont++;
+      }
+    }
+   
+   
+    cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.uid, 'aprobado');
+
+
+    console.log(cambio);
+
+    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
+      this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+    });
+
+
+    
+  }
+
+  cambiarEstadoSugerencia(uid, estado){
+    const cam = this.labestructurado.cambios;
+    for (let i = 0; i < cam.length; i++) {
+      const element = cam[i];
+
+      if(element.uid == uid){
+        element.estado = estado;
+        for (let j = 0; j < element.data.length; j++) {
+          const element2 = element.data[j];
+          
+          element2.cambio = this.checks['checkbox'+j];
+
+        }     
+      }    
+    }
+    return cam;
+  }
+
+  desaprobarSugerencia(){
+    const cambio = {};
+    cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.uid, 'desaprobado');
+
+    console.log(cambio);
+    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
+      this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+    });
+  }
+
+  estructurarDataCambios(){
+    const aux1 = ['iddueno','info.dir','info.email','info.tel'];
+    const aux2 = ['facilityAdmin', 'otros.direccion', 'otros.email', 'otros.telefono'];
+    const data = [];
+    let element;
+    let element2;
+
+    for (let i = 0; i < aux1.length; i++) {
+
+      element = aux1[i].split('.');  
+      element2 = aux2[i].split('.');
+     
+
+      if(element.length != 2){
+
+        if(this.labestructurado[element] != this.infolab[element2]){
+           data.push({llave: aux2[i], nombre: element2[0], info:this.infolab[element2], cambio: false});
+        }
+      } else {
+        
+        if(this.labestructurado[element[0]][element[1]] != this.infolab[element2[0]][element2[1]]) {
+          data.push({llave: aux2[i], nombre: element2[1], info: this.infolab[element2[0]][element2[1]], cambio: false});
+        }
+
+      }
+     
+      
+    }
+    console.log(data);
+    return data;
+  }
+
+  pendientes(item){
+   const arr = [];
+    for (let j = 0; j < item.length; j++) {
+      const element = item[j];
+
+      if(element.estado == 'pendiente'){
+        arr.push(element);
+      }
+      
+    }
+
+    return arr;
+  }
+
+  cambiarSugerencia(item){
+
+    if(item != 'inicial'){
+      this.sugerencia = this.buscarSugerencia(item);
+      this.estructurarChecks(this.sugerencia.data);
+    } else {
+      this.sugerencia = undefined;
+    }
+
+  }
+
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarChecks(item){
+    this.checks = {};
+    for (let i = 0; i < item.length; i++) {
+      //const element = condiciones[i];
+      this.checks["checkbox"+i] = false;
+    }
+  }
+
+  // METODO QUE BUSCA LA SUGERENCIA QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+  buscarSugerencia(item){
+    for (let i = 0; i < this.labestructurado.cambios.length; i++) {
+      const element = this.labestructurado.cambios[i];
+      if(element.uid == item){
+        return element;
+      }   
+    }
+  }
+
+
+  limpiarData(){
+    this.seleccionado = 'inicial';
+    this.sugerencia = undefined;
+    this.infolab.otros.email = this.labestructurado.info.email;
+    this.infolab.otros.direccion = this.labestructurado.info.dir;
+    this.infolab.otros.telefono = this.labestructurado.info.tel;
+    this.infolab.facilityAdmin = this.labestructurado.iddueno;
+
   }
 
 

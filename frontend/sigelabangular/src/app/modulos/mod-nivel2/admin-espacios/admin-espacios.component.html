@@ -42,29 +42,29 @@
                                 <!-- <div *ngIf="this.itemsel.espacios.length == 0">
                                     <h3>SELECCIONE UN LABORATORIO</h3>
                                 </div> -->
-                              <!--   <div class="example-container mat-elevation-z8" *ngIf="">
+                                 <div class="example-container mat-elevation-z8">
                                     <div class="example-header">
                                       <mat-form-field>
-                                        <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
+                                        <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Espacio">
                                       </mat-form-field>
                                     </div>
 
-                                    <mat-table #tableSpace #sortSpace="matSort" [dataSource]="dataSourcePersIn" matSort>
+                                    <mat-table #tableSpace #sortSpace="matSort" [dataSource]="dataSourceSpace" matSort>
 
 
                                       <ng-container matColumnDef="nombre">
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                        <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.capacity}} </mat-cell>
                                       </ng-container>
 
-                                      <mat-header-row *matHeaderRowDef="displayedColumnsPersIn"></mat-header-row>
-                                      <mat-row *matRowDef="let row; columns: displayedColumnsPersIn;" style="cursor: pointer;" (click)="cambiardata(row, 'inactivos')"
+                                      <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
+                                      <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardata(row, 'inactivos')"
                                         data-toggle="modal" data-target="#modal"></mat-row>
                                     </mat-table>
 
-                                    <mat-paginator #paginatorPersIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                    <mat-paginator #paginatorSpace="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                                     </mat-paginator>
-                                  </div> -->
+                                  </div>
 
                             </div>
                         </div>
@@ -93,7 +93,7 @@
 
                                             <div class="info-box-content">
                                               <span class="info-box-text">SENSOR 1</span>
-                                              <span class="info-box-number">{{this.espaciosel.s1}}</span>
+                                              <span class="info-box-number"></span>
                                             </div>
                                             <!-- /.info-box-content -->
                                           </div>
@@ -106,7 +106,7 @@
 
                                             <div class="info-box-content">
                                               <span class="info-box-text">SENSOR 2</span>
-                                              <span class="info-box-number">{{this.espaciosel.s2}}</span>
+                                              <span class="info-box-number"></span>
                                             </div>
                                             <!-- /.info-box-content -->
                                           </div>
@@ -123,7 +123,7 @@
 
                                             <div class="info-box-content">
                                               <span class="info-box-text">ACTIVIDAD <br>ACTUAL</span>
-                                              <span class="info-box-number">{{this.espaciosel.aa}}</span>
+                                              <span class="info-box-number"></span>
                                             </div>
                                             <!-- /.info-box-content -->
                                           </div>
@@ -136,7 +136,7 @@
 
                                             <div class="info-box-content">
                                               <span class="info-box-text">OCUPACION <br>ACTUAL</span>
-                                              <span class="info-box-number">{{this.espaciosel.oa}}</span>
+                                              <span class="info-box-number"></span>
                                             </div>
                                             <!-- /.info-box-content -->
                                           </div>
@@ -179,7 +179,7 @@
                                                               <div class="form-group row">
                                                                 <label for="facultad" class="col-sm-2 col-form-label">Facultad:</label>
                                                                 <div class="col-sm-10">
-                                                                  <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                                                  <input type="text" value="" class="form-control" id="facultad" placeholder="Password">
                                                                 </div>
                                                               </div>
                                                             </div>
@@ -190,7 +190,7 @@
                                                                 <div class="form-group row">
                                                                   <label for="facultad" class="col-sm-2 col-form-label">Campus:</label>
                                                                   <div class="col-sm-10">
-                                                                    <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                                                    <input type="text" value="" class="form-control" id="facultad" placeholder="Password">
                                                                   </div>
                                                                 </div>
                                                             </div>
@@ -200,15 +200,15 @@
                                                             <div class="form-group row">
                                                               <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                                                               <div class="col-sm-2">
-                                                                <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                                                <input type="text" value="" class="form-control" id="edificio">
                                                               </div>
                                                               <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                                                               <div class="col-sm-2">
-                                                                <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                                                <input type="text" value="" class="form-control" id="edificio">
                                                               </div>
                                                               <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                                                               <div class="col-sm-2">
-                                                                <input type="text" value="{{this.espaciosel.espacio}}" class="form-control" id="espac">
+                                                                <input type="text" value="" class="form-control" id="espac">
                                                               </div>
                                                             </div>
 
@@ -223,7 +223,7 @@
                                                             <div class="form-group row">
                                                               <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
                                                               <div class="col-sm-10">
-                                                                <input type="text" value="{{this.espaciosel.info.area}}" class="form-control" id="area" placeholder="Password">
+                                                                <input type="text" value="" class="form-control" id="area" placeholder="Password">
                                                               </div>
                                                             </div>
                                                         </div>
@@ -233,7 +233,7 @@
                                                             <div class="form-group row">
                                                               <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
                                                               <div class="col-sm-10">
-                                                                <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                                                <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                                               </div>
                                                             </div>
                                                         </div>
@@ -243,7 +243,7 @@
                                                           <div class="form-group row">
                                                             <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
                                                             <div class="col-sm-10">
-                                                              <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                                              <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                                             </div>
                                                           </div>
                                                         </div>
@@ -253,7 +253,7 @@
                                                             <div class="form-group row">
                                                               <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
                                                               <div class="col-sm-10">
-                                                                <input type="text" value="{{this.espaciosel.info.capacidad}}" class="form-control" id="arealibre" placeholder="Password">
+                                                                <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                                               </div>
                                                             </div>
                                                         </div>
@@ -263,7 +263,7 @@
                                                           <div class="form-group row">
                                                             <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
                                                             <div class="col-sm-10">
-                                                              <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                                              <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                                             </div>
                                                           </div>
                                                         </div>
@@ -274,7 +274,7 @@
                                                           <div class="form-group row">
                                                             <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
                                                             <div class="col-sm-7">
-                                                              <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="indice" placeholder="Password">
+                                                              <input type="text" value="" class="form-control" id="indice" placeholder="Password">
                                                             </div>
                                                           </div>
                                                         </div>
@@ -321,7 +321,7 @@
                                 </div>
 
                                 <div class="box-body">
-                                    <table datatable [dtOptions]="dtOptions"  class=" table row-border hover table-condensed" [dtTrigger]= "dtTrigger1">
+                                    <table datatable [dtOptions]=""  class=" table row-border hover table-condensed" [dtTrigger]= "">
                                         <thead>
                                             <tr>
                                                 <th>Uso</th>
@@ -331,18 +331,18 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr style="cursor:pointer" *ngFor="let item of this.indicadores">
+                                            <tr style="cursor:pointer" >
                                                 <td>
-                                                    {{item.p1}}
+
                                                 </td>
                                                 <td>
-                                                    {{item.p2}}
+
                                                 </td>
                                                 <td>
-                                                    {{item.p3}}
+
                                                 </td>
                                                 <td>
-                                                    {{item.p4}}
+
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -388,7 +388,7 @@
                                       <div class="form-group row">
                                         <label for="facultad" class="col-sm-2 col-form-label">Facultad:</label>
                                         <div class="col-sm-10">
-                                          <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                          <input type="text" value="" class="form-control" id="facultad" placeholder="Password">
                                         </div>
                                       </div>
                                     </div>
@@ -399,7 +399,7 @@
                                         <div class="form-group row">
                                           <label for="facultad" class="col-sm-2 col-form-label">Campus:</label>
                                           <div class="col-sm-10">
-                                            <input type="text" value="{{this.espaciosel.info.facultad}}" class="form-control" id="facultad" placeholder="Password">
+                                            <input type="text" value="" class="form-control" id="facultad" placeholder="Password">
                                           </div>
                                         </div>
                                     </div>
@@ -409,15 +409,15 @@
                                     <div class="form-group row">
                                       <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                                       <div class="col-sm-2">
-                                        <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                        <input type="text" value="" class="form-control" id="edificio">
                                       </div>
                                       <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                                       <div class="col-sm-2">
-                                        <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="edificio">
+                                        <input type="text" value="" class="form-control" id="edificio">
                                       </div>
                                       <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                                       <div class="col-sm-2">
-                                        <input type="text" value="{{this.espaciosel.espacio}}" class="form-control" id="espac">
+                                        <input type="text" value="" class="form-control" id="espac">
                                       </div>
                                     </div>
 
@@ -432,7 +432,7 @@
                                     <div class="form-group row">
                                       <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
                                       <div class="col-sm-10">
-                                        <input type="text" value="{{this.espaciosel.info.area}}" class="form-control" id="area" placeholder="Password">
+                                        <input type="text" value="" class="form-control" id="area" placeholder="Password">
                                       </div>
                                     </div>
                                 </div>
@@ -442,7 +442,7 @@
                                     <div class="form-group row">
                                       <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
                                       <div class="col-sm-10">
-                                        <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                        <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                       </div>
                                     </div>
                                 </div>
@@ -452,7 +452,7 @@
                                   <div class="form-group row">
                                     <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
                                     <div class="col-sm-10">
-                                      <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                      <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                     </div>
                                   </div>
                                 </div>
@@ -462,7 +462,7 @@
                                     <div class="form-group row">
                                       <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
                                       <div class="col-sm-10">
-                                        <input type="text" value="{{this.espaciosel.info.capacidad}}" class="form-control" id="arealibre" placeholder="Password">
+                                        <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                       </div>
                                     </div>
                                 </div>
@@ -472,7 +472,7 @@
                                   <div class="form-group row">
                                     <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
                                     <div class="col-sm-10">
-                                      <input type="text" value="{{this.espaciosel.info.arealibre}}" class="form-control" id="arealibre" placeholder="Password">
+                                      <input type="text" value="" class="form-control" id="arealibre" placeholder="Password">
                                     </div>
                                   </div>
                                 </div>
@@ -483,7 +483,7 @@
                                   <div class="form-group row">
                                     <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
                                     <div class="col-sm-7">
-                                      <input type="text" value="{{this.espaciosel.edificio}}" class="form-control" id="indice" placeholder="Password">
+                                      <input type="text" value="" class="form-control" id="indice" placeholder="Password">
                                     </div>
                                   </div>
                                 </div>

@@ -120,7 +120,7 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <form id="form-work" class="" name="form-work" action="#">
+                    <form *ngIf="itemsel" id="form-work" class="" name="form-work" action="#">
                       <fieldset>
                         <div class="form-group">
                           <div class="col-md-12">
@@ -163,7 +163,7 @@
                         </div>
                         <div class="form-group">
                           <div class="col-md-12" style="margin-left: 70%; max-width: 120px;">
-                            <button class="btn2 btn-danger btn-lg btn-block danger" type="button" data-toggle="modal" data-target="#modal2">Editar</button>
+                            <button class="btn2 btn-danger btn-lg btn-block danger" type="button" data-toggle="modal" (click)="limpiarData()" data-target="#modal2">Editar</button>
                           </div>
                         </div>
 
@@ -800,71 +800,151 @@
 
 
 <div class="modal fade" id="modal2" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div [ngClass]="{'modal-dialog':true, 'modal-md':moduloPermiso, 'modal-lg':moduloNivel2}">
 
     <!-- Modal content-->
     <div class="modal-content">
-
       <div class="modal-body">
-        <div class="box box-danger">
-          <div class="box-header text-center">
-            <i class="fa fa-address-card-o"></i>
+          <div class="box box-danger">
+              <div class="box-header text-center">
+                <i class="fa fa-address-card-o"></i>
+    
+                <h3 class="box-title">Panel para editar informacion</h3>
+              </div>
+     
+              <div class="box-body">
 
-            <h3 class="box-title">Editar Informacion</h3>
+                 <div [ngClass]="{'col-md-6':moduloNivel2, 'col-md-12':moduloPermiso}">           
+                  <div [ngClass]="{'box box-danger':moduloNivel2, '':moduloPermiso}" >
+                      <div *ngIf="moduloNivel2" class="box-header text-center">
+                        <i class="fa fa-address-card-o"></i>
+            
+                        <h3 class="box-title">Editar Informacion Actual</h3>
+                      </div>
+                     
+                      <div class="box-body">
+                        <form id="form-work2" class="" name="form-work2" action="#">
+                            <fieldset>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="escuelaedit">
+                                    <strong>Escuela:</strong>
+                                  </label>
+                                  <input id="escuelaedit"  name="escuelaedit" class="form-control" type="text">
+                                </div>
+                              </div>
+                              <div *ngIf="labestructurado" class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="espacioedit"><strong>Encargado:</strong></label>
+                                  <select class="form-control" id="espacioedit" name="espacioedit" [(ngModel)]="this.infolab.facilityAdmin">
+                                    <option *ngFor="let item of this.labestructurado.personal" value="{{item.id}}" >{{item.nombre}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="emailedit">
+                                    <strong>Email:</strong>
+                                  </label>
+                                  <input id="emailedit" [(ngModel)]="this.infolab.otros.email" name="emailedit" class="form-control" type="text">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="teledit">
+                                    <strong>Telefono:</strong>
+                                  </label>
+                                  <input id="teledit" [(ngModel)]="this.infolab.otros.telefono" name="teledit" class="form-control" type="text">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="diredit">
+                                    <strong>Direccion:</strong>
+                                  </label>
+                                  <input id="diredit" [(ngModel)]="this.infolab.otros.direccion" name="diredit" class="form-control" type="text">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <button (click)="editar()" class="btn2 btn-danger btn-lg btn-block danger" type="button">Guardar Cambios</button>
+                                </div>
+                              </div>
+                            </fieldset>
+                        </form>
+                      </div>
+                  </div>
+                </div>
+               
+
+                <div *ngIf="moduloNivel2" class="col-md-6">
+                  <div class="box box-danger">
+                      <div class="box-header text-center">
+                        <i class="fa fa-address-card-o"></i>
+            
+                        <h3 class="box-title">Cambios Propuestos</h3>
+                      </div>
+                      <div class="box-body">
+                        <form action="">
+                          <div *ngIf="labestructurado" class="form-group">
+                            <div class="col-md-12">
+                              <label class="control-label" for="espacioedit"><strong>Seleccione:</strong></label>
+                              <select class="form-control" id="espacioedit" name="espacioedit" [(ngModel)]="seleccionado" (change)="cambiarSugerencia($event.target.value)">
+                                <option value="inicial">Seleccione una Sugerencia</option>
+                                <option *ngFor="let item of this.cambios" value="{{item.uid}}" >{{item.nombre}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div *ngIf="this.sugerencia" class="row" style="margin-top: 20px;">
+                          <div class="col-md-12">
+                              <div class="box box-danger">
+                                  <div class="box-header text-center">
+                                    <i class="fa fa-address-card-o"></i>
+                        
+                                    <h3 class="box-title">Cambios</h3>
+                                  </div>
+                                  <div class="box-body">
+                                    <form action="">
+                                        <fieldset>
+                                            <div class="form-group">
+                                              <div *ngFor="let item of this.sugerencia.data; let i = index" class="col-md-12">
+                                                <label class="control-label" for="espacio">
+                                                  <strong>{{item.nombre}}:</strong> {{item.info}} 
+                                                  <input name="{{'checkbox' + i}}" [(ngModel)]="checks['checkbox'+ i]" type="checkbox">
+                                                </label>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                              <div class="col-md-6">
+                                                <button (click)="enviarSugerencia()" class="btn2 btn-success btn-lg btn-block success" type="button">Aprobar</button>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                              <div class="col-md-6">
+                                                <button (click)="desaprobarSugerencia()" class="btn2 btn-danger btn-lg btn-block danger" type="button">Desaprobar</button>
+                                              </div>
+                                            </div>
+                                          
+                                          </fieldset>
+                                    </form>
+                                  </div>
+                              </div>
+                          </div>
+  
+                         
+                      </div>
+                  </div>
+                </div> 
+
+                
+              </div>
           </div>
-          <!-- /.box-header -->
-          <div class="box-body">
-            <form id="form-work2" class="" name="form-work2" action="#">
-              <fieldset>
-                <div class="form-group">
-                  <div class="col-md-6">
-                    <label class="control-label" for="escuelaedit">
-                      <strong>Escuela:</strong>
-                    </label>
-                    <input id="escuelaedit"  name="escuelaedit" class="form-control" type="text">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-6">
-                    <label class="control-label" for="espacioedit">
-                      <strong>Encargado:</strong>
-                    </label>
-                    <input id="espacioedit" name="espacioedit" class="form-control" type="text">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-6">
-                    <label class="control-label" for="emailedit">
-                      <strong>Email:</strong>
-                    </label>
-                    <input id="emailedit" [(ngModel)]="this.infolab.otros.email" name="emailedit" class="form-control" type="text">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-6">
-                    <label class="control-label" for="teledit">
-                      <strong>Telefono:</strong>
-                    </label>
-                    <input id="teledit" [(ngModel)]="this.infolab.otros.telefono" name="teledit" class="form-control" type="text">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-6">
-                    <label class="control-label" for="diredit">
-                      <strong>Direccion:</strong>
-                    </label>
-                    <input id="diredit" [(ngModel)]="this.infolab.otros.direccion" name="diredit" class="form-control" type="text">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                   <button (click)="editar()">Enviar</button>
-                  </div>
-                </div>
-              </fieldset>
-            </form>
-          </div>
-        </div>
+
+
+        
       </div>
     </div>
   </div>

@@ -19,17 +19,38 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   datosLabsEstructurados = [];
 
   user: any;
+  rol: any;
+
+  moduloNivel2 = false;
+  moduloPermiso = false;
 
   constructor(private obs: ObservablesService, private route: Router, private afs: AngularFirestore) { }
 
   ngOnInit() {
     if (localStorage.getItem('usuario')) {
       this.getUserId();
+      this.getRoles();
       this.getPersonId(this.user.uid).subscribe(person => {
         this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
           this.laboratorios2 = this.estructuraIdLab(labs);
 
         });
+        if(this.moduloNivel2){
+          this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
+            this.laboratorios2 = this.estructuraIdLab(labs);
+  
+          });
+        } 
+        if(this.moduloPermiso){
+          this.getPersona(person.payload.data().cfPers).subscribe(pers => {
+            this.getLaboratoriosPermiso(pers.payload.data().cfFacil).subscribe(labs=>{
+              this.laboratorios2 = this.estructuraIdLabPermisos(labs);
+            })
+            
+            console.log(this.laboratorios2);
+          });
+        }
+
 
       });
 
@@ -52,14 +73,41 @@ export class BarAdminLaboratoriosComponent implements OnInit {
         this.datosLabsEstructurados.push(laboratorio);
 
 
-
     }
     return this.datosLabsEstructurados;
+  }
+
+  estructuraIdLabPermisos(data: any){
+    let laboratorio = [];
+    console.log(data.payload.data());
+    laboratorio = [{
+      nombre: this.ajustarTexto(data.payload.data().cfName),
+      uid: data.payload.id
+    }];
+    return laboratorio;;
   }
 
   getUserId() {
     this.user = JSON.parse(localStorage.getItem('usuario'));
   }
+
+  getRoles() {
+    this.rol = JSON.parse(localStorage.getItem('rol'));
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
+
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+ 
+        }
+        if ((clave === 'moduloDosPermiso')) {
+          this.moduloPermiso = true;
+
+        }
+      }
+    }
+  }
+
 
   getPersonId(userid) {
     return this.afs.doc('user/' + userid).snapshotChanges();
@@ -72,10 +120,20 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     return this.labsColection.snapshotChanges();
   }
 
+  getPersona(persid) {
+    return  this.afs.doc('cfPers/'+persid).snapshotChanges();
+  }
+
+  // METODO QUE TRAE LA COLECCION DE LOS LABORATORIOS DE LOS CUALES TIENE PERMISOS
+  getLaboratoriosPermiso(labid) {
+    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
+  }
+
 
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
+    console.log(nombre);
     const nombreArr = nombre.split(' ');
     let name1 = '';
     let name2 = '';
@@ -87,7 +145,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       }
     }
 
-    return {nom1: name1, nom2: name2};
+    return { nom1: name1, nom2: name2 };
   }
 
   enviaritem(item) {

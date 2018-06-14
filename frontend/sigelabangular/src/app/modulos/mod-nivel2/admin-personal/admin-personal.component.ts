@@ -17,10 +17,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
+  apellido;
+  rol;
   email;
   estado;
   idu;
   idp;
+  idlab;
   activos = [];
   inactivos = [];
   fecha = new Date();
@@ -60,14 +63,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre'];
+  displayedColumnsPers = ['nombre', 'email', 'tipo' ];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
   @ViewChild('sortPers') sortPers: MatSort;
 
   // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre'];
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo'];
   dataSourcePersIn = new MatTableDataSource([]);
 
   @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
@@ -86,11 +89,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit() {
     this.obs.currentObject.subscribe(data => {
+
       if (data.personal) {
-        console.log(data);
+        this.idlab = data.id_lab;
         this.itemsel = Observable.of(data);
 
-        data.personal.forEach(element => {
+  /*       data.personal.forEach(element => {
 
           if (element.activo === true) {
 
@@ -106,18 +110,17 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             }
           }
 
-        });
+        }); */
 
 
-        console.log('entro');
-        this.dataSourcePers.data = this.activos;
-        this.dataSourcePersIn.data = this.inactivos;
+        this.dataSourcePers.data = data.personal;
+        this.dataSourcePersIn.data = data.personalInactivo;
 
 
       }
 
 
-      console.log('datos personal', data);
+      console.log('datos del observer', data);
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
@@ -170,6 +173,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.nombre = item.nombre;
     this.estado = item.activo;
     this.email = item.email;
+    this.apellido = item.apellidos;
+    this.rol = item.tipo;
     this.idp = item.idpers;
     this.idu = item.iduser;
 
@@ -180,13 +185,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  actualizarPers(idU, idP, nombre?, email?, estado?) {
-    // cierra el model
+  actualizarPers() {
+    // cierra el model this.idu, this.idp,this.nombre, this.email,  this.estado
     $('#modal').modal('hide');
 
     let state: boolean;
 
-    if (estado === 'false') {
+    if ( this.estado === 'false') {
 
       state = false;
 
@@ -197,27 +202,29 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /* validar  */
-    console.log(idU, idP, nombre, email, estado);
+   //  console.log(idU, idP, nombre, email, estado);
 
     /* objeto para persona  */
     const pers = {
       active: state,
-      cfFirstNames : nombre
+      cfFirstNames : this.nombre,
+      cfFamilyNames: this.apellido
     };
     /* objeto para usuario */
     const user = {
-      estado
+      estado : state
     };
 
     /* metodo firebase para subir una persona actualizada */
-    this.afs.collection('cfPers/').doc(idP).update(pers).then(
+    this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
        () => {
         swal({
           type: 'success',
           title: 'usuario actualizado correctamente',
           showConfirmButton: true
         });
-        this.setArray();
+
+        /* elimina de array  inactivos <-> activos */
        }
 
     );
@@ -234,7 +241,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   setPers() {
 
     const pers = this.person;
-
+    pers.cfFacil = this.idlab;
     console.log(pers);
     this.afs.collection('cfPers').add(pers)
       .then(ok => {
@@ -258,6 +265,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
    //  agrega un nuevo usuario a firestore
    this.afs.collection('user').add(user).then( ok => {
        // actualiza el campo idusuario en el document persona
+     this.updateFaciliti(  idP );
      this.updatePers( ok.id, idP  );
      }) ;
 
@@ -279,23 +287,26 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   updatePers( idU, pathP ) {
 
-    this.afs.collection('cfPers' ).doc(pathP).update( { user: idU  } );
+    this.afs.collection('cfPers' ).doc(pathP).update( { user: idU  } ) ;
 
   }
 
   /* actualizar el laboratorio con el nuevo id del document pers */
 
-  updateFaciliti( idP, pathF ) {
+  updateFaciliti( idP ) {
+
+    console.log('entrooooooo');
 
     const  relatedPers = this.register.setBoolean(  idP );
 
     console.log(relatedPers);
-    this.afs.collection('cfFacil' ).doc(pathF).set({   relatedPers   }  , { merge: true });
+    console.log('revisar este lab', this.idlab);
+    this.afs.collection('cfFacil' ).doc(this.idlab).set({   relatedPers   }  , { merge: true });
 
   }
 
   /* metodo para mover personal inactivo a personal activo */
-  setArray() {
+/*   setArray() {
 
     const activo = this.activos;
     const inactivo = this.inactivos;
@@ -332,7 +343,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     }
 
-  }
+  } */
 }
 
 
