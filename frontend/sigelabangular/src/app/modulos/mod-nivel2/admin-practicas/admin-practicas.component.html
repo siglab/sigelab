@@ -1,453 +1,568 @@
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-         Laboratorios
-      </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i> Home</a>
-        </li>
-        <li class="active">Dashboard laboratorios</li>
-      </ol>
-    </section>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Laboratorios
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <a href="#">
+          <i class="fa fa-dashboard"></i> Home</a>
+      </li>
+      <li class="active">Dashboard laboratorios</li>
+    </ol>
+  </section>
 
-    <!-- Main content -->
-    <section class="content" *ngIf="itemsel | async; let itemsel">
+  <!-- Main content -->
+  <section class="content" *ngIf="itemsel | async; let itemsel">
 
-      <!-- Componente central de busqueda -->
+    <!-- Componente central de busqueda -->
 
-      <div class="row">
-        <div class="col-md-12 col-lg-12">
-          <div class="box box-danger">
-            <div class="box-header" >
-              <div class="form-group">
-                <div class="col-md-12">
-                    <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#myModal2" >Nuevo practica, prueba y/o ensayo</button>
-                </div>
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger">
+          <div class="box-header">
+            <div class="form-group">
+              <div class="col-md-12">
+                <button style="float: right;" class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal2">Nuevo practica, prueba y/o ensayo</button>
               </div>
             </div>
+          </div>
 
-            <div class="box-body">
-
-              <div class="col-md-6">
+          <div class="box-body">
+            <ul class="nav nav-tabs">
+              <li>
+                <a class="tablas" data-toggle="tab" href="#home">
+                  Activos</a>
+              </li>
+              <li>
+                <a class="tablas" data-toggle="tab" href="#menu1">
+                  Inactivos</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div id="home" class="tab-pane fade in active">
+                <div class="col-md-12" style="margin-top:20px;">
                   <div class="box box-danger">
                     <div class="box-header">
-                      <i class="fa fa-map"></i>
+                      <i class="fa fa-book"></i>
 
                       <h3 class="box-title">PRACTICAS ACTIVAS SEMESTRE</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <div class="box-body divScroll">
-                          <div *ngIf="this.itemsel.practicas.length == 0">
-                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                            </div>
-                          <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
-                              <table class=" table row-border hover table-condensed">
-                                  <thead>
-                                      <tr>
-                                          <th>Nombre</th>
-                                          <th>Materia</th>
-                                      </tr>
-                                      </thead>
-                                      <tbody>
-                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas" (click)="equipoSeleccionado(item, false)" data-toggle="modal" data-target="#myModal3">
-                                          <td>
-                                              {{item.nombre}}
-                                          </td>
-                                          <td>
-                                              {{item.nombre}}
-                                          </td>
-                                      </tr>
-                                      </tbody>
 
-                              </table>
-
-                          </div>
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePrac.data.length > 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Practicas">
+                          </mat-form-field>
                         </div>
-                    </div>
-                  <!-- /.box-body -->
-                  </div>
 
-              </div>
-
-              <div class="col-md-6">
-                  <div class="box box-danger">
-                    <div class="box-header">
-                      <i class="fa fa-map"></i>
-
-                      <h3 class="box-title">PRACTICAS INACTIVAS</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="box-body divScroll">
-                          <div *ngIf="this.itemsel.practicas.length == 0">
-                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS3</h3>
-                            </div>
-                          <div *ngIf="this.itemsel.practicas.length != 0" class="list-group">
-                              <table class=" table row-border hover table-condensed">
-                                  <thead>
-                                      <tr>
-                                          <th>Nombre</th>
-                                          <th>Materia</th>
-                                          <th>Ultimo semestre</th>
-                                      </tr>
-                                      </thead>
-                                      <tbody>
-                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.practicas" (click)="equipoSeleccionado(item , true)" data-toggle="modal" data-target="#myModal3">
-                                          <td>
-                                              {{item.nombre}}
-                                          </td>
-                                          <td>
-                                              {{item.nombre}}
-                                          </td>
-                                          <td>
-                                              {{item.nombre}}
-                                          </td>
-                                      </tr>
-                                      </tbody>
-
-                              </table>
-                          </div>
-                        </div>
-                    </div>
-                  <!-- /.box-body -->
-                  </div>
-
-              </div>
+                        <mat-table #tablePrac #sortPrac="matSort" [dataSource]="dataSourcePrac" matSort>
 
 
-            </div>
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
 
-          </div>
-        </div>
-      </div>
+                          <ng-container matColumnDef="programacion.semestre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Semestre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.semestre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="programacion.estudiantes">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Numero estudiantes </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.estudiantes}} </mat-cell>
+                          </ng-container>
 
 
 
-    </section>
+                          <ng-container matColumnDef="activo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> estado </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.activo}} </mat-cell>
+                          </ng-container>
 
 
 
-  </div>
-
-  <!-- MODAL PARA NUEVAS PRACTICAS -->
-  <section class="content" *ngIf="itemsel | async; let itemsel">
-    <div class="modal fade" id="myModal2" role="dialog">
-      <div class="modal-dialog modal-lg">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-
-          <div class="modal-body">
-              <div class="box box-danger">
-                  <div class="box-header text-center">
-                    <i class="fa fa-address-card-o"></i>
-
-                    <h1 class="box-title">Nueva Practica</h1>
-
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                      <form id="form-work2" class="" name="form-work2" action="#">
-                          <fieldset>
-                              <div class="form-group">
-                                  <div class="form-group">
-                                      <div class="col-md-12">
-                                        <div class="form-group row">
-                                          <label for="nompru" class="col-sm-4 col-form-label">Nombre de la Practica:</label>
-                                          <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="nompru" placeholder="Ingrese nombre de la practica">
-                                          </div>
-                                        </div>
-                                      </div>
-                                  </div>
-
-                                  <div class="form-group">
-                                      <div class="col-md-12">
-                                          <div class="form-group row">
-                                            <label for="codmat" class="col-sm-4 col-form-label">Codigo de materia:</label>
-                                            <div class="col-sm-8">
-                                              <input type="text" class="form-control" id="codmat" placeholder="Ingrese codigo de materia">
-                                            </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-
-                          </fieldset>
-                      </form>
-
-                      <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                          <div class="box box-danger">
-                            <div class="box-header">
-
-                            </div>
-
-                            <div class="box-body">
-
-                              <div class="col-md-6">
-                                  <div class="box box-danger">
-                                    <div class="box-header">
-                                      <i class="fa fa-map"></i>
-
-                                      <h3 class="box-title">EQUIPOS VINCULADOS</h3>
-                                    </div>
-                                    <!-- /.box-header -->
-                                    <div class="box-body">
-                                        <div class="box-body divScroll">
-                                          <div *ngIf="this.itemsel.equipos.length == 0">
-                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                            </div>
-                                          <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                              <table class=" table row-border hover table-condensed">
-                                                  <thead>
-                                                      <tr>
-                                                          <th>Nombre de equipos</th>
-
-                                                      </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
-                                                          <td>
-                                                              {{item.nombre}}
-                                                          </td>
-
-                                                      </tr>
-                                                      </tbody>
-
-                                              </table>
-
-                                          </div>
-                                          <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >vincular equipo</button>
-                                        </div>
-                                    </div>
-                                  <!-- /.box-body -->
-                                  </div>
-
-                              </div>
-
-                              <div class="col-md-6">
-                                  <div class="box box-danger">
-                                    <div class="box-header">
-                                      <i class="fa fa-map"></i>
-
-                                      <h3 class="box-title">ESPACIOS VINCULADOS</h3>
-                                    </div>
-                                    <!-- /.box-header -->
-                                    <div class="box-body">
-                                        <div class="box-body divScroll">
-                                          <div *ngIf="this.itemsel.espacios.length == 0">
-                                            <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS</h3>
-                                          </div>
-                                          <div *ngIf="this.itemsel.espacios.length != 0" class="list-group">
-                                              <table class=" table row-border hover table-condensed">
-                                                  <thead>
-                                                      <tr>
-                                                          <th>Edificio</th>
-                                                          <th>Planta</th>
-                                                          <th>Espacio</th>
-                                                      </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.espacios">
-                                                          <td>
-                                                              {{item.edificio}}
-                                                          </td>
-                                                          <td>
-                                                              {{item.planta}}
-                                                          </td>
-                                                          <td>
-                                                              {{item.espacio}}
-                                                          </td>
-                                                      </tr>
-                                                      </tbody>
-
-                                              </table>
-                                          </div>
-                                          <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >vincular espacio</button>
-                                        </div>
-                                    </div>
-                                  <!-- /.box-body -->
-                                  </div>
-
-                              </div>
 
 
-                            </div>
+                          <mat-header-row *matHeaderRowDef="displayedColumnsPrac"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
+                            data-target="#myModal"></mat-row>
+                        </mat-table>
 
-                          </div>
-                        </div>
+                        <mat-paginator #paginatorPrac="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        </mat-paginator>
                       </div>
 
-                      <div class="row">
-                        <div class="col-md-4">
-                          <input class="form-control" type="date">
-                        </div>
-                        <div class="col-md-8">
-                            <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Guardar</button>
-                          </div>
-                      </div>
+
+                    </div>
+                    <!-- /.box-body -->
                   </div>
 
                 </div>
-          </div>
-        </div>
+              </div>
 
+              <div id="menu1" class="tab-pane fade in active">
+                <div class="col-md-12" style="margin-top:20px;">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-book"></i>
+
+                      <h3 class="box-title">PRACTICAS INACTIVAS SEMESTRE</h3>
+                    </div>
+
+                    <div *ngIf="dataSourcePracIn.data.length == 0">
+                      <h3>El laboratorio no cuenta con practicas inactivas </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracIn.data.length > 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Practicas">
+                          </mat-form-field>
+                        </div>
+
+                        <mat-table #tablePrac #sortPracIn="matSort" [dataSource]="dataSourcePracIn" matSort>
+
+
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="programacion.semestre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Semestre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.semestre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="programacion.estudiantes">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Numero estudiantes </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.estudiantes}} </mat-cell>
+                          </ng-container>
+
+
+
+                          <ng-container matColumnDef="activo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> estado </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.activo}} </mat-cell>
+                          </ng-container>
+
+
+
+
+
+                          <mat-header-row *matHeaderRowDef="displayedColumnsPracIn"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
+                            data-target="#myModal"></mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        </mat-paginator>
+                      </div>
+
+
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="col-md-6">
+              <div class="box box-danger">
+                <div class="box-header">
+                  <i class="fa fa-map"></i>
+
+                  <h3 class="box-title">PRACTICAS INACTIVAS</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="box-body divScroll">
+                    <div *ngIf="this.itemsel.practicas.length == 0">
+                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS3</h3>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
       </div>
     </div>
+
+
+
   </section>
 
-<!-- MODAL PARA VER INFORMACION DE PRACTICAS -->
-<div class="modal fade" id="myModal3" role="dialog">
+
+
+</div>
+
+<!-- MODAL PARA NUEVAS PRACTICAS -->
+<section class="content" *ngIf="itemsel | async; let itemsel">
+  <div class="modal fade" id="myModal2" role="dialog">
     <div class="modal-dialog modal-lg">
 
       <!-- Modal content-->
       <div class="modal-content">
 
         <div class="modal-body">
-            <div class="box box-danger">
-                <div class="box-header text-center">
-                  <i class="fa fa-address-card-o"></i>
+          <div class="box box-danger">
+            <div class="box-header text-center">
+              <i class="fa fa-address-card-o"></i>
 
-                  <h1 class="box-title">PRACTICA SELECCIONADA</h1>
+              <h1 class="box-title">Nueva Practica</h1>
 
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body" *ngIf="itemsel | async; let itemsel">
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <form id="form-work2" class="" name="form-work2" action="#">
+                <fieldset>
+                  <div class="form-group">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="nompru" class="col-sm-4 col-form-label">Nombre de la Practica:</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="nompru" placeholder="Ingrese nombre de la practica">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="codmat" class="col-sm-4 col-form-label">Codigo de materia:</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="codmat" placeholder="Ingrese codigo de materia">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                      <div class="box box-danger">
+                </fieldset>
+              </form>
+
+              <div class="row">
+                <div class="col-md-12 col-lg-12">
+                  <div class="box box-danger">
+                    <div class="box-header">
+
+                    </div>
+
+                    <div class="box-body">
+
+                      <div class="col-md-6">
+                        <div class="box box-danger">
                           <div class="box-header">
+                            <i class="fa fa-map"></i>
 
-                            <h1 class="box-title">Informacion de la Practica</h1>
-
+                            <h3 class="box-title">EQUIPOS VINCULADOS</h3>
                           </div>
                           <!-- /.box-header -->
                           <div class="box-body">
-
-                            <form  id="form-work" class="" name="form-work" action="#">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ccpas"><strong>Nombre Practica: {{this.practica.nombre}}</strong></label>
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="nac"><strong>Facultad: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciuor"><strong>Campus: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciudes"><strong>Edificio: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciudes"><strong>Planta: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciudes"><strong>Espacio: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciudes"><strong>Materia: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciudes"><strong>Estado: </strong></label>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="this.interfaz" class="form-group">
-                                        <div class="col-md-12">
-                                          <label class="control-label" for="ciudes"><strong>Ultimo semestre dictada: </strong></label>
-                                        </div>
-                                    </div>
-
-                                </fieldset>
-                            </form>
-
-                            <div *ngIf="!this.interfaz" class="form-group text-center" style="margin-top: 20px;">
-                                <div class="col-md-12">
-                                    <button class="btn2 btn-danger btn-lg danger" type="button" >Ver Programacion</button>
-                                </div>
-                            </div>
-
-                          </div>
-
-                        </div>
-                  </div>
-
-
-                  <div class="col-md-6" >
-                      <div class="box box-danger">
-                        <div class="box-header">
-                          <i class="fa fa-map"></i>
-
-                          <h3 class="box-title">EQUIPOS VINCULADOS</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
                             <div class="box-body divScroll">
                               <div *ngIf="this.itemsel.equipos.length == 0">
-                                  <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                </div>
-                              <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                  <table class=" table row-border hover table-condensed">
-                                      <thead>
-                                          <tr>
-                                              <th>Nombre de equipos</th>
+                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                              </div>
+                              <div *ngIf="this.itemsel.equipos.length != 0" >
+                                <table class=" table row-border hover table-condensed">
+                                  <thead>
+                                    <tr>
+                                      <th>Nombre de equipos</th>
 
-                                          </tr>
-                                          </thead>
-                                          <tbody>
-                                          <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
-                                              <td>
-                                                  {{item.nombre}}
-                                              </td>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
+                                      <td>
+                                        {{item.nombre}}
+                                      </td>
 
-                                          </tr>
-                                          </tbody>
+                                    </tr>
+                                  </tbody>
 
-                                  </table>
+                                </table>
 
                               </div>
-
+                              <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">vincular equipo</button>
                             </div>
-                        </div>
-                      <!-- /.box-body -->
-                      </div>
-
-
-                      <div *ngIf="this.interfaz" class="form-group text-center" style="margin-top: 20px;">
-                          <div class="col-md-12">
-                              <button class="btn2 btn-danger btn-lg danger" type="button" >Reactivar</button>
                           </div>
+                          <!-- /.box-body -->
+                        </div>
+
                       </div>
+
+                      <div class="col-md-6">
+                        <div class="box box-danger">
+                          <div class="box-header">
+                            <i class="fa fa-map"></i>
+
+                            <h3 class="box-title">ESPACIOS VINCULADOS</h3>
+                          </div>
+                          <!-- /.box-header -->
+                          <div class="box-body">
+                            <div class="box-body divScroll">
+                              <div *ngIf="this.itemsel.espacios.length == 0">
+                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS</h3>
+                              </div>
+                              <div *ngIf="this.itemsel.espacios.length != 0" class="list-group">
+                                <table class=" table row-border hover table-condensed">
+                                  <thead>
+                                    <tr>
+                                      <th>Edificio</th>
+                                      <th>Planta</th>
+                                      <th>Espacio</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.espacios">
+                                      <td>
+                                        {{item.edificio}}
+                                      </td>
+                                      <td>
+                                        {{item.planta}}
+                                      </td>
+                                      <td>
+                                        {{item.espacio}}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+
+                                </table>
+                              </div>
+                              <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">vincular espacio</button>
+                            </div>
+                          </div>
+                          <!-- /.box-body -->
+                        </div>
+
+                      </div>
+
+
+                    </div>
 
                   </div>
-
-
                 </div>
-
               </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <input class="form-control" type="date">
+                </div>
+                <div class="col-md-8">
+                  <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">Guardar</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- MODAL PARA VER INFORMACION DE PRACTICAS -->
+<div class="modal fade" id="myModal3" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
+
+            <h1 class="box-title">PRACTICA SELECCIONADA</h1>
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body" *ngIf="itemsel | async; let itemsel">
+
+            <div class="col-md-6">
+
+              <div class="box box-danger">
+                <div class="box-header">
+
+                  <h1 class="box-title">Informacion de la Practica</h1>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+                  <form id="form-work" class="" name="form-work" action="#">
+                    <fieldset>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ccpas">
+                            <strong>Nombre Practica: {{this.practica.nombre}}</strong>
+                          </label>
+
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="nac">
+                            <strong>Facultad: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciuor">
+                            <strong>Campus: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciudes">
+                            <strong>Edificio: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciudes">
+                            <strong>Planta: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciudes">
+                            <strong>Espacio: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciudes">
+                            <strong>Materia: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciudes">
+                            <strong>Estado: </strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div *ngIf="this.interfaz" class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ciudes">
+                            <strong>Ultimo semestre dictada: </strong>
+                          </label>
+                        </div>
+                      </div>
+
+                    </fieldset>
+                  </form>
+
+                  <div *ngIf="!this.interfaz" class="form-group text-center" style="margin-top: 20px;">
+                    <div class="col-md-12">
+                      <button class="btn2 btn-danger btn-lg danger" type="button">Ver Programacion</button>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="box box-danger">
+                <div class="box-header">
+                  <i class="fa fa-map"></i>
+
+                  <h3 class="box-title">EQUIPOS VINCULADOS</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="box-body divScroll">
+                    <div *ngIf="this.itemsel.equipos.length == 0">
+                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                    </div>
+                    <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
+                      <table class=" table row-border hover table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Nombre de equipos</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
+                            <td>
+                              {{item.nombre}}
+                            </td>
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+
+                    </div>
+
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+
+
+              <div *ngIf="this.interfaz" class="form-group text-center" style="margin-top: 20px;">
+                <div class="col-md-12">
+                  <button class="btn2 btn-danger btn-lg danger" type="button">Reactivar</button>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

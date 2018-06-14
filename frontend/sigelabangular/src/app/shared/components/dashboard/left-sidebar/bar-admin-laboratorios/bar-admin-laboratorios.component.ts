@@ -87,6 +87,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               info: { dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email },
               servicios: this.estructurarServicios(elemento.relatedServices).arr,
               practicas: this.estructurarPracticas(elemento.relatedPractices).arr,
+              practicasInactivas: this.estructurarPracticas(elemento.relatedPractices).arr3,
               eventos: this.estructurarPracticas(elemento.relatedPractices).arr2,
               equipos: this.estructurarEquipos(elemento.relatedEquipments),
               personal: this.estructurarPers(elemento.relatedPers),
@@ -191,6 +192,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     const arr = [];
     const arr2 = [];
+    const arr3 = [];
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
@@ -221,8 +223,15 @@ export class BarAdminLaboratoriosComponent implements OnInit {
                     color: 'green',
                 };
 
-                arr.push(pract);
-                arr2.push(evento);
+
+                  arr2.push(evento);
+
+                if ( practica.active ) {
+
+                  arr.push( pract );
+                } else {
+                  arr3.push( pract );
+                }
               }
 
 
@@ -234,7 +243,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       }
     }
 
-    return {arr, arr2};
+    return {arr, arr2, arr3};
   }
 
 

@@ -1,8 +1,8 @@
 import { async } from '@angular/core/testing';
 import { ObservablesService } from './../../../shared/services/observables.service';
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort   } from '@angular/material';
 import swal from 'sweetalert2';
 import { LoginService } from '../../login/login-service/login.service';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -41,10 +41,8 @@ export class AdminEspaciosComponent implements OnInit {
 
 
 
-  //  https://www.npmjs.com/package/angular-calendar
-  // https://blog.ng-classroom.com/blog/ionic2/fullcalendar/
-  // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'edificio', 'espacio'];
+  // INICIALIZACION DATATABLE espacios
+  displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'spaceData.building', 'spaceData.place'];
   dataSourceSpace = new MatTableDataSource([]);
 
   @ViewChild('paginatorSpace') paginatorSpace: MatPaginator;
@@ -63,16 +61,27 @@ export class AdminEspaciosComponent implements OnInit {
 
     this.obs.currentObject.subscribe(data => {
 
-
       if (data.espacios) {
         this.itemsel = Observable.of(data);
         this.idlab = data.id_lab;
-        this.dataSourceSpace.data = data.espacios;
+        this.dataSourceSpace = new MatTableDataSource(data.espacios);
         // inicializa calendario
        this.initCalendar( data.eventos  );
         console.log(data.espacios);
-        console.log('si hay un espacio', data.espacios);
-        console.log('datos del observer', data);
+        // prueba
+
+        this.dataSourceSpace.sortingDataAccessor = (item, property) => {
+          switch (property) {
+            case 'spaceData.place': return item.spaceData.place;
+
+            case 'spaceData.building': return item.spaceData.building;
+
+            default: return item[property];
+          }
+        };
+
+
+
         swal({
           title: 'Cargando un momento...',
           text: 'espere mientras se cargan los datos',
@@ -82,8 +91,10 @@ export class AdminEspaciosComponent implements OnInit {
         });
 
         setTimeout(() => {
+          if (data.espacios.length > 0 ) {
           this.dataSourceSpace.paginator = this.paginatorSpace;
           this.dataSourceSpace.sort = this.sortSpace;
+          }
           swal.close();
         }, 1000);
         // llamar metodo para iniciar calendario
@@ -175,17 +186,6 @@ export class AdminEspaciosComponent implements OnInit {
 
 
   applyFilterPers(filterValue: string) {
-
-    this.dataSourceSpace.filterPredicate = (data, filter: string)  => {
-      const accumulator = (currentTerm, key) => {
-        return key === 'spaceData' ? currentTerm + data.spaceData.building : currentTerm + data[key];
-      };
-      const dataStr = Object.keys(data).reduce(accumulator, '').toLowerCase();
-      // Transform the filter by converting it to lowercase and removing whitespace.
-      const transformedFilter = filter.trim().toLowerCase();
-      return dataStr.indexOf(transformedFilter) !== -1;
-    };
-
 
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches

@@ -40,13 +40,13 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
 
 
-    equiposel:any;
-    tablesel:any;
-    seleccionado:any;
+    equiposel: any;
+    tablesel: any;
+    seleccionado: any;
     itemsel: Observable<Array<any>>;
 
-  constructor(private obs:ObservablesService, private afs: AngularFirestore) {
-   
+  constructor(private obs: ObservablesService, private afs: AngularFirestore) {
+
   }
 
   ngOnInit() {
@@ -64,7 +64,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
       this.iniciliazarTablas();
 
-      if(datos.equipos){
+      if (datos.equipos) {
         this.itemsel = Observable.of(datos);
 
         console.log(datos.equipos);
@@ -72,11 +72,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
         const ambiente = this;
         setTimeout(function() {
-          
-          if(datos.equipos.data !== 0){
+          if (datos.equipos.data !== 0) {
             ambiente.dataSourceEquip.sort = ambiente.sortEquip;
-            ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;    
-            
+            ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
+
           }
 
         // cierra loading luego de cargados los datos
@@ -84,7 +83,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
         }, 1500);
       }
-      
+
 
 
      });
@@ -97,10 +96,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
   cambiardataEquipos(item) {
    this.equiposel = this.buscarDato(item);
-  
+
   }
 
-  cambiarDataEquipo(item){
+  cambiarDataEquipo(item) {
     console.log(item);
     const ambiente = this;
     this.equiposel = item;
@@ -108,7 +107,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     this.dataSourceServicios.data = item.servicios;
     this.dataSourcePracticas.data = item.practicas;
     console.log(this.dataSourceComponentes.data);
-    setTimeout(function(){
+    setTimeout(function() {
       ambiente.dataSourceComponentes.sort = ambiente.sortComponentes;
       ambiente.dataSourceComponentes.paginator = ambiente.paginatorComponentes;
 
@@ -117,25 +116,25 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
       ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
       ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
-    },1000);
-   
-  
+    }, 1000);
+
+
   }
 
-  iniciliazarTablas(){
+  iniciliazarTablas() {
     this.equiposel = undefined;
     this.dataSourceComponentes.data = [];
     this.dataSourcePracticas.data = [];
     this.dataSourceServicios.data = [];
   }
 
-  cambiarInfoModal(row, table){
+  cambiarInfoModal(row, table) {
     this.tablesel = table;
     this.seleccionado = row;
   }
 
 
- buscarDato(item){
+ buscarDato(item) {
   //  for(let i=0;i<this.equipos.length;i++){
   //    if(item.nombre == this.equipos[i].nombre){
   //      return this.equipos[i];
@@ -167,7 +166,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     this.dataSourceServicios.filter = filterValue;
   }
 
-  subir(){
+  subir() {
     const equipos = {
 
       cfAcro: '',
@@ -187,15 +186,15 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
       brand: '',
       model: '',
       price : 0,
-      timeUnit:'minutes',
-      workingHours:'',
+      timeUnit: 'minutes',
+      workingHours: '',
       timeBeforeBooking: '',
       cfConditions: [],
       active: true,
-      createdAt:'',
-      updatedAt:''
-    
-    }
+      createdAt: '',
+      updatedAt: ''
+
+    };
 
 
 
@@ -204,15 +203,15 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
         this.afs.collection('cfEquipment').add(equipos).then(data => {
           console.log(data);
-          this.subirComp(); 
+          this.subirComp();
         });
-      
+
 
   }
 
-  subirComp(){
+  subirComp() {
 
-    const fecha =new Date();
+    const fecha = new Date();
     const components = {
 
       cfName: 'bola de iones',
@@ -223,32 +222,32 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
       cfPrice: 12300000,
       brand: 'SAMSUNG',
       model: '2018',
-      active:true,
+      active: true,
       createdAt: fecha.toISOString(),
       updatedAt: fecha.toISOString()
 
 
-    }
-    this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta =>{
+    };
+    this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta => {
       console.log('se hizo menar');
-    })
+    });
   }
 
-  subirVar(){
-    const fecha =new Date();
+  subirVar() {
+    const fecha = new Date();
     const va = {
       cfName: 'servicio banda ancha',
-      cfConditions:["debe traer cedula", "debe traer recibo"],
-      cfDescription:'para utilizar la sala de computo',
+      cfConditions: ['debe traer cedula', 'debe traer recibo'],
+      cfDescription: 'para utilizar la sala de computo',
       cfPrice: '1200',
       active: true,
-      createdAt:fecha.toISOString(),
-      updateAt:fecha.toISOString()
-    }
+      createdAt: fecha.toISOString(),
+      updateAt: fecha.toISOString()
+    };
 
-    this.afs.collection('cfSrv/IkDMCt1fpuP8xg2iIXwA/variations').add(va).then(dta =>{
+    this.afs.collection('cfSrv/IkDMCt1fpuP8xg2iIXwA/variations').add(va).then(dta => {
       console.log('se hizo menar');
-    })
+    });
   }
 
 }
