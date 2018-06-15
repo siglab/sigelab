@@ -71,6 +71,7 @@ import { QuerysAutenticadoService } from './modulos/mod-autenticado/services/que
 import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/observer-autenticado.service';
 
 // librerias calendario
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -125,7 +126,7 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
-
+    MatCheckboxModule
 
   ],
   providers: [

@@ -308,6 +308,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
+              id: data.payload.id,
               nombre: equip.cfName,
               activo: equip.active,
               precio: equip.price,
