@@ -174,22 +174,6 @@
               </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
 
         </div>
@@ -253,14 +237,14 @@
 
               <div class="row">
                 <div class="col-md-12 col-lg-12">
-                  <div class="box box-danger">
+                  <div>
                     <div class="box-header">
 
                     </div>
 
                     <div class="box-body">
 
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="box box-danger">
                           <div class="box-header">
                             <i class="fa fa-map"></i>
@@ -269,39 +253,58 @@
                           </div>
                           <!-- /.box-header -->
                           <div class="box-body">
-                            <div class="box-body divScroll">
-                              <div *ngIf="this.itemsel.equipos.length == 0">
-                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                            <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquip.data.length > 0">
+                              <div class="example-header">
+                                <mat-form-field>
+                                  <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Equipos">
+                                </mat-form-field>
                               </div>
-                              <div *ngIf="this.itemsel.equipos.length != 0" >
-                                <table class=" table row-border hover table-condensed">
-                                  <thead>
-                                    <tr>
-                                      <th>Nombre de equipos</th>
 
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
-                                      <td>
-                                        {{item.nombre}}
-                                      </td>
 
-                                    </tr>
-                                  </tbody>
+                              <mat-table #tableEquip #sortEquip="matSort" [dataSource]="dataSourceEquip" matSort>
 
-                                </table>
+                                <!-- Checkbox Column -->
+                                <ng-container matColumnDef="select">
+                                  <mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                  [checked]="selection.hasValue() && isAllSelected()"
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                  (change)="$event ? selection.toggle(row) : null"
+                                                  [checked]="selection.isSelected(row)">
+                                    </mat-checkbox>
+                                  </mat-cell>
+                                </ng-container>
 
-                              </div>
-                              <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">vincular equipo</button>
+                                <!-- nombre Column -->
+                                <ng-container matColumnDef="nombre">
+                                  <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                </ng-container>
+
+
+                                <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumnsEquip;"
+                                         (click)="selection.toggle(row)">
+                                </mat-row>
+                              </mat-table>
+
                             </div>
+
+                            <div class="col-md-8">
+                              <button style="float: right;" class="btn btn-danger" type="button">Agregar espacio</button>
+                            </div>
+
                           </div>
                           <!-- /.box-body -->
                         </div>
 
                       </div>
 
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="box box-danger">
                           <div class="box-header">
                             <i class="fa fa-map"></i>
@@ -339,7 +342,7 @@
 
                                 </table>
                               </div>
-                              <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">vincular espacio</button>
+                              <button style="float: right;" (click)="addPractice()" class="btn2 btn-danger btn-lg danger" type="button">vincular espacio</button>
                             </div>
                           </div>
                           <!-- /.box-body -->

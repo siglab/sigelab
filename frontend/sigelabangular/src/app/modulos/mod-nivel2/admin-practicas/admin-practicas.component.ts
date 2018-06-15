@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
+
 import swal from 'sweetalert2';
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -12,6 +14,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 })
 export class AdminPracticasComponent implements OnInit {
 
+  selection = new SelectionModel(true, []);
   itemsel: Observable<Array<any>>;
   interfaz: boolean;
   practica = {nombre: ''};
@@ -22,6 +25,9 @@ export class AdminPracticasComponent implements OnInit {
   displayedColumnsPracIn = ['nombre', 'estado', 'semestre', 'estudiantes', 'horario'];
   dataSourcePracIn = new MatTableDataSource([]);
 
+  displayedColumnsEquip = ['select', 'nombre'];
+  dataSourceEquip = new MatTableDataSource([]);
+
   // practicas activas
   @ViewChild('paginatorPrac') paginatorPrac: MatPaginator;
   @ViewChild('sortPrac') sortPrac: MatSort;
@@ -30,10 +36,13 @@ export class AdminPracticasComponent implements OnInit {
    @ViewChild('paginatorPracIn') paginatorPracIn: MatPaginator;
    @ViewChild('sortPracIn') sortPracIn: MatSort;
 
-   pracestructurado:any;
+   // equipos
+   @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
+   @ViewChild('sortEquip') sortEquip: MatSort;
+
+   pracestructurado: any;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) {
-
   }
 
 
@@ -50,6 +59,9 @@ export class AdminPracticasComponent implements OnInit {
           this.dataSourcePrac = new MatTableDataSource(this.pracestructurado.practicas);
 
           this.dataSourcePracIn = new MatTableDataSource(this.pracestructurado.practicasInactivas);
+
+          this.dataSourceEquip = new MatTableDataSource(this.pracestructurado.equipos);
+
           // data acesor activos
           this.dataSourcePrac.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -97,6 +109,9 @@ export class AdminPracticasComponent implements OnInit {
 
             this.dataSourcePracIn.sort = this.sortPracIn;
             this.dataSourcePracIn.paginator = this.paginatorPracIn;
+
+            this.dataSourceEquip.sort = this.sortEquip;
+            this.dataSourceEquip.paginator = this.paginatorEquip;
 
             }
             swal.close();
@@ -168,6 +183,7 @@ export class AdminPracticasComponent implements OnInit {
 
               if (prog) {
                 const pract = {
+                  uid: data.payload.id,
                   nombre: practica.practiceName,
                   programacion: {
                     estudiantes: prog['noStudents'],
@@ -207,6 +223,16 @@ export class AdminPracticasComponent implements OnInit {
     return {arr, arr2, arr3};
   }
 
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.displayedColumnsEquip.length;
+    return numSelected === numRows;
+  }
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSourceEquip.data.forEach(row => this.selection.select(row));
+  }
 
   estructurarSpace(item) {
 
@@ -265,6 +291,7 @@ export class AdminPracticasComponent implements OnInit {
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
+              id: data.payload.id,
               nombre: equip.cfName,
               activo: equip.active,
               precio: equip.price,   
@@ -319,11 +346,24 @@ export class AdminPracticasComponent implements OnInit {
     this.dataSourcePrac.filter = filterValue;
   }
   cambiardata(row) {
-
+     console.log(row);
   }
 
  addPractice() {
 
+  const practica = {
+  relatedSpaces : {},
+  relatedEquips : {}
+
+  };
+
+   this.selection.selected.forEach(  (element) => {
+
+         practica.relatedEquips[element.id] = true;
+
+        });
+
+        console.log(practica);
 
  }
 
