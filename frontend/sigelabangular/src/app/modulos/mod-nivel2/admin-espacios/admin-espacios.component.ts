@@ -1,8 +1,8 @@
 import { async } from '@angular/core/testing';
 import { ObservablesService } from './../../../shared/services/observables.service';
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort   } from '@angular/material';
 import swal from 'sweetalert2';
 import { LoginService } from '../../login/login-service/login.service';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -41,14 +41,14 @@ export class AdminEspaciosComponent implements OnInit {
 
 
 
-  //  https://www.npmjs.com/package/angular-calendar
-  // https://blog.ng-classroom.com/blog/ionic2/fullcalendar/
-  // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'edificio', 'espacio'];
+  // INICIALIZACION DATATABLE espacios
+  displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'spaceData.building', 'spaceData.place'];
   dataSourceSpace = new MatTableDataSource([]);
 
   @ViewChild('paginatorSpace') paginatorSpace: MatPaginator;
   @ViewChild('sortSpace') sortSpace: MatSort;
+
+  espaestructurado:any;
 
   constructor(private obs: ObservablesService,
               private afs: AngularFirestore,
@@ -63,36 +63,209 @@ export class AdminEspaciosComponent implements OnInit {
 
     this.obs.currentObject.subscribe(data => {
 
+      if(data.length != 0){
 
-      if (data.espacios) {
-        this.itemsel = Observable.of(data);
-        this.idlab = data.id_lab;
-        this.dataSourceSpace.data = data.espacios;
-        // inicializa calendario
-       this.initCalendar( data.eventos  );
-        console.log(data.espacios);
-        console.log('si hay un espacio', data.espacios);
-        console.log('datos del observer', data);
-        swal({
-          title: 'Cargando un momento...',
-          text: 'espere mientras se cargan los datos',
-          onOpen: () => {
-            swal.showLoading();
-          }
-        });
+        this.estructuraEspacio(data.uid).then(() => {
+         this.itemsel = Observable.of(this.espaestructurado.espacios);
+          console.log(this.espaestructurado);
+          this.idlab = data.uid;
+          this.dataSourceSpace = new MatTableDataSource(this.espaestructurado.espacios);
 
-        setTimeout(() => {
-          this.dataSourceSpace.paginator = this.paginatorSpace;
-          this.dataSourceSpace.sort = this.sortSpace;
-          swal.close();
-        }, 1000);
-        // llamar metodo para iniciar calendario
+          this.initCalendar( data.eventos  );
+
+          this.dataSourceSpace.sortingDataAccessor = (item, property) => {
+            switch (property) {
+              case 'spaceData.place': return item.spaceData.place;
+  
+              case 'spaceData.building': return item.spaceData.building;
+  
+              default: return item[property];
+            }
+          };
+
+        
+          swal({
+            title: 'Cargando un momento...',
+            text: 'espere mientras se cargan los datos',
+            onOpen: () => {
+              swal.showLoading();
+            }
+          });
+
+          setTimeout(() => {
+              if (this.espaestructurado.espacios.length > 0 ) {
+                this.dataSourceSpace.paginator = this.paginatorSpace;
+                this.dataSourceSpace.sort = this.sortSpace;
+              }
+              swal.close();
+            }, 1000);
+   
+ 
+       });
+      
       }
+
     });
 
 
 
   }
+
+
+  estructuraEspacio(key){
+    let promise = new Promise((resolve,reject)=>{
+      this.buscarLab(key).subscribe(labo => {
+        const laboratorio = labo.payload.data();
+ 
+        let estadoLab;
+        if (laboratorio.active === true) {
+           estadoLab = 'Activo';
+        } else if ( laboratorio.active === false ) {
+           estadoLab = 'Inactivo';
+        }
+ 
+         this.espaestructurado = {
+          eventos: this.estructurarPracticas(laboratorio.relatedPractices).arr2,
+          espacios: this.estructurarSpace( laboratorio.relatedSpaces),
+          uid: key
+         };
+ 
+         resolve();
+  
+      })
+     });
+  
+     return promise;
+   
+  }
+
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarPracticas(item) {
+
+    const arr = [];
+    const arr2 = [];
+    const arr3 = [];
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+          this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
+            const practica = data.payload.data();
+            this.afs.doc('practice/' + clave).collection('programmingData').valueChanges().subscribe(data2 => {
+
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              const prog = data2[0];
+
+              if (prog) {
+                const pract = {
+                  nombre: practica.practiceName,
+                  programacion: {
+                    estudiantes: prog['noStudents'],
+                    diahora: prog['schedule'],
+                    semestre: prog['semester']
+                  },
+                  activo: practica.active
+                };
+                 // construye los eventos para el calendario de cada laboratorio
+                const evento = {
+
+                    title: this.ajustarTexto(practica.practiceName).nom1 ,
+                    start: prog['schedule'],
+                    color: 'green',
+                };
+
+
+                  arr2.push(evento);
+
+                if ( practica.active ) {
+
+                  arr.push( pract );
+                } else {
+                  arr3.push( pract );
+                }
+              }
+
+
+            });
+
+          });
+        }
+
+      }
+    }
+
+    return {arr, arr2, arr3};
+  }
+
+  estructurarSpace(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+          this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
+            const espacio = data.payload.data();
+
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              if (espacio) {
+                const space = {
+                  id_space: data.payload.id,
+                  capacity: espacio.capacity,
+                  createdAt: espacio.createdAt,
+                  freeArea: espacio.freeArea,
+                  headquarter: espacio.headquarter,
+                  indxSa: espacio.indxSa,
+                  map: espacio.map,
+                  minArea: espacio.minArea,
+                  ocupedArea: espacio.ocupedArea,
+                  totalArea: espacio.totalArea,
+                  spaceData: espacio.spaceData,
+
+                };
+
+                arr.push(space);
+              }
+
+
+
+          });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+   buscarLab(idlab) {
+    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
+
+  }
+
+   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
+   ajustarTexto(nombre) {
+    console.log(nombre);
+    const nombreArr = nombre.split(' ');
+    let name1 = '';
+    let name2 = '';
+    for (let i = 0; i < nombreArr.length; i++) {
+      if (i < 3) {
+        name1 += nombreArr[i] + ' ';
+      } else {
+        name2 += nombreArr[i] + ' ';
+      }
+    }
+
+    return { nom1: name1, nom2: name2 };
+  }
+
+
 
   /* asigna la fila de la tabla a variables ngmodel */
   cambiardata(item) {
@@ -175,17 +348,6 @@ export class AdminEspaciosComponent implements OnInit {
 
 
   applyFilterPers(filterValue: string) {
-
-    this.dataSourceSpace.filterPredicate = (data, filter: string)  => {
-      const accumulator = (currentTerm, key) => {
-        return key === 'spaceData' ? currentTerm + data.spaceData.building : currentTerm + data[key];
-      };
-      const dataStr = Object.keys(data).reduce(accumulator, '').toLowerCase();
-      // Transform the filter by converting it to lowercase and removing whitespace.
-      const transformedFilter = filter.trim().toLowerCase();
-      return dataStr.indexOf(transformedFilter) !== -1;
-    };
-
 
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches

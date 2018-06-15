@@ -7,3 +7,7 @@
 cursor: pointer;
 
 }
+.mat-row:hover {
+  background-color: gray;
+}
+

@@ -61,6 +61,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   };
 
+  
+  persestructurado:any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
   displayedColumnsPers = ['nombre', 'email', 'tipo' ];
@@ -79,10 +81,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 
-
-
-
-
   constructor(private obs: ObservablesService,
               private afs: AngularFirestore,
               private register: LoginService) { }
@@ -90,57 +88,48 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit() {
     this.obs.currentObject.subscribe(data => {
 
-      if (data.personal) {
-        this.idlab = data.id_lab;
-        this.itemsel = Observable.of(data);
+      if(data.length != 0){
+        this.estructuraIdPers(data.uid).then(() => {
 
-  /*       data.personal.forEach(element => {
+         this.idlab = data.uid;
+         this.itemsel = Observable.of(this.persestructurado.personal);
+          console.log(this.persestructurado);
+         
+          this.dataSourcePers.data = this.persestructurado.personal;
+          this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
 
-          if (element.activo === true) {
+         const ambiente = this;
+       
+         swal({
+           title: 'Cargando un momento...',
+           text: 'espere mientras se cargan los datos',
+           onOpen: () => {
+             swal.showLoading();
+           }
+         });
+   
+         
+        setTimeout(function () {
+          if (ambiente.persestructurado.personal != 0) {
 
-            if (element !== this.activos[0]) {
-              this.activos.push(element);
-            }
-
-            console.log('is true', element);
-          } else {
-
-            if (element !== this.inactivos[0]) {
-              this.inactivos.push(element);
-            }
+            ambiente.dataSourcePers.sort = ambiente.sortPers;
+            ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+            ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
+            ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
+            
+           
           }
 
-        }); */
+          swal.close();
 
-
-        this.dataSourcePers.data = data.personal;
-        this.dataSourcePersIn.data = data.personalInactivo;
-
-
+        }, 1500);
+  
+       });
+      
       }
 
 
-      console.log('datos del observer', data);
-      swal({
-        title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
-        onOpen: () => {
-          swal.showLoading();
-        }
-      });
 
-      const ambiente = this;
-      setTimeout(function () {
-
-        ambiente.dataSourcePers.sort = ambiente.sortPers;
-        ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
-        ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
-        ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
-
-
-        swal.close();
-
-      }, 1000);
 
     });
 
@@ -153,6 +142,118 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+
+
+  estructuraIdPers(key){
+
+    let promise = new Promise((resolve,reject)=>{
+      this.buscarLab(key).subscribe(labo => {
+        const laboratorio = labo.payload.data();
+ 
+        let estadoLab;
+        if (laboratorio.active === true) {
+           estadoLab = 'Activo';
+        } else if ( laboratorio.active === false ) {
+           estadoLab = 'Inactivo';
+        }
+ 
+         this.persestructurado = {    
+            personal: this.estructurarPers(laboratorio.relatedPers),
+            personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
+            estado: estadoLab,
+            uid: key    
+         };
+ 
+         resolve();
+  
+      })
+     });
+  
+     return promise;
+
+  }
+
+  estructurarPers(item) {
+
+    const arr1 = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+        if (item[clave]) {
+          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers = data.payload.data();
+            if (pers) {
+              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+                const user = dataper.payload.data();
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+    
+                const persona = {
+                  roles: user.appRoles,
+                  nombre: pers.cfFirstNames,
+                  apellidos: pers.cfFamilyNames,
+                  activo: pers.active,
+                  tipo: pers.type,
+                  email: user.email,
+                  idpers: clave,
+                  iduser: pers.user,
+                };
+
+                if (pers.active) {
+                  arr1.push(persona);
+                }
+
+              });
+            }
+          });
+        }
+      }
+    }
+    return  arr1;
+  }
+
+  estructurarPersIna(item) {
+
+    const arr1 = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+        if (item[clave]) {
+          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers = data.payload.data();
+            if (pers) {
+              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                const persona = {
+                  nombre: pers.cfFirstNames,
+                  apellidos: pers.cfFamilyNames,
+                  activo: pers.active,
+                  tipo: pers.type,
+                  email: dataper.payload.data().email,
+                  roles: dataper.payload.data().appRoles ,
+                  idpers: clave,
+                  iduser: pers.user,
+                };
+
+                if (!pers.active) {
+                  arr1.push(persona);
+                }
+
+              });
+            }
+          });
+        }
+      }
+    }
+    return arr1;
+  }
+
+  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  buscarLab(idlab) {
+    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
+
+  }
 
 
 
@@ -281,27 +382,27 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     user.cfPers = idP;
     console.log( 'usuario pa subir',  user);
 
-   const password = '123456';
+    const password = '123456';
 
 
-   //  agrega un nuevo usuario a firestore
-   this.afs.collection('user').add(user).then( ok => {
-       // actualiza el campo idusuario en el document persona
-     this.updateFaciliti(  idP );
-     this.updatePers( ok.id, idP  );
-     }) ;
+    //  agrega un nuevo usuario a firestore
+    this.afs.collection('user').add(user).then( ok => {
+        // actualiza el campo idusuario en el document persona
+      this.updateFaciliti(  idP );
+      this.updatePers( ok.id, idP  );
+      }) ;
 
-  // registra un usuario para logeuarse con mail
-    this.register.createUser( user.email, password )
-             .then(   () => {
+    // registra un usuario para logeuarse con mail
+      this.register.createUser( user.email, password )
+              .then(   () => {
 
-                  // enviar email para que el usuario restablesca pass de inicio
-                  this.register.sendEmail( user.email );
-                  // cerrar modal
-                  $('#modal1').modal('hide');
+                    // enviar email para que el usuario restablesca pass de inicio
+                    this.register.sendEmail( user.email );
+                    // cerrar modal
+                    $('#modal1').modal('hide');
 
 
-             });
+              });
   }
 
 
@@ -327,45 +428,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  /* metodo para mover personal inactivo a personal activo */
-/*   setArray() {
 
-    const activo = this.activos;
-    const inactivo = this.inactivos;
-
-    if (this.tablesel === 'activos') {
-
-      activo.find((element, index) => {
-        if (element.nombre === this.nombre) {
-
-          console.log('se encontro el elemento', element, index);
-          activo.splice(index, 1);
-          inactivo.push(element);
-          this.inactivos = inactivo;
-          return true;
-
-        }
-      });
-
-    } if (this.tablesel === 'inactivos') {
-
-      inactivo.find((element, index) => {
-        if (element.nombre === this.nombre) {
-
-          console.log('se encontro el elemento', element, index);
-          inactivo.splice(index, 1);
-          activo.push(element);
-          this.activos = activo;
-          return true;
-
-        }
-      });
-
-
-
-    }
-
-  } */
 }
 
 
