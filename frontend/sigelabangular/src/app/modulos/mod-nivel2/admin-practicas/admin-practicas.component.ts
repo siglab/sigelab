@@ -2,10 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import {SelectionModel} from '@angular/cdk/collections';
-
+import { SelectionModel } from '@angular/cdk/collections';
+import * as $ from 'jquery';
+import 'fullcalendar';
+import 'fullcalendar-scheduler';
 import swal from 'sweetalert2';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { constrainPoint } from 'fullcalendar/src/util';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-practicas',
@@ -13,54 +17,82 @@ import { AngularFirestore } from 'angularfire2/firestore';
   styleUrls: ['./admin-practicas.component.css']
 })
 export class AdminPracticasComponent implements OnInit {
+  events = [ {
+    title: 'seguridad1',
+    start: '2018-06-09',
+    color: 'red'
+  },
+  {
+    title: 'programa2',
+    start: '2018-06-04',
+    color: 'blue'
+  } ];
+  evento = {
+    title: '',
+    start: '',
+    color: ''
+  };
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
   selection = new SelectionModel(true, []);
+  selection2 = new SelectionModel(true, []);
+
   itemsel: Observable<Array<any>>;
   interfaz: boolean;
-  practica = {nombre: ''};
+  practica = { nombre: '' };
   info: any;
   displayedColumnsPrac = ['nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
   dataSourcePrac = new MatTableDataSource([]);
 
   displayedColumnsPracIn = ['nombre', 'estado', 'semestre', 'estudiantes', 'horario'];
   dataSourcePracIn = new MatTableDataSource([]);
-
+  // equipos
   displayedColumnsEquip = ['select', 'nombre'];
   dataSourceEquip = new MatTableDataSource([]);
+  // espacios
+  displayedColumnsEsp = ['select', 'nombre', 'freeArea'];
+  dataSourceEsp = new MatTableDataSource([]);
 
   // practicas activas
   @ViewChild('paginatorPrac') paginatorPrac: MatPaginator;
   @ViewChild('sortPrac') sortPrac: MatSort;
 
-   // practicas inactivas
-   @ViewChild('paginatorPracIn') paginatorPracIn: MatPaginator;
-   @ViewChild('sortPracIn') sortPracIn: MatSort;
+  // practicas inactivas
+  @ViewChild('paginatorPracIn') paginatorPracIn: MatPaginator;
+  @ViewChild('sortPracIn') sortPracIn: MatSort;
 
-   // equipos
-   @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
-   @ViewChild('sortEquip') sortEquip: MatSort;
+  // equipos
+  @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
+  @ViewChild('sortEquip') sortEquip: MatSort;
 
-   pracestructurado: any;
+  // espacios
+  @ViewChild('paginatorEsp') paginatorEsp: MatPaginator;
+  @ViewChild('sortEsp') sortEsp: MatSort;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore) {
+  pracestructurado: any;
+
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, private _formBuilder: FormBuilder) {
   }
 
 
   ngOnInit() {
     this.obs.currentObject.subscribe(data => {
-      if(data.length != 0){
-
+      if (data.length !== 0) {
         this.estructurarDataPrac(data.uid).then(() => {
-         this.itemsel = Observable.of(this.pracestructurado);
+          this.itemsel = Observable.of(this.pracestructurado);
           console.log(this.pracestructurado);
 
           // this.idlab = data.uid;
-         
+
           this.dataSourcePrac = new MatTableDataSource(this.pracestructurado.practicas);
 
           this.dataSourcePracIn = new MatTableDataSource(this.pracestructurado.practicasInactivas);
 
           this.dataSourceEquip = new MatTableDataSource(this.pracestructurado.equipos);
+
+          this.dataSourceEsp = new MatTableDataSource(this.pracestructurado.espacios);
 
           // data acesor activos
           this.dataSourcePrac.sortingDataAccessor = (item, property) => {
@@ -70,9 +102,9 @@ export class AdminPracticasComponent implements OnInit {
               default: return item[property];
             }
           };
-  
-            // data acesor inactivos
-            this.dataSourcePracIn.sortingDataAccessor = (item, property) => {
+
+          // data acesor inactivos
+          this.dataSourcePracIn.sortingDataAccessor = (item, property) => {
             switch (property) {
               case 'programacion.semestre': return item.programacion.semestre;
               case 'programacion.estudiantes': return item.programacion.estudiantes;
@@ -80,8 +112,8 @@ export class AdminPracticasComponent implements OnInit {
             }
           };
 
-            // data filter
-          this.dataSourcePrac.filterPredicate = (dat, filter: string)  => {
+          // data filter
+          this.dataSourcePrac.filterPredicate = (dat, filter: string) => {
             const accumulator = (currentTerm, key) => {
               return key === 'orderInfo' ? currentTerm + dat.orderInfo.type : currentTerm + dat[key];
             };
@@ -92,7 +124,6 @@ export class AdminPracticasComponent implements OnInit {
           };
 
 
-    
           swal({
             title: 'Cargando un momento...',
             text: 'espere mientras se cargan los datos',
@@ -102,24 +133,33 @@ export class AdminPracticasComponent implements OnInit {
           });
 
           setTimeout(() => {
-            if (this.pracestructurado.practicas.length > 0 ) {
+            if (this.pracestructurado.practicas.length > 0) {
 
-            this.dataSourcePrac.sort = this.sortPrac;
-            this.dataSourcePrac.paginator = this.paginatorPrac;
+              this.dataSourcePrac.sort = this.sortPrac;
+              this.dataSourcePrac.paginator = this.paginatorPrac;
 
-            this.dataSourcePracIn.sort = this.sortPracIn;
-            this.dataSourcePracIn.paginator = this.paginatorPracIn;
+              this.dataSourcePracIn.sort = this.sortPracIn;
+              this.dataSourcePracIn.paginator = this.paginatorPracIn;
 
-            this.dataSourceEquip.sort = this.sortEquip;
-            this.dataSourceEquip.paginator = this.paginatorEquip;
+              this.dataSourceEquip.sort = this.sortEquip;
+              this.dataSourceEquip.paginator = this.paginatorEquip;
+
+              this.dataSourceEsp.sort = this.sortEsp;
+              this.dataSourceEsp.paginator = this.paginatorEsp;
 
             }
             swal.close();
           }, 1000);
-   
- 
-       });
-      
+
+
+        });
+
+        this.firstFormGroup = this._formBuilder.group({
+          firstCtrl: ['', Validators.required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+          secondCtrl: ['', Validators.required]
+        });
       }
 
     });
@@ -127,36 +167,35 @@ export class AdminPracticasComponent implements OnInit {
 
   estructurarDataPrac(key) {
 
-    let promise = new Promise((resolve,reject)=>{
+    const promise = new Promise((resolve, reject) => {
       this.buscarLab(key).subscribe(labo => {
         const laboratorio = labo.payload.data();
-  
+
         let estadoLab;
         if (laboratorio.active === true) {
-            estadoLab = 'Activo';
-        } else if ( laboratorio.active === false ) {
-            estadoLab = 'Inactivo';
+          estadoLab = 'Activo';
+        } else if (laboratorio.active === false) {
+          estadoLab = 'Inactivo';
         }
-  
-          this.pracestructurado = {
-            practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
-            practicasInactivas: this.estructurarPracticas(laboratorio.relatedPractices).arr3,
-            equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-            espacios: this.estructurarSpace( laboratorio.relatedSpaces),
-            estado: estadoLab,
-            id_lab: key
-          };
-  
-          resolve();
-  
-      })
+
+        this.pracestructurado = {
+          practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
+          practicasInactivas: this.estructurarPracticas(laboratorio.relatedPractices).arr3,
+          equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+          espacios: this.estructurarSpace(laboratorio.relatedSpaces),
+          estado: estadoLab,
+          id_lab: key
+        };
+        resolve();
+
       });
-  
-      return promise;
+    });
+
+    return promise;
 
   }
 
-   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
     return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
 
@@ -192,22 +231,22 @@ export class AdminPracticasComponent implements OnInit {
                   },
                   activo: practica.active
                 };
-                 // construye los eventos para el calendario de cada laboratorio
+                // construye los eventos para el calendario de cada laboratorio
                 const evento = {
 
-                    title: this.ajustarTexto(practica.practiceName).nom1 ,
-                    start: prog['schedule'],
-                    color: 'green',
+                  title: this.ajustarTexto(practica.practiceName).nom1,
+                  start: prog['schedule'],
+                  color: 'green',
                 };
 
 
-                  arr2.push(evento);
+                arr2.push(evento);
 
-                if ( practica.active ) {
+                if (practica.active) {
 
-                  arr.push( pract );
+                  arr.push(pract);
                 } else {
-                  arr3.push( pract );
+                  arr3.push(pract);
                 }
               }
 
@@ -220,19 +259,34 @@ export class AdminPracticasComponent implements OnInit {
       }
     }
 
-    return {arr, arr2, arr3};
+    return { arr, arr2, arr3 };
   }
-
+  // equipos
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.displayedColumnsEquip.length;
     return numSelected === numRows;
   }
   masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSourceEquip.data.forEach(row => this.selection.select(row));
+    this.isAllSelected2() ?
+      this.selection.clear() :
+      this.dataSourceEquip.data.forEach(row => this.selection.select(row));
   }
+
+ // espacios
+  isAllSelected2() {
+    const numSelected = this.selection2.selected.length;
+    const numRows = this.displayedColumnsEsp.length;
+    return numSelected === numRows;
+  }
+  masterToggle2() {
+    this.isAllSelected2() ?
+      this.selection2.clear() :
+      this.dataSourceEsp.data.forEach(row => this.selection2.select(row));
+  }
+
+
+
 
   estructurarSpace(item) {
 
@@ -246,25 +300,25 @@ export class AdminPracticasComponent implements OnInit {
           this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
             const espacio = data.payload.data();
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              if (espacio) {
-                const space = {
-                  id_space: data.payload.id,
-                  capacity: espacio.capacity,
-                  createdAt: espacio.createdAt,
-                  freeArea: espacio.freeArea,
-                  headquarter: espacio.headquarter,
-                  indxSa: espacio.indxSa,
-                  map: espacio.map,
-                  minArea: espacio.minArea,
-                  ocupedArea: espacio.ocupedArea,
-                  totalArea: espacio.totalArea,
-                  spaceData: espacio.spaceData,
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            if (espacio) {
+              const space = {
+                id_space: data.payload.id,
+                capacity: espacio.capacity,
+                createdAt: espacio.createdAt,
+                freeArea: espacio.freeArea,
+                headquarter: espacio.headquarter,
+                indxSa: espacio.indxSa,
+                map: espacio.map,
+                minArea: espacio.minArea,
+                ocupedArea: espacio.ocupedArea,
+                totalArea: espacio.totalArea,
+                spaceData: espacio.spaceData,
 
-                };
+              };
 
-                arr.push(space);
-              }
+              arr.push(space);
+            }
 
           });
         }
@@ -294,7 +348,7 @@ export class AdminPracticasComponent implements OnInit {
               id: data.payload.id,
               nombre: equip.cfName,
               activo: equip.active,
-              precio: equip.price,   
+              precio: equip.price,
             };
 
 
@@ -346,25 +400,68 @@ export class AdminPracticasComponent implements OnInit {
     this.dataSourcePrac.filter = filterValue;
   }
   cambiardata(row) {
-     console.log(row);
+    console.log(row);
   }
 
- addPractice() {
+  addPractice() {
 
-  const practica = {
-  relatedSpaces : {},
-  relatedEquips : {}
+    const practica = {
 
-  };
+      relatedSpaces: {},
+      relatedEquips: {}
 
-   this.selection.selected.forEach(  (element) => {
+    };
 
-         practica.relatedEquips[element.id] = true;
+    this.selection.selected.forEach((element) => {
 
-        });
+      console.log(element);
 
-        console.log(practica);
+      practica.relatedEquips[element.id] = true;
 
- }
+    });
+
+    console.log(practica);
+
+  }
+
+  initCalendar( horario) {
+
+    const containerEl: JQuery = $('#cal');
+    containerEl.fullCalendar('destroy');
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 320,
+
+      header: {
+
+        left: '',
+        center: 'tittle',
+        right: 'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+
+    });
+  }
+
+  agregarEvento() {
+
+     const arr = this.events;
+     const nev = {
+      title: this.evento.title,
+      start: this.evento.start,
+      color: this.evento.color
+    };
+
+    arr.push( nev );
+
+    console.log('nuevo array', arr);
+    this.initCalendar(arr);
+  }
+
 
 }

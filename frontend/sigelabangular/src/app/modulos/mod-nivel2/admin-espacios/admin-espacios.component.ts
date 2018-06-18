@@ -48,7 +48,7 @@ export class AdminEspaciosComponent implements OnInit {
   @ViewChild('paginatorSpace') paginatorSpace: MatPaginator;
   @ViewChild('sortSpace') sortSpace: MatSort;
 
-  espaestructurado:any;
+  espaestructurado: any;
 
   constructor(private obs: ObservablesService,
               private afs: AngularFirestore,
@@ -63,7 +63,7 @@ export class AdminEspaciosComponent implements OnInit {
 
     this.obs.currentObject.subscribe(data => {
 
-      if(data.length != 0){
+      if (data.length !== 0) {
 
         this.estructuraEspacio(data.uid).then(() => {
          this.itemsel = Observable.of(this.espaestructurado.espacios);
@@ -76,14 +76,13 @@ export class AdminEspaciosComponent implements OnInit {
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
             switch (property) {
               case 'spaceData.place': return item.spaceData.place;
-  
+
               case 'spaceData.building': return item.spaceData.building;
-  
+
               default: return item[property];
             }
           };
 
-        
           swal({
             title: 'Cargando un momento...',
             text: 'espere mientras se cargan los datos',
@@ -99,10 +98,10 @@ export class AdminEspaciosComponent implements OnInit {
               }
               swal.close();
             }, 1000);
-   
- 
+
+
        });
-      
+
       }
 
     });
@@ -112,31 +111,31 @@ export class AdminEspaciosComponent implements OnInit {
   }
 
 
-  estructuraEspacio(key){
-    let promise = new Promise((resolve,reject)=>{
+  estructuraEspacio(key) {
+    const promise = new Promise((resolve, reject) => {
       this.buscarLab(key).subscribe(labo => {
         const laboratorio = labo.payload.data();
- 
+
         let estadoLab;
         if (laboratorio.active === true) {
            estadoLab = 'Activo';
         } else if ( laboratorio.active === false ) {
            estadoLab = 'Inactivo';
         }
- 
+
          this.espaestructurado = {
           eventos: this.estructurarPracticas(laboratorio.relatedPractices).arr2,
           espacios: this.estructurarSpace( laboratorio.relatedSpaces),
           uid: key
          };
- 
+
          resolve();
-  
-      })
+
+      });
      });
-  
+
      return promise;
-   
+
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS

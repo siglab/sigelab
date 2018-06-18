@@ -36,18 +36,17 @@ export class BarAdminLaboratoriosComponent implements OnInit {
           this.laboratorios2 = this.estructuraIdLab(labs);
 
         });
-        if(this.moduloNivel2){
+        if (this.moduloNivel2) {
           this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
             this.laboratorios2 = this.estructuraIdLab(labs);
-  
           });
-        } 
-        if(this.moduloPermiso){
+        }
+        if (this.moduloPermiso) {
           this.getPersona(person.payload.data().cfPers).subscribe(pers => {
-            this.getLaboratoriosPermiso(pers.payload.data().cfFacil).subscribe(labs=>{
+            this.getLaboratoriosPermiso(pers.payload.data().cfFacil).subscribe(labs => {
               this.laboratorios2 = this.estructuraIdLabPermisos(labs);
-            })
-            
+            });
+
             console.log(this.laboratorios2);
           });
         }
@@ -59,7 +58,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     }
   }
-  estructuraIdLab(data: any){
+  estructuraIdLab(data: any) {
     this.datosLabsEstructurados = [];
 
     for (let index = 0; index < data.length; index++) {
@@ -78,14 +77,14 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     return this.datosLabsEstructurados;
   }
 
-  estructuraIdLabPermisos(data: any){
+  estructuraIdLabPermisos(data: any) {
     let laboratorio = [];
     console.log(data.payload.data());
     laboratorio = [{
       nombre: this.ajustarTexto(data.payload.data().cfName),
       uid: data.payload.id
     }];
-    return laboratorio;;
+    return laboratorio;
   }
 
   getUserId() {
@@ -99,7 +98,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
- 
+
         }
         if ((clave === 'moduloDosPermiso')) {
           this.moduloPermiso = true;
@@ -122,7 +121,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   }
 
   getPersona(persid) {
-    return  this.afs.doc('cfPers/'+persid).snapshotChanges();
+    return  this.afs.doc('cfPers/' + persid).snapshotChanges();
   }
 
   // METODO QUE TRAE LA COLECCION DE LOS LABORATORIOS DE LOS CUALES TIENE PERMISOS
