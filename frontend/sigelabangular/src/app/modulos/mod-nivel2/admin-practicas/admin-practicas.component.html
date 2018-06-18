@@ -105,7 +105,7 @@
                 </div>
               </div>
 
-              <div id="menu1" class="tab-pane fade in active">
+              <div id="menu1" class="tab-pane fade">
                 <div class="col-md-12" style="margin-top:20px;">
                   <div class="box box-danger">
                     <div class="box-header">
@@ -114,7 +114,7 @@
                       <h3 class="box-title">PRACTICAS INACTIVAS SEMESTRE</h3>
                     </div>
 
-                    <div *ngIf="dataSourcePracIn.data.length == 0">
+                    <div *ngIf="dataSourcePracIn.data.length === 0">
                       <h3>El laboratorio no cuenta con practicas inactivas </h3>
                     </div>
                     <!-- /.box-header -->
@@ -178,11 +178,180 @@
 
         </div>
       </div>
+      <!-- prueba de stepp -->
+      <div class="col-md-12" style="margin-top:20px;">
+        <div class="box box-danger">
+          <div class="box-header">
+            <i class="fa fa-plus"></i>
+
+            <h3 class="box-title">Agregar Nueva Practica</h3>
+          </div>
+
+
+          <!-- /.box-header -->
+          <div class="box-body">
+            <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
+              <mat-step [stepControl]="firstFormGroup">
+                <form [formGroup]="firstFormGroup">
+                  <ng-template matStepLabel>Informacion basica</ng-template>
+                  <mat-form-field>
+                    <input matInput placeholder="nombre practica" formControlName="firstCtrl" required>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input matInput placeholder="Codigo de la materia" formControlName="firstCtrl">
+                  </mat-form-field>
+                  <div>
+                    <button mat-button matStepperNext (click)="initCalendar(this.events)" class="btn btn-success">siguiente</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel>Horario de practica</ng-template>
+
+
+                <div class="box box-danger">
+                  <div class="box-header">
+                    <i class="fa fa-calendar"></i>
+
+                    <h3 class="box-title">CALENDARIO</h3>
+
+
+                  </div>
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#myModal2"> Agregar Fecha
+                    <i class="fa fa-plus"></i>
+                  </button>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <div id="cal"> </div>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-success" mat-button matStepperPrevious>Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperNext>Siguiente</button>
+                </div>
+
+              </mat-step>
+              <mat-step>
+                <ng-template matStepLabel>Vincular Equipos</ng-template>
+
+                <div class="box box-danger">
+                  <div class="box-header">
+                    <i class="fa fa-laptop"></i>
+
+                    <h3 class="box-title">EQUIPOS VINCULADOS</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <div class="example-container" *ngIf="dataSourceEquip.data.length > 0">
+
+                      <mat-table #tableEquip [dataSource]="dataSourceEquip">
+
+                        <!-- Checkbox Column -->
+                        <ng-container matColumnDef="select">
+                          <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!-- nombre Column -->
+                        <ng-container matColumnDef="nombre">
+                          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsEquip;" (click)="selection.toggle(row)">
+                        </mat-row>
+                      </mat-table>
+
+                    </div>
+
+                  </div>
+
+                  <!-- /.box-body -->
+                </div>
+
+                <div>
+                  <button class="btn btn-success" mat-button matStepperPrevious>Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperNext>Siguiente</button>
+                </div>
+              </mat-step>
+
+              <mat-step>
+                <ng-template matStepLabel>Vincular Espacios</ng-template>
+
+                <div class="box box-danger">
+                  <div class="box-header">
+                    <i class="fa fa-map"></i>
+
+                    <h3 class="box-title">ESPACIOS VINCULADOS</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <div class="example-container" *ngIf="dataSourceEsp.data.length > 0">
+
+                      <mat-table #tableEsp [dataSource]="dataSourceEsp">
+
+                        <!-- Checkbox Column -->
+                        <ng-container matColumnDef="select">
+                          <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!-- nombre Column -->
+                        <ng-container matColumnDef="nombre">
+                          <mat-header-cell *matHeaderCellDef> capacidad </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.capacity}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="freeArea">
+                          <mat-header-cell *matHeaderCellDef> Area libre </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.freeArea}} </mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumnsEsp"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsEsp;" (click)="selection.toggle(row)">
+                        </mat-row>
+                      </mat-table>
+
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+
+                <div>
+                  <button class="btn btn-success" mat-button matStepperPrevious>Anterior</button>
+                  <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
+                </div>
+              </mat-step>
+            </mat-horizontal-stepper>
+
+
+          </div>
+        </div>
+      </div>
+      <!-- prueba de stepp -->
     </div>
 
 
 
   </section>
+
+
 
 
 
@@ -201,174 +370,48 @@
             <div class="box-header text-center">
               <i class="fa fa-address-card-o"></i>
 
-              <h1 class="box-title">Nueva Practica</h1>
+              <h1 class="box-title">Nuevo Evento</h1>
 
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form id="form-work2" class="" name="form-work2" action="#">
-                <fieldset>
+
+
+
+
+
+                    <div class="form-group">
+                      <div class='col-md-6'>
+                        <label for="nombre" class="col-sm-4 col-form-label">nombre:</label>
+                        <input name="nombre" [(ngModel)]="this.evento.title" type="text"  class="form-control" id="edificio">
+                      </div>
+                      <div class='col-md-6'>
+                          <label for="edificio" class="col-sm-4 col-form-label">color:</label>
+                          <input name="color" [(ngModel)]="this.evento.color" type="text" class="form-control" id="edificio">
+                        </div>
+                    </div>
+
+
                   <div class="form-group">
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <div class="form-group row">
-                          <label for="nompru" class="col-sm-4 col-form-label">Nombre de la Practica:</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control" id="nompru" placeholder="Ingrese nombre de la practica">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <div class="form-group row">
-                          <label for="codmat" class="col-sm-4 col-form-label">Codigo de materia:</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control" id="codmat" placeholder="Ingrese codigo de materia">
-                          </div>
-                        </div>
-                      </div>
+                    <div class='col-md-12'>
+                      <label for="fecha" class="col-sm-4 col-form-label">fecha:</label>
+                      <input name="fecha" [(ngModel)]="this.evento.start" type="date"  class="form-control" id="espac">
                     </div>
                   </div>
 
-                </fieldset>
-              </form>
-
-              <div class="row">
-                <div class="col-md-12 col-lg-12">
-                  <div>
-                    <div class="box-header">
-
-                    </div>
-
-                    <div class="box-body">
-
-                      <div class="col-md-12">
-                        <div class="box box-danger">
-                          <div class="box-header">
-                            <i class="fa fa-map"></i>
-
-                            <h3 class="box-title">EQUIPOS VINCULADOS</h3>
-                          </div>
-                          <!-- /.box-header -->
-                          <div class="box-body">
-                            <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquip.data.length > 0">
-                              <div class="example-header">
-                                <mat-form-field>
-                                  <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Equipos">
-                                </mat-form-field>
-                              </div>
 
 
-                              <mat-table #tableEquip #sortEquip="matSort" [dataSource]="dataSourceEquip" matSort>
-
-                                <!-- Checkbox Column -->
-                                <ng-container matColumnDef="select">
-                                  <mat-header-cell *matHeaderCellDef>
-                                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                  [checked]="selection.hasValue() && isAllSelected()"
-                                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
-                                    </mat-checkbox>
-                                  </mat-header-cell>
-                                  <mat-cell *matCellDef="let row">
-                                    <mat-checkbox (click)="$event.stopPropagation()"
-                                                  (change)="$event ? selection.toggle(row) : null"
-                                                  [checked]="selection.isSelected(row)">
-                                    </mat-checkbox>
-                                  </mat-cell>
-                                </ng-container>
-
-                                <!-- nombre Column -->
-                                <ng-container matColumnDef="nombre">
-                                  <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                </ng-container>
 
 
-                                <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumnsEquip;"
-                                         (click)="selection.toggle(row)">
-                                </mat-row>
-                              </mat-table>
-
-                            </div>
-
-                            <div class="col-md-8">
-                              <button style="float: right;" class="btn btn-danger" type="button">Agregar espacio</button>
-                            </div>
-
-                          </div>
-                          <!-- /.box-body -->
-                        </div>
-
-                      </div>
-
-                      <div class="col-md-12">
-                        <div class="box box-danger">
-                          <div class="box-header">
-                            <i class="fa fa-map"></i>
-
-                            <h3 class="box-title">ESPACIOS VINCULADOS</h3>
-                          </div>
-                          <!-- /.box-header -->
-                          <div class="box-body">
-                            <div class="box-body divScroll">
-                              <div *ngIf="this.itemsel.espacios.length == 0">
-                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS</h3>
-                              </div>
-                              <div *ngIf="this.itemsel.espacios.length != 0" class="list-group">
-                                <table class=" table row-border hover table-condensed">
-                                  <thead>
-                                    <tr>
-                                      <th>Edificio</th>
-                                      <th>Planta</th>
-                                      <th>Espacio</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.espacios">
-                                      <td>
-                                        {{item.edificio}}
-                                      </td>
-                                      <td>
-                                        {{item.planta}}
-                                      </td>
-                                      <td>
-                                        {{item.espacio}}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-
-                                </table>
-                              </div>
-                              <button style="float: right;" (click)="addPractice()" class="btn2 btn-danger btn-lg danger" type="button">vincular espacio</button>
-                            </div>
-                          </div>
-                          <!-- /.box-body -->
-                        </div>
-
-                      </div>
-
-
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <input class="form-control" type="date">
-                </div>
-                <div class="col-md-8">
-                  <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">Guardar</button>
-                </div>
-              </div>
             </div>
 
           </div>
         </div>
+
+        <div class="modal-footer">
+          <button (click)="agregarEvento()"   style="float: center;" type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-plus"></i> Agregar</button>
+        </div>
+
       </div>
 
     </div>

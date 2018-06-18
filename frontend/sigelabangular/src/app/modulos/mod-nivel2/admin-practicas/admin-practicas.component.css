@@ -80,14 +80,7 @@
   color: black;
 }
 
-/* estilos selected */
-.example-container {
-  display: flex;
-  flex-direction: column;
-  max-height: 500px;
-  min-width: 300px;
-}
 
-.mat-column-select {
-  overflow: visible;
+.customWidthClass{
+  flex: 0 0 70px;
 }

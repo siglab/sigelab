@@ -70,8 +70,9 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { QuerysAutenticadoService } from './modulos/mod-autenticado/services/querys-autenticado.service';
 import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/observer-autenticado.service';
 
-// librerias calendario
+// librerias material
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 @NgModule({
@@ -126,7 +127,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatStepperModule
 
   ],
   providers: [
