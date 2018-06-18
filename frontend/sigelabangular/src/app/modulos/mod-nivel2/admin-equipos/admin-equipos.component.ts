@@ -47,6 +47,14 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
     equiestructurado:any;
 
+    iconos = {
+      info:false,
+      componente:false,
+      practica:false,
+      servicio:false
+
+    }
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore) {
 
   }
@@ -494,6 +502,15 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
       console.log('se hizo menar');
     });
   }
+
+  cambiarIcono(box){
+    if(!this.iconos[box]){
+      this.iconos[box] = true;
+    } else {
+      this.iconos[box] = false;
+    }
+  }
+
 
 }
 

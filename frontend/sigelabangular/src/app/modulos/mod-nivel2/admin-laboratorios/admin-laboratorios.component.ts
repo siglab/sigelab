@@ -53,7 +53,7 @@ export class AdminLaboratoriosComponent implements OnInit {
     @ViewChild('sortPracticas') sortPracticas: MatSort;
 
     // INICIALIZACION DATATABLE SOLICITUDES
-    displayedColumnsSolicitudes = ['nombre'];
+    displayedColumnsSolicitudes = ['nombre', 'email'];
     dataSourceSolicitudes = new MatTableDataSource([]);
     @ViewChild('paginatorSolicitudes') paginatorSolicitudes: MatPaginator;
     @ViewChild('sortSolicitudes') sortSolicitudes: MatSort;
@@ -86,6 +86,17 @@ export class AdminLaboratoriosComponent implements OnInit {
     rol: any;
 
 
+    iconos = {
+      info:false,
+      equipos:false,
+      personal:false,
+      espacio:false,
+      servicio:false,
+      proyecto:false,
+      practica:false,
+      solicitud:false
+    };
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore) {
   }
 
@@ -99,6 +110,7 @@ export class AdminLaboratoriosComponent implements OnInit {
           this.itemsel = Observable.of(this.labestructurado);
           this.limpiarData();
           const ambiente = this;
+          console.log(this.labestructurado);
         
           swal({
             title: 'Cargando un momento...',
@@ -263,23 +275,23 @@ export class AdminLaboratoriosComponent implements OnInit {
         if (item[clave]) {
           this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
             const servicio =  data.payload.data();
+            const serv = {
+              nombre: servicio.cfName,
+              descripcion: servicio.cfDesc,
+              precio: servicio.cfPrice,
+              activo: servicio.active,
+              variaciones: this.variations(clave),
+              uid: data.payload.id
+             };
+             arr.push(serv);
 
             this.afs.collection<any>('cfSrvReserv',
-            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'creada'))
+            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'pendiente'))
             .snapshotChanges().subscribe(dataSol => {
-
-              const serv = {
-               nombre: servicio.cfName,
-               descripcion: servicio.cfDesc,
-               precio: servicio.cfPrice,
-               activo: servicio.active,
-               variaciones: this.variations(clave),
-               uid: data.payload.id
-              };
-              arr.push(serv);
 
               for (let i = 0; i < dataSol.length; i++) {
                 const element = dataSol[i].payload.doc.data();
+      
                 this.getPersonId(element.user).subscribe(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
@@ -794,6 +806,14 @@ export class AdminLaboratoriosComponent implements OnInit {
     this.infolab.otros.telefono = this.labestructurado.info.tel;
     this.infolab.facilityAdmin = this.labestructurado.iddueno;
 
+  }
+
+  cambiarIcono(box){
+    if(!this.iconos[box]){
+      this.iconos[box] = true;
+    } else {
+      this.iconos[box] = false;
+    }
   }
 
 
