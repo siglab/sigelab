@@ -5,6 +5,7 @@ import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild} from '@angular/
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 
 declare var $: any;
 
@@ -42,13 +43,35 @@ servicioso = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{di
 
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
+  
+   // INICIALIZACION DE CONSULTAS PARA SERVICIOS RESERVADOS POR EL USUARIO
+   private collectionReserv: AngularFirestoreCollection<any>;
+
+   private collectionHisto: AngularFirestoreCollection<any>;
+
+   datos:any;
+   histodatos:any;
 
 
-constructor(private obs: ObservablesService) {
+constructor(private obs: ObservablesService, private afs: AngularFirestore) {
  //this.obs.changeSolServ(this.servicioso);
 }
 
   ngOnInit() {
+
+    this.obs.currentObject.subscribe(data => {
+
+      this.getCollectionReserv(data.uid).subscribe(data1 => {
+        this.datos = this.estructurarServiciosActivos(data1);
+        console.log(this.datos);
+      });
+
+      this.getCollectionsHisto(data.uid).subscribe(data2 => {
+        this.histodatos = this.estructurarHistoriaServicios(data2);
+        console.log(this.histodatos);
+      });
+
+    });
 
     this.obs.currentSolServ.subscribe(data => {
      this.service = data;
@@ -74,6 +97,118 @@ constructor(private obs: ObservablesService) {
   ngOnDestroy() {
 
   }
+
+
+  getCollectionReserv(userid) {
+    this.collectionReserv = this.afs.collection('cfSrvReserv',
+      ref => ref.where('user', '==', userid).where('status', '==', 'pendiente'));
+
+    return this.collectionReserv.snapshotChanges();
+  }
+
+  getCollectionsHisto(userid) {
+    this.collectionHisto = this.afs.collection('cfSrvReserv',
+      ref => ref.where('user', '==', userid));
+
+    return this.collectionHisto.snapshotChanges();
+  }
+
+  estructurarServiciosActivos(data) {
+    const datos = [];
+
+    for (let index = 0; index < data.length; index++) {
+      const elemento = data[index].payload.doc.data();
+      this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
+        const servicio =  data2.payload.data();
+        console.log(elemento);
+          const Reserv = {
+           
+            lab: elemento.cfFacil,
+            status: elemento.status,
+            nombre: servicio.cfName,
+            descripcion: servicio.cfDesc,
+            precio: servicio.cfPrice,
+            activo: servicio.active,
+            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+            condiciones: elemento.conditionsLog,
+            comentario: elemento.comments,
+            uid: data2.payload.id,
+            uidreserv: data[index].payload.doc.id
+          };
+
+          datos.push(Reserv);
+        });
+
+    }
+
+    return datos;
+  }
+
+  estructurarHistoriaServicios(data) {
+    const histodatos = [];
+
+    for (let index = 0; index < data.length; index++) {
+      const elemento = data[index].payload.doc.data();
+      this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
+        const servicio =  data2.payload.data();
+
+        if(elemento.status != 'pendiente'){
+          const HistoReserv = {
+            
+            lab: elemento.cfFacil,
+            status: elemento.status,
+            nombre: servicio.cfName,
+            descripcion: servicio.cfDesc,
+            precio: servicio.cfPrice,
+            activo: servicio.active,
+            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+            condiciones: elemento.conditionsLog,
+            comentario: elemento.comments,
+            uid: data2.payload.id,
+            uidreserv: data[index].payload.doc.id
+          };
+
+          histodatos.push(HistoReserv);
+      
+        }
+      });
+
+    }
+
+    return histodatos;
+  }
+
+  estructurarVariaciones(idser,item){
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {        
+          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
+           const variacion =  data.payload.data();
+       
+            const vari = {
+              id: clave,
+              nombre: variacion.cfName,
+              descripcion: variacion.cfDescription,
+              precio: variacion.cfPrice,
+              activo: variacion.active
+              };
+
+              arr.push(vari);      
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace

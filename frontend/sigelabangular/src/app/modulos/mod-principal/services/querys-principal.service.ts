@@ -145,6 +145,7 @@ export class QuerysPrincipalService {
                   uid: data[index].payload.doc.id
                 },
                 infoLab: {
+                  uid: elemento.cfFacil,
                   dir: labencontrado.otros.direccion,
                   tel: labencontrado.otros.telefono,
                   cel: '',

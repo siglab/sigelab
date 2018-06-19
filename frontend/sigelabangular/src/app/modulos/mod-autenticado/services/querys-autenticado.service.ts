@@ -41,7 +41,8 @@ export class QuerysAutenticadoService {
         console.log(elemento);
           const Reserv = {
             email: email,
-            lab: elemento.cfFacil,
+            lab: elemento.namelab,
+            uidlab: elemento.cfFacil,
             status: elemento.status,
             nombre: servicio.cfName,
             descripcion: servicio.cfDesc,
@@ -73,7 +74,8 @@ export class QuerysAutenticadoService {
         if(elemento.status != 'pendiente'){
           const HistoReserv = {
             email: email,
-            lab: elemento.cfFacil,
+            lab: elemento.namelab,
+            uidlab: elemento.cfFacil,
             status: elemento.status,
             nombre: servicio.cfName,
             descripcion: servicio.cfDesc,

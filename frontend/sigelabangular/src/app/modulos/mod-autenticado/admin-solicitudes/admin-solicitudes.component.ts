@@ -149,7 +149,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   }
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-   buscarVariacion(item){
+  buscarVariacion(item){
     for (let i = 0; i < this.servsel.variaciones.length; i++) {
       const element = this.servsel.variaciones[i];
       if(element.id == item){
@@ -223,8 +223,16 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario(){
+    const fecha = new Date();
+    let cfSrvReserv = {
+      comments:[]
+    };
     console.log(this.comentario);
     console.log(this.servsel);
+    cfSrvReserv.comments.push({
+      commentText: this.comentario, 
+      fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+      uid: this.user.uid});
   }
 
 

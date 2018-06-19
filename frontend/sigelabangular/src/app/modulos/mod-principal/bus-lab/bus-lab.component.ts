@@ -177,7 +177,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     if (this.user) {
 
       const cfSrvReserv = {
-        cfFacil: this.itemsel.nombre,
+        cfFacil: this.itemsel.uid,
+        namelab: this.itemsel.nombre,
         cfSrv: this.servsel.uid,
         user: this.user.uid,
         selectedVariations: {},
