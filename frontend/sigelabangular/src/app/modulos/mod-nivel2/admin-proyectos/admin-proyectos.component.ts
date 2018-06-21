@@ -10,6 +10,10 @@ import { ObservablesService } from '../../../shared/services/observables.service
 export class AdminProyectosComponent implements OnInit {
   itemsel: Observable<Array<any>>;
 
+  proyectos = {
+
+  };
+
   constructor(private obs: ObservablesService) { }
 
   ngOnInit() {
@@ -17,6 +21,9 @@ export class AdminProyectosComponent implements OnInit {
       console.log(data);
       this.itemsel = Observable.of(data);
       console.log(this.itemsel);
+
+
+
     });
   }
 

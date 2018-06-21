@@ -84,3 +84,16 @@
 .customWidthClass{
   flex: 0 0 70px;
 }
+/* estilos calendar */
+
+
+#cal{
+  /* 		float: right; */
+          margin: 0 auto;
+          width: 800px;
+          background-color: #FFFFFF;
+          border-radius: 6px;
+          box-shadow: 0 2px 2px 2px #C3C3C3;
+          font-size: 14px;
+	       font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+      }

@@ -61,7 +61,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   };
 
-  
+
   persestructurado:any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
@@ -88,18 +88,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit() {
     this.obs.currentObject.subscribe(data => {
 
-      if(data.length != 0){
+      if(data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {
 
          this.idlab = data.uid;
          this.itemsel = Observable.of(this.persestructurado.personal);
           console.log(this.persestructurado);
-         
+
           this.dataSourcePers.data = this.persestructurado.personal;
           this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
 
          const ambiente = this;
-       
+
          swal({
            title: 'Cargando un momento...',
            text: 'espere mientras se cargan los datos',
@@ -107,25 +107,25 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
              swal.showLoading();
            }
          });
-   
-         
+
+
         setTimeout(function () {
-          if (ambiente.persestructurado.personal != 0) {
+          if (ambiente.persestructurado.personal !== 0) {
 
             ambiente.dataSourcePers.sort = ambiente.sortPers;
             ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
             ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
             ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
-            
-           
+
+
           }
 
           swal.close();
 
-        }, 1500);
-  
+        }, 2000);
+
        });
-      
+
       }
 
 
@@ -149,26 +149,26 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     let promise = new Promise((resolve,reject)=>{
       this.buscarLab(key).subscribe(labo => {
         const laboratorio = labo.payload.data();
- 
+
         let estadoLab;
         if (laboratorio.active === true) {
            estadoLab = 'Activo';
         } else if ( laboratorio.active === false ) {
            estadoLab = 'Inactivo';
         }
- 
-         this.persestructurado = {    
+
+         this.persestructurado = {
             personal: this.estructurarPers(laboratorio.relatedPers),
             personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
             estado: estadoLab,
-            uid: key    
+            uid: key
          };
- 
+
          resolve();
-  
+
       })
      });
-  
+
      return promise;
 
   }
@@ -187,7 +187,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 const user = dataper.payload.data();
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-    
+
                 const persona = {
                   roles: user.appRoles,
                   nombre: pers.cfFirstNames,
