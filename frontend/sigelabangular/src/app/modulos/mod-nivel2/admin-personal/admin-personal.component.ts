@@ -86,7 +86,16 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               private register: LoginService) { }
 
   ngOnInit() {
-    this.obs.currentObject.subscribe(data => {
+           
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+    
+    this.obs.currentObjectPer.subscribe(data => {
 
       if(data.length != 0){
         this.estructuraIdPers(data.uid).then(() => {
@@ -99,16 +108,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
 
          const ambiente = this;
-       
-         swal({
-           title: 'Cargando un momento...',
-           text: 'espere mientras se cargan los datos',
-           onOpen: () => {
-             swal.showLoading();
-           }
-         });
-   
-         
+          
         setTimeout(function () {
           if (ambiente.persestructurado.personal != 0) {
 

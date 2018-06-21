@@ -5,6 +5,7 @@ import { ObservablesService } from '../../../shared/services/observables.service
 import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Http } from '@angular/http';
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
@@ -46,61 +47,68 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     itemsel: Observable<Array<any>>;
 
     equiestructurado:any;
+    infosabs = [];
+    infosabsel:any;
+    response:any;
 
     iconos = {
       info:false,
       componente:false,
       practica:false,
-      servicio:false
+      servicio:false,
+      sabs:false
 
-    }
+    };
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore) {
+    modelEquipoSel = {
+      cfName: '',
+      price: ''
+    };
+
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
 
   }
 
   ngOnInit() {
       // abre loading mientras se cargan los datos
-      swal({
-        title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
-        onOpen: () => {
-          swal.showLoading();
-        }
-      });
 
+    this.obs.currentObjectequip.subscribe(data => {
 
-    this.obs.currentObject.subscribe(data => {
-
+      this.equiestructurado = undefined;
       this.iniciliazarTablas();
 
       if(data.length != 0){
-        this.estructurarEquip(data.uid).then(() => {
-         this.itemsel = Observable.of(this.equiestructurado.equipos);
-          console.log(this.equiestructurado);
-         this.dataSourceEquip.data = this.equiestructurado.equipos;
-
-         const ambiente = this;
-       
-         swal({
-           title: 'Cargando un momento...',
-           text: 'espere mientras se cargan los datos',
-           onOpen: () => {
-             swal.showLoading();
-           }
-         });
+        swal({
+          title: 'Cargando un momento...',
+          text: 'espere mientras se cargan los datos',
+          onOpen: () => {
+            swal.showLoading();
+          }
+        });
+        if(!this.equiestructurado){
+          this.estructurarEquip(data.uid).then(() => {
+            this.itemsel = Observable.of(this.equiestructurado.equipos);
+             console.log(this.equiestructurado);
+             console.log(this.infosabs);
+            this.dataSourceEquip.data = this.equiestructurado.equipos;
    
-          setTimeout(function() {
-            if (ambiente.equiestructurado.equipos != 0) {
-              ambiente.dataSourceEquip.sort = ambiente.sortEquip;
-              ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
-               // cierra loading luego de cargados los datos
-              swal.close();
-            }
-           
-          }, 1500);
- 
-       });
+            const ambiente = this;
+      
+             setTimeout(function() {
+               if (ambiente.equiestructurado.equipos != 0) {
+                 ambiente.dataSourceEquip.sort = ambiente.sortEquip;
+                 ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
+                  // cierra loading luego de cargados los datos
+                
+               }
+              
+             }, 1500);
+    
+          });
+        } else {
+          swal.close();
+        }
+        
       
       }
 
@@ -112,7 +120,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
   }
 
   estructurarEquip(key){
-
+    this.equiestructurado = {};
     let promise = new Promise((resolve,reject)=>{
      this.buscarLab(key).subscribe(labo => {
        const laboratorio = labo.payload.data();
@@ -138,11 +146,11 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
  
     return promise;
  
-   }
+  }
 
-      // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
-  
-      // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
+
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
   estructurarServicios(item) {
 
     const arr = [];
@@ -262,15 +270,20 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 const equipo = {
+                  id: data.payload.id,
                   nombre: equip.cfName,
                   activo: equip.active,
                   precio: equip.price,
+                  // infoSab: this.consultarSabs(equip.inventory),
                   componentes:this.estructurarComponents(clave),
                   servicios:this.estructurarServicios(equip.relatedSrv).arr,
                   practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
 
-              
+                this.consultarSabs(equip.inventory).then(() => {
+                  this.infosabs.push(this.response);
+                  swal.close();
+                });
 
                 arr.push(equipo);
 
@@ -282,6 +295,37 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     }
 
     return arr;
+  }
+
+  // METODO QUE TRAE LOS DATOS EXISTENTES EN SABS
+  consultarSabs(item){
+    this.infosabs = [];
+    let promise = new Promise((resolve,reject) => {
+
+      const url = 'http://192.168.0.10:1337/inventario/buscar';
+      const body = {
+        codInventario: item,
+        codLab: '5646',
+        nomLab: 'fgh',
+        sede: 'fgh',
+        edificio: '567',
+        espacio: 'fghgf'
+      };
+ 
+      this.http.post(url, body).subscribe((res) => {
+        if(res.status == 200){
+          this.response =  res.json().inventario;
+        } else {
+          this.response = {};
+        }
+
+        resolve();
+       
+      });
+    });
+
+
+    return promise;
   }
 
       // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -342,24 +386,22 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
   }
 
 
-
-
- 
-
-
-  cambiardataEquipos(item) {
-   this.equiposel = this.buscarDato(item);
-
-  }
-
-  cambiarDataEquipo(item) {
+  cambiarDataEquipo(item, index) {
     console.log(item);
+    console.log(index);
     const ambiente = this;
     this.equiposel = item;
+    this.infosabsel = this.infosabs[index];
+
+    this.modelEquipoSel.cfName = this.equiposel.nombre;
+    this.modelEquipoSel.price = this.equiposel.precio;
+
+
     this.dataSourceComponentes.data = item.componentes;
     this.dataSourceServicios.data = item.servicios;
     this.dataSourcePracticas.data = item.practicas;
-    console.log(this.dataSourceComponentes.data);
+
+
     setTimeout(function() {
       ambiente.dataSourceComponentes.sort = ambiente.sortComponentes;
       ambiente.dataSourceComponentes.paginator = ambiente.paginatorComponentes;
@@ -374,6 +416,25 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
   }
 
+  editarEquipo(){
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere por favor',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+    this.afs.doc('cfEquip/'+this.equiposel.id).update(this.modelEquipoSel).then(()=>{
+      swal.close();
+      swal({
+        type: 'success',
+        title: 'Exito',
+        showConfirmButton: true
+      }); 
+      this.obs.changeObjectEquip({nombre:this.equiestructurado.nombre, uid: this.equiestructurado.uid});  
+    });
+  }
+
   iniciliazarTablas() {
     this.equiposel = undefined;
     this.dataSourceComponentes.data = [];
@@ -386,14 +447,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     this.seleccionado = row;
   }
 
-
- buscarDato(item) {
-  //  for(let i=0;i<this.equipos.length;i++){
-  //    if(item.nombre == this.equipos[i].nombre){
-  //      return this.equipos[i];
-  //    }
-  //  }
- }
 
   applyFilterEquip(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace

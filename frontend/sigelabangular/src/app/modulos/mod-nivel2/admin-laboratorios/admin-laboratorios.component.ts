@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import swal from 'sweetalert2';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 declare var $: any;
 
@@ -91,76 +92,88 @@ export class AdminLaboratoriosComponent implements OnInit {
       equipos:false,
       personal:false,
       espacio:false,
+      espacioaso:false,
       servicio:false,
       proyecto:false,
       practica:false,
       solicitud:false
     };
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore) {
+    espaciosel:any;
+    plano:Observable<any>;
+
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, private storage: AngularFireStorage) {
   }
 
   ngOnInit() {
+
     this.getUserId();
     this.getRoles();
-    this.obs.currentObject.subscribe(data => {
-      console.log(data);
+
+    this.obs.currentObjectLab.subscribe(data => {
+      console.log(this.labestructurado);
+      this.labestructurado = undefined;
       if(data.length != 0){
-         this.estructurarLab(data.uid).then(() => {
-          this.itemsel = Observable.of(this.labestructurado);
-          this.limpiarData();
-          const ambiente = this;
-          console.log(this.labestructurado);
-        
-          swal({
-            title: 'Cargando un momento...',
-            text: 'espere mientras se cargan los datos',
-            onOpen: () => {
-              swal.showLoading();
-            }
-          });
-    
-          setTimeout(function() {
-    
-            ambiente.dataSourceEquipos.data = ambiente.labestructurado.equipos;
-    
-            ambiente.dataSourcePersonal.data = ambiente.labestructurado.personal;
-    
-            ambiente.dataSourceServicios.data = ambiente.labestructurado.servicios;
-    
-            ambiente.dataSourceProyectos.data = ambiente.labestructurado.proyectos;
-    
-            ambiente.dataSourcePracticas.data = ambiente.labestructurado.practicas;
-    
-            ambiente.dataSourceSolicitudes.data = ambiente.labestructurado.solicitudes;
-          }, 1000);
-    
-          setTimeout(function() {
-    
-            ambiente.dataSourceEquipos.sort = ambiente.sortEquipos;
-            ambiente.dataSourceEquipos.paginator = ambiente.paginatorEquipos;
-    
-            ambiente.dataSourcePersonal.sort = ambiente.sortPersonal;
-            ambiente.dataSourcePersonal.paginator = ambiente.paginatorPersonal;
-    
-            ambiente.dataSourceServicios.sort = ambiente.sortServicios;
-            ambiente.dataSourceServicios.paginator = ambiente.paginatorServicios;
-    
-            ambiente.dataSourceProyectos.sort = ambiente.sortProyectos;
-            ambiente.dataSourceProyectos.paginator = ambiente.paginatorProyectos;
-    
-            ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
-            ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
-    
-            ambiente.dataSourceSolicitudes.sort = ambiente.sortSolicitudes;
-            ambiente.dataSourceSolicitudes.paginator = ambiente.paginatorSolicitudes;
-    
-            swal.close();
-          }, 1500);
-    
-  
+        swal({
+          title: 'Cargando un momento...',
+          text: 'espere mientras se cargan los datos',
+          onOpen: () => {
+            swal.showLoading();
+          }
         });
-       
+
+        if(!this.labestructurado){
+          this.estructurarLab(data.uid).then(() => {
+            this.itemsel = Observable.of(this.labestructurado);
+            this.limpiarData();
+            const ambiente = this;
+            console.log(this.labestructurado);
+          
+            if(this.labestructurado){
+                this.dataSourceEquipos.data = this.labestructurado.equipos;
+                  
+                this.dataSourcePersonal.data = this.labestructurado.personal;
+        
+                this.dataSourceServicios.data = this.labestructurado.servicios;
+        
+                this.dataSourceProyectos.data = this.labestructurado.proyectos;
+        
+                this.dataSourcePracticas.data = this.labestructurado.practicas;
+        
+                this.dataSourceSolicitudes.data = this.labestructurado.solicitudes;
+  
+                setTimeout(function() {
+      
+                  ambiente.dataSourceEquipos.sort = ambiente.sortEquipos;
+                  ambiente.dataSourceEquipos.paginator = ambiente.paginatorEquipos;
+          
+                  ambiente.dataSourcePersonal.sort = ambiente.sortPersonal;
+                  ambiente.dataSourcePersonal.paginator = ambiente.paginatorPersonal;
+          
+                  ambiente.dataSourceServicios.sort = ambiente.sortServicios;
+                  ambiente.dataSourceServicios.paginator = ambiente.paginatorServicios;
+          
+                  ambiente.dataSourceProyectos.sort = ambiente.sortProyectos;
+                  ambiente.dataSourceProyectos.paginator = ambiente.paginatorProyectos;
+          
+                  ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
+                  ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
+          
+                  ambiente.dataSourceSolicitudes.sort = ambiente.sortSolicitudes;
+                  ambiente.dataSourceSolicitudes.paginator = ambiente.paginatorSolicitudes;
+          
+                  swal.close();
+  
+                }, 1500);
+  
+               
+            }    
+    
+          });
+        } else {
+          swal.close();
+        }
+     
       }
 
     });
@@ -186,7 +199,7 @@ export class AdminLaboratoriosComponent implements OnInit {
 
 
   estructurarLab(key){
-
+    this.labestructurado = {};
    let promise = new Promise((resolve,reject)=>{
     this.buscarLab(key).subscribe(labo => {
       const laboratorio = labo.payload.data();
@@ -212,6 +225,7 @@ export class AdminLaboratoriosComponent implements OnInit {
               inves: laboratorio.researchGroup,
               director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
               iddueno: laboratorio.facilityAdmin,
+              espacioPrin: espacioLab,
               coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
               info: {dir: laboratorio.otros.direccion, tel: laboratorio.otros.telefono, cel: '', email: laboratorio.otros.email},
               servicios: this.estructurarServicios(laboratorio.relatedServices).arr,
@@ -220,6 +234,7 @@ export class AdminLaboratoriosComponent implements OnInit {
               personal: this.estructurarPersonas(laboratorio.relatedPers),
               proyectos: this.estructurarProyectos(laboratorio.relatedProjects),
               solicitudes: this.estructurarServicios(laboratorio.relatedServices).arr2,
+              espacios: this.estructurarSpace(laboratorio.relatedSpaces),
               cambios: laboratorio.suggestedChanges,
               estado: estadoLab
             };
@@ -510,6 +525,49 @@ export class AdminLaboratoriosComponent implements OnInit {
     return arr;
   }
 
+  estructurarSpace(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+          this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
+            const espacio = data.payload.data();
+
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              if (espacio) {
+                const space = {
+                  id_space: data.payload.id,
+                  capacity: espacio.capacity,
+                  createdAt: espacio.createdAt,
+                  freeArea: espacio.freeArea,
+                  headquarter: espacio.headquarter,
+                  indxSa: espacio.indxSa,
+                  map: espacio.map,
+                  minArea: espacio.minArea,
+                  ocupedArea: espacio.ocupedArea,
+                  totalArea: espacio.totalArea,
+                  spaceData: espacio.spaceData,
+
+                };
+
+                arr.push(space);
+              }
+
+
+
+          });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
 
 
 
@@ -598,7 +656,7 @@ export class AdminLaboratoriosComponent implements OnInit {
         }
       });
       this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
-        this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+        this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
        
         swal.close();
         swal({
@@ -797,6 +855,44 @@ export class AdminLaboratoriosComponent implements OnInit {
     }
   }
 
+  cambiarEspacioSel(item){
+    if(item != 'inicial'){
+      this.espaciosel = this.buscarEspacioLocal(item);
+      console.log(this.espaciosel);
+    } else {
+      this.espaciosel = undefined;
+    }
+  }
+
+  /* este metodo carga la imagen desde firebase con un parametro nombre de la imagen */
+  cargarImagen() {
+
+    if (this.espaciosel.map) {  
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });  
+     const ref = this.storage.ref('planos/' + this.espaciosel.map + '.png');
+      this.plano = ref.getDownloadURL();
+      if(this.plano){
+        swal.close();
+      }
+    } 
+
+  }
+
+  // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+  buscarEspacioLocal(item){
+    for (let i = 0; i < this.labestructurado.espacios.length; i++) {
+      const element = this.labestructurado.espacios[i];
+      if(element.id_space == item){
+        return element;
+      }   
+    }
+  }
 
   limpiarData(){
     this.seleccionado = 'inicial';

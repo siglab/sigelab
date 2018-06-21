@@ -105,6 +105,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       }, 1000);
 
     });
+    
 
   }
 

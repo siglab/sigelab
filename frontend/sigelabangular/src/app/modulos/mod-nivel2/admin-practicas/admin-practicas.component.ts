@@ -78,7 +78,15 @@ export class AdminPracticasComponent implements OnInit {
 
 
   ngOnInit() {
-    this.obs.currentObject.subscribe(data => {
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+    
+    this.obs.currentObjectPra.subscribe(data => {
       if (data.length !== 0) {
         this.estructurarDataPrac(data.uid).then(() => {
           this.itemsel = Observable.of(this.pracestructurado);
@@ -122,15 +130,6 @@ export class AdminPracticasComponent implements OnInit {
             const transformedFilter = filter.trim().toLowerCase();
             return dataStr.indexOf(transformedFilter) !== -1;
           };
-
-
-          swal({
-            title: 'Cargando un momento...',
-            text: 'espere mientras se cargan los datos',
-            onOpen: () => {
-              swal.showLoading();
-            }
-          });
 
           setTimeout(() => {
             if (this.pracestructurado.practicas.length > 0) {
