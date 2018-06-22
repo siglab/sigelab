@@ -548,6 +548,7 @@ export class AdminPracticasComponent implements OnInit {
     containerEl.fullCalendar('destroy');
 
     containerEl.fullCalendar({
+
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
       // options here

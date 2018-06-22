@@ -211,6 +211,7 @@ export class AdminEspaciosComponent implements OnInit {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
               if (espacio) {
+                console.log('espacioo', espacio);
                 const space = {
                   id_space: data.payload.id,
                   capacity: espacio.capacity,
@@ -223,6 +224,7 @@ export class AdminEspaciosComponent implements OnInit {
                   ocupedArea: espacio.ocupedArea,
                   totalArea: espacio.totalArea,
                   spaceData: espacio.spaceData,
+                  active: espacio.active
 
                 };
 
@@ -279,6 +281,7 @@ export class AdminEspaciosComponent implements OnInit {
     this.space.spaceData.floor = item.spaceData.floor;
     this.space.spaceData.place = item.spaceData.place;
     this.space.map = item.map;
+    this.space.active = item.active;
 
     this.cargarImagen(this.space.map);
     this.listPracticeforSpace();
@@ -320,7 +323,14 @@ export class AdminEspaciosComponent implements OnInit {
 
     this.buscarSede().then((ok: string) => {
       nuevoespacio.subHq = ok;
-       this.afs.doc( 'space/' + this.idsp ).set( nuevoespacio, { merge: true} );
+       this.afs.doc( 'space/' + this.idsp ).set( nuevoespacio, { merge: true} ).then( () => {
+        swal({
+          type: 'success',
+          title: 'Actualizado Correctamente',
+          showConfirmButton: true
+        });
+
+       });
       console.log(nuevoespacio);
     });
 
@@ -399,7 +409,15 @@ export class AdminEspaciosComponent implements OnInit {
 
 
     console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil' ).doc(this.idlab).set({   relatedSpaces   }  , { merge: true });
+    this.afs.collection('cfFacil' ).doc(this.idlab).set({   relatedSpaces   }  , { merge: true })
+                   .then( () => {
+
+                    swal({
+                      type: 'success',
+                      title: 'Creado Correctamente',
+                      showConfirmButton: true
+                    });
+                   });
 
   }
 
