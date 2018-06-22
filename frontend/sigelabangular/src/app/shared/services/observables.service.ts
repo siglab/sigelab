@@ -39,6 +39,9 @@ export class ObservablesService {
   private objectSolServ = new BehaviorSubject<any>([]);
   currentObjectSolSer = this.objectSolServ.asObservable();
 
+  private objectProy = new BehaviorSubject<any>([]);
+  currentObjectProy = this.objectProy.asObservable();
+
 
   changeObject(object: any) {
     this.object.next(object);
@@ -66,6 +69,10 @@ export class ObservablesService {
 
   changeObjectSolServ(object: any) {
     this.objectSolServ.next(object);
+  }
+
+  changeObjectProy(object: any) {
+    this.objectProy.next(object);
   }
 
   getSolServ() {
