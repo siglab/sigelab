@@ -168,6 +168,9 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   enviaritemPra(pra){
     this.obs.changeObjectPra(pra);
   }
+  enviaritemSolServ(solsrv){
+    this.obs.changeObjectSolServ(solsrv);
+  }
 
 
 

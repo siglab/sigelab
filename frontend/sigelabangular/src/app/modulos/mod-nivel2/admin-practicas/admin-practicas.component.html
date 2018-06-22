@@ -24,7 +24,7 @@
           <div class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button style="float: right;" class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal2">Nuevo practica, prueba y/o ensayo</button>
+                <button style="float: right;" class="btn btn-danger" type="button">Nuevo practica, prueba y/o ensayo</button>
               </div>
             </div>
           </div>
@@ -90,7 +90,7 @@
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPrac"></mat-header-row>
                           <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
-                            data-target="#myModal"></mat-row>
+                            data-target="#myModal3"></mat-row>
                         </mat-table>
 
                         <mat-paginator #paginatorPrac="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
@@ -157,8 +157,7 @@
 
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPracIn"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
-                            data-target="#myModal"></mat-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal" data-target="#myModal3"></mat-row>
                         </mat-table>
 
                         <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
@@ -191,16 +190,25 @@
           <!-- /.box-header -->
           <div class="box-body">
             <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
-              <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="firstFormGroup">
+              <mat-step>
+                <form >
                   <ng-template matStepLabel>Informacion basica</ng-template>
                   <mat-form-field>
-                    <input matInput placeholder="nombre practica" formControlName="firstCtrl" required>
+                    <input name="nombrep" [(ngModel)]="nameP"  matInput placeholder="nombre practica"  >
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput placeholder="Codigo de la materia" formControlName="firstCtrl">
+                    <input name="code"   [(ngModel)]="code"  matInput placeholder="Codigo de la materia" >
                   </mat-form-field>
+
+                  <mat-form-field>
+                      <input name="semestre"  [(ngModel)]="programming.semester"  matInput placeholder="Semestre" >
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input name="numeroes"  [(ngModel)]="programming.noStudents"  matInput placeholder="Numero de estudiantes" >
+                      </mat-form-field>
+
                   <div>
                     <button mat-button matStepperNext (click)="initCalendar(this.events)" class="btn btn-success">siguiente</button>
                   </div>
@@ -218,17 +226,17 @@
 
 
                   </div>
-                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#myModal2"> Agregar Fecha
+                  <button  class="btn btn-success text-center" type="button" data-toggle="modal" data-target="#myModal2"> Agregar Fecha
                     <i class="fa fa-plus"></i>
                   </button>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <div id="cal"> </div>
+                    <div class="cal" id="cal"> </div>
                   </div>
                 </div>
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious>Anterior</button>
-                  <button class="btn btn-success" mat-button matStepperNext>Siguiente</button>
+                  <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i> Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperNext>Siguiente <i class="fa fa-arrow-right"></i>  </button>
                 </div>
 
               </mat-step>
@@ -279,8 +287,8 @@
                 </div>
 
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious>Anterior</button>
-                  <button class="btn btn-success" mat-button matStepperNext>Siguiente</button>
+                  <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i>  Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperNext>Siguiente <i class="fa fa-arrow-right"></i> </button>
                 </div>
               </mat-step>
 
@@ -334,7 +342,7 @@
                 </div>
 
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious>Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i> Anterior</button>
                   <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
                 </div>
               </mat-step>
@@ -358,7 +366,7 @@
 </div>
 
 <!-- MODAL PARA NUEVAS PRACTICAS -->
-<section class="content" *ngIf="itemsel | async; let itemsel">
+
   <div class="modal fade" id="myModal2" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -387,7 +395,7 @@
                       </div>
                       <div class='col-md-6'>
                           <label for="edificio" class="col-sm-4 col-form-label">color:</label>
-                          <input name="color" [(ngModel)]="this.evento.color" type="text" class="form-control" id="edificio">
+                          <input name="color" [(ngModel)]="this.evento.color" type="color" class="form-control" id="edificio">
                         </div>
                     </div>
 
@@ -416,7 +424,115 @@
 
     </div>
   </div>
-</section>
+
+
+
+<!--  modal editar informacion del personal -->
+<div class="modal fade" id="modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+            <h3 class="box-title">Informacion del Personal</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-dash2equip" class="" name="form-dash2equip">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Nombre :</strong>
+                    </label>
+                    <input   id="escuelaedit" name="nombre" class="form-control" type="text">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Apellidos :</strong>
+                      </label>
+                      <input    id="escuelaedit" name="apellido" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="nombreprub">
+                          <strong>tipo:</strong>
+                        </label>
+                        <input   id="escuelaedit" name="rol" class="form-control" type="text">
+                      </div>
+                    </div>
+
+
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Email:</strong>
+                    </label>
+                    <input    id="escuelaedit" name="email" class="form-control" type="email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Estado:</strong>
+                    </label>
+                     <select    class="form-control"  name = "estado"  >
+                      <option   value="true">  Activo </option>
+                      <option   value="false"> Inactivo</option>
+
+                    </select>
+                  </div>
+
+
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Rol:</strong>
+                    </label>
+                     <select    class="form-control"  name = "estado"  >
+                      <option   value="editar">  editar  </option>
+                      <option   value="nivel2">  nivel2  </option>
+                      <option
+
+                    </select>
+                  </div>
+
+
+                </div>
+
+
+
+              </fieldset>
+
+
+            </form>
+
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button"   class="btn btn-danger">Guardar</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
 
 <!-- MODAL PARA VER INFORMACION DE PRACTICAS -->
 <div class="modal fade" id="myModal3" role="dialog">
@@ -452,18 +568,51 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="ccpas">
-                            <strong>Nombre Practica: {{this.practica.nombre}}</strong>
+                            <strong>Nombre Practica:</strong>
                           </label>
+
+                          <input name="nombre" [(ngModel)]="this.practica.nombre"  type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
-                          <label class="control-label" for="nac">
-                            <strong>Facultad: </strong>
+                          <label class="control-label" for="ccpas">
+                            <strong>Numero Estudiantes:</strong>
                           </label>
+
+                          <input name="numeroEstudiantes" [(ngModel)]="this.practica.numeroEst"  type="text" class="form-control" id="nombre">
+
                         </div>
                       </div>
+
+
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ccpas">
+                            <strong>Semestre:</strong>
+                          </label>
+
+                          <input name="semestre" [(ngModel)]="this.practica.semestre"  type="text" class="form-control" id="nombre">
+
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-12">
+
+                            <label   style="margin-top: 20px;" class="switch">
+                              <input name="active" [(ngModel)]="this.practica.estado" id="activo" type="checkbox" checked>
+                              <span class="slider round"></span>
+                            </label>
+
+
+                        </div>
+                      </div>
+
+
+
+                      <div  *ngFor="let item of this.practica.space">
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="ciuor">
@@ -471,55 +620,40 @@
                           </label>
                         </div>
                       </div>
+
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="ciudes">
-                            <strong>Edificio: </strong>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciudes">
-                            <strong>Planta: </strong>
+                            <strong>Edificio: {{item.spaceData.building}}  </strong>
                           </label>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="ciudes">
-                            <strong>Espacio: </strong>
+                            <strong>Planta: {{item.spaceData.floor}}  </strong>
                           </label>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="ciudes">
-                            <strong>Materia: </strong>
+                            <strong>Espacio: {{item.spaceData.place}}  </strong>
                           </label>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciudes">
-                            <strong>Estado: </strong>
-                          </label>
-                        </div>
-                      </div>
-                      <div *ngIf="this.interfaz" class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciudes">
-                            <strong>Ultimo semestre dictada: </strong>
-                          </label>
-                        </div>
-                      </div>
+                    </div>
+
+
 
                     </fieldset>
                   </form>
 
-                  <div *ngIf="!this.interfaz" class="form-group text-center" style="margin-top: 20px;">
+                  <div class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
-                      <button class="btn2 btn-danger btn-lg danger" type="button">Ver Programacion</button>
+                      <button class="btn btn-danger"  data-toggle="modal" data-target="#practicaprog"  type="button">Programacion</button>
+
+                      <button class="btn btn-success" (click)= "actualizarPractica()"  type="button">Guardar</button>
                     </div>
                   </div>
 
@@ -539,10 +673,10 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                   <div class="box-body divScroll">
-                    <div *ngIf="this.itemsel.equipos.length == 0">
-                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                    <div *ngIf="this.practica.equipos.length == 0">
+                      <h3>Esta practica no tiene equipos asociados</h3>
                     </div>
-                    <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
+                    <div *ngIf="this.practica.equipos.length != 0" class="list-group">
                       <table class=" table row-border hover table-condensed">
                         <thead>
                           <tr>
@@ -551,7 +685,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos">
+                          <tr style="cursor:pointer" *ngFor="let item of this.practica.equipos">
                             <td>
                               {{item.nombre}}
                             </td>
@@ -578,6 +712,34 @@
             </div>
 
 
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- modal de horario de practica -->
+<div class="modal fade" id="practicaprog" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-calendar"></i>
+
+            <h1 class="box-title">Programacion de la Practica</h1>
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+
+            <div class= "cal" id="cal2">
+            </div>
           </div>
 
         </div>

@@ -102,7 +102,7 @@
                     <h3 class="box-title">Ficha tecnica de espacio seleccionado</h3>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <button data-toggle="modal" data-target="#modal2" style="float: right;" class="btn btn-danger" type="button">Programacion  Espacio</button>
+                        <button (click)="initCalendar()" data-toggle="modal" data-target="#modal2" style="float: right;" class="btn btn-danger" type="button">Programacion Espacio</button>
                       </div>
                     </div>
                   </div>
@@ -191,14 +191,14 @@
 
                   <div class="box-body">
                     <h3 *ngIf=" this.mensaje"> El laboratorio seleccionado no cuenta con ningun plano </h3>
-                    <img *ngIf="this.plano"  style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
+                    <img *ngIf="this.plano" style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
 
                   </div>
 
                 </div>
               </div>
-                   <!-- calendario de actividades -->
-           <!--    <div class="col-md-6">
+              <!-- calendario de actividades -->
+              <!--    <div class="col-md-6">
                 <div class="box box-danger">
 
                   <div class="box-body">
@@ -434,8 +434,8 @@
                         <label for="facultad" class="col-sm-2 col-form-label">Sede:</label>
                         <div class="col-sm-10">
                           <select class="form-control" [(ngModel)]="this.sede" name="estado">
-                            <option value="san fernando">san fernando</option>
-                            <option value="ciudad universitaria melendez">ciudad universitaria melendez</option>
+                            <option value="san fernando">San Fernando</option>
+                            <option value="ciudad universitaria melendez">Ciudad Universitaria Melendez</option>
 
                           </select>
                         </div>
@@ -529,12 +529,14 @@
 
                 <div class="form-group">
                   <div class="col-md-12">
-                    <label for="Activo" class="col-sm-3 col-form-label">Activo:</label>
-                    <div class="col-sm-9">
-                      <label class="switch">
-                        <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox" checked>
-                        <span class="slider round"></span>
-                      </label>
+                    <div class="form-group row">
+                      <label for="Activo" class="col-form-label">Activo:</label>
+                      <div class="col-sm-9">
+                        <label class="switch">
+                          <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox" checked>
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
                     </div>
 
                   </div>
@@ -731,9 +733,9 @@
           <!-- /.box-header -->
           <div class="box-body">
 
-            <div id="calendario">
+            <div class="cal" id="cal">
             </div>
-        </div>
+          </div>
 
         </div>
       </div>

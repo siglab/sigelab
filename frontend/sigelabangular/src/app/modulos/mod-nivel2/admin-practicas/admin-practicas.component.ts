@@ -17,36 +17,51 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
   styleUrls: ['./admin-practicas.component.css']
 })
 export class AdminPracticasComponent implements OnInit {
-  events = [ {
-    title: 'seguridad1',
-    start: '2018-06-09',
-    color: 'red'
-  },
-  {
-    title: 'programa2',
-    start: '2018-06-04',
-    color: 'blue'
-  } ];
+  events = [
+  ];
+
+  id_prc;
+  id_pro;
+
+  practica = {
+    nombre: '',
+    semestre: '',
+    numeroEst: '',
+    estado: false,
+    equipos: [],
+    space: [
+    ]
+  };
+
   evento = {
     title: '',
     start: '',
     color: ''
   };
+
+  programming = {
+    semester: '',
+    noStudents: '',
+  };
+
+  code;
+  nameP;
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-
+  id_lab;
+  mainSpace;
   selection = new SelectionModel(true, []);
   selection2 = new SelectionModel(true, []);
 
   itemsel: Observable<Array<any>>;
   interfaz: boolean;
-  practica = { nombre: '' };
+
   info: any;
   displayedColumnsPrac = ['nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
   dataSourcePrac = new MatTableDataSource([]);
 
-  displayedColumnsPracIn = ['nombre', 'estado', 'semestre', 'estudiantes', 'horario'];
+  displayedColumnsPracIn = ['nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
   dataSourcePracIn = new MatTableDataSource([]);
   // equipos
   displayedColumnsEquip = ['select', 'nombre'];
@@ -74,25 +89,34 @@ export class AdminPracticasComponent implements OnInit {
   pracestructurado: any;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore, private _formBuilder: FormBuilder) {
+
+
   }
 
 
   ngOnInit() {
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
-    
+
+     this.metodoInicio();
+
+  }
+
+
+
+
+
+   async metodoInicio() {
+
     this.obs.currentObjectPra.subscribe(data => {
+
+
       if (data.length !== 0) {
         this.estructurarDataPrac(data.uid).then(() => {
+
           this.itemsel = Observable.of(this.pracestructurado);
           console.log(this.pracestructurado);
 
-          // this.idlab = data.uid;
+          this.id_lab = data.uid;
+          this.mainSpace = this.pracestructurado.mainSpace;
 
           this.dataSourcePrac = new MatTableDataSource(this.pracestructurado.practicas);
 
@@ -131,6 +155,14 @@ export class AdminPracticasComponent implements OnInit {
             return dataStr.indexOf(transformedFilter) !== -1;
           };
 
+          swal({
+            title: 'Cargando un momento...',
+            text: 'espere mientras se cargan los datos',
+            onOpen: () => {
+              swal.showLoading();
+            }
+          });
+
           setTimeout(() => {
             if (this.pracestructurado.practicas.length > 0) {
 
@@ -147,22 +179,18 @@ export class AdminPracticasComponent implements OnInit {
               this.dataSourceEsp.paginator = this.paginatorEsp;
 
             }
-            swal.close();
-          }, 1000);
+               swal.close();
+          }, 2000);
 
 
-        });
-
-        this.firstFormGroup = this._formBuilder.group({
-          firstCtrl: ['', Validators.required]
-        });
-        this.secondFormGroup = this._formBuilder.group({
-          secondCtrl: ['', Validators.required]
         });
       }
 
     });
+
+
   }
+
 
   estructurarDataPrac(key) {
 
@@ -183,7 +211,9 @@ export class AdminPracticasComponent implements OnInit {
           equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
           espacios: this.estructurarSpace(laboratorio.relatedSpaces),
           estado: estadoLab,
-          id_lab: key
+          mainSpace: laboratorio.mainSpace,
+          id_lab: key,
+          nombre: laboratorio.cfName
         };
         resolve();
 
@@ -201,7 +231,7 @@ export class AdminPracticasComponent implements OnInit {
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
-  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAestructurarPracticasS ASOCIADOS
   estructurarPracticas(item) {
 
     const arr = [];
@@ -214,19 +244,24 @@ export class AdminPracticasComponent implements OnInit {
         if (item[clave]) {
           this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
             const practica = data.payload.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('practice/' + clave).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
+              const prog = data2[0].payload.doc.data();
 
               if (prog) {
+                console.log('id que ingreso del espacio', prog['space']);
+
                 const pract = {
-                  uid: data.payload.id,
+                  id_pract: data.payload.id,
                   nombre: practica.practiceName,
+                  equipos: this.estructurarEquipos(practica.relatedEquipments),
+                  espacio: this.getOnlySpace(prog['space']),
                   programacion: {
-                    estudiantes: prog['noStudents'],
-                    diahora: prog['schedule'],
-                    semestre: prog['semester']
+                    id_pro: data2[0].payload.doc.id,
+                    estudiantes: prog.noStudents,
+                    horario: prog.schedule,
+                    semestre: prog.semester
                   },
                   activo: practica.active
                 };
@@ -272,7 +307,7 @@ export class AdminPracticasComponent implements OnInit {
       this.dataSourceEquip.data.forEach(row => this.selection.select(row));
   }
 
- // espacios
+  // espacios
   isAllSelected2() {
     const numSelected = this.selection2.selected.length;
     const numRows = this.displayedColumnsEsp.length;
@@ -285,7 +320,38 @@ export class AdminPracticasComponent implements OnInit {
   }
 
 
+  getOnlySpace(clave) {
 
+    const arr = [];
+    if (clave) {
+      this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
+        const espacio = data.payload.data();
+
+
+        // funciona con una programacion, cuando hayan mas toca crear otro metodo
+        if (espacio) {
+          const space = {
+            id_space: data.payload.id,
+            capacity: espacio.capacity,
+            createdAt: espacio.createdAt,
+            freeArea: espacio.freeArea,
+            headquarter: espacio.headquarter,
+            indxSa: espacio.indxSa,
+            map: espacio.map,
+            minArea: espacio.minArea,
+            ocupedArea: espacio.ocupedArea,
+            totalArea: espacio.totalArea,
+            spaceData: espacio.spaceData,
+          };
+
+          arr.push(space);
+
+        }
+
+      });
+    }
+    return arr;
+  }
 
   estructurarSpace(item) {
 
@@ -368,7 +434,6 @@ export class AdminPracticasComponent implements OnInit {
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
-    console.log(nombre);
     const nombreArr = nombre.split(' ');
     let name1 = '';
     let name2 = '';
@@ -400,30 +465,87 @@ export class AdminPracticasComponent implements OnInit {
   }
   cambiardata(row) {
     console.log(row);
+    this.practica.nombre = row.nombre;
+    this.practica.numeroEst = row.programacion.estudiantes;
+    this.practica.semestre = row.programacion.semestre;
+    this.practica.estado = row.activo;
+    this.practica.equipos = row.equipos;
+    this.practica.space = row.espacio;
+    this.id_prc = row.id_pract;
+    this.id_pro = row.programacion.id_pro;
+    this.initCalendarModal( row.programacion.horario);
+    console.log(row.programacion.horario);
   }
 
   addPractice() {
 
+    const fecha = new Date();
+
     const practica = {
 
+      practiceName: this.nameP,
+      subjectCode: this.code,
+      cfFacil: this.id_lab,
       relatedSpaces: {},
-      relatedEquips: {}
+      relatedEquipments: {},
+      active: true,
+      createdAt: fecha.toISOString(),
+      updatedAt: fecha.toISOString()
 
+    };
+
+    const programming = {
+      semester: this.programming.semester,
+      schedule: this.events,
+      noStudents: this.programming.noStudents,
+      createdAt: fecha.toISOString(),
+      space: this.mainSpace
+    };
+
+    const facil = {
+
+           relatedPractices: {}
     };
 
     this.selection.selected.forEach((element) => {
 
-      console.log(element);
 
-      practica.relatedEquips[element.id] = true;
+
+
+      if (element.id) {
+        practica.relatedEquipments[element.id] = true;
+
+      }
+
+      if (element.id_space) {
+        practica.relatedSpaces[element.id_space] = true;
+      }
 
     });
 
-    console.log(practica);
+    console.log(practica, 'programing', programming);
+    console.log(this.mainSpace);
+    if (practica) {
+
+      this.afs.collection('practice').add(practica).then(ok => {
+         facil.relatedPractices[ok.id] = true;
+        this.afs.doc('cfFacil/'  + this.id_lab).set(facil, { merge: true });
+        this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming).then(()=>{
+          this.obs.changeObjectPra({nombre:this.pracestructurado.nombre, uid:this.pracestructurado.id_lab});
+        });
+
+        swal({
+          type: 'success',
+          title: 'creado correctamente',
+          showConfirmButton: true
+        });
+      });
+
+    }
 
   }
 
-  initCalendar( horario) {
+  initCalendar(horario) {
 
     const containerEl: JQuery = $('#cal');
     containerEl.fullCalendar('destroy');
@@ -432,8 +554,31 @@ export class AdminPracticasComponent implements OnInit {
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
       // options here
-      height: 320,
+      height: 450,
+      header: {
 
+        left: '',
+        center: 'tittle',
+        right: 'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+
+    });
+  }
+
+
+  initCalendarModal(horario) {
+
+    const containerEl: JQuery = $('#cal2');
+    containerEl.fullCalendar('destroy');
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 450,
       header: {
 
         left: '',
@@ -449,17 +594,50 @@ export class AdminPracticasComponent implements OnInit {
 
   agregarEvento() {
 
-     const arr = this.events;
-     const nev = {
+    const arr = this.events;
+    const nev = {
       title: this.evento.title,
       start: this.evento.start,
       color: this.evento.color
     };
 
-    arr.push( nev );
+    arr.push(nev);
 
-    console.log('nuevo array', arr);
     this.initCalendar(arr);
+  }
+
+  actualizarPractica() {
+
+    const fecha = new Date();
+    const practica = {
+
+      practiceName: this.practica.nombre,
+      active: this.practica.estado,
+      updatedAt: fecha.toISOString()
+
+    };
+
+    const prog = {
+      noStudents: this.practica.numeroEst ,
+      semester: this.practica.semestre
+
+    };
+
+      this.afs.doc('practice/' + this.id_prc).set(practica , {merge: true }).then(ok => {
+
+      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, {merge: true}).then(()=>{
+        this.obs.changeObjectPra({nombre:this.pracestructurado.nombre, uid:this.pracestructurado.id_lab});
+      });
+
+      swal({
+        type: 'success',
+        title: 'actualizado correctamente',
+        showConfirmButton: true
+      });
+
+    });
+
+
   }
 
 

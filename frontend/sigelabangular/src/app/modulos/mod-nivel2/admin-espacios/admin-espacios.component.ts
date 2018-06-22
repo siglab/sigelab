@@ -78,7 +78,6 @@ export class AdminEspaciosComponent implements OnInit {
           this.idlab = data.uid;
           this.dataSourceSpace = new MatTableDataSource(this.espaestructurado.espacios);
 
-          this.initCalendar( data.eventos  );
 
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -123,7 +122,7 @@ export class AdminEspaciosComponent implements OnInit {
         }
 
          this.espaestructurado = {
-          eventos: this.estructurarPracticas(laboratorio.relatedPractices).arr2,
+          practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
           espacios: this.estructurarSpace( laboratorio.relatedSpaces),
           uid: key
          };
@@ -365,9 +364,11 @@ export class AdminEspaciosComponent implements OnInit {
 
   }
 
-  initCalendar( horario ) {
+  initCalendar( horario  ) {
 
-    const containerEl: JQuery = $('#calendario');
+
+    console.log('entro este es el horario', horario );
+    const containerEl: JQuery = $('#cal');
     containerEl.fullCalendar( 'destroy' );
 
 
@@ -383,9 +384,7 @@ export class AdminEspaciosComponent implements OnInit {
         center: 'tittle',
         right: 'today prev,next'
       },
-      events: horario ,
-      eventRender: function( event, element: JQuery) {
-      },
+      events: horario  ,
 
       defaultView: 'month',
 
