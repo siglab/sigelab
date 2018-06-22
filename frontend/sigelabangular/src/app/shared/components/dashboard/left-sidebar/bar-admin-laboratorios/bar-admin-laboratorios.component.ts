@@ -152,6 +152,30 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     this.obs.changeObject(item);
   }
 
+  enviaritemEquip(equip){
+    this.obs.changeObjectEquip(equip);
+  }
+
+  enviaritemLab(lab){
+    this.obs.changeObjectLab(lab);
+  }
+  enviaritemPer(per){
+    this.obs.changeObjectPer(per);
+  }
+  enviaritemEsp(esp){
+    this.obs.changeObjectEsp(esp);
+  }
+  enviaritemPra(pra){
+    this.obs.changeObjectPra(pra);
+  }
+  enviaritemSolServ(solsrv){
+    this.obs.changeObjectSolServ(solsrv);
+  }
+  enviaritemProy(proy){
+    this.obs.changeObjectProy(proy);
+  }
+
+
 
 
 

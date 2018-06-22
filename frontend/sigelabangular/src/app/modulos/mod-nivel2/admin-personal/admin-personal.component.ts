@@ -86,7 +86,16 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               private register: LoginService) { }
 
   ngOnInit() {
-    this.obs.currentObject.subscribe(data => {
+           
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+    
+    this.obs.currentObjectPer.subscribe(data => {
 
       if(data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {

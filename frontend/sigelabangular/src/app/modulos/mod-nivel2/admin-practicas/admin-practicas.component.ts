@@ -106,7 +106,7 @@ export class AdminPracticasComponent implements OnInit {
 
    async metodoInicio() {
 
-    this.obs.currentObject.subscribe(data => {
+    this.obs.currentObjectPra.subscribe(data => {
 
 
       if (data.length !== 0) {
@@ -212,7 +212,8 @@ export class AdminPracticasComponent implements OnInit {
           espacios: this.estructurarSpace(laboratorio.relatedSpaces),
           estado: estadoLab,
           mainSpace: laboratorio.mainSpace,
-          id_lab: key
+          id_lab: key,
+          nombre: laboratorio.cfName
         };
         resolve();
 
@@ -529,7 +530,9 @@ export class AdminPracticasComponent implements OnInit {
       this.afs.collection('practice').add(practica).then(ok => {
          facil.relatedPractices[ok.id] = true;
         this.afs.doc('cfFacil/'  + this.id_lab).set(facil, { merge: true });
-        this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming);
+        this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming).then(()=>{
+          this.obs.changeObjectPra({nombre:this.pracestructurado.nombre, uid:this.pracestructurado.id_lab});
+        });
 
         swal({
           type: 'success',
@@ -623,7 +626,9 @@ export class AdminPracticasComponent implements OnInit {
 
       this.afs.doc('practice/' + this.id_prc).set(practica , {merge: true }).then(ok => {
 
-      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, {merge: true});
+      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, {merge: true}).then(()=>{
+        this.obs.changeObjectPra({nombre:this.pracestructurado.nombre, uid:this.pracestructurado.id_lab});
+      });
 
       swal({
         type: 'success',

@@ -25,14 +25,12 @@ itemsel: any;
 service: any;
 histoservice: any;
 
-
-servicioso = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{dir: "cra54 cambulos",tel:"53454636",cel:"43656537",email:"jkhkhjk@univalle.edu.co"},estado:"NO ACEPTADO"},
-                {nombre:"INVESTIGACION",coord: {lat:'3.419737',lon:'-76.540275'}, info:{dir: 'cra54 san fernado', tel:'53454543gdf636',cel:'43656537',email:'fdgfgjh@univalle.edu.co'},estado:'NO ACEPTADO'},
-                {nombre:'MODELADO', coord: {lat: '3.420380', lon: '-76.510105'}, info: {dir: 'cra54 sfdfsdfs', tel: '35345435', cel: '436574676537', email: 'fgjh@univalle.edu.co'}, estado: 'NO ACEPTADO'},
-                {nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, estado: 'ACEPTADO'}];
+servicioActivoSel:any;
+histoServicioSel:any;
 
 
-  displayedColumns = ['nombre', 'telefono', 'email', 'estado'];
+
+  displayedColumns = ['nombre', 'fecha', 'email', 'estado'];
   displayedColumns2 = ['nombre', 'telefono', 'email', 'fecha'];
 
   dataSource = new MatTableDataSource([]);
@@ -52,6 +50,11 @@ servicioso = [{nombre:"QUIMICA",coord:{lat:"3.425906",lon:"-76.540446"},info:{di
    datos:any;
    histodatos:any;
 
+   variation:any;
+   condicion:any;
+
+   condicionesobjeto = {};
+
 
 constructor(private obs: ObservablesService, private afs: AngularFirestore) {
  //this.obs.changeSolServ(this.servicioso);
@@ -59,35 +62,33 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
 
   ngOnInit() {
 
-    this.obs.currentObject.subscribe(data => {
+    this.obs.currentObjectSolSer.subscribe(data => {
 
-      this.getCollectionReserv(data.uid).subscribe(data1 => {
-        this.datos = this.estructurarServiciosActivos(data1);
-        console.log(this.datos);
-      });
+      if(data.length != 0){
+       
+        this.getCollectionReserv(data.uid).subscribe(data1 => {
+          this.datos = this.estructurarServiciosActivos(data1);
+          console.log(this.datos);
+          this.dataSource.data = this.datos;
 
-      this.getCollectionsHisto(data.uid).subscribe(data2 => {
-        this.histodatos = this.estructurarHistoriaServicios(data2);
-        console.log(this.histodatos);
-      });
+          
+            setTimeout(() => {
+              if(this.datos){
+                this.dataSource.sort = this.sort;
+                this.dataSource.paginator = this.paginator;
+              }
+            }, 1500);
+                     
+        });
+      }
 
-    });
 
-    this.obs.currentSolServ.subscribe(data => {
-     this.service = data;
-     this.dataSource.data = this.estrucutrarArray(data);
-    });
-
-    this.obs.currentHistoSolserv.subscribe(data => {
-      this.histoservice = data;
-      this.dataSource2.data = this.estrucutrarArray2(data);
     });
 
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+
 
     this.dataSource2.sort = this.sort2;
     this.dataSource2.paginator = this.paginator2;
@@ -99,18 +100,11 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
   }
 
 
-  getCollectionReserv(userid) {
+  getCollectionReserv(labid) {
     this.collectionReserv = this.afs.collection('cfSrvReserv',
-      ref => ref.where('user', '==', userid).where('status', '==', 'pendiente'));
+      ref => ref.where('cfFacil', '==', labid));
 
     return this.collectionReserv.snapshotChanges();
-  }
-
-  getCollectionsHisto(userid) {
-    this.collectionHisto = this.afs.collection('cfSrvReserv',
-      ref => ref.where('user', '==', userid));
-
-    return this.collectionHisto.snapshotChanges();
   }
 
   estructurarServiciosActivos(data) {
@@ -120,24 +114,32 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
       const elemento = data[index].payload.doc.data();
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();
-        console.log(elemento);
-          const Reserv = {
-           
-            lab: elemento.cfFacil,
-            status: elemento.status,
-            nombre: servicio.cfName,
-            descripcion: servicio.cfDesc,
-            precio: servicio.cfPrice,
-            activo: servicio.active,
-            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-            condiciones: elemento.conditionsLog,
-            comentario: elemento.comments,
-            uid: data2.payload.id,
-            uidreserv: data[index].payload.doc.id
-          };
 
-          datos.push(Reserv);
-        });
+        if(elemento.status != 'rechazada' && elemento.status != 'cancelada'){
+
+          this.getEmailUser(elemento.user).subscribe(email =>{
+            const Reserv = {
+              uidlab: elemento.cfFacil,
+              status: elemento.status,
+              nombre: servicio.cfName,
+              descripcion: servicio.cfDesc,
+              precio: servicio.cfPrice,
+              activo: servicio.active,
+              variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+              condiciones: elemento.conditionsLog,
+              comentario: elemento.comments,
+              usuario: email.payload.data().email,
+              fecha: elemento.createdAt.split('T')[0],
+              uidserv: data2.payload.id,
+              uidreserv: data[index].payload.doc.id
+            };
+  
+            datos.push(Reserv);
+          });
+
+        }
+
+      });
 
     }
 
@@ -152,7 +154,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();
 
-        if(elemento.status != 'pendiente'){
+        if(elemento.status != 'aceptada'){
           const HistoReserv = {
             
             lab: elemento.cfFacil,
@@ -208,6 +210,9 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
     return arr;
   }
 
+  getEmailUser(userid){
+    return this.afs.doc('user/' + userid).snapshotChanges();
+  }
 
 
   applyFilter(filterValue: string) {
@@ -254,53 +259,75 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
    this.moduloinfo = false;
   }
 
-  prueba() {
-    // tslint:disable-next-line:max-line-length
-    this.obs.changeSolServ([{nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, fecha: '08/03/2017'}]);
-   }
 
-  cambiarData() {
-    // this.obs.changeSolServ([{nombre: 'YODURO', coord: {lat: '3.403437', lon: '-76.511292'}, info: {dir: 'cra54 dfsdfsdf', tel: '46363565', cel: '4357547656537', email: 'hkjkhjjh@univalle.edu.co'}, fecha: '08/03/2017'}]);
+
+  cambiarDataServicioActivo(item) {
+    this.servicioActivoSel = item;
+    this.variation = undefined;
+    this.condicion = undefined;
+    this.estructurarCondiciones(item.condiciones);
+    //this.buttoncancel = false;
+    this.moduloinfo = true;
+    console.log(item);  
   }
 
+  cambiarVariacion(item){
 
-
-  mostrardata(item) {
-
-    for (let i = 0; i < this.service.length; i++) {
-      if (this.service[i].nombre === item.nombre) {
-        this.itemsel = this.service[i];
-        break;
-      }
+    if(item != 'inicial'){
+      this.variation = this.buscarVariacion(item);
+      this.condicion =  this.buscarCondicion(item);
+      console.log(this.condicion);
+      this.estructurarCondiciones(this.condicion.condicion);
+    } else {
+      this.variation = undefined;
+      this.condicion = undefined;
     }
-
-    this.moduloinfo = true;
 
     console.log(item);
 
   }
 
+    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+  buscarVariacion(item){
+    for (let i = 0; i < this.servicioActivoSel.variaciones.length; i++) {
+      const element = this.servicioActivoSel.variaciones[i];
+      if(element.id == item){
+        return element;
+      }   
+    }
+  }
+
+  buscarCondicion(item){
+    for (let i = 0; i < this.servicioActivoSel.condiciones.length; i++) {
+      const element = this.servicioActivoSel.condiciones[i];
+      if(element.idvariacion == item){
+        return element;
+      }   
+    }
+  }
+
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarCondiciones(condiciones){
+    this.condicionesobjeto = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      //const element = condiciones[i];
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+    }
+  }
+
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarVariacionesCond(condiciones){
+    this.condicionesobjeto = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      //const element = condiciones[i];
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+    }
+  }
+
+
+
 
 
 }
-
-
-// export interface Element {
-//   nombre: string;
-//   telefono: string;
-//   email: string;
-//   estado: string;
-// }
-
-// const ELEMENT_DATA: Element[] = [
-//   // tslint:disable-next-line:max-line-length
-//   {nombre: 'QUIMICA',  telefono: '53454636', email: 'jkhkhjk@univalle.edu.co', estado: 'NO ACEPTADO'},
-//                 // tslint:disable-next-line:max-line-length
-//   {nombre: 'INVESTIGACION', telefono: '5345454636',  email: 'fdgfgjh@univalle.edu.co', estado: 'NO ACEPTADO'},
-//   // tslint:disable-next-line:max-line-length
-//   {nombre: 'MODELADO', telefono: '35345435', email: 'fgjh@univalle.edu.co', estado: 'NO ACEPTADO'},
-//   // tslint:disable-next-line:max-line-length
-//   {nombre: 'YODURO', telefono: '46363565',  email: 'hkjkhjjh@univalle.edu.co', estado: 'ACEPTADO'}
-// ];
 
 

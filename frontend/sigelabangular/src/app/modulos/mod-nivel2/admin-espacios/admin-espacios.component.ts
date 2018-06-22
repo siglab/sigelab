@@ -60,8 +60,15 @@ export class AdminEspaciosComponent implements OnInit {
   // tslint:disable-next-line:max-line-length
 
   ngOnInit() {
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
 
-    this.obs.currentObject.subscribe(data => {
+    this.obs.currentObjectEsp.subscribe(data => {
 
       if (data.length !== 0) {
 
@@ -81,14 +88,6 @@ export class AdminEspaciosComponent implements OnInit {
               default: return item[property];
             }
           };
-
-          swal({
-            title: 'Cargando un momento...',
-            text: 'espere mientras se cargan los datos',
-            onOpen: () => {
-              swal.showLoading();
-            }
-          });
 
           setTimeout(() => {
               if (this.espaestructurado.espacios.length > 0 ) {

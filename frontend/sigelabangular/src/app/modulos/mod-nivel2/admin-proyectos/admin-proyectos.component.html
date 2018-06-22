@@ -35,125 +35,122 @@
                 <div class="box box-danger">
 
 
-                  <div class="box-body">
-                      <div class="box-body">
+                    <div class="box-body">
+                        <div class="box-body">
 
-                          <ul class="nav nav-tabs" >
-                              <li><a class="tablas" data-toggle="tab"  href="#home" >
+                            <ul class="nav nav-tabs" >
+                                <li><a class="tablas" data-toggle="tab"  href="#home" >
                                 ACTIVOS</a></li>
-                              <li><a class="tablas" data-toggle="tab" href="#menu1">
-                               INACTIVOS</a></li>
-                          </ul>
+                                <li><a class="tablas" data-toggle="tab" href="#menu1">
+                                INACTIVOS</a></li>
+                            </ul>
 
-                          <div class="row" style="margin-top:30px;">
-                              <div class="col-md-12">
-                                  <div class="box box-danger">
-                                      <div class="tab-content">
-                                          <div id="home" class="tab-pane fade in active">
-                                              <div class="box-header">
-                                                  <i class="fa fa-flask"></i>
+                            <div class="row" style="margin-top:30px;">
+                                <div class="col-md-12">
+                                    <div class="box box-danger">
+                                        <div class="tab-content">
+                                            <div id="home" class="tab-pane fade in active">
+                                                <div class="box-header">
+                                                    <i class="fa fa-flask"></i>
 
-                                                  <h3 class="box-title">ACTIVOS</h3>
-                                              </div>
-                                              <div class="box-body divScroll">
+                                                    <h3 class="box-title">ACTIVOS</h3>
+                                                </div>
+                                                <div class="box-body divScroll">
 
-                                                  <div class="box box-danger">
-                                                      <div class="box-header">
+                                                    <div class="box box-danger">
+                                                        <div class="box-header">
                                                         <i class="fa fa-map"></i>
 
                                                         <h3 class="box-title">Proyectos</h3>
-                                                        <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} PROYECTOS</h3>
-                                                      </div>
-                                                      <!-- /.box-header -->
-                                                      <div class="box-body">
-                                                          <div class="box-body divScroll">
-                                                            <div *ngIf="this.itemsel.proyectos.length == 0">
-                                                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                              </div>
-                                                            <div *ngIf="this.itemsel.proyectos.length != 0" class="list-group">
-                                                                <table class=" table row-border hover table-condensed">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Proyectos</th>
-
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr style="cursor:pointer" *ngFor="let item of this.itemsel.proyectos">
-                                                                            <td>
-                                                                                {{item.nombre}}
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-
-                                                                </table>
-
-                                                            </div>
-                                                          </div>
-                                                      </div>
+                                        
+                                                        </div>
+                                                        <!-- /.box-header -->
+                                                        <div class="box-body">
+                                                                <div *ngIf="this.proyestructurados.proyectos.length != 0" class="list-group">
+                                                                
+                                                                    <div *ngIf="dataSourceProy.data.length == 0">
+                                                                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES</h3>
+                                                                    </div>
+                                                    
+                                                                    <div class="example-container mat-elevation-z8" *ngIf="dataSourceProy.data.length != 0">
+                                                                        <div class="example-header">
+                                                                            <mat-form-field>
+                                                                            <input style="outline: none;" matInput (keyup)="applyFilterProy($event.target.value)" placeholder="Buscar Solicitudes">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                
+                                                                        <mat-table #tableProyectos #sortProy="matSort" [dataSource]="dataSourceProy" matSort>
+                                                
+                                                
+                                                                            <ng-container matColumnDef="ci">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> CI </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.ci}} </mat-cell>
+                                                                            </ng-container>
+                                                                            <ng-container matColumnDef="nombre">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                                            </ng-container>
+                                                
+                                                                            <mat-header-row *matHeaderRowDef="displayedColumnsProy"></mat-header-row>
+                                                                            <mat-row *matRowDef="let row; columns: displayedColumnsProy;" style="cursor: pointer;" (click)="cambiardata(row, 'solicitudes')"
+                                                                            data-toggle="modal" data-target="#modal1"></mat-row>
+                                                                        </mat-table>
+                                                
+                                                                        <mat-paginator #paginatorProy="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                                                        </mat-paginator>
+                                                                    </div>
+    
+                                                                </div>
+                                                        </div>
                                                     <!-- /.box-body -->
-                                                  </div>
+                                                    </div>
 
-                                              </div>
-                                          </div>
+                                                </div>
+                                            </div>
 
-                                          <div id="menu1" class="tab-pane fade">
-                                              <div class="box-header">
-                                                  <i class="fa fa-flask"></i>
+                                            <div id="menu1" class="tab-pane fade">
+                                                <div class="box-header">
+                                                    <i class="fa fa-flask"></i>
 
-                                                  <h3 class="box-title">INACTIVOS</h3>
-                                              </div>
-                                              <div class="box-body divScroll">
+                                                    <h3 class="box-title">INACTIVOS</h3>
+                                                </div>
+                                                <div class="box-body divScroll">
 
-                                                  <div class="box box-danger">
-                                                      <div class="box-header">
+                                                    <div class="box box-danger">
+                                                        <div class="box-header">
                                                         <i class="fa fa-map"></i>
 
                                                         <h3 class="box-title">Proyectos</h3>
-                                                        <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} PROYECTOS</h3>
-                                                      </div>
-                                                      <!-- /.box-header -->
-                                                      <div class="box-body">
-                                                          <div class="box-body divScroll">
-                                                            <div *ngIf="this.itemsel.proyectos.length == 0">
+                                                   
+                                                        </div>
+                                                        <!-- /.box-header -->
+                                                        <div class="box-body">
+                                                            <div class="box-body divScroll">
+                                                            <div *ngIf="this.proyestructurados.proyectos.length == 0">
                                                                 <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                              </div>
-                                                            <div *ngIf="this.itemsel.proyectos.length != 0" class="list-group">
-                                                                <table class=" table row-border hover table-condensed">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Proyectos</th>
+                                                            </div>
+                                                            <div *ngIf="this.proyestructurados.proyectos.length != 0" class="list-group">
+                                                                
 
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr style="cursor:pointer" *ngFor="let item of this.itemsel.proyectos">
-                                                                            <td>
-                                                                                {{item.nombre}}
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-
-                                                                </table>
 
                                                             </div>
-                                                          </div>
-                                                      </div>
+                                                            </div>
+                                                        </div>
                                                     <!-- /.box-body -->
-                                                  </div>
+                                                    </div>
 
-                                              </div>
-                                          </div>
+                                                </div>
+                                            </div>
                                         </div>
 
 
-                                  </div>
-                              </div>
-                          </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
-                      </div>
-                  </div>
+                        </div>
+                    </div>
                 <!-- /.box-body -->
                 </div>
 
@@ -175,38 +172,16 @@
                             <i class="fa fa-map"></i>
 
                             <h3 class="box-title">Personal Involucrado</h3>
-                            <h3 class="box-title" style="float: right;">{{this.itemsel.personal.length}} Personas</h3>
                           </div>
                           <!-- /.box-header -->
                           <div class="box-body">
                               <div class="box-body divScroll">
-                                <div *ngIf="this.itemsel.personal.length == 0">
+                                <div *ngIf="this.proyestructurados.personal.length == 0">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
                                   </div>
-                                <div *ngIf="this.itemsel.personal.length != 0" class="list-group">
-                                    <table class=" table row-border hover table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Email</th>
-                                                <th>Tipo</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr style="cursor:pointer" *ngFor="let item of this.itemsel.personal">
-                                                <td>
-                                                    {{item.nombre}}
-                                                </td>
-                                                <td>
-                                                    {{item.nombre}}@univalle.edu.co
-                                                </td>
-                                                <td>
-                                                    ESTUDIANTE
-                                                </td>
-                                            </tr>
-                                            </tbody>
+                                <div *ngIf="this.proyestructurados.personal.length != 0" class="list-group">
+                                    
 
-                                    </table>
 
                                 </div>
                               </div>
