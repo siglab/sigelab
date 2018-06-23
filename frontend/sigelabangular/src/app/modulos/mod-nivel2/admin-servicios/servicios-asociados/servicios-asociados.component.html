@@ -1,188 +1,226 @@
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>
-    Laboratorios
-    </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
-  </section>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+     Servicios
+      </h1>
 
-  <!-- Main content -->
-  <section class="content" *ngIf="itemsel | async; let itemsel">
+    </section>
 
-    <!-- Componente central de busqueda -->
+    <!-- Main content -->
+    <section class="content">
 
-    <div class="row">
-      <div class="col-md-12 col-lg-12">
-        <div class="box box-danger">
-          <div class="box-header" >
-            <div class="form-group">
-              <div class="col-md-12">
-                  <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Agregar Servicio</button>
+      <!-- Componente central de busqueda -->
+
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="box box-danger">
+            <div class="box-header">
+              <i class="fa fa-search"></i>
+
+              <h3 class="box-title">Busqueda</h3>
+              <button style="float: right;" class="btn btn-danger danger" type="button" data-toggle="modal" data-target="#modal2" >Nuevo Servicio</button>
+            </div>
+
+            <div class="box-body">
+
+              <div class="example-container mat-elevation-z8">
+                <div class="example-header">
+                  <mat-form-field>
+                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar servicio">
+                  </mat-form-field>
+                </div>
+
+                <mat-table #tableserv #sort="matSort" [dataSource]="dataSource" matSort>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="nombreserv">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Servicio </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.nombreserv}} </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style = "cursor: pointer;"></mat-row>
+                </mat-table>
+
+                <mat-paginator #paginator="matPaginator"
+                  [pageSize]="5"
+                  [pageSizeOptions]="[5, 10, 20]"
+                  [showFirstLastButtons]="true">
+                </mat-paginator>
               </div>
+
+
             </div>
           </div>
+        </div>
 
-          <div class="box-body">
-
-            <div class="col-md-6">
+        <div *ngIf="!moduloinfo" class="row">
+            <div class="col-md-6 col-lg-6">
                 <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-map"></i>
-
-                    <h3 class="box-title">Servicios Asociados</h3>
-                    <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} SERVICIOS</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                      <div class="box-body divScroll">
-                        <div *ngIf="this.itemsel.servicios.length == 0">
-                            <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                          </div>
-                        <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
-                            <table class=" table row-border hover table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre de Servicios</th>
-
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr style="cursor:pointer" *ngFor="let item of this.itemsel.servicios">
-                                        <td>
-                                            {{item.nombre}}
-                                        </td>
-                                    </tr>
-                                    </tbody>
-
-                            </table>
-
-                        </div>
-                      </div>
-                  </div>
-                <!-- /.box-body -->
+                    <div class="box-body">
+                        <h3>SIN DATOS SELECCIONADOS</h3>
+                    </div>
                 </div>
-
+    
             </div>
-
-            <div class="col-md-6">
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-map"></i>
-
-                    <h3 class="box-title">INFORMACION DE SERVICIO</h3>
-                  </div>
-
-                  <!-- /.box-header -->
-                  <div class="box-body">
-
-                      <div class="box box-danger">
-                          <div class="box-header">
-                            <i class="fa fa-map"></i>
-
-                            <h3 class="box-title">Variaciones de servicio</h3>
-                            <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} SERVICIOS</h3>
-                          </div>
-                          <!-- /.box-header -->
-                          <div class="box-body">
-                              <div class="box-body divScroll">
-                                <div *ngIf="this.itemsel.servicios.length == 0">
-                                    <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                  </div>
-                                <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
-                                    <table class=" table row-border hover table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre de Variacion</th>
-                                                <th>Costo</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr style="cursor:pointer" *ngFor="let item of this.itemsel.servicios">
-                                                <td>
-                                                    {{item.nombre}}
-                                                </td>
-                                                <td>
-                                                    {{item.nombre}}
-                                                </td>
-                                            </tr>
-                                            </tbody>
-
-                                    </table>
-
-                                </div>
-                              </div>
-                          </div>
-                        <!-- /.box-body -->
-                      </div>
-
-                        <div class="box box-danger">
-                            <div class="box-header">
-                              <i class="fa fa-map"></i>
-
-                              <h3 class="box-title">Equipos Vinculados</h3>
-                              <h3 class="box-title" style="float: right;">{{this.itemsel.servicios.length}} SERVICIOS</h3>
-                            </div>
-                            <!-- /.box-header -->
+        </div>
+      
+        <div *ngIf="moduloinfo" class="row">
+            <div class="col-md-6 col-lg-6">
+                <div class="box-group" id="accordion">
+                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+        
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIcono('info')" class="box-title">
+                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
+                                INFORMACION DE SERVICIO
+                            </a>
+                            </h4>
+                            <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
+                            </a>
+                        </div>
+                        <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                             <div class="box-body">
-                                <div class="box-body divScroll">
-                                  <div *ngIf="this.itemsel.servicios.length == 0">
-                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+                            <form id="form-work" class="" name="form-work" action="#">
+                                    <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{itemsel.nombreserv}}</label>
+        
+                                        </div>
                                     </div>
-                                  <div *ngIf="this.itemsel.servicios.length != 0" class="list-group">
-                                      <table class=" table row-border hover table-condensed">
-                                          <thead>
-                                              <tr>
-                                                  <th>Nombre de Equipo</th>
-
-                                              </tr>
-                                              </thead>
-                                              <tbody>
-                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.servicios">
-                                                  <td>
-                                                      {{item.nombre}}
-                                                  </td>
-                                              </tr>
-                                              </tbody>
-
-                                      </table>
-
-                                  </div>
-                                </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{itemsel.infoServ.descripcion}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
+                                        <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                        <div class="form-group" *ngFor="let item of itemsel.infoServ.condiciones; let i = index">
+                                            <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
+                                        </div>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="precioserv"><strong>Precio:</strong> {{itemsel.infoServ.precio}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{itemsel.infoServ.estado}}</label>
+                                        </div>
+                                    </div>
+    
+        
+                                    </fieldset>                          
+                            </form>
                             </div>
-                          <!-- /.box-body -->
                         </div>
+                    </div>
+    
+                    <div class="box box-danger">
+                        <div class="box-header">
+                        <h4 (click)="cambiarIcono('sabs')" class="box-title">
+                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
+                            INFORMACION DE VARIACIONES DE SERVICIO
+                            </a>
+                        </h4>
+                        <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
+                            <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
+                        </a> 
+                        </div>
+                        <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                            <form *ngIf="itemsel.infoServ.variaciones.length != 0"  id="form-workserv2" class="" name="form-workserv2" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
+                                            <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
+                                            <option value="inicial">Seleccione una variacion</option>
+                                            <option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}" >{{item.data.cfName}}</option>
+                                            </select>
+                                        </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset *ngIf="variation">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.data.cfName}}</label>
+                
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.data.cfDescription}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.data.cfPrice}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                            <div class="form-group" *ngFor="let item of variation.data.cfConditions; let i = index">
+                                                <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
+                                            </div>
+                                            
+                                        </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.data.active}}</label>
+                                            </div>
+                                        </div> 
+                                        
+                                    </fieldset>
+                            </form>
 
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Editar</button>
-                            </div>
-                          </div>
-                  </div>
-                <!-- /.box-body -->
+                        </div>
+                        </div>
+                    </div>                  
                 </div>
-
             </div>
-
-
-          </div>
-
-
-
         </div>
       </div>
-    </div>
 
+ 
 
-
-  </section>
-
-
+    </section>
 
 </div>
+
+
+<!-- MODAL QUE PERMITE LA EDICION DE LOS DATOS DEL LABORATORIO -->
+<div class="modal fade" id="modal2" role="dialog">
+        <div Class="modal-dialog modal-lg">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-body">
+                <div class="box box-danger">
+                    <div class="box-header text-center">
+                      <i class="fa fa-address-card-o"></i>
+          
+                      <h3 class="box-title">Nueva Variacion</h3>
+                    </div>
+           
+                    <div class="box-body">
+      
+                      
+                      
+                    </div>
+                </div>
+               
+            </div>
+          </div>
+        </div>
+      </div>

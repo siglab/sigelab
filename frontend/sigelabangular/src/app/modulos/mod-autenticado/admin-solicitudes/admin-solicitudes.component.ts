@@ -120,7 +120,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.buttoncancel = false;
     this.moduloinfo = true;
    
- 
   }
 
   mostrardata2(item) {
@@ -226,7 +225,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   enviarComentario(){
     const fecha = new Date();
     let cfSrvReserv = {
-      comments:[]
+      comments:this.servsel.comentario
     };
     console.log(this.comentario);
     console.log(this.servsel);
@@ -234,6 +233,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       commentText: this.comentario, 
       fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
       uid: this.user.uid});
+
+      console.log(cfSrvReserv);
+    this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
+      console.log('comentario guardado');
+    });
+
+     
   }
 
 

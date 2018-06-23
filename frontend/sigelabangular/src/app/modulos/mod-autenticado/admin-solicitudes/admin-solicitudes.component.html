@@ -295,7 +295,7 @@
                     <div class="direct-chat-messages">
                       <!-- Message. Default to the left -->
                       <div *ngFor="let item of servsel.comentario; let i = index">
-                        <div *ngIf="(i%2) == 1" class="direct-chat-msg">
+                        <div *ngIf="this.user.uid != item.uid" class="direct-chat-msg">
                           <div class="direct-chat-info clearfix">
                             <span class="direct-chat-name pull-left">{{servsel.lab}}</span>
                             <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
@@ -310,7 +310,7 @@
                         <!-- /.direct-chat-msg -->
     
                         <!-- Message to the right -->
-                        <div *ngIf="(i%2) == 0" class="direct-chat-msg right">
+                        <div *ngIf="this.user.uid == item.uid" class="direct-chat-msg right">
                           <div class="direct-chat-info clearfix">
                             <span class="direct-chat-name pull-right">{{servsel.email}}</span>
                             <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>

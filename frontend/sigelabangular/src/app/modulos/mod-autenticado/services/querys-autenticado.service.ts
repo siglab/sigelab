@@ -128,6 +128,10 @@ export class QuerysAutenticadoService {
     return arr;
   }
 
+  updateComments(id, comments){
+    return this.afs.doc('cfSrvReserv/' + id).update(comments);
+  }
+
   consultarLaboratorio(idlab){
     let nombre = '';
     this.afs.doc('cfFacil/' + idlab).snapshotChanges().subscribe(data => {
