@@ -13,7 +13,7 @@ declare var $: any;
   styleUrls: ['./admin-personal.component.css']
 })
 export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy {
-  rolc = 'auxiliar';
+  rolc = 'editar';
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
@@ -307,7 +307,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   actualizarPers() {
     // cierra el model this.idu, this.idp,this.nombre, this.email,  this.estado
-    $('#modal').modal('hide');
+    // $('#modal').modal('hide');
 
     let state: boolean;
 
@@ -332,16 +332,21 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     };
     /* objeto para usuario */
     const user = {
-      estado : state,
+      active : state,
       appRoles: ''
     };
 
     /* metodo que consulta el rol */
 
+    console.log(' se va actualizar esta persona', pers );
+
     this.consultarRol().then((ok) => {
 
      user.appRoles = this.register.setBoolean (ok);
      /* metodo firebase para subir un usuario actualizado */
+
+     console.log('usuario con el rol', user);
+
      this.afs.collection('user').doc( this.idu ).set (user, { merge: true} );
 
      console.log( 'usuario con el rol', user);
