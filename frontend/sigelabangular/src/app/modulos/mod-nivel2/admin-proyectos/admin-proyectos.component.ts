@@ -418,7 +418,15 @@ export class AdminProyectosComponent implements OnInit {
       this.afs.collection('cfPers').add(persona).then((ok) => {
         const pro = { relatedPers: {} };
         pro.relatedPers[ok.id] = true;
-        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true });
+        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true }) .then ( () => {
+
+
+          swal({
+            type: 'success',
+            title: ' Proyecto agregado correctamente',
+            showConfirmButton: true
+          });
+        } );
       });
     }
 
