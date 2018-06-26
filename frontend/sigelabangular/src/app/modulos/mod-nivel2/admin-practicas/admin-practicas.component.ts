@@ -302,7 +302,7 @@ export class AdminPracticasComponent implements OnInit {
     return numSelected === numRows;
   }
   masterToggle() {
-    this.isAllSelected2() ?
+    this.isAllSelected() ?
       this.selection.clear() :
       this.dataSourceEquip.data.forEach(row => this.selection.select(row));
   }
@@ -530,8 +530,8 @@ export class AdminPracticasComponent implements OnInit {
       this.afs.collection('practice').add(practica).then(ok => {
          facil.relatedPractices[ok.id] = true;
         this.afs.doc('cfFacil/'  + this.id_lab).set(facil, { merge: true });
-        this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming).then(()=>{
-          this.obs.changeObjectPra({nombre:this.pracestructurado.nombre, uid:this.pracestructurado.id_lab});
+        this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming).then(() => {
+          this.obs.changeObjectPra({nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab});
         });
 
         swal({
@@ -626,8 +626,8 @@ export class AdminPracticasComponent implements OnInit {
 
       this.afs.doc('practice/' + this.id_prc).set(practica , {merge: true }).then(ok => {
 
-      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, {merge: true}).then(()=>{
-        this.obs.changeObjectPra({nombre:this.pracestructurado.nombre, uid:this.pracestructurado.id_lab});
+      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, {merge: true}).then(() => {
+        this.obs.changeObjectPra({nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab});
       });
 
       swal({

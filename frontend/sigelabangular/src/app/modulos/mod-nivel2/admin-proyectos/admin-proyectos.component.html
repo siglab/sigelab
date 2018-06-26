@@ -2,7 +2,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-    Laboratorios
+      Laboratorios
     </h1>
     <ol class="breadcrumb">
       <li>
@@ -21,185 +21,135 @@
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
-          <div class="box-header" >
+          <div class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                  <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Nuevo Proyecto</button>
+                <button  (click)= "clearModal()"   data-toggle="modal" data-target="#modal"  style="float: right;" class="btn btn-danger" type="button">Nuevo Proyecto</button>
               </div>
             </div>
           </div>
 
           <div class="box-body">
+            <ul class="nav nav-tabs">
+              <li>
+                <a class="tablas" data-toggle="tab" href="#home">
+                  Activos</a>
+              </li>
+              <li>
+                <a class="tablas" data-toggle="tab" href="#menu1">
+                  Inactivos</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div id="home" class="tab-pane fade in active">
+                <div class="col-md-12" style="margin-top:20px;">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-book"></i>
 
-            <div class="col-md-6">
-                <div class="box box-danger">
-
-
-                    <div class="box-body">
-                        <div class="box-body">
-
-                            <ul class="nav nav-tabs" >
-                                <li><a class="tablas" data-toggle="tab"  href="#home" >
-                                ACTIVOS</a></li>
-                                <li><a class="tablas" data-toggle="tab" href="#menu1">
-                                INACTIVOS</a></li>
-                            </ul>
-
-                            <div class="row" style="margin-top:30px;">
-                                <div class="col-md-12">
-                                    <div class="box box-danger">
-                                        <div class="tab-content">
-                                            <div id="home" class="tab-pane fade in active">
-                                                <div class="box-header">
-                                                    <i class="fa fa-flask"></i>
-
-                                                    <h3 class="box-title">ACTIVOS</h3>
-                                                </div>
-                                                <div class="box-body divScroll">
-
-                                                    <div class="box box-danger">
-                                                        <div class="box-header">
-                                                        <i class="fa fa-map"></i>
-
-                                                        <h3 class="box-title">Proyectos</h3>
-                                        
-                                                        </div>
-                                                        <!-- /.box-header -->
-                                                        <div class="box-body">
-                                                                <div *ngIf="this.proyestructurados.proyectos.length != 0" class="list-group">
-                                                                
-                                                                    <div *ngIf="dataSourceProy.data.length == 0">
-                                                                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES</h3>
-                                                                    </div>
-                                                    
-                                                                    <div class="example-container mat-elevation-z8" *ngIf="dataSourceProy.data.length != 0">
-                                                                        <div class="example-header">
-                                                                            <mat-form-field>
-                                                                            <input style="outline: none;" matInput (keyup)="applyFilterProy($event.target.value)" placeholder="Buscar Solicitudes">
-                                                                            </mat-form-field>
-                                                                        </div>
-                                                
-                                                                        <mat-table #tableProyectos #sortProy="matSort" [dataSource]="dataSourceProy" matSort>
-                                                
-                                                
-                                                                            <ng-container matColumnDef="ci">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> CI </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.ci}} </mat-cell>
-                                                                            </ng-container>
-                                                                            <ng-container matColumnDef="nombre">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                                                            </ng-container>
-                                                
-                                                                            <mat-header-row *matHeaderRowDef="displayedColumnsProy"></mat-header-row>
-                                                                            <mat-row *matRowDef="let row; columns: displayedColumnsProy;" style="cursor: pointer;" (click)="cambiardata(row, 'solicitudes')"
-                                                                            data-toggle="modal" data-target="#modal1"></mat-row>
-                                                                        </mat-table>
-                                                
-                                                                        <mat-paginator #paginatorProy="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                                                                        </mat-paginator>
-                                                                    </div>
-    
-                                                                </div>
-                                                        </div>
-                                                    <!-- /.box-body -->
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                            <div id="menu1" class="tab-pane fade">
-                                                <div class="box-header">
-                                                    <i class="fa fa-flask"></i>
-
-                                                    <h3 class="box-title">INACTIVOS</h3>
-                                                </div>
-                                                <div class="box-body divScroll">
-
-                                                    <div class="box box-danger">
-                                                        <div class="box-header">
-                                                        <i class="fa fa-map"></i>
-
-                                                        <h3 class="box-title">Proyectos</h3>
-                                                   
-                                                        </div>
-                                                        <!-- /.box-header -->
-                                                        <div class="box-body">
-                                                            <div class="box-body divScroll">
-                                                            <div *ngIf="this.proyestructurados.proyectos.length == 0">
-                                                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                            </div>
-                                                            <div *ngIf="this.proyestructurados.proyectos.length != 0" class="list-group">
-                                                                
-
-
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                    <!-- /.box-body -->
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
+                      <h3 class="box-title">PROYECTOS ACTIVOS SEMESTRE</h3>
                     </div>
-                <!-- /.box-body -->
-                </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
 
-            </div>
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceProy.data.length > 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Proyectos">
+                          </mat-form-field>
+                        </div>
 
-            <div class="col-md-6">
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-map"></i>
-
-                    <h3 class="box-title">INFORMACION DE PROYECTO</h3>
-                  </div>
-
-                  <!-- /.box-header -->
-                  <div class="box-body">
-
-                      <div class="box box-danger">
-                          <div class="box-header">
-                            <i class="fa fa-map"></i>
-
-                            <h3 class="box-title">Personal Involucrado</h3>
-                          </div>
-                          <!-- /.box-header -->
-                          <div class="box-body">
-                              <div class="box-body divScroll">
-                                <div *ngIf="this.proyestructurados.personal.length == 0">
-                                    <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                  </div>
-                                <div *ngIf="this.proyestructurados.personal.length != 0" class="list-group">
-                                    
+                        <mat-table #tableProy #sortProy="matSort" [dataSource]="dataSourceProy" matSort>
 
 
-                                </div>
-                              </div>
-                          </div>
-                        <!-- /.box-body -->
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="ci">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Semestre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.ci}} </mat-cell>
+                          </ng-container>
+
+
+
+
+
+
+                          <mat-header-row *matHeaderRowDef="displayedColumnsProy"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsProy;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
+                            data-target="#modal"></mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginatorPrac="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        </mat-paginator>
                       </div>
 
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Editar</button>
-                            </div>
-                          </div>
+
+                    </div>
+                    <!-- /.box-body -->
                   </div>
-                <!-- /.box-body -->
+
                 </div>
+              </div>
 
+              <div id="menu1" class="tab-pane fade">
+                <div class="col-md-12" style="margin-top:20px;">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-book"></i>
+
+                      <h3 class="box-title">PROYECTOS INACTIVOS SEMESTRE</h3>
+                    </div>
+
+                    <div *ngIf="dataSourceProyIn.data.length === 0">
+                      <h3>El laboratorio no cuenta con proyectos inactivos </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceProyIn.data.length > 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Proyectos">
+                          </mat-form-field>
+                        </div>
+
+                        <mat-table #tableProyIn #sortProyIn="matSort" [dataSource]="dataSourceProyIn" matSort>
+
+
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="ci">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> CI </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.ci}} </mat-cell>
+                          </ng-container>
+
+
+
+
+
+
+                          <mat-header-row *matHeaderRowDef="displayedColumnsProyIn"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsProyIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal" data-target="#modal"></mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        </mat-paginator>
+                      </div>
+
+
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+
+                </div>
+              </div>
             </div>
-
 
           </div>
 
@@ -215,4 +165,368 @@
 
 
 
+</div>
+
+
+<!--  modal editar informacion del proyecto -->
+<div class="modal fade" id="modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
+
+            <h1 class="box-title">PROYECTO SELECCIONADO</h1>
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body"   *ngIf="itemsel | async; let itemsel"  >
+
+            <div class="col-md-6">
+
+              <div class="box box-danger">
+                <div class="box-header">
+
+                  <h1 class="box-title">Informacion deL Proyecto</h1>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+                  <form id="form-work" class="" name="form-work" action="#">
+                    <fieldset>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ccpas">
+                            <strong>Nombre Proyecto:</strong>
+                          </label>
+
+                          <input name="nombre" [(ngModel)]="this.proyecto.nombre"  type="text" class="form-control" id="nombre">
+
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ccpas">
+                            <strong>CI:</strong>
+                          </label>
+
+                          <input name="ci" [(ngModel)]="this.proyecto.ci"  type="text" class="form-control" id="nombre">
+
+                        </div>
+                      </div>
+
+
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ccpas">
+                            <strong>Descripcion:</strong>
+                          </label>
+
+<!--                           <input name="descripcion" [(ngModel)]="this.proyecto.descripcion"  type="text" class="form-control" id="nombre">
+ -->                            <textarea class="form-control"  name="descripcion"  [(ngModel)]="this.proyecto.descripcion"  id="" cols="30" rows="2"></textarea>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-md-12">
+
+                            <label   style="margin-top: 20px;" class="switch">
+                              <input name="estado" [(ngModel)]="this.proyecto.estado" id="activo" type="checkbox" checked>
+                              <span class="slider round"></span>
+                            </label>
+
+
+                        </div>
+                      </div>
+
+
+
+
+                    </fieldset>
+                  </form>
+
+                  <div class="form-group" style="margin-top: 30px;">
+                    <div class="col-md-12">
+
+                      <button *ngIf="button"  class="btn btn-danger"   (click)="updateProject()"  type="button">Actualizar <i class="fa fa-sync" ></i>  </button>
+                      <button *ngIf="!button"   class="btn btn-success"   (click)="addProject()"  type="button">Guardar  <i class="fa fa-disk" ></i>    </button>
+
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="box box-danger">
+                <div class="box-header">
+                  <i class="fa fa-users"></i>
+
+                  <h3 class="box-title">PERSONAL  VINCULADO</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div>
+
+                    <div  class="list-group">
+                      <table class=" table row-border hover table-condensed">
+                        <thead>
+                          <tr>
+                            <th>nombre </th>
+                            <th>email </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr   (click)="editPers(item)" *ngFor="let item of this.proyecto.personal"  style="cursor:pointer">
+                            <td>
+                                 {{ item.nombre }}
+                            </td>
+                            <td>
+                                 {{ item.email }}
+                          </td>
+
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+
+                    </div>
+
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top: 30px;">
+                    <div class="col-md-12">
+
+
+                        <button class="btn btn-success"  data-toggle="modal" data-target="#modal1"  type="button">Personal del Laboratorio <i class="fa fa-plus">  </i> </button>
+
+                        <button  class="btn btn-danger"  data-toggle="modal" data-target="#personal"  type="button"> Nuevo Personal <i class="fa fa-plus">  </i> </button>
+
+
+
+
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- modal agregar personal al proyecto -->
+<div class="modal fade" id="modal1" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+
+            <h1 class="box-title">Personal del  Laboratorio </h1>
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="example-container" *ngIf="dataSourcePers.data.length > 0">
+
+              <mat-table #tablePers [dataSource]="dataSourcePers">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- nombre Column -->
+                <ng-container matColumnDef="nombre">
+                  <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                  <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.activo}} </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsPers;" (click)="selection.toggle(row)">
+                </mat-row>
+              </mat-table>
+
+            </div>
+
+
+
+
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="modal-footer" >
+        <button (click)="addPerstoProject()" class="btn btn-success">Agregar <i class="fa fa-plus"></i> </button>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="personal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+            <h3 class="box-title">Agregar Personal</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-dash2equip" class="" name="form-dash2equip">
+              <fieldset>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Fecha nacimiento :</strong>
+                    </label>
+                    <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Nombre :</strong>
+                    </label>
+                    <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Apellidos :</strong>
+                    </label>
+                    <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Email:</strong>
+                    </label>
+                    <input [(ngModel)]="this.person.email" id="escuelaedit" name="email" class="form-control" type="email">
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong> Nivel:</strong>
+                    </label>
+                    <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
+                      <option value="auxiliar">Auxiliar </option>
+                      <option value="analista">Analista</option>
+                      <option value="analista">Administrativo</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong> Tipo personal:</strong>
+                    </label>
+                    <select class="form-control" [(ngModel)]="this.person.type" name="estado">
+                      <option value="funcionario">Funcionario </option>
+                      <option value="estudiante">Estudiante</option>
+                      <option value="contratista">Contratista</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Genero:</strong>
+                    </label>
+                    <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
+                      <option value="Hombre">Hombre </option>
+                      <option value="Mujer">Mujer</option>
+
+                    </select>
+                  </div>
+
+
+                </div>
+
+
+
+
+
+              </fieldset>
+
+
+            </form>
+
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button  (click)= "addSingleProject()"  type="button" class="btn btn-danger">Guardar</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
 </div>

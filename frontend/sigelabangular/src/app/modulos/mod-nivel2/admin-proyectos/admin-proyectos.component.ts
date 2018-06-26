@@ -1,9 +1,11 @@
+
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-admin-proyectos',
@@ -12,19 +14,62 @@ import swal from 'sweetalert2';
 })
 export class AdminProyectosComponent implements OnInit {
   itemsel: Observable<Array<any>>;
-
-  displayedColumnsProy = ['ci','nombre'];
-  dataSourceProy = new MatTableDataSource([]);
-  @ViewChild('paginatorProy') paginatorProy: MatPaginator;
-  @ViewChild('sortProy') sortProy: MatSort;
-
-  displayedColumnsPracIn = ['nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
-  dataSourcePracIn = new MatTableDataSource([]);
-  proyectos = {
+  button = true;
+  fecha = new Date();
+  // objeto persona:
+  person = {
+    cfBirthdate: '',
+    cfGender: '',
+    cfUri: '',
+    cfFamilyNames: '',
+    cfFirstNames: '',
+    cfOtherNames: '',
+    cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+    cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
+    cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
+    cfFacil: '',
+    active: true,
+    user: '',
+    lvl: '',
+    type: '',
+    email: '',
+    relatedEquipments: {},
+    createdAt: this.fecha.toISOString(),
+    updatedAt: this.fecha.toISOString()
 
   };
 
-  proyestructurados:any;
+  // proyectos activos
+  displayedColumnsProy = ['ci', 'nombre'];
+  dataSourceProy = new MatTableDataSource([]);
+  @ViewChild('paginatorProy') paginatorProy: MatPaginator;
+  @ViewChild('sortProy') sortProy: MatSort;
+  // proyectos inactivos
+  displayedColumnsProyIn = ['ci', 'nombre'];
+  dataSourceProyIn = new MatTableDataSource([]);
+  @ViewChild('paginatorProyIn') paginatorProyIn: MatPaginator;
+  @ViewChild('sortProyIn') sortProyIn: MatSort;
+
+
+  displayedColumnsPers = ['nombre', 'email', 'estado', 'select'];
+  dataSourcePers = new MatTableDataSource([]);
+  @ViewChild('paginatorPers') paginatorPers: MatPaginator;
+  @ViewChild('sortPers') sortPers: MatSort;
+
+  selection = new SelectionModel(true, []);
+  proyecto = {
+
+    nombre: '',
+    ci: '',
+    descripcion: '',
+    estado: false,
+    personal: [],
+    relatedPers: {}
+
+  };
+  id_lab;
+  id_proj;
+  proyestructurados: any;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
@@ -34,42 +79,57 @@ export class AdminProyectosComponent implements OnInit {
 
       this.proyestructurados = undefined;
 
-      if(data.length != 0){
-        swal({
-          title: 'Cargando un momento...',
-          text: 'espere mientras se cargan los datos',
-          onOpen: () => {
-            swal.showLoading();
-          }
-        });
-        if(!this.proyestructurados){
+      if (data.length !== 0) {
+
+        if (!this.proyestructurados) {
           this.estructurarLab(data.uid).then(() => {
             this.itemsel = Observable.of(this.proyestructurados.proyectos);
-             console.log(this.proyestructurados);
+            console.log(this.proyestructurados);
 
+
+            this.id_lab = this.proyestructurados.uid;
             this.dataSourceProy.data = this.proyestructurados.proyectos;
-   
+            // inactivos
+            this.dataSourceProyIn.data = this.proyestructurados.proyectosInactivo;
+
+
+
+            this.dataSourcePers.data = this.proyestructurados.personal;
             const ambiente = this;
-      
-             setTimeout(function() {
-               if (ambiente.proyestructurados.proyectos != 0) {
-                 ambiente.dataSourceProy.sort = ambiente.sortProy;
-                 ambiente.dataSourceProy.paginator = ambiente.paginatorProy;
-                  // cierra loading luego de cargados los datos               
-               }
-              
-             }, 1500);
-    
+
+            swal({
+              title: 'Cargando un momento...',
+              text: 'espere mientras se cargan los datos',
+              onOpen: () => {
+                swal.showLoading();
+              }
+            });
+
+            setTimeout(function () {
+              if (ambiente.proyestructurados.proyectos !== 0) {
+                ambiente.dataSourceProy.sort = ambiente.sortProy;
+                ambiente.dataSourceProy.paginator = ambiente.paginatorProy;
+
+                ambiente.dataSourceProyIn.sort = ambiente.sortProyIn;
+                ambiente.dataSourceProyIn.paginator = ambiente.paginatorProyIn;
+                // cierra loading luego de cargados los datos
+
+                ambiente.dataSourcePers.sort = ambiente.sortPers;
+                ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+
+              }
+              swal.close();
+            }, 1500);
+
           });
         } else {
-          swal.close();
+
         }
-        
-      
+
       }
-      this.estructurarLab(data.uid).then(()=>{
+      this.estructurarLab(data.uid).then(() => {
         this.itemsel = Observable.of(this.proyestructurados);
-        
+
       });
 
 
@@ -79,32 +139,27 @@ export class AdminProyectosComponent implements OnInit {
   }
 
 
-  estructurarLab(key){
+  estructurarLab(key) {
     this.proyestructurados = {};
-    let promise = new Promise((resolve,reject)=>{
+    const promise = new Promise((resolve, reject) => {
       this.buscarLab(key).subscribe(labo => {
         const laboratorio = labo.payload.data();
-        console.log(laboratorio);
-        
-        let estadoLab;
-        if (laboratorio.active === true) {
-          estadoLab = 'Activo';
-        } else if ( laboratorio.active === false ) {
-          estadoLab = 'Inactivo';
+        //   console.log(laboratorio);
+        if (laboratorio) {
+
+          this.proyestructurados = {
+            uid: labo.payload.id,
+            nombre: laboratorio.cfName,
+            personal: this.estructurarPersonas(laboratorio.relatedPers),
+            proyectos: this.estructurarProyectos(laboratorio.relatedProjects).arr,
+            proyectosInactivo: this.estructurarProyectos(laboratorio.relatedProjects).arr2,
+            estado: laboratorio.active
+          };
+
         }
-
-        this.proyestructurados = {
-          uid: labo.payload.id,
-          nombre: laboratorio.cfName,
-          personal: this.estructurarPersonas(laboratorio.relatedPers),
-          proyectos: this.estructurarProyectos(laboratorio.relatedProjects),
-          estado: estadoLab
-        };
-
-
         resolve();
 
-      })
+      });
     });
 
     return promise;
@@ -123,36 +178,45 @@ export class AdminProyectosComponent implements OnInit {
   estructurarProyectos(item) {
 
     const arr = [];
+    const arr2 = [];
 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
-            const project =  data.payload.data();
+          this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
+            const project = data.payload.data();
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const proyecto = {
-                nombre: project.projectName,
-                descripcion: project.projectDesc,
-                ci: project.ciNumber,
-                personal: this.estructurarPersonas(project.relatedPers),
-                uid: data.payload.id
-              };
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const proyecto = {
+              nombre: project.projectName,
+              descripcion: project.projectDesc,
+              ci: project.ciNumber,
+              personal: this.estructurarPersonas(project.relatedPers),
+              id_proj: data.payload.id,
+              active: project.active
+            };
+            if (project.active) {
 
               arr.push(proyecto);
 
-           });
+            } else {
+
+              arr2.push(proyecto);
+            }
+
+
+          });
         }
 
       }
     }
 
-    return arr;
+    return { arr, arr2 };
   }
 
-    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPersonas(item) {
 
@@ -163,12 +227,12 @@ export class AdminProyectosComponent implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers =  data.payload.data();
-            if(pers){
+          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers = data.payload.data();
+            if (pers) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if(dataper.payload.data()){
+                if (dataper.payload.data()) {
 
                   const persona = {
                     id: clave,
@@ -178,14 +242,13 @@ export class AdminProyectosComponent implements OnInit {
                     idpers: clave,
                     iduser: pers.user
                   };
-    
                   arr.push(persona);
                 }
-              
+
               });
             }
 
-           });
+          });
         }
 
       }
@@ -199,6 +262,195 @@ export class AdminProyectosComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceProy.filter = filterValue;
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.displayedColumnsPers.length;
+    return numSelected === numRows;
+  }
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSourcePers.data.forEach(row => this.selection.select(row));
+  }
+
+  cambiardata(item) {
+    this.button = true;
+
+    this.proyecto.nombre = item.nombre;
+    this.proyecto.descripcion = item.descripcion;
+    this.proyecto.ci = item.ci;
+    this.proyecto.estado = item.active;
+    this.proyecto.personal = item.personal;
+    this.id_proj = item.id_proj;
+    console.log(item);
+  }
+
+  addPerstoProject() {
+
+    const aux = this.proyecto.personal;
+    /* for (let j = 0; j < this.proyecto.personal.length; j++) {
+      const persona = this.proyecto.personal[j];
+      aux.push(persona);
+    } */
+
+    let encontrado = false;
+    const arrayselect = this.selection.selected;
+    arrayselect.forEach(element => {
+      console.log(element);
+      for (let i = 0; i < aux.length; i++) {
+        console.log(aux);
+        const persona = aux[i];
+        if (persona.id === element.id) {
+          encontrado = true;
+          break;
+        }
+      }
+
+      if (!encontrado) {
+
+        swal({
+          type: 'success',
+          title: 'Agregado correctamente',
+          showConfirmButton: true
+        });
+
+        this.proyecto.personal.push(element);
+
+      } else {
+
+        swal({
+          type: 'info',
+          title: 'Usuario ya vinculado',
+          showConfirmButton: true
+        });
+
+      }
+
+    });
+
+    console.log(this.proyecto.personal);
+
+
+  }
+
+
+
+  addProject() {
+    const proyect = {
+      projectName: this.proyecto.nombre,
+      ciNumber: this.proyecto.ci,
+      projectDesc: this.proyecto.descripcion,
+      active: this.proyecto.estado,
+      relatedPers: {},
+      updatedAt: this.fecha.toISOString()
+    };
+
+    this.proyecto.personal.forEach((element) => {
+
+      console.log(element);
+      proyect.relatedPers[element.idpers] = true;
+
+    });
+
+
+    console.log(proyect);
+
+
+    this.afs.collection('project').add(proyect)
+      .then((ok) => {
+
+        const lab = { relatedProjects: {} };
+        lab.relatedProjects[ok.id] = true;
+
+        this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
+
+      });
+
+  }
+
+
+  updateProject() {
+    const proyect = {
+      projectName: this.proyecto.nombre,
+      ciNumber: this.proyecto.ci,
+      projectDesc: this.proyecto.descripcion,
+      active: this.proyecto.estado,
+      relatedPers: {},
+      updatedAt: this.fecha.toISOString()
+
+    };
+
+    this.proyecto.personal.forEach((element) => {
+
+      console.log(element);
+      proyect.relatedPers[element.idpers] = true;
+
+    });
+
+
+    console.log(proyect);
+
+
+    this.afs.doc('project/' + this.id_proj).set(proyect, { merge: true })
+      .then(() => {
+        swal({
+          type: 'success',
+          title: 'Actualizado correctamente',
+          showConfirmButton: true
+        });
+      });
+
+  }
+
+  addSingleProject() {
+
+    if (!this.person.email) {
+      swal({
+        type: 'info',
+        title: 'Es necesario el email',
+        showConfirmButton: true
+      });
+    } else {
+      const persona = this.person;
+
+      this.afs.collection('cfPers').add(persona).then((ok) => {
+        const pro = { relatedPers: {} };
+        pro.relatedPers[ok.id] = true;
+        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true });
+      });
+    }
+
+  }
+
+  applyFilter(filterValue: string) {
+
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceProy.filter = filterValue;
+  }
+
+
+  clearModal () {
+
+    this.button = false;
+
+   this.proyecto.ci = '';
+   this.proyecto.descripcion = '';
+   this.proyecto.estado = true;
+   this.proyecto.nombre = '';
+   this.proyecto.personal = [];
+
+
+
+
+  }
+
+  editPers(item) {
+
+    console.log(item);
+
   }
 
 }

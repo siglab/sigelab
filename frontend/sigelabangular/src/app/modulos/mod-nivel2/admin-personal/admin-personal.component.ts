@@ -62,7 +62,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   };
 
 
-  persestructurado:any;
+  persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
   displayedColumnsPers = ['nombre', 'email', 'tipo' ];
@@ -86,7 +86,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               private register: LoginService) { }
 
   ngOnInit() {
-           
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se cargan los datos',
@@ -94,10 +93,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         swal.showLoading();
       }
     });
-    
+
     this.obs.currentObjectPer.subscribe(data => {
 
-      if(data.length !== 0) {
+      if (data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {
 
          this.idlab = data.uid;
@@ -153,9 +152,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 
-  estructuraIdPers(key){
+  estructuraIdPers(key) {
 
-    let promise = new Promise((resolve,reject)=>{
+    const promise = new Promise((resolve, reject) => {
       this.buscarLab(key).subscribe(labo => {
         const laboratorio = labo.payload.data();
 
@@ -175,7 +174,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
          resolve();
 
-      })
+      });
      });
 
      return promise;
