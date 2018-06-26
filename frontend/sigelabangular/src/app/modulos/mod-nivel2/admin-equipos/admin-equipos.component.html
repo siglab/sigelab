@@ -212,33 +212,33 @@
                       <div class="box-body">
                           <div *ngIf="dataSourceComponentes.data.length == 0">
                               <h3>EL EQUIPO SELECCIONADO NO CUENTA CON COMPONENTES</h3>
+                          </div>
+
+                          <div class="example-container mat-elevation-z8" *ngIf="dataSourceComponentes.data.length != 0">
+                            <div class="example-header">
+                              <mat-form-field>
+                                <input style="outline: none;" matInput (keyup)="applyFilterComponentes($event.target.value)" placeholder="Buscar Componentes">
+                              </mat-form-field>
                             </div>
-  
-                              <div class="example-container mat-elevation-z8" *ngIf="dataSourceComponentes.data.length != 0">
-                                <div class="example-header">
-                                  <mat-form-field>
-                                    <input style="outline: none;" matInput (keyup)="applyFilterComponentes($event.target.value)" placeholder="Buscar Componentes">
-                                  </mat-form-field>
-                                </div>
-  
-                                <mat-table #tableSComponentes #sortComponentes="matSort" [dataSource]="dataSourceComponentes" matSort>
-  
-  
-                                  <ng-container matColumnDef="nombre">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                  </ng-container>
-  
-                                  <mat-header-row *matHeaderRowDef="displayedColumnsComponentes"></mat-header-row>
-                                  <mat-row *matRowDef="let row; columns: displayedColumnsComponentes;" style = "cursor: pointer;" (click)="cambiarInfoModal(row, 'componentes')" data-toggle="modal" data-target="#modal1"></mat-row>
-                                </mat-table>
-  
-                                <mat-paginator #paginatorComponentes="matPaginator"
-                                  [pageSize]="5"
-                                  [pageSizeOptions]="[5, 10, 20]"
-                                  [showFirstLastButtons]="true">
-                                </mat-paginator>
-                              </div>
+
+                            <mat-table #tableSComponentes #sortComponentes="matSort" [dataSource]="dataSourceComponentes" matSort>
+
+
+                              <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                              </ng-container>
+
+                              <mat-header-row *matHeaderRowDef="displayedColumnsComponentes"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsComponentes;" style = "cursor: pointer;" (click)="cambiarInfoModal(row, 'componentes')" data-toggle="modal" data-target="#modal1"></mat-row>
+                            </mat-table>
+
+                            <mat-paginator #paginatorComponentes="matPaginator"
+                              [pageSize]="5"
+                              [pageSizeOptions]="[5, 10, 20]"
+                              [showFirstLastButtons]="true">
+                            </mat-paginator>
+                          </div>
                       </div>
                     </div>
                   </div>

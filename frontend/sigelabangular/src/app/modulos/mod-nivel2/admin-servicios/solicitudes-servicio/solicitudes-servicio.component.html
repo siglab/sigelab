@@ -78,7 +78,7 @@
                                               </ng-container>
 
                                               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                              <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataServicioActivo(row)"></mat-row>
+                                              <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataServicio(row, 'activo')"></mat-row>
                                             </mat-table>
 
                                             <mat-paginator #paginator="matPaginator"
@@ -115,25 +115,25 @@
                                           </ng-container>
 
                                           <!-- Name Column -->
-                                          <ng-container matColumnDef="telefono">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Telefono </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.telefono}} </mat-cell>
+                                          <ng-container matColumnDef="fecha">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
                                           </ng-container>
 
                                           <!-- Weight Column -->
-                                          <ng-container matColumnDef="email">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          <ng-container matColumnDef="laboratorio">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
                                           </ng-container>
 
                                           <!-- Symbol Column -->
-                                          <ng-container matColumnDef="fecha">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-                                            <mat-cell *matCellDef="let element" > {{element.fecha}} </mat-cell>
+                                          <ng-container matColumnDef="estado">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                            <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
                                           </ng-container>
 
                                           <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-                                          <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="mostrardata(row)"></mat-row>
+                                          <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataServicio(row, 'historial')"></mat-row>
                                         </mat-table>
 
                                         <mat-paginator #paginator2="matPaginator"
@@ -158,7 +158,6 @@
       </div>
     </div>
 
-    <button class="btn-danger btn-lg btn-block danger" type="button" (click)="cambiarData()">CANCELAR</button>
     
     <div *ngIf="!moduloinfo" class="row">
       <div class="col-md-12 col-lg-12">
@@ -215,9 +214,15 @@
                       </div>
                   </div>
 
-                  <div class="row" style="margin-top:20px;">
+                  <div *ngIf="buttons" class="row" style="margin-top:20px;">
                     <div class="col-md-12 text-center form-group">
-                      <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
+                      <div class="col-md-6">
+                          <button class="btn-danger btn-lg btn-block danger" type="button" (click)="aceptarSolicitud()">ACEPTAR SOLICITUD</button>
+                      </div>
+                      <div class="col-md-6">
+                          <button class="btn-danger btn-lg btn-block danger" type="button" (click)="rechazarSolicitud()">RECHAZAR SOLICITUD</button>
+                      </div>
+                     
                     </div>
                   </div>
 
@@ -279,9 +284,15 @@
                           <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.activo}}</label>
                         </div>
                     </div>
-                    <div class="row" style="margin-top:20px;">
+                    <div *ngIf="buttons" class="row" style="margin-top:20px;">
                       <div class="col-md-12 text-center form-group">
-                        <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
+                        <div class="col-md-6">
+                            <button class="btn-succes btn-lg succes" type="button" (click)="aceptarSolicitud()">ACEPTAR</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-danger btn-lg danger" type="button" (click)="rechazarSolicitud()">RECHAZAR</button>
+                        </div>
+                        
                       </div>
                     </div>
 
@@ -307,9 +318,9 @@
                 <div class="direct-chat-messages">
                   <!-- Message. Default to the left -->
                   <div *ngFor="let item of servicioActivoSel.comentario; let i = index">
-                    <div *ngIf="(i%2) == 1" class="direct-chat-msg">
+                    <div *ngIf="this.user.uid != item.uid" class="direct-chat-msg">
                       <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">{{servicioActivoSel.usuario}}</span>
+                        <span class="direct-chat-name pull-left">{{servicioActivoSel.nombrelab}}</span>
                         <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
                       </div>
                       <!-- /.direct-chat-info -->
@@ -322,7 +333,7 @@
                     <!-- /.direct-chat-msg -->
 
                     <!-- Message to the right -->
-                    <div *ngIf="(i%2) == 0" class="direct-chat-msg right">
+                    <div *ngIf="this.user.uid == item.uid" class="direct-chat-msg right">
                       <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name pull-right">{{servicioActivoSel.usuario}}</span>
                         <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
