@@ -53,3 +53,33 @@ divScroll1::-webkit-scrollbar-track
   background-color: rgba(184, 16, 16, 0.938);border-color: rgb(87, 83, 83);color: rgb(255, 255, 255);font-weight: bold;
 }
 
+/* estilos material data table */
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
+}
+
+
+.customWidthClass{
+  flex: 0 0 70px;
+}
