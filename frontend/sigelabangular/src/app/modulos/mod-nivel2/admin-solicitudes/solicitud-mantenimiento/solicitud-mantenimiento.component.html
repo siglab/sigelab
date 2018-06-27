@@ -14,7 +14,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content" *ngIf="itemsel | async; let itemsel">
+    <section class="content">
 
       <!-- Componente central de busqueda -->
 
@@ -65,45 +65,55 @@
                                                           <i class="fa fa-map"></i>
 
                                                           <h3 class="box-title">Solicitudes</h3>
-                                                          <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} ACTIVAS</h3>
+                                                          <h3 class="box-title" style="float: right;"> ACTIVAS</h3>
                                                         </div>
                                                         <!-- /.box-header -->
                                                         <div class="box-body">
-                                                            <div class="box-body divScroll">
-                                                              <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                                  <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                                </div>
-                                                              <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                                  <table class=" table row-border hover table-condensed">
-                                                                      <thead>
-                                                                          <tr>
-                                                                              <th>NUMERO</th>
-                                                                              <th>FECHA</th>
-                                                                              <th>TIPO</th>
-                                                                              <th>EQUIPO</th>
+                                                            <div class="table-responsive">
 
-                                                                          </tr>
-                                                                          </thead>
-                                                                          <tbody>
-                                                                          <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i=index">
-                                                                              <td>
-                                                                                  {{i}}
-                                                                              </td>
-                                                                              <td>
-                                                                                  {{item.nombre}}
-                                                                              </td>
-                                                                              <td>
-                                                                                  {{item.nombre}}
-                                                                              </td>
-                                                                              <td>
-                                                                                  {{item.nombre}}
-                                                                              </td>
-                                                                          </tr>
-                                                                          </tbody>
-
-                                                                  </table>
-
-                                                              </div>
+                                                                    <div class="example-container mat-elevation-z8">
+                                                                        <div class="example-header">
+                                                                        <mat-form-field>
+                                                                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                                                        </mat-form-field>
+                                                                        </div>
+                            
+                                                                        <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
+                            
+                                                                        <!-- Position Column -->
+                                                                        <ng-container matColumnDef="nombre">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                                        </ng-container>
+                            
+                                                                        <!-- Name Column -->
+                                                                        <ng-container matColumnDef="fecha">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                                        </ng-container>
+                            
+                                                                        <!-- Weight Column -->
+                                                                        <ng-container matColumnDef="email">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.usuario}} </mat-cell>
+                                                                        </ng-container>
+                            
+                                                                        <!-- Symbol Column -->
+                                                                        <ng-container matColumnDef="estado">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
+                                                                        </ng-container>
+                            
+                                                                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                                        <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataServicio(row, 'activo')"></mat-row>
+                                                                        </mat-table>
+                            
+                                                                        <mat-paginator #paginator="matPaginator"
+                                                                        [pageSize]="4"
+                                                                        [pageSizeOptions]="[2, 3, 4]"
+                                                                        [showFirstLastButtons]="true">
+                                                                    </mat-paginator>
+                                                                    </div>
                                                             </div>
                                                         </div>
                                                       <!-- /.box-body -->
@@ -125,45 +135,54 @@
                                                           <i class="fa fa-map"></i>
 
                                                           <h3 class="box-title">Proyectos</h3>
-                                                          <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} INACTIVAS</h3>
+                                                          <h3 class="box-title" style="float: right;"> INACTIVAS</h3>
                                                         </div>
                                                         <!-- /.box-header -->
                                                         <div class="box-body">
-                                                            <div class="box-body divScroll">
-                                                              <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                                  <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                                </div>
-                                                              <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                                  <table class=" table row-border hover table-condensed">
-                                                                      <thead>
-                                                                          <tr>
-                                                                              <th>NUMERO</th>
-                                                                              <th>FECHA</th>
-                                                                              <th>TIPO</th>
-                                                                              <th>EQUIPO</th>
-
-                                                                          </tr>
-                                                                          </thead>
-                                                                          <tbody>
-                                                                          <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i=index">
-                                                                              <td>
-                                                                                  {{i}}
-                                                                              </td>
-                                                                              <td>
-                                                                                  {{item.nombre}}
-                                                                              </td>
-                                                                              <td>
-                                                                                  {{item.nombre}}
-                                                                              </td>
-                                                                              <td>
-                                                                                  {{item.nombre}}
-                                                                              </td>
-                                                                          </tr>
-                                                                          </tbody>
-
-                                                                  </table>
-
-                                                              </div>
+                                                            <div class="table-responsive">
+                                                                    <div class="example-container mat-elevation-z8">
+                                                                        <div class="example-header">
+                                                                        <mat-form-field>
+                                                                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                                                                        </mat-form-field>
+                                                                        </div>
+                                
+                                                                        <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+                                
+                                                                        <!-- Position Column -->
+                                                                        <ng-container matColumnDef="nombre">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                                        </ng-container>
+                                
+                                                                        <!-- Name Column -->
+                                                                        <ng-container matColumnDef="fecha">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                                        </ng-container>
+                                
+                                                                        <!-- Weight Column -->
+                                                                        <ng-container matColumnDef="laboratorio">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
+                                                                        </ng-container>
+                                
+                                                                        <!-- Symbol Column -->
+                                                                        <ng-container matColumnDef="estado">
+                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                                            <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
+                                                                        </ng-container>
+                                
+                                                                        <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                                                        <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataServicio(row, 'historial')"></mat-row>
+                                                                        </mat-table>
+                                
+                                                                        <mat-paginator #paginator2="matPaginator"
+                                                                        [pageSize]="4"
+                                                                        [pageSizeOptions]="[2, 3, 4]"
+                                                                        [showFirstLastButtons]="true">
+                                                                    </mat-paginator>
+                                                                    </div>
                                                             </div>
                                                         </div>
                                                       <!-- /.box-body -->
@@ -245,14 +264,14 @@
                         </form>
 
 
-                        <div class="box box-danger">
+                        <!-- <div class="box box-danger">
                             <div class="box-header">
                               <i class="fa fa-map"></i>
 
                               <h3 class="box-title">Equipo Vinculado</h3>
                               <h3 class="box-title" style="float: right;">{{this.itemsel.equipos.length}} Equipos</h3>
                             </div>
-                            <!-- /.box-header -->
+                         
                             <div class="box-body">
                                 <div class="box-body divScroll1">
                                   <div *ngIf="this.itemsel.equipos.length == 0">
@@ -286,7 +305,7 @@
                                   </div>
                                 </div>
                             </div>
-                          <!-- /.box-body -->
+                       
                         </div>
 
                         <div class="box box-danger">
@@ -296,7 +315,7 @@
                               <h3 class="box-title">Accesorios y Componentes</h3>
                               <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} Componentes y/o Accesorios</h3>
                             </div>
-                            <!-- /.box-header -->
+                          
                             <div class="box-body">
                                 <div class="box-body divScroll1">
                                   <div *ngIf="this.itemsel.solicitudes.length == 0">
@@ -330,11 +349,11 @@
                                   </div>
                                 </div>
                             </div>
-                          <!-- /.box-body -->
-                        </div>
+                       
+                        </div> -->
 
                     </div>
-                  <!-- /.box-body -->
+
                   </div>
 
               </div>

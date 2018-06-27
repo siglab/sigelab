@@ -192,7 +192,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
       const cfSrvReserv = {
         cfFacil: this.itemsel.infoLab.uid,
-        namelab: this.itemsel.nombre,
+        namelab: this.itemsel.nombrelab,
         cfSrv: this.itemsel.infoServ.uid,
         user: this.user.uid,
         selectedVariations: {},
@@ -236,6 +236,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
               uid: this.user.uid});
            
+              console.log(cfSrvReserv);
+
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
               swal({
                 type: 'success',
@@ -245,8 +247,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 $('#myModalLabs').modal('hide');
               });
 
-             
-  
             }).catch(error => {
   
               swal({
