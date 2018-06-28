@@ -8,90 +8,56 @@ const ref = admin.firestore();
 
 exports.CreateUser = functions.auth.user().onCreate(event => {
 
-  console.log("FUNCIONO");
-    crearUsuario(event);
-    getPerson( event.email)
+
+  ref.collection("cfPers").where("email", "==", event.email)
+    .get()
+    .then((querySnapshot) => {
+      const personas = []
+
+      // add data from the 5 most recent comments to the array
+      querySnapshot.forEach(doc => {
+        personas.push(doc.id)
+      });
+
+      if (personas.length > 0) {
+
+        return personas[0];
+
+      } else {
+
+        return '';
+      }
+
+
+    }
+
+    ).then((idp) => {
+
+
+      const fecha = new Date();
+      const uid = event.uid;
+      const email = event.email;
+      const newUser = ref.doc(`/user/${uid}`);
+      const usr = {
+        cfOrgId: "UK6cYXc1iYXCdSU30xmr",
+        cfPers: idp,
+        appRoles: { IKLoR5biu1THaAMG4JOz: true },
+        createdAt: fecha.toISOString(),
+        email: email,
+      }
+
+
+      return newUser.set(usr)
+
+      //   return  console.log(' nuevo usuario para subir' , usr);
+
+
+    }).catch(err => console.log('fallo la consulta', err));
+
 
 });
 
 
-
-function crearUsuario(event){
-
-  const fecha = new Date();
-  console.log(event);
-  const uid = event.uid;
-  console.log(event.uid);
-    const displayName = event.metadata.displayName || "";
-     console.log(event);
-    const email = event.email;
-    const newUser = ref.doc(`/user/${uid}`);
-    const usr = {
-      cfOrgId: "UK6cYXc1iYXCdSU30xmr",
-      cfPers: "",
-      appRoles: { IKLoR5biu1THaAMG4JOz: true },
-      createdAt: fecha.toISOString(),
-      email: email,
-      updatedAt: "2018-04-17T21:41:31.027Z"
-  }
-
-
-
-    newUser.set(usr).then( exito => {
-     console.log('EL USUARIO SE CREO CON EXITO', exito);
-    }).catch(error => {
-      console.log('SE GENERO UN ERROR AL INTENTAR CREAR USUARIO');
-      crearUsuario(event);
-    });
-}
-
-
-
-/* function getPerson(email) {
-  return new Promise((resolve, reject) => {
-
-
-    console.log('llego este email' , email);
-
-    const personRef = ref.collection('cfPers');
-
-    const query = personRef.where('email' === email);
-
-    const uns= query.onSnapshot((ok) => {
-
-      console.log('consol de la consulta', ok);
-    const resp = ok[0].doc.id;
-      console.log(ok[0].doc.id);
-      resolve(resp);
-
-    }, err => {
-
-      console.log('no existe', err)
-
-    });
-    uns();
-  });
-
-} */
-
-function getPerson(email) {
-
-
-   ref.collection("cfPers").where("email", "==", email)
-     .get()
-     .then( (querySnapshot) => {
-
-    return    console.log(object);
-
-    }
-
-  ).catch( err => console.log('fallo la consulta', err)  );
-
-    uns ();
-
-
-
-}
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
