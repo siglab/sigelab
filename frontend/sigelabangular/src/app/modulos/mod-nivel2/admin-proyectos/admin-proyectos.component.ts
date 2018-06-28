@@ -40,6 +40,7 @@ export class AdminProyectosComponent implements OnInit {
   };
 
   // proyectos activos
+  newp = true;
   displayedColumnsProy = ['ci', 'nombre'];
   dataSourceProy = new MatTableDataSource([]);
   @ViewChild('paginatorProy') paginatorProy: MatPaginator;
@@ -285,15 +286,13 @@ export class AdminProyectosComponent implements OnInit {
     this.proyecto.personal = item.personal;
     this.id_proj = item.id_proj;
     console.log(item);
+
+
   }
 
   addPerstoProject() {
 
     const aux = this.proyecto.personal;
-    /* for (let j = 0; j < this.proyecto.personal.length; j++) {
-      const persona = this.proyecto.personal[j];
-      aux.push(persona);
-    } */
 
     let encontrado = false;
     const arrayselect = this.selection.selected;
@@ -330,14 +329,20 @@ export class AdminProyectosComponent implements OnInit {
 
     });
 
-    console.log(this.proyecto.personal);
-
-
   }
 
 
 
   addProject() {
+
+   if ( !this.person.cfFirstNames || this.proyecto.personal.length === 0 ) {
+    swal({
+      type: 'info',
+      title: 'Primero debe vincular personal al laboratorio',
+      showConfirmButton: true
+    });
+   } else {
+
     const proyect = {
       projectName: this.proyecto.nombre,
       ciNumber: this.proyecto.ci,
@@ -357,7 +362,7 @@ export class AdminProyectosComponent implements OnInit {
 
     console.log(proyect);
 
-
+/*
     this.afs.collection('project').add(proyect)
       .then((ok) => {
 
@@ -366,7 +371,10 @@ export class AdminProyectosComponent implements OnInit {
 
         this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
 
-      });
+      }); */
+
+   }
+
 
   }
 
@@ -389,10 +397,6 @@ export class AdminProyectosComponent implements OnInit {
 
     });
 
-
-    console.log(proyect);
-
-
     this.afs.doc('project/' + this.id_proj).set(proyect, { merge: true })
       .then(() => {
         swal({
@@ -403,6 +407,42 @@ export class AdminProyectosComponent implements OnInit {
       });
 
   }
+
+  updatedSingleProject() {
+
+    if (!this.person.email) {
+      swal({
+        type: 'info',
+        title: 'Es necesario el email',
+        showConfirmButton: true
+      });
+    } else {
+      const persona = this.person;
+
+      this.afs.collection('cfPers').add(persona).then((ok) => {
+        const pro = {
+          projectName: this.proyecto.nombre,
+          ciNumber: this.proyecto.ci,
+          projectDesc: this.proyecto.descripcion,
+          active: this.proyecto.estado,
+          relatedPers: {},
+          updatedAt: this.fecha.toISOString()
+
+        };
+        pro.relatedPers[ok.id] = true;
+        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true }) .then ( () => {
+
+
+          swal({
+            type: 'success',
+            title: ' Proyecto agregado correctamente',
+            showConfirmButton: true
+          });
+        } );
+      });
+    }
+  }
+
 
   addSingleProject() {
 
@@ -416,9 +456,17 @@ export class AdminProyectosComponent implements OnInit {
       const persona = this.person;
 
       this.afs.collection('cfPers').add(persona).then((ok) => {
-        const pro = { relatedPers: {} };
+        const pro = {
+          projectName: this.proyecto.nombre,
+          ciNumber: this.proyecto.ci,
+          projectDesc: this.proyecto.descripcion,
+          active: this.proyecto.estado,
+          relatedPers: {},
+          updatedAt: this.fecha.toISOString()
+
+        };
         pro.relatedPers[ok.id] = true;
-        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true }) .then ( () => {
+        this.afs.collection('project/').add (pro) .then ( () => {
 
 
           swal({
@@ -429,9 +477,7 @@ export class AdminProyectosComponent implements OnInit {
         } );
       });
     }
-
   }
-
   applyFilter(filterValue: string) {
 
     filterValue = filterValue.trim(); // Remove whitespace
@@ -442,7 +488,7 @@ export class AdminProyectosComponent implements OnInit {
 
   clearModal () {
 
-    this.button = false;
+   this.button = false;
 
    this.proyecto.ci = '';
    this.proyecto.descripcion = '';
@@ -454,6 +500,8 @@ export class AdminProyectosComponent implements OnInit {
 
 
   }
+
+
 
   editPers(item) {
 
