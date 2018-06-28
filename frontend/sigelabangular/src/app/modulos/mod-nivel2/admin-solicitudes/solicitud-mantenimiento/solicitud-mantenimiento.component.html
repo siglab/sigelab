@@ -17,7 +17,7 @@
     <section class="content">
 
       <!-- Componente central de busqueda -->
-
+      <button (click)="subir()">Subir</button>
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
@@ -34,7 +34,7 @@
 
             <div class="box-body">
 
-              <div class="col-md-6">
+              <div class="col-md-12">
                   <div class="box box-danger">
 
 
@@ -58,65 +58,53 @@
 
                                                     <h3 class="box-title">ACTIVOS</h3>
                                                 </div>
-                                                <div class="box-body divScroll">
+                                                <div class="box-body">
 
-                                                    <div class="box box-danger">
-                                                        <div class="box-header">
-                                                          <i class="fa fa-map"></i>
+                                                    <div class="table-responsive">
 
-                                                          <h3 class="box-title">Solicitudes</h3>
-                                                          <h3 class="box-title" style="float: right;"> ACTIVAS</h3>
-                                                        </div>
-                                                        <!-- /.box-header -->
-                                                        <div class="box-body">
-                                                            <div class="table-responsive">
-
-                                                                    <div class="example-container mat-elevation-z8">
-                                                                        <div class="example-header">
-                                                                        <mat-form-field>
-                                                                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                                                                        </mat-form-field>
-                                                                        </div>
-                            
-                                                                        <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
-                            
-                                                                        <!-- Position Column -->
-                                                                        <ng-container matColumnDef="nombre">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                                                        </ng-container>
-                            
-                                                                        <!-- Name Column -->
-                                                                        <ng-container matColumnDef="fecha">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
-                                                                        </ng-container>
-                            
-                                                                        <!-- Weight Column -->
-                                                                        <ng-container matColumnDef="email">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.usuario}} </mat-cell>
-                                                                        </ng-container>
-                            
-                                                                        <!-- Symbol Column -->
-                                                                        <ng-container matColumnDef="estado">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
-                                                                        </ng-container>
-                            
-                                                                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                                                        <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataServicio(row, 'activo')"></mat-row>
-                                                                        </mat-table>
-                            
-                                                                        <mat-paginator #paginator="matPaginator"
-                                                                        [pageSize]="4"
-                                                                        [pageSizeOptions]="[2, 3, 4]"
-                                                                        [showFirstLastButtons]="true">
-                                                                    </mat-paginator>
-                                                                    </div>
+                                                        <div class="example-container mat-elevation-z8">
+                                                            <div class="example-header">
+                                                            <mat-form-field>
+                                                                <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                                                            </mat-form-field>
                                                             </div>
+                
+                                                            <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
+                
+                                                            <!-- Position Column -->
+                                                            <ng-container matColumnDef="nombre">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element"> {{element.nombreEquip}} </mat-cell>
+                                                            </ng-container>
+                
+                                                            <!-- Name Column -->
+                                                            <ng-container matColumnDef="fecha">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                            </ng-container>
+                
+                                                            <!-- Weight Column -->
+                                                            <ng-container matColumnDef="tipo">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                                            </ng-container>
+                
+                                                            <!-- Symbol Column -->
+                                                            <ng-container matColumnDef="estado">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
+                                                            </ng-container>
+                
+                                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                            <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataSolicitud(row)"></mat-row>
+                                                            </mat-table>
+                
+                                                            <mat-paginator #paginator="matPaginator"
+                                                            [pageSize]="4"
+                                                            [pageSizeOptions]="[2, 3, 4]"
+                                                            [showFirstLastButtons]="true">
+                                                        </mat-paginator>
                                                         </div>
-                                                      <!-- /.box-body -->
                                                     </div>
 
                                                 </div>
@@ -128,64 +116,52 @@
 
                                                     <h3 class="box-title">INACTIVOS</h3>
                                                 </div>
-                                                <div class="box-body divScroll">
+                                                <div class="box-body">
 
-                                                    <div class="box box-danger">
-                                                        <div class="box-header">
-                                                          <i class="fa fa-map"></i>
-
-                                                          <h3 class="box-title">Proyectos</h3>
-                                                          <h3 class="box-title" style="float: right;"> INACTIVAS</h3>
-                                                        </div>
-                                                        <!-- /.box-header -->
-                                                        <div class="box-body">
-                                                            <div class="table-responsive">
-                                                                    <div class="example-container mat-elevation-z8">
-                                                                        <div class="example-header">
-                                                                        <mat-form-field>
-                                                                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
-                                                                        </mat-form-field>
-                                                                        </div>
-                                
-                                                                        <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
-                                
-                                                                        <!-- Position Column -->
-                                                                        <ng-container matColumnDef="nombre">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                                                        </ng-container>
-                                
-                                                                        <!-- Name Column -->
-                                                                        <ng-container matColumnDef="fecha">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
-                                                                        </ng-container>
-                                
-                                                                        <!-- Weight Column -->
-                                                                        <ng-container matColumnDef="laboratorio">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
-                                                                        </ng-container>
-                                
-                                                                        <!-- Symbol Column -->
-                                                                        <ng-container matColumnDef="estado">
-                                                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                                                            <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
-                                                                        </ng-container>
-                                
-                                                                        <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-                                                                        <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataServicio(row, 'historial')"></mat-row>
-                                                                        </mat-table>
-                                
-                                                                        <mat-paginator #paginator2="matPaginator"
-                                                                        [pageSize]="4"
-                                                                        [pageSizeOptions]="[2, 3, 4]"
-                                                                        [showFirstLastButtons]="true">
-                                                                    </mat-paginator>
-                                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <div class="example-container mat-elevation-z8">
+                                                            <div class="example-header">
+                                                            <mat-form-field>
+                                                                <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                                                            </mat-form-field>
                                                             </div>
+                    
+                                                            <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+                    
+                                                            <!-- Position Column -->
+                                                            <ng-container matColumnDef="nombre">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element"> {{element.nombreEquip}} </mat-cell>
+                                                            </ng-container>
+                    
+                                                            <!-- Name Column -->
+                                                            <ng-container matColumnDef="fecha">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                            </ng-container>
+                    
+                                                            <!-- Weight Column -->
+                                                            <ng-container matColumnDef="laboratorio">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
+                                                            </ng-container>
+                    
+                                                            <!-- Symbol Column -->
+                                                            <ng-container matColumnDef="estado">
+                                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                                <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
+                                                            </ng-container>
+                    
+                                                            <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                                            <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataServicio(row, 'historial')"></mat-row>
+                                                            </mat-table>
+                    
+                                                            <mat-paginator #paginator2="matPaginator"
+                                                            [pageSize]="4"
+                                                            [pageSizeOptions]="[2, 3, 4]"
+                                                            [showFirstLastButtons]="true">
+                                                        </mat-paginator>
                                                         </div>
-                                                      <!-- /.box-body -->
                                                     </div>
 
                                                 </div>
@@ -205,7 +181,7 @@
 
               </div>
 
-              <div class="col-md-6">
+              <div *ngIf="this.solsel" class="col-md-6">
                   <div class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-map"></i>
@@ -215,148 +191,190 @@
 
                     <!-- /.box-header -->
                     <div class="box-body">
-
                         <form  id="form-work" class="" name="form-work" action="#">
-                            <fieldset>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ccpas"><strong>No Solicitud: </strong></label>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ccpas"><strong>No Solicitud: </strong>
+                                        {{this.solsel.uidlab}}
+                                        </label>
+    
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="nac"><strong>Fecha Solicitud: </strong>
+                                            {{this.solsel.fecha}}
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Fecha ultima edicion: </strong>
+                                            {{this.solsel.editado}}
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ciudes"><strong>Usuario solicitante: </strong>
+                                            {{this.solsel.usuario}}
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ciudes"><strong>Tipo Mantenimiento: </strong>
+                                            {{this.solsel.tipo}}
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ciudes"><strong>Estado Equipo: </strong>
+                                            {{this.solsel.equipo.active}}
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ciudes"><strong>Descripcion: </strong>
+                                            {{this.solsel.descripcion}}
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="ciudes"><strong>Datos Proveedor:</strong>                    
+                                        </label>
+                                            <ul>
+                                                <li *ngFor="let item of solsel.proveedores">
+                                                    {{item.name}}
+                                                    <ul>
+                                                        <li *ngFor="let item2 of item.contactNumbers; let i = index">tel {{i}} : {{item2}}</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="nac"><strong>Fecha Solicitud: </strong></label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Fecha ultima edicion: </strong></label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciudes"><strong>Usuario solicitante: </strong></label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciudes"><strong>Tipo Mantenimiento: </strong></label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciudes"><strong>Estado Equipo: </strong></label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciudes"><strong>Descripcion: </strong></label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciudes"><strong>Datos PRoveedor: </strong></label>
-                                    </div>
-                                </div>
-
-                            </fieldset>
+    
+                                </fieldset>
                         </form>
-
-
-                        <!-- <div class="box box-danger">
-                            <div class="box-header">
-                              <i class="fa fa-map"></i>
-
-                              <h3 class="box-title">Equipo Vinculado</h3>
-                              <h3 class="box-title" style="float: right;">{{this.itemsel.equipos.length}} Equipos</h3>
-                            </div>
-                         
-                            <div class="box-body">
-                                <div class="box-body divScroll1">
-                                  <div *ngIf="this.itemsel.equipos.length == 0">
-                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                    </div>
-                                  <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                      <table class=" table row-border hover table-condensed">
-                                          <thead>
-                                              <tr>
-                                                  <th>Nombre</th>
-                                                  <th>Estado</th>
-                                                  <th>No Inventario</th>
-                                              </tr>
-                                              </thead>
-                                              <tbody>
-                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos; let i = index">
-                                                  <td>
-                                                      {{item.nombre}}
-                                                  </td>
-                                                  <td>
-                                                      ACTIVO
-                                                  </td>
-                                                  <td>
-                                                      {{i}}
-                                                  </td>
-                                              </tr>
-                                              </tbody>
-
-                                      </table>
-
-                                  </div>
-                                </div>
-                            </div>
-                       
-                        </div>
-
-                        <div class="box box-danger">
-                            <div class="box-header">
-                              <i class="fa fa-map"></i>
-
-                              <h3 class="box-title">Accesorios y Componentes</h3>
-                              <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} Componentes y/o Accesorios</h3>
-                            </div>
-                          
-                            <div class="box-body">
-                                <div class="box-body divScroll1">
-                                  <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                    </div>
-                                  <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                      <table class=" table row-border hover table-condensed">
-                                          <thead>
-                                              <tr>
-                                                  <th>Nombre</th>
-                                                  <th>Estado</th>
-                                                  <th>No Inventario</th>
-                                              </tr>
-                                              </thead>
-                                              <tbody>
-                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i = index">
-                                                  <td>
-                                                      {{item.nombre}}
-                                                  </td>
-                                                  <td>
-                                                     ACTIVO
-                                                  </td>
-                                                  <td>
-                                                      {{i}}
-                                                  </td>
-                                              </tr>
-                                              </tbody>
-
-                                      </table>
-
-                                  </div>
-                                </div>
-                            </div>
-                       
-                        </div> -->
-
+                                          
                     </div>
 
                   </div>
 
               </div>
+
+              <div *ngIf="this.solsel" class="col-md-6">
+                    <div class="box box-danger">
+                      <div class="box-header">
+                        <i class="fa fa-map"></i>
+  
+                        <h3 class="box-title">INFORMACION DE EQUIPO VINCULADO</h3>
+                      </div>
+  
+                      <!-- /.box-header -->
+                      <div class="box-body">
+                            <form  id="form-work" class="" name="form-work" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="nac"><strong>No Invetario: </strong>
+                                                {{this.solsel.equipo.inventory}}
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                              <label class="control-label" for="ccpas"><strong>Nombre Equipo: </strong>
+                                            {{this.solsel.equipo.cfName}}
+                                            </label>
+        
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                              <label class="control-label" for="nac"><strong>Precio: </strong>
+                                                {{this.solsel.equipo.price}}
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                              <label class="control-label" for="ciuor"><strong>Estado: </strong>
+                                                {{this.solsel.equipo.active}}
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                              <label class="control-label" for="ciudes"><strong>COMPONENTES ASOCIADOS:</strong>                    
+                                            </label>
+                                                <ul>
+                                                    <li *ngFor="let item of solsel.componentes">
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="nac"><strong>Nombre: </strong>
+                                                                {{item.nombre}}
+                                                            </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                              <label class="control-label" for="ccpas"><strong>Descripcion: </strong>
+                                                                {{item.descripcion}}
+                                                              </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                              <label class="control-label" for="nac"><strong>Precio: </strong>
+                                                                {{item.precio}}
+                                                            </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                              <label class="control-label" for="ciuor"><strong>Marca: </strong>
+                                                                {{item.marca}}
+                                                            </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                              <label class="control-label" for="ciuor"><strong>Modelo: </strong>
+                                                                {{item.modelo}}
+                                                            </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                              <label class="control-label" for="ciuor"><strong>Estado: </strong>
+                                                                {{item.estado}}
+                                                            </label>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+    
+        
+                                    </fieldset>
+                            </form>
+                         
+                      </div>
+  
+                    </div>
+  
+              </div>
+
+                <div *ngIf="!this.solsel">
+                    <h1>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h1>
+                </div>
 
 
             </div>
@@ -374,3 +392,5 @@
 
 
   </div>
+
+

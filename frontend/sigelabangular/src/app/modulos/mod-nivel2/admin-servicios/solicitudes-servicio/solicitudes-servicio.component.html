@@ -252,55 +252,55 @@
                 </a> 
                 </div>
                 <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                <div class="box-body">
-                    <form  id="form-workserv3" class="" name="form-workserv3" action="#">
-                        <fieldset>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                                <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
-                              <select class="form-control" name="variatio" id="variato" (change)="cambiarVariacion($event.target.value)">
-                                <option value="inicial">Seleccione una variacion</option>
-                                <option *ngFor="let item of servicioActivoSel.variaciones" value="{{item.id}}" >{{item.nombre}}</option>
-                              </select>
-                            </div>
-                          </div>
-                        </fieldset>
-      
-                        <fieldset *ngIf="variation">
-                          <div class="form-group">
+                  <div class="box-body">
+                      <form  id="form-workserv3" class="" name="form-workserv3" action="#">
+                          <fieldset>
+                            <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
-      
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.descripcion}}</label>
-                              </div>
-                          </div>
-                          <div *ngIf="condicion" class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                                <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
-                                    <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                </div>            
+                                  <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
+                                <select class="form-control" name="variatio" id="variato" (change)="cambiarVariacion($event.target.value)">
+                                  <option value="inicial">Seleccione una variacion</option>
+                                  <option *ngFor="let item of servicioActivoSel.variaciones" value="{{item.id}}" >{{item.nombre}}</option>
+                                </select>
                               </div>
                             </div>
-                          <div class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.precio}}</label>
+                          </fieldset>
+        
+                          <fieldset *ngIf="variation">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
+        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.descripcion}}</label>
+                                </div>
+                            </div>
+                            <div *ngIf="condicion" class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                  <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
+                                      <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
+                                  </div>            
+                                </div>
                               </div>
-                          </div>
-                          <div class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.activo}}</label>
-                              </div>
-                          </div>
-      
-                        </fieldset> 
-                    </form>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.precio}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.activo}}</label>
+                                </div>
+                            </div>
+        
+                          </fieldset> 
+                      </form>
 
-                </div>
+                  </div>
                 </div>
             </div>                  
           </div>
