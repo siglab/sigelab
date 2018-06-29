@@ -273,7 +273,7 @@
                     </label>
 
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
+                      <input [(ngModel)]="this.email"   id="escuelaedit" name="email" class="form-control" type="email">
                     </div>
                   </div>
                 </div>
@@ -335,7 +335,7 @@
 
 <!-- modal agregar nuevo personal al laboratorio -->
 
-<div class="modal fade" id="modal1" role="dialog">
+<div     class="modal fade" id="modal1" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
@@ -380,14 +380,17 @@
                 </div>
 
 
-                <div class="form-group">
+
+                <div class="form-group has-info" [ngClass]="{ 'has-error': !this.dispo, 'has-success': this.dispo }"   >
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
                       <strong>Email:</strong>
                     </label>
-                    <input [(ngModel)]="this.usuario.email" id="escuelaedit" name="email" class="form-control" type="email">
+                    <input (focusout)="emailcheck($event)"    [(ngModel)]="this.email"  id="email" name="email" class="form-control" type="email">
+                    <span class="help-block"> {{status}}</span>
                   </div>
                 </div>
+
 
 
                 <div class="form-group">
