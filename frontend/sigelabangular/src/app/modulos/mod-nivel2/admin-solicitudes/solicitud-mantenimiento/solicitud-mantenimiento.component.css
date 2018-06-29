@@ -1,6 +1,6 @@
 .divScroll {
   overflow-y: scroll;
-  height: 400px;
+  height: 100px;
 }
 divScroll::-webkit-scrollbar-track
 {
@@ -90,42 +90,59 @@ divScroll1::-webkit-scrollbar-track
     100% { transform: rotate(360deg); }
   }
 
-  body {
-    font-family: 'Open Sans', sans-serif;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 300;
-  }
-  
-  p {
-    color: #999;
-  }
-  
-  strong {
-    color: #333;
-  }
-  
-  #wrapper {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 30px 0;
-  }
-  
-  
-  .page-head-image img {
-    border-radius: 50%;
-  }
-  
-  #form-trabalhe {
-    margin-top: 30px;
-    text-align: left;
-  }
-  
-  label {
-    font-weight: normal;
-    margin-top: 15px;
-  }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+p {
+  color: #999;
+}
+
+strong {
+  color: #333;
+}
+
+#wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 30px 0;
+}
+
+
+.page-head-image img {
+  border-radius: 50%;
+}
+
+#form-trabalhe {
+  margin-top: 30px;
+  text-align: left;
+}
+
+label {
+  font-weight: normal;
+  margin-top: 15px;
+}
+
+.input-group-addon {
+  border: 2px solid #CCC !important;
+  border-right: 0px !important;
+}
+
+.btn2 {
+  border: 0;
+  border-radius: 3px;
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 0;
+  text-align: left;
+}
 

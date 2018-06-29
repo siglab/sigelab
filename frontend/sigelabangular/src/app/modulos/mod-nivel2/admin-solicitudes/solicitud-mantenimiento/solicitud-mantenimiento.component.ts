@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import swal from 'sweetalert2';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-solicitud-mantenimiento',
@@ -11,7 +12,7 @@ import swal from 'sweetalert2';
   styleUrls: ['./solicitud-mantenimiento.component.css']
 })
 export class SolicitudMantenimientoComponent implements OnInit {
-  itemsel: Observable<Array<any>>;
+  itemsel: any;
 
   datos:any;
   histodatos:any;
@@ -27,26 +28,86 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
+
+  // equipos
+  displayedColumnsEquip = ['select', 'nombre'];
+  dataSourceEquip = new MatTableDataSource([]);
+  @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
+  @ViewChild('sortEquip') sortEquip: MatSort;
+
+  // componentes
+  displayedColumnsComp = ['select', 'nombre'];
+  dataSourceComp = new MatTableDataSource([]);
+  @ViewChild('paginatorComp') paginatorComp: MatPaginator;
+  @ViewChild('sortComp') sortComp: MatSort;
+  
+  selection = new SelectionModel(true, []);
+  selection2 = new SelectionModel(true, []);
+
   
   solsel:any;
+
+  reserMan = {
+    cfOrgUnit:'',
+    headquarter:'',
+    cfFacil:'',
+    createdBy:'',
+    requestDesc:'',
+    requestType:'mantenimiento',
+    maintenanceType:'',
+    providersInfo:[],
+    relatedEquipments:'',
+    relatedComponents:{},
+    status:'pendiente',
+    active:true,
+    createdAt:'',
+    updatedAt:''
+  };
+
+  proovedor = {
+    name:'',
+    contactNumbers:[],
+    attachments:{}
+  };
+
+  telproov = {
+    tel1:'',
+    tel2:''
+  }
+
+  iconosModal = {
+    servicio:false,
+    variacion:false,
+    equipos:false,
+    componentes:false
+  };
+
+  lab_id:any;
+
+  equipos:any;
+
+  user:any;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) {
    }
 
   ngOnInit() {
+    if (localStorage.getItem('usuario')) {
+      this.user = JSON.parse(localStorage.getItem('usuario'));   
+    }
     this.obs.currentObjectSolMan.subscribe(data => {
+
       if(data.length != 0){
-        console.log(data);
+
         this.alertaCargando();
+                
+        this.itemsel = data;
+        this.lab_id = data.uid;
 
         this.getCollectionSolicitudes(data.uid).subscribe(data1 => {
           console.log(data1);
           this.datos = this.estructurarSolicitudesActivas(data1, data);
-          this.histodatos = this.estructurarHistorialSolicitudes(data1, data);
-          console.log(this.datos);
-          //console.log(this.histodatos);
-          
-         
+          this.histodatos = this.datos;
           
             setTimeout(() => {
               if(this.datos){
@@ -64,13 +125,53 @@ export class SolicitudMantenimientoComponent implements OnInit {
             }, 1500);
                      
         });
+
+        this.getLaboratorio(data.uid).subscribe(labo => {
+          this.equipos = this.estructurarEquipos(labo.payload.data().relatedEquipments);
+
+          this.dataSourceEquip = new MatTableDataSource(this.equipos);
+
+            setTimeout(() => {
+              
+              this.dataSourceEquip.sort = this.sortEquip;
+              this.dataSourceEquip.paginator = this.paginatorEquip;
+
+            }, 1000);
+        });
       }
     });
   }
 
+  // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.displayedColumnsEquip.length;
+    return numSelected === numRows;
+    
+  }
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSourceEquip.data.forEach(row => this.selection.select(row));
+  }
+
+  // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO
+  isAllSelected2() {
+    const numSelected = this.selection2.selected.length;
+    const numRows = this.displayedColumnsComp.length;
+    return numSelected === numRows;
+    
+  }
+  masterToggle2() {
+    this.isAllSelected() ?
+      this.selection2.clear() :
+      this.dataSourceComp.data.forEach(row => this.selection2.select(row));
+  }
+
+
   getCollectionSolicitudes(labid) {
     return this.afs.collection('request',
-      ref => ref.where('requestType', '==', 'mantenimiento')).snapshotChanges();
+      ref => ref.where('requestType', '==', 'mantenimiento').where('cfFacil','==',labid)).snapshotChanges();
   }
 
   estructurarSolicitudesActivas(data, lab) {
@@ -116,6 +217,10 @@ export class SolicitudMantenimientoComponent implements OnInit {
     return this.afs.doc('cfEquip/' + equipid).snapshotChanges();
   }
 
+  getLaboratorio(labid){
+    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
+  }
+
   estructurarHistorialSolicitudes(data, lab) {
 
     const historial = [];
@@ -126,6 +231,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       this.getEmailUser(elemento.createdBy).subscribe(email => {
         this.getEquipo(elemento.relatedEquipments).subscribe(equipo => {
           const Solicitud = {
+            uidsol:data[index].payload.id,
             uidlab: elemento.cfFacil,
             uidespacio: elemento.headquarter,
             nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
@@ -136,8 +242,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
             activo: elemento.active,
             equipo: equipo.payload.data(),
             nombreEquip: equipo.payload.data().cfName,
-            componentes: elemento.conditionsLog,
+            componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
             fecha: elemento.createdAt.split('T')[0],
+            editado: elemento.updatedAt.split('T')[0],
             proveedores: elemento.providersInfo
           };
 
@@ -186,8 +293,6 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     return arr;
   }
-
-
 
       // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
@@ -250,11 +355,102 @@ export class SolicitudMantenimientoComponent implements OnInit {
      return arr;
   }
 
+  agregarSolicitudMan(){
+    this.alertaCargando();
+    const fecha = new Date();
+    this.reserMan.cfFacil = this.lab_id;
+    this.reserMan.createdAt = fecha.toISOString();
+    this.reserMan.updatedAt = fecha.toISOString();
+    this.reserMan.createdBy = this.user.uid;
+    this.selection.selected.forEach(equipo => {
+      this.reserMan.relatedEquipments = equipo.id;
+    });
+
+    this.selection2.selected.forEach(componente => {
+      this.reserMan.relatedComponents[componente.id] = true;
+    });
+
+    console.log(this.reserMan);
+
+    this.afs.collection('request').add(this.reserMan).then(data => {
+
+      swal({
+        type: 'success',
+        title: 'Se ha agregado la solicitud, el ID de la solicitud es: '+data.id,
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        timer: 5000,
+
+
+      }).then((result) => {
+
+        if (result.value) {
+          result.dismiss === swal.DismissReason.cancel
+        }
+
+      });
+         
+    });
+   
+  }
+
 
   cambiarDataSolicitud(item){
     this.solsel = item;
   }
 
+  cambiarDataComponentes(item){
+   this.dataSourceComp = new MatTableDataSource(item.componentes);
+
+    console.log(item);
+  }
+
+  agregarProovedor(){
+    this.proovedor.contactNumbers.push(this.telproov.tel1);
+    this.proovedor.contactNumbers.push(this.telproov.tel2);
+    this.reserMan.providersInfo.push(this.proovedor);
+    this.inicializarProovedor();
+
+    console.log(this.reserMan.providersInfo);
+  }
+
+  quitarProovedor(index){
+    this.reserMan.providersInfo.splice(index, 1);
+  }
+
+
+  inicializarProovedor(){
+    this.proovedor = {
+      name:'',
+      contactNumbers:[],
+      attachments:{}
+    };
+  
+    this.telproov = {
+      tel1:'',
+      tel2:''
+    }
+  }
+
+  inicializarSolicitud(){
+    
+    this.reserMan = {
+      cfOrgUnit:'',
+      headquarter:'',
+      cfFacil:'',
+      createdBy:'',
+      requestDesc:'',
+      requestType:'',
+      maintenanceType:'',
+      providersInfo:[],
+      relatedEquipments:'',
+      relatedComponents:{},
+      status:'pendiente',
+      active:true,
+      createdAt:'',
+      updatedAt:''
+    };
+  }
 
   alertaCargando(){
     swal({
@@ -267,7 +463,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
   }
 
   alertaExito(mensaje){
-    swal({
+    return swal({
       type: 'success',
       title: mensaje,
       showConfirmButton: true
@@ -323,6 +519,14 @@ export class SolicitudMantenimientoComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource2.filter = filterValue;
+  }
+
+  cambiarIconoModal(box){
+    if(!this.iconosModal[box]){
+      this.iconosModal[box] = true;
+    } else {
+      this.iconosModal[box] = false;
+    }
   }
 
   

@@ -45,6 +45,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     listaVariaciones = [];
 
+    iconos = {
+      info:false,
+      var:false
+    };
+
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
@@ -319,6 +324,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
       this.removerMarker();
       this.agregarMarker(item);
      }
+  }
+
+
+  cambiarIcono(box){
+    if(!this.iconos[box]){
+      this.iconos[box] = true;
+    } else {
+      this.iconos[box] = false;
+    }
   }
 
 

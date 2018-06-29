@@ -14,10 +14,9 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section *ngIf="itemsel" class="content">
 
       <!-- Componente central de busqueda -->
-      <button (click)="subir()">Subir</button>
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
@@ -27,7 +26,7 @@
                     <i class="fa fa-map"></i>
 
                     <h3 class="box-title">Solicitudes de Mantenimiento</h3>
-                    <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Nueva Solicitud</button>
+                    <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#modal2" >Nueva Solicitud</button>
                 </div>
               </div>
             </div>
@@ -153,7 +152,7 @@
                                                             </ng-container>
                     
                                                             <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-                                                            <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataServicio(row, 'historial')"></mat-row>
+                                                            <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataSolicitud(row)"></mat-row>
                                                             </mat-table>
                     
                                                             <mat-paginator #paginator2="matPaginator"
@@ -389,8 +388,248 @@
 
     </section>
 
+    <section>
+        <h1 *ngIf="!itemsel">NO SE HA SELECCIONADO NINGUN LABORATORIO</h1>
+    </section>
+    
+
 
 
   </div>
 
+
+  <!-- MODAL QUE PERMITE LA CREACION DE UN NUEVA SOLICITUD DE MANTENIMIENTO -->
+<div class="modal fade" id="modal2" role="dialog">
+    <div Class="modal-dialog modal-lg">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="box box-danger">
+                <div class="box-header text-center">
+                  <i class="fa fa-address-card-o"></i>
+      
+                  <h3 class="box-title">Nueva solicitud de mantenimiento</h3>
+                </div>
+       
+                <div class="box-body">
+                    <div class="box-group" id="accordionModal">
+                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+        
+                        <div class="box box-danger">
+                            <div class="box-header">
+                                <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false" class="collapsed">
+                                    INFORMACION DE SOLICITUD
+                                </a>
+                                </h4>
+                                <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false" class="collapsed">
+                                    <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.servicio, 'glyphicon-minus':iconosModal.servicio}"></span>
+                                </a>
+                            </div>
+                            <div id="collapseServicio" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body">
+                                    <form id="form-work2" class="" name="form-work2" action="#">
+                                        <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                            <label class="control-label" for="tipo"><strong>Tipo de Mantenimiento :</strong></label>
+                                            <select class="form-control" name="tipo" id="tipo" [(ngModel)]="this.reserMan.maintenanceType">
+                                                <option value="preventivo" >Preventivo</option>
+                                                <option value="correctivo" >Correctivo</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                            <label class="control-label" for="descripcion"><strong>Descripcion:</strong></label>
+                                            <textarea name="descripcion" rows="4" [(ngModel)]="this.reserMan.requestDesc" id="descripcion" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div> 
+                                                   
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="condiciones">
+                                                <strong>Proveedores:</strong>                                                    
+                                            </label>  
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label class="control-label" for="nombre">
+                                                    <strong>Nombre de proveedor:</strong>
+                                                    </label>
+                                                    <input id="nombre" [(ngModel)]="this.proovedor.name"  name="nombre" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label class="control-label" for="tel1">
+                                                    <strong>Tel 1:</strong>
+                                                    </label>
+                                                    <input id="tel1" [(ngModel)]="this.telproov.tel1" name="tel1" class="form-control" type="text">
+                                                </div>
+                                            </div> 
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label class="control-label" for="tel2">
+                                                    <strong>Tel 2:</strong>
+                                                    </label>
+                                                    <input id="tel2" [(ngModel)]="this.telproov.tel2" name="tel2" class="form-control" type="text">
+                                                </div>
+                                            </div>                                          
+                                            
+                                            <button  style="float: right; margin-top: 20px;"  (click)="agregarProovedor()" type="button" class="btn btn-success btn-sm">Agregar Proovedor</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="proovedores">
+                                                <strong *ngIf="this.reserMan.providersInfo.length != 0">Proovedores Agregados</strong> 
+                                                <strong *ngIf="this.reserMan.providersInfo.length == 0">Sin proovedores Agregados</strong> 
+                                                </label> 
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.reserMan.providersInfo; let i = index"><a style = "cursor: pointer;">{{item.name}} <span (click)="quitarProovedor(i)" class="pull-right badge bg-red">-</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <h4 (click)="cambiarIconoModal('equipos')" class="box-title">
+                                        <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false" class="collapsed">
+                                        AGREGAR EQUIPO
+                                        </a>
+                                    </h4>
+                                    <a (click)="cambiarIconoModal('equipos')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false" class="collapsed">
+                                        <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.equipos, 'glyphicon-minus':iconosModal.equipos}"></span>
+                                    </a> 
+                                </div>
+                                <div id="collapseEquip" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="box-body">
+                                            <div class="box-header">
+                                                <h3 class="box-title">recuerde que solo puede anexar un equipo por solictud</h3>
+                                            </div>
+                                      
+                                            <div class="box-body">
+                                                <div class="example-container" *ngIf="dataSourceEquip.data.length > 0">
+                            
+                                                    <mat-table #tableEquip [dataSource]="dataSourceEquip">
+                            
+                                                
+                                                    <ng-container matColumnDef="select">
+                                                        <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                                                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                        </mat-checkbox>
+                                                        </mat-header-cell>
+                                                        <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                                                        <mat-checkbox (click)="$event.stopPropagation(); cambiarDataComponentes(row)" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                                                        </mat-checkbox>
+                                                        </mat-cell>
+                                                    </ng-container>
+                            
+                                               
+                                                    <ng-container matColumnDef="nombre">
+                                                        <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                    </ng-container>
+                            
+                            
+                                                    <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                                                    <mat-row *matRowDef="let row; columns: displayedColumnsEquip;" (click)="selection.toggle(row); cambiarDataComponentes(row)">
+                                                    </mat-row>
+                                                    </mat-table>
+                            
+                                                </div>                         
+                                            </div>                             
+            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         
+                        <div class="col-md-6">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <h4 (click)="cambiarIconoModal('componentes')" class="box-title">
+                                        <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false" class="collapsed">
+                                        AGREGAR COMPONENTES
+                                        </a>
+                                    </h4>
+                                    <a (click)="cambiarIconoModal('componentes')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseComp" aria-expanded="false" class="collapsed">
+                                        <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.componentes, 'glyphicon-minus':iconosModal.componentes}"></span>
+                                    </a> 
+                                </div>
+                                <div id="collapseComp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                                   
+                                    <div class="box-body">
+                                        <div class="example-container" *ngIf="dataSourceComp.data.length > 0">
+                    
+                                            <mat-table #tableComp [dataSource]="dataSourceComp">
+                    
+                                        
+                                            <ng-container matColumnDef="select">
+                                                <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                                                <mat-checkbox (change)="$event ? masterToggle2() : null" [checked]="selection2.hasValue() && isAllSelected2()" [indeterminate]="selection2.hasValue() && !isAllSelected2()">
+                                                </mat-checkbox>
+                                                </mat-header-cell>
+                                                <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                                                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection2.toggle(row) : null" [checked]="selection2.isSelected(row)">
+                                                </mat-checkbox>
+                                                </mat-cell>
+                                            </ng-container>
+                    
+                                        
+                                            <ng-container matColumnDef="nombre">
+                                                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                            </ng-container>
+                    
+                    
+                                            <mat-header-row *matHeaderRowDef="displayedColumnsComp"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumnsComp;" (click)="selection2.toggle(row)">
+                                            </mat-row>
+                                            </mat-table>
+                    
+                                        </div>                         
+                                    </div>                             
+            
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        
+                    
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form style="margin-top: 30px;">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <button (click)="agregarSolicitudMan()" class="btn btn-danger btn-block btn-lg danger" type="button">Enviar Solicitud</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                      
+                    </div>
+
+  
+                  
+                  
+                </div>
+            </div>
+           
+        </div>
+      </div>
+    </div>
+</div>
+  
 

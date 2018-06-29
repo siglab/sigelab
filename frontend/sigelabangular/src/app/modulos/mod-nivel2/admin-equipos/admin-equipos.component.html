@@ -119,7 +119,7 @@
                       </div>
                   </div>
 
-                  <div class="box box-danger">
+                  <div *ngIf="this.infosabs.length > 0" class="box box-danger">
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('sabs')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">

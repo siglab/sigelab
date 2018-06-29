@@ -780,8 +780,8 @@ export class AdminLaboratoriosComponent implements OnInit {
   }
 
   estructurarDataCambios(){
-    const aux1 = ['iddueno','info.dir','info.email','info.tel'];
-    const aux2 = ['facilityAdmin', 'otros.direccion', 'otros.email', 'otros.telefono'];
+    const aux1 = ['info.dir','info.email','info.tel'];
+    const aux2 = ['otros.direccion', 'otros.email', 'otros.telefono'];
     const data = [];
     let element;
     let element2;

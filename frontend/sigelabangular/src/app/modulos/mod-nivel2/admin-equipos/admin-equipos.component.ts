@@ -283,6 +283,13 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
                 this.consultarSabs(equip.inventory).then(() => {
                   this.infosabs.push(this.response);
                   swal.close();
+                }).catch((error)=>{
+                  swal.close();
+                  swal({
+                    type: 'error',
+                    title: 'No se pudo conectar con SABS',
+                    showConfirmButton: true
+                  });
                 });
 
                 arr.push(equipo);
@@ -302,7 +309,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
     this.infosabs = [];
     let promise = new Promise((resolve,reject) => {
 
-      const url = 'http://192.168.0.10:1337/inventario/buscar';
+      const url = 'http://192.168.0.13:1337/inventario/buscar';
       const body = {
         codInventario: item,
         codLab: '5646',
@@ -312,15 +319,18 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
         espacio: 'fghgf'
       };
  
-      this.http.post(url, body).subscribe((res) => {
+      this.http.post(url, body). subscribe((res) => {
+        console.log(res.json());
         if(res.status == 200){
+          console.log('funco');
           this.response =  res.json().inventario;
-        } else {
+          resolve();
+        } 
+           
+      }, (error)=>{
+          console.log('faio');
           this.response = {};
-        }
-
-        resolve();
-       
+          reject();      
       });
     });
 
