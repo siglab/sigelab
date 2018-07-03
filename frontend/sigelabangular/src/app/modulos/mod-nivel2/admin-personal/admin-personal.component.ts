@@ -309,29 +309,19 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     // cierra el model this.idu, this.idp,this.nombre, this.email,  this.estado
     // $('#modal').modal('hide');
 
-    let state: boolean;
 
-    if ( this.estado === 'false') {
-
-      state = false;
-
-    } else {
-
-      state = true;
-
-    }
 
     /* validar  */
 
     /* objeto para persona  */
     const pers = {
-      active: state,
+      active: this.estado,
       cfFirstNames : this.nombre,
       cfFamilyNames: this.apellido
     };
     /* objeto para usuario */
     const user = {
-      active : state,
+      active : this.estado,
       appRoles: ''
     };
 
