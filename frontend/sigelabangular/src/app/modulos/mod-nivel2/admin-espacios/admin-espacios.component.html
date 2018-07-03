@@ -191,7 +191,9 @@
 
                   <div class="box-body">
                     <h3 *ngIf=" this.mensaje"> El laboratorio seleccionado no cuenta con ningun plano </h3>
-                    <img *ngIf="this.plano" style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
+
+                    <div *ngIf="!this.plano"  class="spinner"> </div>
+                    <img *ngIf="this.plano"  style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
 
                   </div>
 
