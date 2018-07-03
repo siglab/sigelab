@@ -23,47 +23,53 @@ const mailTrasport = nodemailer.createTransport({
 
 
 exports.CreateUser = functions.auth.user().onCreate(event => {
+  ref.collection("cfPers").where("email", "==", event.email)
+  .get()
+  .then((querySnapshot) => {
+    const personas = []
 
-  console.log("FUNCIONO");
-    crearUsuario(event);
-    getPerson( event.email)
+    // add data from the 5 most recent comments to the array
+    querySnapshot.forEach(doc => {
+      personas.push(doc.id)
+    });
 
-});
+    if (personas.length > 0) {
+
+      return personas[0];
+
+    } else {
+
+      return '';
+    }
 
 
+  }
 
-function crearUsuario(event){
+  ).then((idp) => {
 
-  const fecha = new Date();
-  console.log(event);
-  const uid = event.uid;
-  console.log(event.uid);
-    const displayName = event.metadata.displayName || "";
-     console.log(event);
+
+    const fecha = new Date();
+    const uid = event.uid;
     const email = event.email;
     const newUser = ref.doc(`/user/${uid}`);
     const usr = {
       cfOrgId: "UK6cYXc1iYXCdSU30xmr",
-      cfPers: "",
+      cfPers: idp,
       appRoles: { IKLoR5biu1THaAMG4JOz: true },
       createdAt: fecha.toISOString(),
       email: email,
-      updatedAt: "2018-04-17T21:41:31.027Z"
-  }
+    };
 
 
+    return newUser.set(usr)
 
-    newUser.set(usr).then( exito => {
-     console.log('EL USUARIO SE CREO CON EXITO', exito);
-    }).catch(error => {
-      console.log('SE GENERO UN ERROR AL INTENTAR CREAR USUARIO');
-      crearUsuario(event);
-    });
-}
+    //   return  console.log(' nuevo usuario para subir' , usr);
 
 
+  }).catch(err => console.log('fallo la consulta', err));
 
-<<<<<<< HEAD
+});
+
 let sendMail = (req, res) => {
 
   var mailsolicitante = {
@@ -88,7 +94,7 @@ let sendMail = (req, res) => {
       }
   });
 
-}
+};
 
 
 exports.enviarCorreo = functions.https.onRequest((req, res) => {
@@ -103,57 +109,54 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 });
 
 
-=======
-/* function getPerson(email) {
-  return new Promise((resolve, reject) => {
+//FUNCION QUE BUSCA LA INFORMACION PARA QUIUV
+exports.consultaQuiUv = functions.https.onRequest((req, res) => {
 
+  cors(req, res, () => {
 
-    console.log('llego este email' , email);
+      quiv(req.body, res);
 
-    const personRef = ref.collection('cfPers');
-
-    const query = personRef.where('email' === email);
-
-    const uns= query.onSnapshot((ok) => {
-
-      console.log('consol de la consulta', ok);
-    const resp = ok[0].doc.id;
-      console.log(ok[0].doc.id);
-      resolve(resp);
-
-    }, err => {
-
-      console.log('no existe', err)
-
-    });
-    uns();
   });
-
-} */
-
-function getPerson(email) {
+});
 
 
-   ref.collection("cfPers").where("email", "==", email)
-     .get()
-     .then( (querySnapshot) => {
+let quiv = (req, res) => {
 
-    return    console.log(object);
+  var tabla = req.tabla;
 
+  let consulta = '';
+
+  if(tabla == 'espacios'){
+    consulta = 'space';
+  } else if(tabla == 'servicios'){
+    consulta = 'cfSrv';
+  } else if(tabla == 'pruebas'){
+    consulta = 'practice';
+  } else if(tabla == 'proyectos'){
+    consulta = 'project';
+  }else if(tabla == 'personal'){
+    consulta = 'cfPers';
+  }
+
+  ref.collection(consulta)
+  .get()
+  .then((querySnapshot) => {
+    const data = []
+
+    // add data from the 5 most recent comments to the array
+    querySnapshot.forEach(doc => {
+      data.push(doc.data())
+    });
+
+    if (res) {
+      res.status(200).send(data);
+      console.log('hecho');
     }
 
-  ).catch( err => console.log('fallo la consulta', err)  );
+  });
 
-    uns ();
+};
 
 
 
-}
->>>>>>> dd4dbcb763014825d04ee5ac8f95425e3c0f0e62
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });

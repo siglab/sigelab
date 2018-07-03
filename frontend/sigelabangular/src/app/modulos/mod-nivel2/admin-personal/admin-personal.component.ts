@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
+import { map, take, debounceTime } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AngularFirestore } from 'angularfire2/firestore';
 declare var $: any;
 @Component({
@@ -18,8 +20,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   tablesel = '';
   nombre;
   apellido;
-  rol;
   email;
+  rol;
   estado;
   idu;
   idp;
@@ -42,6 +44,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     active: true,
     user: '',
     lvl: '',
+    email: '',
     type: '',
     relatedEquipments: {},
     createdAt: this.fecha.toISOString(),
@@ -81,23 +84,24 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 
+  status = '';
+  dispo;
+
   constructor(private obs: ObservablesService,
               private afs: AngularFirestore,
+              private fb: FormBuilder,
               private register: LoginService) { }
 
   ngOnInit() {
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
 
     this.obs.currentObjectPer.subscribe(data => {
 
       if (data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {
+
+
+           // validators email
+
 
          this.idlab = data.uid;
          this.itemsel = Observable.of(this.persestructurado.personal);
@@ -264,9 +268,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
 
-
-
-
   consultarRol() {
 
     return new Promise((resolve, reject) => {
@@ -293,7 +294,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.nombre = item.nombre;
     this.estado = item.activo;
-    this.email = item.email;
+     this.email = item.email;
     this.apellido = item.apellidos;
     this.rol = item.tipo;
     this.idp = item.idpers;
@@ -321,7 +322,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /* validar  */
-   //  console.log(idU, idP, nombre, email, estado);
 
     /* objeto para persona  */
     const pers = {
@@ -376,19 +376,26 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   setPers() {
 
-    const pers = this.person;
-    pers.cfFacil = this.idlab;
-    console.log(pers);
+     this.person.email = this.email;
+     const pers = this.person;
+     pers.cfFacil = this.idlab;
+     console.log(pers);
     this.afs.collection('cfPers').add(pers)
       .then(ok => {
 
-        this.setUser(ok.id);
+        this.updateFaciliti(  ok.id );
+
+        swal({
+          type: 'success',
+          title: 'persona creada correctamente',
+          showConfirmButton: true
+        });
 
       });
   }
 
   /* metodo para crear un nuevo usuario relacionado a una persona */
-  setUser(idP) {
+/*   setUser(idP) {
 
     console.log(idP);
     const user = this.usuario;
@@ -417,7 +424,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
               });
   }
-
+ */
 
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
 
@@ -441,7 +448,32 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+  emailcheck($event) {
+
+    console.log($event);
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('cfPers').ref;
+      const queryref = collref.where('email', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'Email disponible';
+          this.dispo = true;
+        } else {
+          this.status = 'Email no disponible, intente con otro';
+          this.dispo = false;
+        }
+      });
+    }
+  }
+
+
 
 }
+
 
 
