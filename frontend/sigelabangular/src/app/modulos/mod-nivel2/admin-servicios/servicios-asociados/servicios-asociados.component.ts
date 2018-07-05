@@ -410,14 +410,24 @@ export class ServiciosAsociadosComponent implements OnInit {
         for (let i = 0; i < this.variaciones.length; i++) {
           const element = this.variaciones[i];
           this.afs.collection('cfSrv/' + data.id + '/variations').add(element).then(()=>{
-            swal.close();
-            swal({
-              type: 'success',
-              title: 'creado correctamente',
-              showConfirmButton: true
-            });
+            //swal.close();
+
+            if(i == this.variaciones.length-1){
+              swal({
+                type: 'success',
+                title: 'creado correctamente',
+                showConfirmButton: true
+              });
+            }
+            
           });
         }      
+      } else {
+        swal({
+          type: 'success',
+          title: 'creado correctamente',
+          showConfirmButton: true
+        });
       }
      
     });
@@ -583,6 +593,12 @@ export class ServiciosAsociadosComponent implements OnInit {
     this.inicializarVariacion();
     
   
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceEquip.filter = filterValue;
   }
 
 }

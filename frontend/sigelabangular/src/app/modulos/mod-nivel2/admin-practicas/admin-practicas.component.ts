@@ -641,5 +641,11 @@ export class AdminPracticasComponent implements OnInit {
 
   }
 
+  down() {
+
+    $('html, body').animate({ scrollTop: '600px' }, 'slow');
+
+  }
+
 
 }

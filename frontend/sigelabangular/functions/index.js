@@ -51,19 +51,31 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
     const fecha = new Date();
     const uid = event.uid;
     const email = event.email;
-    const newUser = ref.doc(`/user/${uid}`);
+
     const usr = {
       cfOrgId: "UK6cYXc1iYXCdSU30xmr",
       cfPers: idp,
       appRoles: { IKLoR5biu1THaAMG4JOz: true },
       createdAt: fecha.toISOString(),
       email: email,
-    };
+    }
+
+    return usr
 
 
-    return newUser.set(usr)
 
     //   return  console.log(' nuevo usuario para subir' , usr);
+
+
+  }).then((usr) => {
+
+
+    const pers = { user: event.uid} ;
+
+      ref.doc(`cfPers/${usr.cfPers}`).set(pers , { merge : true});
+      return ref.doc(`/user/${event.uid}`).set(usr)
+
+
 
 
   }).catch(err => console.log('fallo la consulta', err));
@@ -95,6 +107,7 @@ let sendMail = (req, res) => {
         createdAt: fecha.toISOString(),
         email: email,
       }
+    }
   }).catch(error => {
       if (res) {
           res.status(200).send("Exito al enviar Email desde Firebase Functions.");
