@@ -645,19 +645,14 @@ export class AdminPracticasComponent implements OnInit {
 
   }
 
-<<<<<<< HEAD
   down() {
 
     $('html, body').animate({ scrollTop: '600px' }, 'slow');
+    this.toastr.success('hola prrrrrrrrrrrrrrros');
+
 
   }
-=======
-    prueba() {
 
-      this.toastr.success('hola prrrrrrrrrrrrrrros');
-
-    }
->>>>>>> 4defd2e19a16111dda0610527b051c3399156d73
 
 
 }
