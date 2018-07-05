@@ -463,12 +463,13 @@ export class AdminLaboratoriosComponent implements OnInit {
         if (item[clave]) {
            this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers =  data.payload.data();
-            if(pers){
+            let persona = {};
+            if(pers.user){
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 if(dataper.payload.data()){
 
-                  const persona = {
+                  persona = {
                     id: clave,
                     nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                     activo: pers.active,
@@ -478,6 +479,18 @@ export class AdminLaboratoriosComponent implements OnInit {
                   };
     
                   arr.push(persona);
+                } else {
+
+                  persona = {
+                    id: clave,
+                    nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                    activo: pers.active,
+                    email: '',
+                    idpers: clave,
+                    iduser: ''
+                  };
+                  arr.push(persona);
+    
                 }
               
               });

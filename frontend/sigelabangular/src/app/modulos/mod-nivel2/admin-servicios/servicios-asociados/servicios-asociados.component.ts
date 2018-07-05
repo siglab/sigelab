@@ -404,8 +404,12 @@ export class ServiciosAsociadosComponent implements OnInit {
       }
     });
 
+
     this.afs.collection('cfSrv').add(this.srv).then(data =>{
       console.log(data);
+      const objeto = {relatedServices:{}};
+      objeto.relatedServices[data.id] = true;
+      this.afs.doc('cfFacil/' + this.lab_id).set(objeto,{merge:true});
       if(this.variaciones.length != 0){
         for (let i = 0; i < this.variaciones.length; i++) {
           const element = this.variaciones[i];

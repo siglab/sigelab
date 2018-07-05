@@ -73,7 +73,8 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
 // librerias material
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
-
+  // alertas toast
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -128,7 +129,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatPaginatorModule,
     MatSortModule,
     MatCheckboxModule,
-    MatStepperModule
+    MatStepperModule,
+    ToastrModule.forRoot()
 
   ],
   providers: [

@@ -41,7 +41,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
     cfFacil: '',
-    active: false,
+    active: true,
     user: '',
     lvl: '',
     email: '',
@@ -343,56 +343,63 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   actualizarPers() {
-    // cierra el model this.idu, this.idp,this.nombre, this.email,  this.estado
-    // $('#modal').modal('hide');
 
 
-
-    /* validar  */
-
-    /* objeto para persona  */
-    const pers = {
-      active: this.estado,
-      cfFirstNames: this.nombre,
-      cfFamilyNames: this.apellido
-    };
-    /* objeto para usuario */
-    const user = {
-      active: this.estado,
-      appRoles: ''
-    };
-
-    /* metodo que consulta el rol */
-
-    console.log(' se va actualizar esta persona', pers);
-
-    this.consultarRol().then((ok) => {
-
-      user.appRoles = this.register.setBoolean(ok);
-      /* metodo firebase para subir un usuario actualizado */
-
-      console.log('usuario con el rol', user);
-
-      this.afs.collection('user').doc(this.idu).set(user, { merge: true });
-
-      console.log('usuario con el rol', user);
-
-    }).then(() => {
-      /* metodo firebase para subir una persona actualizada */
-      this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
-        () => {
-          swal({
-            type: 'success',
-            title: 'usuario actualizado correctamente',
-            showConfirmButton: true
-          });
-
-        }
-
-      );
-    });
+    if (!this.idu) {
 
 
+      swal({
+        type: 'info',
+        title: 'La persona seleccionada aun no cuenta con un usuario asociado',
+        showConfirmButton: true
+      });
+    } else {
+
+      // $('#modal').modal('hide');
+
+      /* objeto para persona  */
+      const pers = {
+        active: this.estado,
+        cfFirstNames: this.nombre,
+        cfFamilyNames: this.apellido
+      };
+      /* objeto para usuario */
+      const user = {
+        active: this.estado,
+        appRoles: ''
+      };
+
+      /* metodo que consulta el rol */
+
+      console.log(' se va actualizar esta persona', pers);
+
+      this.consultarRol().then((ok) => {
+
+        user.appRoles = this.register.setBoolean(ok);
+        /* metodo firebase para subir un usuario actualizado */
+
+        console.log('usuario con el rol', user);
+
+        this.afs.collection('user').doc(this.idu).set(user, { merge: true });
+
+        console.log('usuario con el rol', user);
+
+      }).then(() => {
+        /* metodo firebase para subir una persona actualizada */
+        this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
+          () => {
+            swal({
+              type: 'success',
+              title: 'usuario actualizado correctamente',
+              showConfirmButton: true
+            });
+
+          }
+
+        );
+      });
+
+    }
 
 
   }
@@ -407,7 +414,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     const pers = this.person;
     pers.cfFacil = this.idlab;
     console.log(pers);
-     this.afs.collection('cfPers').add(pers)
+    this.afs.collection('cfPers').add(pers)
       .then(ok => {
 
         this.updateFaciliti(ok.id);
