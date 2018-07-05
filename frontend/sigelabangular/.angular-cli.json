@@ -28,7 +28,7 @@
         "../node_modules/fullcalendar/dist/fullcalendar.min.css",
         "../node_modules/fullcalendar-scheduler/dist/scheduler.css",
         "../node_modules/qtip2/dist/jquery.qtip.css",
-
+        "../node_modules/ngx-toastr/toastr.css",
         "styles.css"
 
       ],

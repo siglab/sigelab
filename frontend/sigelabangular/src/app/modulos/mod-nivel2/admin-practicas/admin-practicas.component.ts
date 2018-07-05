@@ -11,6 +11,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { constrainPoint } from 'fullcalendar/src/util';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-admin-practicas',
   templateUrl: './admin-practicas.component.html',
@@ -88,7 +90,9 @@ export class AdminPracticasComponent implements OnInit {
 
   pracestructurado: any;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, private _formBuilder: FormBuilder) {
+  constructor(private obs: ObservablesService,
+              private afs: AngularFirestore,
+              private toastr: ToastrService) {
 
 
   }
@@ -640,6 +644,12 @@ export class AdminPracticasComponent implements OnInit {
 
 
   }
+
+    prueba() {
+
+      this.toastr.success('hola prrrrrrrrrrrrrrros');
+
+    }
 
 
 }

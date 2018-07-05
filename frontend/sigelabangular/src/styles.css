@@ -2,7 +2,7 @@
 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-
+@import "~ngx-toastr/toastr.css";
 .puntero {
 cursor: pointer;
 
