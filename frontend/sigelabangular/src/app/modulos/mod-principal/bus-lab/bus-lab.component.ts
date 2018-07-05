@@ -99,14 +99,25 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
     this.observer.currentDatatableLab.subscribe(datos => {
-
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
       const ambiente = this;
       setTimeout(function() {
-        ambiente.dataSource.data = datos;
-        ambiente.dataSource.sort = ambiente.sort;
-        ambiente.dataSource.paginator = ambiente.paginator;
-    // cierra loading luego de cargados los datos
-        swal.close();
+        if(datos.length != 0){
+          ambiente.dataSource.data = datos;
+          ambiente.dataSource.sort = ambiente.sort;
+          ambiente.dataSource.paginator = ambiente.paginator;
+      // cierra loading luego de cargados los datos
+          swal.close();
+        } else {
+          swal.close();
+        }
+   
 
       }, 1500);
 

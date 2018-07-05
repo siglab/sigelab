@@ -185,6 +185,18 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   }
 
 
+  abrirEnlaceBaja(){
+    const url = "https://swebse12.univalle.edu.co/sabs/paquetes/formatos/fm_bajas.htm";
+
+    window.open(url);
+  }
+
+  abrirEnlaceQuiUv(){
+    const url = "https://dfrq-quiuv.herokuapp.com/cuentas/login/";
+
+    window.open(url);
+  }
+
 
 
 
