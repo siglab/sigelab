@@ -230,12 +230,13 @@ export class AdminProyectosComponent implements OnInit {
         if (item[clave]) {
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
-            if (pers) {
+            let persona = {};
+            if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 if (dataper.payload.data()) {
 
-                  const persona = {
+                  persona = {
                     id: clave,
                     nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                     activo: pers.active,
@@ -247,8 +248,19 @@ export class AdminProyectosComponent implements OnInit {
                 }
 
               });
-            }
+            } else {
 
+              persona = {
+                id: clave,
+                nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                activo: pers.active,
+                email: '',
+                idpers: clave,
+                iduser: ''
+              };
+              arr.push(persona);
+
+            }
           });
         }
 
@@ -335,45 +347,53 @@ export class AdminProyectosComponent implements OnInit {
 
   addProject() {
 
-   if ( !this.person.cfFirstNames || this.proyecto.personal.length === 0 ) {
-    swal({
-      type: 'info',
-      title: 'Primero debe vincular personal al laboratorio',
-      showConfirmButton: true
-    });
-   } else {
+    console.log(this.proyecto.personal);
 
-    const proyect = {
-      projectName: this.proyecto.nombre,
-      ciNumber: this.proyecto.ci,
-      projectDesc: this.proyecto.descripcion,
-      active: this.proyecto.estado,
-      relatedPers: {},
-      updatedAt: this.fecha.toISOString()
-    };
+    if (this.proyecto.personal.length === 0) {
+      swal({
+        type: 'info',
+        title: 'Primero debe vincular personal al laboratorio',
+        showConfirmButton: true
+      });
+    } else {
 
-    this.proyecto.personal.forEach((element) => {
+      const proyect = {
+        projectName: this.proyecto.nombre,
+        ciNumber: this.proyecto.ci,
+        projectDesc: this.proyecto.descripcion,
+        active: this.proyecto.estado,
+        relatedPers: {},
+        updatedAt: this.fecha.toISOString()
+      };
 
-      console.log(element);
-      proyect.relatedPers[element.idpers] = true;
+      this.proyecto.personal.forEach((element) => {
 
-    });
+        console.log(element);
+        proyect.relatedPers[element.idpers] = true;
+
+      });
 
 
-    console.log(proyect);
+      console.log(proyect);
 
-/*
-    this.afs.collection('project').add(proyect)
-      .then((ok) => {
 
-        const lab = { relatedProjects: {} };
-        lab.relatedProjects[ok.id] = true;
+      this.afs.collection('project').add(proyect)
+        .then((ok) => {
 
-        this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
+          const lab = { relatedProjects: {} };
+          lab.relatedProjects[ok.id] = true;
 
-      }); */
+          this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
 
-   }
+          swal({
+            type: 'success',
+            title: 'Usuario ya vinculado',
+            showConfirmButton: true
+          });
+
+        });
+
+    }
 
 
   }
@@ -430,7 +450,7 @@ export class AdminProyectosComponent implements OnInit {
 
         };
         pro.relatedPers[ok.id] = true;
-        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true }) .then ( () => {
+        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true }).then(() => {
 
 
           swal({
@@ -438,7 +458,7 @@ export class AdminProyectosComponent implements OnInit {
             title: ' Proyecto agregado correctamente',
             showConfirmButton: true
           });
-        } );
+        });
       });
     }
   }
@@ -456,25 +476,49 @@ export class AdminProyectosComponent implements OnInit {
       const persona = this.person;
 
       this.afs.collection('cfPers').add(persona).then((ok) => {
-        const pro = {
-          projectName: this.proyecto.nombre,
-          ciNumber: this.proyecto.ci,
-          projectDesc: this.proyecto.descripcion,
-          active: this.proyecto.estado,
-          relatedPers: {},
-          updatedAt: this.fecha.toISOString()
 
+        const per = {
+          activo: persona.active,
+          idpers: ok.id,
+          email: persona.email,
+          iduser: '',
+          nombre: persona.cfFirstNames + ' ' + persona.cfFamilyNames
         };
-        pro.relatedPers[ok.id] = true;
-        this.afs.collection('project/').add (pro) .then ( () => {
+
+        this.proyecto.personal.push(per);
 
 
-          swal({
-            type: 'success',
-            title: ' Proyecto agregado correctamente',
-            showConfirmButton: true
-          });
-        } );
+        const lab = { relatedPers: {} };
+
+        lab.relatedPers[ok.id] = true;
+        this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
+
+        swal({
+          type: 'success',
+          title: ' Personal agregado correctamente',
+          showConfirmButton: true
+        });
+
+
+        /*         const pro = {
+                  projectName: this.proyecto.nombre,
+                  ciNumber: this.proyecto.ci,
+                  projectDesc: this.proyecto.descripcion,
+                  active: this.proyecto.estado,
+                  relatedPers: {},
+                  updatedAt: this.fecha.toISOString()
+
+                };
+                pro.relatedPers[ok.id] = true;
+                this.afs.collection('project/').add (pro) .then ( () => {
+
+
+                  swal({
+                    type: 'success',
+                    title: ' Proyecto agregado correctamente',
+                    showConfirmButton: true
+                  });
+                } ); */
       });
     }
   }
@@ -486,15 +530,15 @@ export class AdminProyectosComponent implements OnInit {
   }
 
 
-  clearModal () {
+  clearModal() {
 
-   this.button = false;
+    this.button = false;
 
-   this.proyecto.ci = '';
-   this.proyecto.descripcion = '';
-   this.proyecto.estado = true;
-   this.proyecto.nombre = '';
-   this.proyecto.personal = [];
+    this.proyecto.ci = '';
+    this.proyecto.descripcion = '';
+    this.proyecto.estado = true;
+    this.proyecto.nombre = '';
+    this.proyecto.personal = [];
 
 
 
