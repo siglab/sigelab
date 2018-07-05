@@ -84,6 +84,16 @@ let sendMail = (req, res) => {
 
       } else {
           console.log("exito al enviar correo");
+      const fecha = new Date();
+      const uid = event.uid;
+      const email = event.email;
+
+      const usr = {
+        cfOrgId: "UK6cYXc1iYXCdSU30xmr",
+        cfPers: idp,
+        appRoles: { IKLoR5biu1THaAMG4JOz: true },
+        createdAt: fecha.toISOString(),
+        email: email,
       }
   }).catch(error => {
       if (res) {
@@ -107,17 +117,35 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
   });
 });
+      
+
+
 
 
 //FUNCION QUE BUSCA LA INFORMACION PARA QUIUV
 exports.consultaQuiUv = functions.https.onRequest((req, res) => {
 
   cors(req, res, () => {
+    }).then((usr) => {
+
+
+      const pers = { user: event.uid} ;
+
+        ref.doc(`cfPers/${usr.cfPers}`).set(pers , { merge : true});
+        return ref.doc(`/user/${event.uid}`).set(usr)
+
+
+
+
+    }).catch(err => console.log('fallo la consulta', err));
 
       quiv(req.body, res);
 
   });
-});
+
+
+
+
 
 
 let quiv = (req, res) => {

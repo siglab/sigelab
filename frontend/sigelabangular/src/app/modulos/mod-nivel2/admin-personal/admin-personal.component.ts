@@ -41,7 +41,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
     cfFacil: '',
-    active: true,
+    active: false,
     user: '',
     lvl: '',
     email: '',
@@ -56,7 +56,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   usuario = {
     email: '',
     cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
-    appRoles: { IKLoR5biu1THaAMG4JOz: true   },
+    appRoles: { IKLoR5biu1THaAMG4JOz: true },
     cfPers: '',
     active: true,
     createdAt: this.fecha.toISOString(),
@@ -68,7 +68,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'email', 'tipo' ];
+  displayedColumnsPers = ['nombre', 'email', 'tipo'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
@@ -88,9 +88,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   dispo;
 
   constructor(private obs: ObservablesService,
-              private afs: AngularFirestore,
-              private fb: FormBuilder,
-              private register: LoginService) { }
+    private afs: AngularFirestore,
+    private fb: FormBuilder,
+    private register: LoginService) { }
 
   ngOnInit() {
 
@@ -100,43 +100,43 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         this.estructuraIdPers(data.uid).then(() => {
 
 
-           // validators email
+          // validators email
 
 
-         this.idlab = data.uid;
-         this.itemsel = Observable.of(this.persestructurado.personal);
+          this.idlab = data.uid;
+          this.itemsel = Observable.of(this.persestructurado.personal);
           console.log(this.persestructurado);
 
           this.dataSourcePers.data = this.persestructurado.personal;
           this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
 
-         const ambiente = this;
+          const ambiente = this;
 
-         swal({
-           title: 'Cargando un momento...',
-           text: 'espere mientras se cargan los datos',
-           onOpen: () => {
-             swal.showLoading();
-           }
-         });
-
-
-        setTimeout(function () {
-          if (ambiente.persestructurado.personal !== 0) {
-
-            ambiente.dataSourcePers.sort = ambiente.sortPers;
-            ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
-            ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
-            ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
+          swal({
+            title: 'Cargando un momento...',
+            text: 'espere mientras se cargan los datos',
+            onOpen: () => {
+              swal.showLoading();
+            }
+          });
 
 
-          }
+          setTimeout(function () {
+            if (ambiente.persestructurado.personal !== 0) {
 
-          swal.close();
+              ambiente.dataSourcePers.sort = ambiente.sortPers;
+              ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+              ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
+              ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
 
-        }, 2000);
 
-       });
+            }
+
+            swal.close();
+
+          }, 2000);
+
+        });
 
       }
 
@@ -164,24 +164,24 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
         let estadoLab;
         if (laboratorio.active === true) {
-           estadoLab = 'Activo';
-        } else if ( laboratorio.active === false ) {
-           estadoLab = 'Inactivo';
+          estadoLab = 'Activo';
+        } else if (laboratorio.active === false) {
+          estadoLab = 'Inactivo';
         }
 
-         this.persestructurado = {
-            personal: this.estructurarPers(laboratorio.relatedPers),
-            personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
-            estado: estadoLab,
-            uid: key
-         };
+        this.persestructurado = {
+          personal: this.estructurarPers(laboratorio.relatedPers),
+          personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
+          estado: estadoLab,
+          uid: key
+        };
 
-         resolve();
+        resolve();
 
       });
-     });
+    });
 
-     return promise;
+    return promise;
 
   }
 
@@ -195,12 +195,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         if (item[clave]) {
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
-            if (pers) {
+            console.log(pers);
+            let persona = {};
+            if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 const user = dataper.payload.data();
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
 
-                const persona = {
+                persona = {
                   roles: user.appRoles,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
@@ -216,12 +218,28 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
 
               });
+            } else {
+
+              persona = {
+                roles: '',
+                nombre: pers.cfFirstNames,
+                apellidos: pers.cfFamilyNames,
+                activo: pers.active,
+                tipo: pers.type,
+                email: pers.email,
+                idpers: clave,
+                iduser: pers.user,
+              };
+
+              if (pers.active) {
+                arr1.push(persona);
+              }
             }
           });
         }
       }
     }
-    return  arr1;
+    return arr1;
   }
 
   estructurarPersIna(item) {
@@ -234,16 +252,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         if (item[clave]) {
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
-            if (pers) {
+            let persona = {};
+            console.log(pers);
+            if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                const persona = {
+                persona = {
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   activo: pers.active,
                   tipo: pers.type,
                   email: dataper.payload.data().email,
-                  roles: dataper.payload.data().appRoles ,
+                  roles: dataper.payload.data().appRoles,
                   idpers: clave,
                   iduser: pers.user,
                 };
@@ -253,6 +273,23 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
 
               });
+            } else {
+              persona = {
+                nombre: pers.cfFirstNames,
+                apellidos: pers.cfFamilyNames,
+                activo: pers.active,
+                tipo: pers.type,
+                email: '',
+                roles: '',
+                idpers: clave,
+                iduser: pers.user,
+              };
+
+              if (!pers.active) {
+                arr1.push(persona);
+              }
+
+
             }
           });
         }
@@ -272,13 +309,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     return new Promise((resolve, reject) => {
       this.afs.collection<any>('appRoles',
-      ref => ref.where('roleName', '==', this.rolc))
-     .snapshotChanges().subscribe(data => {
-       const idnuevo = data[0].payload.doc.id;
+        ref => ref.where('roleName', '==', this.rolc))
+        .snapshotChanges().subscribe(data => {
+          const idnuevo = data[0].payload.doc.id;
 
-       console.log(idnuevo);
-       resolve(idnuevo);
-     });
+          console.log(idnuevo);
+          resolve(idnuevo);
+        });
     });
   }
 
@@ -294,7 +331,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.nombre = item.nombre;
     this.estado = item.activo;
-     this.email = item.email;
+    this.email = item.email;
     this.apellido = item.apellidos;
     this.rol = item.tipo;
     this.idp = item.idpers;
@@ -316,43 +353,43 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     /* objeto para persona  */
     const pers = {
       active: this.estado,
-      cfFirstNames : this.nombre,
+      cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido
     };
     /* objeto para usuario */
     const user = {
-      active : this.estado,
+      active: this.estado,
       appRoles: ''
     };
 
     /* metodo que consulta el rol */
 
-    console.log(' se va actualizar esta persona', pers );
+    console.log(' se va actualizar esta persona', pers);
 
     this.consultarRol().then((ok) => {
 
-     user.appRoles = this.register.setBoolean (ok);
-     /* metodo firebase para subir un usuario actualizado */
+      user.appRoles = this.register.setBoolean(ok);
+      /* metodo firebase para subir un usuario actualizado */
 
-     console.log('usuario con el rol', user);
+      console.log('usuario con el rol', user);
 
-     this.afs.collection('user').doc( this.idu ).set (user, { merge: true} );
+      this.afs.collection('user').doc(this.idu).set(user, { merge: true });
 
-     console.log( 'usuario con el rol', user);
+      console.log('usuario con el rol', user);
 
     }).then(() => {
-       /* metodo firebase para subir una persona actualizada */
+      /* metodo firebase para subir una persona actualizada */
       this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
         () => {
-         swal({
-           type: 'success',
-           title: 'usuario actualizado correctamente',
-           showConfirmButton: true
-         });
+          swal({
+            type: 'success',
+            title: 'usuario actualizado correctamente',
+            showConfirmButton: true
+          });
 
         }
 
-     );
+      );
     });
 
 
@@ -366,14 +403,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   setPers() {
 
-     this.person.email = this.email;
-     const pers = this.person;
-     pers.cfFacil = this.idlab;
-     console.log(pers);
-    this.afs.collection('cfPers').add(pers)
+    this.person.email = this.email;
+    const pers = this.person;
+    pers.cfFacil = this.idlab;
+    console.log(pers);
+     this.afs.collection('cfPers').add(pers)
       .then(ok => {
 
-        this.updateFaciliti(  ok.id );
+        this.updateFaciliti(ok.id);
 
         swal({
           type: 'success',
@@ -385,56 +422,58 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   /* metodo para crear un nuevo usuario relacionado a una persona */
-/*   setUser(idP) {
+  /*   setUser(idP) {
 
-    console.log(idP);
-    const user = this.usuario;
-    user.cfPers = idP;
-    console.log( 'usuario pa subir',  user);
+      console.log(idP);
+      const user = this.usuario;
+      user.cfPers = idP;
+      console.log( 'usuario pa subir',  user);
 
-    const password = '123456';
-
-
-    //  agrega un nuevo usuario a firestore
-    this.afs.collection('user').add(user).then( ok => {
-        // actualiza el campo idusuario en el document persona
-      this.updateFaciliti(  idP );
-      this.updatePers( ok.id, idP  );
-      }) ;
-
-    // registra un usuario para logeuarse con mail
-      this.register.createUser( user.email, password )
-              .then(   () => {
-
-                    // enviar email para que el usuario restablesca pass de inicio
-                    this.register.sendEmail( user.email );
-                    // cerrar modal
-                    $('#modal1').modal('hide');
+      const password = '123456';
 
 
-              });
-  }
- */
+      //  agrega un nuevo usuario a firestore
+      this.afs.collection('user').add(user).then( ok => {
+          // actualiza el campo idusuario en el document persona
+        this.updateFaciliti(  idP );
+        this.updatePers( ok.id, idP  );
+        }) ;
+
+      // registra un usuario para logeuarse con mail
+        this.register.createUser( user.email, password )
+                .then(   () => {
+
+                      // enviar email para que el usuario restablesca pass de inicio
+                      this.register.sendEmail( user.email );
+                      // cerrar modal
+                      $('#modal1').modal('hide');
+
+
+                });
+    }
+   */
 
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
 
-  updatePers( idU, pathP ) {
+  updatePers(idU, pathP) {
 
-    this.afs.collection('cfPers' ).doc(pathP).update( { user: idU  } ) ;
+    this.afs.collection('cfPers').doc(pathP).update({ user: idU });
 
   }
 
   /* actualizar el laboratorio con el nuevo id del document pers */
 
-  updateFaciliti( idP ) {
+  updateFaciliti(idP) {
 
     console.log('entrooooooo');
+    const facil = {
+      relatedPers: {}
+    };
+    facil.relatedPers[idP] = true;
 
-    const  relatedPers = this.register.setBoolean(  idP );
 
-    console.log(relatedPers);
     console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil' ).doc(this.idlab).set({   relatedPers   }  , { merge: true });
+    this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
 
   }
 
