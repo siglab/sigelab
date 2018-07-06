@@ -163,122 +163,131 @@
 
         
         <div class="col-md-12">
-          <div *ngIf="this.servsel.variaciones.length == 0" class="col-md-6">
-              <div class="box box-danger">
-                <div class="box-header">
-                  <i class="fa fa-address-card-o"></i>
-
-                  <h3 class="box-title">Informacion Servicio</h3>
+          <div class="col-md-6">
+              <div class="box-group" id="accordion">
+                  <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+    
+                <div class="box box-danger">
+                    <div class="box-header">
+                        <h4 (click)="cambiarIcono('info')" class="box-title">
+                        <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
+                            INFORMACION DE SERVICIO
+                        </a>
+                        </h4>
+                        <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
+                            <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
+                        </a>
+                    </div>
+                    <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                            <form  id="form-workserv" class="" name="form-workserv" action="#">
+                                <fieldset>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{servsel.nombre}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servsel.descripcion}}</label>
+                                    </div>
+                                  </div>
+                                  <div *ngIf="servsel.variaciones.length == 0" class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                      <div class="form-group" *ngFor="let item of servsel.condiciones; let i = index">
+                                          <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
+                                      </div>            
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="precioserv"><strong>Precio:</strong> {{servsel.precio}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="estado"><strong>Estado:</strong> {{servsel.status}}</label>
+                                    </div>
+                                </div>
+          
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <form  id="form-workserv" class="" name="form-workserv" action="#">
-                      <fieldset>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{servsel.nombre}}</label>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servsel.descripcion}}</label>
-                          </div>
-                        </div>
-                        <div *ngIf="servsel.condiciones.length != 0" class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                            <div class="form-group" *ngFor="let item of servsel.condiciones; let i = index">
-                                <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                            </div>            
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="precioserv"><strong>Precio:</strong> {{servsel.precio}}</label>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="estado"><strong>Estado:</strong> {{servsel.status}}</label>
-                          </div>
-                      </div>
-
-                      <div class="row" style="margin-top:20px;">
-                        <div class="col-md-12 text-center form-group">
-                          <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
-                        </div>
-                      </div>
-
-                      </fieldset>
-                    </form>
-                </div>
+    
+                <div class="box box-danger">
+                    <div class="box-header">
+                    <h4 (click)="cambiarIcono('sabs')" class="box-title">
+                        <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
+                        INFORMACION DE VARIACIONES DE SERVICIO
+                        </a>
+                    </h4>
+                    <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
+                        <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
+                    </a> 
+                    </div>
+                    <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                    <div class="box-body">
+                        <form  id="form-workserv3" class="" name="form-workserv3" action="#">
+                            <fieldset>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
+                                  <select class="form-control" name="variatio" id="variato" (change)="cambiarVariacion($event.target.value)">
+                                    <option value="inicial">Seleccione una variacion</option>
+                                    <option *ngFor="let item of servsel.variaciones" value="{{item.id}}" >{{item.nombre}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </fieldset>
+      
+                            <fieldset *ngIf="variation">
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
+          
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.descripcion}}</label>
+                                  </div>
+                              </div>
+                              <div *ngIf="condicion" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                    <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
+                                        <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
+                                    </div>            
+                                  </div>
+                                </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.precio}}</label>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.activo}}</label>
+                                  </div>
+                              </div>
+          
+                            </fieldset> 
+                        </form> 
+    
+                    </div>
+                    </div>
+                </div>  
+                <div class="row" style="margin-top:20px;">
+                  <div class="col-md-12 text-center form-group">
+                    <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
+                  </div>
+                </div>                
               </div>
           </div>
-
-          <div *ngIf="this.servsel.variaciones.length != 0" class="col-md-6">
-              <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-address-card-o"></i>
-  
-                    <h3 class="box-title">Informacion Servicio</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                   <form  id="form-workserv3" class="" name="form-workserv3" action="#">
-                      <fieldset>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                              <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
-                            <select class="form-control" name="variatio" id="variato" (change)="cambiarVariacion($event.target.value)">
-                              <option value="inicial">Seleccione una variacion</option>
-                              <option *ngFor="let item of servsel.variaciones" value="{{item.id}}" >{{item.nombre}}</option>
-                            </select>
-                          </div>
-                        </div>
-                      </fieldset>
-
-                      <fieldset *ngIf="variation">
-                        <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
     
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.descripcion}}</label>
-                            </div>
-                        </div>
-                        <div *ngIf="condicion" class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                              <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
-                                  <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                              </div>            
-                            </div>
-                          </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.precio}}</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.activo}}</label>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top:20px;">
-                          <div class="col-md-12 text-center form-group">
-                            <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
-                          </div>
-                        </div>
-    
-                      </fieldset> 
-                    </form> 
-                  </div>
-  
-              </div>
-          </div>
 
 
           <div class="col-md-6">
@@ -351,4 +360,5 @@
 
 
 </div>
+
 

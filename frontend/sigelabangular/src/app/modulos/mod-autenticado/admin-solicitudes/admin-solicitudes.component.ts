@@ -4,6 +4,7 @@ import { QuerysAutenticadoService } from './../services/querys-autenticado.servi
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
 import swal from 'sweetalert2';
+import { Http } from '@angular/http';
 
 declare var $: any;
 @Component({
@@ -47,21 +48,23 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   comentario = '';
 
-  constructor(private querys: QuerysAutenticadoService, private observer: ObserverAutenticadoService) {
+  iconos = {
+    info:false,
+    sabs:false
+  }
+
+  constructor(private querys: QuerysAutenticadoService, 
+              private observer: ObserverAutenticadoService,
+              private http:Http) {
 
    }
 
   ngOnInit() {
      // abre loading mientras se cargan los datos
-     swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
+     
 
     if (localStorage.getItem('usuario')) {
+      this.alertaCargando();
       this.user = JSON.parse(localStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         this.datos = this.querys.estructurarServiciosActivos(this.user.email, data);
@@ -90,7 +93,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
         ambiente.dataSource.sort = ambiente.sort;
         ambiente.dataSource.paginator = ambiente.paginator;
         // cerrar modal una vez se cargan los datos
-        swal.close();
+        ambiente.cerrarAlerta();
       }, 1000);
 
     });
@@ -227,19 +230,53 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     let cfSrvReserv = {
       comments:this.servsel.comentario
     };
-    console.log(this.comentario);
-    console.log(this.servsel);
+
     cfSrvReserv.comments.push({
       commentText: this.comentario, 
       fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
       uid: this.user.uid});
 
-      console.log(cfSrvReserv);
     this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
-      console.log('comentario guardado');
+      if(this.servsel.status == 'aceptada'){
+        this.enviarEmails();
+      }
     });
 
      
+  }
+
+  enviarEmails(){
+    this.alertaCargando();
+    let emailSolicitante = '';
+    let emailAcepto = '';
+    let emailEncargado = '';
+    let emailLaboratorio = '';
+    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
+    let destino = '';
+    this.querys.getLab(this.servsel.uidlab).subscribe(lab => {
+      emailSolicitante = this.servsel.usuario;
+      emailLaboratorio = lab.payload.data().otros.email;
+      emailAcepto = this.servsel.acepto;
+      const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
+                      this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
+                      ' por el usuario con el correo ' + emailSolicitante;
+
+      this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
+        emailEncargado = persona.payload.data().email;
+        destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
+        console.log(destino);
+        this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+          if(res.status == 200){
+            //this.cerrarAlerta();
+            this.alertaExito('Comentario enviado');
+          } else {
+            this.alertaError('fallo al enviar correos');
+          }
+        });
+
+      });
+    });
   }
 
 
@@ -257,5 +294,43 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   ocultar() {
     this.moduloinfo = false;
+  }
+
+  cambiarIcono(box){
+    if(!this.iconos[box]){
+      this.iconos[box] = true;
+    } else {
+      this.iconos[box] = false;
+    }
+  }
+
+  alertaCargando(){
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+  }
+
+  alertaExito(mensaje){
+    swal({
+      type: 'success',
+      title: mensaje,
+      showConfirmButton: true
+    });
+  }
+
+  alertaError(mensaje){
+    swal({
+      type: 'error',
+      title: mensaje,
+      showConfirmButton: true
+    });
+  }
+
+  cerrarAlerta(){
+    swal.close();
   }
 }

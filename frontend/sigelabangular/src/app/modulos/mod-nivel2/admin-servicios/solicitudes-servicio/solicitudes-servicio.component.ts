@@ -7,6 +7,8 @@ import { Subject } from 'rxjs/Subject';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 
+import swal from 'sweetalert2';
+import { Http } from '@angular/http';
 declare var $: any;
 
 @Component({
@@ -61,11 +63,17 @@ comentario = '';
 
    user:any;
 
-constructor(private obs: ObservablesService, private afs: AngularFirestore) {
+   iconos = {
+     sabs:false,
+     info:false
+   }
+
+constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
  //this.obs.changeSolServ(this.servicioso);
 }
 
   ngOnInit() {
+    
 
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
@@ -74,7 +82,8 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
     this.obs.currentObjectSolSer.subscribe(data => {
 
       if(data.length != 0){
-       
+        this.alertaCargando();
+
         this.getCollectionReserv(data.uid).subscribe(data1 => {
           this.datos = this.estructurarServiciosActivos(data1, data);
           this.histodatos = this.estructurarHistorialServicios(data1, data);
@@ -92,6 +101,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
                 this.dataSource2.sort = this.sort2;
                 this.dataSource2.paginator = this.paginator2;
               }
+              this.cerrarAlerta();
             }, 1500);
                      
         });
@@ -144,7 +154,8 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
                   usuario: email.payload.data().email,
                   fecha: elemento.createdAt.split('T')[0],
                   uidserv: data2.payload.id,
-                  uidreserv: data[index].payload.doc.id
+                  uidreserv: data[index].payload.doc.id,
+                  acepto: elemento.acceptedBy
                 };
                 activo.push(Reserv);
               });
@@ -166,7 +177,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();     
 
-            if(elemento.status != 'pendiente'){
+            if(elemento.status != 'pendiente' || elemento.status == 'aceptada' ){
               this.getEmailUser(elemento.user).subscribe(email =>{
                 this.getLab(lab.uid).subscribe(laboratorio => {
                   const Reserv = {
@@ -241,6 +252,10 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
     return this.afs.doc('cfFacil/' + labid).snapshotChanges();
   }
 
+  getPersona(persid){
+    return this.afs.doc('cfPers/' + persid).snapshotChanges();
+  }
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -255,35 +270,16 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
   }
 
 
-  estrucutrarArray(item: Array<any>): Array<any> {
-    const informacion = [];
-    for (let i = 0; i < item.length; i++) {
-      informacion.push({
-        nombre: item[i].nombre,
-        telefono: item[i].info.tel,
-        email: item[i].info.email,
-        estado: item[i].estado
-      });
-    }
-    return informacion;
-  }
-
-  estrucutrarArray2(item: Array<any>): Array<any> {
-    const informacion = [];
-    for (let i = 0; i < item.length; i++) {
-      informacion.push({
-        nombre: item[i].nombre,
-        telefono: item[i].info.tel,
-        email: item[i].info.email,
-        fecha: item[i].fecha
-      });
-    }
-    return informacion;
-  }
-
-
   ocultar() {
    this.moduloinfo = false;
+  }
+
+  cambiarIcono(box){
+    if(!this.iconos[box]){
+      this.iconos[box] = true;
+    } else {
+      this.iconos[box] = false;
+    }
   }
 
 
@@ -365,28 +361,113 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore) {
     let cfSrvReserv = {
       comments:this.servicioActivoSel.comentario
     };
-    console.log(this.comentario);
-    console.log(this.servicioActivoSel);
+
     cfSrvReserv.comments.push({
       commentText: this.comentario, 
       fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
       uid: 'hgyuhvguhv'});
 
-      console.log(cfSrvReserv);
     this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
-      console.log('comentario guardado');
+      if(this.servicioActivoSel.status == 'aceptada'){
+        this.enviarEmails();
+      }
     });
-
      
+  }
+
+  enviarEmails(){
+    this.alertaCargando();
+    let emailSolicitante = '';
+    let emailAcepto = '';
+    let emailEncargado = '';
+    let emailLaboratorio = '';
+    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
+    let destino = '';
+    this.getLab(this.servicioActivoSel.uidlab).subscribe(lab => {
+      emailSolicitante = this.servicioActivoSel.usuario;
+      emailLaboratorio = lab.payload.data().otros.email;
+      emailAcepto = this.servicioActivoSel.acepto;
+      const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
+                      this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
+                      ' por el usuario con el correo ' + emailSolicitante;
+
+      this.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
+        emailEncargado = persona.payload.data().email;
+        destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
+        this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+          if(res.status == 200){
+            //this.cerrarAlerta();
+            this.alertaExito('Comentario enviado');
+          } else {
+            this.alertaError('fallo al enviar correos');
+          }
+        });
+
+      });
+    });
   }
 
 
   aceptarSolicitud(){
+    this.alertaCargando();
 
+
+    const reserva = {
+      status: 'aceptada',
+      acceptedBy: this.user.email
+    }
+
+    this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
+      this.cerrarAlerta();
+          this.alertaExito('Reserva aceptada');
+    });
   }
 
   rechazarSolicitud(){
+    this.alertaCargando();
 
+    const reserva = {
+      status: 'rechazada',
+      acceptedBy: this.user.email
+    }
+
+    this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
+      
+          this.cerrarAlerta();
+          this.alertaExito('Reserva rechazada');
+    });
+  }
+
+
+  alertaCargando(){
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+  }
+
+  alertaExito(mensaje){
+    swal({
+      type: 'success',
+      title: mensaje,
+      showConfirmButton: true
+    });
+  }
+
+  alertaError(mensaje){
+    swal({
+      type: 'error',
+      title: mensaje,
+      showConfirmButton: true
+    });
+  }
+
+  cerrarAlerta(){
+    swal.close();
   }
 
 

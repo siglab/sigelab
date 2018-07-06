@@ -45,6 +45,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     listaVariaciones = [];
 
+    iconos = {
+      info:false,
+      var:false
+    };
+
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
@@ -192,7 +197,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
       const cfSrvReserv = {
         cfFacil: this.itemsel.infoLab.uid,
-        namelab: this.itemsel.nombre,
+        namelab: this.itemsel.nombrelab,
         cfSrv: this.itemsel.infoServ.uid,
         user: this.user.uid,
         selectedVariations: {},
@@ -236,6 +241,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
               uid: this.user.uid});
            
+              console.log(cfSrvReserv);
+
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
               swal({
                 type: 'success',
@@ -245,8 +252,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 $('#myModalLabs').modal('hide');
               });
 
-             
-  
             }).catch(error => {
   
               swal({
@@ -319,6 +324,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
       this.removerMarker();
       this.agregarMarker(item);
      }
+  }
+
+
+  cambiarIcono(box){
+    if(!this.iconos[box]){
+      this.iconos[box] = true;
+    } else {
+      this.iconos[box] = false;
+    }
   }
 
 

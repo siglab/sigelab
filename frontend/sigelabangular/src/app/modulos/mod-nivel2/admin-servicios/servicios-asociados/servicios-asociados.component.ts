@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-servicios-asociados',
@@ -24,6 +25,20 @@ export class ServiciosAsociadosComponent implements OnInit {
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
 
+
+  // equipos
+  displayedColumnsEquip = ['select', 'nombre'];
+  dataSourceEquip = new MatTableDataSource([]);
+  @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
+  @ViewChild('sortEquip') sortEquip: MatSort;
+
+  // EQUIPOS VINCULADOS AL SERVICIO
+  displayedColumnsEquipVin = ['select', 'nombre'];
+  dataSourceEquipvin = new MatTableDataSource([]);
+  @ViewChild('paginatorEquipVin') paginatorEquipVin: MatPaginator;
+  @ViewChild('sortEquipVin') sortEquipVin: MatSort;
+  
+
   campoCondicion = '';
   condicionesobjeto = {};
   variation:any;
@@ -34,40 +49,139 @@ export class ServiciosAsociadosComponent implements OnInit {
   iconos = {
     info:false,
     sabs:false
+  };
+
+  iconosModal = {
+    servicio:false,
+    variacion:false,
+    equipos:false,
+    equipos2:false
+  };
+
+  srv = {
+    active:true,
+    cfAcro:'',
+    cfClass:'',
+    cfCondition:[],
+    cfCurrCode:'CO',
+    cfDesc:'',
+    cfFacil:'',
+    cfName:'',
+    cfPrice:'',
+    cfScheme:'',
+    cfUri:'',
+    createdAt:'',
+    relatedEquipments:{},
+    relatedMeasurement:{},
+    relatedServices:{},
+    updatedAt:''
+  };
+
+  objectvariation = {
+    active:true,
+    cfConditions:[],
+    cfDescription:'',
+    cfName:'',
+    cfPrice:'',
+    createdAt:'',
+    updateAt:''
   }
+
+  variaciones = [];
+
+  condicion = '';
+  condicionvar = '';
+
+  lab_id = '';
+
+  selection = new SelectionModel(true, []);
+  selection2 = new SelectionModel(true, []);
+
+  equipos:any;
+  
+  editar = false;
+  botonEditar = false;
+  nuevaVar = false;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
   ngOnInit() {
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
     this.obs.currentObjectServAsoc.subscribe(data => {
-      console.log(data);
-      this.getCollectionServ(data.uid).subscribe(servicios =>{
-        console.log(servicios);
-        this.servasocestructurados = this.estructurarDataServ(servicios);
-        console.log(this.servasocestructurados);
-        if(this.servasocestructurados){
-          this.dataSource.data = this.servasocestructurados;
+      if(data.length != 0){
+  
+        this.lab_id = data.uid;
+        this.getCollectionServ(data.uid).subscribe(servicios =>{
 
-          setTimeout(() => {
-            
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-            // cierra loading luego de cargados los datos
-            swal.close();
-          }, 1000);
-
-        }
-
-      });
+          this.servasocestructurados = this.estructurarDataServ(servicios);
+          this.getLaboratorio(this.lab_id).subscribe(labo => {
+            this.equipos = this.estructurarEquipos(labo.payload.data().relatedEquipments);
+            console.log(this.equipos);
+            if(this.servasocestructurados ){
+              this.dataSource.data = this.servasocestructurados;
+              this.dataSourceEquip = new MatTableDataSource(this.equipos);
+  
+              setTimeout(() => {
+                
+                this.dataSource.sort = this.sort;
+                this.dataSource.paginator = this.paginator;
+                // cierra loading luego de cargados los datos
+  
+                this.dataSourceEquip.sort = this.sortEquip;
+                this.dataSourceEquip.paginator = this.paginatorEquip;
+  
+                swal.close();
+              }, 1000);
+    
+            }
+          });
+  
+        });
+      }
 
     });
   }
+
+  // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.displayedColumnsEquip.length;
+    return numSelected === numRows;
+  }
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSourceEquip.data.forEach(row => this.selection.select(row));
+  }
+
+  // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO
+  isAllSelected2() {
+    const numSelected = this.selection2.selected.length;
+    const numRows = this.displayedColumnsEquip.length;
+    return numSelected === numRows;
+  }
+  masterToggle2() {
+    this.isAllSelected2() ?
+      this.selection2.clear() :
+      this.dataSourceEquip.data.forEach(row => this.selection2.select(row));
+  }
+
 
   getCollectionServ(labid) {
     this.collectionReserv = this.afs.collection('cfSrv',
       ref => ref.where('cfFacil', '==', labid));
 
     return this.collectionReserv.snapshotChanges();
+  }
+
+  getLaboratorio(labid){
+    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
   }
 
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
@@ -92,14 +206,17 @@ export class ServiciosAsociadosComponent implements OnInit {
           descripcion: elemento.cfDesc,
           precio: elemento.cfPrice,
           estado: estadoServ,
+          equipos: this.estructurarEquipos(elemento.relatedEquipments),
           variaciones: this.variations(data[index].payload.doc.id),
           condiciones: elemento.cfCondition,
-          uid: data[index].payload.doc.id
+          uid: data[index].payload.doc.id,
+          creado: elemento.createdAt,
+          editado: elemento.updatedAt,
+          active: elemento.active
         }
       };
 
       this.servasocestructurados.push(servicios);
-
 
 
     }
@@ -116,7 +233,7 @@ export class ServiciosAsociadosComponent implements OnInit {
         for (let i = 0; i < data.length; i++) {
           const element = data[i].payload.doc.data();
 
-          variaciones.push({data: element, id: data[i].payload.doc.id});
+          variaciones.push({cfName:element.cfName, data: element, id: data[i].payload.doc.id});
         }
       } else {
         return variaciones;
@@ -126,69 +243,105 @@ export class ServiciosAsociadosComponent implements OnInit {
     return variaciones;
   }
 
-     // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-     buscarVariacion(item){
-      for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
-        const element = this.itemsel.infoServ.variaciones[i];
-        if(element.id == item){
-          return element;
-        }   
-      }
+  // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+  buscarVariacion(item){
+    for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
+      const element = this.itemsel.infoServ.variaciones[i];
+      if(element.id == item){
+        return element;
+      }   
     }
+  }
   
-    cambiarVariacion(item){
-  
-      if(item != 'inicial'){
-        this.variation = this.buscarVariacion(item);
-        console.log(this.variation);
-        this.estructurarVariaciones(this.variation.data.cfConditions);
-      } else {
-        this.variation = undefined;
-      }
-  
-  
+  cambiarVariacion(item){
+
+    if(item != 'inicial'){
+      this.variation = this.buscarVariacion(item);
+      console.log(this.variation);
+      this.estructurarVariaciones(this.variation.data.cfConditions);
+    } else {
+      this.variation = undefined;
     }
+
+
+  }
   
-    //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
-    estructuraCondiciones(variations){
-      const arr = [];
-      for (let i = 0; i < variations.length; i++) {
-        const element = variations[i];
+  //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
+  estructuraCondiciones(variations){
+    const arr = [];
+    for (let i = 0; i < variations.length; i++) {
+      const element = variations[i];
+
+      const vari = {
+        conditionText: variations[i],
+        aceptada: this.condicionesobjeto["checkbox"+i]
+      }
+      arr.push(vari);
+    }
+    return arr;
+  }
   
-        const vari = {
-          conditionText: variations[i],
-          aceptada: this.condicionesobjeto["checkbox"+i]
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarVariaciones(condiciones){
+    this.condicionesobjeto = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      //const element = condiciones[i];
+      this.condicionesobjeto["checkbox"+i] = true;
+    }
+  }
+
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarEquipos(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+          this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
+            const equip = data.payload.data();
+
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const equipo = {
+              id: data.payload.id,
+              nombre: equip.cfName,
+              activo: equip.active,
+              precio: equip.price,
+            };
+
+
+
+            arr.push(equipo);
+
+
+          });
         }
-        arr.push(vari);
-      }
-      return arr;
-    }
-  
-    // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-    estructurarVariaciones(condiciones){
-      this.condicionesobjeto = {};
-      for (let i = 0; i < condiciones.length; i++) {
-        //const element = condiciones[i];
-        this.condicionesobjeto["checkbox"+i] = true;
+
       }
     }
 
-    cambiardata(item) { 
-      console.log(item);
-      this.variation = undefined;
-      this.campoCondicion = '';
-       /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-      this.itemsel = item;
-  
-      if(item.infoServ.variaciones.length == 0){
-        if(item.infoServ.condiciones.length !== 0){
-          this.estructurarVariaciones(item.infoServ.condiciones);
-        }
-  
+    return arr;
+  }
+
+  cambiardata(item) { 
+    console.log(item);
+    this.variation = undefined;
+    this.campoCondicion = '';
+      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
+    this.itemsel = item;
+
+    if(item.infoServ.variaciones.length == 0){
+      if(item.infoServ.condiciones.length !== 0){
+        this.estructurarVariaciones(item.infoServ.condiciones);
       }
-      this.moduloinfo = true;
-      
+
     }
+    this.moduloinfo = true;
+    
+  }
 
 
   cambiarIcono(box){
@@ -197,6 +350,259 @@ export class ServiciosAsociadosComponent implements OnInit {
     } else {
       this.iconos[box] = false;
     }
+  }
+
+  cambiarIconoModal(box){
+    if(!this.iconosModal[box]){
+      this.iconosModal[box] = true;
+    } else {
+      this.iconosModal[box] = false;
+    }
+  }
+
+
+  cambiarDatosEditar(){
+    this.editar = true;
+    this.botonEditar = true;
+    this.srv.cfName = this.itemsel.nombreserv;
+    this.srv.cfDesc = this.itemsel.infoServ.descripcion;
+    this.srv.cfPrice = this.itemsel.infoServ.precio;
+    this.srv.cfCondition = this.itemsel.infoServ.condiciones;
+    this.srv.createdAt = this.itemsel.infoServ.creado;
+    this.srv.updatedAt = this.itemsel.infoServ.editado;
+    this.srv.active = this.itemsel.infoServ.active;
+
+    this.variaciones = this.itemsel.infoServ.variaciones;
+
+    this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
+    
+  }
+
+  cambiarDataEditarVariacion(item){
+    console.log(this.variaciones);
+    this.nuevaVar = false;
+    this.objectvariation = item.data;
+    
+  }
+
+  agregarServicio(){
+    const fecha = new Date();  
+    this.srv.createdAt = fecha.toISOString();
+    this.srv.updatedAt = fecha.toISOString();
+    this.srv.cfFacil = this.lab_id;
+    this.selection.selected.forEach((element) => {
+
+      if (element.id) {
+        this.srv.relatedEquipments[element.id] = true;
+      }
+    });
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+
+    this.afs.collection('cfSrv').add(this.srv).then(data =>{
+      console.log(data);
+      const objeto = {relatedServices:{}};
+      objeto.relatedServices[data.id] = true;
+      this.afs.doc('cfFacil/' + this.lab_id).set(objeto,{merge:true});
+      if(this.variaciones.length != 0){
+        for (let i = 0; i < this.variaciones.length; i++) {
+          const element = this.variaciones[i];
+          this.afs.collection('cfSrv/' + data.id + '/variations').add(element).then(()=>{
+            //swal.close();
+
+            if(i == this.variaciones.length-1){
+              swal({
+                type: 'success',
+                title: 'creado correctamente',
+                showConfirmButton: true
+              });
+            }
+            
+          });
+        }      
+      } else {
+        swal({
+          type: 'success',
+          title: 'creado correctamente',
+          showConfirmButton: true
+        });
+      }
+     
+    });
+
+  }
+
+  editarServicio(){
+    const fecha = new Date();
+    for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
+      const equipo = this.itemsel.infoServ.equipos[i];
+      this.srv.relatedEquipments[equipo.id] = true;
+    }
+    this.srv.cfFacil = this.lab_id;
+    this.srv.updatedAt = fecha.toISOString();
+    console.log(this.srv);
+
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    this.afs.doc('cfSrv/' + this.itemsel.infoServ.uid).update(this.srv).then(()=>{
+
+      console.log(this.variaciones);
+
+      for (let j = 0; j < this.variaciones.length; j++) {
+        const variacion = this.variaciones[j];
+        if(variacion.id == 'nuevo'){
+          this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations').add(variacion.data).then(()=>{
+            
+          });
+        } else {
+          this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')
+          .doc(variacion.id).update(variacion.data).then(()=>{
+            
+          });
+        }
+        
+      }
+        swal.close();
+          swal({
+            type: 'success',
+            title: 'creado correctamente',
+            showConfirmButton: true
+          });
+        
+    });
+
+
+    
+  }
+
+
+  agregarCondicion(){
+    this.srv.cfCondition.push(this.condicion);
+    this.condicion = '';
+    console.log(this.srv.cfCondition);
+  }
+
+  quitarCondicion(index){
+    this.srv.cfCondition.splice(index, 1);
+  }
+
+  agregarCondicionVariacion(){
+    this.objectvariation.cfConditions.push(this.condicionvar);
+    this.condicionvar = '';
+    console.log(this.objectvariation.cfConditions);
+  }
+
+  quitarCondicionVariacion(index){
+    this.objectvariation.cfConditions.splice(index, 1);
+  }
+ 
+  nuevaVariacion(){
+    this.nuevaVar = true;
+    this.inicializarVariacion();
+  }
+
+  agregarVariacion(){
+    const fecha = new Date();
+    this.objectvariation.createdAt = fecha.toISOString();
+    this.objectvariation.updateAt = fecha.toISOString();
+    if(!this.editar){
+      this.variaciones.push(this.objectvariation);
+    } else {
+      this.variaciones.push({cfName: this.objectvariation.cfName, data:this.objectvariation, id:'nuevo'});
+    }
+    
+    this.inicializarVariacion();
+    console.log(this.variaciones);
+
+  }
+
+  quitarVariacion(index){
+    this.variaciones.splice(index, 1);
+  }
+
+  agregarEquipo(){
+    this.selection.selected.forEach((element) => {
+
+      this.itemsel.infoServ.equipos.push(element);
+      this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
+    });
+   
+  }
+
+  quitarEquipo(){
+    this.selection2.selected.forEach((element) => {
+      for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
+        const equipo = this.itemsel.infoServ.equipos[i];
+
+        if(element.id == equipo.id){
+          this.itemsel.infoServ.equipos.splice(i, 1);
+          this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
+        }
+      
+      }
+     
+    });
+  }
+
+  inicializarVariacion(){
+    this.objectvariation = {
+      active:true,
+      cfConditions:[],
+      cfDescription:'',
+      cfName:'',
+      cfPrice:'',
+      createdAt:'',
+      updateAt:''
+    }
+  }
+
+  inicializarServicio(){
+    this.srv = {
+      active:true,
+      cfAcro:'',
+      cfClass:'',
+      cfCondition:[],
+      cfCurrCode:'CO',
+      cfDesc:'',
+      cfFacil:'',
+      cfName:'',
+      cfPrice:'',
+      cfScheme:'',
+      cfUri:'',
+      createdAt:'',
+      relatedEquipments:{},
+      relatedMeasurement:{},
+      relatedServices:{},
+      updatedAt:''
+    };
+  }
+
+  nuevoEspacio(){
+    this.editar = false;
+    this.variaciones = [];
+   
+    this.inicializarServicio();
+    this.inicializarVariacion();
+    
+  
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceEquip.filter = filterValue;
   }
 
 }

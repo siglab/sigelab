@@ -18,12 +18,12 @@
 
     <app-bar-admin-solicitudes *ngIf="moduloPrincipal || moduloNivel2"></app-bar-admin-solicitudes>
     <app-bar-admin-laboratorios  *ngIf="moduloNivel2 || moduloPermiso"></app-bar-admin-laboratorios>
-    <app-bar-admin-laboratorio-superior *ngIf="moduloNivel2 || moduloPermiso"></app-bar-admin-laboratorio-superior>
-    <app-bar-admin-usuarios></app-bar-admin-usuarios>
-    <app-bar-indicadores></app-bar-indicadores>
+    <app-bar-admin-laboratorio-superior *ngIf="false"></app-bar-admin-laboratorio-superior>
+    <app-bar-admin-usuarios *ngIf="false"></app-bar-admin-usuarios>
+    <app-bar-indicadores *ngIf="false"></app-bar-indicadores>
    <!--  <li style="color: #FFFFFF;">nivel 3</li> -->
-    <app-bar-solicitudes-nivel3 ></app-bar-solicitudes-nivel3>
-    <app-bar-comunicacion-masiva ></app-bar-comunicacion-masiva>
+    <app-bar-solicitudes-nivel3 *ngIf="false"></app-bar-solicitudes-nivel3>
+    <app-bar-comunicacion-masiva *ngIf="false"></app-bar-comunicacion-masiva>
   </section>
   <!-- /.sidebar -->
 </aside>

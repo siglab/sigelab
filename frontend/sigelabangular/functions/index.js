@@ -2,38 +2,100 @@ const functions = require('firebase-functions');
 
 const admin = require('firebase-admin');
 
+ const nodemailer = require('nodemailer');
+
+ const cors = require('cors')({origin: true});
+
 admin.initializeApp(functions.config().firebase);
 
 const ref = admin.firestore();
 
+const mailTrasport = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+      type: 'OAuth2',
+      user: 'francisco.hurtado@geoprocess.com.co',
+      clientId: '731094417333-mf72n4qkv0kv3d4pedcsnhdbl9cad2rk.apps.googleusercontent.com',
+      clientSecret: 'yYR_LE_rvRRHE2uuSGhYePVW',
+      refreshToken: '1/G5iHoswJgCmZzGEySCk2aHXAeaXkcmIJrmWXYlbRmjs'
+  }
+});
+
+
 exports.CreateUser = functions.auth.user().onCreate(event => {
-
-
   ref.collection("cfPers").where("email", "==", event.email)
-    .get()
-    .then((querySnapshot) => {
-      const personas = []
+  .get()
+  .then((querySnapshot) => {
+    const personas = []
 
-      // add data from the 5 most recent comments to the array
-      querySnapshot.forEach(doc => {
-        personas.push(doc.id)
-      });
+    // add data from the 5 most recent comments to the array
+    querySnapshot.forEach(doc => {
+      personas.push(doc.id)
+    });
 
-      if (personas.length > 0) {
+    if (personas.length > 0) {
 
-        return personas[0];
+      return personas[0];
 
-      } else {
+    } else {
 
-        return '';
-      }
-
-
+      return '';
     }
 
-    ).then((idp) => {
+
+  }
+
+  ).then((idp) => {
 
 
+    const fecha = new Date();
+    const uid = event.uid;
+    const email = event.email;
+
+    const usr = {
+      cfOrgId: "UK6cYXc1iYXCdSU30xmr",
+      cfPers: idp,
+      appRoles: { IKLoR5biu1THaAMG4JOz: true },
+      createdAt: fecha.toISOString(),
+      email: email,
+    }
+
+    return usr
+
+
+
+    //   return  console.log(' nuevo usuario para subir' , usr);
+
+
+  }).then((usr) => {
+
+
+    const pers = { user: event.uid} ;
+
+      ref.doc(`cfPers/${usr.cfPers}`).set(pers , { merge : true});
+      return ref.doc(`/user/${event.uid}`).set(usr)
+
+
+
+
+  }).catch(err => console.log('fallo la consulta', err));
+
+});
+
+let sendMail = (req, res) => {
+
+  var mailsolicitante = {
+      from: 'SIGELAB <francisco.hurtado@geoprocess.com.co>',
+      bcc: `${req.para}`,
+      subject: req.asunto,
+      html: req.mensaje
+  };
+  return mailTrasport.sendMail(mailsolicitante).then(() => {
+      if (res) {
+          res.status(200).send("Exito al enviar Email desde Firebase Functions.");
+
+      } else {
+          console.log("exito al enviar correo");
       const fecha = new Date();
       const uid = event.uid;
       const email = event.email;
@@ -45,14 +107,38 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
         createdAt: fecha.toISOString(),
         email: email,
       }
+    }
+  }).catch(error => {
+      if (res) {
+          res.status(200).send("Exito al enviar Email desde Firebase Functions.");
 
-      return usr
+      } else {
+          console.log("exito al enviar correo");
+      }
+  });
+
+};
+
+
+exports.enviarCorreo = functions.https.onRequest((req, res) => {
+  //res.send('Inicia enviarCorreo');
+  //res.status(200).send('Para: ' + req.body.para + ' Asunto: ' + req.body.asunto + ' Mensaje: ' + req.body.mensaje);
+  // Enable CORS using the `cors` express middleware.
+  cors(req, res, () => {
+
+      sendMail(req.body, res);
+
+  });
+});
+      
 
 
 
-      //   return  console.log(' nuevo usuario para subir' , usr);
 
+//FUNCION QUE BUSCA LA INFORMACION PARA QUIUV
+exports.consultaQuiUv = functions.https.onRequest((req, res) => {
 
+  cors(req, res, () => {
     }).then((usr) => {
 
 
@@ -66,17 +152,52 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
     }).catch(err => console.log('fallo la consulta', err));
 
+      quiv(req.body, res);
+
+  });
 
 
 
 
-});
+
+
+let quiv = (req, res) => {
+
+  var tabla = req.tabla;
+
+  let consulta = '';
+
+  if(tabla == 'espacios'){
+    consulta = 'space';
+  } else if(tabla == 'servicios'){
+    consulta = 'cfSrv';
+  } else if(tabla == 'pruebas'){
+    consulta = 'practice';
+  } else if(tabla == 'proyectos'){
+    consulta = 'project';
+  }else if(tabla == 'personal'){
+    consulta = 'cfPers';
+  }
+
+  ref.collection(consulta)
+  .get()
+  .then((querySnapshot) => {
+    const data = []
+
+    // add data from the 5 most recent comments to the array
+    querySnapshot.forEach(doc => {
+      data.push(doc.data())
+    });
+
+    if (res) {
+      res.status(200).send(data);
+      console.log('hecho');
+    }
+
+  });
+
+};
 
 
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+

@@ -177,7 +177,25 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   enviaritemProy(proy){
     this.obs.changeObjectProy(proy);
   }
+  enviaritemSolMante(solman){
+    this.obs.changeObjectSolMante(solman);
+  }
+  enviaritemSolBaja(baja){
+    this.obs.changeObjectSolBaja(baja);
+  }
 
+
+  abrirEnlaceBaja(){
+    const url = "https://swebse12.univalle.edu.co/sabs/paquetes/formatos/fm_bajas.htm";
+
+    window.open(url);
+  }
+
+  abrirEnlaceQuiUv(){
+    const url = "https://dfrq-quiuv.herokuapp.com/cuentas/login/";
+
+    window.open(url);
+  }
 
 
 
