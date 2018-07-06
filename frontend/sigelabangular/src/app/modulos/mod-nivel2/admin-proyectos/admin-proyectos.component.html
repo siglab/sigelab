@@ -24,7 +24,7 @@
           <div class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button  (click)= "clearModal()"   data-toggle="modal" data-target="#modal"  style="float: right;" class="btn btn-danger" type="button">Nuevo Proyecto</button>
+                <button (click)="clearModal()" data-toggle="modal" data-target="#modal" style="float: right;" class="btn btn-danger" type="button">Nuevo Proyecto</button>
               </div>
             </div>
           </div>
@@ -135,7 +135,8 @@
 
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsProyIn"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsProyIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal" data-target="#modal"></mat-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsProyIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
+                            data-target="#modal"></mat-row>
                         </mat-table>
 
                         <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
@@ -184,7 +185,7 @@
 
           </div>
           <!-- /.box-header -->
-          <div class="box-body"   *ngIf="itemsel | async; let itemsel"  >
+          <div class="box-body" *ngIf="itemsel | async; let itemsel">
 
             <div class="col-md-6">
 
@@ -201,44 +202,59 @@
                     <fieldset>
                       <div class="form-group">
                         <div class="col-md-12">
-                          <label class="control-label" for="ccpas">
+                          <label class="control-label" for="nombreproyecto">
                             <strong>Nombre Proyecto:</strong>
                           </label>
 
-                          <input  name="nombre" [(ngModel)]="this.proyecto.nombre"  type="text" class="form-control" id="nombre">
+                          <input name="nombre" [(ngModel)]="this.proyecto.nombre" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
-                      <div class="form-group">
+
+                      <!-- input ci validator -->
+                      <div *ngIf="!this.proyecto.nombre" class="form-group" [ngClass]="{ 'has-error': !this.dispo, 'has-success': this.dispo }">
                         <div class="col-md-12">
-                          <label class="control-label" for="ccpas">
+                          <label class="control-label" for="ci">
                             <strong>CI:</strong>
                           </label>
 
-                          <input name="ci" [(ngModel)]="this.proyecto.ci"  type="text" class="form-control" id="nombre">
+                          <input (focusout)="ciCheck($event)" name="ci" [(ngModel)]="this.proyecto.ci" type="text" class="form-control" id="nombre">
+                          <span class="help-block"> {{status}}</span>
 
                         </div>
                       </div>
 
+                      <!-- input ci default -->
+                      <div *ngIf="this.proyecto.nombre" class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="ci">
+                            <strong>CI:</strong>
+                          </label>
+
+                          <input disabled= "true"  name="ci" [(ngModel)]="this.proyecto.ci" type="text" class="form-control" id="nombre">
+                        </div>
+                      </div>
 
                       <div class="form-group">
                         <div class="col-md-12">
-                          <label class="control-label" for="ccpas">
+                          <label class="control-label" for="descripcion">
                             <strong>Descripcion:</strong>
                           </label>
 
-<!--                           <input name="descripcion" [(ngModel)]="this.proyecto.descripcion"  type="text" class="form-control" id="nombre">
- -->                            <textarea class="form-control"  name="descripcion"  [(ngModel)]="this.proyecto.descripcion"  id="" cols="30" rows="2"></textarea>
+                          <!--                           <input name="descripcion" [(ngModel)]="this.proyecto.descripcion"  type="text" class="form-control" id="nombre">
+ -->
+                          <textarea class="form-control" name="descripcion" [(ngModel)]="this.proyecto.descripcion" id=""
+                            cols="30" rows="2"></textarea>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <div class="col-md-12">
 
-                            <label   style="margin-top: 20px;" class="switch">
-                              <input name="estado" [(ngModel)]="this.proyecto.estado" id="activo" type="checkbox" checked>
-                              <span class="slider round"></span>
-                            </label>
+                          <label style="margin-top: 20px;" class="switch">
+                            <input name="estado" [(ngModel)]="this.proyecto.estado" id="activo" type="checkbox" checked>
+                            <span class="slider round"></span>
+                          </label>
 
 
                         </div>
@@ -253,8 +269,12 @@
                   <div class="form-group" style="margin-top: 30px;">
                     <div class="col-md-12">
 
-                      <button *ngIf="button"  class="btn btn-danger"   (click)="updateProject()"  type="button">Actualizar <i class="fa fa-share" ></i>  </button>
-                      <button *ngIf="!button"   class="btn btn-success"   (click)="addProject()"  type="button">Guardar  <i class="fa fa-check" ></i>    </button>
+                      <button *ngIf="button" class="btn btn-danger" (click)="updateProject()" type="button">Actualizar
+                        <i class="fa fa-share"></i>
+                      </button>
+                      <button *ngIf="!button" class="btn btn-success" (click)="addProject()" type="button">Guardar
+                        <i class="fa fa-check"></i>
+                      </button>
 
                     </div>
                   </div>
@@ -270,13 +290,13 @@
                 <div class="box-header">
                   <i class="fa fa-users"></i>
 
-                  <h3 class="box-title">PERSONAL  VINCULADO</h3>
+                  <h3 class="box-title">PERSONAL VINCULADO</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                   <div>
 
-                    <div  class="list-group">
+                    <div class="list-group">
                       <table class=" table row-border hover table-condensed">
                         <thead>
                           <tr>
@@ -285,13 +305,13 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr   (click)="editPers(item)" *ngFor="let item of this.proyecto.personal"  style="cursor:pointer">
+                          <tr (click)="editPers(item)" *ngFor="let item of this.proyecto.personal" style="cursor:pointer">
                             <td>
-                                 {{ item.nombre }}
+                              {{ item.nombre }}
                             </td>
                             <td>
-                                 {{ item.email }}
-                          </td>
+                              {{ item.email }}
+                            </td>
 
 
                           </tr>
@@ -304,12 +324,16 @@
                   </div>
                 </div>
                 <div class="form-group" style="margin-top: 30px;">
-                    <div class="col-md-12">
+                  <div class="col-md-12">
 
 
-                        <button class="btn btn-success"  data-toggle="modal" data-target="#modal1"  type="button">Personal del Laboratorio <i class="fa fa-plus">  </i> </button>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#modal1" type="button">Personal del Laboratorio
+                      <i class="fa fa-plus"> </i>
+                    </button>
 
-                        <button  class="btn btn-danger"  data-toggle="modal" data-target="#personal"  type="button"> Nuevo Personal <i class="fa fa-plus">  </i> </button>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#personal" type="button"> Nuevo Personal
+                      <i class="fa fa-plus"> </i>
+                    </button>
 
 
 
@@ -344,7 +368,7 @@
           <div class="box-header text-center">
             <i class="fa fa-users"></i>
 
-            <h1 class="box-title">Personal del  Laboratorio </h1>
+            <h1 class="box-title">Personal del Laboratorio </h1>
 
           </div>
           <!-- /.box-header -->
@@ -398,8 +422,10 @@
         </div>
       </div>
 
-      <div class="modal-footer" >
-        <button (click)="addPerstoProject()" class="btn btn-success">Agregar <i class="fa fa-plus"></i> </button>
+      <div class="modal-footer">
+        <button (click)="addPerstoProject()" class="btn btn-success">Agregar
+          <i class="fa fa-plus"></i>
+        </button>
       </div>
 
 
@@ -520,7 +546,7 @@
 
           </div>
           <div class="modal-footer">
-            <button  (click)= "addSingleProject()"  type="button" class="btn btn-danger">Guardar</button>
+            <button (click)="addSingleProject()" type="button" class="btn btn-danger">Guardar</button>
 
           </div>
         </div>

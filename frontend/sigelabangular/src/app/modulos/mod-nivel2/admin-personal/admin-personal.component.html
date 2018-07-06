@@ -449,8 +449,8 @@
 
           </div>
           <div class="modal-footer">
-            <button type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
-
+            <button  *ngIf="!addP"  type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
+            <button  *ngIf="addP"   type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular</button>
           </div>
         </div>
       </div>
