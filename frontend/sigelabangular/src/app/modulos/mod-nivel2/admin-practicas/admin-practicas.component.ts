@@ -647,7 +647,7 @@ export class AdminPracticasComponent implements OnInit {
 
     prueba() {
 
-      this.toastr.success('hola prrrrrrrrrrrrrrros');
+      this.toastr.success(  'hola prrrrrrrrrrrrrrros' , 'Agregado'  );
 
     }
 

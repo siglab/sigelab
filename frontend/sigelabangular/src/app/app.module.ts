@@ -130,7 +130,7 @@ import { ToastrModule } from 'ngx-toastr';
     MatSortModule,
     MatCheckboxModule,
     MatStepperModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({positionClass: 'inline' })
 
   ],
   providers: [
