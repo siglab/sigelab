@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ObservablesService } from '../../../shared/services/observables.service';
 
@@ -6,12 +6,13 @@ import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
   styleUrls: ['./admin-equipos.component.css']
 })
-export class AdminEquiposComponent implements OnInit, AfterViewInit {
+export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
@@ -65,15 +66,20 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
       price: ''
     };
 
+    ventana = false;
+
+    sus : Subscription;
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
 
   }
 
   ngOnInit() {
       // abre loading mientras se cargan los datos
+    this.ventana = true;
+    this.sus = this.obs.currentObjectequip.subscribe(data => {
 
-    this.obs.currentObjectequip.subscribe(data => {
-
+      console.log(data);
       this.equiestructurado = undefined;
       this.iniciliazarTablas();
 
@@ -86,7 +92,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
           }
         });
         if(!this.equiestructurado){
-          this.estructurarEquip(data.uid).then(() => {
+          this.estructurarEquip(data.uid, data.labo).then(() => {
             this.itemsel = Observable.of(this.equiestructurado.equipos);
              console.log(this.equiestructurado);
              console.log(this.infosabs);
@@ -108,8 +114,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
         } else {
           swal.close();
         }
-        
-      
+              
       }
 
      });
@@ -119,29 +124,30 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
   }
 
-  estructurarEquip(key){
+  ngOnDestroy(){
+    this.sus.unsubscribe();
+  }
+
+  estructurarEquip(key, objeto){
+    
     this.equiestructurado = {};
     let promise = new Promise((resolve,reject)=>{
-     this.buscarLab(key).subscribe(labo => {
-       const laboratorio = labo.payload.data();
-
+      
        let estadoLab;
-       if (laboratorio.active === true) {
+       if (objeto.active === true) {
           estadoLab = 'Activo';
-       } else if ( laboratorio.active === false ) {
+       } else if ( objeto.active === false ) {
           estadoLab = 'Inactivo';
        }
 
         this.equiestructurado = {
-          uid: labo.payload.id,
-          nombre: laboratorio.cfName,
-          equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+          uid: key,
+          nombre: objeto.cfName,
+          equipos: this.estructurarEquipos(objeto.relatedEquipments),
           estado: estadoLab
-        };
+        };        
 
         resolve();
- 
-     })
     });
  
     return promise;
@@ -257,16 +263,16 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarEquipos(item) {
-
+  
     const arr = [];
-
+    let cont = 0;
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
            this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-           const equip =  data.payload.data();
+            const equip =  data.payload.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 const equipo = {
@@ -280,24 +286,26 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
                   practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
 
+                arr.push(equipo);
+
+                cont ++;
                 this.consultarSabs(equip.inventory).then(() => {
                   this.infosabs.push(this.response);
                   swal.close();
                 }).catch((error)=>{
-                  swal.close();
-                  swal({
-                    type: 'error',
-                    title: 'No se pudo conectar con SABS',
-                    showConfirmButton: true
-                  });
+                  console.log(cont, Object.keys(item).length);
+                  if(cont == Object.keys(item).length){
+                    swal.close();
+                    swal({
+                      type: 'error',
+                      title: 'No se pudo conectar con SABS',
+                      showConfirmButton: true
+                    });
+                  }
                 });
-
-                arr.push(equipo);
-
 
            });
         }
-
       }
     }
 
@@ -306,6 +314,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
 
   // METODO QUE TRAE LOS DATOS EXISTENTES EN SABS
   consultarSabs(item){
+  
     this.infosabs = [];
     let promise = new Promise((resolve,reject) => {
 
@@ -318,24 +327,33 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit {
         edificio: '567',
         espacio: 'fghgf'
       };
+
+
+      if(this.ventana){
+
+     
+        this.http.post(url, body). subscribe((res) => {
+          console.log(res.json());
+          if(res.status == 200){
+            console.log('funco');
+            this.response =  res.json().inventario;
+            resolve();
+          } else {
+            reject();
+          } 
+             
+        }, (error)=>{
+            console.log('faio');
+            this.response = {};
+            reject();      
+        });
+      }
  
-      this.http.post(url, body). subscribe((res) => {
-        console.log(res.json());
-        if(res.status == 200){
-          console.log('funco');
-          this.response =  res.json().inventario;
-          resolve();
-        } 
-           
-      }, (error)=>{
-          console.log('faio');
-          this.response = {};
-          reject();      
-      });
+
     });
 
 
-    return promise;
+   return promise;
   }
 
       // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS

@@ -1,6 +1,6 @@
 import { async } from '@angular/core/testing';
 import { ObservablesService } from './../../../shared/services/observables.service';
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort   } from '@angular/material';
 import swal from 'sweetalert2';
@@ -10,13 +10,14 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as $ from 'jquery';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-espacios',
   templateUrl: './admin-espacios.component.html',
   styleUrls: ['./admin-espacios.component.css']
 })
-export class AdminEspaciosComponent implements OnInit {
+export class AdminEspaciosComponent implements OnInit, OnDestroy {
   plano: Observable<any>;
   mensaje = false;
   idlab;
@@ -39,7 +40,7 @@ export class AdminEspaciosComponent implements OnInit {
     active: false
   };
 
-
+  sus: Subscription;
 
   // INICIALIZACION DATATABLE espacios
   displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'spaceData.building', 'spaceData.place'];
@@ -61,7 +62,7 @@ export class AdminEspaciosComponent implements OnInit {
 
   ngOnInit() {
 
-    this.obs.currentObjectEsp.subscribe(data => {
+    this.sus = this.obs.currentObjectEsp.subscribe(data => {
 
       if (data.length !== 0) {
 
@@ -108,6 +109,10 @@ export class AdminEspaciosComponent implements OnInit {
 
 
 
+  }
+
+  ngOnDestroy(){
+    this.sus.unsubscribe();
   }
 
 

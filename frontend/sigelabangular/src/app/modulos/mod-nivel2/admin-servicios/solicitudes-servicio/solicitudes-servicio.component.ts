@@ -9,6 +9,7 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
+import { Subscription } from 'rxjs';
 declare var $: any;
 
 @Component({
@@ -68,6 +69,8 @@ comentario = '';
      info:false
    }
 
+   sus: Subscription;
+
 constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
  //this.obs.changeSolServ(this.servicioso);
 }
@@ -79,12 +82,13 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
       this.user = JSON.parse(localStorage.getItem('usuario'));   
     }
 
-    this.obs.currentObjectSolSer.subscribe(data => {
+    this.sus = this.obs.currentObjectSolSer.subscribe(data => {
 
       if(data.length != 0){
         this.alertaCargando();
 
         this.getCollectionReserv(data.uid).subscribe(data1 => {
+          console.log('rrtrtrt');
           this.datos = this.estructurarServiciosActivos(data1, data);
           this.histodatos = this.estructurarHistorialServicios(data1, data);
           console.log(this.datos);
@@ -118,8 +122,8 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
 
   }
 
-  ngOnDestroy() {
-
+  ngOnDestroy(){
+    this.sus.unsubscribe();
   }
 
 
@@ -143,6 +147,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
                 const Reserv = {
                   uidlab: elemento.cfFacil,
                   nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
+                  infolab: lab.labo,
                   status: elemento.status,
                   nombre: servicio.cfName,
                   descripcion: servicio.cfDesc,
@@ -179,27 +184,24 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
 
             if(elemento.status != 'pendiente' || elemento.status == 'aceptada' ){
               this.getEmailUser(elemento.user).subscribe(email =>{
-                this.getLab(lab.uid).subscribe(laboratorio => {
-                  const Reserv = {
-                    uidlab: elemento.cfFacil,
-                    nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
-                    infolab:laboratorio.payload.data(),
-                    status: elemento.status,
-                    nombre: servicio.cfName,
-                    descripcion: servicio.cfDesc,
-                    precio: servicio.cfPrice,
-                    activo: servicio.active,
-                    variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-                    condiciones: elemento.conditionsLog,
-                    comentario: elemento.comments,
-                    usuario: email.payload.data().email,
-                    fecha: elemento.createdAt.split('T')[0],
-                    uidserv: data2.payload.id,
-                    uidreserv: data[index].payload.doc.id
-                  };
-                  historial.push(Reserv);
-
-                });
+                const Reserv = {
+                  uidlab: elemento.cfFacil,
+                  nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
+                  infolab:lab.labo,
+                  status: elemento.status,
+                  nombre: servicio.cfName,
+                  descripcion: servicio.cfDesc,
+                  precio: servicio.cfPrice,
+                  activo: servicio.active,
+                  variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+                  condiciones: elemento.conditionsLog,
+                  comentario: elemento.comments,
+                  usuario: email.payload.data().email,
+                  fecha: elemento.createdAt.split('T')[0],
+                  uidserv: data2.payload.id,
+                  uidreserv: data[index].payload.doc.id
+                };
+                historial.push(Reserv);
      
               });
             } 
@@ -357,6 +359,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario(){
+    this.alertaCargando();
     const fecha = new Date();
     let cfSrvReserv = {
       comments:this.servicioActivoSel.comentario
@@ -369,6 +372,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
 
     this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
       if(this.servicioActivoSel.status == 'aceptada'){
+        this.alertaExito('Comentario enviado');
         this.enviarEmails();
       }
     });
@@ -376,7 +380,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
   }
 
   enviarEmails(){
-    this.alertaCargando();
+    
     let emailSolicitante = '';
     let emailAcepto = '';
     let emailEncargado = '';
@@ -384,27 +388,25 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
     const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
     const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
     let destino = '';
-    this.getLab(this.servicioActivoSel.uidlab).subscribe(lab => {
-      emailSolicitante = this.servicioActivoSel.usuario;
-      emailLaboratorio = lab.payload.data().otros.email;
-      emailAcepto = this.servicioActivoSel.acepto;
-      const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
-                      this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
-                      ' por el usuario con el correo ' + emailSolicitante;
+    
+    emailSolicitante = this.servicioActivoSel.usuario;
+    emailLaboratorio = this.servicioActivoSel.infolab.otros.email;
+    emailAcepto = this.servicioActivoSel.acepto;
+    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
+                    this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
+                    ' por el usuario con el correo ' + emailSolicitante;
 
-      this.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
-        emailEncargado = persona.payload.data().email;
-        destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
-        this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-          if(res.status == 200){
-            //this.cerrarAlerta();
-            this.alertaExito('Comentario enviado');
-          } else {
-            this.alertaError('fallo al enviar correos');
-          }
-        });
-
+    this.getPersona(this.servicioActivoSel.infolab.facilityAdmin).subscribe(persona => {
+      emailEncargado = persona.payload.data().email;
+      destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
+      this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+        if(res.status == 200){
+          //this.cerrarAlerta();
+        } else {
+          this.alertaError('fallo al enviar correos');
+        }
       });
+
     });
   }
 

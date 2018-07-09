@@ -139,20 +139,10 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 exports.consultaQuiUv = functions.https.onRequest((req, res) => {
 
   cors(req, res, () => {
-    }).then((usr) => {
+    quiv(req.body, res);
+    });
 
-
-      const pers = { user: event.uid} ;
-
-        ref.doc(`cfPers/${usr.cfPers}`).set(pers , { merge : true});
-        return ref.doc(`/user/${event.uid}`).set(usr)
-
-
-
-
-    }).catch(err => console.log('fallo la consulta', err));
-
-      quiv(req.body, res);
+     
 
   });
 

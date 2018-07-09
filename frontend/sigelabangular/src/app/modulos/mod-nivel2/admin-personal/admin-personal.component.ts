@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, take, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Subscription } from 'rxjs';
 declare var $: any;
 @Component({
   selector: 'app-admin-personal',
@@ -87,6 +88,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   status = '';
   dispo;
 
+  sus: Subscription;
+
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
     private fb: FormBuilder,
@@ -94,7 +97,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit() {
 
-    this.obs.currentObjectPer.subscribe(data => {
+    this.sus = this.obs.currentObjectPer.subscribe(data => {
 
       if (data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {
@@ -147,8 +150,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(){
+    this.sus.unsubscribe();
   }
+  
   ngAfterViewInit(): void {
     // outputs `I am span`
 
@@ -195,7 +200,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         if (item[clave]) {
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
-            console.log(pers);
+
             let persona = {};
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
@@ -253,7 +258,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
             let persona = {};
-            console.log(pers);
+           
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo

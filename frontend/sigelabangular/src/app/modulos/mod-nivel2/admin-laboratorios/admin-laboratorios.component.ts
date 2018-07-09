@@ -3,9 +3,10 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { ObservablesService } from './../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import swal from 'sweetalert2';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { Subscription } from 'rxjs';
 
 declare var $: any;
 
@@ -14,7 +15,7 @@ declare var $: any;
   templateUrl: './admin-laboratorios.component.html',
   styleUrls: ['./admin-laboratorios.component.css']
 })
-export class AdminLaboratoriosComponent implements OnInit {
+export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
 
   itemsel: Observable<Array<any>>;
@@ -102,6 +103,8 @@ export class AdminLaboratoriosComponent implements OnInit {
     espaciosel:any;
     plano:Observable<any>;
 
+    sus: Subscription;
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore, private storage: AngularFireStorage) {
   }
 
@@ -110,7 +113,9 @@ export class AdminLaboratoriosComponent implements OnInit {
     this.getUserId();
     this.getRoles();
 
-    this.obs.currentObjectLab.subscribe(data => {
+    this.sus = this.obs.currentObjectLab.subscribe(data => {
+
+      console.log(data);
       console.log(this.labestructurado);
       this.labestructurado = undefined;
       if(data.length != 0){
@@ -179,6 +184,11 @@ export class AdminLaboratoriosComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(){
+    this.sus.unsubscribe();
+ 
+  }
+
   cambiardata(item, table) {
     this.tablesel = table;
     this.seleccionado = item;
@@ -241,7 +251,12 @@ export class AdminLaboratoriosComponent implements OnInit {
 
             this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
-            resolve();
+            if(this.labestructurado){
+              resolve();
+            } else {
+              reject();
+            }
+           
 
           });
 
@@ -669,7 +684,7 @@ export class AdminLaboratoriosComponent implements OnInit {
         }
       });
       this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
-        this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+        //this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
        
         swal.close();
         swal({

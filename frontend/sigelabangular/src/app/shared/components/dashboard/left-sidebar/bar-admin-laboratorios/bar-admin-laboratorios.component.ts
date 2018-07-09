@@ -67,7 +67,8 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       const laboratorio = {
 
         nombre: this.ajustarTexto(elemento.cfName),
-        uid: data[index].payload.doc.id
+        uid: data[index].payload.doc.id,
+        labo: elemento
       };
 
         this.datosLabsEstructurados.push(laboratorio);
@@ -82,7 +83,8 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     console.log(data.payload.data());
     laboratorio = [{
       nombre: this.ajustarTexto(data.payload.data().cfName),
-      uid: data.payload.id
+      uid: data.payload.id,
+      labo: data.payload.data()
     }];
     return laboratorio;
   }
@@ -183,6 +185,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   enviaritemSolBaja(baja){
     this.obs.changeObjectSolBaja(baja);
   }
+  
 
 
   abrirEnlaceBaja(){
