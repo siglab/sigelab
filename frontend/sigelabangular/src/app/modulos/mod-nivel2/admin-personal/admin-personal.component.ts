@@ -9,6 +9,7 @@ import { map, take, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
   selector: 'app-admin-personal',
@@ -30,6 +31,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   activos = [];
   inactivos = [];
   fecha = new Date();
+  addP;
   // objeto persona:
   person = {
     cfBirthdate: '',
@@ -92,7 +94,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
-    private fb: FormBuilder,
+    private toastr: ToastrService,
     private register: LoginService) { }
 
   ngOnInit() {
@@ -415,22 +417,30 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   setPers() {
 
-    this.person.email = this.email;
-    const pers = this.person;
-    pers.cfFacil = this.idlab;
-    console.log(pers);
-    this.afs.collection('cfPers').add(pers)
-      .then(ok => {
+    if (this.email) {
+      this.person.email = this.email;
+      const pers = this.person;
+      pers.cfFacil = this.idlab;
+      console.log(pers);
+      this.afs.collection('cfPers').add(pers)
+        .then(ok => {
 
-        this.updateFaciliti(ok.id);
+          this.updateFaciliti(ok.id);
 
-        swal({
-          type: 'success',
-          title: 'persona creada correctamente',
-          showConfirmButton: true
+          swal({
+            type: 'success',
+            title: 'persona creada correctamente',
+            showConfirmButton: true
+          });
+
         });
 
-      });
+    } else {
+
+      this.toastr.info('Es necesario el campo email', 'Email requerido');
+
+    }
+
   }
 
   /* metodo para crear un nuevo usuario relacionado a una persona */
@@ -490,12 +500,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   emailcheck($event) {
-
-    console.log($event);
+    this.addP = '';
     const q = $event.target.value;
     if (q.trim() === '') {
       this.status = 'Campo obligatorio';
-      this.dispo = false;
+      // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
       const collref = this.afs.collection('cfPers').ref;
@@ -505,11 +514,37 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.status = 'Email disponible';
           this.dispo = true;
         } else {
-          this.status = 'Email no disponible, intente con otro';
+          console.log(snapShot.docs[0].id);
+          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
           this.dispo = false;
+          this.addP = snapShot.docs[0].id;
         }
       });
     }
+  }
+
+  addLabPers(id: string) {
+
+    if (id) {
+      const lab = {
+        relatedPers: {}
+      };
+
+      lab.relatedPers[id] = true;
+
+      this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
+        .then(() => {
+
+          $('#modal1').modal('hide');
+          this.toastr.success('Almacenado correctamente.', 'exito!');
+        });
+    } else {
+
+      this.toastr.warning('Ocurrio un error, intente ingresar el email otra vez.');
+
+    }
+
+
   }
 
 

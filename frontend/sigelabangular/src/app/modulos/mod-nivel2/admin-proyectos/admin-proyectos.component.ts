@@ -69,9 +69,13 @@ export class AdminProyectosComponent implements OnInit,OnDestroy {
     relatedPers: {}
 
   };
+
   id_lab;
   id_proj;
   proyestructurados: any;
+  status;
+  addP;
+  dispo;
 
   sus:Subscription;
 
@@ -546,17 +550,38 @@ export class AdminProyectosComponent implements OnInit,OnDestroy {
     this.proyecto.nombre = '';
     this.proyecto.personal = [];
 
-
-
-
   }
 
-
-
   editPers(item) {
-
     console.log(item);
+  }
 
+  ciCheck($event) {
+
+    this.addP = '';
+    const q = $event.target.value;
+
+    console.log(q);
+
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('project').ref;
+      const queryref = collref.where('ciNumber', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'CI disponible';
+          this.dispo = true;
+        } else {
+          console.log(snapShot.docs[0].id);
+          this.status = 'Ya existe un proyecto en el sistema con el CI ingresado, si desea vincularlo presione el boton vincular.';
+          this.dispo = false;
+          this.addP = snapShot.docs[0].id;
+        }
+      });
+    }
   }
 
 }
