@@ -1,18 +1,19 @@
 
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-proyectos',
   templateUrl: './admin-proyectos.component.html',
   styleUrls: ['./admin-proyectos.component.css']
 })
-export class AdminProyectosComponent implements OnInit {
+export class AdminProyectosComponent implements OnInit,OnDestroy {
   itemsel: Observable<Array<any>>;
   button = true;
   fecha = new Date();
@@ -76,10 +77,12 @@ export class AdminProyectosComponent implements OnInit {
   addP;
   dispo;
 
+  sus:Subscription;
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
   ngOnInit() {
-    this.obs.currentObjectProy.subscribe(data => {
+    this.sus = this.obs.currentObjectProy.subscribe(data => {
       console.log(data);
 
       this.proyestructurados = undefined;
@@ -143,6 +146,9 @@ export class AdminProyectosComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(){
+    this.sus.unsubscribe();
+  }
 
   estructurarLab(key) {
     this.proyestructurados = {};

@@ -1,17 +1,18 @@
 import { Observable } from 'rxjs/Observable';
 import { ObservablesService } from './../../../../shared/services/observables.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-servicios-asociados',
   templateUrl: './servicios-asociados.component.html',
   styleUrls: ['./servicios-asociados.component.css']
 })
-export class ServiciosAsociadosComponent implements OnInit {
+export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   itemsel:any;
 
@@ -103,6 +104,8 @@ export class ServiciosAsociadosComponent implements OnInit {
   botonEditar = false;
   nuevaVar = false;
 
+  sus: Subscription;
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
   ngOnInit() {
@@ -146,6 +149,10 @@ export class ServiciosAsociadosComponent implements OnInit {
       }
 
     });
+  }
+
+  ngOnDestroy(){
+    this.sus.unsubscribe();
   }
 
   // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO

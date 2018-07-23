@@ -650,7 +650,7 @@ export class AdminPracticasComponent implements OnInit {
 
 
     $('html, body').animate({ scrollTop: '600px' }, 'slow');
-    this.toastr.success('hola prrrrrrrrrrrrrrros');
+    this.toastr.success('alerta');
 
 
   }

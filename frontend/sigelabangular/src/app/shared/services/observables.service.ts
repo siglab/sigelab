@@ -21,10 +21,10 @@ export class ObservablesService {
 
 
 
-  private objectEquip = new BehaviorSubject<any>([]);
+  public objectEquip = new BehaviorSubject<any>([]);
   currentObjectequip = this.objectEquip.asObservable();
 
-  private objectLab = new BehaviorSubject<any>([]);
+  public objectLab = new BehaviorSubject<any>([]);
   currentObjectLab = this.objectLab.asObservable();
 
   private objectPer = new BehaviorSubject<any>([]);
@@ -54,16 +54,22 @@ export class ObservablesService {
   currentObjectSolBaja = this.objectSolBaja.asObservable();
 
 
+
   changeObject(object: any) {
     this.object.next(object);
   }
 
   changeObjectEquip(object: any) {
+    console.log('cambioequipo');
+    //
+    
     this.objectEquip.next(object);
+   
   }
 
-  changeObjectLab(object: any) {
-    this.objectLab.next(object);
+  changeObjectLab(object2: any) {
+    console.log('cambiolab');
+    this.objectLab.next(object2);
   }
 
   changeObjectPer(object: any) {
