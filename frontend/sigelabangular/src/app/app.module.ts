@@ -1,3 +1,4 @@
+import { QrService } from './modulos/mod-nivel2/services/qr.service';
 import { QuerysPrincipalService } from './modulos/mod-principal/services/querys-principal.service';
 import { ObserverPrincipalService } from './modulos/mod-principal/services/observer-principal.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
@@ -75,6 +76,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
   // alertas toast
 import { ToastrModule } from 'ngx-toastr';
+import { BardAdminQrComponent } from './shared/components/dashboard/left-sidebar/bard-admin-qr/bard-admin-qr.component';
+import { AdminQrComponent } from './modulos/mod-nivel2/admin-qr/admin-qr.component';
+import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
 
 @NgModule({
   declarations: [
@@ -109,7 +113,10 @@ import { ToastrModule } from 'ngx-toastr';
     IndicadoresGraficasReportesComponent,
     SolicitudesNivel3Component,
     BarSolicitudesNivel3Component,
-    LoginComponent
+    LoginComponent,
+    BardAdminQrComponent,
+    AdminQrComponent,
+    FormQrComponent,
   ],
   imports: [
 
@@ -142,7 +149,7 @@ import { ToastrModule } from 'ngx-toastr';
     ObserverAutenticadoService,
     LoginService,
     AngularFireAuth,
-    AngularFireStorage
+    QrService
   ],
   bootstrap: [AppComponent]
 })

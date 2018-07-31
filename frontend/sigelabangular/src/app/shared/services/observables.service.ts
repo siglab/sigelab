@@ -62,9 +62,9 @@ export class ObservablesService {
   changeObjectEquip(object: any) {
     console.log('cambioequipo');
     //
-    
+
     this.objectEquip.next(object);
-   
+
   }
 
   changeObjectLab(object2: any) {

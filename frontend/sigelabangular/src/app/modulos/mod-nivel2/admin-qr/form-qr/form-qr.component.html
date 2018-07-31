@@ -1,0 +1,223 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <a href="#">
+          <i class="fa fa-dashboard"></i> Home</a>
+      </li>
+      <li class="active">Dashboard laboratorios</li>
+    </ol>
+  </section>
+  <section class="content">
+
+    <div class="col-md-12" style="margin-top: 20px;">
+      <div class="box box-danger">
+        <div class="box-header text-center">
+          <i class="fa fa-tags"></i>
+          <h3 class="box-title">Vincular equipo a codigo Qr: {{id}} </h3>
+        </div>
+        <!-- /.box-header -->
+
+        <div class="box-body">
+          <form id="form-dash2equip" class="" name="form-dash2equip">
+            <fieldset>
+
+
+              <div class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
+                <div class="col-md-12">
+                  <label class="control-label" for="estadoserv">
+                    <strong>codigo inventario:</strong>
+                  </label>
+                  <input (focusout)="codeCheck($event)" id="email" name="codigo" class="form-control" type="text">
+                  <span class="help-block"> {{status}}</span>
+                </div>
+              </div>
+
+
+              <div *ngIf="this.formulario">
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong> Responsable :</strong>
+                    </label>
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.responsable" id="escuelaedit" name="responsable" class="form-control"
+                      type="text">
+
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong> Ubicacion :</strong>
+                    </label>
+                    <input [readonly]='this.formEdit' [ngClass]="{disabled : this.formEdit}" [(ngModel)]="inventario.ubicacion" id="escuelaedit"
+                      name="ubicacion" class="form-control" type="text">
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Costo Inicial: :</strong>
+                    </label>
+                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control"
+                      type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong> Marca: :</strong>
+                    </label>
+                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion"
+                      class="form-control" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Estado:</strong>
+                    </label>
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="variacionserv">
+                      <strong>Espacio :</strong>
+                    </label>
+                    <select class="form-control" name="espacio" id="variato" (change)="getSelectValue($event.target.value)">
+                      <option value="inicial">Seleccione un espacio</option>
+                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place}} </option>
+
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group" *ngIf="this.arrComponents.length > 0">
+                  <div class="col-md-6">
+                    <label class="control-label" for="variacionserv">
+                      <strong>Componentes :</strong>
+                    </label>
+                    <select class="form-control" name="components">
+
+                      <option *ngFor="let item of  this.arrComponents" value="{{item.brand}}" >{{ item.brand }} </option>
+
+                    </select>
+                  </div>
+                </div>
+
+
+              </div>
+
+
+
+
+            </fieldset>
+
+
+          </form>
+
+          <div class="box box-danger" *ngIf="this.formulario" style="margin-top: 20px">
+            <div class="box-header text-center">
+              <i class="fa fa-cogs"></i>
+              <h3 class="box-title">Vincular componente a Equipo </h3>
+            </div>
+            <div class="box-body">
+              <form id="form-2" class="" name="form-2">
+                <fieldset>
+
+                  <div class="form-group has-info" [ngClass]="{'has-success': this.formularioComp }">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong>codigo inventario componente:</strong>
+                      </label>
+                      <input (focusout)="codeCheckComponent($event)"  name="codigo_c" class="form-control" type="text">
+                      <span class="help-block"> {{statusComponent}}</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label class="control-label" for="nombreprub">
+                        <strong> Ubicacion :</strong>
+                      </label>
+                      <input  [(ngModel)]="componente.ubicacion_c"
+                        name="ubicacion_c" class="form-control" type="text">
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Costo Inicial: :</strong>
+                      </label>
+                      <input  [(ngModel)]="componente.costoinicial_c" name="costoinicial_c" class="form-control"
+                        type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label class="control-label" for="nombreprub">
+                        <strong> Marca: :</strong>
+                      </label>
+                      <input   [(ngModel)]="componente.marca_c"  name="fechaaceptacion_c"
+                        class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Estado:</strong>
+                      </label>
+                      <input [(ngModel)]="componente.estado_c" name="estado_c" class="form-control" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+
+
+            </div>
+
+
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Guardar</button>
+          <button type="button" (click)="addComponent()" class="btn btn-success">
+            <i class="fa fa-plus"></i> Agregar Componente </button>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </section>
+</div>
