@@ -144,9 +144,9 @@ export class FormQrComponent implements OnInit {
   }
 
   getSelectValueSpace(value): string {
-
+     console.log( 'este es el value',  value);
      return value;
-    console.log( 'este es el value',  value);
+   
   }
 
   addComponent() {

@@ -127,6 +127,11 @@
 
           </form>
 
+          <div *ngIf="this.formulario"  class="modal-footer">
+            <button type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>  
+          </div>
+
+        </div>
           <div class="box box-danger" *ngIf="this.formulario" style="margin-top: 20px">
             <div class="box-header text-center">
               <i class="fa fa-cogs"></i>
@@ -195,9 +200,8 @@
 
           </div>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger">Guardar</button>
+       
+        <div class="modal-footer" *ngIf="this.formularioComp"  >
           <button type="button" (click)="addComponent()" class="btn btn-success">
             <i class="fa fa-plus"></i> Agregar Componente </button>
         </div>
