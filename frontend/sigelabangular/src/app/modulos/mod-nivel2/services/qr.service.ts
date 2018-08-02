@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Http, Response } from '@angular/http';
+import swal from 'sweetalert2';
 
 @Injectable()
 export class QrService {
@@ -169,7 +170,11 @@ export class QrService {
   async addEquipFirebase( newEq ) {
 
   return  this.afs.collection('cfEqip').add(newEq).then( (ok) => {
-
+    swal({
+      type: 'success',
+      title: 'Equipo almacenado con exito.',
+      showConfirmButton: true
+    });
     return ok.path;
 
    });

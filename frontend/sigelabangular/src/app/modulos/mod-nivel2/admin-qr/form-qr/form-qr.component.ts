@@ -148,8 +148,8 @@ export class FormQrComponent implements OnInit {
   getSelectValueSpace(value) {
      console.log( 'este es el value',  value);
      this.idspace = value;
-     
-   
+
+
   }
 
   addComponent() {
@@ -170,7 +170,11 @@ export class FormQrComponent implements OnInit {
         createdAt: fecha.toISOString()
       };
       this.arrComponents.push( cmp);
-
+      swal({
+        type: 'success',
+        title: 'Componente agregado correctamente.',
+        showConfirmButton: true
+      });
 
       console.log( this.arrComponents);
 
@@ -205,7 +209,7 @@ export class FormQrComponent implements OnInit {
         this.qrser.addEquipFirebase(cfEquip).then(path => {
 
           if (this.arrComponents.length > 0) {
-            
+
             this.qrser.addComponents( this.arrComponents , path  );
           }
 
@@ -213,7 +217,7 @@ export class FormQrComponent implements OnInit {
       });
 
    } else {
-           
+
     swal({
       type: 'info',
       title: 'El campo espacio es obligatorio',
@@ -223,7 +227,7 @@ export class FormQrComponent implements OnInit {
   }
 
   viewComp() {
-    if(this.formularioComp) {
+    if (this.formularioComp) {
 
       this.formularioComp = false ;
 
