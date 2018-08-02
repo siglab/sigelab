@@ -95,7 +95,7 @@
                     <label class="control-label" for="variacionserv">
                       <strong>Espacio :</strong>
                     </label>
-                    <select class="form-control" name="espacio" id="variato" (change)="getSelectValue($event.target.value)">
+                    <select class="form-control" name="espacio" id="variato" (change)="getSelectValueSpace($event.target.value)">
                       <option value="inicial">Seleccione un espacio</option>
                       <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place}} </option>
 
@@ -106,7 +106,7 @@
                 <div class="form-group" *ngIf="this.arrComponents.length > 0">
                   <div class="col-md-6">
                     <label class="control-label" for="variacionserv">
-                      <strong>Componentes :</strong>
+                      <strong>Componentes:</strong>
                     </label>
                     <select class="form-control" name="components">
 
@@ -128,11 +128,13 @@
           </form>
 
           <div *ngIf="this.formulario"  class="modal-footer">
-            <button type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>  
+            <button (click) = "addEquipFirebase()"  type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>  
+            <button  (click) = "viewComp()"  type="button" class="btn btn-success"> <i class="fa fa-cogs"></i> vincular componente</button>  
+
           </div>
 
         </div>
-          <div class="box box-danger" *ngIf="this.formulario" style="margin-top: 20px">
+          <div class="box box-danger" *ngIf="this.formularioComp" style="margin-top: 20px">
             <div class="box-header text-center">
               <i class="fa fa-cogs"></i>
               <h3 class="box-title">Vincular componente a Equipo </h3>
@@ -154,7 +156,7 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <label class="control-label" for="nombreprub">
-                        <strong> Ubicacion :</strong>
+                        <strong> Ubicacion:</strong>
                       </label>
                       <input  [(ngModel)]="componente.ubicacion_c"
                         name="ubicacion_c" class="form-control" type="text">
@@ -165,7 +167,7 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <label class="control-label" for="nombreprub">
-                        <strong>Costo Inicial: :</strong>
+                        <strong>Costo Inicial:</strong>
                       </label>
                       <input  [(ngModel)]="componente.costoinicial_c" name="costoinicial_c" class="form-control"
                         type="text">
@@ -175,7 +177,7 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <label class="control-label" for="nombreprub">
-                        <strong> Marca: :</strong>
+                        <strong> Marca:</strong>
                       </label>
                       <input   [(ngModel)]="componente.marca_c"  name="fechaaceptacion_c"
                         class="form-control" type="text">

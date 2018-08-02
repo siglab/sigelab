@@ -2,6 +2,7 @@ import { QrService } from './../../services/qr.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { variable } from '@angular/compiler/src/output/output_ast';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-qr',
@@ -10,11 +11,12 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 })
 export class FormQrComponent implements OnInit {
   id;
+  idspace;
   data;
   status;
   formEdit;
   statusComponent;
-  formularioComp;
+  formularioComp = false;
   arrComponents = [];
   //  modelo inventario
   inventario = {
@@ -109,7 +111,7 @@ export class FormQrComponent implements OnInit {
         console.log(res);
         if (res.inventario.encontrado === true) {
           this.statusComponent  = 'Codigo componente de inventario encontrado.';
-          this.formulario = true;
+          this.formularioComp = true;
           console.log(this.formEdit);
           // asignar valores de la consulta a formulario
           this.componente.ubicacion_c = res.inventario.ubicacion;
@@ -143,9 +145,10 @@ export class FormQrComponent implements OnInit {
 
   }
 
-  getSelectValueSpace(value): string {
+  getSelectValueSpace(value) {
      console.log( 'este es el value',  value);
-     return value;
+     this.idspace = value;
+     
    
   }
 
@@ -177,7 +180,7 @@ export class FormQrComponent implements OnInit {
   addEquipFirebase() {
     const fecha = new Date();
 
-   if (this.inventario.codeinventario) {
+   if (this.idspace) {
 
        // construir objeto equipo cerif
        const cfEquip = {
@@ -190,10 +193,10 @@ export class FormQrComponent implements OnInit {
         relatedSrv : {},
         relatedMeas: {},
         qr: this.id,
-        space : '',
-        brand : '',
+        space : this.idspace,
+        brand : this.inventario.marca,
         model : '',
-        price : '',
+        price : this.inventario.costoinicial,
         active: true,
         createdAt: fecha.toISOString(),
         cfConditions : []
@@ -201,10 +204,32 @@ export class FormQrComponent implements OnInit {
 
         this.qrser.addEquipFirebase(cfEquip).then(path => {
 
-        this.qrser.addComponents( this.arrComponents , path  );
+          if (this.arrComponents.length > 0) {
+            
+            this.qrser.addComponents( this.arrComponents , path  );
+          }
+
 
       });
 
+   } else {
+           
+    swal({
+      type: 'info',
+      title: 'El campo espacio es obligatorio',
+      showConfirmButton: true
+    });
    }
+  }
+
+  viewComp() {
+    if(this.formularioComp) {
+
+      this.formularioComp = false ;
+
+    } else {
+
+      this.formularioComp = true ;
+    }
   }
 }
