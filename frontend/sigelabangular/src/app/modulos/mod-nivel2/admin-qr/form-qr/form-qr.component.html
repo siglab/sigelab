@@ -128,8 +128,8 @@
           </form>
 
           <div *ngIf="this.formulario"  class="modal-footer">
-            <button (click) = "addEquipFirebase()"  type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>  
-            <button  (click) = "viewComp()"  type="button" class="btn btn-success"> <i class="fa fa-cogs"></i> vincular componente</button>  
+            <button (click) = "addEquipFirebase()"  type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>
+            <button  (click) = "viewComp()"  type="button" class="btn btn-success"> <i class="fa fa-cogs"></i> vincular componente</button>
 
           </div>
 
@@ -143,7 +143,7 @@
               <form id="form-2" class="" name="form-2">
                 <fieldset>
 
-                  <div class="form-group has-info" [ngClass]="{'has-success': this.formularioComp }">
+                  <div class="form-group has-info" [ngClass]="{'has-success': this.formularioComp, 'has-warning': !this.formularioComp  }">
                     <div class="col-md-12">
                       <label class="control-label" for="estadoserv">
                         <strong>codigo inventario componente:</strong>
@@ -202,7 +202,7 @@
 
           </div>
 
-       
+
         <div class="modal-footer" *ngIf="this.formularioComp"  >
           <button type="button" (click)="addComponent()" class="btn btn-success">
             <i class="fa fa-plus"></i> Agregar Componente </button>
