@@ -169,7 +169,7 @@ export class QrService {
 
   async addEquipFirebase( newEq ) {
 
-  return  this.afs.collection('cfEqip').add(newEq).then( (ok) => {
+  return  this.afs.collection('cfEquip').add(newEq).then( (ok) => {
     swal({
       type: 'success',
       title: 'Equipo almacenado con exito.',
