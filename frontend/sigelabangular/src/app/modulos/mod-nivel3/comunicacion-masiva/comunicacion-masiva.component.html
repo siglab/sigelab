@@ -30,256 +30,228 @@
             </div>
 
             <div class="box-body">
+                <div class="box-header">
+                    <i class="fa fa-flask"></i>
 
-                <ul class="nav nav-tabs" >
-                    <li><a class="tablas" data-toggle="tab"  href="#home">
-                      CORREO</a></li>
-                    <li><a class="tablas" data-toggle="tab" href="#menu1">
-                      NOTIFICACION</a></li>
-                      <li><a class="tablas" data-toggle="tab" href="#menu2">
-                      HISTORIAL</a></li>
-                </ul>
+                    <h3 class="box-title">FILTROS</h3>
+                </div>
+
+                <div class="box-body">
+                    <form id="form-work" class="" name="form-work" action="#">
+
+                            <fieldset>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+
+                                        <label><input class="checkbox" type="checkbox" id="universidad" name="universidad" [(ngModel)]="checkBox.universidad" (change)="controlChecks('universidad')" >Universidad</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+                                            <label><input class="checkbox" type="checkbox" name="sede" id="sede" [(ngModel)]="checkBox.sede" (change)="controlChecks('sede')" >Sede</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                        <label class="control-label" for="variatiosede"><strong>Sede</strong></label>
+                                        <select style="height: 100%; width: 100%;" name="variatiosede" id="variatiosede" [(ngModel)]="objsel.sede" (change)="aplicarFiltro($event.target.value, 'sede')" >
+                                            <option value="inicial">Seleccione una sede</option>
+                                            <option *ngFor="let item of sedes" value="{{item.id}}" >{{item.nombre}}</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+                                            <label><input class="checkbox" type="checkbox" id="facultad" name="facultad"  [(ngModel)]="checkBox.facultad" (change)="controlChecks('facultad')" >Facultad</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                        <label class="control-label" for="variatiofacul"><strong>Facultad</strong></label>
+                                        <select style="height: 100%; width: 100%;" name="variatiofacultad" id="variatiofacultad" [(ngModel)]="objsel.facultad" (change)="aplicarFiltro($event.target.value, 'facultad')">
+                                            <option value="inicial">Seleccione una facultad</option>
+                                            <option *ngFor="let item of facultads" value="{{item.id}}" >{{item.nombre}}</option>
+                                        </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+
+                                        <label><input class="checkbox" type="checkbox" id="departamento" name="departamento" [(ngModel)]="checkBox.departamento" (change)="controlChecks('departamento')" >Departamento</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                        <label class="control-label" for="variatiodepar"><strong>Departamento</strong></label>
+                                        <select style="height: 100%; width: 100%;" name="variatiodepartamento" id="variatiodepartamento" [(ngModel)]="objsel.departamento" (change)="aplicarFiltro($event.target.value, 'departamento')">
+                                            <option value="inicial">Seleccione un departamento</option>
+                                            <option *ngFor="let item of departamentos" value="{{item.id}}" >{{item.nombre}}</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+                                            <label><input class="checkbox" type="checkbox" id="escuela" name="escuela" [(ngModel)]="checkBox.escuela" (change)="controlChecks('escuela')">Escuela</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                        <label class="control-label" for="variatioescuela"><strong>Escuela</strong></label>
+                                        <select style="height: 100%; width: 100%;" name="variatioescuela" id="variatioescuela" [(ngModel)]="objsel.escuela" (change)="aplicarFiltro($event.target.value, 'escuela')">
+                                            <option value="inicial">Seleccione una escuela</option>
+                                            <option *ngFor="let item of escuelas" value="{{item.id}}" >{{item.nombre}}</option>
+                                        </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+                    </form>
+
+                </div>
 
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-12">
-                        <div class="box box-danger">
-                            <div class="tab-content">
-                                <div id="home" class="tab-pane fade in active">
+                        <ul class="nav nav-tabs" >
+                                <li><a class="tablas" data-toggle="tab"  href="#home">
+                                    CORREO</a></li>
+                                <li><a class="tablas" data-toggle="tab" href="#menu1">
+                                    NOTIFICACION</a></li>
+                                    <li><a class="tablas" data-toggle="tab" href="#menu2">
+                                    HISTORIAL</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade in active">
+
+                                <div class="box box-danger">
                                     <div class="box-header">
                                         <i class="fa fa-flask"></i>
 
-                                        <h3 class="box-title">NUEVO CORREO MASIVO</h3>
+                                        <h3 class="box-title">CORREO</h3>
                                     </div>
-                                    <div class="box-body divScroll">
+    
+                                    <div class="box-body">
                                         <form id="form-work" class="" name="form-work" action="#">
-
-                                          <fieldset>
-                                            <div class="row">
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-
-                                                      <label><input class="checkbox" type="checkbox" value="">Universidad</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <label><input class="checkbox" type="checkbox" value="">Sede</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-3">
-                                                      <label class="control-label" for="ciuor"><strong>Sede</strong></label>
-                                                      <select name="ciour" class="form-control" id="">
-                                                        <option value="">sede 1</option>
-                                                        <option value="">sede 2</option>
-                                                        <option value="">sede 3</option>
-                                                      </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <label><input class="checkbox" type="checkbox" value="">Facultad</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-3">
-                                                      <label class="control-label" for="ciudess"><strong>Facultad</strong></label>
-                                                      <select name="ciudess" class="form-control" id="">
-                                                          <option value="">facu 1</option>
-                                                          <option value="">facu 2</option>
-                                                          <option value="">facu 3</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-
-                                                      <label><input class="checkbox" type="checkbox" value="">Departamento</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-5">
-                                                      <label class="control-label" for="ciuor"><strong>Departamento</strong></label>
-                                                      <select name="ciour" class="form-control" id="">
-                                                        <option value="">depto 1</option>
-                                                        <option value="">depto 2</option>
-                                                        <option value="">depto 3</option>
-                                                      </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <label><input class="checkbox" type="checkbox" value="">Escuela</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-3">
-                                                      <label class="control-label" for="ciudess"><strong>Departamento</strong></label>
-                                                      <select name="ciudess" class="form-control" id="">
-                                                          <option value="">depto 1</option>
-                                                          <option value="">depto 2</option>
-                                                          <option value="">depto 3</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row">
+                                            <fieldset>
                                                 <div class="form-group">
                                                     <div class="col-md-12">
-                                                      <label class="control-label" for="nac"><strong>Titulo</strong></label>
-                                                      <input id="nac" name="nac"  class="form-control" placeholder="Ingrese Nacionalidad" type="text">
+                                                        <label class="control-label" for="asunt"><strong>Asunto</strong></label>
+                                                        <input class="form-control" name="asunt" [(ngModel)]="correo.asunto" id="" type="text">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-md-12">
-                                                      <label class="control-label" for="just"><strong>Mensaje</strong></label>
-                                                      <textarea class="form-control" name="just" id="" rows="5"></textarea>
+                                                    <label class="control-label" for="mensaje"><strong>Mensaje</strong></label>
+                                                    <textarea class="form-control" name="mensaje" [(ngModel)]="correo.mensaje" id="" rows="5"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                  <div class="col-md-12">
-                                                    <button type="button" style="float: right;" class="btn2 btn-danger btn-lg danger">Enviar</button>
-                                                  </div>
-
+                                                    <div class="col-md-12">
+                                                        <button type="button" style="float: right;" (click)="enviarCorreoNotificacion('correo')" class="btn2 btn-danger btn-lg danger">Enviar</button>
+                                                    </div>
+    
                                                 </div>
-
-
-                                            </div>
-
-                                          </fieldset>
+    
+                                            </fieldset>
                                         </form>
 
                                     </div>
+
                                 </div>
 
-                                <div id="menu1" class="tab-pane fade">
-                                    <div class="box-header">
-                                        <i class="fa fa-flask"></i>
-
-                                        <h3 class="box-title">NUEVA NOTIFICACION</h3>
-                                    </div>
-                                    <div class="box-body divScroll">
-                                        <form id="form-work" class="" name="form-work" action="#">
-
-                                          <fieldset>
-                                            <div class="row">
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-
-                                                      <label><input class="checkbox" type="checkbox" value="">Universidad</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <label><input class="checkbox" type="checkbox" value="">Sede</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-3">
-                                                      <label class="control-label" for="ciuor"><strong>Sede</strong></label>
-                                                      <select name="ciour" class="form-control" id="">
-                                                        <option value="">sede 1</option>
-                                                        <option value="">sede 2</option>
-                                                        <option value="">sede 3</option>
-                                                      </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <label><input class="checkbox" type="checkbox" value="">Facultad</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-3">
-                                                      <label class="control-label" for="ciudess"><strong>Facultad</strong></label>
-                                                      <select name="ciudess" class="form-control" id="">
-                                                          <option value="">facu 1</option>
-                                                          <option value="">facu 2</option>
-                                                          <option value="">facu 3</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-
-                                                      <label><input class="checkbox" type="checkbox" value="">Departamento</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-5">
-                                                      <label class="control-label" for="ciuor"><strong>Departamento</strong></label>
-                                                      <select name="ciour" class="form-control" id="">
-                                                        <option value="">depto 1</option>
-                                                        <option value="">depto 2</option>
-                                                        <option value="">depto 3</option>
-                                                      </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <label><input class="checkbox" type="checkbox" value="">Escuela</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-3">
-                                                      <label class="control-label" for="ciudess"><strong>Departamento</strong></label>
-                                                      <select name="ciudess" class="form-control" id="">
-                                                          <option value="">depto 1</option>
-                                                          <option value="">depto 2</option>
-                                                          <option value="">depto 3</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row">
-
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="just"><strong>Mensaje</strong></label>
-                                                      <textarea class="form-control" name="just" id="" rows="5"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                  <div class="col-md-12">
-                                                    <button type="button" style="float: right;" class="btn2 btn-danger btn-lg danger">Enviar</button>
-                                                  </div>
-
-                                                </div>
-
-
-                                            </div>
-
-                                          </fieldset>
-                                        </form>
-
-                                    </div>
-                                </div>
-
-                                <div id="menu2" class="tab-pane fade">
-                                    <div class="box-header">
-                                        <i class="fa fa-flask"></i>
-
-                                        <h3 class="box-title">HISTORIAL</h3>
-                                    </div>
-                                    <div class="box-body divScroll">
-
-                                    </div>
-                                </div>
                             </div>
 
+                            <div id="menu1" class="tab-pane fade">
 
+                                    <div class="box box-danger">
+                                        <div class="box-header">
+                                            <i class="fa fa-flask"></i>
+    
+                                            <h3 class="box-title">NUEVA NOTIFICACION</h3>
+                                        </div>
+        
+                                        <div class="box-body">
+                                            <form id="form-work" class="" name="form-work" action="#">
+                                                <fieldset>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                        <label class="control-label" for="just"><strong>Notificacion (max {{caracteres}})</strong></label>
+                                                        <textarea class="form-control" name="just" id="" maxlength="140" [(ngModel)]="notificacion" rows="5" (input)="cambiarNumeroCaracteres($event.target.value)"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <button type="button" style="float: right;" (click)="enviarCorreoNotificacion('notificacion')" class="btn2 btn-danger btn-lg danger">Enviar</button>
+                                                        </div>
+        
+                                                    </div>
+        
+                                                </fieldset>
+                                            </form>
+    
+                                        </div>
+
+                                    </div>
+
+                            </div>
+
+                            <div id="menu2" class="tab-pane fade">
+                                <div class="box-header">
+                                    <i class="fa fa-flask"></i>
+
+                                    <h3 class="box-title">HISTORIAL</h3>
+                                </div>
+                                <div class="box-body">
+                                        <div class="box-body">
+                                                <div *ngIf="dataSource.data.length == 0">
+                                                    <h3>AUN NO SE HAN ENVIADO CORREOS O NOTIFICACIONES</h3>
+                                                </div>
+                          
+                                                <div class="example-container mat-elevation-z8" *ngIf="dataSource.data.length != 0">
+                                                  <div class="example-header">
+                                                    <mat-form-field>
+                                                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Personal">
+                                                    </mat-form-field>
+                                                  </div>
+                          
+                                                  <mat-table #tableComunicacion #sort="matSort" [dataSource]="dataSource" matSort>
+                          
+                          
+                                                    <ng-container matColumnDef="asunto">
+                                                      <mat-header-cell *matHeaderCellDef mat-sort-header> Asunto </mat-header-cell>
+                                                      <mat-cell *matCellDef="let element"> {{element.asunto}} </mat-cell>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="tipo">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Asunto </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="email">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Asunto </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="fecha">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Asunto </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                    </ng-container>
+                          
+                                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                    <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataHistorial(row)"
+                                                      data-toggle="modal" data-target="#modal1"></mat-row>
+                                                  </mat-table>
+                          
+                                                  <mat-paginator #paginator="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                                  </mat-paginator>
+                                                </div>
+                                            </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -295,3 +267,74 @@
 
 
 </div>
+
+
+<!-- MODAL QUE PERMITE LA EDICION DE LOS DATOS DEL LABORATORIO -->
+<div *ngIf="historialsel" class="modal fade" id="modal1" role="dialog">
+        <div [ngClass]="{'modal-dialog':true, 'modal-md':true}">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-body">
+                <div class="box box-danger">
+                    <div class="box-header text-center">
+                      <i class="fa fa-address-card-o"></i>
+          
+                      <h3 class="box-title">Informacion de {{historialsel.type}}</h3>
+                    </div>
+           
+                    <div class="box-body">
+                        
+                        <form>
+                            <fieldset>
+                                <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="nombreprub">
+                                    <strong>Asunto :</strong> {{historialsel.asunto}}</label>               
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="estadoserv">
+                                    <strong>Mensaje:</strong> {{historialsel.mensaje}}</label>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="estadoserv">
+                                    <strong>Estado:</strong> {{historialsel.email}}</label>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-md-12">
+                                    <h2><strong>Filtros usados</strong></h2>
+                                </div>
+                                </div>
+                                <div *ngFor = "let item of historialsel.texto" class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="estadoserv">
+                                    <strong>{{item.key}}: </strong>{{item.nombre}}</label>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <button type="button" style="float: right;" (click)="editarFiltros('reenviar')" class="btn2 btn-success btn-lg success" >Reenviar</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-2">                                       
+                                        <button type="button" style="float: right;" (click)="editarFiltros('editar')" class="btn2 btn-danger btn-lg danger">Editar</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                                          
+                    </div>
+                </div>
+      
+      
+              
+            </div>
+          </div>
+        </div>
+      </div>

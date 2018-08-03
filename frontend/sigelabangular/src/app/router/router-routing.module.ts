@@ -24,6 +24,8 @@ import { SolicitudBajaComponent } from '../modulos/mod-nivel2/admin-solicitudes/
 import { IndicadoresGraficasReportesComponent } from '../modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 import { SolicitudesNivel3Component } from '../modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
 import { LoginComponent } from '../modulos/login/login.component';
+import { AdminLaboratorios3Component } from '../modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
+import { IndicadoresGraficasReportes3Component } from '../modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
 
 
 const routes: Routes = [
@@ -48,7 +50,9 @@ const routes: Routes = [
       { path: 'adminlaboratorios25', component: AdminLaboratorios25Component},
       { path: 'indicadores25', component: IndicadoresGraficasReportesComponent},
 
+      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component},
       { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent},
+      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component},
       { path: 'solicitudes3', component: SolicitudesNivel3Component},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},

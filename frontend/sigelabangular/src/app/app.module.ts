@@ -75,6 +75,10 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
   // alertas toast
 import { ToastrModule } from 'ngx-toastr';
+import { AdminLaboratorios3Component } from './modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
+import { ServicesNivel3Service } from './modulos/mod-nivel3/services/services-nivel3.service';
+import { IndicadoresGraficasReportes3Component } from './modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
+
 
 @NgModule({
   declarations: [
@@ -109,7 +113,9 @@ import { ToastrModule } from 'ngx-toastr';
     IndicadoresGraficasReportesComponent,
     SolicitudesNivel3Component,
     BarSolicitudesNivel3Component,
-    LoginComponent
+    LoginComponent,
+    AdminLaboratorios3Component,
+    IndicadoresGraficasReportes3Component
   ],
   imports: [
 
@@ -142,8 +148,9 @@ import { ToastrModule } from 'ngx-toastr';
     ObserverAutenticadoService,
     LoginService,
     AngularFireAuth,
-    AngularFireStorage
-  ],
+    AngularFireStorage,
+    ServicesNivel3Service
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

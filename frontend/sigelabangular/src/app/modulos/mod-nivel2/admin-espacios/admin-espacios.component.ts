@@ -24,7 +24,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   itemsel: Observable<Array<any>>;
   sede = 'san fernando';
   idsp;
-  tablesel = '';
+
   space = {
     capacity: '',
     createdAt: '',
@@ -368,18 +368,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.dataSourceSpace.filter = filterValue;
   }
 
-  prueba() {
-    this.dataSourceSpace.filterPredicate = (data, filter: string)  => {
-      const accumulator = (currentTerm, key) => {
-        return key === 'spaceData' ? currentTerm + data.spaceData.type : currentTerm + data[key];
-      };
-      const dataStr = Object.keys(data).reduce(accumulator, '').toLowerCase();
-      // Transform the filter by converting it to lowercase and removing whitespace.
-      const transformedFilter = filter.trim().toLowerCase();
-      return dataStr.indexOf(transformedFilter) !== -1;
-    };
-
-  }
 
   initCalendar( horario  ) {
 
@@ -411,11 +399,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   updateFaciliti( idSp ) {
 
 
-    const  relatedSpaces = this.register.setBoolean(  idSp );
+    const  relatedSpaces = {};
+    relatedSpaces[idSp] = true;
 
 
     console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil' ).doc(this.idlab).set({   relatedSpaces   }  , { merge: true })
+    this.afs.collection('cfFacil' ).doc(this.idlab).set(relatedSpaces  , { merge: true })
                    .then( () => {
 
                     swal({

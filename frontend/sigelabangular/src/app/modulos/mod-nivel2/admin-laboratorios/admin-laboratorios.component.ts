@@ -117,7 +117,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
       console.log(data);
       console.log(this.labestructurado);
+
       this.labestructurado = undefined;
+      this.itemsel = Observable.of(this.labestructurado);
       if(data.length != 0){
         swal({
           title: 'Cargando un momento...',
@@ -216,11 +218,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       console.log(laboratorio);
       this.buscarDirector(laboratorio.facilityAdmin).subscribe(dueno => {
         const duenoLab = dueno.payload.data();
-        if (duenoLab && laboratorio.mainSpace) {
+        if (duenoLab) {
 
-          this.buscarEspacio(laboratorio.mainSpace).subscribe(espacio => {
-
-            const espacioLab = espacio.payload.data();
               // convertir boolean a cadena de caracteres para estado del laboratorio
             let estadoLab;
               if (laboratorio.active === true) {
@@ -235,8 +234,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               inves: laboratorio.researchGroup,
               director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
               iddueno: laboratorio.facilityAdmin,
-              espacioPrin: espacioLab,
-              coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
+              espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
               info: {dir: laboratorio.otros.direccion, tel: laboratorio.otros.telefono, cel: '', email: laboratorio.otros.email},
               servicios: this.estructurarServicios(laboratorio.relatedServices).arr,
               practicas: this.estructurarPracticas(laboratorio.relatedPractices),
@@ -244,7 +242,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               personal: this.estructurarPersonas(laboratorio.relatedPers),
               proyectos: this.estructurarProyectos(laboratorio.relatedProjects),
               solicitudes: this.estructurarServicios(laboratorio.relatedServices).arr2,
-              espacios: this.estructurarSpace(laboratorio.relatedSpaces),
+              espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
               cambios: laboratorio.suggestedChanges,
               estado: estadoLab
             };
@@ -258,7 +256,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             }
            
 
-          });
+     
 
         }
       });
@@ -286,7 +284,18 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   // METODO QUE TRAE UN ESPACIO ESPECIFICO DEPENDIENDO EL ID-ESPACIO
   buscarEspacio(idespacio) {
-    return this.afs.doc('space/' + idespacio).snapshotChanges();
+    let arr = [];
+    for (let i = 0; i < 1; i++) {
+      if(idespacio){
+        this.afs.doc('space/' + idespacio).snapshotChanges().subscribe(data=>{
+          console.log(data);
+         arr.push(data.payload.data());
+        });
+      }      
+    }
+    
+    return arr;;
+   
   }
 
 
@@ -553,7 +562,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     return arr;
   }
 
-  estructurarSpace(item) {
+  estructurarSpace(item, keyprincipal) {
 
     const arr = [];
 
@@ -584,8 +593,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
                 arr.push(space);
               }
-
-
 
           });
         }
