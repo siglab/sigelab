@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, take, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AngularFirestore } from 'angularfire2/firestore';
+// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
@@ -152,10 +153,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sus.unsubscribe();
   }
-  
   ngAfterViewInit(): void {
     // outputs `I am span`
 
@@ -260,7 +260,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
             let persona = {};
-           
+
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
@@ -368,7 +368,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       const pers = {
         active: this.estado,
         cfFirstNames: this.nombre,
-        cfFamilyNames: this.apellido
+        cfFamilyNames: this.apellido,
+        type: this.rol
       };
       /* objeto para usuario */
       const user = {
@@ -529,6 +530,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       const lab = {
         relatedPers: {}
       };
+
+
+      const collref = this.afs.doc('cfFacil/' + this.idlab).ref;
+
 
       lab.relatedPers[id] = true;
 

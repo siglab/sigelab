@@ -10,7 +10,11 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as $ from 'jquery';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
+// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
+import { ArrayType } from '@angular/compiler/src/output/output_ast';
+import { all } from 'q';
+import { EspaciosService } from '../services/espacios.service';
 
 @Component({
   selector: 'app-admin-espacios',
@@ -24,7 +28,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   itemsel: Observable<Array<any>>;
   sede = 'san fernando';
   idsp;
-
+  tablesel = '';
+  horarios = [];
   space = {
     capacity: '',
     createdAt: '',
@@ -40,6 +45,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     active: false
   };
 
+  horariopractica;
+
   sus: Subscription;
 
   // INICIALIZACION DATATABLE espacios
@@ -54,7 +61,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   constructor(private obs: ObservablesService,
               private afs: AngularFirestore,
               private storage: AngularFireStorage,
-              private register: LoginService) {
+              private register: LoginService,
+              private spServ: EspaciosService) {
   }
 
 
@@ -111,7 +119,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sus.unsubscribe();
   }
 
@@ -289,10 +297,17 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.map = item.map;
     this.space.active = item.active;
 
-    this.cargarImagen(this.space.map);
-    this.listPracticeforSpace();
+     this.cargarImagen(this.space.map);
+     this.listPracticeforSpace( this.idsp ).then( ( ok: any) => {
 
+      console.log( ok );
+      setTimeout(() => {
+         ok.forEach(element => {
 
+            this.getPrgramming(element);
+          });
+      }, 1000);
+     });
 
   }
 
@@ -369,10 +384,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
 
-  initCalendar( horario  ) {
+  initCalendar( ) {
 
-
-    console.log('entro este es el horario', horario );
+    console.log(this.horarios);
+    const  horario = this.horarios;
     const containerEl: JQuery = $('#cal');
     containerEl.fullCalendar( 'destroy' );
 
@@ -418,25 +433,37 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   /* listar horario por espacio  */
 
-    listPracticeforSpace() {
+     listPracticeforSpace(idSpace) {
+      // traer array con todas las referencias de practicas con el espacio relacionado
+      return new Promise((resolve, reject) => {
+        const pathPrograming = [];
+        const pracRef = this.afs.collection('practice').ref ;
+        const query = pracRef.where( 'relatedSpaces.' + idSpace, '==', true  );
+        query.get().then( ok => {
 
-      console.log('entro el prro');
-
-      const arr = [];
-
-        this.afs.doc('practice/AmtSFtg3m5SrSc5iO2vK').collection('programmingData',
-        ref => ref.where('space', '==', '1xCjO5lRbstnW20U2Lyz'))
-        .snapshotChanges().subscribe(data => {
-            if ( data) {
-            data.forEach(element => {
-             const elemento = element.payload.doc.data();
-               arr.push( elemento );
-            });
-          }
+          ok.forEach( doc =>  {
+            pathPrograming.push(doc.id);
+          });
         });
 
-        console.log(arr);
+            resolve(pathPrograming );
 
+      });
+
+
+
+    }
+
+     getPrgramming(id) {
+
+      this.afs.collection( 'practice/' + id + '/programmingData')
+                 .valueChanges()
+                 .subscribe( data => {
+                  const prog =  data[0];
+                   const el = prog['schedule'].forEach(element => {
+                     this.horarios.push( element);
+                   });
+                 });
     }
 
 

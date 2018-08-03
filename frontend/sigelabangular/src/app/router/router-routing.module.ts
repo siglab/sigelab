@@ -1,3 +1,5 @@
+import { FormQrComponent } from './../modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
+import { AdminQrComponent } from './../modulos/mod-nivel2/admin-qr/admin-qr.component';
 import { ComunicacionMasivaComponent } from './../modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
 import { AdminLaboratorios25Component } from './../modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
@@ -41,6 +43,9 @@ const routes: Routes = [
       { path: 'adminespacios', component: AdminEspaciosComponent},
       { path: 'adminpracticas', component: AdminPracticasComponent},
       { path: 'adminpersonal', component: AdminPersonalComponent},
+      { path: 'adminqr', component: AdminQrComponent,
+      },
+      { path : 'qrinventario/:id', component: FormQrComponent   },
       { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent},
       { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent},
       { path: 'adminproyectos', component: AdminProyectosComponent},
@@ -60,7 +65,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{  useHash: true  } )],
+  imports: [RouterModule.forRoot(routes, {  useHash: true  } )],
   exports: [RouterModule]
 })
 export class RouterRoutingModule { }

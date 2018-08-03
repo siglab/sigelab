@@ -97,24 +97,24 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
              console.log(this.equiestructurado);
              console.log(this.infosabs);
             this.dataSourceEquip.data = this.equiestructurado.equipos;
-   
+
             const ambiente = this;
-      
+
              setTimeout(function() {
                if (ambiente.equiestructurado.equipos != 0) {
                  ambiente.dataSourceEquip.sort = ambiente.sortEquip;
                  ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
                   // cierra loading luego de cargados los datos
-                
+
                }
-              
+
              }, 1500);
-    
+
           });
         } else {
           swal.close();
         }
-              
+
       }
 
      });
@@ -129,10 +129,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   estructurarEquip(key, objeto){
-    
+
     this.equiestructurado = {};
     let promise = new Promise((resolve,reject)=>{
-      
+
        let estadoLab;
        if (objeto.active === true) {
           estadoLab = 'Activo';
@@ -145,13 +145,13 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
           nombre: objeto.cfName,
           equipos: this.estructurarEquipos(objeto.relatedEquipments),
           estado: estadoLab
-        };        
+        };
 
         resolve();
     });
- 
+
     return promise;
- 
+
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -242,10 +242,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                   },
                   activo: practica.active
                  };
-  
+
                  arr.push(pract);
               }
-   
+
 
               });
 
@@ -263,7 +263,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarEquipos(item) {
-  
+
     const arr = [];
     let cont = 0;
     for (const clave in item) {
@@ -281,9 +281,9 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                   activo: equip.active,
                   precio: equip.price,
                   // infoSab: this.consultarSabs(equip.inventory),
-                  componentes:this.estructurarComponents(clave),
-                  servicios:this.estructurarServicios(equip.relatedSrv).arr,
-                  practicas:this.estructurarPracticas(equip.relatedPrac)
+                  componentes: this.estructurarComponents(clave),
+                  servicios:  this.estructurarServicios(equip.relatedSrv).arr,
+                  practicas: this.estructurarPracticas(equip.relatedPrac)
                 };
 
                 arr.push(equipo);
@@ -313,12 +313,12 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // METODO QUE TRAE LOS DATOS EXISTENTES EN SABS
-  consultarSabs(item){
-  
-    this.infosabs = [];
-    let promise = new Promise((resolve,reject) => {
+  consultarSabs(item) {
 
-      const url = 'http://192.168.0.13:1337/inventario/buscar';
+    this.infosabs = [];
+    let promise = new Promise((resolve, reject) => {
+
+      const url = 'http://192.168.0.15:1337/inventario/buscar';
       const body = {
         codInventario: item,
         codLab: '5646',
@@ -329,26 +329,26 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       };
 
 
-      if(this.ventana){
+      if (this.ventana) {
 
-     
+
         this.http.post(url, body). subscribe((res) => {
           console.log(res.json());
-          if(res.status == 200){
+          if (res.status === 200) {
             console.log('funco');
             this.response =  res.json().inventario;
             resolve();
           } else {
             reject();
-          } 
-             
-        }, (error)=>{
+          }
+
+        }, (error) => {
             console.log('faio');
             this.response = {};
-            reject();      
+            reject();
         });
       }
- 
+
 
     });
 
@@ -358,7 +358,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarComponents(item){
+  estructurarComponents(item) {
     const arr = [];
 
     this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
@@ -374,11 +374,11 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
             modelo: element.model,
             estado: element.active
           };
-  
-          arr.push(componente);
-     
 
-        
+          arr.push(componente);
+
+
+
       }
 
      });
@@ -408,7 +408,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         return variaciones;
       }
-      
+
     });
     return variaciones;
   }
@@ -458,8 +458,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         type: 'success',
         title: 'Exito',
         showConfirmButton: true
-      }); 
-      this.obs.changeObjectEquip({nombre:this.equiestructurado.nombre, uid: this.equiestructurado.uid});  
+      });
+      this.obs.changeObjectEquip({nombre:this.equiestructurado.nombre, uid: this.equiestructurado.uid});
     });
   }
 

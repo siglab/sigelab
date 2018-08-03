@@ -117,7 +117,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         } else {
           swal.close();
         }
-   
+
 
       }, 1500);
 
@@ -141,13 +141,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       this.listaVariaciones.push({
         data: this.variation,
         condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
-      }); 
+      });
 
       swal({
         type: 'success',
         title: 'Variacion agregada',
         showConfirmButton: true
-      }); 
+      });
     }else{
       swal({
         type: 'error',
@@ -155,7 +155,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         showConfirmButton: true
       });
     }
-   
+
   }
 
   quitarVariacion(id){
@@ -182,7 +182,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   enviarSolicitudServicio(reserva){
-    
+
     const fecha = new Date();
 
     if (this.user) {
@@ -216,20 +216,20 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
           if (result.value) {
             if(reserva == 'convariaciones'){
-          
+
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
-                cfSrvReserv.selectedVariations[element.data.id] = true; 
+                cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
               }
-    
+
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
             }
 
             cfSrvReserv.comments.push({
-              commentText: this.campoCondicion, 
-              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+              commentText: this.campoCondicion,
+              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
               uid: this.user.uid});
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
@@ -241,16 +241,16 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 $('#myModalLabs').modal('hide');
               });
 
-             
-  
+
+
             }).catch(error => {
-  
+
               swal({
                 type: 'error',
                 title: error,
                 showConfirmButton: true
               });
-  
+
             });
           } else if (
             // Read more about handling dismissals
@@ -262,7 +262,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               'error'
             );
           }
-  
+
         });
 
     } else {
@@ -341,7 +341,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       }
 
     }
- 
+
   }
 
   cambiarDataPrueba(item) {
@@ -355,7 +355,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       const element = this.servsel.variaciones[i];
       if(element.id == item){
         return element;
-      }   
+      }
     }
   }
 

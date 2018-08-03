@@ -1,7 +1,8 @@
+import { QrService } from './modulos/mod-nivel2/services/qr.service';
 import { QuerysPrincipalService } from './modulos/mod-principal/services/querys-principal.service';
 import { ObserverPrincipalService } from './modulos/mod-principal/services/observer-principal.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { DataTablesModule } from 'angular-datatables';
 import { ObservablesService } from './shared/services/observables.service';
@@ -78,7 +79,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { AdminLaboratorios3Component } from './modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
 import { ServicesNivel3Service } from './modulos/mod-nivel3/services/services-nivel3.service';
 import { IndicadoresGraficasReportes3Component } from './modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
+import { BardAdminQrComponent } from './shared/components/dashboard/left-sidebar/bard-admin-qr/bard-admin-qr.component';
+import { AdminQrComponent } from './modulos/mod-nivel2/admin-qr/admin-qr.component';
+import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
 
+import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
 
 @NgModule({
   declarations: [
@@ -115,10 +120,13 @@ import { IndicadoresGraficasReportes3Component } from './modulos/mod-nivel3/indi
     BarSolicitudesNivel3Component,
     LoginComponent,
     AdminLaboratorios3Component,
-    IndicadoresGraficasReportes3Component
+    IndicadoresGraficasReportes3Component,
+    BardAdminQrComponent,
+    AdminQrComponent,
+    FormQrComponent,
   ],
   imports: [
-
+    AngularFireStorageModule,
     BrowserModule,
     DataTablesModule,
     RouterRoutingModule,
@@ -148,9 +156,15 @@ import { IndicadoresGraficasReportes3Component } from './modulos/mod-nivel3/indi
     ObserverAutenticadoService,
     LoginService,
     AngularFireAuth,
+<<<<<<< HEAD
     AngularFireStorage,
     ServicesNivel3Service
     ],
+=======
+    QrService,
+    EspaciosService
+  ],
+>>>>>>> 9d42f30d42d7cc9077181ff769f5f9e779407a01
   bootstrap: [AppComponent]
 })
 export class AppModule { }

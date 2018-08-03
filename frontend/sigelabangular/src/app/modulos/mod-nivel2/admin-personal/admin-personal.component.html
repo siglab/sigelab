@@ -381,7 +381,7 @@
 
 
 
-                <div class="form-group has-info" [ngClass]="{ 'has-error': !this.dispo, 'has-success': this.dispo }"   >
+                <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }"   >
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
                       <strong>Email:</strong>
