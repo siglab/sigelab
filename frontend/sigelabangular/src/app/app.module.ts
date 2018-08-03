@@ -156,15 +156,9 @@ import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service'
     ObserverAutenticadoService,
     LoginService,
     AngularFireAuth,
-<<<<<<< HEAD
-    AngularFireStorage,
-    ServicesNivel3Service
-    ],
-=======
     QrService,
     EspaciosService
   ],
->>>>>>> 9d42f30d42d7cc9077181ff769f5f9e779407a01
   bootstrap: [AppComponent]
 })
 export class AppModule { }
