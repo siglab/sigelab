@@ -2,7 +2,7 @@ import { QrService } from './modulos/mod-nivel2/services/qr.service';
 import { QuerysPrincipalService } from './modulos/mod-principal/services/querys-principal.service';
 import { ObserverPrincipalService } from './modulos/mod-principal/services/observer-principal.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { DataTablesModule } from 'angular-datatables';
 import { ObservablesService } from './shared/services/observables.service';
@@ -119,7 +119,7 @@ import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.c
     FormQrComponent,
   ],
   imports: [
-
+    AngularFireStorageModule,
     BrowserModule,
     DataTablesModule,
     RouterRoutingModule,

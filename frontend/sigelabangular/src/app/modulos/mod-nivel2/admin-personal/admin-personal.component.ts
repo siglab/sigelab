@@ -368,7 +368,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       const pers = {
         active: this.estado,
         cfFirstNames: this.nombre,
-        cfFamilyNames: this.apellido
+        cfFamilyNames: this.apellido,
+        type: this.rol
       };
       /* objeto para usuario */
       const user = {
@@ -529,6 +530,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       const lab = {
         relatedPers: {}
       };
+
+
+      const collref = this.afs.doc('cfFacil/' + this.idlab).ref;
+
 
       lab.relatedPers[id] = true;
 
