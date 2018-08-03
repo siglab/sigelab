@@ -79,6 +79,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BardAdminQrComponent } from './shared/components/dashboard/left-sidebar/bard-admin-qr/bard-admin-qr.component';
 import { AdminQrComponent } from './modulos/mod-nivel2/admin-qr/admin-qr.component';
 import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
+import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
 
 @NgModule({
   declarations: [
@@ -149,7 +150,8 @@ import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.c
     ObserverAutenticadoService,
     LoginService,
     AngularFireAuth,
-    QrService
+    QrService,
+    EspaciosService
   ],
   bootstrap: [AppComponent]
 })

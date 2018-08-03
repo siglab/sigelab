@@ -82,8 +82,8 @@
 
 
                         <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
-                          data-target="#myModal"></mat-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardata(row)" 
+                         ></mat-row>
                       </mat-table>
 
                       <mat-paginator #paginatorSpace="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
@@ -102,103 +102,149 @@
                     <h3 class="box-title">Ficha tecnica de espacio seleccionado</h3>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <button (click)="initCalendar()" data-toggle="modal" data-target="#modal2" style="float: right;" class="btn btn-danger" type="button">Programacion Espacio</button>
+                        <button (click)="initCalendar()" data-toggle="modal" style=" margin-left: auto;"   data-target="#modal2"  class="btn btn-success" type="button"> <i class="fa fa-calendar" ></i> Programacion Espacio</button>
+                        <button   data-toggle="modal" data-target="#myModal" style=" margin-left: auto;" class="btn btn-danger" type="button"> <i class="fa fa-picture-o" ></i> Ver plano </button>
+
                       </div>
                     </div>
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <div class="row">
-                      <div class="col-md-3 col-sm-6 col-xs-12">
-                        <div class="info-box">
-                          <span class="info-box-icon bg-aqua">
-                            <i class="fa fa-thumbs-o-up"></i>
-                          </span>
+                    <form id="form-work" class="" name="form-work" action="#">
+                      <fieldset>
+                        <div class="form-group">
 
-                          <div class="info-box-content">
-                            <span class="info-box-text">SENSOR 1</span>
-                            <span class="info-box-number"></span>
+
+                          <div class="form-group">
+                            <div class="col-md-12">
+                              <div class="form-group row">
+                                <label for="facultad" class="col-sm-2 col-form-label">Sede:</label>
+                                <div class="col-sm-10">
+                                  <select class="form-control" [(ngModel)]="this.sede" name="estado">
+                                    <option value="san fernando">San Fernando</option>
+                                    <option value="ciudad universitaria melendez">Ciudad Universitaria Melendez</option>
+
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
-                      </div>
-                      <!-- /.col -->
-                      <div class="col-md-3 col-sm-6 col-xs-12">
-                        <div class="info-box">
-                          <span class="info-box-icon bg-red">
-                            <i class="fa fa-suitcase"></i>
-                          </span>
 
-                          <div class="info-box-content">
-                            <span class="info-box-text">SENSOR 2</span>
-                            <span class="info-box-number"></span>
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
+                              <div class="col-sm-2">
+                                <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value="" class="form-control" id="edificio">
+                              </div>
+                              <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
+                              <div class="col-sm-2">
+                                <input name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value="" class="form-control" id="edificio">
+                              </div>
+                              <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
+                              <div class="col-sm-2">
+                                <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
+                              </div>
+                            </div>
+
+
                           </div>
-                          <!-- /.info-box-content -->
+
                         </div>
-                        <!-- /.info-box -->
-                      </div>
-                      <!-- /.col -->
 
-                      <!-- fix for small devices only -->
-                      <div class="clearfix visible-sm-block"></div>
 
-                      <div class="col-md-3 col-sm-6 col-xs-12">
-                        <div class="info-box">
-                          <span class="info-box-icon bg-green">
-                            <i class="fa fa-group"></i>
-                          </span>
-
-                          <div class="info-box-content">
-                            <span class="info-box-text">ACTIVIDAD
-                              <br>ACTUAL</span>
-                            <span class="info-box-number"></span>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
+                              <div class="col-sm-10">
+                                <input name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control" id="area" placeholder="Area total">
+                              </div>
+                            </div>
                           </div>
-                          <!-- /.info-box-content -->
                         </div>
-                        <!-- /.info-box -->
-                      </div>
-                      <!-- /.col -->
-                      <div class="col-md-3 col-sm-6 col-xs-12">
-                        <div class="info-box">
-                          <span class="info-box-icon bg-yellow">
-                            <i class="glyphicon glyphicon-ok"></i>
-                          </span>
-
-                          <div class="info-box-content">
-                            <span class="info-box-text">OCUPACION
-                              <br>ACTUAL</span>
-                            <span class="info-box-number"></span>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
+                              <div class="col-sm-10">
+                                <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area ocupada">
+                              </div>
+                            </div>
                           </div>
-                          <!-- /.info-box-content -->
                         </div>
-                        <!-- /.info-box -->
-                      </div>
-                      <!-- /.col -->
-                    </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
+                              <div class="col-sm-10">
+                                <input name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area libre">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
+                              <div class="col-sm-10">
+                                <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control" id="arealibre" placeholder="Capacidad">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
+                              <div class="col-sm-10">
+                                <input name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area min">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
+                              <div class="col-sm-7">
+                                <input name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control" id="indice" placeholder="Indice sat">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <div class="form-group row">
+                              <label for="Activo" class="col-form-label">Activo:</label>
+                              <div class="col-sm-9">
+                                <label class="switch">
+                                  <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox" checked>
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <button (click)="actualizarEspacio()" style="float: right;" class="btn btn-success" type="button"> <i class="fa fa-refresh" > </i>  Actualizar</button>
+                          </div>
+                        </div>
+
+                      </fieldset>
+                    </form>
                   </div>
 
                 </div>
               </div>
 
-              <div class="col-md-10">
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-address-card-o"></i>
 
-                    <h3 class="box-title">Plano Espacio</h3>
-                  </div>
-
-                  <div class="box-body">
-                    <h3 *ngIf=" this.mensaje"> El laboratorio seleccionado no cuenta con ningun plano </h3>
-
-                    <div *ngIf="!this.plano"  class="spinner"> </div>
-                    <img *ngIf="this.plano"  style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
-
-                  </div>
-
-                </div>
-              </div>
               <!-- calendario de actividades -->
               <!--    <div class="col-md-6">
                 <div class="box box-danger">
@@ -383,135 +429,11 @@
           </div>
           <!-- /.box-header -->
           <div class="box-body">
-            <form id="form-work" class="" name="form-work" action="#">
-              <fieldset>
-                <div class="form-group">
+            <h3 *ngIf=" this.mensaje"> El laboratorio seleccionado no cuenta con ningun plano </h3>
 
+            <div *ngIf="!this.plano"  class="spinner"> </div>
+            <img *ngIf="this.plano"  style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
 
-                  <div class="form-group">
-                    <div class="col-md-12">
-                      <div class="form-group row">
-                        <label for="facultad" class="col-sm-2 col-form-label">Sede:</label>
-                        <div class="col-sm-10">
-                          <select class="form-control" [(ngModel)]="this.sede" name="estado">
-                            <option value="san fernando">San Fernando</option>
-                            <option value="ciudad universitaria melendez">Ciudad Universitaria Melendez</option>
-
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
-                      <div class="col-sm-2">
-                        <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value="" class="form-control" id="edificio">
-                      </div>
-                      <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
-                      <div class="col-sm-2">
-                        <input name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value="" class="form-control" id="edificio">
-                      </div>
-                      <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
-                      <div class="col-sm-2">
-                        <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
-                      </div>
-                    </div>
-
-
-                  </div>
-
-                </div>
-
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
-                      <div class="col-sm-10">
-                        <input name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control" id="area" placeholder="Area total">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
-                      <div class="col-sm-10">
-                        <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area ocupada">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
-                      <div class="col-sm-10">
-                        <input name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area libre">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
-                      <div class="col-sm-10">
-                        <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control" id="arealibre" placeholder="Capacidad">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
-                      <div class="col-sm-10">
-                        <input name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area min">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
-                      <div class="col-sm-7">
-                        <input name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control" id="indice" placeholder="Indice sat">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <div class="form-group row">
-                      <label for="Activo" class="col-form-label">Activo:</label>
-                      <div class="col-sm-9">
-                        <label class="switch">
-                          <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox" checked>
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <button (click)="actualizarEspacio()" style="float: right;" class="btn btn-danger" type="button">Guardar</button>
-                  </div>
-                </div>
-
-              </fieldset>
-            </form>
           </div>
 
         </div>
