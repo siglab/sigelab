@@ -6,9 +6,5 @@ export class EspaciosService {
 
   constructor(private afs: AngularFirestore ) { }
 
-  getIdsPractices( idSpace) {
-
-
-  }
 
 }

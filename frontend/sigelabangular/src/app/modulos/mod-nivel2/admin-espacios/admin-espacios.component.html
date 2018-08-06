@@ -82,7 +82,7 @@
 
 
                         <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardata(row)" 
+                        <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardata(row)"
                          ></mat-row>
                       </mat-table>
 
@@ -94,16 +94,16 @@
                 </div>
               </div>
 
-              <div class="col-md-12">
+              <div class="col-md-12" *ngIf="this.formtrue" >
                 <div class="box box-danger">
                   <div class="box-header">
                     <i class="fa fa-address-card-o"></i>
 
                     <h3 class="box-title">Ficha tecnica de espacio seleccionado</h3>
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <button (click)="initCalendar()" data-toggle="modal" style=" margin-left: auto;"   data-target="#modal2"  class="btn btn-success" type="button"> <i class="fa fa-calendar" ></i> Programacion Espacio</button>
-                        <button   data-toggle="modal" data-target="#myModal" style=" margin-left: auto;" class="btn btn-danger" type="button"> <i class="fa fa-picture-o" ></i> Ver plano </button>
+                    <div class="form-group" style= "float: right"  >
+                      <div class="col-md-12"  >
+                        <button   (click)="initCalendar()" data-toggle="modal"    data-target="#modal2"   type="button"> <i class="fa fa-calendar" ></i> Programacion Espacio</button>
+                        <button   data-toggle="modal" data-target="#myModal"   type="button"> <i class="fa fa-picture-o" ></i> Ver plano </button>
 
                       </div>
                     </div>
@@ -431,8 +431,8 @@
           <div class="box-body">
             <h3 *ngIf=" this.mensaje"> El laboratorio seleccionado no cuenta con ningun plano </h3>
 
-            <div *ngIf="!this.plano"  class="spinner"> </div>
-            <img *ngIf="this.plano"  style=" float: center; width: 600px;height: 400px;" [src]="this.plano | async" alt="">
+            <div *ngIf="!this.plano"  style="width: 100%; height:100%;"   class="spinner"> </div>
+            <img *ngIf="this.plano"   style="width: 100%; height:100%;"   [src]="this.plano" alt="">
 
           </div>
 
@@ -482,10 +482,11 @@
                   </div>
 
                   <div class="col-md-12">
-                    <div class="form-group row">
+                    <div class="form-group has-info row" >
                       <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                       <div class="col-sm-2">
-                        <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value="" class="form-control" id="edificio">
+                        <input name="edificio" #ed [(ngModel)]="this.space.spaceData.building " type="text" value="" class="form-control" id="edificio">
+
                       </div>
                       <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                       <div class="col-sm-2">
@@ -493,8 +494,10 @@
                       </div>
                       <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                       <div class="col-sm-2">
-                        <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
+                        <input name="espacio" #sp (focusout) = "spaceCheck( ed.value, sp.value )" [disabled] = '!this.space.spaceData.building '  [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
                       </div>
+
+                      <span class="help-block text-center"> {{this.status}}  </span>
                     </div>
 
 
@@ -582,7 +585,8 @@
 
                 <div class="form-group">
                   <div class="col-md-12">
-                    <button (click)="setSpace()" style="float: right;" class="btn2 btn-danger btn-lg  danger" type="button">Guardar</button>
+                    <button  *ngIf="this.dispo"  (click)="setSpace()" style="float: right;" class="btn btn-default  " type="button"> <i class="fa fa-check" ></i> Guardar</button>
+                    <button  *ngIf="!this.dispo"  (click)="updateFaciliti( this.idnewSp )" style="float: right;" class="btn btn-default  " type="button"> <i class="fa fa-plus" ></i> Vincular</button>
                   </div>
                 </div>
 
@@ -615,7 +619,7 @@
           <!-- /.box-header -->
           <div class="box-body">
 
-            <div class="cal" id="cal">
+             <div class="cal" id="cal">
             </div>
           </div>
 
