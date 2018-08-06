@@ -73,6 +73,22 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   };
 
 
+  indserv = {
+    prestados:0,
+    monto:0
+  };
+
+
+  indprac = {
+    pracactivas:0,
+    estudiantes:0
+  };
+
+  indproy = {
+    proyactivos:0,
+    estudiantes:0
+  };
+
  // VARIABLES DE LOS FILTROS
 
   objsel = {
@@ -108,7 +124,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.estructurarFacultades();
 
     //this.inicializarDonaLabs();
-    this.inicializarDonaServs();
+    //this.inicializarDonaServs();
     this.inicializarGraficoLineaServicios();
     this.inicializarGraficoBarra();
   }
@@ -195,24 +211,74 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
   aplicarFiltro(item, filtro){
+    const arr = ['facultad','departamento', 'escuela'];
+   
     console.log(item, filtro);
     this.objsel[filtro] = item;
     console.log(this.objsel);
     if(filtro == "sede"){
+      for (let i = 0; i < arr.length; i++) {      
+        $('#'+arr[i]).prop('checked', false);
+        this.checkBox[arr[i]] = false;
+      }
       this.estructurarFacultadesWitSede(this.objsel.sede);
     } else if(filtro == "facultad"){
+      for (let i = 1; i < arr.length; i++) {      
+        $('#'+arr[i]).prop('checked', false);
+        $('#'+arr[i]).prop('disabled', false);
+        this.checkBox[arr[i]] = false;
+      }
       this.estructurarDeparamentos(this.objsel.facultad);
     }
 
-    const query = this.estructurarQuery()
-    this.buscaLaboratorios(query).subscribe(datos => {
-
-      console.log(datos);
-      this.inicializarDonaLabs(datos);
-      
-    });
+    this.ejecutarGraficos();
 
    
+  }
+
+  ejecutarGraficos(){ 
+    const servicios = [];
+    const practicas = [];
+    const proyectos = [];
+    const query = this.estructurarQuery();
+    this.buscaLaboratorios(query).subscribe(datos => {
+      let contservact = 0;
+      let contservinact = 0;
+      console.log(datos);
+      this.inicializarDonaLabs(datos);
+
+      // INICIALIZO GRAFICO DE SERVICIOS
+      for (let id = 0; id < datos.length; id++) {
+        const element = datos[id];
+        for (const key in element.relatedServices) {
+          if (element.relatedServices.hasOwnProperty(key)) {
+            if(element.relatedServices[key]){
+              contservact++;
+            }else{
+              contservinact++;
+            }
+            servicios.push({id:key});      
+          }
+        }
+        for (const key in element.relatedPractices) {
+          if (element.relatedPractices.hasOwnProperty(key)) {
+            if(element.relatedPractices[key])
+            practicas.push({id:key});         
+          }
+        }
+        for (const key in element.relatedProjects) {
+          if (element.relatedProjects.hasOwnProperty(key)) {
+            if(element.relatedProjects[key])
+            proyectos.push({id:key});         
+          }
+        }
+      }
+      this.inicializarDonaServs(contservact, contservinact);
+     
+      this.inicializarIndicadoresServicios(servicios);
+      this.inicializarIndicadoresPracticas(practicas);
+      this.inicializarIndicadoresProyectos(proyectos);
+    });
   }
 
   controlChecks(item){
@@ -222,7 +288,10 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       if(this.checkBox[item]){
         for (let i = 0; i < arr.length; i++) {      
           $('#'+arr[i]).prop('disabled', true);
+          this.checkBox[arr[i]] = false;
+          this.objsel[arr[i]] = 'inicial';
         }
+        this.ejecutarGraficos();
         $('select').prop('disabled', true);
       } else {
         for (let i = 0; i < arr.length; i++) {      
@@ -294,10 +363,26 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       }
       query += final;     
     }
-
+    console.log(query);
     return query;
 
   }
+
+
+  removeDuplicates(originalArray, prop) {
+    var newArray = [];
+    var lookupObject  = {};
+
+    for(var i in originalArray) {
+       lookupObject[originalArray[i][prop]] = originalArray[i];
+    }
+
+    for(i in lookupObject) {
+        newArray.push(lookupObject[i]);
+    }
+     return newArray;
+  }
+  
 
 
   // METODOS PARA LA INICIALIZACION DE LOS GRAFICOS
@@ -326,17 +411,117 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
-  inicializarDonaServs() {
+  inicializarDonaServs(activos, inactivos) {
     this.singleServs = [
       {
         'name': 'Servicios Activos',
-        'value': 350
+        'value': activos
       },
       {
         'name': 'Servicios Inactivos',
-        'value': 100
+        'value': inactivos
       }
     ];
+
+  }
+
+  inicializarIndicadoresServicios(array){
+    const ano = new Date().toISOString().split('-')[0];
+    let sus = false;
+    let cont = 0;
+    this.indserv.prestados = 0;
+    this.indserv.monto = 0;
+    const noduplicados = this.removeDuplicates(array,'id');
+
+    for (let i = 0; i < noduplicados.length; i++) {
+      const element = noduplicados[i];
+      this.buscaServicioPrestado(element.id).subscribe(datos=>{
+        console.log(datos);
+        if(!sus){
+          if(datos.length != 0){         
+          
+            for (let j = 0; j < datos.length; j++) {
+              if(datos[j]['createdAt'].split('-')[0] == ano){
+                this.indserv.prestados++;
+                this.indserv.monto += parseInt(datos[j]['price']);
+              }
+              
+            }
+          }
+          cont++;
+
+          if(cont == noduplicados.length-1){
+            sus = true;
+          }
+        }
+     
+        
+      });
+    }
+
+  }
+
+  inicializarIndicadoresPracticas(array){
+    this.indprac.estudiantes = 0;
+    this.indprac.pracactivas = 0;
+    const ano = new Date().toISOString().split('-');
+
+    let semester = ano[0];
+    if(parseInt(ano[1]) <= 6){
+      semester += '-A';
+    }else{
+      semester += '-B';
+    }
+    let sus = false;
+    let cont = 0;
+   
+    const noduplicados = this.removeDuplicates(array,'id');
+    console.log(noduplicados, semester);
+    for (let i = 0; i < noduplicados.length; i++) {
+      const element = noduplicados[i];
+      this.buscaPracticas(element.id, semester).subscribe(programacion=>{
+        for (let j = 0; j < programacion.length; j++) {
+          const element = programacion[j];
+          this.indprac.pracactivas ++;
+          this.indprac.estudiantes += element['noStudents']; 
+        }
+      });
+    }
+
+  }
+
+  inicializarIndicadoresProyectos(array){
+    this.indproy.estudiantes = 0;
+    this.indproy.proyactivos = 0;
+    const ano = new Date().toISOString().split('-');
+
+    let semester = ano[0];
+    if(parseInt(ano[1]) <= 6){
+      semester += '-A';
+    }else{
+      semester += '-B';
+    }
+    let sus = false;
+    let cont = 0;
+
+    let personal = 0;
+   
+    const noduplicados = this.removeDuplicates(array,'id');
+    console.log(noduplicados, semester);
+    for (let i = 0; i < noduplicados.length; i++) {
+      const element = noduplicados[i];
+      this.buscaProyectos(element.id).subscribe(proy => {
+        this.indproy.proyactivos ++;
+    
+        for (const key in proy['relatedPers']) {
+          if (proy['relatedPers'].hasOwnProperty(key)) {
+            personal++;
+          }
+        }
+
+        this.indproy.proyactivos = personal;
+      });
+    }
 
   }
 
@@ -646,8 +831,22 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
 
-
   // servicios
+
+  buscaPracticas(keyprac, semester){
+    return  this.afs.doc('practice/'+keyprac).collection('programmingData', 
+            ref=>ref.where('semester','==',semester)).valueChanges();
+  }
+
+  buscaProyectos(keyproy){
+    return  this.afs.doc('project/'+keyproy).valueChanges();
+  }
+
+  buscaServicioPrestado(keyserv){
+    return  this.afs.collection('cfSrvReserv', ref=>ref.where('cfSrv','==',keyserv)
+            .where('status','==','terminada')).valueChanges();
+  }
+
   buscaSede(){
     return  this.afs.collection('cfPAddr').snapshotChanges();
   }
