@@ -82,7 +82,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           console.log(this.espaestructurado);
           this.idlab = data.uid;
           this.dataSourceSpace = new MatTableDataSource(this.espaestructurado.espacios);
-          this.lisSede();
+          // this.listSubHq();
 
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -384,13 +384,16 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   }
 
-  lisSede() {
-    this.afs.collection('cfPAddr').valueChanges()
-      .subscribe(res => {
-        console.log(res);
-      });
+  listSubHq(sede) {
+
   }
 
+  // lista
+  listHq() {
+
+
+
+  }
 
   applyFilterPers(filterValue: string) {
 
