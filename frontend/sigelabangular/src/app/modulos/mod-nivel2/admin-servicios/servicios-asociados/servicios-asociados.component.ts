@@ -116,39 +116,39 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         swal.showLoading();
       }
     });
-    this.obs.currentObjectServAsoc.subscribe(data => {
-      if(data.length != 0){
-  
-        this.lab_id = data.uid;
-        this.getCollectionServ(data.uid).subscribe(servicios =>{
-
-          this.servasocestructurados = this.estructurarDataServ(servicios);
-          this.getLaboratorio(this.lab_id).subscribe(labo => {
-            this.equipos = this.estructurarEquipos(labo.payload.data().relatedEquipments);
-            console.log(this.equipos);
-            if(this.servasocestructurados ){
-              this.dataSource.data = this.servasocestructurados;
-              this.dataSourceEquip = new MatTableDataSource(this.equipos);
-  
-              setTimeout(() => {
-                
-                this.dataSource.sort = this.sort;
-                this.dataSource.paginator = this.paginator;
-                // cierra loading luego de cargados los datos
-  
-                this.dataSourceEquip.sort = this.sortEquip;
-                this.dataSourceEquip.paginator = this.paginatorEquip;
-  
-                swal.close();
-              }, 1000);
+    this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
+        if(data.length != 0){
     
-            }
-          });
-  
-        });
-      }
+          this.lab_id = data.uid;
+          this.getCollectionServ(data.uid).subscribe(servicios =>{
 
-    });
+            this.servasocestructurados = this.estructurarDataServ(servicios);
+            this.getLaboratorio(this.lab_id).subscribe(labo => {
+              this.equipos = this.estructurarEquipos(labo.payload.data().relatedEquipments);
+              console.log(this.equipos);
+              if(this.servasocestructurados ){
+                this.dataSource.data = this.servasocestructurados;
+                this.dataSourceEquip = new MatTableDataSource(this.equipos);
+    
+                setTimeout(() => {
+                  
+                  this.dataSource.sort = this.sort;
+                  this.dataSource.paginator = this.paginator;
+                  // cierra loading luego de cargados los datos
+    
+                  this.dataSourceEquip.sort = this.sortEquip;
+                  this.dataSourceEquip.paginator = this.paginatorEquip;
+    
+                  swal.close();
+                }, 1000);
+      
+              }
+            });
+    
+          });
+        }
+
+      });
   }
 
   ngOnDestroy(){

@@ -54,17 +54,7 @@ label {
   margin-top: 15px;
 }
 
-input {
-  border: 2px solid #CCC !important;
-  height: 35px;
-  border-radius: 3px;
-  max-width: 100%;
-}
 
-.input-group-addon {
-  border: 2px solid #CCC !important;
-  border-right: 0px !important;
-}
 
 .btn2 {
   border: 0;
@@ -76,4 +66,20 @@ input {
   margin-bottom: 0;
   text-align: left;
 }
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
+}
+
+
 
