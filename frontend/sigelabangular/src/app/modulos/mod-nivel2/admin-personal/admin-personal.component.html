@@ -273,7 +273,7 @@
                     </label>
 
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.email"   id="escuelaedit" name="email" class="form-control" type="email">
+                      <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
                     </div>
                   </div>
                 </div>
@@ -284,7 +284,7 @@
                     <label class="control-label col-sm-2" for="estadoserv">
                       <strong>Rol:</strong>
                     </label>
-                    <div  class="col-md-10">
+                    <div class="col-md-10">
 
                       <select class="form-control" [(ngModel)]="rolc" name="estado">
                         <option value="editar"> editar </option>
@@ -335,7 +335,7 @@
 
 <!-- modal agregar nuevo personal al laboratorio -->
 
-<div     class="modal fade" id="modal1" role="dialog">
+<div class="modal fade" id="modal1" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
@@ -351,6 +351,20 @@
           <div class="box-body">
             <form id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
+
+                <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Email:</strong>
+                    </label>
+                    <input (focusout)="emailcheck($event)" [(ngModel)]="this.email" id="email" name="email" class="form-control" type="email">
+                    <span class="help-block"> {{status}}</span>
+                  </div>
+                </div>
+
+
+                  <!-- ocultar form  para validar si ya existe -->
+              <div *ngIf="dispo" >
 
                 <div class="form-group">
                   <div class="col-md-12">
@@ -378,20 +392,6 @@
                     <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
                   </div>
                 </div>
-
-
-
-                <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }"   >
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong>Email:</strong>
-                    </label>
-                    <input (focusout)="emailcheck($event)"    [(ngModel)]="this.email"  id="email" name="email" class="form-control" type="email">
-                    <span class="help-block"> {{status}}</span>
-                  </div>
-                </div>
-
-
 
                 <div class="form-group">
                   <div class="col-md-12">
@@ -435,7 +435,7 @@
 
                 </div>
 
-
+            </div>
 
 
 
@@ -449,8 +449,8 @@
 
           </div>
           <div class="modal-footer">
-            <button  *ngIf="!addP"  type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
-            <button  *ngIf="addP"   type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular</button>
+            <button *ngIf="!addP" type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
+            <button *ngIf="addP" type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular</button>
           </div>
         </div>
       </div>
