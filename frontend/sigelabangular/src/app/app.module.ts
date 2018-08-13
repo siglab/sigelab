@@ -78,6 +78,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { ToastrModule } from 'ngx-toastr';
 import { AdminLaboratorios3Component } from './modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
 import { ServicesNivel3Service } from './modulos/mod-nivel3/services/services-nivel3.service';
+// tslint:disable-next-line:max-line-length
 import { IndicadoresGraficasReportes3Component } from './modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
 import { BardAdminQrComponent } from './shared/components/dashboard/left-sidebar/bard-admin-qr/bard-admin-qr.component';
 import { AdminQrComponent } from './modulos/mod-nivel2/admin-qr/admin-qr.component';

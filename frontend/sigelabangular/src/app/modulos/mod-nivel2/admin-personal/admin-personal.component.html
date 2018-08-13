@@ -230,7 +230,7 @@
                   \
                   <div class="col-md-12">
                     <label class="col-md-2 control-label" for="nombreprub">
-                      <strong>Nombre :</strong>
+                      <strong>Nombre:</strong>
                     </label>
                     <div class="col-md-10">
                       <input [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
@@ -244,7 +244,7 @@
                 <div class="form-group row">
                   <div class="col-md-12">
                     <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>Apellidos :</strong>
+                      <strong>Apellidos:</strong>
                     </label>
                     <div class="col-md-10">
                       <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
@@ -363,79 +363,79 @@
                 </div>
 
 
-                  <!-- ocultar form  para validar si ya existe -->
-              <div *ngIf="dispo" >
+                <!-- ocultar form  para validar si ya existe -->
+                <div *ngIf="dispo">
 
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="nombreprub">
-                      <strong>Fecha nacimiento :</strong>
-                    </label>
-                    <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="nombreprub">
-                      <strong>Nombre :</strong>
-                    </label>
-                    <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="nombreprub">
-                      <strong>Apellidos :</strong>
-                    </label>
-                    <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong> Nivel:</strong>
-                    </label>
-                    <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
-                      <option value="auxiliar">Auxiliar </option>
-                      <option value="analista">Analista</option>
-                      <option value="analista">Administrativo</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong> Tipo personal:</strong>
-                    </label>
-                    <select class="form-control" [(ngModel)]="this.person.type" name="estado">
-                      <option value="funcionario">Funcionario </option>
-                      <option value="estudiante">Estudiante</option>
-                      <option value="contratista">Contratista</option>
-                      <option value="otro">Otro</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong>Genero:</strong>
-                    </label>
-                    <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
-                      <option value="Hombre">Hombre </option>
-                      <option value="Mujer">Mujer</option>
-
-                    </select>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Fecha nacimiento:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
+                    </div>
                   </div>
 
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Nombre:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Apellidos:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong> Nivel:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
+                        <option value="auxiliar">Auxiliar </option>
+                        <option value="analista">Analista</option>
+                        <option value="analista">Administrativo</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong> Tipo personal:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.type" name="estado">
+                        <option value="funcionario">Funcionario </option>
+                        <option value="estudiante">Estudiante</option>
+                        <option value="contratista">Contratista</option>
+                        <option value="otro">Otro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong>Genero:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
+                        <option value="Hombre">Hombre </option>
+                        <option value="Mujer">Mujer</option>
+
+                      </select>
+                    </div>
+
+
+                  </div>
 
                 </div>
-
-            </div>
 
 
 

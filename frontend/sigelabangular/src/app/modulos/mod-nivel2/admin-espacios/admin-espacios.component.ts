@@ -28,8 +28,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   status;
   mensaje = false;
   idlab;
+  idsh;
   itemsel: Observable<Array<any>>;
-  sede = 'san fernando';
+  sedes = [];
+  subsedes = [];
   idsp;
   tablesel = '';
   horarios = [];
@@ -78,6 +80,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       if (data.length !== 0) {
 
         this.estructuraEspacio(data.uid).then(() => {
+          this.listHq();
           this.itemsel = Observable.of(this.espaestructurado.espacios);
           console.log(this.espaestructurado);
           this.idlab = data.uid;
@@ -336,24 +339,34 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   }
 
+    // necesario el id de la subsede para almacenarlo en los metodos de los espacios
   setSpace() {
 
-    const nuevoespacio = this.space;
-    this.buscarSede().then((ok: string) => {
-      nuevoespacio.subHq = ok;
-      this.afs.collection('space').add(nuevoespacio).then((data) => {
-        // agrega el nuevo espacio al laboratorio actual
-        this.updateFaciliti(data.id);
+    if ( !this.space.spaceData.building && !this.space.spaceData.building   ) {
+
+      swal({
+        type: 'info',
+        title: 'Hay campos vacios importantes.',
+        showConfirmButton: true
       });
-      console.log(nuevoespacio);
+
+    }
+    const nuevoespacio = this.space;
+
+    nuevoespacio.subHq =  this.idsh;
+    this.afs.collection('space').add(nuevoespacio).then((data) => {
+      // agrega el nuevo espacio al laboratorio actual
+      this.updateFaciliti(data.id);
     });
+    console.log(nuevoespacio);
+
+
+
   }
 
   actualizarEspacio() {
     const nuevoespacio = this.space;
 
-    this.buscarSede().then((ok: string) => {
-      nuevoespacio.subHq = ok;
       this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
         swal({
           type: 'success',
@@ -363,13 +376,13 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
       });
       console.log(nuevoespacio);
-    });
+
 
 
   }
 
   /* metodo para buscar una subsede de cali  */
-  buscarSede() {
+  /* buscarSede() {
 
     return new Promise((resolve, reject) => {
       this.afs.collection<any>('cfPAddr',
@@ -382,16 +395,30 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         });
     });
 
-  }
+  } */
 
   listSubHq(sede) {
 
+     console.log('si llego la sede', sede);
+    this.spServ.listSubHq(sede).subscribe( res => {
+
+     this.subsedes = res;
+
+      console.log( 'subsedes',  res);
+
+    });
+
   }
 
-  // lista
+  // lista todas las sedes de la plataforma
   listHq() {
 
+    this.spServ.listHq().subscribe(  (res) =>  {
 
+       this.sedes = res;
+       console.log( 'sedes', res);
+
+    });
 
   }
 
@@ -521,6 +548,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     }
   }
 
+  getIdSubHq( id ) {
+    console.log( 'llego este id', id);
+    this.idsh = id;
+  }
 
   /* setea campos del objeto */
   clearObj() {
