@@ -1,7 +1,7 @@
 
 import { element } from 'protractor';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import * as L from 'leaflet';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
@@ -11,6 +11,7 @@ import { QuerysPrincipalService } from '../services/querys-principal.service';
 
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 declare var $: any;
 @Component({
@@ -32,6 +33,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   itemsel: any;
   servsel: any;
   prubsel: any;
+  equipsel:any;
 
   moduloinfo = false;
   layer = null;
@@ -42,6 +44,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   variation:any;
   variacionSel = "";
+
+  preciototal = 0;
 
 
 
@@ -70,10 +74,24 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   listaVariaciones = [];
 
+  selecunivallelab = '';
+  univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
+  habilitarci = false;
+  valorci = '';
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
+  usuariounivalle = false;
+
+
+
+
+  constructor(private observer: ObserverPrincipalService, 
+              private query: QuerysPrincipalService, 
+              private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
+      if(this.user.email.split('@')[1] == 'gmail.com'){
+        this.usuariounivalle = true;
+      }
     }
   }
 
@@ -95,6 +113,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
 
   }
+
+
 
   ngAfterViewInit(): void {
 
@@ -142,7 +162,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         data: this.variation,
         condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
       });
-
+      this.preciototal += parseInt(this.variation.data.cfPrice);
       swal({
         type: 'success',
         title: 'Variacion agregada',
@@ -161,10 +181,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   quitarVariacion(id){
     const encontrado = this.listaVariaciones.find((element, index) => {
 
-      console.log(element);
       if(element.data.id == id){
 
-        console.log(index);
+        this.preciototal -= parseInt(element.data.data.cfPrice);
         this.listaVariaciones.splice(index, 1);
         return true;
       }
@@ -197,6 +216,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         cfEndDate: '',
         cfClass: '',
         cfClassScheme: '',
+        cfPrice: this.servsel.precio,
         status: 'pendiente',
         createdAt: fecha.toISOString(),
         updatedAt:  fecha.toISOString(),
@@ -222,6 +242,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
               }
+
+              cfSrvReserv.cfPrice = ''+this.preciototal;
 
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
@@ -348,6 +370,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.prubsel = item;
   }
 
+  selectorunivalle(key){
+    this.habilitarci = false; 
+
+    if(key == 3){
+      this.habilitarci = true;
+    }
+   
+  }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarVariacion(item){

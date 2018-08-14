@@ -37,7 +37,75 @@
                 </div>
 
                 <div class="box-body">
-                    <form id="form-work" class="" name="form-work" action="#">
+                    <div class="col-md-4">
+                        <p>
+                        <mat-checkbox [formControl]="formCheckBox.universidad" (change)="controlChecks('universidad')">Universidad</mat-checkbox>
+                        </p>                               
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                        <mat-checkbox [formControl]="formCheckBox.sede" (change)="controlChecks('sede')">Sede</mat-checkbox>
+                        </p>
+                        <p>
+                        <mat-form-field>
+                        <mat-select placeholder="Todas las Sedes" [formControl]="formSelect.sede" multiple>
+                            <mat-option *ngFor="let sede of listSelect.sede" [value]="sede.id" >{{sede.nombre}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        </p>                                
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                        <mat-checkbox [formControl]="formCheckBox.subsede" (change)="controlChecks('subsede')" >SubSede</mat-checkbox>
+                        </p>
+                        <p>
+                        <mat-form-field>
+                        <mat-select placeholder="Todas las Subsedes" [formControl]="formSelect.subsede" multiple>
+                            <mat-option *ngFor="let sede of listSelect.subsede" [value]="sede.id">{{sede.nombre}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        </p>                                
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                        <mat-checkbox [formControl]="formCheckBox.facultad" (change)="controlChecks('facultad')" >Facultad</mat-checkbox>
+                        </p>
+                        <p>
+                        <mat-form-field>
+                        <mat-select placeholder="Todas las Facultades" [formControl]="formSelect.facultad" multiple>
+                            <mat-option *ngFor="let fac of listSelect.facultad" [value]="fac.id">{{fac.nombre}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        </p>                                                    
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                        <mat-checkbox [formControl]="formCheckBox.departamento" (change)="controlChecks('departamento')">Departamento</mat-checkbox>
+                        </p>
+                        <p>
+                        <mat-form-field>
+                        <mat-select placeholder="Todos los Departamentos" [formControl]="formSelect.departamento"  multiple>
+                            <mat-option *ngFor="let dep of listSelect.departamento" [value]="dep">{{dep.nombre}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        </p>                                                    
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                        <mat-checkbox [formControl]="formCheckBox.escuela" (change)="controlChecks('escuela')">Escuela</mat-checkbox>
+                        </p>
+                        <p>
+                        <mat-form-field>
+                        <mat-select placeholder="Todas las Escuelas" [formControl]="formSelect.escuela" multiple>
+                            <mat-option *ngFor="let esc of listSelect.escuela" [value]="esc">{{esc.nombre}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                        </p>                                                    
+                    </div>
+                    
+                       
+                        
+                    <!-- <form id="form-work" class="" name="form-work" action="#">
 
                             <fieldset>
                                 <div class="row">
@@ -112,7 +180,7 @@
                                 </div>
 
                             </fieldset>
-                    </form>
+                    </form> -->
 
                 </div>
 

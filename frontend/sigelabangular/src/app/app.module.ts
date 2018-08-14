@@ -61,7 +61,7 @@ import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-niv
 // tslint:disable-next-line:max-line-length
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
 
-import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule } from '@angular/material';
 
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
@@ -144,6 +144,8 @@ import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service'
     MatSortModule,
     MatCheckboxModule,
     MatStepperModule,
+    MatSelectModule,
+    MatDialogModule,
     ToastrModule.forRoot()
 
   ],
