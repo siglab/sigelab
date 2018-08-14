@@ -381,21 +381,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   }
 
-  /* metodo para buscar una subsede de cali  */
-  /* buscarSede() {
-
-    return new Promise((resolve, reject) => {
-      this.afs.collection<any>('cfPAddr',
-        ref => ref.where('cfAddrline1', '==', this.sede))
-        .snapshotChanges().subscribe(data => {
-          const idnuevo = data[0].payload.doc.id;
-
-          console.log(idnuevo);
-          resolve(idnuevo);
-        });
-    });
-
-  } */
 
   listSubHq(sede) {
 
