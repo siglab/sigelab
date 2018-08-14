@@ -5,7 +5,7 @@ import swal from 'sweetalert2';
 
 @Injectable()
 export class QrService {
-  private url = 'http://192.168.0.15:1337/inventario/buscar';
+  private url = 'http://localhost:1337/inventario/buscar';
   arraygeneral = [];
   constructor(private afs: AngularFirestore, private http: Http) {}
   // lista qrs sin asociar o inactivos

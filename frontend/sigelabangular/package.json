@@ -49,6 +49,8 @@
     "qrcode": "^1.2.0",
     "qtip2": "^3.0.3",
     "rxjs": "^5.5.6",
+    "selectize": "^0.12.6",
+    "standalone": "0.0.1",
     "sweetalert2": "^7.12.17",
     "zone.js": "^0.8.19"
   },
@@ -59,6 +61,7 @@
     "@types/datatables.net": "^1.10.8",
     "@types/datatables.net-buttons": "^1.4.0",
     "@types/datatables.net-select": "^1.2.3",
+    "@types/fullcalendar": "^3.8.0",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
     "@types/jquery": "^3.3.1",

@@ -230,7 +230,7 @@
                   \
                   <div class="col-md-12">
                     <label class="col-md-2 control-label" for="nombreprub">
-                      <strong>Nombre :</strong>
+                      <strong>Nombre:</strong>
                     </label>
                     <div class="col-md-10">
                       <input [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
@@ -244,7 +244,7 @@
                 <div class="form-group row">
                   <div class="col-md-12">
                     <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>Apellidos :</strong>
+                      <strong>Apellidos:</strong>
                     </label>
                     <div class="col-md-10">
                       <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
@@ -273,7 +273,7 @@
                     </label>
 
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.email"   id="escuelaedit" name="email" class="form-control" type="email">
+                      <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
                     </div>
                   </div>
                 </div>
@@ -284,7 +284,7 @@
                     <label class="control-label col-sm-2" for="estadoserv">
                       <strong>Rol:</strong>
                     </label>
-                    <div  class="col-md-10">
+                    <div class="col-md-10">
 
                       <select class="form-control" [(ngModel)]="rolc" name="estado">
                         <option value="editar"> editar </option>
@@ -335,7 +335,7 @@
 
 <!-- modal agregar nuevo personal al laboratorio -->
 
-<div     class="modal fade" id="modal1" role="dialog">
+<div class="modal fade" id="modal1" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
@@ -352,90 +352,90 @@
             <form id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
 
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="nombreprub">
-                      <strong>Fecha nacimiento :</strong>
-                    </label>
-                    <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="nombreprub">
-                      <strong>Nombre :</strong>
-                    </label>
-                    <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="nombreprub">
-                      <strong>Apellidos :</strong>
-                    </label>
-                    <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
-                  </div>
-                </div>
-
-
-
-                <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }"   >
+                <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
                       <strong>Email:</strong>
                     </label>
-                    <input (focusout)="emailcheck($event)"    [(ngModel)]="this.email"  id="email" name="email" class="form-control" type="email">
+                    <input (focusout)="emailcheck($event)" [(ngModel)]="this.email" id="email" name="email" class="form-control" type="email">
                     <span class="help-block"> {{status}}</span>
                   </div>
                 </div>
 
 
+                <!-- ocultar form  para validar si ya existe -->
+                <div *ngIf="dispo">
 
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong> Nivel:</strong>
-                    </label>
-                    <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
-                      <option value="auxiliar">Auxiliar </option>
-                      <option value="analista">Analista</option>
-                      <option value="analista">Administrativo</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong> Tipo personal:</strong>
-                    </label>
-                    <select class="form-control" [(ngModel)]="this.person.type" name="estado">
-                      <option value="funcionario">Funcionario </option>
-                      <option value="estudiante">Estudiante</option>
-                      <option value="contratista">Contratista</option>
-                      <option value="otro">Otro</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong>Genero:</strong>
-                    </label>
-                    <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
-                      <option value="Hombre">Hombre </option>
-                      <option value="Mujer">Mujer</option>
-
-                    </select>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Fecha nacimiento:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
+                    </div>
                   </div>
 
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Nombre:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
+                        <strong>Apellidos:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong> Nivel:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
+                        <option value="auxiliar">Auxiliar </option>
+                        <option value="analista">Analista</option>
+                        <option value="analista">Administrativo</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong> Tipo personal:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.type" name="estado">
+                        <option value="funcionario">Funcionario </option>
+                        <option value="estudiante">Estudiante</option>
+                        <option value="contratista">Contratista</option>
+                        <option value="otro">Otro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="estadoserv">
+                        <strong>Genero:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
+                        <option value="Hombre">Hombre </option>
+                        <option value="Mujer">Mujer</option>
+
+                      </select>
+                    </div>
+
+
+                  </div>
 
                 </div>
-
-
 
 
 
@@ -449,8 +449,8 @@
 
           </div>
           <div class="modal-footer">
-            <button  *ngIf="!addP"  type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
-            <button  *ngIf="addP"   type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular</button>
+            <button *ngIf="!addP" type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
+            <button *ngIf="addP" type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular</button>
           </div>
         </div>
       </div>

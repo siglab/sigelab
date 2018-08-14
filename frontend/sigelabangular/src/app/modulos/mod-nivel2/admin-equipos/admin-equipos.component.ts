@@ -316,9 +316,9 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   consultarSabs(item) {
 
     this.infosabs = [];
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
 
-      const url = 'http://192.168.0.15:1337/inventario/buscar';
+      const url = 'http://localhost:1337/inventario/buscar';
       const body = {
         codInventario: item,
         codLab: '5646',
