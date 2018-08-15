@@ -146,6 +146,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             });
     
           });
+        } else {
+          swal.close();
+          
         }
 
       });

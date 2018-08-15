@@ -13,7 +13,12 @@ import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
+import 'fullcalendar';
+import 'fullcalendar-scheduler';
+import * as $AB from 'jquery';
+
 declare var $: any;
+
 @Component({
   selector: 'app-bus-lab',
   templateUrl: './bus-lab.component.html',
@@ -151,7 +156,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   agregarSolicitudServicio() {
     const encontrado = this.listaVariaciones.find((element, index) => {
-      if(element.id == this.variation.id){
+      if(element.data.id == this.variation.id){
         return true;
       }
       return false;
@@ -221,7 +226,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         createdAt: fecha.toISOString(),
         updatedAt:  fecha.toISOString(),
         conditionsLog: [],
-        comments:[]
+        comments:[],
+        typeuser:'externo',
+        datauser:{type:'', ci:''}
       };
 
         swal({
@@ -243,12 +250,19 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
               }
 
-              cfSrvReserv.cfPrice = ''+this.preciototal;
+              cfSrvReserv.cfPrice = ''+this.preciototal;            
 
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
             }
+            
+            if(this.usuariounivalle){
+              cfSrvReserv.typeuser = 'interno'
+              cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
+              cfSrvReserv.datauser.ci = this.valorci;
+            }
 
+           
             cfSrvReserv.comments.push({
               commentText: this.campoCondicion,
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
@@ -261,6 +275,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 showConfirmButton: true
               }).then(()=>{
                 $('#myModalLabs').modal('hide');
+                this.valorci = '';
               });
 
 
@@ -368,6 +383,34 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   cambiarDataPrueba(item) {
     this.prubsel = item;
+    this.initCalendarModal(item.programacion.horario);
+  }
+
+  initCalendarModal(horario) {
+
+    const containerEl: JQuery = $AB('#calendar2');
+
+    if(containerEl.children().length > 0){
+ 
+      containerEl.fullCalendar('destroy');
+    }
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 450,
+      header: {
+
+        left: '',
+        center: 'tittle',
+        right: 'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+
+    });
   }
 
   selectorunivalle(key){

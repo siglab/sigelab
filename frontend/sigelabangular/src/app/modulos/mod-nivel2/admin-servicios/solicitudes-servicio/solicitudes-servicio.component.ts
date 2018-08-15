@@ -10,6 +10,7 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
+import { AngularFireStorage } from 'angularfire2/storage';
 declare var $: any;
 
 @Component({
@@ -32,6 +33,8 @@ servicioActivoSel:any;
 histoServicioSel:any;
 
 comentario = '';
+
+nombrearchivo = '';
 
 
 
@@ -71,7 +74,12 @@ comentario = '';
 
    sus: Subscription;
 
-constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
+   file:any;
+   filePath:any;
+   ref:any;
+
+constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+            private http: Http, private storage: AngularFireStorage) {
  //this.obs.changeSolServ(this.servicioso);
 }
 
@@ -88,10 +96,10 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
         this.alertaCargando();
 
         this.getCollectionReserv(data.uid).subscribe(data1 => {
-          console.log('rrtrtrt');
+         
           this.datos = this.estructurarServiciosActivos(data1, data);
           this.histodatos = this.estructurarHistorialServicios(data1, data);
-          console.log(this.datos);
+       
           this.dataSource.data = this.datos;
           this.dataSource2.data = this.histodatos;
           
@@ -142,7 +150,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();     
 
-            if(elemento.status != 'rechazada' && elemento.status != 'cancelada'){
+            if(elemento.status == 'aceptada' || elemento.status == 'pendiente' ){
               this.getEmailUser(elemento.user).subscribe(email =>{
                 const Reserv = {
                   uidlab: elemento.cfFacil,
@@ -182,7 +190,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();     
 
-            if(elemento.status != 'pendiente' || elemento.status == 'aceptada' ){
+            if(elemento.status != 'aceptada' && elemento.status != 'pendiente'){
               this.getEmailUser(elemento.user).subscribe(email =>{
                 const Reserv = {
                   uidlab: elemento.cfFacil,
@@ -213,7 +221,19 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
     return historial;
   }
 
+  alistarVariables(event){
+    this.file = event.target.files[0];
+    this.filePath = this.nombrearchivo;
+    this.ref = this.storage.ref('archivos/'+this.filePath);
+  }
 
+  uploadFile() {
+   
+    const task = this.ref.put(this.file).then(()=>{
+      console.log('subido con exito');
+      this.cambiarEstadoSolicitud('terminada');
+    });
+  }
 
 
   estructurarVariaciones(idser,item){
@@ -359,23 +379,45 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario(){
-    this.alertaCargando();
-    const fecha = new Date();
-    let cfSrvReserv = {
-      comments:this.servicioActivoSel.comentario
-    };
+    swal({
 
-    cfSrvReserv.comments.push({
-      commentText: this.comentario, 
-      fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
-      uid: 'hgyuhvguhv'});
+      type: 'warning',
+      title: 'Esta seguro que desea enviar este comentario',
+      showCancelButton: true,
+      confirmButtonText: 'Si, Solicitar',
+      cancelButtonText: 'No, Cancelar'
 
-    this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
-      if(this.servicioActivoSel.status == 'aceptada'){
-        this.alertaExito('Comentario enviado');
-        this.enviarEmails();
+    }).then((result) => {
+
+      if (result.value) {
+        this.alertaCargando();
+        const fecha = new Date();
+        let cfSrvReserv = {
+          comments:this.servicioActivoSel.comentario
+        };
+    
+        cfSrvReserv.comments.push({
+          commentText: this.comentario, 
+          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          uid: 'hgyuhvguhv'});
+    
+        this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
+          if(this.servicioActivoSel.status == 'aceptada'){
+            this.alertaExito('Comentario enviado');
+            this.enviarEmails();
+          }
+        });
+       
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
       }
+
     });
+  
      
   }
 
@@ -411,33 +453,22 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore, priv
   }
 
 
-  aceptarSolicitud(){
+  cambiarEstadoSolicitud(estado){
     this.alertaCargando();
-
-
     const reserva = {
-      status: 'aceptada',
+      status: estado,
       acceptedBy: this.user.email
+    };
+    if(estado == 'terminada'){
+     reserva['path'] = 'archivos/'+this.filePath;
     }
+
+
+    this.servicioActivoSel.status = estado;
 
     this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
       this.cerrarAlerta();
-          this.alertaExito('Reserva aceptada');
-    });
-  }
-
-  rechazarSolicitud(){
-    this.alertaCargando();
-
-    const reserva = {
-      status: 'rechazada',
-      acceptedBy: this.user.email
-    }
-
-    this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
-      
-          this.cerrarAlerta();
-          this.alertaExito('Reserva rechazada');
+          this.alertaExito('Reserva '+estado);
     });
   }
 

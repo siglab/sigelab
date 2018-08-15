@@ -152,12 +152,13 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   agregarSolicitudServicio() {
     const encontrado = this.listaVariaciones.find((element, index) => {
-      if(element.id == this.variation.id){
+
+      if(element.data.id == this.variation.id){
         return true;
       }
-      return false;
+      return false;    
     });
-
+  
     if(!encontrado){
       this.listaVariaciones.push({
         data: this.variation,
@@ -222,7 +223,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
         createdAt: fecha.toISOString(),
         updatedAt:  fecha.toISOString(),
         conditionsLog: [],
-        comments:[]
+        comments:[],
+        typeuser:'externo',
+        datauser:{type:'', ci:''}
       };
 
         swal({
@@ -249,6 +252,12 @@ export class BusServComponent implements OnInit, AfterViewInit {
     
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.itemsel.infoServ.condiciones);
+            }
+
+            if(this.usuariounivalle){
+              cfSrvReserv.typeuser = 'interno'
+             // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+              cfSrvReserv.datauser.ci = this.valorci;
             }
 
             cfSrvReserv.comments.push({

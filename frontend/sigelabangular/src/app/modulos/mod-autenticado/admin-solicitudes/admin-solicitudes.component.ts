@@ -226,21 +226,44 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario(){
-    const fecha = new Date();
-    let cfSrvReserv = {
-      comments:this.servsel.comentario
-    };
+    swal({
 
-    cfSrvReserv.comments.push({
-      commentText: this.comentario, 
-      fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
-      uid: this.user.uid});
+      type: 'warning',
+      title: 'Esta seguro que desea enviar este comentario',
+      showCancelButton: true,
+      confirmButtonText: 'Si, Solicitar',
+      cancelButtonText: 'No, Cancelar'
 
-    this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
-      if(this.servsel.status == 'aceptada'){
-        this.enviarEmails();
+    }).then((result) => {
+
+      if (result.value) {
+
+        const fecha = new Date();
+        let cfSrvReserv = {
+          comments:this.servsel.comentario
+        };
+    
+        cfSrvReserv.comments.push({
+          commentText: this.comentario, 
+          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          uid: this.user.uid});
+    
+        this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
+          if(this.servsel.status == 'aceptada'){
+            this.enviarEmails();
+          }
+        });
+
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
       }
+
     });
+
 
      
   }
@@ -260,7 +283,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       emailAcepto = this.servsel.acepto;
       const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
                       this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
-                      ' por el usuario con el correo ' + emailSolicitante;
+                      ' por el usuario con el correo ' + emailSolicitante +'. a continuacion vera el comentario: " '+
+                      this.comentario +' "';
 
       this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
         emailEncargado = persona.payload.data().email;
@@ -270,6 +294,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           if(res.status == 200){
             //this.cerrarAlerta();
             this.alertaExito('Comentario enviado');
+            this.comentario = '';
           } else {
             this.alertaError('fallo al enviar correos');
           }

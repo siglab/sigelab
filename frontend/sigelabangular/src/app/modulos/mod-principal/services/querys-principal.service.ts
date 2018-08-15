@@ -189,10 +189,10 @@ export class QuerysPrincipalService {
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
 
-      this.afs.doc('practice/' + data[index].payload.doc.id).collection('programmingData').valueChanges().subscribe(data2 => {
+      this.afs.doc('practice/' + data[index].payload.doc.id).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
         // funciona con una programacion, cuando hayan mas toca crear otro metodo
-        const prog = data2[0];
+        const prog = data2[0].payload.doc.data();
 
         this.buscarLaboratorio(elemento.cfFacil).subscribe(lab => {
           const labencontrado = lab.payload.data();
@@ -218,9 +218,10 @@ export class QuerysPrincipalService {
                   nombrelab: labencontrado.cfName,
                   infoPrub: {
                     programacion: {
-                      estudiantes: prog['noStudents'],
-                      diahora: prog['schedule'],
-                      semestre: prog['semester']
+                      id_pro: data2[0].payload.doc.id,
+                      estudiantes: prog.noStudents,
+                      horario: prog.schedule,
+                      semestre: prog.semester
                     },
 
                     activo: estado
@@ -350,17 +351,18 @@ export class QuerysPrincipalService {
         if (item[clave]) {
            this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
            const practica =  data.payload.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('practice/' + clave ).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
+              const prog = data2[0].payload.doc.data();
 
               const pract = {
                 nombre: practica.practiceName,
                 programacion: {
-                  estudiantes: prog['noStudents'],
-                  diahora: prog['schedule'],
-                  semestre: prog['semester']
+                  id_pro: data2[0].payload.doc.id,
+                  estudiantes: prog.noStudents,
+                  horario: prog.schedule,
+                  semestre: prog.semester
                 },
                 activo: practica.active
                };
