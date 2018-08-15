@@ -418,6 +418,7 @@ export class AdminPracticasComponent implements OnInit {
               nombre: equip.cfName,
               activo: equip.active,
               precio: equip.price,
+              espacio: equip.space
             };
 
 
@@ -514,19 +515,22 @@ export class AdminPracticasComponent implements OnInit {
     this.selection.selected.forEach((element) => {
 
 
-
+       console.log(element);
 
       if (element.id) {
         practica.relatedEquipments[element.id] = true;
 
       }
 
-      if (element.id_space) {
-        practica.relatedSpaces[element.id_space] = true;
+      if (element.espacio) {
+        practica.relatedSpaces[element.espacio] = true;
       }
 
     });
 
+    console.log('objeto practicas',  practica);
+
+    /*
     console.log(practica, 'programing', programming);
     console.log(this.mainSpace);
     if (practica) {
@@ -546,7 +550,7 @@ export class AdminPracticasComponent implements OnInit {
       });
 
     }
-
+    */
   }
 
   initCalendar(horario) {

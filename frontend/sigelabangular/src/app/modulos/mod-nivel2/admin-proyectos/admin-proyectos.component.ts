@@ -6,6 +6,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
+// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,7 +14,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './admin-proyectos.component.html',
   styleUrls: ['./admin-proyectos.component.css']
 })
-export class AdminProyectosComponent implements OnInit,OnDestroy {
+export class AdminProyectosComponent implements OnInit, OnDestroy {
   itemsel: Observable<Array<any>>;
   button = true;
   fecha = new Date();
@@ -77,7 +78,7 @@ export class AdminProyectosComponent implements OnInit,OnDestroy {
   addP;
   dispo;
 
-  sus:Subscription;
+  sus: Subscription;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
@@ -146,7 +147,7 @@ export class AdminProyectosComponent implements OnInit,OnDestroy {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sus.unsubscribe();
   }
 
@@ -362,7 +363,7 @@ export class AdminProyectosComponent implements OnInit,OnDestroy {
     if (this.proyecto.personal.length === 0) {
       swal({
         type: 'info',
-        title: 'Primero debe vincular personal al laboratorio',
+        title: 'Primero debe vincular personal al proyecto',
         showConfirmButton: true
       });
     } else {
@@ -564,6 +565,7 @@ export class AdminProyectosComponent implements OnInit,OnDestroy {
     console.log(q);
 
     if (q.trim() === '') {
+
       this.status = 'Campo obligatorio';
       // this.dispo = false;
     } else {

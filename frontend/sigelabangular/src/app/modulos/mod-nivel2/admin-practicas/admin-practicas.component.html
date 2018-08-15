@@ -288,11 +288,11 @@
 
                 <div>
                   <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i>  Anterior</button>
-                  <button class="btn btn-success" mat-button matStepperNext>Siguiente <i class="fa fa-arrow-right"></i> </button>
+                  <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
                 </div>
               </mat-step>
 
-              <mat-step>
+              <!-- <mat-step>
                 <ng-template matStepLabel>Vincular Espacios</ng-template>
 
                 <div class="box box-danger">
@@ -301,13 +301,12 @@
 
                     <h3 class="box-title">ESPACIOS VINCULADOS</h3>
                   </div>
-                  <!-- /.box-header -->
+
                   <div class="box-body">
                     <div class="example-container" *ngIf="dataSourceEsp.data.length > 0">
 
                       <mat-table #tableEsp [dataSource]="dataSourceEsp">
 
-                        <!-- Checkbox Column -->
                         <ng-container matColumnDef="select">
                           <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
                             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
@@ -319,7 +318,6 @@
                           </mat-cell>
                         </ng-container>
 
-                        <!-- nombre Column -->
                         <ng-container matColumnDef="nombre">
                           <mat-header-cell *matHeaderCellDef> capacidad </mat-header-cell>
                           <mat-cell *matCellDef="let element"> {{element.capacity}} </mat-cell>
@@ -338,14 +336,13 @@
 
                     </div>
                   </div>
-                  <!-- /.box-body -->
                 </div>
 
                 <div>
                   <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i> Anterior</button>
                   <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
                 </div>
-              </mat-step>
+              </mat-step> -->
             </mat-horizontal-stepper>
 
 
