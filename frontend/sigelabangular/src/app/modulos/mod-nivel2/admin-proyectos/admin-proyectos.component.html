@@ -182,17 +182,31 @@
             <i class="fa fa-address-card-o"></i>
 
             <h1 class="box-title">PROYECTO</h1>
-
           </div>
           <!-- /.box-header -->
           <div class="box-body" *ngIf="itemsel | async; let itemsel">
 
-            <div class="col-md-6">
+            <div class="col-md-12">
+              <!-- input ci validator -->
+              <div *ngIf="!this.proyecto.nombre" class="form-group" [ngClass]="{ 'has-error': !this.dispo, 'has-success': this.dispo }">
+                <div class="col-md-12">
+                  <label class="control-label" for="ci">
+                    <strong>CI:</strong>
+                  </label>
+
+                  <input (focusout)="ciCheck($event)" name="ci" [(ngModel)]="this.proyecto.ci" type="text" class="form-control" id="nombre">
+                  <span class="help-block"> {{status}}</span>
+
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="dispo" class="col-md-6">
 
               <div class="box box-danger">
                 <div class="box-header">
 
-                  <h1 class="box-title">Informacion deL Proyecto</h1>
+                  <h1 class="box-title">Informacion del Proyecto</h1>
 
                 </div>
                 <!-- /.box-header -->
@@ -211,18 +225,7 @@
                         </div>
                       </div>
 
-                      <!-- input ci validator -->
-                      <div *ngIf="!this.proyecto.nombre" class="form-group" [ngClass]="{ 'has-error': !this.dispo, 'has-success': this.dispo }">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ci">
-                            <strong>CI:</strong>
-                          </label>
 
-                          <input (focusout)="ciCheck($event)" name="ci" [(ngModel)]="this.proyecto.ci" type="text" class="form-control" id="nombre">
-                          <span class="help-block"> {{status}}</span>
-
-                        </div>
-                      </div>
 
                       <!-- input ci default -->
                       <div *ngIf="this.proyecto.nombre" class="form-group">
@@ -231,7 +234,7 @@
                             <strong>CI:</strong>
                           </label>
 
-                          <input disabled= "true"  name="ci" [(ngModel)]="this.proyecto.ci" type="text" class="form-control" id="nombre">
+                          <input disabled="true" name="ci" [(ngModel)]="this.proyecto.ci" type="text" class="form-control" id="nombre">
                         </div>
                       </div>
 
@@ -243,8 +246,7 @@
 
                           <!--                           <input name="descripcion" [(ngModel)]="this.proyecto.descripcion"  type="text" class="form-control" id="nombre">
  -->
-                          <textarea class="form-control" name="descripcion" [(ngModel)]="this.proyecto.descripcion" id=""
-                            cols="30" rows="2"></textarea>
+                          <textarea class="form-control" name="descripcion" [(ngModel)]="this.proyecto.descripcion" id="" cols="30" rows="2"></textarea>
                         </div>
                       </div>
 
@@ -285,7 +287,7 @@
             </div>
 
 
-            <div class="col-md-6">
+            <div *ngIf="dispo" class="col-md-6">
               <div class="box box-danger">
                 <div class="box-header">
                   <i class="fa fa-users"></i>
@@ -345,6 +347,9 @@
 
             </div>
 
+            <div class="modal-footer">
+                <button *ngIf="addP" type="button" class="btn btn-success">Vincular <i class="fa fa-plus"></i> </button>
+              </div>
 
           </div>
 
@@ -546,7 +551,7 @@
 
           </div>
           <div class="modal-footer">
-            <button (click)="addSingleProject()" type="button" class="btn btn-danger">Guardar</button>
+            <button  *ngIf="!addP" (click)="addSingleProject()" type="button" class="btn btn-danger">Guardar</button>
 
           </div>
         </div>

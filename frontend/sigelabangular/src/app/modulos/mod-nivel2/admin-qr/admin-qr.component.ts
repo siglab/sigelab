@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
 import { QrService } from './../services/qr.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import QRCode = require('qrcode');
-import JSZip = require('jszip');
+import * as QRCode from 'qrcode';
+import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver/FileSaver';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';

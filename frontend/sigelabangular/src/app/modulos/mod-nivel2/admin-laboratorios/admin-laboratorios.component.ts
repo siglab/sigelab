@@ -68,9 +68,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     infolab = {
       headquarter:'',
       subHq:'',
+      cfDescr:'',
       faculties:{},
       departments:{},
-      mainSpace:'',
+      // mainSpace:'',
       otros: {
         direccion: '',
         email: '',
@@ -275,9 +276,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       cambios: laboratorio.suggestedChanges,
                       estado: estadoLab
                     };
-        
+                    
+
                     this.cambios = this.pendientes(laboratorio.suggestedChanges);
-        
+
+
                     if(this.labestructurado){
                       resolve();
                     } else {
@@ -819,6 +822,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           swal.showLoading();
         }
       });
+
+
+      console.log(this.infolab);
       this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
         //this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
        
@@ -856,14 +862,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             estado: 'desaprobado'
           });    
           
+          console.log(aux);
           this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
               swal.close();
               swal({
                 type: 'success',
                 title: 'Sugerencia de cambios ingresada',
                 showConfirmButton: true
-              }).then(()=>{
-                $('#modal2').modal('hide');
               });
           });
         });
@@ -944,8 +949,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   estructurarDataCambios(){
-    const aux1 = ['info.dir','info.email','info.tel'];
-    const aux2 = ['otros.direccion', 'otros.email', 'otros.telefono'];
+    const aux1 = ['descripcion','sede', 'subsede','info.dir','info.email','info.tel'];
+    const aux2 = ['cfDescr','headquarter', 'subHq','otros.direccion', 'otros.email', 'otros.telefono'];
     const data = [];
     let element;
     let element2;
@@ -955,11 +960,21 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       element = aux1[i].split('.');  
       element2 = aux2[i].split('.');
      
-
       if(element.length != 2){
+        let auxiliar = this.labestructurado[element];
+        let nombre = element2[0];
 
-        if(this.labestructurado[element] != this.infolab[element2]){
-           data.push({llave: aux2[i], nombre: element2[0], info:this.infolab[element2], cambio: false});
+        if(aux1[i] == 'sede' || aux1[i] == 'subsede'){
+          auxiliar = this.labestructurado[element].id;
+          nombre = aux1[i];
+        }
+
+        if(aux1[i] == 'descripcion'){
+          nombre = aux1[i];
+        }
+
+        if(auxiliar != this.infolab[element2]){
+           data.push({llave: aux2[i], nombre: nombre, info:this.infolab[element2], cambio: false});
         }
       } else {
         
@@ -971,7 +986,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
      
       
     }
-    console.log(data);
     return data;
   }
 
@@ -980,7 +994,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     for (let j = 0; j < item.length; j++) {
       const element = item[j];
 
-      if(element.estado == 'pendiente'){
+      if(element.estado == 'desaprobado'){
         arr.push(element);
       }
       
@@ -1066,8 +1080,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.infolab.otros.email = this.labestructurado.info.email;
     this.infolab.otros.direccion = this.labestructurado.info.dir;
     this.infolab.otros.telefono = this.labestructurado.info.tel;
-    this.infolab.mainSpace = this.labestructurado.sede.id;
+    this.infolab.headquarter = this.labestructurado.sede.id;
     this.infolab.subHq = this.labestructurado.subsede.id;
+    //this.infolab.mainSpace = this.labestructurado.espacioPrin
+    this.infolab.cfDescr = this.labestructurado.descripcion;
     this.listaFacultades = this.labestructurado.facultades;
     this.listaDepartamentos = this.labestructurado.departamentos;
   }
@@ -1084,21 +1100,24 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   quitarelemento(id, list){
 
     let lista;
-
+    let sugerido;
     if(list == 'facultad'){
       lista = eval('this.listaFacultades');
+      sugerido = eval('this.listaFaculSugeridos');
     }else{
       lista = eval('this.listaDepartamentos');
+      sugerido = eval('this.listaDeparSugeridos');
     }
       const encontrado = lista.find((element, index) => {
         if(element.id == id){
           lista.splice(index, 1);
+          if(this.moduloPermiso){
+            sugerido.splice(index, 1);
+          }
           return true;
         }
         return false;
-      });
-       
-    
+      });   
 
       swal({
         type: 'success',
@@ -1152,20 +1171,26 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     }
   }
 
-
   buscarElemento(list, select, lista){
     let array = '';
+    let sugerido = '';
     if(list == 'facultad'){
       array = 'this.facultades';
+      sugerido = 'this.listaFaculSugeridos';
     }else{
       array = 'this.departamentos';
+      sugerido = 'this.listaDeparSugeridos';
     }
     const selector = eval(select);
     const listafinal =  eval(lista);
+    const listasugerida = eval(sugerido);
     eval(array).find((element, index) => {
 
       if(element.id == selector){
-      listafinal .push(element); 
+        listafinal .push(element); 
+        if(this.moduloPermiso){
+          listasugerida.pus(element);
+        }
       }
 
     });

@@ -667,15 +667,17 @@
                           <fieldset>
                             <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="descrip">
-                                  <strong>Descripcion:</strong> {{this.infolab.cfDescr}}</label> 
+                                <label class="control-label" for="teledit">
+                                  <strong>Descripcion:</strong>
+                                </label>
+                               <textarea class="form-control" name="desc" id="desc" [(ngModel)]="this.infolab.cfDescr" rows="5"></textarea>
                               </div>
                             </div>
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="sede"><strong>Sede :</strong></label>
                                 <mat-form-field>
-                                  <mat-select name="sede" id="sede" [(value)]="this.infolab.mainSpace" placeholder="Seleccione una sede" >
+                                  <mat-select name="sede" id="sede" [(value)]="this.infolab.headquarter" placeholder="Seleccione una sede" >
                                     <mat-option *ngFor="let item of this.sedes" value="{{item.id}}">{{item.nombre}}</mat-option>                              
                                   </mat-select>
                                 </mat-form-field>

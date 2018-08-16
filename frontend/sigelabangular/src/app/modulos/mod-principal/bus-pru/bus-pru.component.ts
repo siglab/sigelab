@@ -116,14 +116,14 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       // options here
       height: 450,
       header: {
-
-        left: '',
-        center: 'tittle',
+        left: 'month,agendaWeek,agendaDay',
+        center: 'title',
         right: 'today prev,next'
       },
       events: horario,
 
       defaultView: 'month',
+      timeFormat: 'H(:mm)'
 
     });
   }
