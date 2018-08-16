@@ -40,7 +40,7 @@ export class AdminPracticasComponent implements OnInit {
     start: '',
     color: ''
   };
-
+  horaE;
   programming = {
     semester: '',
     noStudents: '',
@@ -91,8 +91,8 @@ export class AdminPracticasComponent implements OnInit {
   pracestructurado: any;
 
   constructor(private obs: ObservablesService,
-              private afs: AngularFirestore,
-              private toastr: ToastrService) {
+    private afs: AngularFirestore,
+    private toastr: ToastrService) {
 
 
   }
@@ -100,21 +100,19 @@ export class AdminPracticasComponent implements OnInit {
 
   ngOnInit() {
 
-     this.metodoInicio();
+    this.metodoInicio();
 
   }
 
 
-
-
-
-   async metodoInicio() {
+  async metodoInicio() {
 
     this.obs.currentObjectPra.subscribe(data => {
 
 
       if (data.length !== 0) {
         this.estructurarDataPrac(data.uid).then(() => {
+
 
           this.itemsel = Observable.of(this.pracestructurado);
           console.log(this.pracestructurado);
@@ -183,7 +181,7 @@ export class AdminPracticasComponent implements OnInit {
               this.dataSourceEsp.paginator = this.paginatorEsp;
 
             }
-               swal.close();
+            swal.close();
           }, 2000);
 
 
@@ -478,7 +476,7 @@ export class AdminPracticasComponent implements OnInit {
     this.practica.space = row.espacio;
     this.id_prc = row.id_pract;
     this.id_pro = row.programacion.id_pro;
-    this.initCalendarModal( row.programacion.horario);
+    this.initCalendarModal(row.programacion.horario);
     console.log(row.programacion.horario);
   }
 
@@ -509,13 +507,13 @@ export class AdminPracticasComponent implements OnInit {
 
     const facil = {
 
-           relatedPractices: {}
+      relatedPractices: {}
     };
 
     this.selection.selected.forEach((element) => {
 
 
-       console.log(element);
+      console.log(element);
 
       if (element.id) {
         practica.relatedEquipments[element.id] = true;
@@ -528,29 +526,24 @@ export class AdminPracticasComponent implements OnInit {
 
     });
 
-    console.log('objeto practicas',  practica);
 
-    /*
     console.log(practica, 'programing', programming);
     console.log(this.mainSpace);
     if (practica) {
 
       this.afs.collection('practice').add(practica).then(ok => {
-         facil.relatedPractices[ok.id] = true;
-        this.afs.doc('cfFacil/'  + this.id_lab).set(facil, { merge: true });
+        facil.relatedPractices[ok.id] = true;
+        this.afs.doc('cfFacil/' + this.id_lab).set(facil, { merge: true });
         this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming).then(() => {
-          this.obs.changeObjectPra({nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab});
+          this.obs.changeObjectPra({ nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab });
         });
 
-        swal({
-          type: 'success',
-          title: 'creado correctamente',
-          showConfirmButton: true
-        });
+        this.toastr.success('Almacenado Correctamente!');
+
       });
 
     }
-    */
+
   }
 
   initCalendar(horario) {
@@ -559,20 +552,22 @@ export class AdminPracticasComponent implements OnInit {
     containerEl.fullCalendar('destroy');
 
     containerEl.fullCalendar({
-
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
       // options here
       height: 450,
-      header: {
 
-        left: '',
-        center: 'tittle',
-        right: 'today prev,next'
+      header: {
+        left: 'month,agendaWeek,agendaDay',
+        center: 'title',
+        right: 'today prev,next',
       },
+
       events: horario,
 
       defaultView: 'month',
+      timeFormat: 'H(:mm)'
+
 
     });
   }
@@ -589,30 +584,50 @@ export class AdminPracticasComponent implements OnInit {
       // options here
       height: 450,
       header: {
-
-        left: '',
-        center: 'tittle',
+        center: 'title',
         right: 'today prev,next'
       },
       events: horario,
-
-      defaultView: 'month',
-
+      timeFormat: 'H(:mm)'
     });
   }
+  changeColor(value) {
 
+    this.evento.color = value;
+
+  }
   agregarEvento() {
 
-    const arr = this.events;
-    const nev = {
-      title: this.evento.title,
-      start: this.evento.start,
-      color: this.evento.color
-    };
+    if ( !this.evento.title || !this.evento.start  || !this.evento.start   ) {
+      swal({
+        type: 'error',
+        title: 'Hay un campo importante vacio.',
+        showConfirmButton: true
+      });
+    } else {
 
-    arr.push(nev);
+      const arr = this.events;
+      const nev = {
+        title: this.evento.title,
+        start: this.evento.start + 'T' + this.horaE,
+        allDay: false,
+        color: this.evento.color
+      };
 
-    this.initCalendar(arr);
+      console.log(nev);
+
+      arr.push(nev);
+
+
+      this.initCalendar(arr);
+
+         swal({
+        type: 'success',
+        title: 'Nuevo evento agregado',
+        showConfirmButton: true
+      });
+    }
+
   }
 
   actualizarPractica() {
@@ -627,22 +642,19 @@ export class AdminPracticasComponent implements OnInit {
     };
 
     const prog = {
-      noStudents: this.practica.numeroEst ,
+      noStudents: this.practica.numeroEst,
       semester: this.practica.semestre
 
     };
 
-      this.afs.doc('practice/' + this.id_prc).set(practica , {merge: true }).then(ok => {
+    this.afs.doc('practice/' + this.id_prc).set(practica, { merge: true }).then(ok => {
 
-      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, {merge: true}).then(() => {
-        this.obs.changeObjectPra({nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab});
+      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, { merge: true }).then(() => {
+        this.obs.changeObjectPra({ nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab });
       });
 
-      swal({
-        type: 'success',
-        title: 'actualizado correctamente',
-        showConfirmButton: true
-      });
+      this.toastr.success('Actualizado correctamente');
+
 
     });
 
@@ -650,13 +662,7 @@ export class AdminPracticasComponent implements OnInit {
   }
 
   down() {
-
-
-
     $('html, body').animate({ scrollTop: '600px' }, 'slow');
-    this.toastr.success('alerta');
-
-
   }
 
 

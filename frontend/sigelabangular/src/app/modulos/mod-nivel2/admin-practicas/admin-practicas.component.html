@@ -24,7 +24,7 @@
           <div class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button style="float: right;" (click) = "down()"  class="btn btn-danger" type="button">Nuevo practica, prueba y/o ensayo</button>
+                <button style="float: right;" (click)="down()" class="btn btn-danger" type="button">Nuevo practica, prueba y/o ensayo</button>
               </div>
             </div>
           </div>
@@ -157,7 +157,8 @@
 
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPracIn"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal" data-target="#myModal3"></mat-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
+                            data-target="#myModal3"></mat-row>
                         </mat-table>
 
                         <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
@@ -191,23 +192,23 @@
           <div class="box-body">
             <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
               <mat-step>
-                <form >
+                <form>
                   <ng-template matStepLabel>Informacion basica</ng-template>
                   <mat-form-field>
-                    <input name="nombrep" [(ngModel)]="nameP"  matInput placeholder="nombre practica"  >
+                    <input name="nombrep" [(ngModel)]="nameP" matInput placeholder="nombre practica">
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input name="code"   [(ngModel)]="code"  matInput placeholder="Codigo de la materia" >
+                    <input name="code" [(ngModel)]="code" matInput placeholder="Codigo de la materia">
                   </mat-form-field>
 
                   <mat-form-field>
-                      <input name="semestre"  [(ngModel)]="programming.semester"  matInput placeholder="Semestre" >
-                    </mat-form-field>
+                    <input name="semestre" [(ngModel)]="programming.semester" matInput placeholder="Semestre">
+                  </mat-form-field>
 
-                    <mat-form-field>
-                        <input name="numeroes"  [(ngModel)]="programming.noStudents"  matInput placeholder="Numero de estudiantes" >
-                      </mat-form-field>
+                  <mat-form-field>
+                    <input name="numeroes" [(ngModel)]="programming.noStudents" matInput placeholder="Numero de estudiantes">
+                  </mat-form-field>
 
                   <div>
                     <button mat-button matStepperNext (click)="initCalendar(this.events)" class="btn btn-success">siguiente</button>
@@ -226,7 +227,7 @@
 
 
                   </div>
-                  <button  class="btn btn-success text-center" type="button" data-toggle="modal" data-target="#myModal2"> Agregar Fecha
+                  <button class="btn btn-success" style="float: center" type="button" data-toggle="modal" data-target="#myModal2">Agregar dia
                     <i class="fa fa-plus"></i>
                   </button>
                   <!-- /.box-header -->
@@ -235,8 +236,11 @@
                   </div>
                 </div>
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i> Anterior</button>
-                  <button class="btn btn-success" mat-button matStepperNext>Siguiente <i class="fa fa-arrow-right"></i>  </button>
+                  <button class="btn btn-success" mat-button matStepperPrevious>
+                    <i class="fa fa-arrow-left"></i> Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperNext>Siguiente
+                    <i class="fa fa-arrow-right"></i>
+                  </button>
                 </div>
 
               </mat-step>
@@ -287,7 +291,8 @@
                 </div>
 
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i>  Anterior</button>
+                  <button class="btn btn-success" mat-button matStepperPrevious>
+                    <i class="fa fa-arrow-left"></i> Anterior</button>
                   <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
                 </div>
               </mat-step>
@@ -364,63 +369,133 @@
 
 <!-- MODAL PARA NUEVAS PRACTICAS -->
 
-  <div class="modal fade" id="myModal2" role="dialog">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="myModal2" role="dialog">
+  <div class="modal-dialog modal-lg">
 
-      <!-- Modal content-->
-      <div class="modal-content">
+    <!-- Modal content-->
+    <div class="modal-content">
 
-        <div class="modal-body">
-          <div class="box box-danger">
-            <div class="box-header text-center">
-              <i class="fa fa-address-card-o"></i>
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
 
-              <h1 class="box-title">Nuevo Evento</h1>
-
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-
-
-
-
-
-                    <div class="form-group">
-                      <div class='col-md-6'>
-                        <label for="nombre" class="col-sm-4 col-form-label">nombre:</label>
-                        <input name="nombre" [(ngModel)]="this.evento.title" type="text"  class="form-control" id="edificio">
-                      </div>
-                      <div class='col-md-6'>
-                          <label for="edificio" class="col-sm-4 col-form-label">color:</label>
-                          <input name="color" [(ngModel)]="this.evento.color" type="color" class="form-control" id="edificio">
-                        </div>
-                    </div>
-
-
-                  <div class="form-group">
-                    <div class='col-md-12'>
-                      <label for="fecha" class="col-sm-4 col-form-label">fecha:</label>
-                      <input name="fecha" [(ngModel)]="this.evento.start" type="date"  class="form-control" id="espac">
-                    </div>
-                  </div>
-
-
-
-
-
-            </div>
+            <h1 class="box-title">Dia de clase</h1>
 
           </div>
-        </div>
+          <!-- /.box-header -->
+          <div class="box-body">
 
-        <div class="modal-footer">
-          <button (click)="agregarEvento()"   style="float: center;" type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-plus"></i> Agregar</button>
-        </div>
 
+            <div class="box box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">Seleccione un color</h3>
+              </div>
+              <div class="box-body">
+                <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                  <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+                  <ul class="fc-color-picker" id="color-chooser">
+
+
+                    <li>
+                      <a class="text-teal" (click)="changeColor('teal')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-yellow" (click)="changeColor('yellow')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-orange" (click)="changeColor('orange')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-green" (click)="changeColor('green')" >
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-lime"  (click)="changeColor('lime')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-red" (click)="changeColor('red')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-purple" (click)="changeColor('purple')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-fuchsia" (click)="changeColor('fuchsia')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-muted" (click)="changeColor('muted')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="text-navy" (click)="changeColor('navy')">
+                        <i class="fa fa-square"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- /btn-group -->
+                <div class="input-group">
+                  <input [(ngModel)]="this.evento.title"   id="new-event" type="text" class="form-control" placeholder="Escriba un titulo para la clase" required>
+
+                  <div class="input-group-btn">
+                    <button id="add-new-event" type="button" [ngStyle]="{'background-color': this.evento.color, 'border-color': this.evento.color}" class="btn btn-primary btn-flat">C</button>
+                  </div>
+                  <!-- /btn-group -->
+                </div>
+                <!-- /input-group -->
+              </div>
+            </div>
+
+
+
+            <div class="form-group">
+              <div class='col-md-6'>
+                <label for="fecha" class="col-sm-4 col-form-label">fecha:</label>
+                <input name="fecha" [(ngModel)]="this.evento.start" type="date" class="form-control" id="espac"required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class='col-md-6'>
+                <label for="hora" class="col-sm-4 col-form-label">hora:</label>
+                <input name="hora" placeholder="hrs:mins" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$"  [(ngModel)]="horaE" type="time" class="form-control" id="espac">
+              </div>
+            </div>
+
+
+
+
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="agregarEvento()" style="float: center;" type="button" class="btn btn-success" >
+           Agregar <i class="fa fa-plus"></i></button>
       </div>
 
     </div>
+
   </div>
+</div>
 
 
 
@@ -446,26 +521,26 @@
                     <label class="control-label" for="nombreprub">
                       <strong>Nombre :</strong>
                     </label>
-                    <input   id="escuelaedit" name="nombre" class="form-control" type="text">
+                    <input id="escuelaedit" name="nombre" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Apellidos :</strong>
-                      </label>
-                      <input    id="escuelaedit" name="apellido" class="form-control" type="text">
-                    </div>
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Apellidos :</strong>
+                    </label>
+                    <input id="escuelaedit" name="apellido" class="form-control" type="text">
                   </div>
+                </div>
 
-                  <div class="form-group">
-                      <div class="col-md-12">
-                        <label class="control-label" for="nombreprub">
-                          <strong>tipo:</strong>
-                        </label>
-                        <input   id="escuelaedit" name="rol" class="form-control" type="text">
-                      </div>
-                    </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>tipo:</strong>
+                    </label>
+                    <input id="escuelaedit" name="rol" class="form-control" type="text">
+                  </div>
+                </div>
 
 
 
@@ -474,7 +549,7 @@
                     <label class="control-label" for="estadoserv">
                       <strong>Email:</strong>
                     </label>
-                    <input    id="escuelaedit" name="email" class="form-control" type="email">
+                    <input id="escuelaedit" name="email" class="form-control" type="email">
                   </div>
                 </div>
                 <div class="form-group">
@@ -482,9 +557,9 @@
                     <label class="control-label" for="estadoserv">
                       <strong>Estado:</strong>
                     </label>
-                     <select    class="form-control"  name = "estado"  >
-                      <option   value="true">  Activo </option>
-                      <option   value="false"> Inactivo</option>
+                    <select class="form-control" name="estado">
+                      <option value="true"> Activo </option>
+                      <option value="false"> Inactivo</option>
 
                     </select>
                   </div>
@@ -497,12 +572,10 @@
                     <label class="control-label" for="estadoserv">
                       <strong>Rol:</strong>
                     </label>
-                     <select    class="form-control"  name = "estado"  >
-                      <option   value="editar">  editar  </option>
-                      <option   value="nivel2">  nivel2  </option>
-                      <option
-
-                    </select>
+                    <select class="form-control" name="estado">
+                      <option value="editar"> editar </option>
+                      <option value="nivel2"> nivel2 </option>
+                      <option </select>
                   </div>
 
 
@@ -520,7 +593,7 @@
 
           </div>
           <div class="modal-footer">
-            <button type="button"   class="btn btn-danger">Guardar</button>
+            <button type="button" class="btn btn-danger">Guardar</button>
 
           </div>
         </div>
@@ -568,7 +641,7 @@
                             <strong>Nombre Practica:</strong>
                           </label>
 
-                          <input name="nombre" [(ngModel)]="this.practica.nombre"  type="text" class="form-control" id="nombre">
+                          <input name="nombre" [(ngModel)]="this.practica.nombre" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -578,7 +651,7 @@
                             <strong>Numero Estudiantes:</strong>
                           </label>
 
-                          <input name="numeroEstudiantes" [(ngModel)]="this.practica.numeroEst"  type="text" class="form-control" id="nombre">
+                          <input name="numeroEstudiantes" [(ngModel)]="this.practica.numeroEst" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -590,7 +663,7 @@
                             <strong>Semestre:</strong>
                           </label>
 
-                          <input name="semestre" [(ngModel)]="this.practica.semestre"  type="text" class="form-control" id="nombre">
+                          <input name="semestre" [(ngModel)]="this.practica.semestre" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -598,48 +671,48 @@
                       <div class="form-group">
                         <div class="col-md-12">
 
-                            <label   style="margin-top: 20px;" class="switch">
-                              <input name="active" [(ngModel)]="this.practica.estado" id="activo" type="checkbox" checked>
-                              <span class="slider round"></span>
+                          <label style="margin-top: 20px;" class="switch">
+                            <input name="active" [(ngModel)]="this.practica.estado" id="activo" type="checkbox" checked>
+                            <span class="slider round"></span>
+                          </label>
+
+
+                        </div>
+                      </div>
+
+
+
+                      <div *ngFor="let item of this.practica.space">
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="ciuor">
+                              <strong>Campus: </strong>
                             </label>
+                          </div>
+                        </div>
 
-
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="ciudes">
+                              <strong>Edificio: {{item.spaceData.building}} </strong>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="ciudes">
+                              <strong>Planta: {{item.spaceData.floor}} </strong>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="ciudes">
+                              <strong>Espacio: {{item.spaceData.place}} </strong>
+                            </label>
+                          </div>
                         </div>
                       </div>
-
-
-
-                      <div  *ngFor="let item of this.practica.space">
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciuor">
-                            <strong>Campus: </strong>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciudes">
-                            <strong>Edificio: {{item.spaceData.building}}  </strong>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciudes">
-                            <strong>Planta: {{item.spaceData.floor}}  </strong>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="ciudes">
-                            <strong>Espacio: {{item.spaceData.place}}  </strong>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
 
 
 
@@ -648,9 +721,9 @@
 
                   <div class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
-                      <button class="btn btn-danger"  data-toggle="modal" data-target="#practicaprog"  type="button">Programacion</button>
+                      <button class="btn btn-danger" data-toggle="modal" data-target="#practicaprog" type="button">Programacion</button>
 
-                      <button class="btn btn-success" (click)= "actualizarPractica()"  type="button">Guardar</button>
+                      <button class="btn btn-success" (click)="actualizarPractica()" type="button">Guardar</button>
                     </div>
                   </div>
 
@@ -735,7 +808,7 @@
           <!-- /.box-header -->
           <div class="box-body">
 
-            <div class= "cal" id="cal2">
+            <div class="cal" id="cal2">
             </div>
           </div>
 
