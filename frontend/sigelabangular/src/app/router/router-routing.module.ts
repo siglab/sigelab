@@ -30,6 +30,7 @@ import { AdminLaboratorios3Component } from '../modulos/mod-nivel3/admin-laborat
 import { IndicadoresGraficasReportes3Component } from '../modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
 
 
+
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'principal', component: PrincipalComponent,

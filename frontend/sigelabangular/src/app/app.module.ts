@@ -86,6 +86,7 @@ import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.c
 
 import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -124,7 +125,7 @@ import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service'
     IndicadoresGraficasReportes3Component,
     BardAdminQrComponent,
     AdminQrComponent,
-    FormQrComponent,
+    FormQrComponent
   ],
   imports: [
     AngularFireStorageModule,

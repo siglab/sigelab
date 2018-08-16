@@ -18,16 +18,9 @@ export class QuerysAutenticadoService {
 
   getCollectionReserv(userid) {
     this.collectionReserv = this.afs.collection('cfSrvReserv',
-      ref => ref.where('user', '==', userid).where('status', '==', 'pendiente'));
-
-    return this.collectionReserv.snapshotChanges();
-  }
-
-  getCollectionsHisto(userid) {
-    this.collectionHisto = this.afs.collection('cfSrvReserv',
       ref => ref.where('user', '==', userid));
 
-    return this.collectionHisto.snapshotChanges();
+    return this.collectionReserv.snapshotChanges();
   }
 
 
@@ -36,31 +29,35 @@ export class QuerysAutenticadoService {
 
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
-      this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-        const servicio =  data2.payload.data();
-          
-            const Reserv = {
-              email: email,
-              lab: elemento.namelab,
-              uidlab: elemento.cfFacil,
-              status: elemento.status,
-              nombre: servicio.cfName,
-              descripcion: servicio.cfDesc,
-              precio: servicio.cfPrice,
-              activo: servicio.active,
-              variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-              condiciones: elemento.conditionsLog,
-              comentario: elemento.comments,
-              fecha: elemento.createdAt.split('T')[0],
-              uid: data2.payload.id,
-              uidreserv: data[index].payload.doc.id
-            };
 
-            datos.push(Reserv);
-       
-        });
+      if(elemento.status == 'aceptada' || elemento.status == 'pendiente'){
 
-    }
+        this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
+          const servicio =  data2.payload.data();
+            
+              const Reserv = {
+                email: email,
+                lab: elemento.namelab,
+                uidlab: elemento.cfFacil,
+                status: elemento.status,
+                nombre: servicio.cfName,
+                descripcion: servicio.cfDesc,
+                precio: servicio.cfPrice,
+                activo: servicio.active,
+                variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+                condiciones: elemento.conditionsLog,
+                comentario: elemento.comments,
+                fecha: elemento.createdAt.split('T')[0],
+                uid: data2.payload.id,
+                uidreserv: data[index].payload.doc.id
+              };
+
+              datos.push(Reserv);
+        
+          });
+
+        }
+      }
 
     return datos;
   }
@@ -73,7 +70,7 @@ export class QuerysAutenticadoService {
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();
 
-        if(elemento.status != 'pendiente'){
+        if(elemento.status != 'aceptada' && elemento.status != 'pendiente'){
           this.getEmailUser(elemento.user).subscribe(ema =>{
             const HistoReserv = {
               email: email,
@@ -91,7 +88,8 @@ export class QuerysAutenticadoService {
               fecha: elemento.createdAt.split('T')[0],
               uid: data2.payload.id,
               uidreserv: data[index].payload.doc.id,
-              acepto: elemento.acceptedBy     
+              acepto: elemento.acceptedBy,
+              path: elemento.path    
             };
 
             histodatos.push(HistoReserv);

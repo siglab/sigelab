@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 declare var $: any;
 @Component({
@@ -55,7 +56,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   constructor(private querys: QuerysAutenticadoService, 
               private observer: ObserverAutenticadoService,
-              private http:Http) {
+              private http:Http, private storage: AngularFireStorage) {
 
    }
 
@@ -69,13 +70,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         this.datos = this.querys.estructurarServiciosActivos(this.user.email, data);
         this.observer.changeDatatableServsAct(this.datos);
-        console.log(this.datos);
       });
 
-      this.querys.getCollectionsHisto(this.user.uid).subscribe(data => {
+      this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         this.histodatos = this.querys.estructurarHistoriaServicios(this.user.email, data);
         this.observer.changeDatatableHistoServs(this.histodatos);
-        console.log(this.histodatos);
       });
     }
 
@@ -149,6 +148,14 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
     console.log(item);
 
+  }
+
+  descargarDoc(){
+    console.log(this.servsel.path);
+    const ref = this.storage.ref(this.servsel.path);
+    ref.getDownloadURL().subscribe(data => {
+      window.open(data);
+    }); 
   }
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA

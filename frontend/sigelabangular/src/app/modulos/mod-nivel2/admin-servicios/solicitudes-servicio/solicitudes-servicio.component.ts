@@ -224,14 +224,13 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
   alistarVariables(event){
     this.file = event.target.files[0];
     this.filePath = this.nombrearchivo;
-    this.ref = this.storage.ref('archivos/'+this.filePath);
+    this.ref = this.storage.ref('archivos/'+ this.filePath);
   }
 
   uploadFile() {
-   
     const task = this.ref.put(this.file).then(()=>{
       console.log('subido con exito');
-      this.cambiarEstadoSolicitud('terminada');
+      $('#modalTerminar').modal('hide');
     });
   }
 
@@ -454,22 +453,49 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
 
   cambiarEstadoSolicitud(estado){
-    this.alertaCargando();
-    const reserva = {
-      status: estado,
-      acceptedBy: this.user.email
-    };
-    if(estado == 'terminada'){
-     reserva['path'] = 'archivos/'+this.filePath;
-    }
+    swal({
+      type: 'warning',
+      title: '¿Esta seguro de cambiar el estado de la solicitud?',
+      showCancelButton: true,
+      confirmButtonText: 'Si, Cambiar',
+      cancelButtonText: 'No, Cancelar'
 
+    }).then((result) => {
 
-    this.servicioActivoSel.status = estado;
+      if (result.value) {
+        
+        this.alertaCargando();
+        const reserva = {
+          status: estado,
+          acceptedBy: this.user.email
+        };
+        if(estado == 'terminada'){
+          this.uploadFile();
+          reserva['path'] = 'archivos/'+this.filePath;
+        }
+    
+    
+        this.servicioActivoSel.status = estado;
+    
+        this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
+          this.cerrarAlerta();
+              this.alertaExito('Reserva '+estado);
 
-    this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
-      this.cerrarAlerta();
-          this.alertaExito('Reserva '+estado);
+              this.nombrearchivo = '';
+        });
+
+       
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
+      }
+
     });
+
+   
   }
 
 

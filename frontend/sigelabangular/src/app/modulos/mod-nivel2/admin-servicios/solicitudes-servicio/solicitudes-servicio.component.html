@@ -40,7 +40,7 @@
 
                                       <h3 class="box-title">SERVICIOS ACTIVOS</h3>
                                   </div>
-                                  <div class="box-body divScroll">
+                                  <div class="box-body">
 
                                       <div class="table-responsive">
 
@@ -231,8 +231,8 @@
                                     <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
                                 </div>
 
-                                <div *ngIf="servicioActivoSel.status == 'aceptada'" class="col-md-12" style="float: right;">
-                                    <button class="btn btn-danger btn-md" type="button" data-toggle="modal" data-target="#modalTerminar">TERMINAR</button>
+                                <div *ngIf="servicioActivoSel.status == 'aceptada'" class="col-md-12">
+                                    <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalTerminar">TERMINAR</button>
                                 </div>
                                 
                               </div>
@@ -386,7 +386,7 @@
 
 <!-- modal de horario de practica -->
 <div class="modal fade" id="modalTerminar" role="dialog" >
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-sm">
   
       <!-- Modal content-->
       <div class="modal-content">
@@ -405,18 +405,30 @@
                     <fieldset>
                       <div class="form-group">
                         <div class="col-md-12">
-                          <label class="control-label" for="nombreserv"><strong>Descripcion :</strong> </label>
-                          <input type="text" id="file" name="file" [(ngModel)]="this.nombrearchivo"/>
+                          <label class="control-label" for="teledit">
+                            <strong>Nombre del Archivo:</strong>
+                          </label>
+                          <input class="form-control" type="text" id="file" name="file" [(ngModel)]="this.nombrearchivo"/>
                         </div>
                       </div>
+
                       <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="file" id="avatar" name="avatar" (change)="alistarVariables($event)"/>
+                          <div class="col-md-12">
+                            <label class="control-label" for="teledit">
+                              <strong>Seleccione Archivo:</strong>
+                            </label>
+                            <div class="btn btn-default btn-file">
+                                <i class="fa fa-paperclip"></i> File
+                                <input class="form-control" type="file" name="attachment" (change)="alistarVariables($event)">
+                            </div>
+                              <p class="help-block">Max. 32MB</p>
+                          </div>
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                            <button class="btn btn-danger btn-md" type="button" (click)="uploadFile()">TERMINAR SERVICIO</button>
+             
+                    
+                      <div *ngIf="this.file" class="form-group">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('terminada')">TERMINAR SERVICIO</button>
                         </div>
                       </div>
                     </fieldset>
