@@ -87,7 +87,7 @@ import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.c
 import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
 
 // libreria date time-picker
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
 
 
 @NgModule({
@@ -150,8 +150,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
     MatCheckboxModule,
     MatStepperModule,
     ToastrModule.forRoot(),
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule
+
 
   ],
   providers: [
