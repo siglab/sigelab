@@ -5,6 +5,7 @@ import { ObserverPrincipalService } from '../services/observer-principal.service
 import { QuerysPrincipalService } from '../services/querys-principal.service';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 declare var $: any;
 @Component({
@@ -36,6 +37,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
     variation:any;
     variacionSel = "";
 
+    preciototal = 0;
+
     // INICIALIZACION DATATABLE lABORATORIOS
     displayedColumns = ['nombreserv', 'nombrelab'];
     dataSource = new MatTableDataSource([]);
@@ -50,9 +53,19 @@ export class BusServComponent implements OnInit, AfterViewInit {
       var:false
     };
 
+    selecunivalle = new FormControl();
+    univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
+    habilitarci = false;
+    valorci = '';
+
+    usuariounivalle = false;
+
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
+      if(this.user.email.split('@')[1] == 'gmail.com'){
+        this.usuariounivalle = true;
+      }
     }
   }
 
@@ -139,18 +152,19 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   agregarSolicitudServicio() {
     const encontrado = this.listaVariaciones.find((element, index) => {
-      if(element.id == this.variation.id){
+
+      if(element.data.id == this.variation.id){
         return true;
       }
-      return false;
+      return false;    
     });
-
+  
     if(!encontrado){
       this.listaVariaciones.push({
         data: this.variation,
         condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
       }); 
-
+      this.preciototal += parseInt(this.variation.data.cfPrice);
       swal({
         type: 'success',
         title: 'Variacion agregada',
@@ -169,10 +183,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
   quitarVariacion(id){
     const encontrado = this.listaVariaciones.find((element, index) => {
 
-      console.log(element);
-      if(element.data.id == id){
 
-        console.log(index);
+      if(element.data.id == id){
+        this.preciototal -= parseInt(element.data.data.cfPrice);        
         this.listaVariaciones.splice(index, 1);
         return true;
       }
@@ -205,11 +218,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
         cfEndDate: '',
         cfClass: '',
         cfClassScheme: '',
+        cfPrice: this.itemsel.infoServ.precio,
         status: 'pendiente',
         createdAt: fecha.toISOString(),
         updatedAt:  fecha.toISOString(),
         conditionsLog: [],
-        comments:[]
+        comments:[],
+        typeuser:'externo',
+        datauser:{type:'', ci:''}
       };
 
         swal({
@@ -231,9 +247,17 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
                 
               }
+
+              cfSrvReserv.cfPrice = ''+this.preciototal;
     
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.itemsel.infoServ.condiciones);
+            }
+
+            if(this.usuariounivalle){
+              cfSrvReserv.typeuser = 'interno'
+             // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+              cfSrvReserv.datauser.ci = this.valorci;
             }
 
             cfSrvReserv.comments.push({
@@ -299,6 +323,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   cambiardata(item) { 
     console.log(item);
+    this.listaVariaciones = [];
     this.variation = undefined;
     this.campoCondicion = '';
      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
@@ -324,6 +349,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
       this.removerMarker();
       this.agregarMarker(item);
      }
+  }
+
+  selectorunivalle(){
+    this.habilitarci = false;
+    this.selecunivalle.value.forEach(element => {
+      if(element == 3){
+        this.habilitarci = true;
+      }
+    });
   }
 
 

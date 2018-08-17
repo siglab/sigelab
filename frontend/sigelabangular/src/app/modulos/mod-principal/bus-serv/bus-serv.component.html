@@ -85,181 +85,223 @@
                     <div class="col-md-6">
                       <div class="box box-danger">
                         <div class="box-header">
-                          <i class="fa fa-address-card-o"></i>
-
-                          <h3 class="box-title">Informacion servicio</h3>
+                            <h4 (click)="cambiarIcono('info')" class="box-title">
+                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
+                                INFORMACION DE SERVICIO
+                            </a>
+                            </h4>
+                            <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
+                            </a>
                         </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-
-                            <div class="box-group" id="accordion">
-                                <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                  
-                              <div class="box box-danger">
-                                  <div class="box-header">
-                                      <h4 (click)="cambiarIcono('info')" class="box-title">
-                                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                                          INFORMACION DE SERVICIO
-                                      </a>
-                                      </h4>
-                                      <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
-                                          <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
-                                      </a>
-                                  </div>
-                                  <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                                      <div class="box-body">
-                                          <form  id="form-work" class="" name="form-work" action="#">
-                                              <fieldset>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{itemsel.nombreserv}}</label>
-                  
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{itemsel.infoServ.descripcion}}</label>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
-                                                  <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
-                                                    <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                                                    <div class="form-group" *ngFor="let item of itemsel.infoServ.condiciones; let i = index">
-                                                        <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
-                                                    </div>
-                                                   
-                                                  </div>
-                                               </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="precioserv"><strong>Precio:</strong> {{itemsel.infoServ.precio}}</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{itemsel.infoServ.estado}}</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="condiciones"><strong>Comentarios:</strong></label>
-                                                      <textarea name="condiciones" rows="6" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
-                                                    <div class="col-md-12 text-center">
-                                                        <button  class="btn2 btn-danger btn-lg danger" type="button" (click)="enviarSolicitudServicio('sinvariaciones')" >Enviar Solicitud</button>
-                                                    </div>
-                                                </div>
-                  
-                  
-                                              </fieldset>                          
-                                          </form>
+                        <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <form  id="form-work" class="" name="form-work" action="#">
+                                    <fieldset>
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{itemsel.nombreserv}}</label>
+        
+                                          </div>
                                       </div>
-                                  </div>
-                              </div>
-                  
-                              <div class="box box-danger">
-                                  <div class="box-header">
-                                  <h4 (click)="cambiarIcono('var')" class="box-title">
-                                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                                      INFORMACION DE VARIACIONES DE SERVICIO
-                                      </a>
-                                  </h4>
-                                  <a (click)="cambiarIcono('var')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
-                                      <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.var, 'glyphicon-minus':iconos.var}"></span>
-                                  </a> 
-                                  </div>
-                                  <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                                    <div class="box-body">
-                                        <form  id="form-workserv2" class="" name="form-workserv2" action="#">
-                                            <fieldset>
-                                              <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
-                                                  <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
-                                                    <option value="inicial">Seleccione una variacion</option>
-                                                    <option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}" >{{item.data.cfName}}</option>
-                                                  </select>
-                                                </div>
-                                              </div>
-                                            </fieldset>
-                                            <fieldset *ngIf="variation">
-                                              <div class="form-group">
-                                                  <div class="col-md-12">
-                                                    <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.data.cfName}}</label>
-                        
-                                                  </div>
-                                              </div>
-                                              <div class="form-group">
-                                                  <div class="col-md-12">
-                                                    <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.data.cfDescription}}</label>
-                                                  </div>
-                                              </div>
-                                              <div class="form-group">
-                                                  <div class="col-md-12">
-                                                    <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.data.cfPrice}}</label>
-                                                  </div>
-                                              </div>
-                                              <div class="form-group">
-                                                <div class="col-md-12">
-                                                  <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                                                  <div class="form-group" *ngFor="let item of variation.data.cfConditions; let i = index">
-                                                      <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
-                                                  </div>
-                                                 
-                                                </div>
-                                             </div>
-                                              <div class="form-group">
-                                                  <div class="col-md-12">
-                                                    <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.data.active}}</label>
-                                                  </div>
-                                              </div> 
-                                              <div class="form-group">
-                                                  <div class="col-md-12 text-center">
-                                                      <button  class="btn2 btn-danger btn-lg danger" type="button" (click)="agregarSolicitudServicio()" >Agregar variacion</button>
-                                                  </div>
-                                              </div>
-                                            </fieldset>
-                                        </form>                
-                                    </div>
-                                  </div>
-                              </div>                  
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{itemsel.infoServ.descripcion}}</label>
+                                          </div>
+                                      </div>
+                                      <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
+                                        <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
+                                          <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                          <div class="form-group" *ngFor="let item of itemsel.infoServ.condiciones; let i = index">
+                                              <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
+                                          </div>
+                                         
+                                        </div>
+                                     </div>
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="precioserv"><strong>Precio:</strong> {{itemsel.infoServ.precio}}</label>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{itemsel.infoServ.estado}}</label>
+                                          </div>
+                                      </div>
+
+                                      <div *ngIf="usuariounivalle">
+                                        <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group" style="margin-top: 20px;">
+                                          <div class="col-md-12">
+                                            <p>como es un usuario de la univalle, debe escoger de manera obligatoria una de las siguientes opciones</p>
+                                            <mat-form-field>
+                                              <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivalle" multiple (change)="selectorunivalle()">
+                                                <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+                                        
+                                        <div *ngIf="(itemsel.infoServ.variaciones.length == 0) && habilitarci" class="form-group" style="margin-top: 20px;">
+                                          <div class="col-md-12">
+                                            <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
+                                            <input id="univ" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div *ngIf="itemsel.infoServ.equipos.length != 0" class="form-group">
+                                          <div class="col-md-12 text-center">
+                                              <button class="btn2 btn-danger danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">Ver equipos asociados</button>
+                                          </div>
+                                      </div>
+                                      <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="condiciones"><strong>Comentarios:</strong></label>
+                                            <textarea name="condiciones" rows="6" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;"></textarea>
+                                          </div>
+                                      </div>
+                                      <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
+                                          <div class="col-md-12 text-center">
+                                              <button  class="btn2 btn-danger btn-lg danger" type="button" (click)="enviarSolicitudServicio('sinvariaciones')" >Enviar Solicitud</button>
+                                          </div>
+                                      </div>
+        
+        
+                                    </fieldset>                          
+                                </form>
                             </div>
-
-                      
-
-                          
                         </div>
-
                       </div>
-
+        
                       <div *ngIf="itemsel.infoServ.variaciones.length != 0" class="box box-danger">
+                          <div class="box-header">
+                          <h4 (click)="cambiarIcono('var')" class="box-title">
+                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
+                              INFORMACION DE VARIACIONES DE SERVICIO
+                              </a>
+                          </h4>
+                          <a (click)="cambiarIcono('var')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
+                              <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.var, 'glyphicon-minus':iconos.var}"></span>
+                          </a> 
+                          </div>
+                          <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <form  id="form-workserv2" class="" name="form-workserv2" action="#">
+                                    <fieldset>
+                                      <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
+
+                                          <mat-form-field>
+                                            <mat-select name="sel" id="sel" [(value)]="variacionSel" placeholder="Seleccione una variacion"  (change)="cambiarVariacion(variacionSel)">
+                    
+                                              <mat-option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}">{{item.data.cfName}}</mat-option>
+                                             
+                                            </mat-select>
+                                          </mat-form-field>
+                                        </div>
+                                      </div>
+                                    </fieldset>
+                                    <fieldset *ngIf="variation">
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.data.cfName}}</label>
+                
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.data.cfDescription}}</label>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.data.cfPrice}}</label>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <div class="col-md-12">
+                                          <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                          <div class="form-group" *ngFor="let item of variation.data.cfConditions; let i = index">
+                                              <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
+                                          </div>
+                                        
+                                        </div>
+                                    </div>
+                                      <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.data.active}}</label>
+                                          </div>
+                                      </div> 
+                                      <div class="form-group">
+                                          <div class="col-md-12 text-center">
+                                              <button  class="btn btn-danger" type="button" (click)="agregarSolicitudServicio()" >Agregar variacion</button>
+                                          </div>
+                                      </div>
+                                    </fieldset>
+                                </form>                
+                            </div>
+                          </div>
+                      </div>  
+
+                      <div *ngIf="this.listaVariaciones.length != 0" class="box box-danger">
                           <div class="box-header">
                             <i class="fa fa-map"></i>
     
                             <h3 class="box-title">Variaciones Agregadas</h3>
                           </div>
                           <!-- /.box-header -->
-                          <div *ngIf="this.listaVariaciones.length != 0" class="box-body">
+                          <div class="box-body">
                               <ul class="nav nav-stacked">
-                                <li *ngFor="let item of this.listaVariaciones"><a>{{item.data.data.cfName}} <span (click)="quitarVariacion(item.data.id)" class="pull-right badge bg-red">-</span></a></li>
+                                <li *ngFor="let item of this.listaVariaciones"><a>{{item.data.data.cfName}} <span (click)="quitarVariacion(item.data.id)" class="puntero pull-right badge bg-red">-</span></a></li>
                               </ul>
+
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="total"><strong>TOTAL: $</strong>{{this.preciototal}}</label>
+                                </div>
+                              </div>
+
+                              <div *ngIf="usuariounivalle">
+                                <div class="form-group" style="margin-top: 20px;">
+                                  <div class="col-md-12">
+                                    <p>como es un usuario de la univalle, debe escoger de manera obligatoria una de las siguientes opciones</p>
+                                    <mat-form-field>
+                                      <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivalle" multiple (change)="selectorunivalle()">
+                                        <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                
+                                <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
+                                  <div class="col-md-12">
+                                    <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
+                                    <input id="univ" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
+                                  </div>
+                                </div>      
+                              </div>
+
                               <div class="form-group">
                                   <div class="col-md-12">
                                     <label class="control-label" for="condiciones"><strong>Comentarios:</strong></label>
                                     <textarea name="condiciones" rows="6" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;"></textarea>
                                   </div>
                               </div>
-
-                            <button class="btn-danger btn-lg btn-block danger" style="margin-top: 20px;" type="button" (click)="enviarSolicitudServicio('convariaciones')">HACER SOLICITUD</button>
-        
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                      <button class="btn btn-danger" style="margin-top: 20px;" type="button" (click)="enviarSolicitudServicio('convariaciones')">Solicitar servicio</button>
+                                  </div>
+                              </div>
 
                           </div>
                           <!-- /.box-body -->
     
-                        </div>
+                      </div>
+
                     </div>
+
+                    <!--INFORMACION DE LABORATORIO-->
                   <div class="col-md-6">
                     <div class="box box-danger">
                       <div class="box-header">
@@ -332,3 +374,44 @@
 </div>
 
 
+
+<!--MODAL PARA MOSTRAR EQUIPOS RELACIONADOS-->
+<div class="modal fade" id="modalEquips" role="dialog" *ngIf="itemsel">
+    <div class="modal-dialog modal-md">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="box box-danger">
+                <div class="box-header">
+                  <i class="fa fa-map"></i>
+
+                  <h3 class="box-title">Informacion Equipos Relacionados</h3>
+                </div>
+                
+                <div class="box-body">               
+                    <div class="panel-group" id="accordion">
+                        
+                        <div *ngFor="let item of itemsel.infoServ.equipos; let i = index;" class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}">{{item.nombre}}</a>
+                            </h4>
+                          </div>
+                          <div id="collapse{{i}}" class="panel-collapse collapse">
+                            <div class="panel-body">{{item.descripcion}}</div>
+                          </div>
+                        </div>
+
+                    </div> 
+                </div>
+               
+
+              </div>
+
+      
+        </div>
+      </div>
+
+    </div>
+</div>

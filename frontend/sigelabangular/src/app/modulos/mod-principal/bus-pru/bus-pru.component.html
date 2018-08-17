@@ -2,7 +2,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Pruebas
+        Practicas
       </h1>
 
     </section>
@@ -27,7 +27,7 @@
               <div class="example-container mat-elevation-z8">
                 <div class="example-header">
                   <mat-form-field>
-                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar prueba">
+                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar practica">
                   </mat-form-field>
                 </div>
 
@@ -72,18 +72,17 @@
             <div class="box box-danger">
               <div class="box-body">
                   <div class="box-header">
-                      <i class="fa fa-building"></i>
-
-                      <h3 class="box-title">Detalles de la Prueba</h3>
+                      
+                      <h3 class="box-title">Detalles de la Practica</h3>
                     </div>
                 <div class="row" style="margin-top:20px;">
                    <!-- INFORMACION LABORATORIO -->
                     <div class="col-md-6">
                       <div class="box box-danger">
                         <div class="box-header">
-                          <i class="fa fa-address-card-o"></i>
+                            <i class="fa fa-building"></i>
 
-                          <h3 class="box-title">Informacion Prueba</h3>
+                          <h3 class="box-title">Informacion Practica</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -100,28 +99,12 @@
                                   <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{itemsel.infoPrub.activo}}</label>
                                 </div>
                               </div>
-                              <div class="form-group">
-                                <div class="col-md-12" style="margin-top: 20px;">
-                                  <label class="control-label"><strong style="color: red;">PROGRAMACION</strong></label>
+                             
+                              <div class="form-group" style="margin-top: 20px;">
+                                <div class="col-md-12">
+                                  <button class="btn btn-danger" style="float: right;"  data-toggle="modal" data-target="#practicaprog"  type="button">Ver Programacion</button>
                                 </div>
                               </div>
-                              <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="cantest"><strong>Estudiante:</strong> {{itemsel.infoPrub.programacion.estudiantes}}</label>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="semestre"><strong>Semestre:</strong> {{itemsel.infoPrub.programacion.semestre}}</label>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="diahora"><strong>Dia y Hora:</strong> {{itemsel.infoPrub.programacion.diahora}}</label>
-                                  </div>
-                              </div>
-
-
                             </fieldset>
                           </form>
                         </div>
@@ -201,3 +184,43 @@
 </div>
 
 
+<!-- modal de horario de practica -->
+<div class="modal fade" id="practicaprog" role="dialog" *ngIf="itemsel">
+    <div class="modal-dialog modal-lg">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+  
+        <div class="modal-body">
+          <div class="box box-danger">
+            <div class="box-header text-center">
+              <i class="fa fa-calendar"></i>
+  
+              <h1 class="box-title">Programacion de la Practica</h1>
+  
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="semestre"><strong>Semestre:</strong> {{itemsel.infoPrub.programacion.semestre}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="numero"><strong>No estudiantes:</strong> {{itemsel.infoPrub.programacion.estudiantes}}</label>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                    <div class= "cal" id="cal2">
+                      </div>
+                </div>
+             
+            </div>
+  
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>

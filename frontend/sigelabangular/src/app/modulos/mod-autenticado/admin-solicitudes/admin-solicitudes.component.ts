@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 declare var $: any;
 @Component({
@@ -55,7 +56,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   constructor(private querys: QuerysAutenticadoService, 
               private observer: ObserverAutenticadoService,
-              private http:Http) {
+              private http:Http, private storage: AngularFireStorage) {
 
    }
 
@@ -69,13 +70,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         this.datos = this.querys.estructurarServiciosActivos(this.user.email, data);
         this.observer.changeDatatableServsAct(this.datos);
-        console.log(this.datos);
       });
 
-      this.querys.getCollectionsHisto(this.user.uid).subscribe(data => {
+      this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         this.histodatos = this.querys.estructurarHistoriaServicios(this.user.email, data);
         this.observer.changeDatatableHistoServs(this.histodatos);
-        console.log(this.histodatos);
       });
     }
 
@@ -149,6 +148,14 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
     console.log(item);
 
+  }
+
+  descargarDoc(){
+    console.log(this.servsel.path);
+    const ref = this.storage.ref(this.servsel.path);
+    ref.getDownloadURL().subscribe(data => {
+      window.open(data);
+    }); 
   }
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
@@ -226,21 +233,44 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario(){
-    const fecha = new Date();
-    let cfSrvReserv = {
-      comments:this.servsel.comentario
-    };
+    swal({
 
-    cfSrvReserv.comments.push({
-      commentText: this.comentario, 
-      fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
-      uid: this.user.uid});
+      type: 'warning',
+      title: 'Esta seguro que desea enviar este comentario',
+      showCancelButton: true,
+      confirmButtonText: 'Si, Solicitar',
+      cancelButtonText: 'No, Cancelar'
 
-    this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
-      if(this.servsel.status == 'aceptada'){
-        this.enviarEmails();
+    }).then((result) => {
+
+      if (result.value) {
+
+        const fecha = new Date();
+        let cfSrvReserv = {
+          comments:this.servsel.comentario
+        };
+    
+        cfSrvReserv.comments.push({
+          commentText: this.comentario, 
+          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          uid: this.user.uid});
+    
+        this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
+          if(this.servsel.status == 'aceptada'){
+            this.enviarEmails();
+          }
+        });
+
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
       }
+
     });
+
 
      
   }
@@ -260,7 +290,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       emailAcepto = this.servsel.acepto;
       const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
                       this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
-                      ' por el usuario con el correo ' + emailSolicitante;
+                      ' por el usuario con el correo ' + emailSolicitante +'. a continuacion vera el comentario: " '+
+                      this.comentario +' "';
 
       this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
         emailEncargado = persona.payload.data().email;
@@ -270,6 +301,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           if(res.status == 200){
             //this.cerrarAlerta();
             this.alertaExito('Comentario enviado');
+            this.comentario = '';
           } else {
             this.alertaError('fallo al enviar correos');
           }

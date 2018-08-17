@@ -61,39 +61,43 @@ export class QuerysPrincipalService {
     for (let index = 0; index < data.length; index++) {
 
       const elemento = data[index].payload.doc.data();
-
-      if(elemento.cfName) {
+      console.log(elemento);
+      if(elemento.facilityAdmin != '') {
         this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
           const duenoLab = dueno.payload.data();
           if (duenoLab && elemento.otros) {
 
-            this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
+            if(elemento.mainSpace != ''){
+             
+              this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
 
-              const espacioLab = espacio.payload.data();
-               // convertir boolean a cadena de caracteres para estado del laboratorio
-              let estadoLab;
-               if(elemento.active == true) {
-                estadoLab = 'Activo';
-               } else if( elemento.active == false ) {
-                estadoLab = 'Inactivo';
-               }
-
-              const laboratorio = {
-                uid: data[index].payload.doc.id,
-                nombre: elemento.cfName,
-                escuela: elemento.knowledgeArea,
-                inves: elemento.researchGroup,
-                director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
-                info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
-                servicios: this.estructurarServicios(elemento.relatedServices),
-                practicas: this.estructurarPracticas(elemento.relatedPractices),
-                estado: estadoLab
-              };
-
-                this.datosLabsEstructurados.push(laboratorio);
-            });
-
+                const espacioLab = espacio.payload.data();
+                 // convertir boolean a cadena de caracteres para estado del laboratorio
+                let estadoLab;
+                 if(elemento.active == true) {
+                  estadoLab = 'Activo';
+                 } else if( elemento.active == false ) {
+                  estadoLab = 'Inactivo';
+                 }
+  
+                const laboratorio = {
+                  uid: data[index].payload.doc.id,
+                  nombre: elemento.cfName,
+                  escuela: elemento.knowledgeArea,
+                  inves: elemento.researchGroup,
+                  desc: elemento.cfDescr,
+                  director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                  coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
+                  info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
+                  servicios: this.estructurarServicios(elemento.relatedServices),
+                  practicas: this.estructurarPracticas(elemento.relatedPractices),
+                  estado: estadoLab
+                };
+  
+                  this.datosLabsEstructurados.push(laboratorio);
+              });
+            }
+        
           }
        });
       }
@@ -114,58 +118,62 @@ export class QuerysPrincipalService {
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
 
-      this.buscarLaboratorio(elemento.cfFacil).subscribe(lab => {
-        const labencontrado = lab.payload.data();
-
-        this.buscarDirector(labencontrado.facilityAdmin).subscribe(dueno => {
-          const duenoLab = dueno.payload.data();
-          if (duenoLab && labencontrado.mainSpace) {
-
-            this.buscarEspacio(labencontrado.mainSpace).subscribe(espacio => {
-
-              const espacioLab = espacio.payload.data();
-
-              // convertir boolean a cadena de caracteres para estado del laboratorio
-              let estadoServ;
-              if(elemento.active == true) {
-                estadoServ = 'Activo';
-              } else if( elemento.active == false ) {
-                estadoServ = 'Inactivo';
+      if(elemento.cfFacil){
+        this.buscarLaboratorio(elemento.cfFacil).subscribe(lab => {
+          const labencontrado = lab.payload.data();
+          
+          if(labencontrado){
+            this.buscarDirector(labencontrado.facilityAdmin).subscribe(dueno => {
+              const duenoLab = dueno.payload.data();
+              if (duenoLab && labencontrado.mainSpace) {
+    
+                this.buscarEspacio(labencontrado.mainSpace).subscribe(espacio => {
+    
+                  const espacioLab = espacio.payload.data();
+    
+                  // convertir boolean a cadena de caracteres para estado del laboratorio
+                  let estadoServ;
+                  if(elemento.active == true) {
+                    estadoServ = 'Activo';
+                  } else if( elemento.active == false ) {
+                    estadoServ = 'Inactivo';
+                  }
+    
+                  const servicios = {
+                    nombreserv: elemento.cfName,
+                    nombrelab: labencontrado.cfName,
+                    infoServ: {
+                      descripcion: elemento.cfDesc,
+                      precio: elemento.cfPrice,
+                      estado: estadoServ,
+                      variaciones: this.variations(data[index].payload.doc.id),
+                      equipos: this.estructurarEquipos(elemento.relatedEquipments),
+                      condiciones: elemento.cfCondition,
+                      uid: data[index].payload.doc.id
+                    },
+                    infoLab: {
+                      uid: elemento.cfFacil,
+                      dir: labencontrado.otros.direccion,
+                      tel: labencontrado.otros.telefono,
+                      cel: '',
+                      email: labencontrado.otros.email,
+                      escuela: labencontrado.knowledgeArea,
+                      inves: labencontrado.researchGroup,
+                      director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames},
+                    coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
+                  };
+    
+                  this.datosServEstructurados.push(servicios);
+                });
+    
               }
-
-              const servicios = {
-                nombreserv: elemento.cfName,
-                nombrelab: labencontrado.cfName,
-                infoServ: {
-                  descripcion: elemento.cfDesc,
-                  precio: elemento.cfPrice,
-                  estado: estadoServ,
-                  variaciones: this.variations(data[index].payload.doc.id),
-                  condiciones: elemento.cfCondition,
-                  uid: data[index].payload.doc.id
-                },
-                infoLab: {
-                  uid: elemento.cfFacil,
-                  dir: labencontrado.otros.direccion,
-                  tel: labencontrado.otros.telefono,
-                  cel: '',
-                  email: labencontrado.otros.email,
-                  escuela: labencontrado.knowledgeArea,
-                  inves: labencontrado.researchGroup,
-                  director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames},
-                coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
-              };
-
-              this.datosServEstructurados.push(servicios);
-            });
-
+           });
           }
-       });
-
-
-      });
-
-
+         
+  
+  
+        });
+      }
 
     }
 
@@ -181,10 +189,10 @@ export class QuerysPrincipalService {
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
 
-      this.afs.doc('practice/' + data[index].payload.doc.id).collection('programmingData').valueChanges().subscribe(data2 => {
+      this.afs.doc('practice/' + data[index].payload.doc.id).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
         // funciona con una programacion, cuando hayan mas toca crear otro metodo
-        const prog = data2[0];
+        const prog = data2[0].payload.doc.data();
 
         this.buscarLaboratorio(elemento.cfFacil).subscribe(lab => {
           const labencontrado = lab.payload.data();
@@ -210,9 +218,10 @@ export class QuerysPrincipalService {
                   nombrelab: labencontrado.cfName,
                   infoPrub: {
                     programacion: {
-                      estudiantes: prog['noStudents'],
-                      diahora: prog['schedule'],
-                      semestre: prog['semester']
+                      id_pro: data2[0].payload.doc.id,
+                      estudiantes: prog.noStudents,
+                      horario: prog.schedule,
+                      semestre: prog.semester
                     },
 
                     activo: estado
@@ -244,6 +253,35 @@ export class QuerysPrincipalService {
   }
 
 
+   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarEquipos(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
+           const equip =  data.payload.data();
+
+             // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                const equipo = {
+                  nombre: equip.cfName,
+                  descripcion: equip.cfDescr,
+                };
+                arr.push(equipo);
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
 
   // METODO QUE TRAE UN LABORATORIO ESPECIFICO DEPENDIENDO EL ID-LABORATORIO
   buscarLaboratorio(idLab) {
@@ -260,6 +298,8 @@ export class QuerysPrincipalService {
   buscarEspacio(idespacio) {
     return this.afs.doc('space/' + idespacio).snapshotChanges();
   }
+
+
 
   // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
@@ -281,6 +321,7 @@ export class QuerysPrincipalService {
               descripcion: servicio.cfDesc,
               precio: servicio.cfPrice,
               activo: servicio.active,
+              equipos: this.estructurarEquipos(servicio.relatedEquipments),
               condiciones: servicio.cfCondition,
               variaciones: this.variations(clave),
               uid: data.payload.id
@@ -310,17 +351,18 @@ export class QuerysPrincipalService {
         if (item[clave]) {
            this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
            const practica =  data.payload.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('practice/' + clave ).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
+              const prog = data2[0].payload.doc.data();
 
               const pract = {
                 nombre: practica.practiceName,
                 programacion: {
-                  estudiantes: prog['noStudents'],
-                  diahora: prog['schedule'],
-                  semestre: prog['semester']
+                  id_pro: data2[0].payload.doc.id,
+                  estudiantes: prog.noStudents,
+                  horario: prog.schedule,
+                  semestre: prog.semester
                 },
                 activo: practica.active
                };

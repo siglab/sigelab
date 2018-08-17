@@ -209,7 +209,13 @@
                                     <div class="col-md-12">
                                       <label class="control-label" for="estado"><strong>Estado:</strong> {{servsel.status}}</label>
                                     </div>
-                                </div>
+                                  </div>
+
+                                  <div *ngIf="servsel.path" class="form-group">
+                                    <div class="col-md-12 text-center">
+                                        <button class="btn btn-danger" style="float: right;" type="button" (click)="descargarDoc()">Descargar Archivo</button>
+                                    </div>
+                                  </div>
           
                                 </fieldset>
                             </form>
@@ -280,9 +286,9 @@
                     </div>
                     </div>
                 </div>  
-                <div class="row" style="margin-top:20px;">
-                  <div class="col-md-12 text-center form-group">
-                    <button *ngIf="buttoncancel" class="btn-danger btn-lg btn-block danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
+                <div class="row form-group" style="margin-top:20px;">
+                  <div class="col-md-12 text-center ">
+                    <button *ngIf="buttoncancel" class="btn btn-danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
                   </div>
                 </div>                
               </div>
@@ -335,7 +341,7 @@
                     </div>
                   </div>
                     <!-- /.box-body -->   
-                  <div *ngIf="servsel.status != 'cancelada'" class="box-footer">
+                  <div *ngIf="(servsel.status != 'terminada') && (servsel.status != 'cancelada')" class="box-footer">
                       <form action="#" method="post">
                         <div class="input-group">
                           <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">

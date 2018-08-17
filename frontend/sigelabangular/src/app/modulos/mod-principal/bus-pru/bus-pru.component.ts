@@ -4,7 +4,10 @@ import * as L from 'leaflet';
 import { ObserverPrincipalService } from '../services/observer-principal.service';
 import { QuerysPrincipalService } from '../services/querys-principal.service';
 import swal from 'sweetalert2';
-declare var $: any;
+import 'fullcalendar';
+import 'fullcalendar-scheduler';
+import * as $ from 'jquery';
+//declare var $: any;
 @Component({
   selector: 'app-bus-pru',
   templateUrl: './bus-pru.component.html',
@@ -87,6 +90,8 @@ export class BusPruComponent implements OnInit, AfterViewInit {
     $('html, body').animate({ scrollTop: '400px' }, 'slow');
 
     this.itemsel = item;
+
+    this.initCalendarModal( item.infoPrub.programacion.horario);
     if (!this.moduloinfo) {
       this.moduloinfo = true;
       const ambiente = this;
@@ -98,6 +103,29 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       this.removerMarker();
       this.agregarMarker(item);
      }
+  }
+
+  initCalendarModal(horario) {
+
+    const containerEl: JQuery = $('#cal2');
+    containerEl.fullCalendar('destroy');
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 450,
+      header: {
+        left: 'month,agendaWeek,agendaDay',
+        center: 'title',
+        right: 'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+      timeFormat: 'H(:mm)'
+
+    });
   }
 
 

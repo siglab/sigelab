@@ -468,6 +468,8 @@ export class AdminPracticasComponent implements OnInit {
   }
   cambiardata(row) {
     console.log(row);
+    this.practica = row;
+
     this.practica.nombre = row.nombre;
     this.practica.numeroEst = row.programacion.estudiantes;
     this.practica.semestre = row.programacion.semestre;

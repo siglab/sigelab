@@ -1,7 +1,7 @@
 
 import { element } from 'protractor';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import * as L from 'leaflet';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
@@ -11,8 +11,14 @@ import { QuerysPrincipalService } from '../services/querys-principal.service';
 
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+
+import 'fullcalendar';
+import 'fullcalendar-scheduler';
+import * as $AB from 'jquery';
 
 declare var $: any;
+
 @Component({
   selector: 'app-bus-lab',
   templateUrl: './bus-lab.component.html',
@@ -32,6 +38,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   itemsel: any;
   servsel: any;
   prubsel: any;
+  equipsel:any;
 
   moduloinfo = false;
   layer = null;
@@ -42,6 +49,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   variation:any;
   variacionSel = "";
+
+  preciototal = 0;
 
 
 
@@ -70,10 +79,24 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   listaVariaciones = [];
 
+  selecunivallelab = '';
+  univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
+  habilitarci = false;
+  valorci = '';
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
+  usuariounivalle = false;
+
+
+
+
+  constructor(private observer: ObserverPrincipalService, 
+              private query: QuerysPrincipalService, 
+              private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
+      if(this.user.email.split('@')[1] == 'gmail.com'){
+        this.usuariounivalle = true;
+      }
     }
   }
 
@@ -95,6 +118,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
 
   }
+
+
 
   ngAfterViewInit(): void {
 
@@ -131,7 +156,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   agregarSolicitudServicio() {
     const encontrado = this.listaVariaciones.find((element, index) => {
-      if(element.id == this.variation.id){
+      if(element.data.id == this.variation.id){
         return true;
       }
       return false;
@@ -142,7 +167,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         data: this.variation,
         condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
       });
-
+      this.preciototal += parseInt(this.variation.data.cfPrice);
       swal({
         type: 'success',
         title: 'Variacion agregada',
@@ -161,10 +186,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   quitarVariacion(id){
     const encontrado = this.listaVariaciones.find((element, index) => {
 
-      console.log(element);
       if(element.data.id == id){
 
-        console.log(index);
+        this.preciototal -= parseInt(element.data.data.cfPrice);
         this.listaVariaciones.splice(index, 1);
         return true;
       }
@@ -197,11 +221,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         cfEndDate: '',
         cfClass: '',
         cfClassScheme: '',
+        cfPrice: this.servsel.precio,
         status: 'pendiente',
         createdAt: fecha.toISOString(),
         updatedAt:  fecha.toISOString(),
         conditionsLog: [],
-        comments:[]
+        comments:[],
+        typeuser:'externo',
+        datauser:{type:'', ci:''}
       };
 
         swal({
@@ -223,10 +250,19 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
               }
 
+              cfSrvReserv.cfPrice = ''+this.preciototal;            
+
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
             }
+            
+            if(this.usuariounivalle){
+              cfSrvReserv.typeuser = 'interno'
+              cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
+              cfSrvReserv.datauser.ci = this.valorci;
+            }
 
+           
             cfSrvReserv.comments.push({
               commentText: this.campoCondicion,
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
@@ -239,6 +275,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 showConfirmButton: true
               }).then(()=>{
                 $('#myModalLabs').modal('hide');
+                this.valorci = '';
               });
 
 
@@ -346,8 +383,44 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   cambiarDataPrueba(item) {
     this.prubsel = item;
+    this.initCalendarModal(item.programacion.horario);
   }
 
+  initCalendarModal(horario) {
+
+    const containerEl: JQuery = $AB('#calendar2');
+
+    if(containerEl.children().length > 0){
+ 
+      containerEl.fullCalendar('destroy');
+    }
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 450,
+      header: {
+        left: 'month,agendaWeek,agendaDay',
+        center: 'title',
+        right: 'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+      timeFormat: 'H(:mm)'
+
+    });
+  }
+
+  selectorunivalle(key){
+    this.habilitarci = false; 
+
+    if(key == 3){
+      this.habilitarci = true;
+    }
+   
+  }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarVariacion(item){

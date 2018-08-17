@@ -2,7 +2,7 @@
 
 .divScroll {
   overflow-y: scroll;
-  height: 600px;
+  height: 100%;
   max-height: auto;
 }
 divScroll::-webkit-scrollbar-track
@@ -132,3 +132,5 @@ label {
 .mat-header-cell.mat-sort-header-sorted {
   color: black;
 }
+
+
