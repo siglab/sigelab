@@ -23,23 +23,29 @@ const mailTrasport = nodemailer.createTransport({
 
 
 exports.CreateUser = functions.auth.user().onCreate(event => {
+
   ref.collection("cfPers").where("email", "==", event.email)
   .get()
   .then((querySnapshot) => {
-    const personas = []
 
-    // add data from the 5 most recent comments to the array
-    querySnapshot.forEach(doc => {
-      personas.push(doc.id)
-    });
-
-    if (personas.length > 0) {
-
-      return personas[0];
+    if(querySnapshot.empty) {
+      const id = '';
+      return id ;
 
     } else {
+      const personas = [];
 
-      return '';
+      // add data from the 5 most recent comments to the array
+      querySnapshot.forEach(doc => {
+        personas.push(doc.id);
+      });
+
+      if (personas.length > 0) {
+
+        return personas[0];
+
+      }
+
     }
 
 
@@ -48,19 +54,18 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
   ).then((idp) => {
 
 
-    const fecha = new Date();
-    const uid = event.uid;
-    const email = event.email;
+      const fecha = new Date();
+      const email = event.email;
 
-    const usr = {
-      cfOrgId: "UK6cYXc1iYXCdSU30xmr",
-      cfPers: idp,
-      appRoles: { IKLoR5biu1THaAMG4JOz: true },
-      createdAt: fecha.toISOString(),
-      email: email,
-    }
+      const usr = {
+        cfOrgId: "UK6cYXc1iYXCdSU30xmr",
+        cfPers: idp,
+        appRoles: { IKLoR5biu1THaAMG4JOz: true },
+        createdAt: fecha.toISOString(),
+        email: email
+      };
 
-    return usr
+      return usr;
 
 
 
@@ -69,13 +74,15 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
   }).then((usr) => {
 
+      if(usr.cfPers ) {
 
-    const pers = { user: event.uid} ;
+        const pers = { user: event.uid} ;
+        ref.doc(`cfPers/${usr.cfPers}`).set(pers , { merge : true});
+        return ref.doc(`/user/${event.uid}`).set(usr)
+      } else {
 
-      ref.doc(`cfPers/${usr.cfPers}`).set(pers , { merge : true});
-      return ref.doc(`/user/${event.uid}`).set(usr)
-
-
+        return ref.doc(`/user/${event.uid}`).set(usr)
+      }
 
 
   }).catch(err => console.log('fallo la consulta', err));
@@ -130,7 +137,7 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
   });
 });
-      
+
 
 
 
@@ -142,7 +149,7 @@ exports.consultaQuiUv = functions.https.onRequest((req, res) => {
     quiv(req.body, res);
     });
 
-     
+
 
   });
 
