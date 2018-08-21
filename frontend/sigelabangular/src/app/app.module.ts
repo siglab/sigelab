@@ -61,6 +61,7 @@ import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-niv
 // tslint:disable-next-line:max-line-length
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
 
+// tslint:disable-next-line:max-line-length
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule } from '@angular/material';
 
 import { LoginComponent } from './modulos/login/login.component';
@@ -85,6 +86,7 @@ import { AdminQrComponent } from './modulos/mod-nivel2/admin-qr/admin-qr.compone
 import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
 
 import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
+import { RegistroComponent } from './modulos/registro/registro.component';
 
 // libreria date time-picker
 
@@ -128,7 +130,8 @@ import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service'
     IndicadoresGraficasReportes3Component,
     BardAdminQrComponent,
     AdminQrComponent,
-    FormQrComponent
+    FormQrComponent,
+    RegistroComponent
   ],
   imports: [
     AngularFireStorageModule,

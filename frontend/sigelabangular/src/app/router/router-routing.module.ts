@@ -27,12 +27,15 @@ import { IndicadoresGraficasReportesComponent } from '../modulos/mod-nivel2.5/in
 import { SolicitudesNivel3Component } from '../modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
 import { LoginComponent } from '../modulos/login/login.component';
 import { AdminLaboratorios3Component } from '../modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
+// tslint:disable-next-line:max-line-length
 import { IndicadoresGraficasReportes3Component } from '../modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
+import { RegistroComponent } from '../modulos/registro/registro.component';
 
 
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
+  { path: 'registro', component: RegistroComponent},
   { path: 'principal', component: PrincipalComponent,
     children: [
       { path: 'busquedalaboratorio', component: BusLabComponent},

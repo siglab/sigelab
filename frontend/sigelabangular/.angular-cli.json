@@ -35,6 +35,7 @@
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
         "assets/js/adminlte.js",
+        "assets/js/material-bootstrap-wizard.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js",
         "../node_modules/leaflet/dist/leaflet.js",
         "../node_modules/selectize/dist/js/standalone/selectize.min.js",
