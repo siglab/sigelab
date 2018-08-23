@@ -67,8 +67,7 @@ export class RegistroComponent implements OnInit {
             showConfirmButton: true
           });
 
-           this.email = '';
-           this.pass = '';
+
           console.log('usuario creado', ok);
         }
       );

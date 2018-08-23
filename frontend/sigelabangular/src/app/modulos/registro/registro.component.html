@@ -1,4 +1,4 @@
-<div class="body">
+<section>
 
   <div class="image-container set-full-height">
 
@@ -67,11 +67,11 @@
 
                           <div *ngIf="pas['errors']?.minlength " style="color:red;"> Escriba al menos {{pas['errors'].minlength.requiredLength}} caracteres.</div>
                           <div *ngIf="pas['errors']?.required && (pas.touched)" style="color:red;"> Este campo es obigatorio.</div>
-                        
+
                         </div>
 
                       </div>
-                              
+
 
                     </div>
                   </div>
@@ -97,4 +97,4 @@
 
 
   </div>
-</div>
+</section>
