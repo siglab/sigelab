@@ -78,13 +78,18 @@ nombrearchivo = '';
    filePath:any;
    ref:any;
 
+   rol:any;
+   moduloNivel2 = false;
+   moduloServicios = false;
+
 constructor(private obs: ObservablesService, private afs: AngularFirestore, 
             private http: Http, private storage: AngularFireStorage) {
  //this.obs.changeSolServ(this.servicioso);
 }
 
   ngOnInit() {
-    
+
+    this.getRoles();
 
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
@@ -134,6 +139,23 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     this.sus.unsubscribe();
   }
 
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.rol = JSON.parse(localStorage.getItem('rol'));
+    
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+
+        if ((clave === 'moduloServicios')) {
+          this.moduloServicios = true;
+        }
+      }
+    }
+  }
 
   getCollectionReserv(labid) {
     this.collectionReserv = this.afs.collection('cfSrvReserv',

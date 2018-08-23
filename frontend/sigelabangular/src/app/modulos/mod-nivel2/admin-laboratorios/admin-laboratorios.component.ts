@@ -7,6 +7,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import swal from 'sweetalert2';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Subscription } from 'rxjs';
+import { EspaciosService } from '../services/espacios.service';
 
 declare var $: any;
 
@@ -71,7 +72,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       cfDescr:'',
       faculties:{},
       departments:{},
-      // mainSpace:'',
+      mainSpace:'',
+      cfConditions:'',
+      cfAvailability:[],
       otros: {
         direccion: '',
         email: '',
@@ -115,15 +118,28 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     facultades = [];
     departamentos = [];
 
+    diassemana = [{id:'1', nombre:'LUNES'},{id:'2', nombre:'MARTES'},{id:'3', nombre:'MIERCOLES'},
+                  {id:'4', nombre:'JUEVES'},{id:'5', nombre:'VIERNES'},{id:'6', nombre:'SABADO'},
+                  {id:'7', nombre:'DOMINGO'}];
+
+    espacios = [];
+
     listaFacultades = [];
     listaDepartamentos = [];
+    listaDisponibilidad = [];
     selectfacul = '';
     selectdepar = '';
 
+    selectdia = 0;
+    selectHinicio = '';
+    selectHFinal = '';
+
     listaFaculSugeridos = [];
     listaDeparSugeridos = [];
+    listaDispoSugeridos = [];
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, private storage: AngularFireStorage) {
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+              private storage: AngularFireStorage, private service:EspaciosService) {
   }
 
   ngOnInit() {
@@ -263,6 +279,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       sede: {id:laboratorio.headquarter, nombre:sede.cfName},
                       subsede: {id:laboratorio.subHq, nombre:subsede.cfAddrline1},
                       espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
+                      espacioPrincipal: laboratorio.mainSpace,
                       info: {dir: laboratorio.otros.direccion, tel: laboratorio.otros.telefono, cel: '', email: laboratorio.otros.email},
                       servicios: this.estructurarServicios(laboratorio.relatedServices).arr,
                       practicas: this.estructurarPracticas(laboratorio.relatedPractices),
@@ -274,6 +291,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       departamentos: this.estructurarDepartamentos(laboratorio.departments),
                       espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
                       cambios: laboratorio.suggestedChanges,
+                      disponibilidad: laboratorio.cfAvailability,
+                      condiciones: laboratorio.cfConditions,
                       estado: estadoLab
                     };
                     
@@ -643,7 +662,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               this.afs.doc('faculty/' + clave).collection('departments')
               .doc(key).snapshotChanges().subscribe(data => {
               const departamento =  data.payload.data();
-                arr.push({idfacul:clave, idepar:key, nombre:departamento.departmentName});
+                arr.push({idfacul:clave, id:key, nombre:departamento.departmentName});
               });
            }    
             
@@ -731,7 +750,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.afs.doc('faculty/'+idfacul).collection('departments').snapshotChanges().subscribe(data=>{
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data();      
-        this.departamentos.push({id:data[i].payload.doc.id, nombre:element.departmentName});
+        this.departamentos.push({id:data[i].payload.doc.id, idfacul:idfacul, nombre:element.departmentName});
       }
     });
   }
@@ -811,6 +830,17 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     }
   }
 
+  arregloEspacios(){
+    this.espacios = [];
+    this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data=>{
+      console.log(data);
+      for (let i = 0; i < data.length; i++) {   
+        const element = data[i].payload.doc.data().spaceData;
+        this.espacios.push({id:data[i].payload.doc.id, nombre:element.building + ' - ' +element.place});
+      } 
+    });  
+  }
+
 
   editar(){
 
@@ -823,18 +853,19 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         }
       });
 
-
+      this.infolab.cfAvailability = this.listaDisponibilidad;
+      this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades,'faculties');
+      this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos,'departments');
       console.log(this.infolab);
       this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
-        //this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
-       
+             
         swal.close();
         swal({
           type: 'success',
           title: 'Sugerencia de cambios ingresada',
           showConfirmButton: true
         }).then(()=>{
-          $('#modal2').modal('hide');
+          this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
         });
 
       });
@@ -843,34 +874,58 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         suggestedChanges: this.labestructurado.cambios
       };
 
-      if(this.estructurarDataCambios().length != 0){
+      const dataEstructurada = this.estructurarDataCambios();
+
+      if(dataEstructurada.length != 0){
 
         swal({
-          title: 'Cargando un momento...',
-          text: 'espere mientras se ejecuta la solicitud',
-          onOpen: () => {
-            swal.showLoading();
-          }
-        });
 
-        this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
-          console.log(person.payload.data());
-          aux.suggestedChanges.push({
-            data: this.estructurarDataCambios(),
-            uid: this.user.uid,
-            nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
-            estado: 'desaprobado'
-          });    
-          
-          console.log(aux);
-          this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
-              swal.close();
-              swal({
-                type: 'success',
-                title: 'Sugerencia de cambios ingresada',
-                showConfirmButton: true
+          type: 'warning',
+          title: 'Esta seguro que desea enviar la sugerencia de cambios',
+          showCancelButton: true,
+          confirmButtonText: 'Si, Solicitar',
+          cancelButtonText: 'No, Cancelar'
+    
+        }).then((result) => {
+    
+          if (result.value) {
+            swal({
+              title: 'Cargando un momento...',
+              text: 'espere mientras se ejecuta la solicitud',
+              onOpen: () => {
+                swal.showLoading();
+              }
+            });
+    
+            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
+              aux.suggestedChanges.push({
+                data: dataEstructurada,
+                uid: this.user.uid,
+                nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
+                estado: 'pendiente'
+              });    
+              
+              console.log(aux);
+              this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
+                  swal.close();
+                  swal({
+                    type: 'success',
+                    title: 'Sugerencia de cambios ingresada',
+                    showConfirmButton: true
+                  });
               });
-          });
+            });
+    
+           
+    
+          } else if (result.dismiss === swal.DismissReason.cancel) {
+            swal(
+              'Solicitud Cancelada',
+              '',
+              'error'
+            );
+          }
+    
         });
 
       } else {
@@ -885,47 +940,135 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     
   }
 
+
   enviarSugerencia(){
 
-    let cont = 0;
-    const cambio = this.infolab;
-    for (const key in this.checks) {
-      if (this.checks.hasOwnProperty(key)) {
-        const element = this.checks[key];
-        if(element){
-          const aux = this.sugerencia.data[cont].llave.split('.');
+    swal({
 
-          if(aux.length != 2){          
-            cambio[aux[0]] = this.sugerencia.data[cont].info;          
-          } else {           
-            cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
+      type: 'warning',
+      title: 'Esta seguro que desea editar los datos actuales con la sugerencia seleccionada',
+      showCancelButton: true,
+      confirmButtonText: 'Si, Solicitar',
+      cancelButtonText: 'No, Cancelar'
+
+    }).then((result) => {
+
+      if (result.value) {
+
+        swal({
+          title: 'Cargando un momento...',
+          text: 'espere mientras se ejecuta la solicitud',
+          onOpen: () => {
+            swal.showLoading();
           }
-         
+        });
+
+        let cont = 0;
+        const cambio = this.infolab;
+        cambio['cfAvailability'] = this.listaDisponibilidad;
+        for (const key in this.checks) {
+          if (this.checks.hasOwnProperty(key)) {
+            const element = this.checks[key];
+            if(element){
+              const aux = this.sugerencia.data[cont].llave.split('.');
+    
+              if(aux.length != 2){      
+                if(aux == 'faculties' || aux == 'departments'){
+                  if(this.sugerencia.data[cont].quitar){
+                    const obj = {};
+                    obj[aux] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
+                    cambio[aux[0]] = {};
+                    this.servicioEditarFacDep(obj);
+                  }else{
+                    cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);  
+                  }
+                }else if(aux == 'cfAvailability'){               
+                 
+                  cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info,this.sugerencia.data[cont].quitar);  
+                  
+                }else{
+                  cambio[aux[0]] = this.sugerencia.data[cont].info;  
+                } 
+                       
+              } else {           
+                cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
+              }
+             
+            }
+            cont++;
+          }
         }
-        cont++;
+        console.log(cambio);
+        cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.uid, 'aprobado');
+
+        this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio,{merge:true}).then(data=>{
+          swal(
+            'Cambios Aprobados',
+            '',
+            'success'
+          );
+          this.sugerencia = undefined;
+          this.limpiarData();
+          this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+             
+        });
+       
+
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
       }
-    }
-   
-   
-    cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.uid, 'aprobado');
 
-
-    console.log(cambio);
-
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
-      this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
     });
 
 
     
   }
 
+  estructurarEnvioSugerenciaFacDep(arr, tipo){
+    const obj = {};
+    for (let i = 0; i < arr.length; i++) {
+      if(tipo == 'faculties'){
+        obj[arr[i].id] = true;   
+      }else{
+        if(!obj[arr[i].idfacul]){
+          obj[arr[i].idfacul] = {};
+          obj[arr[i].idfacul][arr[i].id] = true;   
+        }else{
+          obj[arr[i].idfacul][arr[i].id] = true;   
+        }
+      }    
+    }
+    return obj;
+  }
+
+  estructurarEnvioSuferenciaDisponibilidad(arr, quitar){
+    let obj = [];
+    if(!quitar){
+      obj =  this.labestructurado.disponibilidad;
+    }
+   
+    for (let i = 0; i < arr.length; i++) {
+      obj.push(arr[i]);
+    }
+    console.log(obj);
+    return obj;
+  }
+
+  servicioEditarFacDep(obj){
+    return this.afs.doc('cfFacil/'+this.labestructurado.uid).update(obj);
+  }
+
+
   cambiarEstadoSugerencia(uid, estado){
-    const cam = this.labestructurado.cambios;
+    const cam = this.labestructurado.cambios.slice();
     for (let i = 0; i < cam.length; i++) {
       const element = cam[i];
 
-      if(element.uid == uid){
+      if(element.uid == uid  && element.estado == 'pendiente'){
         element.estado = estado;
         for (let j = 0; j < element.data.length; j++) {
           const element2 = element.data[j];
@@ -939,18 +1082,34 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   desaprobarSugerencia(){
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se ejecuta la solicitud',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+
     const cambio = {};
     cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.uid, 'desaprobado');
 
     console.log(cambio);
     this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
+      swal({
+        type: 'success',
+        title:'Cambios Desaprobados',
+        showConfirmButton: true
+      });
+      this.sugerencia = undefined;
       this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
     });
   }
 
   estructurarDataCambios(){
-    const aux1 = ['descripcion','sede', 'subsede','info.dir','info.email','info.tel'];
-    const aux2 = ['cfDescr','headquarter', 'subHq','otros.direccion', 'otros.email', 'otros.telefono'];
+    const aux1 = ['facultades','departamentos','disponibilidad','descripcion', 'condiciones', 'sede', 'subsede', 'espacioPrincipal','info.dir','info.email','info.tel'];
+    const aux2 = ['faculties', 'departments', 'cfAvailability', 'cfDescr', 'cfConditions','headquarter', 'subHq', 'mainSpace','otros.direccion', 'otros.email', 'otros.telefono'];
+    const aux3 = ['this.listaFaculSugeridos', 'this.listaDeparSugeridos', 'this.listaDispoSugeridos'];
+    const aux4 = ['this.listaFacultades', 'this.listaDepartamentos', 'this.listaDisponibilidad'];
     const data = [];
     let element;
     let element2;
@@ -959,34 +1118,130 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
       element = aux1[i].split('.');  
       element2 = aux2[i].split('.');
-     
+      let infoauxiliar = this.infolab[element2];
+
       if(element.length != 2){
-        let auxiliar = this.labestructurado[element];
-        let nombre = element2[0];
+        if((aux1[i] == 'facultades') || (aux1[i] == 'departamentos') || (aux1[i] == 'disponibilidad')){
+          const sugeridos = [];
+          for (let j = 0; j < eval(aux3[i]).length; j++) {
+            const element = eval(aux3[i])[j];
+            sugeridos.push(element);
+          }
 
-        if(aux1[i] == 'sede' || aux1[i] == 'subsede'){
-          auxiliar = this.labestructurado[element].id;
-          nombre = aux1[i];
-        }
+          if(sugeridos.length != 0){
+            data.push({llave: aux2[i], nombre: aux1[i],info:sugeridos, cambio: false});
+          }else{
+            const arr1 = eval(aux4[i]);
+            const arr2 = eval('this.labestructurado.'+aux1[i]);
+            if(arr1.length != arr2.length){
+              data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:this.elementosRetirados(arr1,arr2), info:arr1,cambio: false});
+            }         
+          }
 
-        if(aux1[i] == 'descripcion'){
-          nombre = aux1[i];
-        }
-
-        if(auxiliar != this.infolab[element2]){
-           data.push({llave: aux2[i], nombre: nombre, info:this.infolab[element2], cambio: false});
-        }
-      } else {
+        }else{
+          let auxiliar = this.labestructurado[element];
+          let nombre = element2[0];
         
+  
+          if(aux1[i] == 'sede' || aux1[i] == 'subsede' ){
+            auxiliar = this.labestructurado[element].id;
+            nombre = aux1[i];
+    
+            infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
+          }
+          if((aux1[i] == 'descripcion')||aux1[i] == 'condiciones'){
+            nombre = aux1[i];
+           
+          }
+
+          if(aux1[i] == 'espacioPrincipal'){
+            nombre = aux1[i];
+            infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
+          }
+  
+          if(auxiliar != this.infolab[element2]){
+             data.push({llave: aux2[i], nombre: nombre, infoaux: infoauxiliar, info:this.infolab[element2], cambio: false});
+          }
+        }
+
+      } else {
+        infoauxiliar = this.infolab[element2[0]][element2[1]];
         if(this.labestructurado[element[0]][element[1]] != this.infolab[element2[0]][element2[1]]) {
-          data.push({llave: aux2[i], nombre: element2[1], info: this.infolab[element2[0]][element2[1]], cambio: false});
+          data.push({llave: aux2[i], nombre: element2[1], infoaux: infoauxiliar, info: this.infolab[element2[0]][element2[1]], cambio: false});
         }
 
       }
      
       
     }
+
+    console.log(data);
     return data;
+  }
+
+  buscarArreglo(id, arreglo){
+    let arr = '';
+    if(arreglo == 'sede'){
+      arr = 'this.sedes';
+    }else if(arreglo == 'subsede'){
+      arr = 'this.subsedes';
+    }else{
+      arr = 'this.espacios';
+    }
+
+    for (let i = 0; i < eval(arr).length; i++) {
+      const element = eval(arr)[i];
+      if(element.id == id){
+        return element.nombre;
+      }
+      
+    }
+  }
+
+  elementosRetirados(arr1, arr2){
+    let arr = [];
+    let encontro = false;
+
+    for (let i = 0; i < arr2.length; i++) {
+      encontro = false;
+
+      if(arr1.length == 0){
+        arr.push(arr2[i]);
+
+      }else{
+
+        for (let j = 0; j < arr1.length; j++) {
+       
+          if(arr2[i].idfacul){
+            if(arr2[i].idfacul == arr1[j].idfacul){
+              encontro = true;
+              break;
+            }
+          }
+
+          if(arr2[i].id){
+            if(arr2[i].id == arr1[j].id){
+              encontro = true;
+              break;
+            }
+          }
+  
+          if(arr2[i].id){
+            if(arr2[i].id == arr1[j].id){
+              encontro = true;
+              break;
+            }
+          }
+         
+       }
+
+       if(!encontro){
+         arr.push(arr2[i]);
+       }
+      }   
+    }
+
+    return arr;
   }
 
   pendientes(item){
@@ -994,7 +1249,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     for (let j = 0; j < item.length; j++) {
       const element = item[j];
 
-      if(element.estado == 'desaprobado'){
+      if(element.estado == 'pendiente'){
         arr.push(element);
       }
       
@@ -1027,7 +1282,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   buscarSugerencia(item){
     for (let i = 0; i < this.labestructurado.cambios.length; i++) {
       const element = this.labestructurado.cambios[i];
-      if(element.uid == item){
+      if(element.uid == item && element.estado == 'pendiente'){
         return element;
       }   
     }
@@ -1076,16 +1331,23 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.seleccionado = 'inicial';
     this.sugerencia = undefined;
 
-
     this.infolab.otros.email = this.labestructurado.info.email;
     this.infolab.otros.direccion = this.labestructurado.info.dir;
     this.infolab.otros.telefono = this.labestructurado.info.tel;
     this.infolab.headquarter = this.labestructurado.sede.id;
-    this.infolab.subHq = this.labestructurado.subsede.id;
-    //this.infolab.mainSpace = this.labestructurado.espacioPrin
+    this.infolab.subHq = this.labestructurado.subsede.id;   
     this.infolab.cfDescr = this.labestructurado.descripcion;
-    this.listaFacultades = this.labestructurado.facultades;
-    this.listaDepartamentos = this.labestructurado.departamentos;
+    this.listaFacultades = this.labestructurado.facultades.slice();
+    this.listaDepartamentos = this.labestructurado.departamentos.slice();
+    this.infolab.mainSpace = this.labestructurado.espacioPrincipal;
+    this.infolab.cfConditions = this.labestructurado.condiciones;
+    this.listaDisponibilidad = this.labestructurado.disponibilidad.slice();
+ 
+    this.listaFaculSugeridos = [];
+    this.listaDeparSugeridos = [];
+    this.listaDispoSugeridos = [];
+    this.arregloEspacios();
+   
   }
 
   cambiarIcono(box){
@@ -1137,6 +1399,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     if(list == 'facultad'){
       lista = 'this.listaFacultades';
       select = 'this.selectfacul';
+
     }else{
       lista = 'this.listaDepartamentos';
       select = 'this.selectdepar';
@@ -1187,14 +1450,44 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     eval(array).find((element, index) => {
 
       if(element.id == selector){
-        listafinal .push(element); 
+        listafinal.push(element); 
         if(this.moduloPermiso){
-          listasugerida.pus(element);
+          listasugerida.push(element);
         }
       }
 
     });
   }
+
+  agregarDisponibilidad(){
+    const cadena = this.diassemana[this.selectdia-1].nombre + ' : ' + this.selectHinicio + '-' +this.selectHFinal;
+    this.listaDisponibilidad.push({id:this.selectdia,nombre:cadena});
+    if(this.moduloPermiso){
+      this.listaDispoSugeridos.push({id:this.selectdia,nombre:cadena});
+    }
+
+  }
+
+  
+  quitarDisponibilidad(id){
+    const encontrado = this.listaDisponibilidad.find((element, index) => {
+      if(element.id == id){
+        this.listaDisponibilidad.splice(index, 1);  
+        if(this.moduloPermiso){
+          this.listaDispoSugeridos.splice(index, 1);
+        }  
+        return true;
+      }
+      return false;
+    });   
+
+    swal({
+      type: 'success',
+      title:'Diponibilidad Eliminada',
+      showConfirmButton: true
+    });
+  }
+
 
 
   // FILTADORES DE LAS TABLAS
@@ -1230,4 +1523,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceSolicitudes.filter = filterValue;
   }
+
+
 }

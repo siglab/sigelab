@@ -70,13 +70,17 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     sus : Subscription;
 
+    rol:any;
+    moduloNivel2 = false;
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
 
   }
 
   ngOnInit() {
-      // abre loading mientras se cargan los datos
+    // abre loading mientras se cargan los datos
     this.ventana = true;
+    this.getRoles();
     this.sus = this.obs.currentObjectequip.subscribe(data => {
 
       console.log(data);
@@ -126,6 +130,20 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(){
     this.sus.unsubscribe();
+  }
+
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.rol = JSON.parse(localStorage.getItem('rol'));
+    
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+      }
+    }
   }
 
   estructurarEquip(key, objeto){

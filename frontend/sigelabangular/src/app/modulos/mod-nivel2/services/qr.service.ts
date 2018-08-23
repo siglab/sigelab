@@ -206,4 +206,7 @@ export class QrService {
    }
 
 
+   
+
+
 }

@@ -230,9 +230,11 @@
                                     <button class="btn btn-success btn-md" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
                                     <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
                                 </div>
-
-                                <div *ngIf="servicioActivoSel.status == 'aceptada'" class="col-md-12">
-                                    <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalTerminar">TERMINAR</button>
+                                <div *ngIf="(servicioActivoSel.status == 'aceptada') && (moduloNivel2 || moduloServicios)" class="col-md-12">
+                                    <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalProcesar">PROCESAR</button>
+                                </div>
+                                <div *ngIf="(servicioActivoSel.status == 'procesada') && moduloNivel2" class="col-md-12">
+                                    <button class="btn btn-danger" style="float: right;" type="button" (click)="cambiarEstadoSolicitud('terminada')">TERMINAR</button>
                                 </div>
                                 
                               </div>
@@ -357,7 +359,7 @@
                 </div>
               </div>
                 <!-- /.box-body -->   
-              <div *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'terminada')" class="box-footer">
+              <div *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'rechazada')" class="box-footer">
                   <form action="#" method="post">
                     <div class="input-group">
                       <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">
@@ -385,7 +387,7 @@
 
 
 <!-- modal de horario de practica -->
-<div class="modal fade" id="modalTerminar" role="dialog" >
+<div class="modal fade" id="modalProcesar" role="dialog" >
     <div class="modal-dialog modal-sm">
   
       <!-- Modal content-->
