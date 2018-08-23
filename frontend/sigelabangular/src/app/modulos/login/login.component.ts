@@ -11,6 +11,9 @@ import { SidebarComponent } from '../../shared/layouts/sidebar/sidebar.component
 })
 export class LoginComponent implements OnInit {
 
+  email: string;
+  pass: string;
+
   constructor( private ruta: Router, private _loginService: LoginService  ) { }
 
   ngOnInit() {
@@ -44,4 +47,36 @@ export class LoginComponent implements OnInit {
         // this.ingresar();
      });
   }
+
+
+
+
+  ingresarEmail( em, ps ) {
+
+    if ( em.invalid || ps.invalid) {
+
+      swal({
+        type: 'error',
+        title: 'Hay campos importantes vacios',
+        showConfirmButton: true
+      });
+
+    } else {
+
+      this._loginService.loginEmail( this.email, this.pass ).then( ok => {
+
+        this.ruta.navigate(['principal' ]).then ( () => {
+          swal({
+            type: 'success',
+            title: 'Ingreso correcto',
+            showConfirmButton: true
+          });
+
+        });
+
+      });
+    }
+
+  }
+
 }

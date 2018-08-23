@@ -60,12 +60,11 @@ export class LoginService {
   /* login usando email y password */
   loginEmail(email: string, pass: string) {
 
-    // tslint:disable-next-line:prefer-const
-    let promise = new Promise((resolve, reject) => {
+   return new Promise((resolve, reject) => {
 
       this.afAuth.auth.signInWithEmailAndPassword(email, pass)
         .then(data => {
-          console.log('login');
+          console.log('login email');
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
 
@@ -97,9 +96,9 @@ export class LoginService {
 
     const promise = new Promise((resolve, reject) => {
       this.afAuth.auth.createUserWithEmailAndPassword(email, pass).then(
-        () => {
+        (ok) => {
           console.log('usuario creado');
-          resolve();
+          resolve( ok );
         }).catch(function (error) {
           console.log(error.message);
         });
