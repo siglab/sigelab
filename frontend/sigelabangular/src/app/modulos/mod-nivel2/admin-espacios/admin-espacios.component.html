@@ -2,15 +2,9 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Laboratorios
+      Espacios
     </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
+
   </section>
 
   <!-- Main content -->
@@ -22,10 +16,10 @@
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
-          <div class="box-header">
+          <div *ngIf="moduloNivel2" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button data-toggle="modal" (click)="clearObj()" data-target="#modal" style="float: right;" class="btn btn-danger" type="button">Nuevo Espacio</button>
+                <button  data-toggle="modal" (click)="clearObj()" data-target="#modal" style="float: right;" class="btn btn-danger" type="button">Nuevo Espacio</button>
               </div>
             </div>
           </div>
@@ -199,7 +193,7 @@
                           </div>
                         </div>
 
-                        <div class="form-group">
+                        <div *ngIf="moduloNivel2" class="form-group">
                           <div class="col-md-12">
                             <div class="form-group row">
                               <label for="Activo" class="col-form-label">Activo:</label>
@@ -216,7 +210,7 @@
 
 
 
-                        <div class="form-group">
+                        <div *ngIf="moduloNivel2" class="form-group">
                           <div class="col-md-12">
                             <button (click)="actualizarEspacio()" style="float: right;" class="btn btn-success" type="button">
                               <i class="fa fa-refresh"> </i> Actualizar</button>

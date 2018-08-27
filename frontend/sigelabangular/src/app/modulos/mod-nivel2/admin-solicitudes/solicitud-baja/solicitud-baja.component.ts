@@ -15,11 +15,7 @@ export class SolicitudBajaComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.obs.currentObject.subscribe(data => {
-      console.log(data);
-      this.itemsel = Observable.of(data);
-      console.log(this.itemsel);
-    });
+  
   }
 
 }

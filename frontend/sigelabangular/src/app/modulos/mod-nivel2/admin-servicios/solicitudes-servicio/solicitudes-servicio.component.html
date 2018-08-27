@@ -2,7 +2,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-    Laboratorios
+    Solicitudes de servicios
     </h1>
 
   </section>
@@ -226,14 +226,17 @@
                             <div *ngIf="buttons" class="row" style="margin-top:20px;">
                               <div class="col-md-12 text-center form-group">
   
-                                <div *ngIf="servicioActivoSel.status == 'pendiente'" class="col-md-6" style="float: right;">
+                                <div *ngIf="(servicioActivoSel.status == 'pendiente') && (moduloNivel2 || moduloServicios)" class="col-md-6" style="float: right;">
                                     <button class="btn btn-success btn-md" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
                                     <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
                                 </div>
                                 <div *ngIf="(servicioActivoSel.status == 'aceptada') && (moduloNivel2 || moduloServicios)" class="col-md-12">
                                     <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalProcesar">PROCESAR</button>
                                 </div>
-                                <div *ngIf="(servicioActivoSel.status == 'procesada') && moduloNivel2" class="col-md-12">
+                                <div *ngIf="(servicioActivoSel.status == 'procesada') && (moduloServicios)" class="col-md-12">
+                                    <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalProcesar">ADJUNTAR MAS ARCHIVOS</button>
+                                </div>
+                                <div *ngIf="(servicioActivoSel.status == 'procesada') && (moduloNivel2)" class="col-md-12">
                                     <button class="btn btn-danger" style="float: right;" type="button" (click)="cambiarEstadoSolicitud('terminada')">TERMINAR</button>
                                 </div>
                                 
@@ -328,7 +331,7 @@
                 <div class="direct-chat-messages">
                   <!-- Message. Default to the left -->
                   <div *ngFor="let item of servicioActivoSel.comentario; let i = index">
-                    <div *ngIf="this.user.uid != item.uid" class="direct-chat-msg">
+                    <div *ngIf="item.autor == 'lab'" class="direct-chat-msg">
                       <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name pull-left">{{servicioActivoSel.nombrelab}}</span>
                         <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
@@ -343,7 +346,7 @@
                     <!-- /.direct-chat-msg -->
 
                     <!-- Message to the right -->
-                    <div *ngIf="this.user.uid == item.uid" class="direct-chat-msg right">
+                    <div *ngIf="item.autor == 'usuario'" class="direct-chat-msg right">
                       <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name pull-right">{{servicioActivoSel.usuario}}</span>
                         <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
@@ -359,7 +362,7 @@
                 </div>
               </div>
                 <!-- /.box-body -->   
-              <div *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'rechazada')" class="box-footer">
+              <div *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'rechazada') && (moduloNivel2 || moduloServicios)" class="box-footer">
                   <form action="#" method="post">
                     <div class="input-group">
                       <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">
@@ -398,21 +401,13 @@
             <div class="box-header text-center">
               <i class="fa fa-calendar"></i>
   
-              <h1 class="box-title">Terminar la solicitud de servicio</h1>
+              <h1 class="box-title">Procesar la solicitud de servicio</h1>
   
             </div>
             <!-- /.box-header -->
             <div class="box-body">
                 <form  id="form-workserv" class="" name="form-workserv" action="#">
                     <fieldset>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="teledit">
-                            <strong>Nombre del Archivo:</strong>
-                          </label>
-                          <input class="form-control" type="text" id="file" name="file" [(ngModel)]="this.nombrearchivo"/>
-                        </div>
-                      </div>
 
                       <div class="form-group">
                           <div class="col-md-12">
@@ -421,16 +416,16 @@
                             </label>
                             <div class="btn btn-default btn-file">
                                 <i class="fa fa-paperclip"></i> File
-                                <input class="form-control" type="file" name="attachment" (change)="alistarVariables($event)">
+                                <input class="form-control" type="file" name="attachment"  multiple="multiple" (change)="alistarVariables($event)">
                             </div>
                               <p class="help-block">Max. 32MB</p>
                           </div>
                         </div>
              
                     
-                      <div *ngIf="this.file" class="form-group">
+                      <div *ngIf="this.files.length != 0" class="form-group">
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('terminada')">TERMINAR SERVICIO</button>
+                            <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('procesada')">PROCESAR SERVICIO</button>
                         </div>
                       </div>
                     </fieldset>

@@ -11,6 +11,11 @@ import { EspaciosService } from '../services/espacios.service';
 
 declare var $: any;
 
+import 'fullcalendar';
+import 'fullcalendar-scheduler';
+import * as $AB from 'jquery';
+
+
 @Component({
   selector: 'app-admin-laboratorios',
   templateUrl: './admin-laboratorios.component.html',
@@ -228,9 +233,40 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
  
   }
 
+  initCalendarModal(horario) {
+
+    const containerEl: JQuery = $AB('#calendar2');
+
+    if(containerEl.children().length > 0){
+ 
+      containerEl.fullCalendar('destroy');
+    }
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 450,
+      header: {
+        left: 'month,agendaWeek,agendaDay',
+        center: 'title',
+        right: 'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+      timeFormat: 'H(:mm)'
+
+    });
+  }
+
   cambiardata(item, table) {
     this.tablesel = table;
     this.seleccionado = item;
+    if(this.tablesel == 'practicas'){
+      this.initCalendarModal(item.programacion.horario);
+    }
+  
   }
 
   addEquipo() {
@@ -435,18 +471,19 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         if (item[clave]) {
            this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
            const practica =  data.payload.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('practice/' + clave ).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
+              const prog = data2[0].payload.doc.data();
 
               if(prog){
                 const pract = {
                   nombre: practica.practiceName,
                   programacion: {
-                    estudiantes: prog['noStudents'],
-                    diahora: prog['schedule'],
-                    semestre: prog['semester']
+                    id_pro: data2[0].payload.doc.id,
+                    estudiantes: prog.noStudents,
+                    horario: prog.schedule,
+                    semestre: prog.semester
                   },
                   activo: practica.active
                  };
@@ -1328,7 +1365,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   limpiarData(){
-    this.seleccionado = 'inicial';
+    this.seleccionado = undefined;
     this.sugerencia = undefined;
 
     this.infolab.otros.email = this.labestructurado.info.email;

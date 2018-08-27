@@ -44,10 +44,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
         }
         if (this.moduloPermiso) {
           this.getPersona(person.payload.data().cfPers).subscribe(pers => {
-            this.getLaboratoriosPermiso(pers.payload.data().cfFacil).subscribe(labs => {
-              this.laboratorios2 = this.estructuraIdLabPermisos(labs);
-            });
-
+            this.laboratorios2 = this.getLaboratoriosPermiso(pers.payload.data().cfFacil);
             console.log(this.laboratorios2);
           });
         }
@@ -77,17 +74,6 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     }
     return this.datosLabsEstructurados;
-  }
-
-  estructuraIdLabPermisos(data: any) {
-    let laboratorio = [];
-    console.log(data.payload.data());
-    laboratorio = [{
-      nombre: this.ajustarTexto(data.payload.data().cfName),
-      uid: data.payload.id,
-      labo: data.payload.data()
-    }];
-    return laboratorio;
   }
 
   getUserId() {
@@ -128,8 +114,29 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   }
 
   // METODO QUE TRAE LA COLECCION DE LOS LABORATORIOS DE LOS CUALES TIENE PERMISOS
-  getLaboratoriosPermiso(labid) {
-    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
+  getLaboratoriosPermiso(arr) {
+    let laboratorios = [];
+
+    for (const key in arr) {
+      if (arr.hasOwnProperty(key)) {
+        this.afs.doc('cfFacil/' + key).snapshotChanges().subscribe(data=>{
+              
+          const laboratorio = {
+            nombre: this.ajustarTexto(data.payload.data().cfName),
+            uid: data.payload.id,
+            labo: data.payload.data()
+          };
+
+          laboratorios.push(laboratorio);
+
+        
+        });
+        
+      }
+    }
+
+    return laboratorios;
+   
   }
 
 

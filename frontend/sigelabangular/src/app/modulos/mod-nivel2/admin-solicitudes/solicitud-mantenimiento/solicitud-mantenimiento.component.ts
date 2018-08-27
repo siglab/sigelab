@@ -5,6 +5,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 @Component({
   selector: 'app-solicitud-mantenimiento',
@@ -61,7 +62,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
     status:'pendiente',
     active:true,
     createdAt:'',
-    updatedAt:''
+    updatedAt:'',
+    path:[]
   };
 
   proovedor = {
@@ -88,10 +90,20 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   user:any;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore) {
+  files = [];
+  filePath:any;
+  ref:any;
+
+  rol:any;
+  moduloNivel2 = false;
+  moduloSolicitudes = false;
+
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, private storage:AngularFireStorage) {
    }
 
   ngOnInit() {
+    this.getRoles();
+
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
     }
@@ -140,6 +152,51 @@ export class SolicitudMantenimientoComponent implements OnInit {
         });
       }
     });
+  }
+
+  // METODOS PARA SUBIR UNA COTIZACION
+
+  alistarVariables(event){
+    console.log(event.target.files);
+    this.files = event.target.files;
+   
+  }
+
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.rol = JSON.parse(localStorage.getItem('rol'));
+    console.log(this.rol);
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+
+        if ((clave === 'moduloSolicitudes')) {
+          this.moduloSolicitudes = true;
+        }
+      }
+    }
+  }
+
+  uploadFile() {
+    let filespath = [];
+
+    for (let i = 0; i < this.files.length; i++) {
+      const element = this.files[i];
+
+      this.filePath = element.name.split('.')[0];
+      this.ref = this.storage.ref('cotizaciones/'+ this.filePath);
+      filespath.push('cotizaciones/'+ this.filePath);
+
+      const task = this.ref.put(element).then(()=>{
+         console.log('subido con exito');       
+      });
+    }
+ 
+  
+    return filespath;
   }
 
   // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO
@@ -370,6 +427,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
       this.reserMan.relatedComponents[componente.id] = true;
     });
 
+    this.reserMan.path = this.uploadFile();
+
     console.log(this.reserMan);
 
     this.afs.collection('request').add(this.reserMan).then(data => {
@@ -448,7 +507,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
       status:'pendiente',
       active:true,
       createdAt:'',
-      updatedAt:''
+      updatedAt:'',
+      path:[]
     };
   }
 

@@ -90,18 +90,32 @@ export class AdminPracticasComponent implements OnInit {
 
   pracestructurado: any;
 
+  role:any;
+  moduloNivel2 = false;
+
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
     private toastr: ToastrService) {
-
-
   }
 
 
   ngOnInit() {
-
+    this.getRoles();
     this.metodoInicio();
+  }
 
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    console.log(this.role);
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave == 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+      }
+    }
   }
 
 

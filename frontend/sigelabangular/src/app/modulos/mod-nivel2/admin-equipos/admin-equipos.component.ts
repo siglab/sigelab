@@ -8,7 +8,16 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
+<<<<<<< HEAD
 import { URLAPI } from '../../../config';
+=======
+
+import 'fullcalendar';
+import 'fullcalendar-scheduler';
+import * as $AB from 'jquery';
+
+
+>>>>>>> 583ed59b458a0a660173b50d25e2d016fbdb55c2
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
@@ -141,7 +150,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     for (const clave in this.rol) {
       if (this.rol[clave]) {
-        if ((clave === 'moduloNivel2')) {
+        if ((clave == 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }
@@ -247,18 +256,19 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         if (item[clave]) {
            this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
            const practica =  data.payload.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').valueChanges().subscribe(data2 => {
+            this.afs.doc('practice/' + clave ).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
+              const prog = data2[0].payload.doc.data();
 
               if(prog){
                 const pract = {
                   nombre: practica.practiceName,
                   programacion: {
-                    estudiantes: prog['noStudents'],
-                    diahora: prog['schedule'],
-                    semestre: prog['semester']
+                    id_pro: data2[0].payload.doc.id,
+                    estudiantes: prog.noStudents,
+                    horario: prog.schedule,
+                    semestre: prog.semester
                   },
                   activo: practica.active
                  };
@@ -376,7 +386,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
    return promise;
   }
 
-      // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+    // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarComponents(item) {
     const arr = [];
@@ -439,6 +449,9 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(index);
     const ambiente = this;
     this.equiposel = item;
+
+   
+
     this.infosabsel = this.infosabs[index];
 
     this.modelEquipoSel.cfName = this.equiposel.nombre;
@@ -493,6 +506,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   cambiarInfoModal(row, table) {
     this.tablesel = table;
     this.seleccionado = row;
+    if(table == 'practicas'){
+      this.initCalendarModal(this.seleccionado.programacion.horario);
+    }
+   
   }
 
 
@@ -520,89 +537,118 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSourceServicios.filter = filterValue;
   }
 
-  subir() {
-    const equipos = {
+  initCalendarModal(horario) {
 
-      cfAcro: '',
-      cfUri: '',
-      cfName: '',
-      cfDescr: '',
-      cfKey: '',
-      cfClass: '',
-      cfClassScheme: '',
-      cfFacil: '',
-      cfPers: '',
-      relatedSrv:  {} ,
-      realatedPract: {},
-      relatedMeas: {},
-      qr: '',
-      space: '',
-      brand: '',
-      model: '',
-      price : 0,
-      timeUnit: 'minutes',
-      workingHours: '',
-      timeBeforeBooking: '',
-      cfConditions: [],
-      active: true,
-      createdAt: '',
-      updatedAt: ''
+    const containerEl: JQuery = $AB('#calendar2');
 
-    };
+    if(containerEl.children().length > 0){
+ 
+      containerEl.fullCalendar('destroy');
+    }
 
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 450,
+      header: {
+        left: 'month,agendaWeek,agendaDay',
+        center: 'title',
+        right: 'today prev,next'
+      },
+      events: horario,
 
+      defaultView: 'month',
+      timeFormat: 'H(:mm)'
 
-
-        // METODO QUE AGREGA UNA NUEVA SOLICITUD DE SERVICIO
-
-        this.afs.collection('cfEquipment').add(equipos).then(data => {
-          console.log(data);
-          this.subirComp();
-        });
-
-
-  }
-
-  subirComp() {
-
-    const fecha = new Date();
-    const components = {
-
-      cfName: 'bola de iones',
-      cfClass : '',
-      cfClassScheme: '',
-      cfConditions: [],
-      cfDescription: 'elemento que se usa para contener la implosion',
-      cfPrice: 12300000,
-      brand: 'SAMSUNG',
-      model: '2018',
-      active: true,
-      createdAt: fecha.toISOString(),
-      updatedAt: fecha.toISOString()
-
-
-    };
-    this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta => {
-      console.log('se hizo menar');
     });
   }
 
-  subirVar() {
-    const fecha = new Date();
-    const va = {
-      cfName: 'servicio banda ancha',
-      cfConditions: ['debe traer cedula', 'debe traer recibo'],
-      cfDescription: 'para utilizar la sala de computo',
-      cfPrice: '1200',
-      active: true,
-      createdAt: fecha.toISOString(),
-      updateAt: fecha.toISOString()
-    };
 
-    this.afs.collection('cfSrv/IkDMCt1fpuP8xg2iIXwA/variations').add(va).then(dta => {
-      console.log('se hizo menar');
-    });
-  }
+
+  // subir() {
+  //   const equipos = {
+
+  //     cfAcro: '',
+  //     cfUri: '',
+  //     cfName: '',
+  //     cfDescr: '',
+  //     cfKey: '',
+  //     cfClass: '',
+  //     cfClassScheme: '',
+  //     cfFacil: '',
+  //     cfPers: '',
+  //     relatedSrv:  {} ,
+  //     realatedPract: {},
+  //     relatedMeas: {},
+  //     qr: '',
+  //     space: '',
+  //     brand: '',
+  //     model: '',
+  //     price : 0,
+  //     timeUnit: 'minutes',
+  //     workingHours: '',
+  //     timeBeforeBooking: '',
+  //     cfConditions: [],
+  //     active: true,
+  //     createdAt: '',
+  //     updatedAt: ''
+
+  //   };
+
+
+
+
+  //       // METODO QUE AGREGA UNA NUEVA SOLICITUD DE SERVICIO
+
+  //       this.afs.collection('cfEquipment').add(equipos).then(data => {
+  //         console.log(data);
+  //         this.subirComp();
+  //       });
+
+
+  // }
+
+  // subirComp() {
+
+  //   const fecha = new Date();
+  //   const components = {
+
+  //     cfName: 'bola de iones',
+  //     cfClass : '',
+  //     cfClassScheme: '',
+  //     cfConditions: [],
+  //     cfDescription: 'elemento que se usa para contener la implosion',
+  //     cfPrice: 12300000,
+  //     brand: 'SAMSUNG',
+  //     model: '2018',
+  //     active: true,
+  //     createdAt: fecha.toISOString(),
+  //     updatedAt: fecha.toISOString()
+
+
+  //   };
+  //   this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta => {
+  //     console.log('se hizo menar');
+  //   });
+  // }
+
+  // subirVar() {
+  //   const fecha = new Date();
+  //   const va = {
+  //     cfName: 'servicio banda ancha',
+  //     cfConditions: ['debe traer cedula', 'debe traer recibo'],
+  //     cfDescription: 'para utilizar la sala de computo',
+  //     cfPrice: '1200',
+  //     active: true,
+  //     createdAt: fecha.toISOString(),
+  //     updateAt: fecha.toISOString()
+  //   };
+
+  //   this.afs.collection('cfSrv/IkDMCt1fpuP8xg2iIXwA/variations').add(va).then(dta => {
+  //     console.log('se hizo menar');
+  //   });
+  // }
 
   cambiarIcono(box){
     if(!this.iconos[box]){

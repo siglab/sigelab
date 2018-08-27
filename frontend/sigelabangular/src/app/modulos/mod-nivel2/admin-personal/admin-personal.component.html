@@ -2,15 +2,8 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Laboratorios
+      Personal
     </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
   </section>
 
   <!-- Main content -->
@@ -25,7 +18,7 @@
             <div class="form-group">
               <div class="col-md-12">
 
-                <button data-toggle="modal" data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar Personal</button>
+                <button *ngIf="moduloNivel2" data-toggle="modal" data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar Personal</button>
               </div>
             </div>
           </div>
@@ -211,7 +204,7 @@
 
 <!--  modal editar informacion del personal -->
 <div class="modal fade" id="modal" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -227,13 +220,13 @@
             <form id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
                 <div class="form-group row">
-                  \
+                  
                   <div class="col-md-12">
                     <label class="col-md-2 control-label" for="nombreprub">
                       <strong>Nombre:</strong>
                     </label>
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
                     </div>
                   </div>
 
@@ -247,7 +240,7 @@
                       <strong>Apellidos:</strong>
                     </label>
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
                     </div>
 
                   </div>
@@ -259,7 +252,7 @@
                       <strong>tipo:</strong>
                     </label>
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.rol" id="escuelaedit" name="rol" class="form-control" type="text">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.rol" id="escuelaedit" name="rol" class="form-control" type="text">
                     </div>
                   </div>
                 </div>
@@ -273,7 +266,7 @@
                     </label>
 
                     <div class="col-md-10">
-                      <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
                     </div>
                   </div>
                 </div>
@@ -286,16 +279,16 @@
                     </label>
                     <div class="col-md-10">
 
-                      <select class="form-control" [(ngModel)]="rolc" name="estado">
+                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="rolc" name="estado">
                         <option value="editar"> editar </option>
                         <option value="nivel2"> nivel2 </option>
-                        <option </select>
+                      </select>
                     </div>
                   </div>
 
 
                 </div>
-                <div class="form-group row">
+                <div *ngIf="moduloNivel2" class="form-group row">
                   <div class="col-md-12">
                     <div class="form-group">
                       <div class="col-sm-12">
@@ -320,7 +313,7 @@
 
 
           </div>
-          <div class="modal-footer">
+          <div *ngIf="moduloNivel2" class="modal-footer">
             <button type="button" (click)="actualizarPers()" class="btn btn-danger">Guardar</button>
 
           </div>
