@@ -4,13 +4,6 @@
     <h1>
       Laboratorios
     </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
   </section>
 
    <!-- Main content -->
@@ -918,7 +911,7 @@
 
 <!-- MODAL QUE MUESTRA INFORMACION DEL ITEM SELECCIONADO -->
 <div class="modal fade" id="modal1" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -1052,27 +1045,7 @@
                 </div>
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
-                    <label class="control-label">
-                      <strong style="color: red;">PROGRAMACION</strong>
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="cantest">
-                      <strong>N* Estudiantes:</strong> {{seleccionado.programacion.estudiantes}}</label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="semestre">
-                      <strong>Semestre:</strong> {{seleccionado.programacion.semestre}}</label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="diahora">
-                      <strong>Dia y Hora:</strong> {{seleccionado.programacion.diahora}}</label>
+                      <button class="btn btn-danger" style="float: right;"  data-toggle="modal" data-target="#practicaprog"  type="button">Ver Programacion</button>
                   </div>
                 </div>
               </fieldset>
@@ -1264,3 +1237,47 @@
       </div>
     </div>
   </div>
+
+  <!-- modal de horario de practica -->
+<div class="modal fade" id="practicaprog" role="dialog" >
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-calendar"></i>
+
+            <h1 class="box-title">Programacion de la Practica</h1>
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div *ngIf="this.seleccionado && tablesel == 'practicas'">
+
+              <div class="form-group">
+                <div class="col-md-12">
+                  <label class="control-label" for="semestre"><strong>Semestre:</strong> {{seleccionado.programacion.semestre}}</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-12">
+                  <label class="control-label" for="numero"><strong>No estudiantes:</strong> {{seleccionado.programacion.estudiantes}}</label>
+                </div>
+              </div>
+            </div>
+              <div class="col-md-12">
+                  <div class= "cal" id="calendar2">
+                  </div>
+              </div>
+           
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -63,6 +63,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   espaestructurado: any;
 
+  role:any;
+  moduloNivel2 = false;
+
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
     private storage: AngularFireStorage,
@@ -75,6 +78,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.getRoles();
     this.sus = this.obs.currentObjectEsp.subscribe(data => {
 
       if (data.length !== 0) {
@@ -129,6 +133,18 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.sus.unsubscribe();
   }
 
+   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+   getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave == 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+      }
+    }
+  }
 
   estructuraEspacio(key) {
     const promise = new Promise((resolve, reject) => {

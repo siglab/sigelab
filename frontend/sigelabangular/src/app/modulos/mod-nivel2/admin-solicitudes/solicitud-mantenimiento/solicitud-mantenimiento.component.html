@@ -2,15 +2,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-      Laboratorios
+        Solicitudes de mantenimiento
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i> Home</a>
-        </li>
-        <li class="active">Dashboard laboratorios</li>
-      </ol>
+
     </section>
 
     <!-- Main content -->
@@ -26,7 +20,7 @@
                     <i class="fa fa-map"></i>
 
                     <h3 class="box-title">Solicitudes de Mantenimiento</h3>
-                    <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" data-toggle="modal" data-target="#modal2" >Nueva Solicitud</button>
+                    <button *ngIf="moduloNivel2 || moduloSolicitudes" style="float: right;" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal2" >Nueva Solicitud</button>
                 </div>
               </div>
             </div>
@@ -372,7 +366,7 @@
               </div>
 
                 <div *ngIf="!this.solsel">
-                    <h1>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h1>
+                    <h2>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h2>
                 </div>
 
 
@@ -389,7 +383,7 @@
     </section>
 
     <section>
-        <h1 *ngIf="!itemsel">NO SE HA SELECCIONADO NINGUN LABORATORIO</h1>
+        <h2 *ngIf="!itemsel">NO SE HA SELECCIONADO NINGUN LABORATORIO</h2>
     </section>
     
 
@@ -437,11 +431,24 @@
                                             <select class="form-control" name="tipo" id="tipo" [(ngModel)]="this.reserMan.maintenanceType">
                                                 <option value="preventivo" >Preventivo</option>
                                                 <option value="correctivo" >Correctivo</option>
+                                                <option value="reposicion" >Reposicion</option>
                                             </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-6">
+                                                <label class="control-label" for="cot">
+                                                    <strong>Seleccione Archivos:</strong>
+                                                  </label>
+                                                  <div class="btn btn-default btn-file">
+                                                      <i class="fa fa-paperclip"></i> File
+                                                      <input class="form-control" type="file" name="attachment"  multiple="multiple" (change)="alistarVariables($event)">
+                                                  </div>
+                                                    <p class="help-block">Max. 32MB</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
                                             <label class="control-label" for="descripcion"><strong>Descripcion:</strong></label>
                                             <textarea name="descripcion" rows="4" [(ngModel)]="this.reserMan.requestDesc" id="descripcion" style="width: 100%;"></textarea>
                                             </div>
@@ -606,13 +613,13 @@
                     
                     </div>
                     
-                    <div class="row">
+                    <div *ngIf="this.reserMan.maintenanceType != '' && this.selection.selected.length != 0" class="row">
                         <div class="col-md-12">
                             <form style="margin-top: 30px;">
                                 <fieldset>
                                     <div class="form-group">
-                                        <div class="col-md-12">
-                                            <button (click)="agregarSolicitudMan()" class="btn btn-danger btn-block btn-lg danger" type="button">Enviar Solicitud</button>
+                                        <div class="col-md-12 text-center">
+                                            <button (click)="agregarSolicitudMan()" class="btn btn-danger" type="button">Enviar Solicitud</button>
                                         </div>
                                     </div>
                                 </fieldset>

@@ -2,15 +2,9 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Laboratorios
+      Practicas
     </h1>
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">
-          <i class="fa fa-dashboard"></i> Home</a>
-      </li>
-      <li class="active">Dashboard laboratorios</li>
-    </ol>
+
   </section>
 
   <!-- Main content -->
@@ -21,7 +15,7 @@
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
-          <div class="box-header">
+          <div *ngIf="moduloNivel2" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
                 <button style="float: right;" (click)="down()" class="btn btn-danger" type="button">Nuevo practica, prueba y/o ensayo</button>
@@ -179,7 +173,7 @@
         </div>
       </div>
       <!-- prueba de stepp -->
-      <div class="col-md-12" style="margin-top:20px;">
+      <div *ngIf="moduloNivel2" class="col-md-12" style="margin-top:20px;">
         <div class="box box-danger">
           <div class="box-header">
             <i class="fa fa-plus"></i>
@@ -641,7 +635,7 @@
                             <strong>Nombre Practica:</strong>
                           </label>
 
-                          <input name="nombre" [(ngModel)]="this.practica.nombre" type="text" class="form-control" id="nombre">
+                          <input name="nombre" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.nombre" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -651,7 +645,7 @@
                             <strong>Numero Estudiantes:</strong>
                           </label>
 
-                          <input name="numeroEstudiantes" [(ngModel)]="this.practica.numeroEst" type="text" class="form-control" id="nombre">
+                          <input name="numeroEstudiantes" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.numeroEst" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -663,12 +657,12 @@
                             <strong>Semestre:</strong>
                           </label>
 
-                          <input name="semestre" [(ngModel)]="this.practica.semestre" type="text" class="form-control" id="nombre">
+                          <input name="semestre" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.semestre" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
 
-                      <div class="form-group">
+                      <div *ngIf="moduloNivel2" class="form-group">
                         <div class="col-md-12">
 
                           <label style="margin-top: 20px;" class="switch">
@@ -719,7 +713,7 @@
                     </fieldset>
                   </form>
 
-                  <div class="form-group" style="margin-top: 20px;">
+                  <div *ngIf="moduloNivel2" class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
                       <button class="btn btn-danger" data-toggle="modal" data-target="#practicaprog" type="button">Programacion</button>
 

@@ -114,7 +114,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
 
   mostrardata(item) {
-    console.log(item);
     this.servsel = item;
     this.variation = undefined;
     this.condicion = undefined;
@@ -130,8 +129,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
     this.moduloinfo = true;
-    this.buttoncancel = true;
-    console.log(item);
+    if(this.servsel.status == 'pendiente'){
+      this.buttoncancel = true;
+    }else{
+      this.buttoncancel = false;
+    }
   }
 
   cambiarVariacion(item){
@@ -152,10 +154,14 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   descargarDoc(){
     console.log(this.servsel.path);
-    const ref = this.storage.ref(this.servsel.path);
-    ref.getDownloadURL().subscribe(data => {
-      window.open(data);
-    }); 
+
+    for (let i = 0; i < this.servsel.path.length; i++) {
+      const ref = this.storage.ref(this.servsel.path[i]);
+    
+      ref.getDownloadURL().subscribe(data => {
+        window.open(data);
+      }); 
+    }
   }
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
@@ -253,10 +259,12 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
         cfSrvReserv.comments.push({
           commentText: this.comentario, 
           fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          autor: 'usuario',
+          email: this.user.email,
           uid: this.user.uid});
     
         this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
-          if(this.servsel.status == 'aceptada'){
+          if(this.servsel.status != 'pendiente'){
             this.enviarEmails();
           }
         });

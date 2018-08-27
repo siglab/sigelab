@@ -225,6 +225,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         conditionsLog: [],
         comments:[],
         typeuser:'externo',
+        path:[],
         datauser:{type:'', ci:''}
       };
 

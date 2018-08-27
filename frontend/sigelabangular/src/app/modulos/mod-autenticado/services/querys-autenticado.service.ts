@@ -30,7 +30,7 @@ export class QuerysAutenticadoService {
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
 
-      if(elemento.status == 'aceptada' || elemento.status == 'pendiente'){
+      if(elemento.status == 'aceptada' || elemento.status == 'pendiente' || elemento.status == 'procesada'){
 
         this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
           const servicio =  data2.payload.data();
@@ -49,7 +49,8 @@ export class QuerysAutenticadoService {
                 comentario: elemento.comments,
                 fecha: elemento.createdAt.split('T')[0],
                 uid: data2.payload.id,
-                uidreserv: data[index].payload.doc.id
+                uidreserv: data[index].payload.doc.id,
+                path: elemento.path   
               };
 
               datos.push(Reserv);
@@ -70,7 +71,7 @@ export class QuerysAutenticadoService {
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
         const servicio =  data2.payload.data();
 
-        if(elemento.status != 'aceptada' && elemento.status != 'pendiente'){
+        if(elemento.status != 'aceptada' && elemento.status != 'pendiente' && elemento.status != 'procesada'){
           this.getEmailUser(elemento.user).subscribe(ema =>{
             const HistoReserv = {
               email: email,

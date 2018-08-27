@@ -227,6 +227,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         updatedAt:  fecha.toISOString(),
         conditionsLog: [],
         comments:[],
+        path:[],
         typeuser:'externo',
         datauser:{type:'', ci:''}
       };

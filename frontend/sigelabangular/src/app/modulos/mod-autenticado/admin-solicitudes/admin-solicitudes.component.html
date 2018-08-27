@@ -211,11 +211,16 @@
                                     </div>
                                   </div>
 
-                                  <div *ngIf="servsel.path" class="form-group">
+                                  <div *ngIf="servsel.path.length != 0" class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button class="btn btn-danger" style="float: right;" type="button" (click)="descargarDoc()">Descargar Archivo</button>
+                                        <button class="btn btn-danger" style="float: right;" type="button" (click)="descargarDoc()">Descargar Archivos</button>
                                     </div>
                                   </div>
+                                  <div *ngIf="buttoncancel" class="row form-group" style="margin-top:20px;">
+                                    <div class="col-md-12 text-center ">
+                                      <button  class="btn btn-danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
+                                    </div>
+                                  </div> 
           
                                 </fieldset>
                             </form>
@@ -286,11 +291,7 @@
                     </div>
                     </div>
                 </div>  
-                <div class="row form-group" style="margin-top:20px;">
-                  <div class="col-md-12 text-center ">
-                    <button *ngIf="buttoncancel" class="btn btn-danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
-                  </div>
-                </div>                
+                              
               </div>
           </div>
     
@@ -310,7 +311,7 @@
                     <div class="direct-chat-messages">
                       <!-- Message. Default to the left -->
                       <div *ngFor="let item of servsel.comentario; let i = index">
-                        <div *ngIf="this.user.uid != item.uid" class="direct-chat-msg">
+                        <div *ngIf="item.autor == 'lab'" class="direct-chat-msg">
                           <div class="direct-chat-info clearfix">
                             <span class="direct-chat-name pull-left">{{servsel.lab}}</span>
                             <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
@@ -325,9 +326,9 @@
                         <!-- /.direct-chat-msg -->
     
                         <!-- Message to the right -->
-                        <div *ngIf="this.user.uid == item.uid" class="direct-chat-msg right">
+                        <div *ngIf="item.autor == 'usuario'" class="direct-chat-msg right">
                           <div class="direct-chat-info clearfix">
-                            <span class="direct-chat-name pull-right">{{servsel.email}}</span>
+                            <span class="direct-chat-name pull-right">{{item.email}}</span>
                             <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
                           </div>
                           <!-- /.direct-chat-info -->

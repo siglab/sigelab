@@ -93,12 +93,17 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   sus: Subscription;
 
+  role:any;
+  moduloNivel2 = false;
+
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
     private toastr: ToastrService,
     private register: LoginService) { }
 
   ngOnInit() {
+
+    this.getRoles();
 
     this.sus = this.obs.currentObjectPer.subscribe(data => {
 
@@ -161,6 +166,20 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    console.log(this.role);
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave == 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+      }
+    }
+  }
 
 
   estructuraIdPers(key) {
