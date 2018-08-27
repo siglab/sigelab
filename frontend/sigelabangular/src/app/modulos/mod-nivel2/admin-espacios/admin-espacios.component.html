@@ -120,18 +120,17 @@
                             <div class="form-group row">
                               <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                               <div class="col-sm-2">
-                                <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value="" class="form-control" id="edificio">
+                                <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value="" class="form-control" id="edificio" disabled >
                               </div>
                               <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                               <div class="col-sm-2">
-                                <input name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value="" class="form-control" id="edificio">
+                                <input name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value="" class="form-control" id="edificio" disabled>
                               </div>
                               <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                               <div class="col-sm-2">
-                                <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
+                                <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac" disabled>
                               </div>
                             </div>
-
 
                           </div>
 
@@ -143,7 +142,7 @@
                             <div class="form-group row">
                               <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
                               <div class="col-sm-10">
-                                <input name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control" id="area" placeholder="Area total">
+                                <input name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control" id="area" placeholder="Area total" disabled>
                               </div>
                             </div>
                           </div>
@@ -153,7 +152,7 @@
                             <div class="form-group row">
                               <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
                               <div class="col-sm-10">
-                                <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area ocupada">
+                                <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area ocupada" disabled>
                               </div>
                             </div>
                           </div>
@@ -163,7 +162,7 @@
                             <div class="form-group row">
                               <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
                               <div class="col-sm-10">
-                                <input name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area libre">
+                                <input name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area libre" disabled>
                               </div>
                             </div>
                           </div>
@@ -173,7 +172,7 @@
                             <div class="form-group row">
                               <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
                               <div class="col-sm-10">
-                                <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control" id="arealibre" placeholder="Capacidad">
+                                <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control" id="arealibre" placeholder="Capacidad" disabled>
                               </div>
                             </div>
                           </div>
@@ -183,7 +182,7 @@
                             <div class="form-group row">
                               <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
                               <div class="col-sm-10">
-                                <input name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area min">
+                                <input name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control" id="arealibre" placeholder="Area min" disabled >
                               </div>
                             </div>
                           </div>
@@ -194,7 +193,7 @@
                             <div class="form-group row">
                               <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
                               <div class="col-sm-7">
-                                <input name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control" id="indice" placeholder="Indice sat">
+                                <input name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control" id="indice" placeholder="Indice sat" disabled >
                               </div>
                             </div>
                           </div>
@@ -516,11 +515,6 @@
                         </div>
                       </div>
                     </div>
-
-
-
-
-
 
 
                   <div class="form-group">

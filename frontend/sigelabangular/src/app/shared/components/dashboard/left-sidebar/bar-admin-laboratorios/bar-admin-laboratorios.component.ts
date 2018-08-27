@@ -28,6 +28,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   constructor(private obs: ObservablesService, private route: Router, private afs: AngularFirestore) { }
 
   ngOnInit() {
+
     if (localStorage.getItem('usuario')) {
       this.getUserId();
       this.getRoles();
@@ -154,48 +155,48 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     this.obs.changeObject(item);
   }
 
-  enviaritemEquip(equip){
+  enviaritemEquip(equip) {
     this.obs.changeObjectEquip(equip);
   }
 
-  enviaritemLab(lab){
+  enviaritemLab(lab) {
     this.obs.changeObjectLab(lab);
   }
-  enviaritemPer(per){
+  enviaritemPer(per) {
     this.obs.changeObjectPer(per);
   }
-  enviaritemEsp(esp){
+  enviaritemEsp(esp) {
     this.obs.changeObjectEsp(esp);
-  }
-  enviaritemPra(pra){
+   }
+  enviaritemPra(pra) {
     this.obs.changeObjectPra(pra);
   }
-  enviaritemSolServ(solsrv){
+  enviaritemSolServ(solsrv) {
     this.obs.changeObjectSolServ(solsrv);
   }
-  enviaritemServAsoc(srvasoc){
+  enviaritemServAsoc(srvasoc) {
     this.obs.changeObjectServAsoc(srvasoc);
   }
-  enviaritemProy(proy){
+  enviaritemProy(proy) {
     this.obs.changeObjectProy(proy);
   }
-  enviaritemSolMante(solman){
+  enviaritemSolMante(solman) {
     this.obs.changeObjectSolMante(solman);
   }
-  enviaritemSolBaja(baja){
+  enviaritemSolBaja(baja) {
     this.obs.changeObjectSolBaja(baja);
   }
-  
 
 
-  abrirEnlaceBaja(){
-    const url = "https://swebse12.univalle.edu.co/sabs/paquetes/formatos/fm_bajas.htm";
+
+  abrirEnlaceBaja() {
+    const url = 'https://swebse12.univalle.edu.co/sabs/paquetes/formatos/fm_bajas.htm';
 
     window.open(url);
   }
 
-  abrirEnlaceQuiUv(){
-    const url = "https://dfrq-quiuv.herokuapp.com/cuentas/login/";
+  abrirEnlaceQuiUv() {
+    const url = 'https://dfrq-quiuv.herokuapp.com/cuentas/login/';
 
     window.open(url);
   }

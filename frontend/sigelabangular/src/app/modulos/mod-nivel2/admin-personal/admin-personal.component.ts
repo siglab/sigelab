@@ -386,8 +386,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         user.appRoles = this.register.setBoolean(ok);
         /* metodo firebase para subir un usuario actualizado */
 
-        console.log('usuario con el rol', user);
-
         this.afs.collection('user').doc(this.idu).set(user, { merge: true });
 
         console.log('usuario con el rol', user);

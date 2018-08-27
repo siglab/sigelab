@@ -13,24 +13,28 @@
   </section>
 
   <section class="content">
-    <div class="text-center">
-      <h4> Ingrese la cantidad para generar nuevos codigos QR </h4>
-      <mat-form-field class="example-full-width">
-        <input [(ngModel)]="QrCantidad" matInput placeholder="Numero de codigos" type="number">
-      </mat-form-field>
 
-      <button class="btn btn-primary" (click)="addNewQr(QrCantidad)"> generar QR </button>
+    <!-- OCULTAR O MOSTRAR DEPENDIENDO DEL ROL -->
+    <div>
+
+      <div class="text-center">
+        <h4> Ingrese la cantidad para generar nuevos codigos QR </h4>
+        <mat-form-field class="example-full-width">
+          <input [(ngModel)]="QrCantidad" matInput placeholder="Numero de codigos" type="number">
+        </mat-form-field>
+
+        <button class="btn btn-primary" (click)="addNewQr(QrCantidad)"> generar QR </button>
+
+      </div>
+
+      <div class="text-center">
+
+        <img height="250" width="250" *ngIf="QRimage" [src]='QRimage' alt="">
+
+      </div>
+
 
     </div>
-
-    <div class="text-center">
-
-      <img height="250" width="250" *ngIf="QRimage" [src]='QRimage' alt="">
-
-    </div>
-
-
-
     <div>
 
 

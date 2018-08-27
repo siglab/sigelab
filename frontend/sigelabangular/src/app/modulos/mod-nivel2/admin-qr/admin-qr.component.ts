@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver/FileSaver';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
+import { URLAPI, URLQR } from '../../../config';
 
 @Component({
   selector: 'app-admin-qr',
@@ -58,8 +59,9 @@ export class AdminQrComponent implements OnInit {
   genItQR(id: string , cantidad: number , index: number) {
 
 
+    const urlQR = URLQR + id ;
     return new Promise((resolve, reject) => {
-      QRCode.toDataURL(id, { errorCorrectionLevel: 'M' })
+      QRCode.toDataURL(urlQR, { errorCorrectionLevel: 'M' })
         .then(url => {
           this.QRimage = url;
           this.base64 = this.QRimage.split(',')[1];
@@ -91,6 +93,8 @@ export class AdminQrComponent implements OnInit {
   }
 
   addNewQr(cantidad) {
+
+    const newq = URLAPI;
     const zip = new JSZip();
     const img = zip.folder('images');
     if (cantidad > 0) {
@@ -104,6 +108,8 @@ export class AdminQrComponent implements OnInit {
         createdAt: fecha.toISOString(),
         updatedAt: ''
       };
+
+       /*   */
       for (let index = 1; index <= cantidad; index++) {
         this.afs
           .collection('qr')

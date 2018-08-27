@@ -6,7 +6,9 @@ import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
+// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
+import { URLAPI } from '../../../config';
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
@@ -136,7 +138,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   getRoles() {
 
     this.rol = JSON.parse(localStorage.getItem('rol'));
-    
+
     for (const clave in this.rol) {
       if (this.rol[clave]) {
         if ((clave === 'moduloNivel2')) {
@@ -336,7 +338,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.infosabs = [];
     const promise = new Promise((resolve, reject) => {
 
-      const url = 'http://localhost:1337/inventario/buscar';
+      const url =  URLAPI;
       const body = {
         codInventario: item,
         codLab: '5646',
