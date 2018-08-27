@@ -220,7 +220,7 @@
             <form id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
                 <div class="form-group row">
-                  
+
                   <div class="col-md-12">
                     <label class="col-md-2 control-label" for="nombreprub">
                       <strong>Nombre:</strong>
@@ -252,7 +252,12 @@
                       <strong>tipo:</strong>
                     </label>
                     <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.rol" id="escuelaedit" name="rol" class="form-control" type="text">
+
+                        <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.type" name="estado">
+
+                          <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
+
+                        </select>
                     </div>
                   </div>
                 </div>
@@ -279,9 +284,9 @@
                     </label>
                     <div class="col-md-10">
 
-                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="rolc" name="estado">
-                        <option value="editar"> editar </option>
-                        <option value="nivel2"> nivel2 </option>
+                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rol" name="estado">
+                          <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
+
                       </select>
                     </div>
                   </div>
@@ -389,12 +394,11 @@
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="estadoserv">
-                        <strong> Nivel:</strong>
+                        <strong> Perfil:</strong>
                       </label>
-                      <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
-                        <option value="auxiliar">Auxiliar </option>
-                        <option value="analista">Analista</option>
-                        <option value="analista">Administrativo</option>
+                      <select class="form-control" [(ngModel)]="this.person.roleId" name="estado">
+                        <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
+
                       </select>
                     </div>
                   </div>
@@ -405,10 +409,10 @@
                         <strong> Tipo personal:</strong>
                       </label>
                       <select class="form-control" [(ngModel)]="this.person.type" name="estado">
-                        <option value="funcionario">Funcionario </option>
-                        <option value="estudiante">Estudiante</option>
-                        <option value="contratista">Contratista</option>
-                        <option value="otro">Otro</option>
+                        <option value="Funcionario">Funcionario </option>
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Contratista">Contratista</option>
+                        <option value="Otro">Otro</option>
                       </select>
                     </div>
                   </div>

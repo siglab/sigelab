@@ -84,10 +84,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         direccion: '',
         email: '',
         telefono: ''
-      }    
+      }
     };
 
-   
+
     checks = {};
 
     cambios = [];
@@ -143,7 +143,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     listaDeparSugeridos = [];
     listaDispoSugeridos = [];
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+  constructor(private obs: ObservablesService, private afs: AngularFirestore,
               private storage: AngularFireStorage, private service:EspaciosService) {
   }
 
@@ -177,52 +177,52 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             this.limpiarData();
             const ambiente = this;
             console.log(this.labestructurado);
-          
+
             if(this.labestructurado){
                 this.dataSourceEquipos.data = this.labestructurado.equipos;
-                  
+
                 this.dataSourcePersonal.data = this.labestructurado.personal;
-        
+
                 this.dataSourceServicios.data = this.labestructurado.servicios;
-        
+
                 this.dataSourceProyectos.data = this.labestructurado.proyectos;
-        
+
                 this.dataSourcePracticas.data = this.labestructurado.practicas;
-        
+
                 this.dataSourceSolicitudes.data = this.labestructurado.solicitudes;
-  
+
                 setTimeout(function() {
-      
+
                   ambiente.dataSourceEquipos.sort = ambiente.sortEquipos;
                   ambiente.dataSourceEquipos.paginator = ambiente.paginatorEquipos;
-          
+
                   ambiente.dataSourcePersonal.sort = ambiente.sortPersonal;
                   ambiente.dataSourcePersonal.paginator = ambiente.paginatorPersonal;
-          
+
                   ambiente.dataSourceServicios.sort = ambiente.sortServicios;
                   ambiente.dataSourceServicios.paginator = ambiente.paginatorServicios;
-          
+
                   ambiente.dataSourceProyectos.sort = ambiente.sortProyectos;
                   ambiente.dataSourceProyectos.paginator = ambiente.paginatorProyectos;
-          
+
                   ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
                   ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
-          
+
                   ambiente.dataSourceSolicitudes.sort = ambiente.sortSolicitudes;
                   ambiente.dataSourceSolicitudes.paginator = ambiente.paginatorSolicitudes;
-          
+
                   swal.close();
-  
+
                 }, 1500);
-  
-               
-            }    
-    
+
+
+            }
+
           });
         } else {
           swal.close();
         }
-     
+
       }
 
     });
@@ -230,7 +230,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.sus.unsubscribe();
- 
+
   }
 
   initCalendarModal(horario) {
@@ -238,7 +238,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     const containerEl: JQuery = $AB('#calendar2');
 
     if(containerEl.children().length > 0){
- 
+
       containerEl.fullCalendar('destroy');
     }
 
@@ -266,7 +266,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     if(this.tablesel == 'practicas'){
       this.initCalendarModal(item.programacion.horario);
     }
-  
+
   }
 
   addEquipo() {
@@ -331,7 +331,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       condiciones: laboratorio.cfConditions,
                       estado: estadoLab
                     };
-                    
+
 
                     this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
@@ -340,17 +340,17 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       resolve();
                     } else {
                       reject();
-                    }  
-        
+                    }
+
                 }
               });
             });
           }
-          
-        
+
+
         });
       }
- 
+
 
     })
    });
@@ -390,11 +390,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           console.log(data);
          arr.push(data.payload.data());
         });
-      }      
+      }
     }
-    
+
     return arr;;
-   
+
   }
 
 
@@ -429,7 +429,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
               for (let i = 0; i < dataSol.length; i++) {
                 const element = dataSol[i].payload.doc.data();
-      
+
                 this.getPersonId(element.user).subscribe(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
@@ -487,10 +487,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   },
                   activo: practica.active
                  };
-  
+
                  arr.push(pract);
               }
-   
+
 
               });
 
@@ -529,7 +529,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
 
-              
+
 
                 arr.push(equipo);
 
@@ -561,11 +561,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             modelo: element.model,
             estado: element.active
           };
-  
-          arr.push(componente);
-     
 
-        
+          arr.push(componente);
+
+
+
       }
 
      });
@@ -601,7 +601,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     idpers: clave,
                     iduser: pers.user
                   };
-    
+
                   arr.push(persona);
                 } else {
 
@@ -614,9 +614,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     iduser: ''
                   };
                   arr.push(persona);
-    
+
                 }
-              
+
               });
             }
 
@@ -701,8 +701,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               const departamento =  data.payload.data();
                 arr.push({idfacul:clave, id:key, nombre:departamento.departmentName});
               });
-           }    
-            
+           }
+
           }
         }
 
@@ -757,7 +757,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   cargarSedes(){
     this.afs.collection('headquarter').snapshotChanges().subscribe(data=>{
       for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();      
+        const element = data[i].payload.doc.data();
         this.sedes.push({id:data[i].payload.doc.id, nombre:element.cfName});
       }
     });
@@ -766,7 +766,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   cargarSubsedes(){
     this.afs.collection('cfPAddr').snapshotChanges().subscribe(data=>{
       for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();      
+        const element = data[i].payload.doc.data();
         this.subsedes.push({id:data[i].payload.doc.id, nombre:element.cfAddrline1});
       }
     });
@@ -775,10 +775,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   cargarFacultades(){
     this.afs.collection('faculty').snapshotChanges().subscribe(data=>{
       for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();      
+        const element = data[i].payload.doc.data();
         this.facultades.push({id:data[i].payload.doc.id, nombre:element.facultyName});
         this.cargarDepartamentos(data[i].payload.doc.id);
-      }   
+      }
     });
   }
 
@@ -786,7 +786,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   cargarDepartamentos(idfacul){
     this.afs.doc('faculty/'+idfacul).collection('departments').snapshotChanges().subscribe(data=>{
       for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();      
+        const element = data[i].payload.doc.data();
         this.departamentos.push({id:data[i].payload.doc.id, idfacul:idfacul, nombre:element.departmentName});
       }
     });
@@ -806,7 +806,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       } else {
         return variaciones;
       }
-      
+
     });
     return variaciones;
   }
@@ -853,7 +853,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   getRoles() {
 
     this.rol = JSON.parse(localStorage.getItem('rol'));
-    
+
     for (const clave in this.rol) {
       if (this.rol[clave]) {
 
@@ -871,11 +871,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.espacios = [];
     this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data=>{
       console.log(data);
-      for (let i = 0; i < data.length; i++) {   
+      for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data().spaceData;
         this.espacios.push({id:data[i].payload.doc.id, nombre:element.building + ' - ' +element.place});
-      } 
-    });  
+      }
+    });
   }
 
 
@@ -895,7 +895,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos,'departments');
       console.log(this.infolab);
       this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
-             
+
         swal.close();
         swal({
           type: 'success',
@@ -922,9 +922,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           showCancelButton: true,
           confirmButtonText: 'Si, Solicitar',
           cancelButtonText: 'No, Cancelar'
-    
+
         }).then((result) => {
-    
+
           if (result.value) {
             swal({
               title: 'Cargando un momento...',
@@ -933,15 +933,15 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                 swal.showLoading();
               }
             });
-    
+
             this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
               aux.suggestedChanges.push({
                 data: dataEstructurada,
                 uid: this.user.uid,
                 nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
                 estado: 'pendiente'
-              });    
-              
+              });
+
               console.log(aux);
               this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
                   swal.close();
@@ -952,9 +952,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   });
               });
             });
-    
-           
-    
+
+
+
           } else if (result.dismiss === swal.DismissReason.cancel) {
             swal(
               'Solicitud Cancelada',
@@ -962,7 +962,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               'error'
             );
           }
-    
+
         });
 
       } else {
@@ -974,7 +974,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       }
 
     }
-    
+
   }
 
 
@@ -1008,8 +1008,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             const element = this.checks[key];
             if(element){
               const aux = this.sugerencia.data[cont].llave.split('.');
-    
-              if(aux.length != 2){      
+
+              if(aux.length != 2){
                 if(aux == 'faculties' || aux == 'departments'){
                   if(this.sugerencia.data[cont].quitar){
                     const obj = {};
@@ -1017,20 +1017,20 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     cambio[aux[0]] = {};
                     this.servicioEditarFacDep(obj);
                   }else{
-                    cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);  
+                    cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                   }
-                }else if(aux == 'cfAvailability'){               
-                 
-                  cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info,this.sugerencia.data[cont].quitar);  
-                  
+                }else if(aux == 'cfAvailability'){
+
+                  cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info,this.sugerencia.data[cont].quitar);
+
                 }else{
-                  cambio[aux[0]] = this.sugerencia.data[cont].info;  
-                } 
-                       
-              } else {           
+                  cambio[aux[0]] = this.sugerencia.data[cont].info;
+                }
+
+              } else {
                 cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
               }
-             
+
             }
             cont++;
           }
@@ -1047,9 +1047,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           this.sugerencia = undefined;
           this.limpiarData();
           this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
-             
+
         });
-       
+
 
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
@@ -1062,22 +1062,22 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     });
 
 
-    
+
   }
 
   estructurarEnvioSugerenciaFacDep(arr, tipo){
     const obj = {};
     for (let i = 0; i < arr.length; i++) {
       if(tipo == 'faculties'){
-        obj[arr[i].id] = true;   
+        obj[arr[i].id] = true;
       }else{
         if(!obj[arr[i].idfacul]){
           obj[arr[i].idfacul] = {};
-          obj[arr[i].idfacul][arr[i].id] = true;   
+          obj[arr[i].idfacul][arr[i].id] = true;
         }else{
-          obj[arr[i].idfacul][arr[i].id] = true;   
+          obj[arr[i].idfacul][arr[i].id] = true;
         }
-      }    
+      }
     }
     return obj;
   }
@@ -1087,7 +1087,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     if(!quitar){
       obj =  this.labestructurado.disponibilidad;
     }
-   
+
     for (let i = 0; i < arr.length; i++) {
       obj.push(arr[i]);
     }
@@ -1109,11 +1109,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         element.estado = estado;
         for (let j = 0; j < element.data.length; j++) {
           const element2 = element.data[j];
-          
+
           element2.cambio = this.checks['checkbox'+j];
 
-        }     
-      }    
+        }
+      }
     }
     return cam;
   }
@@ -1153,7 +1153,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i < aux1.length; i++) {
 
-      element = aux1[i].split('.');  
+      element = aux1[i].split('.');
       element2 = aux2[i].split('.');
       let infoauxiliar = this.infolab[element2];
 
@@ -1172,30 +1172,30 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             const arr2 = eval('this.labestructurado.'+aux1[i]);
             if(arr1.length != arr2.length){
               data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:this.elementosRetirados(arr1,arr2), info:arr1,cambio: false});
-            }         
+            }
           }
 
         }else{
           let auxiliar = this.labestructurado[element];
           let nombre = element2[0];
-        
-  
+
+
           if(aux1[i] == 'sede' || aux1[i] == 'subsede' ){
             auxiliar = this.labestructurado[element].id;
             nombre = aux1[i];
-    
+
             infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
           }
           if((aux1[i] == 'descripcion')||aux1[i] == 'condiciones'){
             nombre = aux1[i];
-           
+
           }
 
           if(aux1[i] == 'espacioPrincipal'){
             nombre = aux1[i];
             infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
           }
-  
+
           if(auxiliar != this.infolab[element2]){
              data.push({llave: aux2[i], nombre: nombre, infoaux: infoauxiliar, info:this.infolab[element2], cambio: false});
           }
@@ -1208,8 +1208,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         }
 
       }
-     
-      
+
+
     }
 
     console.log(data);
@@ -1231,7 +1231,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if(element.id == id){
         return element.nombre;
       }
-      
+
     }
   }
 
@@ -1248,7 +1248,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       }else{
 
         for (let j = 0; j < arr1.length; j++) {
-       
+
           if(arr2[i].idfacul){
             if(arr2[i].idfacul == arr1[j].idfacul){
               encontro = true;
@@ -1262,20 +1262,20 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               break;
             }
           }
-  
+
           if(arr2[i].id){
             if(arr2[i].id == arr1[j].id){
               encontro = true;
               break;
             }
           }
-         
+
        }
 
        if(!encontro){
          arr.push(arr2[i]);
        }
-      }   
+      }
     }
 
     return arr;
@@ -1289,7 +1289,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if(element.estado == 'pendiente'){
         arr.push(element);
       }
-      
+
     }
 
     return arr;
@@ -1321,7 +1321,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       const element = this.labestructurado.cambios[i];
       if(element.uid == item && element.estado == 'pendiente'){
         return element;
-      }   
+      }
     }
   }
 
@@ -1337,20 +1337,20 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   /* este metodo carga la imagen desde firebase con un parametro nombre de la imagen */
   cargarImagen() {
 
-    if (this.espaciosel.map) {  
+    if (this.espaciosel.map) {
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
         onOpen: () => {
           swal.showLoading();
         }
-      });  
+      });
      const ref = this.storage.ref('planos/' + this.espaciosel.map + '.png');
       this.plano = ref.getDownloadURL();
       if(this.plano){
         swal.close();
       }
-    } 
+    }
 
   }
 
@@ -1360,7 +1360,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       const element = this.labestructurado.espacios[i];
       if(element.id_space == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -1372,19 +1372,19 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.infolab.otros.direccion = this.labestructurado.info.dir;
     this.infolab.otros.telefono = this.labestructurado.info.tel;
     this.infolab.headquarter = this.labestructurado.sede.id;
-    this.infolab.subHq = this.labestructurado.subsede.id;   
+    this.infolab.subHq = this.labestructurado.subsede.id;
     this.infolab.cfDescr = this.labestructurado.descripcion;
     this.listaFacultades = this.labestructurado.facultades.slice();
     this.listaDepartamentos = this.labestructurado.departamentos.slice();
     this.infolab.mainSpace = this.labestructurado.espacioPrincipal;
     this.infolab.cfConditions = this.labestructurado.condiciones;
     this.listaDisponibilidad = this.labestructurado.disponibilidad.slice();
- 
+
     this.listaFaculSugeridos = [];
     this.listaDeparSugeridos = [];
     this.listaDispoSugeridos = [];
     this.arregloEspacios();
-   
+
   }
 
   cambiarIcono(box){
@@ -1416,14 +1416,14 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           return true;
         }
         return false;
-      });   
+      });
 
       swal({
         type: 'success',
         title: list+' Eliminada',
         showConfirmButton: true
       });
-    
+
   }
 
   agregarElemento(list){
@@ -1441,27 +1441,27 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       lista = 'this.listaDepartamentos';
       select = 'this.selectdepar';
     }
-  
+
 
     const selecsss = eval(select);
 
     const encontrado = eval(lista).find((element, index) => {
-    
+
       if(element.id == selecsss){
         return true;
       }
-      return false;    
+      return false;
     });
-  
+
     if(!encontrado){
-      
+
      this.buscarElemento(list,select,lista);
-   
+
       swal({
         type: 'success',
         title: list + ' agregada',
         showConfirmButton: true
-      }); 
+      });
     }else{
       swal({
         type: 'error',
@@ -1487,7 +1487,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     eval(array).find((element, index) => {
 
       if(element.id == selector){
-        listafinal.push(element); 
+        listafinal.push(element);
         if(this.moduloPermiso){
           listasugerida.push(element);
         }
@@ -1505,18 +1505,18 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   }
 
-  
+
   quitarDisponibilidad(id){
     const encontrado = this.listaDisponibilidad.find((element, index) => {
       if(element.id == id){
-        this.listaDisponibilidad.splice(index, 1);  
+        this.listaDisponibilidad.splice(index, 1);
         if(this.moduloPermiso){
           this.listaDispoSugeridos.splice(index, 1);
-        }  
+        }
         return true;
       }
       return false;
-    });   
+    });
 
     swal({
       type: 'success',

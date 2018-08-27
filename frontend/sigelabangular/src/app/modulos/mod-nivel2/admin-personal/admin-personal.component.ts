@@ -18,7 +18,7 @@ declare var $: any;
   styleUrls: ['./admin-personal.component.css']
 })
 export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy {
-  rolc = 'editar';
+  rolc = '';
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
@@ -28,6 +28,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   estado;
   idu;
   idp;
+  tipo = [ 'Funcionario', 'Estudiante', 'Contratista', 'Otro'];
+  type;
   idlab;
   activos = [];
   inactivos = [];
@@ -44,10 +46,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
-    cfFacil: '',
+    cfFacil: {},
     active: true,
     user: '',
-    lvl: '',
+    roleId: '',
     email: '',
     type: '',
     relatedEquipments: {},
@@ -93,8 +95,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   sus: Subscription;
 
-  role:any;
+  role: any;
   moduloNivel2 = false;
+
+  niveles = [];
 
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
@@ -102,6 +106,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     private register: LoginService) { }
 
   ngOnInit() {
+    this.getRolesNivel2();
 
     this.getRoles();
 
@@ -110,11 +115,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       if (data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {
 
-
           // validators email
 
 
           this.idlab = data.uid;
+
+          console.log('id del lab', data.uid);
           this.itemsel = Observable.of(this.persestructurado.personal);
           console.log(this.persestructurado);
 
@@ -174,11 +180,28 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     console.log(this.role);
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave == 'moduloNivel2')) {
+        if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }
     }
+  }
+
+  // METODO QUE CONSULTA TODOS LOS ROLES NIVEL 2
+  getRolesNivel2() {
+    this.afs.collection('appRoles').snapshotChanges().subscribe(datos => {
+      for (let i = 0; i < datos.length; i++) {
+        const element = datos[i].payload.doc.data();
+        if (element.lvl === 'perfiles2') {
+
+          this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName});
+          console.log(this.niveles);
+
+        }
+
+
+      }
+    });
   }
 
 
@@ -358,8 +381,15 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.nombre = item.nombre;
     this.estado = item.activo;
     this.email = item.email;
+    this.type = item.tipo;
+
     this.apellido = item.apellidos;
-    this.rol = item.tipo;
+    for (const key in item.roles) {
+      if (item.roles.hasOwnProperty(key)) {
+        this.rol = key;
+      }
+    }
+
     this.idp = item.idpers;
     this.idu = item.iduser;
 
@@ -438,7 +468,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.email) {
       this.person.email = this.email;
       const pers = this.person;
-      pers.cfFacil = this.idlab;
+
+      pers.cfFacil [this.idlab] = true;
+      console.log('persona q se subio', pers);
       console.log(pers);
       this.afs.collection('cfPers').add(pers)
         .then(ok => {

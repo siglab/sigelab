@@ -8,16 +8,13 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
-<<<<<<< HEAD
 import { URLAPI } from '../../../config';
-=======
 
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
 
 
->>>>>>> 583ed59b458a0a660173b50d25e2d016fbdb55c2
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
@@ -450,7 +447,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     const ambiente = this;
     this.equiposel = item;
 
-   
+
 
     this.infosabsel = this.infosabs[index];
 
@@ -509,7 +506,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     if(table == 'practicas'){
       this.initCalendarModal(this.seleccionado.programacion.horario);
     }
-   
+
   }
 
 
@@ -542,7 +539,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     const containerEl: JQuery = $AB('#calendar2');
 
     if(containerEl.children().length > 0){
- 
+
       containerEl.fullCalendar('destroy');
     }
 
