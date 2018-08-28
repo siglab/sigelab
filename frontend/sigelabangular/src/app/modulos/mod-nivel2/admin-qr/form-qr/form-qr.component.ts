@@ -12,6 +12,9 @@ import swal from 'sweetalert2';
 export class FormQrComponent implements OnInit {
   id;
   idspace;
+  idlab;
+  iventory;
+  formFirebase = false;
   data;
   status;
   formEdit;
@@ -46,11 +49,12 @@ export class FormQrComponent implements OnInit {
 
   rol:any;
   moduloQr = false;
+  moduloNivel2 = false;
 
   constructor(
     private _Activatedroute: ActivatedRoute,
     private qrser: QrService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getRoles();
@@ -62,7 +66,20 @@ export class FormQrComponent implements OnInit {
 
     this.qrser.getQr(this.id).subscribe(res => {
       this.data = res;
+
+      console.log('qr', res);
     });
+
+    this.formFirebase = false;
+    this.qrser.getIdQr(this.id).then(res => {
+      console.log('trae algo', res);
+      this.formFirebase = true;
+      this.inventario.codeinventario = res['inventory'];
+      this.inventario.marca = res['brand'];
+      this.inventario.costoinicial = res['price'];
+      this.inventario.estado = res['active'];
+
+    }).catch(err => { console.log(err); });
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
@@ -75,6 +92,10 @@ export class FormQrComponent implements OnInit {
         if ((clave == 'moduloQr')) {
           this.moduloQr = true;
         }
+        if ((clave == 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+       
       }
     }
   }
@@ -130,7 +151,7 @@ export class FormQrComponent implements OnInit {
       this.qrser.postSabs(q).subscribe(res => {
         console.log(res);
         if (res.inventario.encontrado === true) {
-          this.statusComponent  = 'Codigo componente de inventario encontrado.';
+          this.statusComponent = 'Codigo componente de inventario encontrado.';
           this.formularioComp = true;
           console.log(this.formEdit);
           // asignar valores de la consulta a formulario
@@ -157,46 +178,56 @@ export class FormQrComponent implements OnInit {
 
   getSpaces() {
 
-    this.qrser.getUser().then( res => {
+    this.qrser.getUser().then(res => {
 
       this.spaces = res;
-      console.log( 'respuesta', res);
-    } );
+
+
+    });
 
   }
 
   getSelectValueSpace(value) {
-     console.log( 'este es el value',  value);
-     this.idspace = value;
+    console.log('este es el value', value);
+    this.idspace = value;
+
+    this.spaces.forEach(element => {
+      if (element.id_space === value) {
+
+        console.log(element.idlab);
+
+        this.idlab = element.idlab;
+      }
+    });
 
 
   }
 
   addComponent() {
 
-      const fecha = new Date();
+    const fecha = new Date();
 
-      const cmp = {
-        cfName: '',
-        cfDescription: '',
-        cfPrice: '',
-        brand: this.componente.marca_c,
-        conditions:  [],
-        active : '',
-        inventory : this.componente.codeinventario_c,
-        model : '',
-        cfClass : '',
-        cfClassScheme : '',
-        createdAt: fecha.toISOString()
-      };
-      this.arrComponents.push( cmp);
-      swal({
-        type: 'success',
-        title: 'Componente agregado correctamente.',
-        showConfirmButton: true
-      });
+    const cmp = {
+      cfName: '',
+      cfDescription: '',
+      cfPrice: '',
+      brand: this.componente.marca_c,
+      conditions: [],
+      active: '',
+      inventory: this.componente.codeinventario_c,
+      model: '',
+      cfClass: '',
+      cfClassScheme: '',
+      createdAt: fecha.toISOString()
+    };
+    this.arrComponents.push(cmp);
+    swal({
+      type: 'success',
+      title: 'Componente agregado correctamente.',
+      showConfirmButton: true
+    });
 
-      console.log( this.arrComponents);
+    console.log(this.arrComponents);
 
   }
 
@@ -204,56 +235,62 @@ export class FormQrComponent implements OnInit {
   addEquipFirebase() {
     const fecha = new Date();
 
-   if (this.idspace) {
+    if (this.idspace) {
 
-       // construir objeto equipo cerif
-       const cfEquip = {
-        cfName : '',
-        cfDescr : '',
-        cfClass : '',
-        cfClassScheme : '',
-        cfFacil: '',
-        cfPers : '',   // cual persona le asigno eto
-        relatedSrv : {},
+      // construir objeto equipo cerif
+      const cfEquip = {
+        cfName: this.inventario.marca,
+        cfDescr: '',
+        cfFacil: this.idlab,
+        cfClass: '',
+        cfClassScheme: '',
+        cfPers: '',   // cual persona le asigno eto
+        relatedSrv: {},
         relatedMeas: {},
         qr: this.id,
-        space : this.idspace,
-        brand : this.inventario.marca,
-        model : '',
-        price : this.inventario.costoinicial,
+        inventory: this.iventory,
+        space: this.idspace,
+        brand: this.inventario.marca,
+        model: '',
+        price: this.inventario.costoinicial,
         active: true,
         createdAt: fecha.toISOString(),
-        cfConditions : []
-       };
+        cfConditions: []
+      };
 
-        this.qrser.addEquipFirebase(cfEquip).then(path => {
+      console.log(cfEquip);
 
-          if (this.arrComponents.length > 0) {
+      this.qrser.addEquipFirebase(cfEquip).then(path => {
 
-            this.qrser.addComponents( this.arrComponents , path  );
-          }
+        if (this.arrComponents.length > 0) {
 
+          this.qrser.addComponents(this.arrComponents, path);
+        }
+
+        this.qrser.updatedLab(this.idlab, path);
+
+        this.qrser.updatedQr(path, this.id);
 
       });
 
-   } else {
+    } else {
 
-    swal({
-      type: 'info',
-      title: 'El campo espacio es obligatorio',
-      showConfirmButton: true
-    });
-   }
+      swal({
+        type: 'info',
+        title: 'El campo espacio es obligatorio',
+        showConfirmButton: true
+      });
+    }
   }
 
   viewComp() {
     if (this.formularioComp) {
 
-      this.formularioComp = false ;
+      this.formularioComp = false;
 
     } else {
 
-      this.formularioComp = true ;
+      this.formularioComp = true;
     }
   }
 }

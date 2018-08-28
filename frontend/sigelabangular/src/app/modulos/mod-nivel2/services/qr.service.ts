@@ -8,7 +8,7 @@ import { URLAPI } from '../../../config';
 export class QrService {
   private url = URLAPI;
   arraygeneral = [];
-  constructor(private afs: AngularFirestore, private http: Http) {}
+  constructor(private afs: AngularFirestore, private http: Http) { }
   // lista qrs sin asociar o inactivos
   listQrInactive() {
     return this.afs
@@ -69,11 +69,11 @@ export class QrService {
         .valueChanges()
         .subscribe(data => {
           // parametro de la persona para buscar en el laboratorio
-          this.getLab(data['cfPers']).then( ok => {
+          this.getLab(data['cfPers']).then(ok => {
 
             resolve(ok);
 
-         } );
+          });
         });
     });
   }
@@ -90,16 +90,16 @@ export class QrService {
           .collection('cfFacil', ref =>
             ref.where('relatedPers.' + id, '==', true)
           )
-          .valueChanges()
+          .snapshotChanges()
           .subscribe(data => {
-               this.listSpaces(data).then( (ok) => {
+            this.listSpaces(data).then((ok) => {
 
-               resolve( ok );
+              resolve(ok);
 
-              });
+            });
           });
       } else {
-         reject('no existe el id de la persona ' );
+        reject('no existe el id de la persona ');
       }
     });
 
@@ -107,17 +107,18 @@ export class QrService {
 
   listSpaces(data) {
 
-     return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       data.forEach(element => {
+        console.log('object', element.payload.doc.data().relatedSpaces);
 
-       this.getSpaces(element.relatedSpaces).then( ok => {
+        this.getSpaces(element.payload.doc.data().relatedSpaces, element.payload.doc.id).then(ok => {
 
-        resolve(ok);
-       });
+          resolve(ok);
+        });
 
       });
 
-     }
+    }
 
 
     );
@@ -125,89 +126,140 @@ export class QrService {
 
   }
 
-  getSpaces(item) {
+  getSpaces(item, idlab) {
 
-      return new Promise((resolve, reject) => {
-        for (const clave in item) {
-          // Controlando que json realmente tenga esa propiedad
-          if (item.hasOwnProperty(clave)) {
-            if (item[clave]) {
-              this.afs
-                .doc('space/' + clave)
-                .snapshotChanges()
-                .subscribe(data => {
-                  const espacio = data.payload.data();
+    return new Promise((resolve, reject) => {
+      for (const clave in item) {
+        // Controlando que json realmente tenga esa propiedad
+        if (item.hasOwnProperty(clave)) {
+          if (item[clave]) {
+            this.afs
+              .doc('space/' + clave)
+              .snapshotChanges()
+              .subscribe(data => {
+                const espacio = data.payload.data();
 
-                  // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                  if (espacio) {
-                    const space = {
-                      id_space: data.payload.id,
-                      capacity: espacio.capacity,
-                      createdAt: espacio.createdAt,
-                      freeArea: espacio.freeArea,
-                      headquarter: espacio.headquarter,
-                      indxSa: espacio.indxSa,
-                      map: espacio.map,
-                      minArea: espacio.minArea,
-                      ocupedArea: espacio.ocupedArea,
-                      totalArea: espacio.totalArea,
-                      spaceData: espacio.spaceData,
-                      active: espacio.active
-                    };
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                if (espacio) {
+                  const space = {
+                    id_space: data.payload.id,
+                    capacity: espacio.capacity,
+                    createdAt: espacio.createdAt,
+                    freeArea: espacio.freeArea,
+                    headquarter: espacio.headquarter,
+                    indxSa: espacio.indxSa,
+                    map: espacio.map,
+                    minArea: espacio.minArea,
+                    ocupedArea: espacio.ocupedArea,
+                    totalArea: espacio.totalArea,
+                    spaceData: espacio.spaceData,
+                    active: espacio.active,
+                    idlab: idlab
+                  };
 
-                    this.arraygeneral.push(space);
-                  }
-                });
-            }
+                  this.arraygeneral.push(space);
+                }
+              });
           }
         }
+      }
 
-          resolve( this.arraygeneral  );
-      });
-
-
-  }
-
-  async addEquipFirebase( newEq ) {
-
-  return  this.afs.collection('cfEquip').add(newEq).then( (ok) => {
-    swal({
-      type: 'success',
-      title: 'Equipo almacenado con exito.',
-      showConfirmButton: true
+      resolve(this.arraygeneral);
     });
-    return ok.path;
 
-   });
+
   }
 
-   addComponents(arrComponent ,  path  ) {
+  async addEquipFirebase(newEq) {
 
-    if (arrComponent.length > 0 ) {
+    return this.afs.collection('cfEquip').add(newEq).then((ok) => {
+      swal({
+        type: 'success',
+        title: 'Equipo almacenado con exito.',
+        showConfirmButton: true
+      });
+      return ok.id;
+
+    });
+  }
+
+  addComponents(arrComponent, path) {
+
+    if (arrComponent.length > 0) {
 
       arrComponent.forEach(element => {
 
-        this.afs.doc( path ).collection( 'components' ).add( element );
+        this.afs.doc('cfFacil/' + path).collection('components').add(element);
 
       });
 
     }
 
 
-   }
+  }
 
-   updateQrDoc( id, idEquip ) {
+  updateQrDoc(id, idEquip) {
 
     const newqr = {
-     cfEquip : idEquip
+      cfEquip: idEquip
     };
 
-    this.afs.doc('qr/' + id ).set( newqr, { merge: true}  );
+    this.afs.doc('qr/' + id).set(newqr, { merge: true });
 
-   }
-
-
-   
+  }
 
 
+  getIdQr(id) {
+
+    return new Promise((resolve, reject) => {
+
+      this.afs.doc('qr/' + id).valueChanges()
+        .subscribe(data => {
+
+          if (data['active']) {
+
+            this.getEquip(data['cfEquip']).subscribe(res => {
+
+              resolve(res);
+            });
+
+
+          } else {
+            reject('no esta asociado a ningun equipo');
+          }
+
+        });
+    });
+
+
+  }
+
+
+  getEquip(id) {
+
+    return this.afs.doc('cfEquip/' + id).valueChanges();
+
+  }
+
+  updatedLab(idLab, idEquip) {
+
+    console.log(idLab, idEquip);
+    const newLab = { relatedEquipments: {} };
+
+    newLab.relatedEquipments[idEquip] = true;
+
+    this.afs.doc('cfFacil/' + idLab).set(newLab, { merge: true });
+
+  }
+
+
+  updatedQr(cfEquip, idQr) {
+
+    const newqr = {
+      cfEquip,
+      active : true
+    };
+
+    this.afs.doc('qr/' + idQr).set(newqr, { merge: true });
+  }
 }
