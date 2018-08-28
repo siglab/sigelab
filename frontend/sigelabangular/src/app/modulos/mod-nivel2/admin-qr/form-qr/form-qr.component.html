@@ -24,19 +24,66 @@
           <form id="form-dash2equip" class="" name="form-dash2equip">
             <fieldset>
 
+              <!-- formulario FIREBASE  -->
+              <div *ngIf="this.formFirebase">
 
-              <div class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
+                <div class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>codigo inventario:</strong>
+                    </label>
+                    <input id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo" class="form-control" type="text">
+                  </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Costo Inicial: :</strong>
+                    </label>
+                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control"
+                      type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong> Marca: :</strong>
+                    </label>
+                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion"
+                      class="form-control" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Estado:</strong>
+                    </label>
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
+                  </div>
+                </div>
+
+              </div>
+
+              <div *ngIf="!this.formFirebase" class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
                 <div class="col-md-12">
                   <label class="control-label" for="estadoserv">
                     <strong>codigo inventario:</strong>
                   </label>
-                  <input (focusout)="codeCheck($event)" id="email" name="codigo" class="form-control" type="text">
+                  <input (focusout)="codeCheck($event)" id="invetory" [(ngModel)]="this.iventory" name="codigo" class="form-control" type="text">
                   <span class="help-block"> {{status}}</span>
                 </div>
               </div>
 
-
+              <!-- formulario de consulta sabs  -->
               <div *ngIf="this.formulario">
+
+
 
                 <div class="form-group">
                   <div class="col-md-6">
@@ -110,7 +157,7 @@
                     </label>
                     <select class="form-control" name="components">
 
-                      <option *ngFor="let item of  this.arrComponents" value="{{item.brand}}" >{{ item.brand }} </option>
+                      <option *ngFor="let item of  this.arrComponents" value="{{item.brand}}">{{ item.brand }} </option>
 
                     </select>
                   </div>
@@ -127,83 +174,80 @@
 
           </form>
 
-          <div *ngIf="this.formulario"  class="modal-footer">
-            <button (click) = "addEquipFirebase()"  type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>
-            <button  (click) = "viewComp()"  type="button" class="btn btn-success"> <i class="fa fa-cogs"></i> vincular componente</button>
+          <div *ngIf="this.formulario" class="modal-footer">
+            <button (click)="addEquipFirebase()" type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Guardar</button>
+            <button (click)="viewComp()" type="button" class="btn btn-success"> <i class="fa fa-cogs"></i> vincular componente</button>
 
           </div>
 
         </div>
-          <div class="box box-danger" *ngIf="this.formularioComp" style="margin-top: 20px">
-            <div class="box-header text-center">
-              <i class="fa fa-cogs"></i>
-              <h3 class="box-title">Vincular componente a Equipo </h3>
-            </div>
-            <div class="box-body">
-              <form id="form-2" class="" name="form-2">
-                <fieldset>
+        <div class="box box-danger" *ngIf="this.formularioComp" style="margin-top: 20px">
+          <div class="box-header text-center">
+            <i class="fa fa-cogs"></i>
+            <h3 class="box-title">Vincular componente a Equipo </h3>
+          </div>
+          <div class="box-body">
+            <form id="form-2" class="" name="form-2">
+              <fieldset>
 
-                  <div class="form-group has-info" [ngClass]="{'has-success': this.formularioComp, 'has-warning': !this.formularioComp  }">
-                    <div class="col-md-12">
-                      <label class="control-label" for="estadoserv">
-                        <strong>codigo inventario componente:</strong>
-                      </label>
-                      <input (focusout)="codeCheckComponent($event)"  name="codigo_c" class="form-control" type="text">
-                      <span class="help-block"> {{statusComponent}}</span>
-                    </div>
+                <div class="form-group has-info" [ngClass]="{'has-success': this.formularioComp, 'has-warning': !this.formularioComp  }">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>codigo inventario componente:</strong>
+                    </label>
+                    <input (focusout)="codeCheckComponent($event)" name="codigo_c" class="form-control" type="text">
+                    <span class="help-block"> {{statusComponent}}</span>
                   </div>
+                </div>
 
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <label class="control-label" for="nombreprub">
-                        <strong> Ubicacion:</strong>
-                      </label>
-                      <input  [(ngModel)]="componente.ubicacion_c"
-                        name="ubicacion_c" class="form-control" type="text">
-                    </div>
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong> Ubicacion:</strong>
+                    </label>
+                    <input [(ngModel)]="componente.ubicacion_c" name="ubicacion_c" class="form-control" type="text">
                   </div>
+                </div>
 
 
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Costo Inicial:</strong>
-                      </label>
-                      <input  [(ngModel)]="componente.costoinicial_c" name="costoinicial_c" class="form-control"
-                        type="text">
-                    </div>
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Costo Inicial:</strong>
+                    </label>
+                    <input [(ngModel)]="componente.costoinicial_c" name="costoinicial_c" class="form-control" type="text">
                   </div>
+                </div>
 
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <label class="control-label" for="nombreprub">
-                        <strong> Marca:</strong>
-                      </label>
-                      <input   [(ngModel)]="componente.marca_c"  name="fechaaceptacion_c"
-                        class="form-control" type="text">
-                    </div>
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong> Marca:</strong>
+                    </label>
+                    <input [(ngModel)]="componente.marca_c" name="fechaaceptacion_c" class="form-control" type="text">
                   </div>
+                </div>
 
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Estado:</strong>
-                      </label>
-                      <input [(ngModel)]="componente.estado_c" name="estado_c" class="form-control" type="text">
-                    </div>
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Estado:</strong>
+                    </label>
+                    <input [(ngModel)]="componente.estado_c" name="estado_c" class="form-control" type="text">
                   </div>
-                </fieldset>
-              </form>
-
-
-            </div>
-
+                </div>
+              </fieldset>
+            </form>
 
 
           </div>
 
 
-        <div class="modal-footer" *ngIf="this.formularioComp"  >
+
+        </div>
+
+
+        <div class="modal-footer" *ngIf="this.formularioComp">
           <button type="button" (click)="addComponent()" class="btn btn-success">
             <i class="fa fa-plus"></i> Agregar Componente </button>
         </div>
