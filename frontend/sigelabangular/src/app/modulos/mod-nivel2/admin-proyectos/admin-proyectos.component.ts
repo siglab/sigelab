@@ -76,7 +76,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   proyestructurados: any;
   status;
   addP;
-  dispo;
+  dispo = true;
 
   sus: Subscription;
 

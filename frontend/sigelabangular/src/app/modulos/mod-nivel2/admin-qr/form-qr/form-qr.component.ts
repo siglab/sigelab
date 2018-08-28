@@ -42,7 +42,7 @@ export class FormQrComponent implements OnInit {
     estado_c: '',
     espacio_c: ''
   };
-  spaces;
+  spaces = [];
 
   formulario = false;
   constructor(
@@ -51,7 +51,11 @@ export class FormQrComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getSpaces();
+
+    this.qrser.getUser().then((res: Array<any> ) => {
+      this.spaces = [];
+      this.spaces = res;
+    });
 
     this._Activatedroute.params.subscribe(params => {
       this.id = params['id'];
@@ -151,16 +155,7 @@ export class FormQrComponent implements OnInit {
 
 
 
-  getSpaces() {
 
-    this.qrser.getUser().then(res => {
-
-      this.spaces = res;
-
-
-    });
-
-  }
 
   getSelectValueSpace(value) {
     console.log('este es el value', value);

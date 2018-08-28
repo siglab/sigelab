@@ -127,7 +127,7 @@ export class QrService {
   }
 
   getSpaces(item, idlab) {
-
+    this.arraygeneral = [];
     return new Promise((resolve, reject) => {
       for (const clave in item) {
         // Controlando que json realmente tenga esa propiedad
