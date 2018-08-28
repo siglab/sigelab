@@ -35,10 +35,15 @@ export class AdminQrComponent implements OnInit {
 
   @ViewChild('paginatorQrIn') paginatorQrIn: MatPaginator;
   @ViewChild('sortQrIn') sortQrIn: MatSort;
+
+  role:any;
+  moduloNivel3 = false;
+
   constructor(private afs: AngularFirestore , private qrserv: QrService , private router: Router   ) {}
 
   ngOnInit() {
 
+    this.getRoles();
       //  consulta qr inactivos
       this.qrserv.listQrInactive().subscribe( (data) => {
         this.dataSourceQrIn.data = data;
@@ -56,6 +61,19 @@ export class AdminQrComponent implements OnInit {
         });
   }
 
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    console.log(this.role);
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave == 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+      }
+    }
+  }
   genItQR(id: string , cantidad: number , index: number) {
 
 
