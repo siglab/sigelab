@@ -214,7 +214,7 @@
                             <strong>Nombre Proyecto:</strong>
                           </label>
 
-                          <input name="nombre" [(ngModel)]="this.proyecto.nombre" type="text" class="form-control" id="nombre">
+                          <input [attr.disabled]="!moduloNivel2 ? false : null" name="nombre" [(ngModel)]="this.proyecto.nombre" type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -240,11 +240,11 @@
 
                           <!--                           <input name="descripcion" [(ngModel)]="this.proyecto.descripcion"  type="text" class="form-control" id="nombre">
  -->
-                          <textarea class="form-control" name="descripcion" [(ngModel)]="this.proyecto.descripcion" id="" cols="30" rows="2"></textarea>
+                          <textarea [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" name="descripcion" [(ngModel)]="this.proyecto.descripcion" id="" cols="30" rows="2"></textarea>
                         </div>
                       </div>
 
-                      <div class="form-group">
+                      <div *ngIf="moduloNivel2" class="form-group">
                         <div class="col-md-12">
 
                           <label style="margin-top: 20px;" class="switch">
@@ -262,7 +262,7 @@
                     </fieldset>
                   </form>
 
-                  <div class="form-group" style="margin-top: 30px;">
+                  <div *ngIf="moduloNivel2" class="form-group" style="margin-top: 30px;">
                     <div class="col-md-12">
 
                       <button *ngIf="button" class="btn btn-danger" (click)="updateProject()" type="button">Actualizar
@@ -319,7 +319,7 @@
 
                   </div>
                 </div>
-                <div class="form-group" style="margin-top: 30px;">
+                <div *ngIf="moduloNivel2" class="form-group" style="margin-top: 30px;">
                   <div class="col-md-12">
 
 
@@ -341,7 +341,7 @@
 
             </div>
 
-            <div class="modal-footer">
+            <div *ngIf="moduloNivel2" class="modal-footer">
                 <button *ngIf="addP" type="button" class="btn btn-success">Vincular <i class="fa fa-plus"></i> </button>
               </div>
 

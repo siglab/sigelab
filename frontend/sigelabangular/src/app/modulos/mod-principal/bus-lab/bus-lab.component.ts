@@ -94,7 +94,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] == 'gmail.com'){
+      if(this.user.email.split('@')[1] == 'correounivalle.edu.co'){
         this.usuariounivalle = true;
       }
     }
