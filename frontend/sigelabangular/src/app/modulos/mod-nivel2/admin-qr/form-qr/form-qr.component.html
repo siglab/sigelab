@@ -32,7 +32,7 @@
                     <label class="control-label" for="estadoserv">
                       <strong>codigo inventario:</strong>
                     </label>
-                    <input id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo" class="form-control" type="text">
+                    <input disabled="true" id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo" class="form-control" type="text">
                   </div>
                 </div>
 
@@ -44,7 +44,7 @@
                     <label class="control-label" for="nombreprub">
                       <strong>Costo Inicial: :</strong>
                     </label>
-                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control"
+                    <input disabled="true" [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control"
                       type="text">
                   </div>
                 </div>
@@ -54,7 +54,7 @@
                     <label class="control-label" for="nombreprub">
                       <strong> Marca: :</strong>
                     </label>
-                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion"
+                    <input disabled="true" [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion"
                       class="form-control" type="text">
                   </div>
                 </div>
@@ -64,12 +64,12 @@
                     <label class="control-label" for="nombreprub">
                       <strong>Estado:</strong>
                     </label>
-                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
+                    <input disabled="true" [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
                   </div>
                 </div>
-
               </div>
 
+              <!-- campo de consulta sabs -->
               <div *ngIf="!this.formFirebase" class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
                 <div class="col-md-12">
                   <label class="control-label" for="estadoserv">
