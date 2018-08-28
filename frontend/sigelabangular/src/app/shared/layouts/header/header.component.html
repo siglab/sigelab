@@ -233,13 +233,13 @@
           </ul>
         </li>
 
-          <li class="dropdown messages-menu" *ngIf="itemLogout"  >
+          <li class="dropdown messages-menu" *ngIf="!itemLogout"  >
               <a  [routerLink]="['/login']"    class="btn " title="Ingresar" id="logout"  style="cursor:pointer;">
                   <i class= "fa fa-sign-in" style="font-size: 14px;"></i> Ingresar</a>
 
           </li>
 
-          <li class="dropdown messages-menu" *ngIf="itemNotificacion"  >
+          <li class="dropdown messages-menu" *ngIf="itemLogout"  >
               <a (click)= "salir()" class="btn " title="Salir" id="logout"  style="cursor:pointer; ">
                   <i class= "fa fa-sign-in" style="font-size: 14px;"></i> Salir</a>
 

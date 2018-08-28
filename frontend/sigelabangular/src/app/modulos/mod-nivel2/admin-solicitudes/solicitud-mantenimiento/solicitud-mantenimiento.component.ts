@@ -133,7 +133,18 @@ export class SolicitudMantenimientoComponent implements OnInit {
                 this.dataSource2.sort = this.sort2;
                 this.dataSource2.paginator = this.paginator2;
               }
-              this.cerrarAlerta();
+
+              if(this.datos.length != 0 || this.histodatos.length != 0){
+                this.cerrarAlerta();
+              } else {    
+                swal({
+                  type: 'error',
+                  title: 'No existen solicitudes de mantenimiento a la fecha',
+                  showConfirmButton: true
+                });
+                
+              }
+             
             }, 1500);
                      
         });
@@ -150,6 +161,14 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
             }, 1000);
         });
+      } else {
+      
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningun laboratorio',
+          showConfirmButton: true
+        });
+        
       }
     });
   }

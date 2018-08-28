@@ -391,11 +391,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
     const containerEl: JQuery = $AB('#calendar2');
 
-    if(containerEl.children().length > 0){
+   if(containerEl.children().length > 0){
  
       containerEl.fullCalendar('destroy');
     }
-
+ 
     containerEl.fullCalendar({
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',

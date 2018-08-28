@@ -80,9 +80,14 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
   sus: Subscription;
 
+  role:any;
+  moduloNivel2 = false;  
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
   ngOnInit() {
+
+    this.getRoles();
     this.sus = this.obs.currentObjectProy.subscribe(data => {
       console.log(data);
 
@@ -115,7 +120,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
             });
 
             setTimeout(function () {
-              if (ambiente.proyestructurados.proyectos !== 0) {
+              if (ambiente.proyestructurados.proyectos != 0) {
                 ambiente.dataSourceProy.sort = ambiente.sortProy;
                 ambiente.dataSourceProy.paginator = ambiente.paginatorProy;
 
@@ -126,15 +131,27 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
                 ambiente.dataSourcePers.sort = ambiente.sortPers;
                 ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
 
+                swal.close();
+              } else {
+                swal({
+                  type: 'error',
+                  title: 'No existen proyectos asociados al laboratorio',
+                  showConfirmButton: true
+                });
               }
-              swal.close();
+            
             }, 1500);
 
           });
-        } else {
-
         }
-
+      } else {
+      
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningun laboratorio',
+          showConfirmButton: true
+        });
+        
       }
       this.estructurarLab(data.uid).then(() => {
         this.itemsel = Observable.of(this.proyestructurados);
@@ -146,6 +163,21 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
     });
   }
+
+   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+   getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    console.log(this.role);
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave == 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+      }
+    }
+  }
+
 
   ngOnDestroy() {
     this.sus.unsubscribe();
@@ -309,7 +341,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     this.proyecto.personal = item.personal;
     this.id_proj = item.id_proj;
     console.log(item);
-
 
   }
 

@@ -185,7 +185,7 @@
 
 
 <!-- modal de horario de practica -->
-<div class="modal fade" id="practicaprog" role="dialog" *ngIf="itemsel">
+<div class="modal fade" id="practicaprog" role="dialog" >
     <div class="modal-dialog modal-lg">
   
       <!-- Modal content-->
@@ -201,22 +201,26 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="semestre"><strong>Semestre:</strong> {{itemsel.infoPrub.programacion.semestre}}</label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="numero"><strong>No estudiantes:</strong> {{itemsel.infoPrub.programacion.estudiantes}}</label>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                    <div class= "cal" id="cal2">
+              <div *ngIf="itemsel">
+                  <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="semestre"><strong>Semestre:</strong> {{itemsel.infoPrub.programacion.semestre}}</label>
                       </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="numero"><strong>No estudiantes:</strong> {{itemsel.infoPrub.programacion.estudiantes}}</label>
+                      </div>
+                    </div>  
+              </div>
+
+              <div class="col-md-12">
+                  <div class= "cal" id="cal2">
+                  </div>
                 </div>
-             
+                        
             </div>
+
   
           </div>
         </div>

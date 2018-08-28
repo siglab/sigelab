@@ -30,6 +30,10 @@ import { AdminLaboratorios3Component } from '../modulos/mod-nivel3/admin-laborat
 // tslint:disable-next-line:max-line-length
 import { IndicadoresGraficasReportes3Component } from '../modulos/mod-nivel3/indicadores-graficas-reportes3/indicadores-graficas-reportes3.component';
 import { RegistroComponent } from '../modulos/registro/registro.component';
+import { AuthGuard } from '../shared/services/guards/auth.guard';
+import { Nivel2Guard } from '../shared/services/guards/nivel2.guard';
+import { Nivel25Guard } from '../shared/services/guards/nivel2-5.guard';
+import { Nivel3Guard } from '../shared/services/guards/nivel3.guard';
 
 
 
@@ -41,28 +45,26 @@ const routes: Routes = [
       { path: 'busquedalaboratorio', component: BusLabComponent},
       { path: 'busquedaservicio', component: BusServComponent},
       { path: 'busquedaprueba', component: BusPruComponent},
-      { path: 'adminsolicitudes', component: AdminSolicitudesComponent},
-      { path: 'adminlaboratorios', component: AdminLaboratoriosComponent},
-      { path: 'adminequipos', component: AdminEquiposComponent},
-      { path: 'adminespacios', component: AdminEspaciosComponent},
-      { path: 'adminpracticas', component: AdminPracticasComponent},
-      { path: 'adminpersonal', component: AdminPersonalComponent},
-      { path: 'adminqr', component: AdminQrComponent,
-      },
-      { path : 'qrinventario/:id', component: FormQrComponent   },
-      { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent},
-      { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent},
-      { path: 'adminproyectos', component: AdminProyectosComponent},
-      { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent},
-      { path: 'adminsolicitudbaja', component: SolicitudBajaComponent},
+      { path: 'adminsolicitudes', component: AdminSolicitudesComponent, canActivate:[AuthGuard]},
+      { path: 'adminlaboratorios', component: AdminLaboratoriosComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminequipos', component: AdminEquiposComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminespacios', component: AdminEspaciosComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminpracticas', component: AdminPracticasComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminpersonal', component: AdminPersonalComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminqr', component: AdminQrComponent},
+      { path: 'qrinventario/:id', component: FormQrComponent},
+      { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminproyectos', component: AdminProyectosComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate:[Nivel2Guard]},
 
-      { path: 'adminlaboratorios25', component: AdminLaboratorios25Component},
-      { path: 'indicadores25', component: IndicadoresGraficasReportesComponent},
+      { path: 'adminlaboratorios25', component: AdminLaboratorios25Component, canActivate:[Nivel25Guard]},
+      { path: 'indicadores25', component: IndicadoresGraficasReportesComponent, canActivate:[Nivel25Guard]},
 
-      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component},
-      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent},
-      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component},
-      { path: 'solicitudes3', component: SolicitudesNivel3Component},
+      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate:[Nivel3Guard]},
+      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate:[Nivel3Guard]},
+      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate:[Nivel3Guard]},
+      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate:[Nivel3Guard]},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}

@@ -146,15 +146,28 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
               ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
 
+              swal.close();
 
+            }else{
+              swal({
+                type: 'error',
+                title: 'No existe personal asociado al laboratorio',
+                showConfirmButton: true
+              });
             }
 
-            swal.close();
+          
 
           }, 2000);
 
         });
 
+      } else{
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningun laboratorio',
+          showConfirmButton: true
+        });
       }
 
 

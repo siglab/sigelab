@@ -142,17 +142,28 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     
                   this.dataSourceEquip.sort = this.sortEquip;
                   this.dataSourceEquip.paginator = this.paginatorEquip;
-    
-                  swal.close();
+                  if(this.servasocestructurados.length != 0){
+                    swal.close();
+                  }else {
+                    swal({
+                      type: 'error',
+                      title: 'No existen servicios asociados al laboratorio',
+                      showConfirmButton: true
+                    });
+                  }
+                 
                 }, 1000);
       
-              }
+              } 
             });
     
           });
-        } else {
-          swal.close();
-          
+        } else{
+          swal({
+            type: 'error',
+            title: 'No se ha seleccionado ningun laboratorio',
+            showConfirmButton: true
+          });
         }
 
       });

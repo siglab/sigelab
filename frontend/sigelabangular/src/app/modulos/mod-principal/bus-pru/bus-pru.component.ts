@@ -108,7 +108,12 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   initCalendarModal(horario) {
 
     const containerEl: JQuery = $('#cal2');
-    containerEl.fullCalendar('destroy');
+    
+    if(containerEl.children().length > 0){
+ 
+      containerEl.fullCalendar('destroy');
+    }
+
 
     containerEl.fullCalendar({
       // licencia

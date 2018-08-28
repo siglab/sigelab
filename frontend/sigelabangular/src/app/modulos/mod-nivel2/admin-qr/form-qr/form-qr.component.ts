@@ -45,6 +45,12 @@ export class FormQrComponent implements OnInit {
   spaces = [];
 
   formulario = false;
+
+
+  rol: any;
+  moduloQr = false;
+  moduloNivel2 = false;
+
   constructor(
     private _Activatedroute: ActivatedRoute,
     private qrser: QrService
@@ -56,6 +62,8 @@ export class FormQrComponent implements OnInit {
       this.spaces = [];
       this.spaces = res;
     });
+    this.getRoles();
+
 
     this._Activatedroute.params.subscribe(params => {
       this.id = params['id'];
@@ -77,6 +85,24 @@ export class FormQrComponent implements OnInit {
       this.inventario.estado = res['active'];
 
     }).catch(err => { console.log(err); });
+  }
+
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.rol = JSON.parse(localStorage.getItem('rol'));
+
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
+        if ((clave === 'moduloQr')) {
+          this.moduloQr = true;
+        }
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel2 = true;
+        }
+
+      }
+    }
   }
 
   codeCheck($event) {
