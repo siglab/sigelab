@@ -87,6 +87,10 @@ import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.c
 
 import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
 import { RegistroComponent } from './modulos/registro/registro.component';
+import { AuthGuard } from './shared/services/guards/auth.guard';
+import { Nivel2Guard } from './shared/services/guards/nivel2.guard';
+import { Nivel25Guard } from './shared/services/guards/nivel2-5.guard';
+import { Nivel3Guard } from './shared/services/guards/nivel3.guard';
 
 // libreria date time-picker
 
@@ -168,7 +172,11 @@ import { RegistroComponent } from './modulos/registro/registro.component';
     LoginService,
     AngularFireAuth,
     QrService,
-    EspaciosService
+    EspaciosService,
+    AuthGuard,
+    Nivel2Guard,
+    Nivel25Guard,
+    Nivel3Guard
   ],
   bootstrap: [AppComponent]
 })

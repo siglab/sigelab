@@ -114,13 +114,26 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             if (this.espaestructurado.espacios.length > 0) {
               this.dataSourceSpace.paginator = this.paginatorSpace;
               this.dataSourceSpace.sort = this.sortSpace;
+              swal.close();
+            }else{
+              swal({
+                type: 'error',
+                title: 'No existen espacios asociados al laboratorio',
+                showConfirmButton: true
+              });
             }
-            swal.close();
+          
           }, 1000);
 
 
         });
 
+      } else {
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningun laboratorio',
+          showConfirmButton: true
+        });
       }
 
     });

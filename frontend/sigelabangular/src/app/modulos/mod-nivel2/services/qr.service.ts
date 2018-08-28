@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Http, Response } from '@angular/http';
 import swal from 'sweetalert2';
+import { URLAPI } from '../../../config';
 
 @Injectable()
 export class QrService {
-  private url = 'http://localhost:1337/inventario/buscar';
+  private url = URLAPI;
   arraygeneral = [];
   constructor(private afs: AngularFirestore, private http: Http) {}
   // lista qrs sin asociar o inactivos

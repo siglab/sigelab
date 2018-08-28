@@ -117,16 +117,27 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                  ambiente.dataSourceEquip.sort = ambiente.sortEquip;
                  ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
                   // cierra loading luego de cargados los datos
-
+                  swal.close();
+               }else{
+                swal({
+                  type: 'error',
+                  title: 'No existen equipos asociados al laboratorio',
+                  showConfirmButton: true
+                });
                }
 
              }, 1500);
 
           });
-        } else {
-          swal.close();
         }
 
+      } else {
+        swal.close();
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningun laboratorio',
+          showConfirmButton: true
+        });
       }
 
      });

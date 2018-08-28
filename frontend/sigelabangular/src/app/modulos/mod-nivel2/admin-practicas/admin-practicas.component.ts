@@ -194,11 +194,24 @@ export class AdminPracticasComponent implements OnInit {
               this.dataSourceEsp.sort = this.sortEsp;
               this.dataSourceEsp.paginator = this.paginatorEsp;
 
+              swal.close();
+            } else {
+              swal({
+                type: 'error',
+                title: 'No existen practicas asociadas al laboratorio',
+                showConfirmButton: true
+              });
             }
-            swal.close();
+           
           }, 2000);
 
 
+        });
+      } else {
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningun laboratorio',
+          showConfirmButton: true
         });
       }
 

@@ -26,14 +26,14 @@ export class HeaderComponent implements OnInit {
 
       console.log ( this.usuario );
          //se visualizan los elementos
-      this.itemLogout = false;
-      this.itemNotificacion = true;
+      this.itemLogout = true;
+      this.itemNotificacion = false;
       
     } else {
   // no se visualizan los elementos
       this.itemNotificacion = false;
-      this.itemLogout = true;
-     console.log('no existe un usuario logueado');
+      this.itemLogout = false;
+    
     }
 
   }
@@ -42,11 +42,11 @@ export class HeaderComponent implements OnInit {
       
        this._loginService.logout().then( () =>
         { 
-    
+          this.itemLogout = false;
          // navegar al dashboard
          this.ruta.navigate(['/login']);
 
-
+         
         }
        )
     }
