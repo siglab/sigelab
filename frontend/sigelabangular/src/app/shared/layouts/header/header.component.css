@@ -1,0 +1,15 @@
+
+#cambio{
+  background-color: black !important;
+  width: 300px;
+  height: 20px;
+/*
+  background-image: url('https://assets.trome.pe/files/ec_article_multimedia_gallery/uploads/2018/04/17/5ad609d27c1a7.jpeg');
+*/
+}
+/* @media only screen and (max-width: 400px) {
+
+  #image{
+     src: url('../../../../assets/img/logo-mobile.png');
+  }
+} */

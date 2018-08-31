@@ -18,7 +18,8 @@
             <div class="form-group">
               <div class="col-md-12">
 
-                <button *ngIf="moduloNivel2" data-toggle="modal" data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar Personal</button>
+                <button *ngIf="moduloNivel2" data-toggle="modal" data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar
+                  Personal</button>
               </div>
             </div>
           </div>
@@ -226,7 +227,8 @@
                       <strong>Nombre:</strong>
                     </label>
                     <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control"
+                        type="text">
                     </div>
                   </div>
 
@@ -240,7 +242,8 @@
                       <strong>Apellidos:</strong>
                     </label>
                     <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control"
+                        type="text">
                     </div>
 
                   </div>
@@ -253,11 +256,11 @@
                     </label>
                     <div class="col-md-10">
 
-                        <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.type" name="estado">
+                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.type" name="estado">
 
-                          <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
+                        <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
 
-                        </select>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -271,7 +274,8 @@
                     </label>
 
                     <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
+                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control"
+                        type="email">
                     </div>
                   </div>
                 </div>
@@ -285,7 +289,7 @@
                     <div class="col-md-10">
 
                       <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rol" name="estado">
-                          <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
+                        <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
 
                       </select>
                     </div>
@@ -319,7 +323,8 @@
 
           </div>
           <div *ngIf="moduloNivel2" class="modal-footer">
-            <button type="button" (click)="actualizarPers()" class="btn btn-danger">Guardar</button>
+            <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar <i class="fa fa-refresh"></i>
+              </button>
 
           </div>
         </div>
@@ -396,7 +401,7 @@
                       <label class="control-label" for="estadoserv">
                         <strong> Perfil:</strong>
                       </label>
-                      <select class="form-control" [(ngModel)]="this.person.roleId" name="estado">
+                      <select class="form-control" [(ngModel)]="this.person.roleId" name="role">
                         <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
 
                       </select>
@@ -408,7 +413,7 @@
                       <label class="control-label" for="estadoserv">
                         <strong> Tipo personal:</strong>
                       </label>
-                      <select class="form-control" [(ngModel)]="this.person.type" name="estado">
+                      <select class="form-control" [(ngModel)]="this.person.type" name="tipo">
                         <option value="Funcionario">Funcionario </option>
                         <option value="Estudiante">Estudiante</option>
                         <option value="Contratista">Contratista</option>

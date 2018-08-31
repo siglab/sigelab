@@ -38,7 +38,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   dataSourceEquipvin = new MatTableDataSource([]);
   @ViewChild('paginatorEquipVin') paginatorEquipVin: MatPaginator;
   @ViewChild('sortEquipVin') sortEquipVin: MatSort;
-  
+
 
   campoCondicion = '';
   condicionesobjeto = {};
@@ -99,7 +99,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   selection2 = new SelectionModel(true, []);
 
   equipos:any;
-  
+
   editar = false;
   botonEditar = false;
   nuevaVar = false;
@@ -122,7 +122,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     });
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
         if(data.length != 0){
-    
+
           this.lab_id = data.uid;
           this.getCollectionServ(data.uid).subscribe(servicios =>{
 
@@ -133,13 +133,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
               if(this.servasocestructurados ){
                 this.dataSource.data = this.servasocestructurados;
                 this.dataSourceEquip = new MatTableDataSource(this.equipos);
-    
+
                 setTimeout(() => {
-                  
+
                   this.dataSource.sort = this.sort;
                   this.dataSource.paginator = this.paginator;
                   // cierra loading luego de cargados los datos
-    
+
                   this.dataSourceEquip.sort = this.sortEquip;
                   this.dataSourceEquip.paginator = this.paginatorEquip;
                   if(this.servasocestructurados.length != 0){
@@ -151,12 +151,12 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                       showConfirmButton: true
                     });
                   }
-                 
+
                 }, 1000);
-      
-              } 
+
+              }
             });
-    
+
           });
         } else{
           swal({
@@ -288,10 +288,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       const element = this.itemsel.infoServ.variaciones[i];
       if(element.id == item){
         return element;
-      }   
+      }
     }
   }
-  
+
   cambiarVariacion(item){
 
     if(item != 'inicial'){
@@ -304,7 +304,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
 
   }
-  
+
   //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
   estructuraCondiciones(variations){
     const arr = [];
@@ -319,7 +319,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     }
     return arr;
   }
-  
+
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarVariaciones(condiciones){
     this.condicionesobjeto = {};
@@ -365,7 +365,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     return arr;
   }
 
-  cambiardata(item) { 
+  cambiardata(item) {
     console.log(item);
     this.variation = undefined;
     this.campoCondicion = '';
@@ -379,7 +379,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     }
     this.moduloinfo = true;
-    
+
   }
 
 
@@ -414,18 +414,18 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.variaciones = this.itemsel.infoServ.variaciones;
 
     this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
-    
+
   }
 
   cambiarDataEditarVariacion(item){
     console.log(this.variaciones);
     this.nuevaVar = false;
     this.objectvariation = item.data;
-    
+
   }
 
   agregarServicio(){
-    const fecha = new Date();  
+    const fecha = new Date();
     this.srv.createdAt = fecha.toISOString();
     this.srv.updatedAt = fecha.toISOString();
     this.srv.cfFacil = this.lab_id;
@@ -462,9 +462,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                 showConfirmButton: true
               });
             }
-            
+
           });
-        }      
+        }
       } else {
         swal({
           type: 'success',
@@ -472,7 +472,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           showConfirmButton: true
         });
       }
-     
+
     });
 
   }
@@ -503,15 +503,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         const variacion = this.variaciones[j];
         if(variacion.id == 'nuevo'){
           this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations').add(variacion.data).then(()=>{
-            
+
           });
         } else {
           this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')
           .doc(variacion.id).update(variacion.data).then(()=>{
-            
+
           });
         }
-        
+
       }
         swal.close();
           swal({
@@ -519,11 +519,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             title: 'creado correctamente',
             showConfirmButton: true
           });
-        
+
     });
 
 
-    
+
   }
 
 
@@ -546,7 +546,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   quitarCondicionVariacion(index){
     this.objectvariation.cfConditions.splice(index, 1);
   }
- 
+
   nuevaVariacion(){
     this.nuevaVar = true;
     this.inicializarVariacion();
@@ -561,7 +561,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     } else {
       this.variaciones.push({cfName: this.objectvariation.cfName, data:this.objectvariation, id:'nuevo'});
     }
-    
+
     this.inicializarVariacion();
     console.log(this.variaciones);
 
@@ -577,7 +577,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       this.itemsel.infoServ.equipos.push(element);
       this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
     });
-   
+
+    swal({
+      type: 'success',
+      title: 'equipo agregado',
+      showConfirmButton: true
+    });
+
   }
 
   quitarEquipo(){
@@ -588,10 +594,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         if(element.id == equipo.id){
           this.itemsel.infoServ.equipos.splice(i, 1);
           this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
+          swal({
+            type: 'error',
+            title: 'equipo retirado',
+            showConfirmButton: true
+          });
         }
-      
+
       }
-     
+
     });
   }
 
@@ -631,11 +642,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   nuevoEspacio(){
     this.editar = false;
     this.variaciones = [];
-   
+
     this.inicializarServicio();
     this.inicializarVariacion();
-    
-  
+
+
   }
 
   applyFilter(filterValue: string) {

@@ -381,7 +381,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
           }
 
         }, (error) => {
-            console.log('faio');
+            console.log('faio', error);
             this.response = {};
             reject();
         });

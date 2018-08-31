@@ -3,6 +3,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Http, Response } from '@angular/http';
 import swal from 'sweetalert2';
 import { URLAPI } from '../../../config';
+// tslint:disable-next-line:import-blacklist
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class QrService {
@@ -40,25 +42,21 @@ export class QrService {
       espacio: 'fghgf'
     };
 
-
-
-    return this.http.post(this.url, body).map(
-      (response: Response) => {
-        // console.log('data json edificios', response.json());
-
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          console.log('error al conectar a sabs');
-          return response;
-        }
-      },
-      err => {
-        console.log('erro al conectarse a sabs', err);
-      }
-    );
+    return this.http.post(this.url, body)
+      .map(this.extractData)
+      .catch(this.handleErrorObservable);
   }
 
+  extractData(res: Response) {
+    const body = res.json();
+    return body || {};
+  }
+
+  handleErrorObservable(error: Response | any) {
+    console.error(error.message || error);
+
+    return Observable.throw(error.message || error);
+  }
 
   getUser() {
 
@@ -257,7 +255,7 @@ export class QrService {
 
     const newqr = {
       cfEquip,
-      active : true
+      active: true
     };
 
     this.afs.doc('qr/' + idQr).set(newqr, { merge: true });

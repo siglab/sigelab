@@ -34,8 +34,8 @@
 
           <i class="fa fa-tags"></i>
 
-          <h3 class="box-title">Vincular equipo a codigo Qr: {{id}} </h3>
-
+          <h3 *ngIf="!this.formFirebase" class="box-title">Vincular equipo a codigo Qr: {{id}} </h3>
+          <h3 *ngIf="this.formFirebase" class="box-title">Informacion codigo Qr: {{id}} </h3>
         </div>
 
         <!-- /.box-header -->

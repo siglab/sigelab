@@ -99,7 +99,7 @@
           </div>
         </div>
 
-      
+
 
         <!--INFORMACION DE LABORATORIO-->
         <div class="row">
@@ -126,13 +126,13 @@
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="nombre">
-                                    <strong>Nombre:</strong> {{this.itemsel.nombre.nom1 + this.itemsel.nombre.nom2}}</label> 
+                                    <strong>Nombre:</strong> {{this.itemsel.nombre.nom1 + this.itemsel.nombre.nom2}}</label>
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="descrip">
-                                    <strong>Descripcion:</strong> {{this.itemsel.descripcion}}</label> 
+                                    <strong>Descripcion:</strong> {{this.itemsel.descripcion}}</label>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -206,7 +206,7 @@
                                   <button class="btn2 btn-danger btn-lg btn-block danger" type="button"  (click)="limpiarData()" data-toggle="tab" href="#menu1">Editar</button>
                                 </div>
                               </div>
-      
+
                             </fieldset>
                         </form>
                       </div>
@@ -229,27 +229,27 @@
                             <div *ngIf="dataSourceEquipos.data.length == 0">
                                 <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
                               </div>
-      
+
                               <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquipos.data.length != 0">
                                 <div class="example-header">
                                   <mat-form-field>
                                     <input style="outline: none;" matInput (keyup)="applyFilterEquipos($event.target.value)" placeholder="Buscar Equipo">
                                   </mat-form-field>
                                 </div>
-      
+
                                 <mat-table #tableEquipos #sortEquipos="matSort" [dataSource]="dataSourceEquipos" matSort>
-      
-      
+
+
                                   <ng-container matColumnDef="nombre">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                     <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                   </ng-container>
-      
+
                                   <mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></mat-header-row>
                                   <mat-row *matRowDef="let row; columns: displayedColumnsEquipos;" style="cursor: pointer;" (click)="cambiardata(row, 'equipos')"
                                     data-toggle="modal" data-target="#modal1"></mat-row>
                                 </mat-table>
-      
+
                                 <mat-paginator #paginatorEquipos="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                                 </mat-paginator>
                               </div>
@@ -273,27 +273,27 @@
                             <div *ngIf="dataSourcePracticas.data.length == 0">
                               <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRACTICAS</h3>
                             </div>
-      
+
                             <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
                               <div class="example-header">
                                 <mat-form-field>
                                   <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Practicas">
                                 </mat-form-field>
                               </div>
-      
+
                               <mat-table #tablePracticas #sortPracticas="matSort" [dataSource]="dataSourcePracticas" matSort>
-      
-      
+
+
                                 <ng-container matColumnDef="nombre">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                   <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                 </ng-container>
-      
+
                                 <mat-header-row *matHeaderRowDef="displayedColumnsPracticas"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: displayedColumnsPracticas;" style="cursor: pointer;" (click)="cambiardata(row, 'practicas')"
                                   data-toggle="modal" data-target="#modal1"></mat-row>
                               </mat-table>
-      
+
                               <mat-paginator #paginatorPracticas="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                               </mat-paginator>
                             </div>
@@ -317,17 +317,17 @@
                             <div *ngIf="dataSourceSolicitudes.data.length == 0">
                                 <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES</h3>
                               </div>
-        
+
                               <div class="example-container mat-elevation-z8" *ngIf="dataSourceSolicitudes.data.length != 0">
                                 <div class="example-header">
                                   <mat-form-field>
                                     <input style="outline: none;" matInput (keyup)="applyFilterSolicitudes($event.target.value)" placeholder="Buscar Solicitudes">
                                   </mat-form-field>
                                 </div>
-        
+
                                 <mat-table #tableSolicitudes #sortSolicitudes="matSort" [dataSource]="dataSourceSolicitudes" matSort>
-        
-        
+
+
                                   <ng-container matColumnDef="nombre">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                     <mat-cell *matCellDef="let element"> {{element.nombreServ}} </mat-cell>
@@ -336,12 +336,12 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
                                     <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
                                   </ng-container>
-        
+
                                   <mat-header-row *matHeaderRowDef="displayedColumnsSolicitudes"></mat-header-row>
                                   <mat-row *matRowDef="let row; columns: displayedColumnsSolicitudes;" style="cursor: pointer;" (click)="cambiardata(row, 'solicitudes')"
                                     data-toggle="modal" data-target="#modal1"></mat-row>
                                 </mat-table>
-        
+
                                 <mat-paginator #paginatorSolicitudes="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                                 </mat-paginator>
                               </div>
@@ -354,7 +354,7 @@
 
             <div class="col-md-6">
               <div class="box-group" id="accordion2">
-                
+
                   <div  class="box box-danger">
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('espacio')" class="box-title">
@@ -364,8 +364,8 @@
                       </h4>
                       <a (click)="cambiarIcono('espacio')" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false" class="collapsed">
                         <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.espacio, 'glyphicon-minus':iconos.espacio}"></span>
-                      </a>            
-                      
+                      </a>
+
                     </div>
                     <div id="collapseEsp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                       <div class="box-body">
@@ -380,7 +380,7 @@
                                     <strong>Edificio: </strong>
                                     {{this.itemsel.espacioPrin[0].spaceData.building}}
                                   </label>
-      
+
                                 </div>
                               </div>
                               <div class="form-group">
@@ -413,10 +413,10 @@
                                     <strong>Capacidad: </strong>
                                     {{this.itemsel.espacioPrin[0].capacity}}
                                   </label>
-      
+
                                 </div>
                               </div>
-      
+
                             </fieldset>
                         </form>
 
@@ -433,8 +433,8 @@
                       </h4>
                       <a (click)="cambiarIcono('espaciosaso')" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false" class="collapsed">
                         <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.espaciosaso, 'glyphicon-minus':iconos.espaciosaso}"></span>
-                      </a>            
-                      
+                      </a>
+
                     </div>
                     <div id="collapseAso" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                       <div class="box-body">
@@ -460,7 +460,7 @@
                                     <strong>Edificio: </strong>
                                     {{this.espaciosel.spaceData.building}}
                                   </label>
-      
+
                                 </div>
                               </div>
                               <div class="form-group">
@@ -493,7 +493,7 @@
                                     <strong>Capacidad: </strong>
                                     {{this.espaciosel.capacity}}
                                   </label>
-      
+
                                 </div>
                               </div>
 
@@ -502,13 +502,13 @@
                                   <button (click)="cargarImagen()" class="btn2 btn-danger btn-lg btn-block danger" data-toggle="modal" data-target="#modal3" type="button">Ver mas</button>
                                 </div>
                               </div>
-      
+
                             </fieldset>
                         </form>
                       </div>
                     </div>
                   </div>
-      
+
                   <div class="box box-danger">
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('personal')" class="box-title">
@@ -639,11 +639,11 @@
                           </div>
                       </div>
                     </div>
-                  </div>       
+                  </div>
 
                 </div>
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -654,20 +654,20 @@
             <div class="box-header text-center">
                 <button class="btn btn-danger" style="float: left;" type="button"  data-toggle="tab" href="#home">Volver</button>
               <i class="fa fa-address-card-o"></i>
-  
+
               <h3 class="box-title">Panel para editar informacion</h3>
             </div>
-    
+
             <div class="box-body">
 
-                <div [ngClass]="{'col-md-6':moduloNivel2, 'col-md-12':moduloPermiso}">           
+                <div [ngClass]="{'col-md-6':moduloNivel2, 'col-md-12':moduloPermiso}">
                 <div [ngClass]="{'box box-danger':moduloNivel2, '':moduloPermiso}" >
                     <div *ngIf="moduloNivel2" class="box-header text-center">
                       <i class="fa fa-address-card-o"></i>
-          
+
                       <h3 class="box-title">Editar Informacion Actual</h3>
                     </div>
-                    
+
                     <div class="box-body">
                       <form id="form-work2" class="" name="form-work2" action="#">
                           <fieldset>
@@ -684,7 +684,7 @@
                                 <label class="control-label" for="sede"><strong>Seccional :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="sede" id="sede" [(value)]="this.infolab.headquarter" placeholder="Seleccione una seccional" >
-                                    <mat-option *ngFor="let item of this.sedes" value="{{item.id}}">{{item.nombre}}</mat-option>                              
+                                    <mat-option *ngFor="let item of this.sedes" value="{{item.id}}">{{item.nombre}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
                               </div>
@@ -694,7 +694,7 @@
                                 <label class="control-label" for="subsede"><strong>Sede :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="subsede" id="subsede" [(value)]="this.infolab.subHq" placeholder="Seleccione una sede" (change)="arregloEspacios()">
-                                    <mat-option *ngFor="let item of this.subsedes" value="{{item.id}}">{{item.nombre}}</mat-option>                              
+                                    <mat-option *ngFor="let item of this.subsedes" value="{{item.id}}">{{item.nombre}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
                               </div>
@@ -704,7 +704,7 @@
                                 <label class="control-label" for="espacio"><strong>Espacio principal :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="espacio" id="espacio" [(value)]="this.infolab.mainSpace" placeholder="Seleccione el espacio principal">
-                                    <mat-option *ngFor="let item of this.espacios" value="{{item.id}}">{{item.nombre}}</mat-option>                              
+                                    <mat-option *ngFor="let item of this.espacios" value="{{item.id}}">{{item.nombre}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
                               </div>
@@ -714,7 +714,7 @@
                                 <label class="control-label" for="dispo"><strong>Disponibilidad :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un dia de la semana" >
-                                    <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>                              
+                                    <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
                               </div>
@@ -725,8 +725,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="control-label"><strong> hasta :</strong></label>
-                                  <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">                          
-                                </div>                      
+                                  <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">
+                                </div>
                               </div>
                               <button class="btn2 btn-success" style="float: right;" type="button" (click)="agregarDisponibilidad()">Agregar</button>
                             </div>
@@ -743,7 +743,7 @@
                                 <label class="control-label" for="facul"><strong>Facultades :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="facul" id="facul" [(value)]="selectfacul" placeholder="Seleccione una Facultad" >
-                                    <mat-option *ngFor="let item of this.facultades" value="{{item.id}}">{{item.nombre}}</mat-option>                              
+                                    <mat-option *ngFor="let item of this.facultades" value="{{item.id}}">{{item.nombre}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
                                 <button class="btn2 btn-success" style="float: right;" type="button" (click)="agregarElemento('facultad')">Agregar</button>
@@ -762,7 +762,7 @@
                                 <label class="control-label" for="depar"><strong>Departamentos :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="depar" id="depar" [(value)]="selectdepar" placeholder="Seleccione un departamento" >
-                                    <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>                              
+                                    <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
                                 <button class="btn2 btn-success" style="float: right;" type="button" (click)="agregarElemento('departamento')">Agregar</button>
@@ -776,7 +776,7 @@
                                   </ul>
                               </div>
                             </div>
-                            
+
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="emailedit">
@@ -819,13 +819,13 @@
                     </div>
                 </div>
               </div>
-              
+
 
               <div *ngIf="moduloNivel2" class="col-md-6">
                 <div class="box box-danger">
                     <div class="box-header text-center">
                       <i class="fa fa-address-card-o"></i>
-          
+
                       <h3 class="box-title">Cambios Propuestos</h3>
                     </div>
                     <div class="box-body">
@@ -847,7 +847,7 @@
                             <div class="box box-danger">
                                 <div class="box-header text-center">
                                   <i class="fa fa-address-card-o"></i>
-                      
+
                                   <h3 class="box-title">Cambios</h3>
                                 </div>
                                 <div class="box-body">
@@ -857,19 +857,19 @@
                                             <div *ngFor="let item of this.sugerencia.data; let i = index" class="col-md-12">
                                               <label class="control-label" for="espacio">
                                                 <input name="{{'checkbox' + i}}" [(ngModel)]="checks['checkbox'+ i]" type="checkbox">
-                                                <strong>{{item.nombre}}:</strong> 
+                                                <strong>{{item.nombre}}:</strong>
                                                 <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')">
                                                   <ul *ngIf="!item.quitar">
                                                     <li *ngFor="let sug of item.info"><strong>Agregar: </strong>{{sug.nombre}}</li>
                                                   </ul>
-                                                  <ul *ngIf="item.quitar">                                          
+                                                  <ul *ngIf="item.quitar">
                                                     <li *ngFor="let sug of item.infoaux"><strong>Quitar: </strong>{{sug.nombre}}</li>
                                                   </ul>
                                                 </div>
                                                 <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')">
                                                     {{item.infoaux}}
                                                 </div>
-                                                 
+
                                               </label>
                                             </div>
                                           </div>
@@ -883,19 +883,19 @@
                                               <button (click)="desaprobarSugerencia()" class="btn btn-danger" type="button">Desaprobar</button>
                                             </div>
                                           </div>
-                                        
+
                                         </fieldset>
                                   </form>
                                 </div>
                             </div>
                         </div>
 
-                        
+
                     </div>
                 </div>
-              </div> 
+              </div>
 
-              
+
             </div>
         </div>
 
@@ -905,7 +905,7 @@
 
   </section>
 
- 
+
 
 </div>
 
@@ -1121,19 +1121,19 @@
 <!-- MODAL QUE PERMITE LA EDICION DE LOS DATOS DEL LABORATORIO -->
 <div class="modal fade" id="modal3" role="dialog">
     <div class="modal-dialog modal-md">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-body">
             <div class="box box-danger">
                 <div class="box-header text-center">
                   <i class="fa fa-address-card-o"></i>
-      
+
                   <h3 class="box-title">Informacion de espacio</h3>
                 </div>
-       
+
                 <div class="box-body" *ngIf="this.labestructurado">
-  
+
                   <form id="form-work" class="" name="form-work" action="#">
                     <fieldset *ngIf="espaciosel">
                       <div class="form-group">
@@ -1216,23 +1216,23 @@
                   <div *ngIf="espaciosel" class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-address-card-o"></i>
-  
+
                       <h3 class="box-title">Plano Espacio</h3>
                     </div>
-  
+
                     <div class="box-body">
                       <h3 *ngIf=" this.espaciosel.map == ''"> El laboratorio seleccionado no cuenta con ningun plano </h3>
                       <img *ngIf="this.espaciosel.map != ''"  style=" float: center; width: 100%;height: 100%;" [src]="this.plano | async" alt="">
-  
+
                     </div>
-  
+
                   </div>
-                  
+
                 </div>
             </div>
-  
-  
-          
+
+
+
         </div>
       </div>
     </div>
@@ -1272,7 +1272,7 @@
                   <div class= "cal" id="calendar2">
                   </div>
               </div>
-           
+
           </div>
 
         </div>
