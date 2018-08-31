@@ -139,7 +139,11 @@ export class FormQrComponent implements OnInit {
           this.inventario.marca = '';
           this.inventario.estado = '';
         }
-      });
+      }, err =>   swal({
+        type: 'error',
+        title: 'Error al conectar a SABS.',
+        showConfirmButton: true
+      }));
     }
   }
 

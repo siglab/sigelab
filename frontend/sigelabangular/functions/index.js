@@ -27,15 +27,15 @@ const mailTrasport = nodemailer.createTransport({
 
   auth: {
 
-    type: mod.AUTHUSER,
+    type: mod.CREDENTIALS.TYPE,
 
-    user: mod.AUTHUSER ,
+    user: mod.CREDENTIALS.AUTHUSER ,
 
-    clientId: mod.AUTHTCLIENTID,
+    clientId: mod.CREDENTIALS.AUTHTCLIENTID,
 
-    clientSecret: mod.AUTHTCLIENTESECRET,
+    clientSecret: mod.CREDENTIALS.AUTHTCLIENTESECRET,
 
-    refreshToken: mod.AUTHREFRESHTOKEN
+    refreshToken: mod.CREDENTIALS.AUTHREFRESHTOKEN
 
   }
 

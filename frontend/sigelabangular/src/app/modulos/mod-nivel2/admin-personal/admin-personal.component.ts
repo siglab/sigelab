@@ -28,7 +28,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   estado;
   idu;
   idp;
-  tipo = [ 'Funcionario', 'Estudiante', 'Contratista', 'Otro'];
+  tipo = ['Funcionario', 'Estudiante', 'Contratista', 'Otro'];
   type;
   idlab;
   activos = [];
@@ -148,7 +148,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
               swal.close();
 
-            }else{
+            } else {
               swal({
                 type: 'error',
                 title: 'No existe personal asociado al laboratorio',
@@ -156,13 +156,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               });
             }
 
-          
+
 
           }, 2000);
 
         });
 
-      } else{
+      } else {
         swal({
           type: 'error',
           title: 'No se ha seleccionado ningun laboratorio',
@@ -207,7 +207,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         const element = datos[i].payload.doc.data();
         if (element.lvl === 'perfiles2') {
 
-          this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName});
+          this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName });
           console.log(this.niveles);
 
         }
@@ -436,36 +436,40 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       /* objeto para usuario */
       const user = {
         active: this.estado,
-        appRoles: ''
+        appRoles: {}
       };
 
       /* metodo que consulta el rol */
 
       console.log(' se va actualizar esta persona', pers);
 
-      this.consultarRol().then((ok) => {
 
-        user.appRoles = this.register.setBoolean(ok);
-        /* metodo firebase para subir un usuario actualizado */
 
-        this.afs.collection('user').doc(this.idu).set(user, { merge: true });
+      user.appRoles[this.rol] = true;
 
-        console.log('usuario con el rol', user);
+      console.log('usuario con el rol', user);
+      /* metodo firebase para subir un usuario actualizado */
 
-      }).then(() => {
-        /* metodo firebase para subir una persona actualizada */
-        this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
-          () => {
-            swal({
-              type: 'success',
-              title: 'usuario actualizado correctamente',
-              showConfirmButton: true
+      this.afs.collection('user').doc(this.idu).update(user)
+        .then(() => {
+
+          this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
+            () => {
+              swal({
+                type: 'success',
+                title: 'usuario actualizado correctamente',
+                showConfirmButton: true
+              });
+
             });
+        });
 
-          }
 
-        );
-      });
+
+
+      /* metodo firebase para subir una persona actualizada */
+
+
 
     }
 
@@ -481,22 +485,45 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.email) {
       this.person.email = this.email;
       const pers = this.person;
+      pers.cfFacil[this.idlab] = true;
 
-      pers.cfFacil [this.idlab] = true;
-      console.log('persona q se subio', pers);
-      console.log(pers);
-      this.afs.collection('cfPers').add(pers)
-        .then(ok => {
+      const collref = this.afs.collection('user').ref;
+      const queryref = collref.where('email', '==', pers.email);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
 
-          this.updateFaciliti(ok.id);
+          this.afs.collection('cfPers').add(pers)
+            .then(ok => {
 
-          swal({
-            type: 'success',
-            title: 'persona creada correctamente',
-            showConfirmButton: true
-          });
+              this.updateFaciliti(ok.id);
 
-        });
+              swal({
+                type: 'success',
+                title: 'persona creada correctamente',
+                showConfirmButton: true
+              });
+
+            });
+        } else {
+
+          pers.user = snapShot.docs[0].id;
+
+          this.afs.collection('cfPers').add(pers)
+            .then(ok => {
+
+              this.updateFaciliti(ok.id);
+              this.updatedUser(pers.user, ok.id);
+              swal({
+                type: 'success',
+                title: 'persona creada correctamente',
+                showConfirmButton: true
+              });
+
+            });
+        }
+      });
+
+
 
     } else {
 
@@ -506,37 +533,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  /* metodo para crear un nuevo usuario relacionado a una persona */
-  /*   setUser(idP) {
+  updatedUser(path, cfPers) {
 
-      console.log(idP);
-      const user = this.usuario;
-      user.cfPers = idP;
-      console.log( 'usuario pa subir',  user);
+    const newUser = {
+      cfPers,
+      appRoles: {}
+    };
+    // asigna como boolean el id del rol al usuario
+    newUser.appRoles[this.person.roleId] = true;
+    console.log(newUser);
+    this.afs.doc('user/' + path).set(newUser, { merge: true });
 
-      const password = '123456';
-
-
-      //  agrega un nuevo usuario a firestore
-      this.afs.collection('user').add(user).then( ok => {
-          // actualiza el campo idusuario en el document persona
-        this.updateFaciliti(  idP );
-        this.updatePers( ok.id, idP  );
-        }) ;
-
-      // registra un usuario para logeuarse con mail
-        this.register.createUser( user.email, password )
-                .then(   () => {
-
-                      // enviar email para que el usuario restablesca pass de inicio
-                      this.register.sendEmail( user.email );
-                      // cerrar modal
-                      $('#modal1').modal('hide');
-
-
-                });
-    }
-   */
+  }
 
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
 
@@ -579,8 +587,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         } else {
           console.log(snapShot.docs[0].id);
           this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
-          this.dispo = false;
+          this.dispo = true;
           this.addP = snapShot.docs[0].id;
+          this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;
+          this.person.cfFirstNames = snapShot.docs[0].data().cfFirstNames;
+          this.person.roleId = snapShot.docs[0].data().roleId;
+          this.person.type = snapShot.docs[0].data().type;
+          this.person.cfGender = snapShot.docs[0].data().cfGender;
+          this.person.cfBirthdate = snapShot.docs[0].data().cfBirthdate;
         }
       });
     }

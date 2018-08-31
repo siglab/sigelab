@@ -18,47 +18,50 @@ export class AdminQrComponent implements OnInit {
   QRimage;
   QrCantidad;
   base64;
-   zip = new JSZip();
-   img = this.zip.folder('images');
-
-
-    // atributos tabla qr active
+  zip = new JSZip();
+  img = this.zip.folder('images');
+  status;
+  cod_qr;
+  dispo = false;
+  marca_equip;
+  precio_equip;
+  // atributos tabla qr active
   displayedColumnsQr = ['SecuenciaQr'];
   dataSourceQr = new MatTableDataSource();
 
   @ViewChild('paginatorQr') paginatorQr: MatPaginator;
   @ViewChild('sortQr') sortQr: MatSort;
-   // atributos tabla qr inactive
-   displayedColumnsQrIn = ['SecuenciaQr'];
-   dataSourceQrIn = new MatTableDataSource();
+  // atributos tabla qr inactive
+  displayedColumnsQrIn = ['SecuenciaQr'];
+  dataSourceQrIn = new MatTableDataSource();
 
 
   @ViewChild('paginatorQrIn') paginatorQrIn: MatPaginator;
   @ViewChild('sortQrIn') sortQrIn: MatSort;
 
-  role:any;
+  role: any;
   moduloNivel3 = false;
 
-  constructor(private afs: AngularFirestore , private qrserv: QrService , private router: Router   ) {}
+  constructor(private afs: AngularFirestore, private qrserv: QrService, private router: Router) { }
 
   ngOnInit() {
 
     this.getRoles();
-      //  consulta qr inactivos
-      this.qrserv.listQrInactive().subscribe( (data) => {
-        this.dataSourceQrIn.data = data;
+    //  consulta qr inactivos
+    this.qrserv.listQrInactive().subscribe((data) => {
+      this.dataSourceQrIn.data = data;
 
-        console.log(this.dataSourceQr.data);
+      console.log(this.dataSourceQr.data);
 
-      });
+    });
 
 
-        //  consulta qr activos
-        this.qrserv.listQrActive().subscribe( (data) => {
-          this.dataSourceQr.data = data;
+    //  consulta qr activos
+    this.qrserv.listQrActive().subscribe((data) => {
+      this.dataSourceQr.data = data;
 
-          console.log(this.dataSourceQrIn.data);
-        });
+      console.log('qr activos', this.dataSourceQr.data);
+    });
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
@@ -68,16 +71,16 @@ export class AdminQrComponent implements OnInit {
     console.log(this.role);
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave == 'moduloNivel3')) {
+        if ((clave === 'moduloNivel3')) {
           this.moduloNivel3 = true;
         }
       }
     }
   }
-  genItQR(id: string , cantidad: number , index: number) {
+  genItQR(id: string, cantidad: number, index: number) {
 
 
-    const urlQR = URLQR + id ;
+    const urlQR = URLQR + id;
     return new Promise((resolve, reject) => {
       QRCode.toDataURL(urlQR, { errorCorrectionLevel: 'M' })
         .then(url => {
@@ -85,20 +88,20 @@ export class AdminQrComponent implements OnInit {
           this.base64 = this.QRimage.split(',')[1];
 
 
-       const image =   this.img.file('qrcode' + id + '.png', this.base64, {base64: true} );
+          const image = this.img.file('qrcode' + id + '.png', this.base64, { base64: true });
           console.log('image content', image);
 
-          console.log('cantidad :' , cantidad , 'indice: ' , index);
+          console.log('cantidad :', cantidad, 'indice: ', index);
 
-          if ( cantidad === index) {
+          if (cantidad === index) {
 
-          this.zip.generateAsync({ type: 'blob' }).then((content) => {
+            this.zip.generateAsync({ type: 'blob' }).then((content) => {
               // see FileSaver.js
 
               console.log('este es el content', content);
               saveAs(content, 'qrcodes.zip');
             });
-           }
+          }
 
           resolve();
           console.log(url);
@@ -108,6 +111,83 @@ export class AdminQrComponent implements OnInit {
           reject(err);
         });
     });
+  }
+
+
+  recuperarQr() {
+    if (this.cod_qr) {
+
+      this.zip = new JSZip();
+      this.img = this.zip.folder('images');
+
+      const urlQR = URLQR + this.cod_qr;
+      return new Promise((resolve, reject) => {
+        QRCode.toDataURL(urlQR, { errorCorrectionLevel: 'M' })
+          .then(url => {
+            this.QRimage = url;
+            this.base64 = this.QRimage.split(',')[1];
+
+
+            const image = this.img.file('qrcode' + this.cod_qr + '.png', this.base64, { base64: true });
+            console.log('image content', image);
+
+
+
+            this.zip.generateAsync({ type: 'blob' }).then((content) => {
+              // see FileSaver.js
+
+              console.log('este es el content', content);
+              saveAs(content, 'qrcodes.zip');
+            });
+
+
+            resolve();
+            console.log(url);
+          })
+          .catch(err => {
+            console.error(err);
+            reject(err);
+          });
+      });
+    } else {
+      swal({
+        type: 'info',
+        title: 'No existe el codigo QR ',
+        showConfirmButton: true
+      });
+
+    }
+
+
+  }
+
+
+  searchInventory($event) {
+    this.cod_qr = '';
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Ingrese numero del iventario';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('cfEquip').ref;
+      const queryref = collref.where('inventory', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'El codigo de Inventario no fue encontrado';
+          this.dispo = false;
+        } else {
+          console.log(snapShot.docs[0].id);
+          this.status = 'Codigo de inventario encontrado puede Generar el codigo asociado';
+          this.dispo = true;
+          this.cod_qr = snapShot.docs[0].data().qr;
+          this.marca_equip = snapShot.docs[0].data().brand;
+          this.precio_equip = snapShot.docs[0].data().price;
+
+
+        }
+      });
+    }
   }
 
   addNewQr(cantidad) {
@@ -127,13 +207,13 @@ export class AdminQrComponent implements OnInit {
         updatedAt: ''
       };
 
-       /*   */
+      /*   */
       for (let index = 1; index <= cantidad; index++) {
         this.afs
           .collection('qr')
           .add(newqr)
           .then(ok => {
-            this.genItQR(ok.id , cantidad , index).then();
+            this.genItQR(ok.id, cantidad, index).then();
 
 
             console.log(ok.id);
@@ -163,10 +243,7 @@ export class AdminQrComponent implements OnInit {
 
     console.log(row);
 
-   const rut = window.location;
-
-   console.log(rut);
-    this.router.navigate( ['principal/qrinventario', row.secQr] );
+    // this.router.navigate( ['principal/qrinventario', row.secQr] );
 
 
   }
