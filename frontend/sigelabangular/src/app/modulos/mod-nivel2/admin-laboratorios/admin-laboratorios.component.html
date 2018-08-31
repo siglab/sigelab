@@ -835,7 +835,7 @@
                             <label class="control-label" for="espacioedit"><strong>Seleccione:</strong></label>
                             <select class="form-control" id="espacioedit" name="espacioedit" [(ngModel)]="seleccionado" (change)="cambiarSugerencia($event.target.value)">
                               <option value="inicial">Seleccione una Sugerencia</option>
-                              <option *ngFor="let item of this.cambios" value="{{item.uid}}" >{{item.nombre}}</option>
+                              <option *ngFor="let item of this.cambios" value="{{item.pos}}" >{{item.nombre}}</option>
                             </select>
                           </div>
                         </div>

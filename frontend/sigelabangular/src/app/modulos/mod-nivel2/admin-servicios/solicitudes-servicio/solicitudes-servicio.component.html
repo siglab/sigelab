@@ -414,6 +414,11 @@
                             <label class="control-label" for="teledit">
                               <strong>Seleccione Archivo:</strong>
                             </label>
+                            <div *ngIf="currentUpload"> 
+                              <div class="progress"> 
+                                <div class="progress-bar progress-bar-animated" [ngStyle]="{'width': currentUpload?.progress + '%'} " > </div> 
+                              </div>   Progreso: {{currentUpload?.name}} | {{currentUpload?.progress}}% Completo
+                            </div>
                             <div class="btn btn-default btn-file">
                                 <i class="fa fa-paperclip"></i> File
                                 <input class="form-control" type="file" name="attachment"  multiple="multiple" (change)="alistarVariables($event)">
