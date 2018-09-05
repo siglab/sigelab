@@ -33,12 +33,10 @@ export class BarAdminLaboratoriosComponent implements OnInit {
       this.getUserId();
       this.getRoles();
       this.getPersonId(this.user.uid).subscribe(person => {
-        this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
-          this.laboratorios2 = this.estructuraIdLab(labs);
-
-        });
+        this.laboratorios2 = [];
         if (this.moduloNivel2) {
           this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
+            
             this.laboratorios2 = this.estructuraIdLab(labs);
           });
         }
@@ -119,12 +117,12 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     for (const key in arr) {
       if (arr.hasOwnProperty(key)) {
-        this.afs.doc('cfFacil/' + key).snapshotChanges().subscribe(data=>{
-              
+        this.afs.doc('cfFacil/' + key).ref.get().then(data=>{
+
           const laboratorio = {
-            nombre: this.ajustarTexto(data.payload.data().cfName),
-            uid: data.payload.id,
-            labo: data.payload.data()
+            nombre: this.ajustarTexto(data.data().cfName),
+            uid: data.id,
+            labo: data.data()
           };
 
           laboratorios.push(laboratorio);

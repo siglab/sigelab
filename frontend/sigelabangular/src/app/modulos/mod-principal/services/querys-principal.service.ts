@@ -67,34 +67,32 @@ export class QuerysPrincipalService {
           const duenoLab = dueno.payload.data();
           if (duenoLab && elemento.otros) {
 
-            if (elemento.mainSpace !== ''){
+            if (elemento.mainSpace !== '') {
 
               this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
 
                 const espacioLab = espacio.payload.data();
-                 // convertir boolean a cadena de caracteres para estado del laboratorio
-                let estadoLab;
-                 if(elemento.active == true) {
-                  estadoLab = 'Activo';
-                 } else if( elemento.active == false ) {
-                  estadoLab = 'Inactivo';
-                 }
 
-                const laboratorio = {
-                  uid: data[index].payload.doc.id,
-                  nombre: elemento.cfName,
-                  escuela: elemento.knowledgeArea,
-                  inves: elemento.researchGroup,
-                  desc: elemento.cfDescr,
-                  director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                  coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
-                  info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
-                  servicios: this.estructurarServicios(elemento.relatedServices),
-                  practicas: this.estructurarPracticas(elemento.relatedPractices),
-                  estado: estadoLab
-                };
+                this.buscarDireccion(elemento.headquarter,elemento.subHq,elemento.mainSpace).then(direspa=>{
+                  const laboratorio = {
+                    uid: data[index].payload.doc.id,
+                    nombre: elemento.cfName,
+                    escuela: elemento.knowledgeArea,
+                    inves: elemento.researchGroup,
+                    desc: elemento.cfDescr,
+                    direspacio: direspa,
+                    director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                    coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud},
+                    info: {dir: elemento.otros.direccion, tel: elemento.otros.telefono, cel: '', email: elemento.otros.email},
+                    servicios: this.estructurarServicios(elemento.relatedServices),
+                    practicas: this.estructurarPracticas(elemento.relatedPractices),
+                    condiciones: elemento.cfConditions,
+                    disponibilidad: elemento.cfAvailability
+                  };
 
-                  this.datosLabsEstructurados.push(laboratorio);
+                    this.datosLabsEstructurados.push(laboratorio);
+                });
+
               });
             }
 
@@ -131,39 +129,37 @@ export class QuerysPrincipalService {
 
                   const espacioLab = espacio.payload.data();
 
-                  // convertir boolean a cadena de caracteres para estado del laboratorio
-                  let estadoServ;
-                  if (elemento.active == true) {
-                    estadoServ = 'Activo';
-                  } else if( elemento.active == false ) {
-                    estadoServ = 'Inactivo';
-                  }
+                  this.buscarDireccion(labencontrado.headquarter,labencontrado.subHq,labencontrado.mainSpace).then(direspa=>{
+                    const servicios = {
+                      nombreserv: elemento.cfName,
+                      nombrelab: labencontrado.cfName,
+                      infoServ: {
+                        descripcion: elemento.cfDesc,
+                        precio: elemento.cfPrice,
+                        variaciones: this.variations(data[index].payload.doc.id),
+                        equipos: this.estructurarEquipos(elemento.relatedEquipments),
+                        condiciones: elemento.cfCondition,
+                        uid: data[index].payload.doc.id
+                      },
+                      infoLab: {
+                        uid: elemento.cfFacil,
+                        direspacio: direspa,
+                        tel: labencontrado.otros.telefono,
+                        cel: '',
+                        desc: labencontrado.cfDescr,
+                        email: labencontrado.otros.email,
+                        escuela: labencontrado.knowledgeArea,
+                        inves: labencontrado.researchGroup,
+                        director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                        condiciones: labencontrado.cfConditions,
+                        disponibilidad: labencontrado.cfAvailability},
 
-                  const servicios = {
-                    nombreserv: elemento.cfName,
-                    nombrelab: labencontrado.cfName,
-                    infoServ: {
-                      descripcion: elemento.cfDesc,
-                      precio: elemento.cfPrice,
-                      estado: estadoServ,
-                      variaciones: this.variations(data[index].payload.doc.id),
-                      equipos: this.estructurarEquipos(elemento.relatedEquipments),
-                      condiciones: elemento.cfCondition,
-                      uid: data[index].payload.doc.id
-                    },
-                    infoLab: {
-                      uid: elemento.cfFacil,
-                      dir: labencontrado.otros.direccion,
-                      tel: labencontrado.otros.telefono,
-                      cel: '',
-                      email: labencontrado.otros.email,
-                      escuela: labencontrado.knowledgeArea,
-                      inves: labencontrado.researchGroup,
-                      director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames},
-                    coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
-                  };
+                      coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
+                    };
 
-                  this.datosServEstructurados.push(servicios);
+                    this.datosServEstructurados.push(servicios);
+                  });
+
                 });
 
               }
@@ -206,10 +202,10 @@ export class QuerysPrincipalService {
                 const espacioLab = espacio.payload.data();
                   let estado;
                  // cambiar variable boolean a cadena de caracteres
-                 if(elemento.active === true) {
-                    estado = 'activo'
-                 } else if(elemento.active === false ){
-                   'inactivo'
+                 if (elemento.active === true) {
+                    estado = 'activo';
+                 } else if (elemento.active === false ) {
+                   estado = 'inactivo';
 
                  }
 
@@ -297,6 +293,27 @@ export class QuerysPrincipalService {
   // METODO QUE TRAE UN ESPACIO ESPECIFICO DEPENDIENDO EL ID-ESPACIO
   buscarEspacio(idespacio) {
     return this.afs.doc('space/' + idespacio).snapshotChanges();
+  }
+
+  buscarDireccion(sede, subsede, espacio){
+    let direccion = '';
+    let espa = '';
+    const promise = new Promise((resolve, reject) => {
+      this.afs.doc('headquarter/' + sede).ref.get().then(sedereturn => {
+        this.afs.doc('cfPAddr/' + subsede).ref.get().then(subreturn => {
+          this.afs.doc('space/' + espacio).ref.get().then(espareturn => {
+            direccion = sedereturn.data().cfName + ' ' + subreturn.data().cfAddrline2
+                        + ' ' + subreturn.data().cfAddrline1;
+            espa = espareturn.data().spaceData.building;
+
+            resolve({dir:direccion, espa: espa});
+          });
+        });
+      });
+    })
+
+    return promise;
+
   }
 
 

@@ -13,6 +13,9 @@ import { Subscription } from 'rxjs';
 import { AngularFireStorage } from 'angularfire2/storage';
 declare var $: any;
 
+import * as _ from "lodash";
+import * as firebase from 'firebase/app';
+
 @Component({
   selector: 'app-solicitudes-servicio',
   templateUrl: './solicitudes-servicio.component.html',
@@ -33,9 +36,6 @@ servicioActivoSel:any;
 histoServicioSel:any;
 
 comentario = '';
-
-nombrearchivo = '';
-
 
 
   displayedColumns = ['nombre', 'fecha', 'email', 'estado'];
@@ -74,9 +74,14 @@ nombrearchivo = '';
 
    sus: Subscription;
 
-   files = [];
-   filePath:any;
-   ref:any;
+  files = [];
+  filePath:any;
+  ref:any;
+
+
+  selectedFiles: FileList;
+  currentUpload: Upload;
+  private basePath:string = '/archivos';
 
    rol:any;
    moduloNivel2 = false;
@@ -265,32 +270,66 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
   alistarVariables(event){
     console.log(event.target.files);
-    this.files = event.target.files;
+    let tamano = false;
+    for (let i = 0; i < event.target.files.length; i++) {
+      console.log(event.target.files[i].size);
+      if(event.target.files[i].size >= 33554432){
+        tamano = true;
+        break;
+      }
+    }
+
+    if(tamano){
+      swal(
+        'Uno o mas archivos tienen mas peso del limite permitido (32 Mgb)',
+        '',
+        'error'
+      );
+    }else{
+      this.files = event.target.files; 
+    }
    
   }
 
-  uploadFile() {
+  uploadMulti() {
+
     let filespath = [];
 
-    if(this.servicioActivoSel.path.length != 0){
-      filespath = this.servicioActivoSel.path;
-    }
+      if(this.servicioActivoSel.path.length != 0){
+        filespath = this.servicioActivoSel.path;
+      }
 
-    for (let i = 0; i < this.files.length; i++) {
-      const element = this.files[i];
+    let files = this.files;
+    let filesIndex = _.range(files.length)
+    _.each(filesIndex, (idx) => {
+      this.currentUpload = new Upload(files[idx]);
+      this.uploadFile(this.currentUpload);
 
-      this.filePath = element.name.split('.')[0];
-      this.ref = this.storage.ref('archivos/'+ this.filePath);
-      filespath.push('archivos/'+ this.filePath);
+      filespath.push('archivos/'+ this.currentUpload.file.name);
+    });
 
-      const task = this.ref.put(element).then(()=>{
-         console.log('subido con exito');       
-        // $('#modalProcesar').modal('hide');
-      });
-    }
- 
-  
     return filespath;
+  }
+
+  uploadFile(upload: Upload) {
+
+    let storageRef = firebase.storage().ref();
+    let uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
+
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) =>  {
+        // upload in progress
+        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100
+      },
+      (error) => {
+        // upload failed
+        return false;
+      },
+      () => {
+        // upload success
+        return true;
+      }
+    );
   }
 
 
@@ -525,14 +564,14 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
       if (result.value) {
         
-        this.alertaCargando();
+        //this.alertaCargando();
         const reserva = {
           status: estado,
           acceptedBy: this.user.email,
           updatedAt: new Date().toISOString()
         };
         if(estado == 'procesada'){
-          const filespath = this.uploadFile();
+          const filespath = this.uploadMulti();
 
           reserva['path'] = filespath;
                 
@@ -606,3 +645,16 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 }
 
 
+export class Upload {
+
+  $key: string;
+  file:File;
+  name:string;
+  url:string;
+  progress:number;
+  createdAt: Date = new Date();
+
+  constructor(file:File) {
+    this.file = file;
+  }
+};

@@ -7,6 +7,9 @@ import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AngularFireStorage } from 'angularfire2/storage';
 
+import * as _ from "lodash";
+import * as firebase from 'firebase/app';
+
 @Component({
   selector: 'app-solicitud-mantenimiento',
   templateUrl: './solicitud-mantenimiento.component.html',
@@ -94,12 +97,16 @@ export class SolicitudMantenimientoComponent implements OnInit {
   filePath:any;
   ref:any;
 
+  selectedFiles: FileList;
+  currentUpload: Upload;
+  private basePath:string = '/cotizaciones';
+
   rol:any;
   moduloNivel2 = false;
   moduloSolicitudes = false;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore, private storage:AngularFireStorage) {
-   }
+  }
 
   ngOnInit() {
     this.getRoles();
@@ -177,8 +184,24 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   alistarVariables(event){
     console.log(event.target.files);
-    this.files = event.target.files;
-   
+    let tamano = false;
+    for (let i = 0; i < event.target.files.length; i++) {
+      console.log(event.target.files[i].size);
+      if(event.target.files[i].size >= 33554432){
+        tamano = true;
+        break;
+      }
+    }
+
+    if(tamano){
+      swal(
+        'Uno o mas archivos tienen mas peso del limite permitido (32 Mgb)',
+        '',
+        'error'
+      );
+    }else{
+      this.files = event.target.files; 
+    }
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
@@ -199,23 +222,40 @@ export class SolicitudMantenimientoComponent implements OnInit {
     }
   }
 
-  uploadFile() {
+  uploadMulti() {
     let filespath = [];
 
-    for (let i = 0; i < this.files.length; i++) {
-      const element = this.files[i];
+    let files = this.files;
+    let filesIndex = _.range(files.length)
+    _.each(filesIndex, (idx) => {
+      this.currentUpload = new Upload(files[idx]);
+      this.uploadFile(this.currentUpload);
 
-      this.filePath = element.name.split('.')[0];
-      this.ref = this.storage.ref('cotizaciones/'+ this.filePath);
-      filespath.push('cotizaciones/'+ this.filePath);
+      filespath.push('cotizaciones/'+ this.currentUpload.file.name);
+    });
 
-      const task = this.ref.put(element).then(()=>{
-         console.log('subido con exito');       
-      });
-    }
- 
-  
     return filespath;
+  }
+
+  uploadFile(upload: Upload) {
+
+    let storageRef = firebase.storage().ref();
+    let uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
+
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) =>  {
+        // upload in progress
+        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100
+      },
+      (error) => {
+        // upload failed
+        return false;
+      },
+      () => {
+        // upload success
+        return true;
+      }
+    );
   }
 
   // TABLA EQUIPOS PERTENECIENTES AL LABORATORIO
@@ -446,7 +486,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       this.reserMan.relatedComponents[componente.id] = true;
     });
 
-    this.reserMan.path = this.uploadFile();
+    this.reserMan.path = this.uploadMulti();
 
     console.log(this.reserMan);
 
@@ -610,3 +650,18 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   
 }
+
+
+export class Upload {
+
+  $key: string;
+  file:File;
+  name:string;
+  url:string;
+  progress:number;
+  createdAt: Date = new Date();
+
+  constructor(file:File) {
+    this.file = file;
+  }
+};

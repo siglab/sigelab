@@ -49,7 +49,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     listaVariaciones = [];
 
     iconos = {
-      info:false,
+      info:true,
       var:false
     };
 
@@ -376,6 +376,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.layer.addTo(this.map)
     .bindPopup(item.nombrelab)
     .openPopup();
+    this.map.setView([item.coord.lat, item.coord.lon], 17);
   }
 
   removerMarker() {

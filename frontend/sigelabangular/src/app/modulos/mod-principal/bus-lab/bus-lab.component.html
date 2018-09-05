@@ -121,9 +121,23 @@
                               </div>
                               <div class="form-group">
                                   <div class="col-md-12">
-                                    <label class="control-label" for="dir"><strong>Direccion: </strong>{{itemsel.info.dir}}</label>
+                                    <label class="control-label" for="dir"><strong>Direccion: </strong>{{itemsel.direspacio.dir}}</label>
 
                                   </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="esp"><strong>Espacio: </strong>{{itemsel.direspacio.espa}}</label>
+
+                                </div>
+                            </div>
+                              <div class="form-group" style="margin-top: 20px;">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="dispo"><strong>Disponibilidad:</strong></label>
+                                  <ul>
+                                    <li *ngFor="let dispo of itemsel.disponibilidad;">{{dispo.nombre}}</li>
+                                  </ul>
+                                </div>
                               </div>
                               <div class="form-group">
                                   <div class="col-md-12">
@@ -141,10 +155,12 @@
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="estado"><strong>Estado: </strong>{{itemsel.estado}}</label>
-                                  </div>
+                                <div class="col-md-12">
+                                  <label class="control-label" for="subsede">
+                                    <strong>Terminos y condiciones:</strong> {{itemsel.condiciones}}</label>
+                                </div>
                               </div>
+
 
                           </fieldset>
                         </form>

@@ -936,6 +936,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
             this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
               aux.suggestedChanges.push({
+                pos: this.labestructurado.cambios.length,
                 data: dataEstructurada,
                 uid: this.user.uid,
                 nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
@@ -1036,7 +1037,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           }
         }
         console.log(cambio);
-        cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.uid, 'aprobado');
+        cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
 
         this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio,{merge:true}).then(data=>{
           swal(
@@ -1100,12 +1101,12 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
 
-  cambiarEstadoSugerencia(uid, estado){
+  cambiarEstadoSugerencia(pos, estado){
     const cam = this.labestructurado.cambios.slice();
     for (let i = 0; i < cam.length; i++) {
       const element = cam[i];
 
-      if(element.uid == uid  && element.estado == 'pendiente'){
+      if(element.pos == pos  && element.estado == 'pendiente'){
         element.estado = estado;
         for (let j = 0; j < element.data.length; j++) {
           const element2 = element.data[j];
@@ -1128,7 +1129,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     });
 
     const cambio = {};
-    cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.uid, 'desaprobado');
+    cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
 
     console.log(cambio);
     this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
@@ -1249,20 +1250,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
         for (let j = 0; j < arr1.length; j++) {
 
-          if(arr2[i].idfacul){
-            if(arr2[i].idfacul == arr1[j].idfacul){
-              encontro = true;
-              break;
-            }
-          }
-
-          if(arr2[i].id){
-            if(arr2[i].id == arr1[j].id){
-              encontro = true;
-              break;
-            }
-          }
-
           if(arr2[i].id){
             if(arr2[i].id == arr1[j].id){
               encontro = true;
@@ -1319,7 +1306,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   buscarSugerencia(item){
     for (let i = 0; i < this.labestructurado.cambios.length; i++) {
       const element = this.labestructurado.cambios[i];
-      if(element.uid == item && element.estado == 'pendiente'){
+      if(element.pos == item && element.estado == 'pendiente'){
         return element;
       }
     }
