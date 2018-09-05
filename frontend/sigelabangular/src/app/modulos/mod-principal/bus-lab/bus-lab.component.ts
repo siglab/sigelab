@@ -89,12 +89,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
 
-  constructor(private observer: ObserverPrincipalService, 
-              private query: QuerysPrincipalService, 
+  constructor(private observer: ObserverPrincipalService,
+              private query: QuerysPrincipalService,
               private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] == 'correounivalle.edu.co'){
+      if(this.user.email.split('@')[1] === 'correounivalle.edu.co'){
         this.usuariounivalle = true;
       }
     }
@@ -133,7 +133,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       });
       const ambiente = this;
       setTimeout(function() {
-        if(datos.length != 0){
+        if(datos.length !== 0){
           ambiente.dataSource.data = datos;
           ambiente.dataSource.sort = ambiente.sort;
           ambiente.dataSource.paginator = ambiente.paginator;
@@ -251,19 +251,19 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
               }
 
-              cfSrvReserv.cfPrice = ''+this.preciototal;            
+              cfSrvReserv.cfPrice = ''+this.preciototal;
 
             } else {
               cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
             }
-            
+
             if(this.usuariounivalle){
               cfSrvReserv.typeuser = 'interno'
               cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
               cfSrvReserv.datauser.ci = this.valorci;
             }
 
-           
+
             cfSrvReserv.comments.push({
               commentText: this.campoCondicion,
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
@@ -392,10 +392,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     const containerEl: JQuery = $AB('#calendar2');
 
    if(containerEl.children().length > 0){
- 
+
       containerEl.fullCalendar('destroy');
     }
- 
+
     containerEl.fullCalendar({
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
@@ -415,12 +415,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   selectorunivalle(key){
-    this.habilitarci = false; 
+    this.habilitarci = false;
 
     if(key == 3){
       this.habilitarci = true;
     }
-   
+
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA

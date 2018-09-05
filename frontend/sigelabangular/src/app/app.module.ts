@@ -91,6 +91,7 @@ import { AuthGuard } from './shared/services/guards/auth.guard';
 import { Nivel2Guard } from './shared/services/guards/nivel2.guard';
 import { Nivel25Guard } from './shared/services/guards/nivel2-5.guard';
 import { Nivel3Guard } from './shared/services/guards/nivel3.guard';
+import { InicioAppComponent } from './modulos/mod-principal/inicio-app/inicio-app.component';
 
 // libreria date time-picker
 
@@ -135,7 +136,8 @@ import { Nivel3Guard } from './shared/services/guards/nivel3.guard';
     BardAdminQrComponent,
     AdminQrComponent,
     FormQrComponent,
-    RegistroComponent
+    RegistroComponent,
+    InicioAppComponent
   ],
   imports: [
     AngularFireStorageModule,
@@ -163,7 +165,6 @@ import { Nivel3Guard } from './shared/services/guards/nivel3.guard';
 
   ],
   providers: [
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
     ObservablesService,
     ObserverPrincipalService,
     QuerysPrincipalService,

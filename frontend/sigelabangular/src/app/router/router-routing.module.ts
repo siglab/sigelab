@@ -34,40 +34,42 @@ import { AuthGuard } from '../shared/services/guards/auth.guard';
 import { Nivel2Guard } from '../shared/services/guards/nivel2.guard';
 import { Nivel25Guard } from '../shared/services/guards/nivel2-5.guard';
 import { Nivel3Guard } from '../shared/services/guards/nivel3.guard';
-
+import { InicioAppComponent } from '../modulos/mod-principal/inicio-app/inicio-app.component';
 
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
+  { path: 'inicio', component: InicioAppComponent},
   { path: 'registro', component: RegistroComponent},
   { path: 'principal', component: PrincipalComponent,
     children: [
       { path: 'busquedalaboratorio', component: BusLabComponent},
       { path: 'busquedaservicio', component: BusServComponent},
       { path: 'busquedaprueba', component: BusPruComponent},
-      { path: 'adminsolicitudes', component: AdminSolicitudesComponent, canActivate:[AuthGuard]},
-      { path: 'adminlaboratorios', component: AdminLaboratoriosComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminequipos', component: AdminEquiposComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminespacios', component: AdminEspaciosComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminpracticas', component: AdminPracticasComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminpersonal', component: AdminPersonalComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminsolicitudes', component: AdminSolicitudesComponent, canActivate: [AuthGuard]},
+      { path: 'adminlaboratorios', component: AdminLaboratoriosComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminequipos', component: AdminEquiposComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminespacios', component: AdminEspaciosComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminpracticas', component: AdminPracticasComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminpersonal', component: AdminPersonalComponent, canActivate: [Nivel2Guard]},
       { path: 'adminqr', component: AdminQrComponent},
       { path: 'qrinventario/:id', component: FormQrComponent},
-      { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminproyectos', component: AdminProyectosComponent, canActivate:[Nivel2Guard]},
-      { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate:[Nivel2Guard]},
+      { path: 'adminserviciosolicitud', component: SolicitudesServicioComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminproyectos', component: AdminProyectosComponent, canActivate: [Nivel2Guard]},
+      { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate: [Nivel2Guard]},
 
-      { path: 'adminlaboratorios25', component: AdminLaboratorios25Component, canActivate:[Nivel25Guard]},
-      { path: 'indicadores25', component: IndicadoresGraficasReportesComponent, canActivate:[Nivel25Guard]},
+      { path: 'adminlaboratorios25', component: AdminLaboratorios25Component, canActivate: [Nivel25Guard]},
+      { path: 'indicadores25', component: IndicadoresGraficasReportesComponent, canActivate: [Nivel25Guard]},
 
-      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate:[Nivel3Guard]},
-      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate:[Nivel3Guard]},
-      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate:[Nivel3Guard]},
-      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate:[Nivel3Guard]},
+      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard]},
+      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel3Guard]},
+      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate: [Nivel3Guard]},
+      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard]},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
-  { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}
+  { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'},
+  { path: '**', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}
 ];
 
 @NgModule({

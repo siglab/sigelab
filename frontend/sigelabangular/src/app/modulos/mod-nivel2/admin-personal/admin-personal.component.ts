@@ -111,6 +111,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.getRoles();
 
     this.sus = this.obs.currentObjectPer.subscribe(data => {
+      console.log(data);
 
       if (data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {

@@ -37,7 +37,7 @@ export class QuerysPrincipalService {
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
   getServicios() {
     this.servsCollection = this.afs.collection<any>('cfSrv');
-    //this.servs = this.servsCollection.valueChanges();
+    // this.servs = this.servsCollection.valueChanges();
 
     return this.servsCollection.snapshotChanges();
 
@@ -62,13 +62,13 @@ export class QuerysPrincipalService {
 
       const elemento = data[index].payload.doc.data();
       console.log(elemento);
-      if(elemento.facilityAdmin != '') {
+      if(elemento.facilityAdmin !== '') {
         this.buscarDirector(elemento.facilityAdmin).subscribe(dueno => {
           const duenoLab = dueno.payload.data();
           if (duenoLab && elemento.otros) {
 
-            if(elemento.mainSpace != ''){
-             
+            if (elemento.mainSpace !== ''){
+
               this.buscarEspacio(elemento.mainSpace).subscribe(espacio => {
 
                 const espacioLab = espacio.payload.data();
@@ -79,7 +79,7 @@ export class QuerysPrincipalService {
                  } else if( elemento.active == false ) {
                   estadoLab = 'Inactivo';
                  }
-  
+
                 const laboratorio = {
                   uid: data[index].payload.doc.id,
                   nombre: elemento.cfName,
@@ -93,11 +93,11 @@ export class QuerysPrincipalService {
                   practicas: this.estructurarPracticas(elemento.relatedPractices),
                   estado: estadoLab
                 };
-  
+
                   this.datosLabsEstructurados.push(laboratorio);
               });
             }
-        
+
           }
        });
       }
@@ -118,27 +118,27 @@ export class QuerysPrincipalService {
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
 
-      if(elemento.cfFacil){
+      if (elemento.cfFacil) {
         this.buscarLaboratorio(elemento.cfFacil).subscribe(lab => {
           const labencontrado = lab.payload.data();
-          
-          if(labencontrado){
+
+          if (labencontrado) {
             this.buscarDirector(labencontrado.facilityAdmin).subscribe(dueno => {
               const duenoLab = dueno.payload.data();
               if (duenoLab && labencontrado.mainSpace) {
-    
+
                 this.buscarEspacio(labencontrado.mainSpace).subscribe(espacio => {
-    
+
                   const espacioLab = espacio.payload.data();
-    
+
                   // convertir boolean a cadena de caracteres para estado del laboratorio
                   let estadoServ;
-                  if(elemento.active == true) {
+                  if (elemento.active == true) {
                     estadoServ = 'Activo';
                   } else if( elemento.active == false ) {
                     estadoServ = 'Inactivo';
                   }
-    
+
                   const servicios = {
                     nombreserv: elemento.cfName,
                     nombrelab: labencontrado.cfName,
@@ -162,16 +162,16 @@ export class QuerysPrincipalService {
                       director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames},
                     coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
                   };
-    
+
                   this.datosServEstructurados.push(servicios);
                 });
-    
+
               }
            });
           }
-         
-  
-  
+
+
+
         });
       }
 
