@@ -310,7 +310,7 @@ export class QuerysPrincipalService {
           });
         });
       });
-    })
+    });
 
     return promise;
 
