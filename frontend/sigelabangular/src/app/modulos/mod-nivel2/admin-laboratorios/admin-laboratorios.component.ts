@@ -1250,20 +1250,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
         for (let j = 0; j < arr1.length; j++) {
 
-          if(arr2[i].idfacul){
-            if(arr2[i].idfacul == arr1[j].idfacul){
-              encontro = true;
-              break;
-            }
-          }
-
-          if(arr2[i].id){
-            if(arr2[i].id == arr1[j].id){
-              encontro = true;
-              break;
-            }
-          }
-
           if(arr2[i].id){
             if(arr2[i].id == arr1[j].id){
               encontro = true;

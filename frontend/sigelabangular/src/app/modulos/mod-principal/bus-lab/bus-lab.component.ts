@@ -469,10 +469,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   agregarMarker(item) {
+
     this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
     this.layer.addTo(this.map)
     .bindPopup(item.nombre)
     .openPopup();
+    this.map.setView([item.coord.lat, item.coord.lon], 17);
   }
 
   removerMarker() {

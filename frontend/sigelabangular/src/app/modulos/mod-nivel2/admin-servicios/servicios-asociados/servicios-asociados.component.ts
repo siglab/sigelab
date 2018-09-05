@@ -89,6 +89,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   variaciones = [];
+  variacionesRetiradas = [];
 
   condicion = '';
   condicionvar = '';
@@ -271,8 +272,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       if(data){
         for (let i = 0; i < data.length; i++) {
           const element = data[i].payload.doc.data();
-
-          variaciones.push({cfName:element.cfName, data: element, id: data[i].payload.doc.id});
+          if(element.active){
+            variaciones.push({cfName:element.cfName, data: element, id: data[i].payload.doc.id});
+          }      
         }
       } else {
         return variaciones;
@@ -406,12 +408,12 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.srv.cfName = this.itemsel.nombreserv;
     this.srv.cfDesc = this.itemsel.infoServ.descripcion;
     this.srv.cfPrice = this.itemsel.infoServ.precio;
-    this.srv.cfCondition = this.itemsel.infoServ.condiciones;
+    this.srv.cfCondition = this.itemsel.infoServ.condiciones.slice();
     this.srv.createdAt = this.itemsel.infoServ.creado;
     this.srv.updatedAt = this.itemsel.infoServ.editado;
     this.srv.active = this.itemsel.infoServ.active;
 
-    this.variaciones = this.itemsel.infoServ.variaciones;
+    this.variaciones = this.itemsel.infoServ.variaciones.slice();
 
     this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
 
@@ -512,13 +514,28 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           });
         }
 
-      }
-        swal.close();
+
+        if(j == this.variaciones.length-1){
+          swal.close();
           swal({
             type: 'success',
             title: 'creado correctamente',
             showConfirmButton: true
           });
+          this.variaciones = [];
+        }
+
+      }
+
+      for (let i = 0; i < this.variacionesRetiradas.length; i++) {
+        this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')
+          .doc(this.variacionesRetiradas[i]).set({active:false},{merge:true});
+
+          if(i == this.variacionesRetiradas.length-1){
+            this.variacionesRetiradas = [];
+          } 
+      }
+       
 
     });
 
@@ -563,12 +580,37 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     }
 
     this.inicializarVariacion();
-    console.log(this.variaciones);
+    
+    swal({
+      type: 'success',
+      title: 'variacion agregada',
+      showConfirmButton: true
+    });
+
 
   }
 
   quitarVariacion(index){
-    this.variaciones.splice(index, 1);
+    if(!this.editar){
+      this.variaciones.splice(index, 1);
+    }else{
+       this.itemsel.infoServ.variaciones.forEach(element => {
+        if(element.id == this.variaciones[index].id){
+          console.log('si ');
+          this.variacionesRetiradas.push(this.variaciones[index].id);
+        }
+      });
+
+      this.variaciones.splice(index, 1);
+    }
+
+    swal({
+      type: 'success',
+      title: 'variacion retirada',
+      showConfirmButton: true
+    });
+
+   
   }
 
   agregarEquipo(){
