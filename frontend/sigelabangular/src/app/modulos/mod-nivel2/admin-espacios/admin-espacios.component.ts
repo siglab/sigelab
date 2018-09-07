@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 import { LoginService } from '../../login/login-service/login.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as $ from 'jquery';
+import * as $AB from 'jquery';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 // tslint:disable-next-line:import-blacklist
@@ -15,6 +15,8 @@ import { Subscription } from 'rxjs';
 import { ArrayType } from '@angular/compiler/src/output/output_ast';
 import { all } from 'q';
 import { EspaciosService } from '../services/espacios.service';
+
+declare var $: any;
 
 @Component({
   selector: 'app-admin-espacios',
@@ -161,8 +163,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   estructuraEspacio(key) {
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).subscribe(labo => {
-        const laboratorio = labo.payload.data();
+      this.buscarLab(key).then(labo => {
+        const laboratorio = labo.data();
 
         let estadoLab;
         if (laboratorio.active === true) {
@@ -293,7 +295,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
+    return this.afs.doc('cfFacil/' + idlab).ref.get();
 
   }
 
@@ -448,7 +450,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     console.log(this.horarios);
     const horario = this.horarios;
-    const containerEl: JQuery = $('#cal');
+    const containerEl: JQuery = $AB('#cal');
     containerEl.fullCalendar('destroy');
 
 
@@ -578,6 +580,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.spaceData.building = '';
     this.space.spaceData.floor = '';
     this.space.spaceData.place = '';
+  }
+
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
   }
 
 }

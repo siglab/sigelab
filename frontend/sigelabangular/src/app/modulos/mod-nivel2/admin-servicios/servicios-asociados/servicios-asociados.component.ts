@@ -7,6 +7,8 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subscription } from 'rxjs';
 
+declare var $: any;
+
 @Component({
   selector: 'app-servicios-asociados',
   templateUrl: './servicios-asociados.component.html',
@@ -89,7 +91,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   variaciones = [];
-  variacionesRetiradas = [];
+  variacionesCambiadas = [];
 
   condicion = '';
   condicionvar = '';
@@ -114,18 +116,21 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getRoles();
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
+
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
+      this.moduloinfo = false;
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
+      
         if(data.length != 0){
 
           this.lab_id = data.uid;
-          this.getCollectionServ(data.uid).subscribe(servicios =>{
+          this.getCollectionServ(data.uid).then(servicios =>{
 
             this.servasocestructurados = this.estructurarDataServ(servicios);
             this.getLaboratorio(this.lab_id).subscribe(labo => {
@@ -217,7 +222,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.collectionReserv = this.afs.collection('cfSrv',
       ref => ref.where('cfFacil', '==', labid));
 
-    return this.collectionReserv.snapshotChanges();
+    return this.collectionReserv.ref.get();
   }
 
   getLaboratorio(labid){
@@ -229,10 +234,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     this.servasocestructurados = [];
 
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-
+    data.forEach( doc =>{
       // convertir boolean a cadena de caracteres para estado del laboratorio
+
+      const elemento = doc.data();
+
       let estadoServ;
       if(elemento.active == true) {
         estadoServ = 'Activo';
@@ -247,9 +253,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           precio: elemento.cfPrice,
           estado: estadoServ,
           equipos: this.estructurarEquipos(elemento.relatedEquipments),
-          variaciones: this.variations(data[index].payload.doc.id),
+          variaciones: this.variations(doc.id),
           condiciones: elemento.cfCondition,
-          uid: data[index].payload.doc.id,
+          uid: doc.id,
           creado: elemento.createdAt,
           editado: elemento.updatedAt,
           active: elemento.active
@@ -257,9 +263,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       };
 
       this.servasocestructurados.push(servicios);
-
-
-    }
+    });
 
     return this.servasocestructurados;
   }
@@ -268,14 +272,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   variations(clave){
 
     const variaciones = [];
-    this.afs.doc('cfSrv/' + clave).collection('variations').snapshotChanges().subscribe(data => {
+    this.afs.doc('cfSrv/' + clave).collection('variations').ref.get().then(data => {
       if(data){
-        for (let i = 0; i < data.length; i++) {
-          const element = data[i].payload.doc.data();
-          if(element.active){
-            variaciones.push({cfName:element.cfName, data: element, id: data[i].payload.doc.id});
-          }      
-        }
+        data.forEach(doc=>{
+          const element = doc.data();
+
+            variaciones.push({cfName:element.cfName, data: element, id: doc.id, active:element.active});
+          
+        });
+    
       } else {
         return variaciones;
       }
@@ -527,12 +532,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
       }
 
-      for (let i = 0; i < this.variacionesRetiradas.length; i++) {
+      for (let i = 0; i < this.variacionesCambiadas.length; i++) {
         this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')
-          .doc(this.variacionesRetiradas[i]).set({active:false},{merge:true});
+          .doc(this.variacionesCambiadas[i].id)
+          .set({active:this.variacionesCambiadas[i].active},{merge:true});
 
-          if(i == this.variacionesRetiradas.length-1){
-            this.variacionesRetiradas = [];
+          if(i == this.variacionesCambiadas.length-1){
+            this.variacionesCambiadas = [];
           } 
       }
        
@@ -547,7 +553,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   agregarCondicion(){
     this.srv.cfCondition.push(this.condicion);
     this.condicion = '';
-    console.log(this.srv.cfCondition);
   }
 
   quitarCondicion(index){
@@ -557,7 +562,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   agregarCondicionVariacion(){
     this.objectvariation.cfConditions.push(this.condicionvar);
     this.condicionvar = '';
-    console.log(this.objectvariation.cfConditions);
   }
 
   quitarCondicionVariacion(index){
@@ -591,22 +595,30 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   quitarVariacion(index){
-    if(!this.editar){
-      this.variaciones.splice(index, 1);
-    }else{
-       this.itemsel.infoServ.variaciones.forEach(element => {
-        if(element.id == this.variaciones[index].id){
-          console.log('si ');
-          this.variacionesRetiradas.push(this.variaciones[index].id);
-        }
-      });
+    this.variaciones.splice(index, 1);
+  }
 
-      this.variaciones.splice(index, 1);
+  cambiarEstadoVariacion(pos, active){
+    let encontrado = false;
+    let indice = 0;
+    this.variacionesCambiadas.forEach((doc, index)=>{
+      if(doc.id == this.variaciones[pos].id){
+       encontrado = true;
+       indice = index;       
+      }
+    });
+
+    if(!encontrado){
+      this.variacionesCambiadas.push({id:this.variaciones[pos].id, active: !active});   
+    }else{
+      this.variacionesCambiadas[indice].active = !active;
     }
 
+    this.variaciones[pos].active = !active; 
+     
     swal({
       type: 'success',
-      title: 'variacion retirada',
+      title: 'cambio de estado de variacion hecho',
       showConfirmButton: true
     });
 
@@ -695,6 +707,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceEquip.filter = filterValue;
+  }
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
   }
 
 }

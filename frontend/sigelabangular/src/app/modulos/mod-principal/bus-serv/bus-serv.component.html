@@ -310,6 +310,11 @@
                         <form  id="form-work" class="" name="form-work" action="#">
                           <fieldset>
                             <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="nombre"><strong>Nombre Laboratorio:</strong> {{itemsel.nombrelab}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="desc"><strong>Descripcion: </strong>{{itemsel.infoLab.desc}}</label>
 
@@ -337,18 +342,16 @@
                           </div>
                           <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="tel"><strong>Telefono: </strong>{{itemsel.infoLab.tel}}</label>
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="cel"><strong>Celular: </strong>{{itemsel.infoLab.cel}}</label>
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <div class="col-md-12">
                                 <label class="control-label" for="email"><strong>Email: </strong>{{itemsel.infoLab.email}}</label>
                               </div>
+                          </div>
+                          <div class="form-group" style="margin-top: 20px;">
+                            <div class="col-md-12">
+                              <label class="control-label" for="dispo"><strong>Telefonos:</strong></label>
+                              <ul>
+                                <li *ngFor="let tel of itemsel.infoLab.telefonos;">{{tel}}</li>
+                              </ul>
+                            </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
@@ -394,6 +397,7 @@
                   <i class="fa fa-map"></i>
 
                   <h3 class="box-title">Informacion Equipos Relacionados</h3>
+                  <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalEquips')"></span>
                 </div>
                 
                 <div class="box-body">               

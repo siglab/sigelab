@@ -9,6 +9,8 @@ export class Nivel2Guard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
       const rol = JSON.parse(localStorage.getItem('rol'));
+
+      console.log(rol);
       if(rol){
         for (const clave in rol) {
           if (rol[clave]) {

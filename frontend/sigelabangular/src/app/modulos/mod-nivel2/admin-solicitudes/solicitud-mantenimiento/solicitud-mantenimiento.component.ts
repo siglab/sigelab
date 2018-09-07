@@ -10,6 +10,9 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as _ from "lodash";
 import * as firebase from 'firebase/app';
 
+
+declare var $: any;
+
 @Component({
   selector: 'app-solicitud-mantenimiento',
   templateUrl: './solicitud-mantenimiento.component.html',
@@ -123,7 +126,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
         this.itemsel = data;
         this.lab_id = data.uid;
 
-        this.getCollectionSolicitudes(data.uid).subscribe(data1 => {
+        this.getCollectionSolicitudes(data.uid).then(data1 => {
           console.log(data1);
           this.datos = this.estructurarSolicitudesActivas(data1, data);
           this.histodatos = this.datos;
@@ -287,19 +290,20 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   getCollectionSolicitudes(labid) {
     return this.afs.collection('request',
-      ref => ref.where('requestType', '==', 'mantenimiento').where('cfFacil','==',labid)).snapshotChanges();
+      ref => ref.where('requestType', '==', 'mantenimiento')
+      .where('cfFacil','==',labid)).ref.get();
   }
 
   estructurarSolicitudesActivas(data, lab) {
     const activo = [];
 
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
+    data.forEach(doc => {
+      const elemento = doc.data();
 
       this.getEmailUser(elemento.createdBy).subscribe(email => {
         this.getEquipo(elemento.relatedEquipments).subscribe(equipo => {
           const Solicitud = {
-            uidsol:data[index].payload.id,
+            uidsol:doc.id,
             uidlab: elemento.cfFacil,
             uidespacio: elemento.headquarter,
             nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
@@ -319,8 +323,10 @@ export class SolicitudMantenimientoComponent implements OnInit {
         });
 
       });
+    });
 
-    }
+
+    
 
     return activo;
   }
@@ -648,6 +654,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
     }
   }
 
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
   
 }
 

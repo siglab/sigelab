@@ -263,7 +263,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
             cfSrvReserv.comments.push({
               commentText: this.campoCondicion, 
-              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
+              autor: 'usuario',
+              email: this.user.email, 
               uid: this.user.uid});
            
               console.log(cfSrvReserv);
@@ -390,5 +392,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
+
 
 }

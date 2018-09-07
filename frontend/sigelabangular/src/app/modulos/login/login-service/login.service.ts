@@ -51,6 +51,7 @@ export class LoginService {
   async logout() {
 
     localStorage.removeItem('usuario');
+    localStorage.removeItem('persona');
     localStorage.removeItem('rol');
     return this.afAuth.auth.signOut();
 
@@ -121,43 +122,58 @@ export class LoginService {
 
 
   consultarPermisos(id) {
+    console.log('ejecuto');
     const promise = new Promise((resolve, reject) => {
-      this.getUser(id).subscribe(data => {
-        localStorage.setItem('persona', JSON.stringify(data.payload.data()));
-        if (data.payload.data()) {
-          const use = data.payload.data().appRoles;
-          console.log(use);
-          for (const clave in use) {
-            if (use[clave]) {
-              this.getRol(clave).subscribe(datarol => {
-                const rol = datarol.payload.data().permissions;
-                if (rol) {
+      this.getUser(id).then(data => {
+        console.log('ejecuto2');
+        
+        localStorage.setItem('persona', JSON.stringify(data.data()));
+        if (data.data()) {
+          const rol = data.data().appRoles;
+          let rolelength = 0;
+          for(const key in rol) {
+            rolelength++;
+          };
+
+          let permisos = {};
+          let cont = 0;
+          for (const clave in rol) {
+            if (rol[clave]) {
+              this.getRol(clave).then(datarol => {
+                const permission = datarol.data().permissions;
+                let rollength = 0;
+                let controle = 0;
+                for (const key in permission) {
+                  rollength++;
+                };
+
+                if (permission) {
                   // tslint:disable-next-line:forin
-                  for (const llave in rol) {
+                  for (const llave in permission) {
+                    permisos[llave] = permission[llave];  
+                    controle++;
 
-                    if (rol[llave]) {
-                      localStorage.setItem('rol', JSON.stringify(rol));
-                      // this.getModulo(llave).subscribe( datamod => {
-                      //   const modulo = datamod.payload.data().value;
+                    if(controle == rollength){
+                      cont++;
 
-                      //   console.log(modulo);
-                      // });
-                      resolve();
-                    } else {
-                      reject();
+                      console.log(rolelength, cont);
+                      if(rolelength == cont){
+                        console.log(permisos);
+                        localStorage.setItem('rol', JSON.stringify(permisos));
+          
+                        resolve();
+                      }
                     }
                   }
-                } else {
-                  this.consultarPermisos(id);
                 }
 
 
               });
             }
+          
+          
           }
 
-        } else {
-          this.consultarPermisos(id);
         }
 
       });
@@ -166,15 +182,15 @@ export class LoginService {
   }
 
   getRol(idrol) {
-    return this.afs.doc('appRoles/' + idrol).snapshotChanges();
+    return this.afs.doc('appRoles/' + idrol).ref.get();
   }
 
   getUser(iduser) {
-    return this.afs.doc('user/' + iduser).snapshotChanges();
+    return this.afs.doc('user/' + iduser).ref.get();
   }
 
   getModulo(idPermiso) {
-    return this.afs.doc('permission/' + idPermiso).snapshotChanges();
+    return this.afs.doc('permission/' + idPermiso).ref.get();
   }
 
 
