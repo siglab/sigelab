@@ -1,16 +1,89 @@
-#navbarLogo {
-  background-image:url("../../../../assets/img/Propuesta_1_Sigelab-15.jpg");
-  background-size:100%;
-  background-repeat:no-repeat;
-  width:150px;
-  height:40px;
-  background-position:center;
-  margin-left:12px;
+@import 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css';
+
+@import 'https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css';
+@import 'https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css';
+@import 'https://fonts.googleapis.com/css?family=Roboto';
+@import 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css';
+@import 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css';
+@import 'https://unpkg.com/@bootstrapstudio/bootstrap-better-nav/dist/bootstrap-better-nav.min.css';
+  
+
+
+@media (min-width: 872px) {
+  .section {
+    height:calc(100vh - 110px);
+    width:100%;
+  }
 }
 
+@media (min-width: 577px) and (max-width:871px) {
+  .section {
+    height:calc(100vh - 155px);
+    width:100%;
+  }
+}
+
+@media (min-width:300px) and (max-width: 576px) {
+  .section {
+    height:calc(100vh - 160px);
+    width:100%;
+  }
+}
+
+@media only screen and (max-height:700px) and (orientation : landscape) {
+  .section {
+    /*height:calc(100% - 160px);*/
+    width:100%;
+    margin-bottom:0px !important;
+  }
+}
+
+#mainSec {
+  background-color:#ffffff;
+}
+
+@media (min-width: 872px) {
+  #header {
+    height:110px;
+  }
+}
+
+@media (min-width: 577px) and (max-width:871px) {
+  #header {
+    height:155px;
+  }
+}
+
+@media (min-width:300px) and (max-width: 576px) {
+  #header {
+    height:160px;
+  }
+}
+
+#aboutSec {
+  background-color:#D51B23;
+}
+
+#contactInfoSec {
+  background-color:#ffffff;
+}
+
+#topDiv {
+  top: 0px;
+  position:fixed !important;
+  width:100%;
+  background-color:white;
+  z-index:100;
+  max-width:100%;
+}
+
+#uvTopbar {
+  /*max-height:55px;*/
+  width:100%;
+  margin:0;
+}
 
 #uvLogo {
-  float:  left;
   background-image:url("../../../../assets/img/logo-univalle.png");
   background-size:75%;
   background-repeat:no-repeat;
@@ -21,14 +94,10 @@
   margin:3px;
 }
 
-#uvLinks {
-  height:41px;
-  background-color:#6D6E71;
-  width: 64px;
-  min-height: 90px;
-  /*width:100%;*/
+.navbar.navbar-light.navbar-expand-md {
+  border-bottom:2px solid #D51B23;
+  box-shadow:0 4px 5px 0 rgba(0,0,0,.18);
 }
-
 
 .homeBtn {
   border:1px solid white;
@@ -36,11 +105,261 @@
   min-width:150px;
   border-radius:15px;
   background-color:#D51B23;
-  float: right;
 }
 
-#navBarLine {
-  border-bottom: 2px solid #D51B23;
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,.18);
-
+.btn.focus, .btn:focus {
+  outline:0;
+  box-shadow:none;
 }
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+  color:#fff;
+  background-color:#58595B !important;
+  border-color:#58595B;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show > .btn-primary.dropdown-toggle:focus {
+  box-shadow:none !important;
+}
+
+.btn.btn-primary.btn-sm.homeBtn:hover {
+  background-color:#58595B !important;
+  border-color:white;
+}
+
+ul {
+  list-style-type:none;
+}
+
+ul li {
+  /*width:100%;*/
+  float:left;
+}
+
+#uvLinks {
+  height:100%;
+  background-color:#6D6E71;
+  /*width:100%;*/
+}
+
+.uvLink {
+  margin:2px;
+  font-size:13px;
+}
+
+@media (max-width: 599px) {
+  #uvLinksMenuLg {
+    margin:0px;
+    padding-top:18px;
+    margin-left:10px;
+    margin-right:10px;
+    display:none !important;
+    /*width:100%;*/
+  }
+}
+
+#uvLinksMenuLg {
+  margin:0px;
+  padding-top:18px;
+  margin-left:10px;
+  margin-right:10px;
+  /*display:flex !important;*/
+}
+
+@media (max-width: 600px) {
+  #uvLinksMenuSm1 {
+    margin:0;
+    /*margin-left:5px;*/
+    /*margin-right:5px;*/
+  }
+}
+
+@media (min-width: 599px) {
+  #uvLinksMenuSm1 {
+    margin:0;
+    display:none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #uvLinksMenuSm2 {
+    margin:0;
+    /*display:none !important;*/
+  }
+}
+
+@media (min-width: 599px) {
+  #uvLinksMenuSm2 {
+    margin:0;
+    display:none !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .col-auto.float-right.mx-auto.uvLinks {
+    padding:0;
+    margin:0;
+    height:100% !important;
+    max-height:100%;
+  }
+}
+
+#mainSec.container {
+  height:100%;
+  max-height:100%;
+}
+
+.btn.btn-link.btn-block.arrowBtn {
+  color:#D51B23;
+}
+
+#mainSecLogo {
+  background-image:url("../../../../assets/img/Propuesta_1_Sigelab-15.jpg");
+  background-position:center;
+  background-size:contain;
+  background-repeat:no-repeat;
+  height:100%;
+}
+
+.carousel-item {
+  height:100%;
+}
+
+.w-100.d-block.adjustedImg {
+  height:100% !important;
+}
+
+.carousel-item-next, .carousel-item-prev, .carousel-item.active {
+  height:100% !important;
+}
+
+.row.appLogo {
+  height:40%;
+  max-height:40%;
+  max-width:750px;
+  width:100%;
+  /*margin-top:10px;*/
+}
+
+@media only screen and (max-height:700px) and (orientation : landscape) {
+  .row.appLogo {
+    height:150px;
+    max-height:25%;
+    max-width:750px;
+    width:100%;
+    /*margin-top:10px;*/
+  }
+}
+
+#navbarLogo {
+  background-image:url("../../../../assets/img/Propuesta_1_Sigelab-15.jpg");
+  background-size:100%;
+  background-repeat:no-repeat;
+  width:150px;
+  height:40px;
+  background-position:center;
+  margin-left:-10px;
+}
+
+#mainSecUvLogo {
+  height:100%;
+  max-width:370px;
+  margin:auto;
+  background-image:url("../../../../assets/img/Logo-UV-Vice.png");
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+}
+
+#footerDiv {
+  position:fixed !important;
+  width:100%;
+  background-color:#212529;
+  z-index:100;
+  max-width:100%;
+  height:25px;
+  max-height:25px;
+}
+
+.row.uvContactInfo .col {
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+#bottomBotDiv {
+  background-color:#6D6E71;
+}
+
+#bottomBotDiv .container {
+  padding-top:17px;
+  padding-bottom:17px;
+}
+
+#bottomBotDiv .container .row .col-auto {
+  padding:10px;
+  /*padding-bottom:17px;*/
+}
+
+#bottomBotDiv .container .row {
+  font-size:13px;
+  /*padding-bottom:17px;*/
+}
+
+.linkListTittle {
+  color:#FBB040;
+  font-size:130%;
+}
+
+#copyright {
+  background-color:#303030;
+  color:white;
+  font-size:13px;
+}
+
+#copyright a {
+  color:#F9AE40;
+}
+
+#bottomTopDiv {
+  background-color:#D51B23;
+}
+
+#bottomTopDiv container {
+  padding-top:17px;
+  padding-bottom:17px;
+}
+
+#goTopBtn {
+  display:none;
+  height:55px;
+  width:55px;
+  text-align:center;
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  z-index:99;
+  border:solid 2px #D51B23;
+  outline:none;
+  background-color:white;
+  color:#D51B23;
+  cursor:pointer;
+  padding:6px 0;
+  border-radius:30px;
+  font-size:30px;
+  font-weight:bold;
+}
+
+#appFooter div {
+  display:none;
+  position:fixed !important;
+  width:100%;
+  z-index:100;
+  max-width:100%;
+  height:19px;
+  max-height:19px;
+  background-color:#303030;
+  color:white;
+  font-size:13px;
+}
+
+
