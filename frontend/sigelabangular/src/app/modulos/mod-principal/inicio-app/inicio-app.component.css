@@ -1,0 +1,46 @@
+#navbarLogo {
+  background-image:url("../../../../assets/img/Propuesta_1_Sigelab-15.jpg");
+  background-size:100%;
+  background-repeat:no-repeat;
+  width:150px;
+  height:40px;
+  background-position:center;
+  margin-left:12px;
+}
+
+
+#uvLogo {
+  float:  left;
+  background-image:url("../../../../assets/img/logo-univalle.png");
+  background-size:75%;
+  background-repeat:no-repeat;
+  background-position:center;
+  height:45px;
+  max-width:368px;
+  min-width:250px;
+  margin:3px;
+}
+
+#uvLinks {
+  height:41px;
+  background-color:#6D6E71;
+  width: 64px;
+  min-height: 90px;
+  /*width:100%;*/
+}
+
+
+.homeBtn {
+  border:1px solid white;
+  white-space:normal !important;
+  min-width:150px;
+  border-radius:15px;
+  background-color:#D51B23;
+  float: right;
+}
+
+#navBarLine {
+  border-bottom: 2px solid #D51B23;
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,.18);
+
+}
