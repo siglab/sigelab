@@ -42,15 +42,16 @@ export class SidebarComponent implements OnInit {
 
     this.rolUser = JSON.parse(localStorage.getItem('rol'));
 
+
     for (const clave in this.rolUser) {
       if (this.rolUser[clave]) {
         if ((clave === 'moduloPrincipal')) {
           this.moduloPrincipal = true;
-          console.log('modulo prin');
+         
         }
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
-          console.log('modulo nivel2');
+ 
         }
         if ((clave === 'moduloDosPermiso')) {
           this.moduloPermiso = true;

@@ -641,6 +641,11 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
 
 
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
+
+
 
 }
 

@@ -267,6 +267,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
             cfSrvReserv.comments.push({
               commentText: this.campoCondicion,
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
+              autor: 'usuario',
+              email: this.user.email,
               uid: this.user.uid});
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
@@ -501,6 +503,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
 
-
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
 
 }

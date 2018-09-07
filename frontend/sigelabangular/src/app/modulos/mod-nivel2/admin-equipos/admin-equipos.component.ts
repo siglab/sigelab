@@ -14,6 +14,8 @@ import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
 
+declare var $: any;
+
 
 @Component({
   selector: 'app-admin-equipos',
@@ -309,12 +311,12 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-            const equip =  data.payload.data();
+           this.afs.doc('cfEquip/' + clave).ref.get().then(doc => {
+            const equip =  doc.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 const equipo = {
-                  id: data.payload.id,
+                  id: doc.id,
                   nombre: equip.cfName,
                   activo: equip.active,
                   precio: equip.price,
@@ -500,7 +502,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         title: 'Exito',
         showConfirmButton: true
       });
-      this.obs.changeObjectEquip({nombre:this.equiestructurado.nombre, uid: this.equiestructurado.uid});
     });
   }
 
@@ -665,6 +666,12 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       this.iconos[box] = false;
     }
   }
+
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
+
 
 
 }

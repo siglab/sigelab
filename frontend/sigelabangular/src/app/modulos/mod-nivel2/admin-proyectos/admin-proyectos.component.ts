@@ -9,6 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 
+declare var $: any;
 @Component({
   selector: 'app-admin-proyectos',
   templateUrl: './admin-proyectos.component.html',
@@ -186,13 +187,13 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   estructurarLab(key) {
     this.proyestructurados = {};
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).subscribe(labo => {
-        const laboratorio = labo.payload.data();
+      this.buscarLab(key).then(labo => {
+        const laboratorio = labo.data();
         //   console.log(laboratorio);
         if (laboratorio) {
 
           this.proyestructurados = {
-            uid: labo.payload.id,
+            uid: labo.id,
             nombre: laboratorio.cfName,
             personal: this.estructurarPersonas(laboratorio.relatedPers),
             proyectos: this.estructurarProyectos(laboratorio.relatedProjects).arr,
@@ -212,7 +213,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
+    return this.afs.doc('cfFacil/' + idlab).ref.get();
 
   }
 
@@ -615,6 +616,10 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
   }
 
 }

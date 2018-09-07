@@ -183,16 +183,12 @@
                                     <strong>Email:</strong> {{this.itemsel.info.email}}</label>
                                 </div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group" style="margin-top: 20px;">
                                 <div class="col-md-12">
-                                  <label class="control-label" for="nac">
-                                    <strong>Telefono:</strong> {{this.itemsel.info.tel}}</label>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="ccpas">
-                                    <strong>Direccion:</strong> {{this.itemsel.info.dir}}</label>
+                                  <label class="control-label" for="dispo"><strong>Telefonos:</strong></label>
+                                  <ul>
+                                    <li *ngFor="let tel of itemsel.telefonos;">{{tel.nombre}}</li>
+                                  </ul>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -710,25 +706,27 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <div class="col-md-7">
                                 <label class="control-label" for="dispo"><strong>Disponibilidad :</strong></label>
-                                <mat-form-field>
-                                  <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un dia de la semana" >
-                                    <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-                              <div class="col-md-5">
-                                <div class="col-md-6">
-                                  <label class="control-label"><strong>de :</strong></label>
-                                  <input name="horaini" id="horaini" [(ngModel)]="selectHinicio" type="time" >
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label"><strong> hasta :</strong></label>
-                                  <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">
-                                </div>
-                              </div>
-                              <button class="btn2 btn-success" style="float: right;" type="button" (click)="agregarDisponibilidad()">Agregar</button>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <label class="control-label"><strong>de :</strong></label>
+                                        <input name="horaini" id="horaini" [(ngModel)]="selectHinicio" type="time" >
+                                      </div>
+                                      <div class="col-md-6">
+                                          <label class="control-label"><strong> hasta :</strong></label>
+                                        <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">
+                                      </div>      
+                                    <div class="input-group">
+                                      <mat-form-field>
+                                          <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un dia de la semana" >
+                                            <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
+                                          </mat-select>
+                                        </mat-form-field>     
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarDisponibilidad()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                      </span>
+                                    </div>
+                                </div>                                          
                             </div>
                             <div class="form-group">
                               <div class="col-md-12">
@@ -738,16 +736,19 @@
                                   </ul>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <div class="col-md-12">
+                          
+                            <div class="col-md-12">
                                 <label class="control-label" for="facul"><strong>Facultades :</strong></label>
-                                <mat-form-field>
-                                  <mat-select name="facul" id="facul" [(value)]="selectfacul" placeholder="Seleccione una Facultad" >
-                                    <mat-option *ngFor="let item of this.facultades" value="{{item.id}}">{{item.nombre}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                                <button class="btn2 btn-success" style="float: right;" type="button" (click)="agregarElemento('facultad')">Agregar</button>
-                              </div>
+                                <div class="input-group">
+                                    <mat-form-field>
+                                        <mat-select name="facul" id="facul" [(value)]="selectfacul" placeholder="Seleccione una Facultad" >
+                                          <mat-option *ngFor="let item of this.facultades" value="{{item.id}}">{{item.nombre}}</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>       
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('facultad')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                    </span>
+                                  </div>
                             </div>
                             <div class="form-group">
                               <div class="col-md-12">
@@ -757,17 +758,20 @@
                                   </ul>
                               </div>
                             </div>
-                            <div class="form-group">
-                              <div class="col-md-12">
+
+                            <div class="col-md-12">
                                 <label class="control-label" for="depar"><strong>Departamentos :</strong></label>
-                                <mat-form-field>
-                                  <mat-select name="depar" id="depar" [(value)]="selectdepar" placeholder="Seleccione un departamento" >
-                                    <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                                <button class="btn2 btn-success" style="float: right;" type="button" (click)="agregarElemento('departamento')">Agregar</button>
-                              </div>
-                            </div>
+                                <div class="input-group">
+                                  <mat-form-field>
+                                      <mat-select name="depar" id="depar" [(value)]="selectdepar" placeholder="Seleccione un departamento" >
+                                        <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>         
+                                  <span class="input-group-btn">
+                                    <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('departamento')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                  </span>
+                                </div>
+                            </div>                     
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="listfacul"><strong>Departamentos Agregados :</strong></label>
@@ -776,7 +780,7 @@
                                   </ul>
                               </div>
                             </div>
-
+                            
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="emailedit">
@@ -785,22 +789,31 @@
                                 <input id="emailedit" [(ngModel)]="this.infolab.otros.email" name="emailedit" class="form-control" type="text">
                               </div>
                             </div>
-                            <div class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="teledit">
-                                  <strong>Telefono:</strong>
-                                </label>
-                                <input id="teledit" [(ngModel)]="this.infolab.otros.telefono" name="teledit" class="form-control" type="text">
+
+                    
+                            <div class="col-md-12">
+                                <label class="control-label" for="tel"><strong>Telefonos :</strong></label>
+                              <div class="input-group">
+                                  
+                                <input id="tel" [(ngModel)]="telefono" name="tel" type="text" class="form-control">
+                                <span class="input-group-btn">
+                                      <button class="btn btn-success" type="button" (click)="agregarTelefonos()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                </span>
                               </div>
                             </div>
-                            <div class="form-group">
+                          
+                          
+
+                            <div class="form-group" >
                               <div class="col-md-12">
-                                <label class="control-label" for="diredit">
-                                  <strong>Direccion:</strong>
-                                </label>
-                                <input id="diredit" [(ngModel)]="this.infolab.otros.direccion" name="diredit" class="form-control" type="text">
+                                <label class="control-label" for="listtel"><strong>telefonos Agregados :</strong></label>
+                                  <ul class="nav nav-stacked">
+                                    <li *ngFor="let item of this.listaTelefonos"><a>{{item.nombre}} <span (click)="quitarTelefonos(item.id)" class="puntero pull-right badge bg-red">-</span></a></li>
+                                  </ul>
                               </div>
                             </div>
+                            
+                            
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="condi">
@@ -835,7 +848,7 @@
                             <label class="control-label" for="espacioedit"><strong>Seleccione:</strong></label>
                             <select class="form-control" id="espacioedit" name="espacioedit" [(ngModel)]="seleccionado" (change)="cambiarSugerencia($event.target.value)">
                               <option value="inicial">Seleccione una Sugerencia</option>
-                              <option *ngFor="let item of this.cambios" value="{{item.pos}}" >{{item.nombre}}</option>
+                              <option *ngFor="let item of this.cambios" value="{{item.pos}}" >{{item.nombre}}  fecha: {{item.fecha}}</option>
                             </select>
                           </div>
                         </div>
@@ -858,7 +871,7 @@
                                               <label class="control-label" for="espacio">
                                                 <input name="{{'checkbox' + i}}" [(ngModel)]="checks['checkbox'+ i]" type="checkbox">
                                                 <strong>{{item.nombre}}:</strong>
-                                                <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')">
+                                                <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')||(item.nombre == 'telefonos')">
                                                   <ul *ngIf="!item.quitar">
                                                     <li *ngFor="let sug of item.info"><strong>Agregar: </strong>{{sug.nombre}}</li>
                                                   </ul>
@@ -866,7 +879,7 @@
                                                     <li *ngFor="let sug of item.infoaux"><strong>Quitar: </strong>{{sug.nombre}}</li>
                                                   </ul>
                                                 </div>
-                                                <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')">
+                                                <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')&&(item.nombre != 'telefonos')">
                                                     {{item.infoaux}}
                                                 </div>
 
@@ -922,6 +935,8 @@
             <i class="fa fa-address-card-o"></i>
 
             <h3 class="box-title">Informacion de {{tablesel}}</h3>
+
+            <i style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></i>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -1118,7 +1133,7 @@
 </div>
 
 
-<!-- MODAL QUE PERMITE LA EDICION DE LOS DATOS DEL LABORATORIO -->
+<!-- MODAL QUE MUESTRA LOS DATOS DE LOS ESPACIOS DE LOS DATOS DEL LABORATORIO -->
 <div class="modal fade" id="modal3" role="dialog">
     <div class="modal-dialog modal-md">
 
@@ -1130,6 +1145,8 @@
                   <i class="fa fa-address-card-o"></i>
 
                   <h3 class="box-title">Informacion de espacio</h3>
+
+                  <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal3')"></span>
                 </div>
 
                 <div class="box-body" *ngIf="this.labestructurado">
@@ -1251,6 +1268,8 @@
             <i class="fa fa-calendar"></i>
 
             <h1 class="box-title">Programacion de la Practica</h1>
+
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('practicaprog')"></span>
 
           </div>
           <!-- /.box-header -->

@@ -6,8 +6,10 @@ import { QuerysPrincipalService } from '../services/querys-principal.service';
 import swal from 'sweetalert2';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
-import * as $ from 'jquery';
-//declare var $: any;
+import * as $AB from 'jquery';
+declare var $: any;
+
+
 @Component({
   selector: 'app-bus-pru',
   templateUrl: './bus-pru.component.html',
@@ -87,7 +89,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   cambiardata(item) {
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-    $('html, body').animate({ scrollTop: '400px' }, 'slow');
+    $AB('html, body').animate({ scrollTop: '400px' }, 'slow');
 
     this.itemsel = item;
 
@@ -107,7 +109,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
   initCalendarModal(horario) {
 
-    const containerEl: JQuery = $('#cal2');
+    const containerEl: JQuery = $AB('#cal2');
     
     if(containerEl.children().length > 0){
  
@@ -140,7 +142,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
     .bindPopup(item.nombreprub)
     .openPopup();
 
-
+    this.map.setView([item.coord.lat, item.coord.lon], 17);
 
   }
 
@@ -155,4 +157,10 @@ export class BusPruComponent implements OnInit, AfterViewInit {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
+
 }

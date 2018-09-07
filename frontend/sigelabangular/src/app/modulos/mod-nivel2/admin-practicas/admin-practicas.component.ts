@@ -3,7 +3,7 @@ import { ObservablesService } from '../../../shared/services/observables.service
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import * as $ from 'jquery';
+import * as $AB from 'jquery';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import swal from 'sweetalert2';
@@ -12,6 +12,8 @@ import { constrainPoint } from 'fullcalendar/src/util';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
+
+declare var $: any;
 
 @Component({
   selector: 'app-admin-practicas',
@@ -224,8 +226,8 @@ export class AdminPracticasComponent implements OnInit {
   estructurarDataPrac(key) {
 
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).subscribe(labo => {
-        const laboratorio = labo.payload.data();
+      this.buscarLab(key).then(labo => {
+        const laboratorio = labo.data();
 
         let estadoLab;
         if (laboratorio.active === true) {
@@ -255,7 +257,7 @@ export class AdminPracticasComponent implements OnInit {
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
+    return this.afs.doc('cfFacil/' + idlab).ref.get();
 
   }
 
@@ -577,7 +579,7 @@ export class AdminPracticasComponent implements OnInit {
 
   initCalendar(horario) {
 
-    const containerEl: JQuery = $('#cal');
+    const containerEl: JQuery = $AB('#cal');
     containerEl.fullCalendar('destroy');
 
     containerEl.fullCalendar({
@@ -604,7 +606,7 @@ export class AdminPracticasComponent implements OnInit {
 
   initCalendarModal(horario) {
 
-    const containerEl: JQuery = $('#cal2');
+    const containerEl: JQuery = $AB('#cal2');
     containerEl.fullCalendar('destroy');
 
     containerEl.fullCalendar({
@@ -691,7 +693,11 @@ export class AdminPracticasComponent implements OnInit {
   }
 
   down() {
-    $('html, body').animate({ scrollTop: '600px' }, 'slow');
+    $AB('html, body').animate({ scrollTop: '600px' }, 'slow');
+  }
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
   }
 
 

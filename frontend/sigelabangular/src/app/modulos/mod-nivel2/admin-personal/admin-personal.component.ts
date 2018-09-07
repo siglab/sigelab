@@ -222,8 +222,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   estructuraIdPers(key) {
 
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).subscribe(labo => {
-        const laboratorio = labo.payload.data();
+      this.buscarLab(key).then(labo => {
+        const laboratorio = labo.data();
 
         let estadoLab;
         if (laboratorio.active === true) {
@@ -363,7 +363,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
+    return this.afs.doc('cfFacil/' + idlab).ref.get();
 
   }
 
@@ -627,6 +627,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
 
+  }
+
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
   }
 
 
