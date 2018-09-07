@@ -27,8 +27,6 @@
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../node_modules/fullcalendar/dist/fullcalendar.min.css",
         "../node_modules/fullcalendar-scheduler/dist/scheduler.css",
-        "../node_modules/aos/dist/aos.css",
-        "../node_modules/qtip2/dist/jquery.qtip.css",
         "../node_modules/ngx-toastr/toastr.css",
         "styles.css"
 
@@ -43,7 +41,6 @@
         "../node_modules/fullcalendar/dist/fullcalendar.min.js",
         "../node_modules/fullcalendar-scheduler/dist/scheduler.js",
         "../node_modules/qtip2/dist/jquery.qtip.js",
-        "../node_modules/aos/dist/aos.js"
 
 
       ],

@@ -7,12 +7,12 @@ export class Nivel3Guard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    
+
       const rol = JSON.parse(localStorage.getItem('rol'));
       if(rol){
         for (const clave in rol) {
           if (rol[clave]) {
-            if (clave == 'moduloNivel3') {
+            if (clave === 'moduloNivel3') {
               return true;
             } else {
               return false;

@@ -29,7 +29,7 @@ const mailTrasport = nodemailer.createTransport({
 
     type: mod.CREDENTIALS.TYPE,
 
-    user: mod.CREDENTIALS.AUTHUSER ,
+    user: mod.CREDENTIALS.AUTHUSER,
 
     clientId: mod.CREDENTIALS.AUTHTCLIENTID,
 
@@ -45,28 +45,36 @@ const mailTrasport = nodemailer.createTransport({
 exports.CreateUser = functions.auth.user().onCreate(event => {
 
 
-
-  ref.collection("cfPers").where("email", "==", event.email)
-
+  return ref.collection("cfPers").where("email", "==", event.email)
     .get()
-
     .then((querySnapshot) => {
-
+      // si la consulta retorna vacia se crea el usuario sin una persona asignada
       if (querySnapshot.empty) {
 
-        const persona = '';
-
+        const fecha = new Date();
         const role = 'npKRYaA0u9l4C43YSruA';
 
-        return { persona, role };
+        const usr = {
+          cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+          cfPers: '',
+          appRoles: {},
+          createdAt: fecha.toISOString(),
+          email: event.email
+        };
+
+        usr.appRoles[role] = true;
+
+      return  ref.doc(`/user/${event.uid}`).set(usr)
+                 .then( () => console.log('se creo un nuevo usuario') )
+                 .catch( err => console.log('ocurrio un error al crear el nuevo usuario', err));
+
+        // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
 
       } else {
 
         const personas = [];
         let role;
-
-
-        // add data from the 5 most recent comments to the array
+        const fecha = new Date();
 
         querySnapshot.forEach(doc => {
 
@@ -75,99 +83,34 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
         });
 
+        const persona = personas[0];
 
+        const usr = {
+          cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+          cfPers: persona,
+          appRoles: {},
+          createdAt: fecha.toISOString(),
+          email: event.email
 
-         const persona = personas[0];
+        };
 
-
-          return {persona , role };
-
-
-
-
-
-
-
-      }
-
-
-
-
-
-    }
-
-
-
-    ).then((result) => {
-
-
-
-
-
-      const fecha = new Date();
-
-      const email = event.email;
-
-
-
-      const usr = {
-
-        cfOrgId: "i9dzCErPCO4n9WUfjxR9",
-
-        cfPers: result.persona,
-
-        appRoles: {},
-
-        createdAt: fecha.toISOString(),
-
-        email: email
-
-      };
-
-      usr.appRoles[result.role] = true;
-
-      return usr;
-
-
-      // return console.log(' nuevo usuario para subir' , usr);
-
-
-
-    }).then((usr) => {
-
-
-
-      if (usr.cfPers) {
-
-
+        usr.appRoles[role] = true;
 
         const pers = { user: event.uid };
+        ref.doc(`cfPers/${usr.cfPers}`).set(pers, { merge: true })
+           .then( () => console.log('se asocio correctamente el usuario'))
+           .catch( err => console.log('no se pudo asociar correctamente el usuario', err));
 
-        ref.doc(`cfPers/${usr.cfPers}`).set(pers, { merge: true });
-
-        return ref.doc(`/user/${event.uid}`).set(usr)
-
-      } else {
-
-        return ref.doc(`/user/${event.uid}`).set(usr)
+       return  ref.doc(`/user/${event.uid}`).set(usr)
+            .then( () => console.log('se asocio correctamente la persona'))
+            .catch( err => console.log('no se pudo asociar correctamente la persona', err) );
 
       }
-
-
-
-
-
     }).catch(err => console.log('fallo la consulta', err));
-
-
 
 });
 
-
-
 let sendMail = (req, res) => {
-
-
 
   var mailsolicitante = {
 
