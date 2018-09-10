@@ -68,7 +68,7 @@ const routes: Routes = [
       { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard]},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
-  { path: '', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'},
+  { path: '', pathMatch: 'full', redirectTo: 'inicio'},
   { path: '**', pathMatch: 'full', redirectTo: 'principal/busquedalaboratorio'}
 ];
 

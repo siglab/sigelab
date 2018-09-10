@@ -38,7 +38,7 @@ export class EspaciosService {
 
 
 
-  listSpaceWithSubHq(space){
-    return this.afs.collection('space', ref => ref.where('subHq','==',space)).snapshotChanges();
+  listSpaceWithSubHq(space) {
+    return this.afs.collection('space', ref => ref.where('subHq', '==', space)).snapshotChanges();
   }
 }

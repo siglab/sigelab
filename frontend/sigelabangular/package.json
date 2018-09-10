@@ -26,6 +26,7 @@
     "@swimlane/ngx-charts": "^7.1.1",
     "angular-datatables": "^5.0.0",
     "angularfire2": "^5.0.0-rc.6",
+    "animate.css": "^3.7.0",
     "aos": "^3.0.0-beta.5",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",

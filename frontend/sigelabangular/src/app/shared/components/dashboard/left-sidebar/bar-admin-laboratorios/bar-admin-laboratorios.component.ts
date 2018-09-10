@@ -36,7 +36,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
         this.laboratorios2 = [];
         if (this.moduloNivel2) {
           this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
-            
+
             this.laboratorios2 = this.estructuraIdLab(labs);
           });
         }
@@ -113,11 +113,11 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
   // METODO QUE TRAE LA COLECCION DE LOS LABORATORIOS DE LOS CUALES TIENE PERMISOS
   getLaboratoriosPermiso(arr) {
-    let laboratorios = [];
+    const laboratorios = [];
 
     for (const key in arr) {
       if (arr.hasOwnProperty(key)) {
-        this.afs.doc('cfFacil/' + key).ref.get().then(data=>{
+        this.afs.doc('cfFacil/' + key).ref.get().then(data => {
 
           const laboratorio = {
             nombre: this.ajustarTexto(data.data().cfName),
@@ -127,14 +127,14 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
           laboratorios.push(laboratorio);
 
-        
+
         });
-        
+
       }
     }
 
     return laboratorios;
-   
+
   }
 
 
