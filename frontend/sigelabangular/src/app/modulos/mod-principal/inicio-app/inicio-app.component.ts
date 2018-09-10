@@ -17,7 +17,10 @@ export class InicioAppComponent implements OnInit {
   }
 
 
-    prueba() {
+    down() {
+
+      $('html, body').animate({ scrollTop: '400px' }, 'slow');
+
       console.log('sii');
 
     }

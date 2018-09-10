@@ -323,7 +323,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     $('html, body').animate({ scrollTop: '400px' }, 'slow');
 
     this.itemsel  = item;
-
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
 
