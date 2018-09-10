@@ -18,7 +18,7 @@
             <div class="form-group">
               <div class="col-md-12">
 
-                <button *ngIf="moduloNivel2" data-toggle="modal" data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar
+                <button *ngIf="moduloNivel2" data-toggle="modal" (click)= "setValue()"   data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar
                   Personal</button>
               </div>
             </div>

@@ -432,7 +432,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         active: this.estado,
         cfFirstNames: this.nombre,
         cfFamilyNames: this.apellido,
-        type: this.rol
+        type: this.type
       };
       /* objeto para usuario */
       const user = {
@@ -451,10 +451,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       console.log('usuario con el rol', user);
       /* metodo firebase para subir un usuario actualizado */
 
-      this.afs.collection('user').doc(this.idu).update(user)
+      this.afs.collection('user').doc(this.idu).set(user, { merge: true })
         .then(() => {
 
-          this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
+          this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
             () => {
               swal({
                 type: 'success',
@@ -609,9 +609,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       };
 
 
-      const collref = this.afs.doc('cfFacil/' + this.idlab).ref;
-
-
       lab.relatedPers[id] = true;
 
       this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
@@ -630,11 +627,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal ).modal('hide');
   }
 
+  setValue() {
 
+    this.email = '';
+  }
 
 }
 

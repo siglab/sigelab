@@ -94,6 +94,7 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
         };
 
+        // para el nivel 3 es necesario pasar el campo tipo string a un objeto
         usr.appRoles[role] = true;
 
         const pers = { user: event.uid };

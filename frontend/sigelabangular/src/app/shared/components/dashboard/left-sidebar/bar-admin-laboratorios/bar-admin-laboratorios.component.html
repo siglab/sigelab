@@ -25,28 +25,28 @@
                     <i class="fa fa-circle-o"></i>DashBoard
                   </a>
                 </li>
-                <li class="treeview" (click)="enviaritemEquip(item)">
+                <li  routerLinkActive="active" class="treeview" (click)="enviaritemEquip(item)">
                   <a [routerLink]="['adminequipos']" >
                     <i class="fa fa-circle-o"></i>Administracion de Equipos
                   </a>
                 </li>
-                <li class="treeview" (click)="enviaritemPer(item)">
+                <li routerLinkActive="active" class="treeview" (click)="enviaritemPer(item)">
                   <a [routerLink]="['adminpersonal']" >
                     <i class="fa fa-circle-o"></i>Administracion de Personal
                   </a>
                 </li>
-                <li class="treeview" (click)="enviaritemEsp(item)">
+                <li routerLinkActive="active" class="treeview" (click)="enviaritemEsp(item)">
                   <a [routerLink]="['adminespacios']" >
                     <i class="fa fa-circle-o"></i>Administracion de Espacios
                   </a>
                 </li>
-                <li class="treeview" (click)="enviaritemPra(item)">
+                <li routerLinkActive="active" class="treeview" (click)="enviaritemPra(item)">
                   <a [routerLink]="['adminpracticas']" >
                     <i class="fa fa-circle-o"></i>Administracion de Practicas
                   </a>
                 </li>
 
-                <li class="treeview">
+                <li  routerLinkActive="active" class="treeview">
                   <a>
                     <i class="fa fa-link"></i> Administracion de Servicios
                     <span class="pull-right-container">
@@ -54,19 +54,19 @@
                     </span>
                   </a>
                   <ul class="treeview-menu">
-                    <li (click)="enviaritemServAsoc(item)">
+                    <li routerLinkActive="active" (click)="enviaritemServAsoc(item)">
                       <a [routerLink]="['adminserviciosasociados']">
                         <i class="fa fa-circle-o" ></i>
                          Servicios asociados</a>
                     </li>
-                    <li (click)="enviaritemSolServ(item)">
+                    <li routerLinkActive="active"  (click)="enviaritemSolServ(item)">
                       <a [routerLink]="['adminserviciosolicitud']">
                         <i class="fa fa-circle-o"></i> Solicitudes de servicios</a>
                     </li>
                   </ul>
                 </li>
 
-                <li class="treeview">
+                <li  routerLinkActive="active" class="treeview">
                   <a [routerLink]="['adminproyectos']" (click)="enviaritemProy(item)">
                     <i class="fa fa-circle-o"></i>Administracion de Proyectos
                   </a>
@@ -80,7 +80,7 @@
                     </span>
                   </a>
                   <ul class="treeview-menu">
-                    <li class="treeview">
+                    <li routerLinkActive="active" class="treeview">
                       <a [routerLink]="['adminsolicitudmantenimiento']" (click)="enviaritemSolMante(item)">
                         <i class="fa fa-circle-o"></i>Solicitud de Mantenimiento
                       </a>
