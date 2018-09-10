@@ -308,7 +308,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     for (const key in this.formCheckBox) {
       if (this.formCheckBox.hasOwnProperty(key)) {
         const element2 = this.formCheckBox[key];
-        if(element2.value){
+        if(element2.value && key != 'universidad'){
 
           if(this.formSelect[key].value.length != 0){
             ifquery += '(';
@@ -340,8 +340,12 @@ export class ComunicacionMasivaComponent implements OnInit {
                  
               }           
             }
-  
+            if((key != 'departamento') && (key != 'escuela')){
               ifquery += ' && ';
+            } else {
+              ifquery += ' || '
+            }
+            
             }
           }
      
@@ -356,9 +360,10 @@ export class ComunicacionMasivaComponent implements OnInit {
       console.log(ifquery);
 
     
-    this.buscaLaboratorios().subscribe(datos=>{
-      for (let i = 0; i < datos.length; i++) {
-        const element = datos[i];
+    this.buscaLaboratorios().then(datos=>{
+
+      datos.forEach(doc => {
+        const element = doc.data();
         
         if(this.formCheckBox.universidad.value){
           coincidencias.push({id: element['facilityAdmin']});
@@ -376,7 +381,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     
             
         }
-      }
+      });
 
       console.log(coincidencias);
     
@@ -649,7 +654,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
   buscaLaboratorios(){
-   return this.afs.collection('cfFacil').valueChanges();
+   return this.afs.collection('cfFacil').ref.get();
   }
 
 
