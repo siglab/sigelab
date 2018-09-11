@@ -102,7 +102,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-     // abre loading mientras se cargan los datos
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se cargan los datos',
@@ -111,9 +110,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       }
     });
     // trae los datos de los laboratorios
-      this.query.getLaboratorios().subscribe(data => {
+    this.query.getLaboratorios().then(data => {
+      this.query.estructurarDataLab(data).then(datos => {
+        this.dataSource.data = datos['data'];
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
 
-      this.observer.changeDatatableLabs(this.query.estructurarDataLab(data));
+         swal.close();
+      });
 
     });
 
@@ -122,34 +126,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit(): void {
-
-    this.observer.currentDatatableLab.subscribe(datos => {
-      swal({
-        title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
-        onOpen: () => {
-          swal.showLoading();
-        }
-      });
-      const ambiente = this;
-      setTimeout(function() {
-        if(datos.length !== 0){
-          ambiente.dataSource.data = datos;
-          ambiente.dataSource.sort = ambiente.sort;
-          ambiente.dataSource.paginator = ambiente.paginator;
-      // cierra loading luego de cargados los datos
-          swal.close();
-        } else {
-          swal.close();
-        }
-
-
-      }, 1500);
-
-     });
-
-
-
 
   }
 
@@ -229,7 +205,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         comments:[],
         path:[],
         typeuser:'externo',
-        datauser:{type:'', ci:''}
+        datauser:{type:'', ci:''},
+        emailuser: this.user.email,
+        acceptedBy:''
       };
 
         swal({
@@ -272,16 +250,17 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               uid: this.user.uid});
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+              this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email);
+
+              this.limpiarDatos();
+
+              this.cerrarModal('myModalLabs');
+
               swal({
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
-              }).then(()=>{
-                $('#myModalLabs').modal('hide');
-                this.valorci = '';
               });
-
-
 
             }).catch(error => {
 
@@ -505,5 +484,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   cerrarModal(modal){
     $('#'+modal).modal('hide');
   }
+
+  limpiarDatos(){
+    this.campoCondicion = '';
+    this.listaVariaciones = [];
+  }
+
 
 }

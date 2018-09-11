@@ -68,14 +68,22 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.alertaCargando();
       this.user = JSON.parse(localStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
-        this.datos = this.querys.estructurarServiciosActivos(this.user.email, data);
-        this.observer.changeDatatableServsAct(this.datos);
+         this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {
+          this.dataSource.data = datos['data'];
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator
+
+          this.dataSource2.data = datos['data2'];
+          this.dataSource2.sort = this.sort2;
+          this.dataSource2.paginator = this.paginator2;
+
+
+          this.cerrarAlerta();
+         });
+        
       });
 
-      this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
-        this.histodatos = this.querys.estructurarHistoriaServicios(this.user.email, data);
-        this.observer.changeDatatableHistoServs(this.histodatos);
-      });
+    
     }
 
 
@@ -84,30 +92,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.observer.currentDatatableServActi.subscribe(data => {
-      const ambiente = this;
-      this.dataSource.data = data;
 
-      setTimeout(function() {
-        ambiente.dataSource.sort = ambiente.sort;
-        ambiente.dataSource.paginator = ambiente.paginator;
-        // cerrar modal una vez se cargan los datos
-        ambiente.cerrarAlerta();
-      }, 1000);
-
-    });
-
-    this.observer.currentDatatableHistoServs.subscribe(data2 => {
-      const ambiente = this;
-      this.dataSource2.data = data2;
-
-      setTimeout(function() {
-        ambiente.dataSource2.sort = ambiente.sort2;
-        ambiente.dataSource2.paginator = ambiente.paginator2;
-      }, 1000);
-
-    });
-    
 
   }
 
@@ -219,7 +204,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           });
 
           this.moduloinfo = false;
-
+          this.incializarIconos();
         });
 
       } else if (
@@ -265,7 +250,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     
         this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
           if(this.servsel.status != 'pendiente'){
-            this.enviarEmails();
+            //this.enviarEmails();
+            console.log('envio emails');
           }
         });
 
@@ -342,6 +328,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     } else {
       this.iconos[box] = false;
     }
+  }
+
+  incializarIconos(){
+    this.iconos.info = false;
+    this.iconos.sabs = false;
   }
 
   alertaCargando(){

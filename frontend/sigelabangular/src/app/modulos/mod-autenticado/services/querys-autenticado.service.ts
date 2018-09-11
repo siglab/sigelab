@@ -24,17 +24,18 @@ export class QuerysAutenticadoService {
   }
 
 
-  estructurarServiciosActivos(email, data) {
-    const datos = [];
+  estructurarSolicitudesServicios(email, data) {
+    console.log(data);
+    let promise = new Promise((resolve,reject)=>{
+      const datos = [];
+      const histodatos = [];
 
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-
-      if(elemento.status == 'aceptada' || elemento.status == 'pendiente' || elemento.status == 'procesada'){
-
-        this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-          const servicio =  data2.payload.data();
-            
+      for (let index = 0; index < data.length; index++) {
+        const elemento = data[index].payload.doc.data();      
+  
+          this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
+            const servicio =  data2.data();
+        
               const Reserv = {
                 email: email,
                 lab: elemento.namelab,
@@ -47,61 +48,39 @@ export class QuerysAutenticadoService {
                 variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
                 condiciones: elemento.conditionsLog,
                 comentario: elemento.comments,
+                usuario: elemento.emailuser,
                 fecha: elemento.createdAt.split('T')[0],
-                uid: data2.payload.id,
+                uid: data2.id,
                 uidreserv: data[index].payload.doc.id,
-                path: elemento.path   
+                acepto: elemento.acceptedBy,
+                path: elemento.path     
               };
+  
+              if(elemento.status == 'aceptada' || elemento.status == 'pendiente' || elemento.status == 'procesada'){
+               datos.push(Reserv);
+              } else {
+                histodatos.push(Reserv);
+              }
 
-              datos.push(Reserv);
-        
+         
+            console.log(data.length, datos.length,histodatos.length);
+              
+            if(data.length == (datos.length+histodatos.length)){
+              resolve({data:datos, data2: histodatos});
+            }
+          
           });
 
-        }
+       
+
+          
       }
+    });
+  
 
-    return datos;
+    return promise;
   }
 
-  estructurarHistoriaServicios(email, data) {
-    const histodatos = [];
-
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-      this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-        const servicio =  data2.payload.data();
-
-        if(elemento.status != 'aceptada' && elemento.status != 'pendiente' && elemento.status != 'procesada'){
-          this.getEmailUser(elemento.user).subscribe(ema =>{
-            const HistoReserv = {
-              email: email,
-              lab: elemento.namelab,
-              uidlab: elemento.cfFacil,
-              status: elemento.status,
-              nombre: servicio.cfName,
-              descripcion: servicio.cfDesc,
-              precio: servicio.cfPrice,
-              activo: servicio.active,
-              variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-              condiciones: elemento.conditionsLog,
-              comentario: elemento.comments,
-              usuario: ema.payload.data().email,
-              fecha: elemento.createdAt.split('T')[0],
-              uid: data2.payload.id,
-              uidreserv: data[index].payload.doc.id,
-              acepto: elemento.acceptedBy,
-              path: elemento.path    
-            };
-
-            histodatos.push(HistoReserv);
-          });
-        }
-      });
-
-    }
-
-    return histodatos;
-  }
 
   estructurarVariaciones(idser,item){
     const arr = [];
@@ -159,7 +138,7 @@ export class QuerysAutenticadoService {
   }
 
   getEmailUser(userid){
-    return this.afs.doc('user/' + userid).snapshotChanges();
+    return this.afs.doc('user/' + userid).ref.get();
   }
 
 

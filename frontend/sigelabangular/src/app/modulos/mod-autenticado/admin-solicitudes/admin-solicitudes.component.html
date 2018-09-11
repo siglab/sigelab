@@ -279,11 +279,6 @@
                                     <label class="control-label" for="precioserv"><strong>Precio:</strong> {{variation.precio}}</label>
                                   </div>
                               </div>
-                              <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.activo}}</label>
-                                  </div>
-                              </div>
           
                             </fieldset> 
                         </form> 
@@ -342,7 +337,7 @@
                     </div>
                   </div>
                     <!-- /.box-body -->   
-                  <div *ngIf="(servsel.status != 'terminada') && (servsel.status != 'cancelada')" class="box-footer">
+                  <div *ngIf="(servsel.status != 'rechazada') && (servsel.status != 'cancelada')" class="box-footer">
                       <form action="#" method="post">
                         <div class="input-group">
                           <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">

@@ -14,6 +14,7 @@ export class SidebarComponent implements OnInit {
   imgUsr;
   moduloPrincipal = false;
   moduloNivel2 = false;
+  moduloNivel3 = false;
   moduloPermiso = false;
   moduloServicios = false;
   moduloSolicitudes = false;
@@ -63,6 +64,10 @@ export class SidebarComponent implements OnInit {
         }
         if ((clave === 'moduloSolicitudes')) {
           this.moduloSolicitudes = true;
+
+        }
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
 
         }
       }

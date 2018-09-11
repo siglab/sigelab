@@ -51,27 +51,21 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       }
 
     }) ;
-    this.query.getPruebas().subscribe(data => {
+    this.query.getPruebas().then(data => {
 
-      this.observer.changeDatatablePrueba(this.query.estructurarDataPruebas(data));
+      this.query.estructurarDataPruebas(data).then(datos => {
+        this.dataSource.data = datos['data'];
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+       // cierra loading luego de cargados los datos
+       swal.close();
+      });
 
     });
   }
 
   ngAfterViewInit(): void {
 
-    this.observer.currentDatatablePruebas.subscribe(datos => {
-
-      const ambiente = this;
-      setTimeout(function() {
-        ambiente.dataSource.data = datos;
-        ambiente.dataSource.sort = ambiente.sort;
-        ambiente.dataSource.paginator = ambiente.paginator;
-       // cierra loading luego de cargados los datos
-       swal.close();
-      }, 1500);
-
-     });
 
   }
 
