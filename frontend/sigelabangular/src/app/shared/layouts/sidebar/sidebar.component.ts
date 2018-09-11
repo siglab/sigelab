@@ -47,11 +47,11 @@ export class SidebarComponent implements OnInit {
       if (this.rolUser[clave]) {
         if ((clave === 'moduloPrincipal')) {
           this.moduloPrincipal = true;
-         
+
         }
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
- 
+
         }
         if ((clave === 'moduloDosPermiso')) {
           this.moduloPermiso = true;

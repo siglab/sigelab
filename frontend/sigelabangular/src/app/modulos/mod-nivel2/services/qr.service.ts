@@ -181,13 +181,16 @@ export class QrService {
     });
   }
 
-  addComponents(arrComponent, path) {
+  addComponents(arrComponent, id) {
 
+     console.log('llego el id', id);
     if (arrComponent.length > 0) {
-
+       console.log('array que llego', arrComponent );
       arrComponent.forEach(element => {
 
-        this.afs.doc('cfFacil/' + path).collection('components').add(element);
+
+        console.log(element);
+        this.afs.doc('cfFacil/' + id).collection('components').add(element);
 
       });
 

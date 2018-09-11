@@ -3,49 +3,64 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import swal from 'sweetalert2';
+import { map } from 'rxjs/operators/map';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class LoginService {
   usuario;
-  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) {
+  usersid = [];
+  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore, private ruta: Router) {
 
     if (localStorage.getItem('usuario')) {
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
-      this.consultarPermisos(this.usuario.uid);
+      // this.consultarPermisos(this.usuario.uid);
     }
   }
 
   login() {
-    const promise = new Promise((resolve, reject) => {
-      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
-        response => {
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
+      response => {
+        console.log('entro a login');
+        this.usuario = response.user;
+        localStorage.setItem('usuario', JSON.stringify(this.usuario));
 
-          this.usuario = response.user;
-          localStorage.setItem('usuario', JSON.stringify(this.usuario));
 
-          this.consultarPermisos(this.usuario.uid).then(() => {
-            resolve();
-          }).catch(() => {
-            swal({
-              type: 'error',
-              title: 'Ocurrio un error al intentar ingresar',
-              showConfirmButton: true
-            });
+          // this.stateChangesUser().then( (res) => {
+          //   setTimeout(() => {
+          //     console.log(res);
+
+          //   }, 2000);
+          // } );
+         this.ruta.navigate(['principal']);
+         this.consultarPermisos( this.usuario.uid).then( () => {
 
           });
 
-        }).catch(error => {
-          // alerta en caso de error
-          swal({
-            type: 'error',
-            title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
-            showConfirmButton: true
-          });
-          console.log(error);
+        // this.consultarPermisos(this.usuario.uid).then(() => {
+
+
+
+        // }).catch(() => {
+        //   swal({
+        //     type: 'error',
+        //     title: 'Ocurrio un error al intentar ingresar',
+        //     showConfirmButton: true
+        //   });
+
+        // });
+
+      }).catch(error => {
+        // alerta en caso de error
+        swal({
+          type: 'error',
+          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
+          showConfirmButton: true
         });
-    });
+        console.log(error);
+      });
 
-    return promise;
+
   }
 
   async logout() {
@@ -58,10 +73,40 @@ export class LoginService {
   }
 
 
+
+  stateChangesUser() {
+
+    const array = [];
+
+    return new Promise((resolve, reject) => {
+      let indice;
+      const refe = this.afs.collection('user').ref;
+      refe.onSnapshot((snapshot) => {
+
+        snapshot.docChanges.forEach((change) => {
+          if (change.type === 'added') {
+
+            console.log(change.newIndex);
+            // agrega todos los ids de la coleccion usuario por primera vez
+             indice = change.newIndex;
+          }
+        });
+        resolve( indice );
+      });
+
+
+    });
+
+
+  }
+
+
+
+
   /* login usando email y password */
   loginEmail(email: string, pass: string) {
 
-   return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       this.afAuth.auth.signInWithEmailAndPassword(email, pass)
         .then(data => {
@@ -99,7 +144,7 @@ export class LoginService {
       this.afAuth.auth.createUserWithEmailAndPassword(email, pass).then(
         (ok) => {
           console.log('usuario creado');
-          resolve( ok );
+          resolve(ok);
         }).catch(function (error) {
           console.log(error.message);
         });
@@ -109,33 +154,33 @@ export class LoginService {
 
 
 
-    /* convierte un id en un objeto id:true */
+  /* convierte un id en un objeto id:true */
 
-     setBoolean(campo) {
+  setBoolean(campo) {
 
-      const string = '{"' + campo + '":true}';
-      return JSON.parse(string);
+    const string = '{"' + campo + '":true}';
+    return JSON.parse(string);
 
-    }
+  }
 
 
 
 
   consultarPermisos(id) {
-    console.log('ejecuto');
-    const promise = new Promise((resolve, reject) => {
-      this.getUser(id).then(data => {
-        console.log('ejecuto2');
-        
+    return new Promise((resolve, reject) => {
+      return this.getUser(id).then(data => {
+        console.log('entro al metodo', this.usuario.uid);
+
         localStorage.setItem('persona', JSON.stringify(data.data()));
         if (data.data()) {
           const rol = data.data().appRoles;
           let rolelength = 0;
-          for(const key in rol) {
+          // tslint:disable-next-line:forin
+          for (const key in rol) {
             rolelength++;
-          };
+          }
 
-          let permisos = {};
+          const permisos = {};
           let cont = 0;
           for (const clave in rol) {
             if (rol[clave]) {
@@ -143,24 +188,25 @@ export class LoginService {
                 const permission = datarol.data().permissions;
                 let rollength = 0;
                 let controle = 0;
+                // tslint:disable-next-line:forin
                 for (const key in permission) {
                   rollength++;
-                };
+                }
 
                 if (permission) {
                   // tslint:disable-next-line:forin
                   for (const llave in permission) {
-                    permisos[llave] = permission[llave];  
+                    permisos[llave] = permission[llave];
                     controle++;
 
-                    if(controle == rollength){
+                    if (controle === rollength) {
                       cont++;
 
                       console.log(rolelength, cont);
-                      if(rolelength == cont){
+                      if (rolelength === cont) {
                         console.log(permisos);
                         localStorage.setItem('rol', JSON.stringify(permisos));
-          
+                        console.log('termino el metodo de rols');
                         resolve();
                       }
                     }
@@ -170,15 +216,14 @@ export class LoginService {
 
               });
             }
-          
-          
+
+
           }
 
         }
 
       });
     });
-    return promise;
   }
 
   getRol(idrol) {

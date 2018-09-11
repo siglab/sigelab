@@ -243,7 +243,7 @@ export class AdminQrComponent implements OnInit {
 
     console.log(row);
 
-    // this.router.navigate( ['principal/qrinventario', row.secQr] );
+    this.router.navigate( ['principal/qrinventario', row.secQr] );
 
 
   }

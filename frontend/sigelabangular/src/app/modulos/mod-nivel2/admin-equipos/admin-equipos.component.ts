@@ -120,7 +120,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                  ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
                   // cierra loading luego de cargados los datos
                   swal.close();
-               }else{
+               } else {
                 swal({
                   type: 'error',
                   title: 'No existen equipos asociados al laboratorio',

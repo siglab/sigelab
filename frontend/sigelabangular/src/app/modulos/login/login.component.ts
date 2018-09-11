@@ -14,7 +14,8 @@ export class LoginComponent implements OnInit {
   email: string;
   pass: string;
 
-  constructor( private ruta: Router, private _loginService: LoginService  ) { }
+  constructor(private ruta: Router,
+    private _loginService: LoginService) { }
 
   ngOnInit() {
   }
@@ -22,38 +23,30 @@ export class LoginComponent implements OnInit {
 
   ingresar() {
     // loading mientras se crea el usuario
-    swal({
-      allowOutsideClick: false,
-      title: 'Un momento  ...',
-      text: 'Estamos creando su cuenta de usuario , no cierre la pestaña',
-      onOpen: () => {
-        swal.showLoading();
-      }
 
-    });
 
-     this._loginService.login().then( () => {
-       // mensaje de bienvenida
+     this._loginService.login();
+
+
+    //  this._loginService.login().then( () => {
+    //    // mensaje de bienvenida
 
 
 
-          this.ruta.navigate(['principal' ]).then ( () => {
-                swal.close();
-          });
+    //       this.ruta.navigate(['principal' ]).then ( () => {
+    //             swal.close();
+    //       });
 
-
-
-     }).catch(error => {
-        // this.ingresar();
-     });
+    //  }).catch(error => {
+    //     // this.ingresar();
+    //  });
   }
 
 
 
+  ingresarEmail(em, ps) {
 
-  ingresarEmail( em, ps ) {
-
-    if ( em.invalid || ps.invalid) {
+    if (em.invalid || ps.invalid) {
 
       swal({
         type: 'error',
@@ -63,9 +56,9 @@ export class LoginComponent implements OnInit {
 
     } else {
 
-      this._loginService.loginEmail( this.email, this.pass ).then( ok => {
+      this._loginService.loginEmail(this.email, this.pass).then(ok => {
 
-        this.ruta.navigate(['principal' ]).then ( () => {
+        this.ruta.navigate(['principal']).then(() => {
           swal({
             type: 'success',
             title: 'Ingreso correcto',

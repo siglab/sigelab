@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../../../modulos/login/login-service/login.service';
 
 
 @Component({
@@ -7,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./principal.component.css']
 })
 export class PrincipalComponent implements OnInit {
-
-  constructor() {}
+  usuario;
+  constructor(  private logServ: LoginService ) {}
 
   ngOnInit() {
+
+
 
   }
 
