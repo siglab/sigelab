@@ -115,14 +115,9 @@
                                    
                                   </div>
                                </div>
-                                <div class="form-group">
+                                <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
                                     <div class="col-md-12">
                                       <label class="control-label" for="precioserv"><strong>Precio:</strong> {{itemsel.infoServ.precio}}</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{itemsel.infoServ.estado}}</label>
                                     </div>
                                 </div>
 
@@ -225,11 +220,6 @@
                                         </div>
                                     </div>
                                       <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="estadoserv"><strong>Estado:</strong> {{variation.data.active}}</label>
-                                          </div>
-                                      </div> 
-                                      <div class="form-group">
                                           <div class="col-md-12 text-center">
                                               <button  class="btn btn-danger" type="button" (click)="agregarSolicitudServicio()" >Agregar variacion</button>
                                           </div>
@@ -285,7 +275,7 @@
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <div class="col-md-12">
+                                  <div class="col-md-12 text-center" >
                                       <button class="btn btn-danger" style="margin-top: 20px;" type="button" (click)="enviarSolicitudServicio('convariaciones')">Solicitar servicio</button>
                                   </div>
                               </div>

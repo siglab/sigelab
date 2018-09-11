@@ -6,6 +6,7 @@ import { QuerysPrincipalService } from '../services/querys-principal.service';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { Http } from '@angular/http';
 
 declare var $: any;
 @Component({
@@ -60,7 +61,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     usuariounivalle = false;
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService, private ruta: Router) {
+  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService,
+              private ruta: Router, private http: Http) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
       if(this.user.email.split('@')[1] == 'correounivalle.edu.co'){
@@ -79,27 +81,23 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     });
 
-    this.query.getServicios().subscribe(data => {
+    this.query.getServicios().then(data => {
 
-      this.observer.changeDatatableServs(this.query.estructurarDataServ(data));
+      this.query.estructurarDataServ(data).then(datos => {
+
+        console.log(datos['data']);
+        this.dataSource.data = datos['data'];
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // cierra loading luego de cargados los datos
+        swal.close();
+      });
 
     });
   }
 
   ngAfterViewInit(): void {
 
-    this.observer.currentDatatableServs.subscribe(datos => {
-
-      const ambiente = this;
-      setTimeout(function() {
-        ambiente.dataSource.data = datos;
-        ambiente.dataSource.sort = ambiente.sort;
-        ambiente.dataSource.paginator = ambiente.paginator;
-        // cierra loading luego de cargados los datos
-        swal.close();
-      }, 1000);
-
-     });
 
   }
 
@@ -226,7 +224,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
         comments:[],
         typeuser:'externo',
         path:[],
-        datauser:{type:'', ci:''}
+        datauser:{type:'', ci:''},
+        emailuser: this.user.email,
+        acceptedBy:''
       };
 
         swal({
@@ -271,12 +271,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
               console.log(cfSrvReserv);
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+
+              this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email);
+
+              this.limpiarDatos();
+
               swal({
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
-              }).then(()=>{
-                $('#myModalLabs').modal('hide');
               });
 
             }).catch(error => {
@@ -364,6 +367,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
 
+
   cambiarIcono(box){
     if(!this.iconos[box]){
       this.iconos[box] = true;
@@ -396,6 +400,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   cerrarModal(modal){
     $('#'+modal).modal('hide');
+  }
+
+  limpiarDatos(){
+    this.campoCondicion = '';
+    this.listaVariaciones = [];
   }
 
 
