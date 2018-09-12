@@ -38,7 +38,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   itemsel: any;
   servsel: any;
   prubsel: any;
-  equipsel:any;
+  equipsel: any;
 
   moduloinfo = false;
   layer = null;
@@ -102,6 +102,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se cargan los datos',
@@ -132,7 +134,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   agregarSolicitudServicio() {
     const encontrado = this.listaVariaciones.find((element, index) => {
-      if(element.data.id == this.variation.id){
+      if(element.data.id === this.variation.id){
         return true;
       }
       return false;

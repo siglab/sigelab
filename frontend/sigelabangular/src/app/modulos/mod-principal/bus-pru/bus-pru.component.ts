@@ -43,6 +43,8 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService) { }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
          // abre loading mientras se cargan los datos
      swal({
       title: 'Cargando un momento...',
@@ -104,9 +106,9 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   initCalendarModal(horario) {
 
     const containerEl: JQuery = $AB('#cal2');
-    
+
     if(containerEl.children().length > 0){
- 
+
       containerEl.fullCalendar('destroy');
     }
 

@@ -49,7 +49,7 @@ comentario = '';
 
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
-  
+
    // INICIALIZACION DE CONSULTAS PARA SERVICIOS RESERVADOS POR EL USUARIO
    private collectionReserv: AngularFirestoreCollection<any>;
 
@@ -87,7 +87,7 @@ comentario = '';
    moduloNivel2 = false;
    moduloServicios = false;
 
-constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+constructor(private obs: ObservablesService, private afs: AngularFirestore,
             private http: Http, private storage: AngularFireStorage) {
  //this.obs.changeSolServ(this.servicioso);
 }
@@ -95,9 +95,10 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
   ngOnInit() {
 
     this.getRoles();
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));   
+      this.user = JSON.parse(localStorage.getItem('usuario'));
     }
 
     this.sus = this.obs.currentObjectSolSer.subscribe(data => {
@@ -106,13 +107,13 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
         this.alertaCargando();
 
         this.getCollectionReserv(data.uid).subscribe(data1 => {
-         
+
           this.datos = this.estructurarServiciosActivos(data1, data);
           this.histodatos = this.estructurarHistorialServicios(data1, data);
-       
+
           this.dataSource.data = this.datos;
           this.dataSource2.data = this.histodatos;
-          
+
             setTimeout(() => {
               if(this.datos){
                 this.dataSource.sort = this.sort;
@@ -127,17 +128,17 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
               if(this.datos.length != 0 || this.histodatos.length != 0){
                 this.cerrarAlerta();
               } else {
-              
+
                 swal({
                   type: 'error',
                   title: 'No existen solicitudes de servicios a la fecha',
                   showConfirmButton: true
                 });
-                
+
               }
-             
+
             }, 1500);
-                     
+
         });
       } else{
         swal({
@@ -166,7 +167,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
   getRoles() {
 
     this.rol = JSON.parse(localStorage.getItem('rol'));
-    
+
     for (const clave in this.rol) {
       if (this.rol[clave]) {
         if ((clave === 'moduloNivel2')) {
@@ -193,7 +194,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-        const servicio =  data2.payload.data();     
+        const servicio =  data2.payload.data();
 
             if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){
               this.getEmailUser(elemento.user).subscribe(email =>{
@@ -218,7 +219,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
                 };
                 activo.push(Reserv);
               });
-            } 
+            }
 
       });
 
@@ -234,7 +235,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     for (let index = 0; index < data.length; index++) {
       const elemento = data[index].payload.doc.data();
       this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-        const servicio =  data2.payload.data();     
+        const servicio =  data2.payload.data();
 
             if(elemento.status != 'aceptada' && elemento.status != 'pendiente' && elemento.status != 'procesada'){
               this.getEmailUser(elemento.user).subscribe(email =>{
@@ -257,9 +258,9 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
                   uidreserv: data[index].payload.doc.id
                 };
                 historial.push(Reserv);
-     
+
               });
-            } 
+            }
 
       });
 
@@ -286,9 +287,9 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
         'error'
       );
     }else{
-      this.files = event.target.files; 
+      this.files = event.target.files;
     }
-   
+
   }
 
   uploadMulti() {
@@ -341,10 +342,10 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-        if (item[clave]) {        
+        if (item[clave]) {
           this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
            const variacion =  data.payload.data();
-       
+
             const vari = {
               id: clave,
               nombre: variacion.cfName,
@@ -353,7 +354,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
               activo: variacion.active
               };
 
-              arr.push(vari);      
+              arr.push(vari);
 
            });
         }
@@ -409,9 +410,9 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
-    
+
     this.moduloinfo = true;
-    console.log(item);  
+    console.log(item);
     if(table == 'activo'){
       this.buttons = true;
       console.log('activpo');
@@ -419,7 +420,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       this.buttons = false;
       console.log('historia');
     }
-   
+
   }
 
   cambiarVariacion(item){
@@ -444,7 +445,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       const element = this.servicioActivoSel.variaciones[i];
       if(element.id == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -453,7 +454,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       const element = this.servicioActivoSel.condiciones[i];
       if(element.idvariacion == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -493,20 +494,20 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
         let cfSrvReserv = {
           comments:this.servicioActivoSel.comentario
         };
-    
+
         cfSrvReserv.comments.push({
-          commentText: this.comentario, 
-          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          commentText: this.comentario,
+          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
           autor: 'lab'
         });
-    
+
         this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
           if(this.servicioActivoSel.status != 'pendiente'){
             this.alertaExito('Comentario enviado');
             this.enviarEmails();
           }
         });
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -516,12 +517,12 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       }
 
     });
-  
-     
+
+
   }
 
   enviarEmails(){
-    
+
     let emailSolicitante = '';
     let emailAcepto = '';
     let emailEncargado = '';
@@ -529,11 +530,11 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
     const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
     let destino = '';
-    
+
     emailSolicitante = this.servicioActivoSel.usuario;
     emailLaboratorio = this.servicioActivoSel.infolab.otros.email;
     emailAcepto = this.servicioActivoSel.acepto;
-    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
+    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
                     this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
                     ' por el usuario con el correo ' + emailSolicitante;
 
@@ -563,7 +564,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     }).then((result) => {
 
       if (result.value) {
-        
+
         //this.alertaCargando();
         const reserva = {
           status: estado,
@@ -574,9 +575,9 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
           const filespath = this.uploadMulti();
 
           reserva['path'] = filespath;
-                
+
           this.servicioActivoSel.status = estado;
-          
+
           console.log(reserva);
           this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
             this.cerrarAlerta();
@@ -591,10 +592,10 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
 
         }
-    
+
         this.moduloinfo = false;
 
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -605,7 +606,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
     });
 
-   
+
   }
 
 

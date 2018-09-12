@@ -10,6 +10,8 @@ export class AdminUsuariosComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
   }
 
 }

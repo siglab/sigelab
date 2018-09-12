@@ -102,6 +102,8 @@ export class AdminPracticasComponent implements OnInit {
 
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.getRoles();
     this.metodoInicio();
   }
@@ -204,7 +206,7 @@ export class AdminPracticasComponent implements OnInit {
                 showConfirmButton: true
               });
             }
-           
+
           }, 2000);
 
 

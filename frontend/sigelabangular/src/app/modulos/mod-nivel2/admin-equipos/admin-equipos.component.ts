@@ -91,6 +91,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     // abre loading mientras se cargan los datos
     this.ventana = true;
     this.getRoles();
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.sus = this.obs.currentObjectequip.subscribe(data => {
 
       console.log(data);

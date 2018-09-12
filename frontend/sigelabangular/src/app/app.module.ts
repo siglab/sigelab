@@ -93,6 +93,8 @@ import { Nivel25Guard } from './shared/services/guards/nivel2-5.guard';
 import { Nivel3Guard } from './shared/services/guards/nivel3.guard';
 import { InicioAppComponent } from './modulos/mod-principal/inicio-app/inicio-app.component';
 import { AdminUsuariosComponent } from './modulos/mod-nivel3/admin-usuarios/admin-usuarios.component';
+import { ActivePipe } from './shared/services/active.pipe';
+
 
 // libreria date time-picker
 
@@ -139,7 +141,8 @@ import { AdminUsuariosComponent } from './modulos/mod-nivel3/admin-usuarios/admi
     FormQrComponent,
     RegistroComponent,
     InicioAppComponent,
-    AdminUsuariosComponent
+    AdminUsuariosComponent,
+    ActivePipe
   ],
   imports: [
     AngularFireStorageModule,

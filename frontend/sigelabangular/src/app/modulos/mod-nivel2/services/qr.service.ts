@@ -190,7 +190,7 @@ export class QrService {
 
 
         console.log(element);
-        this.afs.doc('cfFacil/' + id).collection('components').add(element);
+        this.afs.doc('cfEquip/' + id).collection('components').add(element);
 
       });
 

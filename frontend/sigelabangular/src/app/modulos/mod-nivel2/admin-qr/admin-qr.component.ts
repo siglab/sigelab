@@ -45,6 +45,7 @@ export class AdminQrComponent implements OnInit {
   constructor(private afs: AngularFirestore, private qrserv: QrService, private router: Router) { }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.getRoles();
     //  consulta qr inactivos

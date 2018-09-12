@@ -116,6 +116,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getRoles();
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
       this.moduloinfo = false;
@@ -126,7 +127,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           swal.showLoading();
         }
       });
-      
+
         if(data.length != 0){
 
           this.lab_id = data.uid;
@@ -278,9 +279,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           const element = doc.data();
 
             variaciones.push({cfName:element.cfName, data: element, id: doc.id, active:element.active});
-          
+
         });
-    
+
       } else {
         return variaciones;
       }
@@ -539,9 +540,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
           if(i == this.variacionesCambiadas.length-1){
             this.variacionesCambiadas = [];
-          } 
+          }
       }
-       
+
 
     });
 
@@ -584,7 +585,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     }
 
     this.inicializarVariacion();
-    
+
     swal({
       type: 'success',
       title: 'variacion agregada',
@@ -604,25 +605,25 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.variacionesCambiadas.forEach((doc, index)=>{
       if(doc.id == this.variaciones[pos].id){
        encontrado = true;
-       indice = index;       
+       indice = index;
       }
     });
 
     if(!encontrado){
-      this.variacionesCambiadas.push({id:this.variaciones[pos].id, active: !active});   
+      this.variacionesCambiadas.push({id:this.variaciones[pos].id, active: !active});
     }else{
       this.variacionesCambiadas[indice].active = !active;
     }
 
-    this.variaciones[pos].active = !active; 
-     
+    this.variaciones[pos].active = !active;
+
     swal({
       type: 'success',
       title: 'cambio de estado de variacion hecho',
       showConfirmButton: true
     });
 
-   
+
   }
 
   agregarEquipo(){

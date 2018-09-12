@@ -115,11 +115,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
   constructor(private afs:AngularFirestore) {
-   
+
   }
 
   ngOnInit() {
-    
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.estructurarSedes();
     this.estructurarFacultades();
 
@@ -136,22 +137,22 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       for (let i = 0; i < datos.length; i++) {
         const sede = datos[i].payload.doc.data();
         this.sedes.push({
-          id:datos[i].payload.doc.id, 
+          id:datos[i].payload.doc.id,
           nombre: sede.cfAddrline1 + ' - ' + sede.cfCityTown
-        });        
+        });
       }
     });
 
-    
+
   }
 
   estructurarFacultades(){
     this.facultads = [];
     this.buscaTodasFacultades().subscribe(datos=>{
       for (let i = 0; i < datos.length; i++) {
-        const facultad = datos[i].payload.doc.data();     
+        const facultad = datos[i].payload.doc.data();
         this.facultads.push({
-          id:datos[i].payload.doc.id, 
+          id:datos[i].payload.doc.id,
           nombre: facultad.facultyName
         });
 
@@ -163,19 +164,19 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   estructurarFacultadesWitSede(keysede){
     this.facultads = [];
     this.buscaFacultadWitSede(keysede).subscribe(datos=>{
-      
-      
+
+
       for (let i = 0; i < datos.length; i++) {
-        const facultad = datos[i].payload.doc.data(); 
+        const facultad = datos[i].payload.doc.data();
         this.facultads.push({
-          id:datos[i].payload.doc.id, 
+          id:datos[i].payload.doc.id,
           nombre: facultad.facultyName
         });
 
         this.estructurarDeparamentos(datos[i].payload.doc.id);
-    
+
       }
-     
+
     });
   }
 
@@ -190,40 +191,40 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         const element = departamento[j].payload.doc.data();
 
         if(element.type == 'department'){
-  
+
           this.departamentos.push({
-            id: departamento[j].payload.doc.id, 
+            id: departamento[j].payload.doc.id,
             nombre: element.departmentName
           });
-  
+
         } else {
-  
+
         this.escuelas.push({
-          id: departamento[j].payload.doc.id, 
+          id: departamento[j].payload.doc.id,
           nombre: element.departmentName
         });
-  
+
         }
       }
 
-    });    
-     
+    });
+
   }
 
   aplicarFiltro(item, filtro){
     const arr = ['facultad','departamento', 'escuela'];
-   
+
     console.log(item, filtro);
     this.objsel[filtro] = item;
     console.log(this.objsel);
     if(filtro == "sede"){
-      for (let i = 0; i < arr.length; i++) {      
+      for (let i = 0; i < arr.length; i++) {
         $('#'+arr[i]).prop('checked', false);
         this.checkBox[arr[i]] = false;
       }
       this.estructurarFacultadesWitSede(this.objsel.sede);
     } else if(filtro == "facultad"){
-      for (let i = 1; i < arr.length; i++) {      
+      for (let i = 1; i < arr.length; i++) {
         $('#'+arr[i]).prop('checked', false);
         $('#'+arr[i]).prop('disabled', false);
         this.checkBox[arr[i]] = false;
@@ -233,10 +234,10 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
     this.ejecutarGraficos();
 
-   
+
   }
 
-  ejecutarGraficos(){ 
+  ejecutarGraficos(){
     const servicios = [];
     const practicas = [];
     const proyectos = [];
@@ -257,24 +258,24 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             }else{
               contservinact++;
             }
-            servicios.push({id:key});      
+            servicios.push({id:key});
           }
         }
         for (const key in element.relatedPractices) {
           if (element.relatedPractices.hasOwnProperty(key)) {
             if(element.relatedPractices[key])
-            practicas.push({id:key});         
+            practicas.push({id:key});
           }
         }
         for (const key in element.relatedProjects) {
           if (element.relatedProjects.hasOwnProperty(key)) {
             if(element.relatedProjects[key])
-            proyectos.push({id:key});         
+            proyectos.push({id:key});
           }
         }
       }
       this.inicializarDonaServs(contservact, contservinact);
-     
+
       this.inicializarIndicadoresServicios(servicios);
       this.inicializarIndicadoresPracticas(practicas);
       this.inicializarIndicadoresProyectos(proyectos);
@@ -286,7 +287,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     console.log(item,this.checkBox);
     if(item == 'universidad'){
       if(this.checkBox[item]){
-        for (let i = 0; i < arr.length; i++) {      
+        for (let i = 0; i < arr.length; i++) {
           $('#'+arr[i]).prop('disabled', true);
           this.checkBox[arr[i]] = false;
           this.objsel[arr[i]] = 'inicial';
@@ -294,7 +295,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         this.ejecutarGraficos();
         $('select').prop('disabled', true);
       } else {
-        for (let i = 0; i < arr.length; i++) {      
+        for (let i = 0; i < arr.length; i++) {
           $('#'+arr[i]).prop('disabled', false);
         }
       }
@@ -312,8 +313,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           $('#departamento').prop('disabled', true);
           $('#variatiodepartamento').prop('disabled', true);
         }
-       
-     
+
+
       }else{
         $('#variatio'+item).prop('disabled', true);
         if(item == 'departamento'){
@@ -326,7 +327,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         }
       }
     }
-   
+
   }
 
   estructurarQuery(){
@@ -348,20 +349,20 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       departamento : ".where('departments."+this.objsel.facultad+"."+this.objsel.departamento+"','==', true)",
       escuela : ".where('departments."+this.objsel.facultad+"."+this.objsel.escuela+"','==', true)"
     };
-   
+
     if(this.checkBox.universidad){
-      query = inicio + final;    
+      query = inicio + final;
     } else {
       query = inicio+ref;
       for (const key in this.checkBox) {
         if (this.checkBox.hasOwnProperty(key)) {
           const element = this.checkBox[key];
-          if(element){         
-           query += objQuery[key];                   
-          }         
+          if(element){
+           query += objQuery[key];
+          }
         }
       }
-      query += final;     
+      query += final;
     }
     console.log(query);
     return query;
@@ -382,7 +383,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     }
      return newArray;
   }
-  
+
 
 
   // METODOS PARA LA INICIALIZACION DE LOS GRAFICOS
@@ -438,14 +439,14 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       this.buscaServicioPrestado(element.id).subscribe(datos=>{
         console.log(datos);
         if(!sus){
-          if(datos.length != 0){         
-          
+          if(datos.length != 0){
+
             for (let j = 0; j < datos.length; j++) {
               if(datos[j]['createdAt'].split('-')[0] == ano){
                 this.indserv.prestados++;
                 this.indserv.monto += parseInt(datos[j]['price']);
               }
-              
+
             }
           }
           cont++;
@@ -454,8 +455,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             sus = true;
           }
         }
-     
-        
+
+
       });
     }
 
@@ -474,7 +475,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     }
     let sus = false;
     let cont = 0;
-   
+
     const noduplicados = this.removeDuplicates(array,'id');
     console.log(noduplicados, semester);
     for (let i = 0; i < noduplicados.length; i++) {
@@ -483,7 +484,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         for (let j = 0; j < programacion.length; j++) {
           const element = programacion[j];
           this.indprac.pracactivas ++;
-          this.indprac.estudiantes += element['noStudents']; 
+          this.indprac.estudiantes += element['noStudents'];
         }
       });
     }
@@ -505,14 +506,14 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     let cont = 0;
 
     let personal = 0;
-   
+
     const noduplicados = this.removeDuplicates(array,'id');
     console.log(noduplicados, semester);
     for (let i = 0; i < noduplicados.length; i++) {
       const element = noduplicados[i];
       this.buscaProyectos(element.id).subscribe(proy => {
         this.indproy.proyactivos ++;
-    
+
         for (const key in proy['relatedPers']) {
           if (proy['relatedPers'].hasOwnProperty(key)) {
             personal++;
@@ -834,7 +835,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   // servicios
 
   buscaPracticas(keyprac, semester){
-    return  this.afs.doc('practice/'+keyprac).collection('programmingData', 
+    return  this.afs.doc('practice/'+keyprac).collection('programmingData',
             ref=>ref.where('semester','==',semester)).valueChanges();
   }
 
@@ -861,7 +862,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   buscaFacultadWitSede(keysede){
     return  this.afs.collection('faculty', ref=>ref.where('subHq.'+keysede, '==', true)).snapshotChanges();
   }
- 
+
   buscaDepartamento(keyfacultad){
     return  this.afs.doc('faculty/'+keyfacultad).collection('departments').snapshotChanges();
   }

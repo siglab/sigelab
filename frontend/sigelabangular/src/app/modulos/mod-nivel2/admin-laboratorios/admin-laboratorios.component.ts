@@ -152,6 +152,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.getUserId();
     this.getRoles();
@@ -490,11 +491,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     },
                     activo: practica.active
                    };
-  
+
                    arr.push(pract);
                 }
               })
-       
+
 
 
               });
@@ -897,7 +898,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   editar(){
 
-  
+
 
     if(this.moduloNivel2){
       swal({
@@ -952,7 +953,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               }
             });
 
-            
+
             this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
               aux.suggestedChanges.push({
                 pos: this.labestructurado.cambios.length,
@@ -1046,7 +1047,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
                 }else if (aux == 'cfEAddr'){
                   if(this.sugerencia.data[cont].quitar){
-                   
+
                     this.EnviarcfEAddr(this.sugerencia.data[cont].infoaux, false);
                   }else{
                     this.EnviarcfEAddr(this.sugerencia.data[cont].info, true);
@@ -1133,7 +1134,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         this.afs.doc('cfFacil/'+this.labestructurado.uid).collection('cfEAddr')
         .doc(element.id).delete();
       }
-      
+
     }
   }
 
@@ -1210,14 +1211,14 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           if(sugeridos.length != 0){
             data.push({llave: aux2[i], nombre: aux1[i],info:sugeridos, cambio: false});
           }
-          
+
             const arr1 = eval(aux4[i]);
             const arr2 = eval('this.labestructurado.'+aux1[i]);
             const retirados = this.elementosRetirados(arr1,arr2);
             if(retirados.length != 0){
               data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retirados, info:arr1,cambio: false});
             }
-                 
+
 
         }else{
           let auxiliar = this.labestructurado[element];
@@ -1399,7 +1400,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.sugerencia = undefined;
 
     this.infolab.otros.email = this.labestructurado.info.email;
-  
+
 
     this.infolab.headquarter = this.labestructurado.sede.id;
     this.infolab.subHq = this.labestructurado.subsede.id;

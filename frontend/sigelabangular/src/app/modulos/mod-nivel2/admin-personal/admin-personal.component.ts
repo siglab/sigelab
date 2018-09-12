@@ -106,6 +106,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     private register: LoginService) { }
 
   ngOnInit() {
+
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.getRolesNivel2();
 
     this.getRoles();

@@ -4,7 +4,7 @@
     <h1>
       Espacios
     </h1>
-
+   <button (click)="probarFecha()" > borrar</button>
   </section>
 
   <!-- Main content -->
@@ -73,6 +73,11 @@
                           <mat-cell *matCellDef="let element"> {{element.spaceData.place}} </mat-cell>
                         </ng-container>
 
+
+                         <ng-container matColumnDef="active">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.active | activo }} </mat-cell>
+                        </ng-container>
 
 
                         <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
