@@ -24,9 +24,10 @@ export class AdminPracticasComponent implements OnInit {
   events = [
   ];
 
+  year = new Date().getFullYear();
   id_prc;
   id_pro;
-
+  residuos = false;
   practica = {
     nombre: '',
     semestre: '',
@@ -92,7 +93,7 @@ export class AdminPracticasComponent implements OnInit {
 
   pracestructurado: any;
 
-  role:any;
+  role: any;
   moduloNivel2 = false;
 
   constructor(private obs: ObservablesService,
@@ -115,7 +116,7 @@ export class AdminPracticasComponent implements OnInit {
     console.log(this.role);
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave == 'moduloNivel2')) {
+        if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }
@@ -288,6 +289,7 @@ export class AdminPracticasComponent implements OnInit {
                 const pract = {
                   id_pract: data.payload.id,
                   nombre: practica.practiceName,
+                  residuos: practica.residuos,
                   equipos: this.estructurarEquipos(practica.relatedEquipments),
                   espacio: this.getOnlySpace(prog['space']),
                   programacion: {
@@ -513,7 +515,7 @@ export class AdminPracticasComponent implements OnInit {
     console.log(row.programacion.horario);
   }
 
-  addPractice() {
+  addPractice( stepper ) {
 
     const fecha = new Date();
 
@@ -524,6 +526,7 @@ export class AdminPracticasComponent implements OnInit {
       cfFacil: this.id_lab,
       relatedSpaces: {},
       relatedEquipments: {},
+      residuos: this.residuos,
       active: true,
       createdAt: fecha.toISOString(),
       updatedAt: fecha.toISOString()
@@ -572,6 +575,10 @@ export class AdminPracticasComponent implements OnInit {
         });
 
         this.toastr.success('Almacenado Correctamente!');
+
+        // this.clearObj();
+        stepper.reset();
+
 
       });
 
@@ -698,10 +705,21 @@ export class AdminPracticasComponent implements OnInit {
     $AB('html, body').animate({ scrollTop: '600px' }, 'slow');
   }
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
+
+  clearObj() {
+
+     this.residuos = false;
+     this.nameP = '';
+     this.code = '';
+     this.programming.semester = '';
+     this.programming.noStudents = '';
+
+
+  }
 
 
 

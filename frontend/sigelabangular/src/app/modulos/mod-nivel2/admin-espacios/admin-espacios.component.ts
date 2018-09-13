@@ -22,10 +22,12 @@ declare var $: any;
 })
 export class AdminEspaciosComponent implements OnInit, OnDestroy {
   plano: Observable<any>;
+  actividadAct = [];
   dispo;
   idnewSp;
   status;
   mensaje = false;
+  ocupacionAct;
   idlab;
   idsh;
   itemsel: Observable<Array<any>>;
@@ -36,12 +38,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   tablesel = '';
   horarios = [];
   space = {
-    capacity: '',
+    capacity: 0,
     createdAt: '',
     freeArea: '',
     headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
     subHq: '',
-    indxSa: '',
+    indxSa: 0,
     map: '',
     minArea: '',
     ocupedArea: '',
@@ -336,6 +338,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.map = item.map;
     this.space.active = item.active;
 
+    console.log('capacidad a', item.capacity );
     // optener datos un espacio especifico
 
     this.cargarImagen(this.space.map);
@@ -345,7 +348,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         ok.forEach(element => {
 
-          this.getPrgramming(element).then(() => this.getOcupacionActual());
+          this.getPrgramming(element).then(() => this.totalOcupacion());
 
         });
       }, 1000);
@@ -542,13 +545,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
           console.log(Pr.noStudents);
 
-          const practica = {
+          const practicaH = {
 
             numeroEs: Pr.noStudents,
-            horario: Pr.schedule
+            horario: Pr.schedule,
+            id
           };
           //  crear un array de objetos numero de estudiantes y practicas
-          this.noEsPrac.push(practica);
+          this.noEsPrac.push(practicaH);
           // crea un array con los horarios de la practica
           Pr.schedule.forEach(element => {
             this.horarios.push(element);
@@ -604,9 +608,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   /* setea campos del objeto */
   clearObj() {
     this.space.totalArea = '';
-    this.space.capacity = '';
+    this.space.capacity = 0;
     this.space.freeArea = '';
-    this.space.indxSa = '';
+    this.space.indxSa = 0;
     this.space.minArea = '';
     this.space.ocupedArea = '';
     this.space.spaceData.building = '';
@@ -614,61 +618,112 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.spaceData.place = '';
   }
 
-  probarFecha() {
-
-    const fecha = new Date();
-    // console.log(fecha.getFullYear() + '-' + fecha.getMonth() + '-' + fecha.getDate());
-
-        console.log( fecha.toISOString());
-    //  moment().isBetween(moment-like, moment-like);
-
-  }
 
   cerrarModal(modal) {
     $('#' + modal).modal('hide');
   }
 
-  // obtiene el objeto de todos los espacios relacionados al laboratorio
-  getOcupacionActual() {
-    let pers;
-    let cont = 0;
-    let personalLab;
-    console.log('se ejecuto el metodo ocup');
-    this.afs.doc('cfFacil/' + this.idlab)
-      .ref.get()
-      .then((res) => {
-        pers = res.data().relatedPers;
+  // obtiene el total de personas dentro de un laboratorio
+  getTotalLab() {
+    console.log('obtiene total del laboratorio');
 
-        for (const key in pers) {
-          if (pers.hasOwnProperty(key)) {
-            const element = pers[key];
+    return new Promise((resolve, reject) => {
+      let pers;
+      let cont = 0;
+      let personalLab;
+      this.afs.doc('cfFacil/' + this.idlab)
+        .ref.get()
+        .then((res) => {
+          pers = res.data().relatedPers;
 
-            console.log(cont);
-            cont++;
+          for (const key in pers) {
+            if (pers.hasOwnProperty(key)) {
+              const element = pers[key];
+
+              console.log(element);
+              // valida si es personal activo
+              if (element) {
+                cont++;
+              }
+
+            }
           }
-        }
-        personalLab = cont;
-        console.log('resultado f', personalLab);
-      }).catch(err => console.log('ocurrio un error', err));
+          personalLab = cont;
 
+          // devuelve la cantidad de personas en el laboratorio actual
+          resolve(personalLab);
 
-
-    // let estudiantesPractica = 0;
-
-    // recorrer cada una de las programaciones del espacio
-    this.noEsPrac.forEach(programing => {
-      // recorrer cada uno de los horarios de las programming
-      programing.horario.forEach(fecha => {
-         console.log('fech ob', fecha);
-        // si la fecha coincide con la actual acomular en el total de estudiantes
-        if ( moment('2018-09-13').isBetween('2018-09-12', '2018-09-20'  )) {
-
-          console.log('funciona prro' );
-        // estudiantesPractica += programing.numeroEs;
-      }
+        }).catch(err => console.log('ocurrio un error', err));
     });
 
-  });
+  }
 
-}
+
+  getTotalEstPrac() {
+
+    return new Promise((resolve, reject) => {
+      const now = moment().format();
+      console.log(now);
+      let estudiantesPractica = 0;
+      // recorrer cada una de las programaciones del espacio
+      this.noEsPrac.forEach(programing => {
+        // recorrer cada uno de los horarios de las programming
+        programing.horario.forEach(fecha => {
+          console.log('fech ob', fecha);
+          // si la fecha coincide con la actual acomular en el total de estudiantes
+          if (moment('2018-09-13T09:39:11.106Z').isBetween('2018-09-13T09:31:11.106Z', '2018-09-13T10:41:11.106Z')) {
+
+            console.log('todo correcto');
+            // tslint:disable-next-line:radix
+            estudiantesPractica += parseInt(programing.numeroEs);
+          }
+        });
+
+      });
+
+      // devuelve el total de estudiantes en el momento actual
+      console.log('total de estudiantes en la practica', estudiantesPractica);
+      resolve(estudiantesPractica);
+    });
+  }
+
+  totalOcupacion() {
+
+    this.getTotalLab().then((personalLab: number) => {
+
+      this.getTotalEstPrac().then((estudiantesPract: number) => {
+
+        this.ocupacionAct = personalLab + estudiantesPract;
+        // tslint:disable-next-line:radix
+        this.space.indxSa =  (this.space.capacity ) / (personalLab + estudiantesPract);
+
+      });
+    });
+  }
+
+  getActividadAct() {
+
+    this.noEsPrac.forEach( prog =>  {
+
+      prog.horario.forEach(fecha => {
+
+        const now = moment().format();
+
+        if (moment(now).isBetween(fecha.start , fecha.end )) {
+
+          this.afs.doc( 'practice/' +  prog.id  )
+          .valueChanges()
+          .subscribe( ok => {
+
+            this.actividadAct.push(prog.practiceName);
+            console.log(ok);
+
+          });
+        }
+
+
+      });
+
+    });
+  }
 }

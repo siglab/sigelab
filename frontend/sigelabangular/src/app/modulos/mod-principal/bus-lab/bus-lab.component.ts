@@ -133,8 +133,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
   agregarSolicitudServicio() {
+    // tslint:disable-next-line:no-shadowed-variable
     const encontrado = this.listaVariaciones.find((element, index) => {
-      if(element.data.id === this.variation.id){
+      if (element.data.id === this.variation.id) {
         return true;
       }
       return false;

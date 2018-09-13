@@ -18,7 +18,8 @@
           <div *ngIf="moduloNivel2" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button style="float: right;" (click)="down()" class="btn btn-danger" type="button">Nuevo practica, prueba y/o ensayo</button>
+                <button style="float: right;" (click)="down()" class="btn btn-danger" type="button">Nuevo practica,
+                  prueba y/o ensayo</button>
               </div>
             </div>
           </div>
@@ -49,7 +50,8 @@
                       <div class="example-container mat-elevation-z8" *ngIf="dataSourcePrac.data.length > 0">
                         <div class="example-header">
                           <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Practicas">
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
+                              placeholder="Buscar Practicas">
                           </mat-form-field>
                         </div>
 
@@ -83,11 +85,12 @@
 
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPrac"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
-                            data-target="#myModal3"></mat-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;"
+                            (click)="cambiardata(row)" data-toggle="modal" data-target="#myModal3"></mat-row>
                         </mat-table>
 
-                        <mat-paginator #paginatorPrac="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        <mat-paginator #paginatorPrac="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true">
                         </mat-paginator>
                       </div>
 
@@ -117,7 +120,8 @@
                       <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracIn.data.length > 0">
                         <div class="example-header">
                           <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Practicas">
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
+                              placeholder="Buscar Practicas">
                           </mat-form-field>
                         </div>
 
@@ -151,11 +155,12 @@
 
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPracIn"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;" (click)="cambiardata(row)" data-toggle="modal"
-                            data-target="#myModal3"></mat-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;"
+                            (click)="cambiardata(row)" data-toggle="modal" data-target="#myModal3"></mat-row>
                         </mat-table>
 
-                        <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true">
                         </mat-paginator>
                       </div>
 
@@ -188,24 +193,39 @@
               <mat-step>
                 <form>
                   <ng-template matStepLabel>Informacion basica</ng-template>
+
+
                   <mat-form-field>
                     <input name="nombrep" [(ngModel)]="nameP" matInput placeholder="nombre practica">
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input name="code" [(ngModel)]="code" matInput placeholder="Codigo de la materia">
+                    <input   name="code" [(ngModel)]="code" matInput placeholder="Codigo de la materia">
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input name="semestre" [(ngModel)]="programming.semester" matInput placeholder="Semestre">
+                    <mat-select  name="semester" placeholder="semester" [(ngModel)]="programming.semester"  >
+                      <mat-option  [value]= "this.year + '-' + '01'"  >
+                        Periodo 01
+                      </mat-option>
+                      <mat-option [value]= "this.year + '-' + '02'"   >
+                        Periodo 02
+                      </mat-option>
+                    </mat-select>
                   </mat-form-field>
-
+                  <!-- <mat-form-field>
+                    <mat-checkbox>Genera residuos la practica</mat-checkbox>
+                  </mat-form-field> -->
                   <mat-form-field>
                     <input name="numeroes" [(ngModel)]="programming.noStudents" matInput placeholder="Numero de estudiantes">
                   </mat-form-field>
 
+                  <mat-checkbox name="residuos" [(ngModel)]="residuos">Genera residuos</mat-checkbox>
+
+
                   <div>
-                    <button mat-button matStepperNext (click)="initCalendar(this.events)" class="btn btn-success">siguiente</button>
+                    <button mat-button matStepperNext (click)="initCalendar(this.events)" class="btn btn-success">siguiente
+                      <i class="fa fa-arrow-right"></i> </button>
                   </div>
                 </form>
               </mat-step>
@@ -213,20 +233,23 @@
                 <ng-template matStepLabel>Horario de practica</ng-template>
 
 
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-calendar"></i>
+                <div class="col-md-12">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-calendar"></i>
+                      <h3 class="box-title">CALENDARIO</h3>
+                    </div>
 
-                    <h3 class="box-title">CALENDARIO</h3>
+                    <button class="btn btn-success" style="float: center" type="button" data-toggle="modal" data-target="#myModal2">Agregar
+                      dia
+                      <i class="fa fa-plus"></i>
+                    </button>
+                    <!-- /.box-header -->
 
+                    <div class="box-body no-padding">
+                      <div class="cal" id="cal"> </div>
+                    </div>
 
-                  </div>
-                  <button class="btn btn-success" style="float: center" type="button" data-toggle="modal" data-target="#myModal2">Agregar dia
-                    <i class="fa fa-plus"></i>
-                  </button>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                    <div class="cal" id="cal"> </div>
                   </div>
                 </div>
                 <div>
@@ -256,11 +279,13 @@
                         <!-- Checkbox Column -->
                         <ng-container matColumnDef="select">
                           <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
-                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
                             </mat-checkbox>
                           </mat-header-cell>
                           <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
-                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)">
                             </mat-checkbox>
                           </mat-cell>
                         </ng-container>
@@ -287,7 +312,7 @@
                 <div>
                   <button class="btn btn-success" mat-button matStepperPrevious>
                     <i class="fa fa-arrow-left"></i> Anterior</button>
-                  <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
+                  <button (click)="addPractice( stepper )" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
                 </div>
               </mat-step>
 
@@ -407,12 +432,12 @@
                       </a>
                     </li>
                     <li>
-                      <a class="text-green" (click)="changeColor('green')" >
+                      <a class="text-green" (click)="changeColor('green')">
                         <i class="fa fa-square"></i>
                       </a>
                     </li>
                     <li>
-                      <a class="text-lime"  (click)="changeColor('lime')">
+                      <a class="text-lime" (click)="changeColor('lime')">
                         <i class="fa fa-square"></i>
                       </a>
                     </li>
@@ -445,10 +470,12 @@
                 </div>
                 <!-- /btn-group -->
                 <div class="input-group">
-                  <input [(ngModel)]="this.evento.title"   id="new-event" type="text" class="form-control" placeholder="Escriba un titulo para la clase" required>
+                  <input [(ngModel)]="this.evento.title" id="new-event" type="text" class="form-control" placeholder="Escriba un titulo para la clase"
+                    required>
 
                   <div class="input-group-btn">
-                    <button id="add-new-event" type="button" [ngStyle]="{'background-color': this.evento.color, 'border-color': this.evento.color}" class="btn btn-primary btn-flat">C</button>
+                    <button id="add-new-event" type="button" [ngStyle]="{'background-color': this.evento.color, 'border-color': this.evento.color}"
+                      class="btn btn-primary btn-flat">C</button>
                   </div>
                   <!-- /btn-group -->
                 </div>
@@ -461,14 +488,16 @@
             <div class="form-group">
               <div class='col-md-6'>
                 <label for="fecha" class="col-sm-4 col-form-label">fecha:</label>
-                <input name="fecha" [(ngModel)]="this.evento.start" type="date" class="form-control" id="espac"required>
+                <input name="fecha" [(ngModel)]="this.evento.start" type="date" class="form-control" id="espac"
+                  required>
               </div>
             </div>
 
             <div class="form-group">
               <div class='col-md-6'>
                 <label for="hora" class="col-sm-4 col-form-label">hora:</label>
-                <input name="hora" placeholder="hrs:mins" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$"  [(ngModel)]="horaE" type="time" class="form-control" id="espac">
+                <input name="hora" placeholder="hrs:mins" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$"
+                  [(ngModel)]="horaE" type="time" class="form-control" id="espac">
               </div>
             </div>
 
@@ -482,8 +511,8 @@
       </div>
 
       <div class="modal-footer">
-        <button (click)="agregarEvento()" style="float: center;" type="button" class="btn btn-success" >
-           Agregar <i class="fa fa-plus"></i></button>
+        <button (click)="agregarEvento()" style="float: center;" type="button" class="btn btn-success">
+          Agregar <i class="fa fa-plus"></i></button>
       </div>
 
     </div>
@@ -636,7 +665,8 @@
                             <strong>Nombre Practica:</strong>
                           </label>
 
-                          <input name="nombre" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.nombre" type="text" class="form-control" id="nombre">
+                          <input name="nombre" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.nombre"
+                            type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -646,7 +676,8 @@
                             <strong>Numero Estudiantes:</strong>
                           </label>
 
-                          <input name="numeroEstudiantes" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.numeroEst" type="text" class="form-control" id="nombre">
+                          <input name="numeroEstudiantes" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.numeroEst"
+                            type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
@@ -658,7 +689,8 @@
                             <strong>Semestre:</strong>
                           </label>
 
-                          <input name="semestre" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.semestre" type="text" class="form-control" id="nombre">
+                          <input name="semestre" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.practica.semestre"
+                            type="text" class="form-control" id="nombre">
 
                         </div>
                       </div>
