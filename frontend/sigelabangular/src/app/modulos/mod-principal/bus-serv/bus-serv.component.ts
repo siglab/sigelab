@@ -85,7 +85,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
       this.query.estructurarDataServ(data).then(datos => {
 
-        console.log(datos['data']);
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -115,7 +114,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
-      console.log(this.variation);
       this.estructurarVariaciones(this.variation.data.cfConditions);
     } else {
       this.variation = undefined;
@@ -268,18 +266,17 @@ export class BusServComponent implements OnInit, AfterViewInit {
               email: this.user.email, 
               uid: this.user.uid});
            
-              console.log(cfSrvReserv);
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-
-              this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email);
-
-              this.limpiarDatos();
 
               swal({
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
+              }).then(()=>{
+                this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email);
+
+                this.limpiarDatos();
               });
 
             }).catch(error => {
@@ -328,7 +325,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) { 
-    console.log(item);
+
     this.listaVariaciones = [];
     this.variation = undefined;
     this.campoCondicion = '';

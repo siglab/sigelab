@@ -29,8 +29,8 @@ export class QuerysPrincipalService {
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
   getLaboratorios() {
-      this.labsCollection = this.afs.collection<any>('cfFacil', ref => ref.where('active','==',true));
-    return this.labsCollection.ref.get();
+    return this.afs.collection('cfFacil', 
+            ref => ref.where('active','==',true)).ref.get();
   }
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
@@ -94,7 +94,8 @@ export class QuerysPrincipalService {
                     };
 
                       this.datosLabsEstructurados.push(laboratorio);
-            
+                    
+                      // console.log(this.datosLabsEstructurados, data.size);
                       if(this.datosLabsEstructurados.length == data.size){
                         resolve({data:this.datosLabsEstructurados});
                       }

@@ -52,7 +52,9 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   iconos = {
     info:false,
     sabs:false
-  }
+  };
+
+  fecha = new Date();
 
   constructor(private querys: QuerysAutenticadoService, 
               private observer: ObserverAutenticadoService,
@@ -137,17 +139,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   }
 
-  descargarDoc(){
-    console.log(this.servsel.path);
-
-    for (let i = 0; i < this.servsel.path.length; i++) {
-      const ref = this.storage.ref(this.servsel.path[i]);
-    
-      ref.getDownloadURL().subscribe(data => {
-        window.open(data);
-      }); 
-    }
-  }
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarVariacion(item){
@@ -173,7 +164,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
       //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
     }
   }
 
@@ -195,7 +186,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.value) {
-        this.querys.cancerlarSolicitud(this.servsel.uidreserv).then(() => {
+        const fecha = this.fecha.toISOString();
+        this.querys.cancerlarSolicitud(this.servsel.uidreserv, fecha).then(() => {
 
           swal({
             type: 'success',
@@ -303,6 +295,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
       });
     });
+  }
+
+  descargarArchivo(index){
+    const ref = this.storage.ref(this.servsel.path[index]);
+    ref.getDownloadURL().subscribe(data => {
+      window.open(data);
+    }); ;
   }
 
 

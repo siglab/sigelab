@@ -125,8 +125,8 @@ export class QuerysAutenticadoService {
     return nombre;
   }
 
-  cancerlarSolicitud(reservuid) {
-    return this.afs.collection('cfSrvReserv').doc(reservuid).update({status: 'cancelada'});
+  cancerlarSolicitud(reservuid, fecha) {
+    return this.afs.collection('cfSrvReserv').doc(reservuid).update({status: 'cancelada', updatedAt:fecha});
   }
 
   getLab(labid){

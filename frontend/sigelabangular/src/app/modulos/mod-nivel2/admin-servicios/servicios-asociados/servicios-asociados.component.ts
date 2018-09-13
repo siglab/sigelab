@@ -77,7 +77,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     relatedEquipments:{},
     relatedMeasurement:{},
     relatedServices:{},
-    updatedAt:''
+    updatedAt:'',
+    residuos:false
   };
 
   objectvariation = {
@@ -87,7 +88,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     cfName:'',
     cfPrice:'',
     createdAt:'',
-    updateAt:''
+    updateAt:'',
+    residuos:false
   }
 
   variaciones = [];
@@ -119,6 +121,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
       this.moduloinfo = false;
+      this.resetIconos();
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
@@ -258,7 +261,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           uid: doc.id,
           creado: elemento.createdAt,
           editado: elemento.updatedAt,
-          active: elemento.active
+          active: elemento.active,
+          residuos:elemento.residuos
         }
       };
 
@@ -436,6 +440,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.srv.createdAt = fecha.toISOString();
     this.srv.updatedAt = fecha.toISOString();
     this.srv.cfFacil = this.lab_id;
+  
+
     this.selection.selected.forEach((element) => {
 
       if (element.id) {
@@ -480,6 +486,17 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         });
       }
 
+      this.selection.selected.forEach((element) => {
+        let srvEquip = {
+          relatedSrv:{}
+        };
+        if (element.id) {
+          srvEquip.relatedSrv[data.id] = true;
+          this.afs.doc('cfEquip/'+element.id).set(srvEquip,{merge:true});
+        }
+      });
+     
+
     });
 
   }
@@ -489,10 +506,18 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
       const equipo = this.itemsel.infoServ.equipos[i];
       this.srv.relatedEquipments[equipo.id] = true;
+
+      let srvequip = {
+        relatedSrv:{}
+      };
+
+      srvequip.relatedSrv[this.itemsel.infoServ.uid] = true;
+      this.afs.doc('cfEquip/'+equipo.id).set(
+        srvequip,{merge:true});
     }
     this.srv.cfFacil = this.lab_id;
     this.srv.updatedAt = fecha.toISOString();
-    console.log(this.srv);
+
 
     swal({
       title: 'Cargando un momento...',
@@ -504,7 +529,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     this.afs.doc('cfSrv/' + this.itemsel.infoServ.uid).update(this.srv).then(()=>{
 
-      console.log(this.variaciones);
 
       for (let j = 0; j < this.variaciones.length; j++) {
         const variacion = this.variaciones[j];
@@ -668,7 +692,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       cfName:'',
       cfPrice:'',
       createdAt:'',
-      updateAt:''
+      updateAt:'',
+      residuos:false
     }
   }
 
@@ -689,7 +714,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       relatedEquipments:{},
       relatedMeasurement:{},
       relatedServices:{},
-      updatedAt:''
+      updatedAt:'',
+      residuos:false
     };
   }
 
@@ -711,6 +737,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   cerrarModal(modal){
     $('#'+modal).modal('hide');
+  }
+
+  resetIconos(){
+    this.iconos.info = false;
+    this.iconos.sabs = false;
   }
 
 }

@@ -111,6 +111,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
     // trae los datos de los laboratorios
     this.query.getLaboratorios().then(data => {
+     
       this.query.estructurarDataLab(data).then(datos => {
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
@@ -354,7 +355,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
     if(item.variaciones.length == 0){
       if(item.condiciones.length !== 0){
-        console.log('entro');
         this.estructurarVariaciones(item.condiciones);
       }
 
@@ -459,7 +459,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   removerMarker() {
     if (this.layer != null) {
-      console.log('remover');
       this.layer.remove();
     }
   }
