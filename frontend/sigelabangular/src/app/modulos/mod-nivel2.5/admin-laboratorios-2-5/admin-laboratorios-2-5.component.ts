@@ -41,6 +41,7 @@ export class AdminLaboratorios25Component implements OnInit {
     // servicios:[],practicas:[],equipos:[],personal:[],proyectos:[],solicitudes:[]});
   }
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.obs.currentObject.subscribe(data => {
       console.log(data);

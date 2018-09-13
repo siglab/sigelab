@@ -15,6 +15,7 @@ export class SolicitudesNivel3Component implements OnInit {
    }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
     this.obs.currentObject.subscribe(data => {
       console.log(data);
       this.itemsel = Observable.of(data);

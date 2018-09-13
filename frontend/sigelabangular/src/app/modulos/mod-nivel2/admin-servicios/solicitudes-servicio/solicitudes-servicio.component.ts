@@ -49,7 +49,7 @@ comentario = '';
 
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
-  
+
    // INICIALIZACION DE CONSULTAS PARA SERVICIOS RESERVADOS POR EL USUARIO
    private collectionReserv: AngularFirestoreCollection<any>;
 
@@ -98,9 +98,10 @@ comentario = '';
   ngOnInit() {
 
     this.getRoles();
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));   
+      this.user = JSON.parse(localStorage.getItem('usuario'));
     }
 
     this.sus = this.obs.currentObjectSolSer.subscribe(data => {
@@ -150,7 +151,7 @@ comentario = '';
   getRoles() {
 
     this.rol = JSON.parse(localStorage.getItem('rol'));
-    
+
     for (const clave in this.rol) {
       if (this.rol[clave]) {
         if ((clave === 'moduloNivel2')) {
@@ -251,7 +252,7 @@ comentario = '';
       }
       
     }
-   
+
   }
 
   uploadMulti() {
@@ -304,10 +305,10 @@ comentario = '';
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-        if (item[clave]) {        
+        if (item[clave]) {
           this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
            const variacion =  data.payload.data();
-       
+
             const vari = {
               id: clave,
               nombre: variacion.cfName,
@@ -316,7 +317,7 @@ comentario = '';
               activo: variacion.active
               };
 
-              arr.push(vari);      
+              arr.push(vari);
 
            });
         }
@@ -440,9 +441,9 @@ comentario = '';
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
-    
+
     this.moduloinfo = true;
-    console.log(item);  
+    console.log(item);
     if(table == 'activo'){
       this.buttons = true;
       console.log('activpo');
@@ -450,7 +451,7 @@ comentario = '';
       this.buttons = false;
       console.log('historia');
     }
-   
+
   }
 
   cambiarVariacion(item){
@@ -475,7 +476,7 @@ comentario = '';
       const element = this.servicioActivoSel.variaciones[i];
       if(element.id == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -484,7 +485,7 @@ comentario = '';
       const element = this.servicioActivoSel.condiciones[i];
       if(element.idvariacion == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -516,20 +517,20 @@ comentario = '';
         let cfSrvReserv = {
           comments:this.servicioActivoSel.comentario
         };
-    
+
         cfSrvReserv.comments.push({
-          commentText: this.comentario, 
-          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          commentText: this.comentario,
+          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
           autor: 'lab'
         });
-    
+
         this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
           if(this.servicioActivoSel.status != 'pendiente'){
             this.alertaExito('Comentario enviado');
             this.enviarEmails();
           }
         });
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -539,12 +540,12 @@ comentario = '';
       }
 
     });
-  
-     
+
+
   }
 
   enviarEmails(){
-    
+
     let emailSolicitante = '';
     let emailAcepto = '';
     let emailEncargado = '';
@@ -552,11 +553,11 @@ comentario = '';
     const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
     const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
     let destino = '';
-    
+
     emailSolicitante = this.servicioActivoSel.usuario;
     emailLaboratorio = this.servicioActivoSel.infolab.otros.email;
     emailAcepto = this.servicioActivoSel.acepto;
-    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
+    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
                     this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
                     ' por el usuario con el correo ' + emailSolicitante;
 
@@ -586,7 +587,7 @@ comentario = '';
     }).then((result) => {
 
       if (result.value) {
-        
+
         //this.alertaCargando();
         const reserva = {
           status: estado,
@@ -633,7 +634,7 @@ comentario = '';
 
     });
 
-   
+
   }
 
 

@@ -82,12 +82,12 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   sus: Subscription;
 
   role:any;
-  moduloNivel2 = false;  
+  moduloNivel2 = false;
 
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
   ngOnInit() {
-
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
     this.getRoles();
     this.sus = this.obs.currentObjectProy.subscribe(data => {
       console.log(data);
@@ -140,19 +140,19 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
                   showConfirmButton: true
                 });
               }
-            
+
             }, 1500);
 
           });
         }
       } else {
-      
+
         swal({
           type: 'error',
           title: 'No se ha seleccionado ningun laboratorio',
           showConfirmButton: true
         });
-        
+
       }
       this.estructurarLab(data.uid).then(() => {
         this.itemsel = Observable.of(this.proyestructurados);

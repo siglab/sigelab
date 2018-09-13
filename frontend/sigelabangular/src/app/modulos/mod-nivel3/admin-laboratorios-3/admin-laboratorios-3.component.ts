@@ -63,7 +63,7 @@ export class AdminLaboratorios3Component implements OnInit {
       direccion: '',
       email: '',
       telefono: ''
-    }    
+    }
   };
 
   checks = {};
@@ -162,9 +162,9 @@ export class AdminLaboratorios3Component implements OnInit {
 
     espaciosel:any;
     plano:Observable<any>;
-  
+
     sus: Subscription;
-  
+
     //espaestructurado: any;
 
 
@@ -204,10 +204,10 @@ export class AdminLaboratorios3Component implements OnInit {
       relatedEquipments: {},
       createdAt: this.fecha.toISOString(),
       updatedAt: this.fecha.toISOString()
-  
+
     };
     // objeto usuario
-  
+
     usuario = {
       email: '',
       cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
@@ -216,18 +216,18 @@ export class AdminLaboratorios3Component implements OnInit {
       active: true,
       createdAt: this.fecha.toISOString(),
       updatedAt: this.fecha.toISOString()
-  
+
     };
 
     labo = {
       nombre:'',
       email:''
     };
-  
-    persestructurado: any;
-  
 
-  constructor( private afs: AngularFirestore, 
+    persestructurado: any;
+
+
+  constructor( private afs: AngularFirestore,
                private storage: AngularFireStorage,
                private toastr: ToastrService) {
   }
@@ -235,6 +235,7 @@ export class AdminLaboratorios3Component implements OnInit {
   ngOnInit() {
 
     this.getUserId();
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.estructurarLab().then(() => {
       console.log(this.laboratoriosEstructurados);
@@ -245,18 +246,18 @@ export class AdminLaboratorios3Component implements OnInit {
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         }
-      
+
 
       }, 1500);
      //s this.limpiarData();
- 
-     
+
+
 
     });
   }
 
   ngOnDestroy(){
-    
+
   }
 
   cambiardata(item, table) {
@@ -280,7 +281,7 @@ export class AdminLaboratorios3Component implements OnInit {
         this.buscarDirector(laboratorio.facilityAdmin).subscribe(dueno => {
           const duenoLab = dueno.payload.data();
           if (duenoLab) {
-  
+
               console.log('ejecutame este');
 
                 // convertir boolean a cadena de caracteres para estado del laboratorio
@@ -314,12 +315,12 @@ export class AdminLaboratorios3Component implements OnInit {
               //sconsole.log(this.labestructurado);
 
               this.laboratoriosEstructurados.push(this.labestructurado);
-  
+
              this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
-             this.cambios = [];            
-      
-  
+             this.cambios = [];
+
+
           }
         });
 
@@ -351,9 +352,9 @@ export class AdminLaboratorios3Component implements OnInit {
         this.afs.doc('space/' + idespacio).snapshotChanges().subscribe(data=>{
          arr.push(data.payload.data());
         });
-      }      
+      }
     }
-    
+
     return arr;
   }
 
@@ -388,7 +389,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
               for (let i = 0; i < dataSol.length; i++) {
                 const element = dataSol[i].payload.doc.data();
-      
+
                 this.getPersonId(element.user).subscribe(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
@@ -442,7 +443,7 @@ export class AdminLaboratorios3Component implements OnInit {
                   // practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
 
-              
+
 
                 arr.push(equipo);
 
@@ -474,11 +475,11 @@ export class AdminLaboratorios3Component implements OnInit {
             modelo: element.model,
             estado: element.active
           };
-  
-          arr.push(componente);
-     
 
-        
+          arr.push(componente);
+
+
+
       }
 
      });
@@ -576,7 +577,7 @@ export class AdminLaboratorios3Component implements OnInit {
       } else {
         return variaciones;
       }
-      
+
     });
     return variaciones;
   }
@@ -620,7 +621,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
   cambiarLaboratorio(item){
 
-    
+
     console.log(item);
     this.idlab = item.uid;
     this.dataSourceSpace = new MatTableDataSource(item.espacios);
@@ -646,7 +647,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     if(this.laboratoriosEstructurados){
       this.dataSourceEquipos.data = item.equipos;
-        
+
       this.dataSourcePersonal.data = item.personal;
 
       this.dataSourceServicios.data = item.servicios;
@@ -679,9 +680,9 @@ export class AdminLaboratorios3Component implements OnInit {
 
       }, 1500);
 
-     
-    } 
-    
+
+    }
+
 
     this.dataSourcePers.data = item.personal;
     this.dataSourcePersIn.data = item.personalIna;
@@ -723,52 +724,52 @@ export class AdminLaboratorios3Component implements OnInit {
     });
 
     const objFacil = {
-      cfAcro: '',     
-      cfUri: '',   
-      cfName: '',   
-      category: '', 
-      foundationYear: '', 
-      knowledgeArea: '',   
-      researchGroup: '',   
-      cfDescr: '',  
-      cfKeyw: [],     
-      headquarter: '',   
-      subHq: '',   
-      faculties: {},   
-      departments: {    
-        facultadid: {}   
-      },   
-      cfClass: 'cf7799e7-3477-11e1-b86c-0800200c9a66',    
-      cfClassScheme: 'da0e5a01-c73e-4489-8cf7-917e9efcdad4',  
-      cfAvailability: '',    
-      cfConditions: [],   
-      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',   
-      facilityAdmin: '', 
+      cfAcro: '',
+      cfUri: '',
+      cfName: '',
+      category: '',
+      foundationYear: '',
+      knowledgeArea: '',
+      researchGroup: '',
+      cfDescr: '',
+      cfKeyw: [],
+      headquarter: '',
+      subHq: '',
+      faculties: {},
+      departments: {
+        facultadid: {}
+      },
+      cfClass: 'cf7799e7-3477-11e1-b86c-0800200c9a66',
+      cfClassScheme: 'da0e5a01-c73e-4489-8cf7-917e9efcdad4',
+      cfAvailability: '',
+      cfConditions: [],
+      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+      facilityAdmin: '',
       mainSpace: '',
       facilActivity: { teaching: true, research: true, extension: false },
-      relatedPers: {}, 
-      relatedEquipments: {},      
-      relatedMeasurement: {},    
-      relatedServices: {},     
-      relatedFacilities: {},     
-      relatedSpaces: {},     
-      relatedPractices: {},    
-      relatedRequest: {},    
-      relatedProjects: {},    
+      relatedPers: {},
+      relatedEquipments: {},
+      relatedMeasurement: {},
+      relatedServices: {},
+      relatedFacilities: {},
+      relatedSpaces: {},
+      relatedPractices: {},
+      relatedRequest: {},
+      relatedProjects: {},
       suggestedChanges:[],
-      otros: { direccion: '' , email: '', telefono: '' },    
-      cfPrice: 0,    
-      cfCurrCode: 'COP',   
-      active: false,   
-      createdAt: this.fecha.toISOString(),  
+      otros: { direccion: '' , email: '', telefono: '' },
+      cfPrice: 0,
+      cfCurrCode: 'COP',
+      active: false,
+      createdAt: this.fecha.toISOString(),
       updatedAt: this.fecha.toISOString()
-      
+
     };
 
     objFacil.cfName = this.labo.nombre;
 
     this.afs.collection('cfPers', ref => ref.where('email', '==', this.labo.email))
-    .snapshotChanges().subscribe(data => {    
+    .snapshotChanges().subscribe(data => {
       if(data.length){
         const keyDirector = data[0].payload.doc.id;
         objFacil.facilityAdmin = keyDirector;
@@ -781,7 +782,7 @@ export class AdminLaboratorios3Component implements OnInit {
           });
           console.log(dato.id);
         });
-      
+
       } else {
         swal({
           type: 'error',
@@ -792,7 +793,7 @@ export class AdminLaboratorios3Component implements OnInit {
       console.log(objFacil);
 
     });
-      
+
   }
 
 
@@ -807,7 +808,7 @@ export class AdminLaboratorios3Component implements OnInit {
     });
     this.afs.doc('cfFacil/' + this.itemsel.value.uid).update(this.infolab).then(data=>{
       //this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
-     
+
       swal.close();
       swal({
         type: 'success',
@@ -819,7 +820,7 @@ export class AdminLaboratorios3Component implements OnInit {
       });
 
     });
-    
+
   }
 
   enviarSugerencia(){
@@ -832,18 +833,18 @@ export class AdminLaboratorios3Component implements OnInit {
         if(element){
           const aux = this.sugerencia.data[cont].llave.split('.');
 
-          if(aux.length != 2){          
-            cambio[aux[0]] = this.sugerencia.data[cont].info;          
-          } else {           
+          if(aux.length != 2){
+            cambio[aux[0]] = this.sugerencia.data[cont].info;
+          } else {
             cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
           }
-         
+
         }
         cont++;
       }
     }
-   
-   
+
+
     cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.uid, 'aprobado');
 
 
@@ -852,7 +853,7 @@ export class AdminLaboratorios3Component implements OnInit {
     this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio);
 
 
-    
+
   }
 
   cambiarEstadoSugerencia(uid, estado){
@@ -864,11 +865,11 @@ export class AdminLaboratorios3Component implements OnInit {
         element.estado = estado;
         for (let j = 0; j < element.data.length; j++) {
           const element2 = element.data[j];
-          
+
           element2.cambio = this.checks['checkbox'+j];
 
-        }     
-      }    
+        }
+      }
     }
     return cam;
   }
@@ -890,9 +891,9 @@ export class AdminLaboratorios3Component implements OnInit {
 
     for (let i = 0; i < aux1.length; i++) {
 
-      element = aux1[i].split('.');  
+      element = aux1[i].split('.');
       element2 = aux2[i].split('.');
-     
+
 
       if(element.length != 2){
 
@@ -900,14 +901,14 @@ export class AdminLaboratorios3Component implements OnInit {
            data.push({llave: aux2[i], nombre: element2[0], info:this.infolab[element2], cambio: false});
         }
       } else {
-        
+
         if(this.labestructurado[element[0]][element[1]] != this.infolab[element2[0]][element2[1]]) {
           data.push({llave: aux2[i], nombre: element2[1], info: this.infolab[element2[0]][element2[1]], cambio: false});
         }
 
       }
-     
-      
+
+
     }
     console.log(data);
     return data;
@@ -921,7 +922,7 @@ export class AdminLaboratorios3Component implements OnInit {
       if(element.estado == 'pendiente'){
         arr.push(element);
       }
-      
+
     }
 
     return arr;
@@ -953,7 +954,7 @@ export class AdminLaboratorios3Component implements OnInit {
       const element = this.itemsel.value.cambios[i];
       if(element.uid == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -971,31 +972,31 @@ export class AdminLaboratorios3Component implements OnInit {
   /* este metodo carga la imagen desde firebase con un parametro nombre de la imagen */
   cargarImagen() {
 
-    if (this.espaciosel.map) {  
+    if (this.espaciosel.map) {
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
         onOpen: () => {
           swal.showLoading();
         }
-      });  
+      });
      const ref = this.storage.ref('planos/' + this.espaciosel.map + '.png');
       this.plano = ref.getDownloadURL();
       if(this.plano){
         swal.close();
       }
-    } 
+    }
 
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarEspacioLocal(item){
-   
+
     for (let i = 0; i < this.itemsel.value.espacios.length; i++) {
       const element = this.itemsel.value.espacios[i];
       if(element.id_space == item){
         return element;
-      }   
+      }
     }
   }
 
@@ -1067,7 +1068,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
   /*METODOS DE LA VISTA DE ESPACIOS*/
-  
+
 
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -1131,7 +1132,7 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-  
+
 
   /* asigna la fila de la tabla a variables ngmodel */
   cambiardataEspacio(item) {
@@ -1312,13 +1313,13 @@ export class AdminLaboratorios3Component implements OnInit {
     this.space.spaceData.building = '';
     this.space.spaceData.floor = '';
     this.space.spaceData.place = '';
-  } 
+  }
 
 
 
 
 
-  /*METODOS DE LA VISTA PERSONAS*/ 
+  /*METODOS DE LA VISTA PERSONAS*/
 
   estructuraIdPers(key) {
 
@@ -1417,7 +1418,7 @@ export class AdminLaboratorios3Component implements OnInit {
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
             let persona = {};
-           
+
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
@@ -1673,5 +1674,5 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
- 
+
 }

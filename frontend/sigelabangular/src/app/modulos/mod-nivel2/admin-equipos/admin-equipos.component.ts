@@ -94,6 +94,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     // abre loading mientras se cargan los datos
     this.ventana = true;
     this.getRoles();
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.sus = this.obs.currentObjectequip.subscribe(data => {
 
       console.log(data);
@@ -121,7 +123,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                   this.dataSourceEquip.paginator = this.paginatorEquip;
                   // cierra loading luego de cargados los datos
                   swal.close();
-               }else{
+               } else {
                 swal({
                   type: 'error',
                   title: 'No existen equipos asociados al laboratorio',

@@ -1,4 +1,3 @@
-import { async } from '@angular/core/testing';
 import { ObservablesService } from './../../../shared/services/observables.service';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -12,10 +11,8 @@ import 'fullcalendar';
 import 'fullcalendar-scheduler';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
-import { ArrayType } from '@angular/compiler/src/output/output_ast';
-import { all } from 'q';
 import { EspaciosService } from '../services/espacios.service';
-
+import * as moment from 'moment';
 declare var $: any;
 
 @Component({
@@ -25,25 +22,28 @@ declare var $: any;
 })
 export class AdminEspaciosComponent implements OnInit, OnDestroy {
   plano: Observable<any>;
+  actividadAct = [];
   dispo;
   idnewSp;
   status;
   mensaje = false;
+  ocupacionAct;
   idlab;
   idsh;
   itemsel: Observable<Array<any>>;
   sedes = [];
   subsedes = [];
+  noEsPrac = [];
   idsp;
   tablesel = '';
   horarios = [];
   space = {
-    capacity: '',
+    capacity: 0,
     createdAt: '',
     freeArea: '',
     headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
     subHq: '',
-    indxSa: '',
+    indxSa: 0,
     map: '',
     minArea: '',
     ocupedArea: '',
@@ -57,7 +57,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   sus: Subscription;
 
   // INICIALIZACION DATATABLE espacios
-  displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'spaceData.building', 'spaceData.place'];
+  displayedColumnsSpace = ['capacidad', 'arealibre', 'active', 'totalarea', 'spaceData.building', 'spaceData.place'];
   dataSourceSpace = new MatTableDataSource([]);
 
   @ViewChild('paginatorSpace') paginatorSpace: MatPaginator;
@@ -65,7 +65,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   espaestructurado: any;
 
-  role:any;
+  role: any;
   moduloNivel2 = false;
 
   constructor(private obs: ObservablesService,
@@ -79,6 +79,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:max-line-length
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.getRoles();
     this.sus = this.obs.currentObjectEsp.subscribe(data => {
@@ -117,14 +118,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               this.dataSourceSpace.paginator = this.paginatorSpace;
               this.dataSourceSpace.sort = this.sortSpace;
               swal.close();
-            }else{
+            } else {
               swal({
                 type: 'error',
                 title: 'No existen espacios asociados al laboratorio',
                 showConfirmButton: true
               });
             }
-          
+
           }, 1000);
 
 
@@ -148,13 +149,13 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.sus.unsubscribe();
   }
 
-   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-   getRoles() {
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
 
     this.role = JSON.parse(localStorage.getItem('rol'));
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave == 'moduloNivel2')) {
+        if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }
@@ -213,7 +214,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
                   programacion: {
                     estudiantes: prog['noStudents'],
                     diahora: prog['schedule'],
-                    semestre: prog['semester']
+                    semestre: prog['semester'],
+                    spaceid: prog['space']
                   },
                   activo: practica.active
                 };
@@ -336,6 +338,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.map = item.map;
     this.space.active = item.active;
 
+    console.log('capacidad a', item.capacity );
+    // optener datos un espacio especifico
+
     this.cargarImagen(this.space.map);
     this.listPracticeforSpace(this.idsp).then((ok: any) => {
 
@@ -343,7 +348,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         ok.forEach(element => {
 
-          this.getPrgramming(element);
+          this.getPrgramming(element).then(() => this.totalOcupacion());
+
         });
       }, 1000);
     });
@@ -370,10 +376,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   }
 
-    // necesario el id de la subsede para almacenarlo en los metodos de los espacios
+  // necesario el id de la subsede para almacenarlo en los metodos de los espacios
   setSpace() {
 
-    if ( !this.space.spaceData.building && !this.space.spaceData.building   ) {
+    if (!this.space.spaceData.building && !this.space.spaceData.building) {
 
       swal({
         type: 'info',
@@ -384,7 +390,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     }
     const nuevoespacio = this.space;
 
-    nuevoespacio.subHq =  this.idsh;
+    nuevoespacio.subHq = this.idsh;
     this.afs.collection('space').add(nuevoespacio).then((data) => {
       // agrega el nuevo espacio al laboratorio actual
       this.updateFaciliti(data.id);
@@ -398,15 +404,15 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   actualizarEspacio() {
     const nuevoespacio = this.space;
 
-      this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
-        swal({
-          type: 'success',
-          title: 'Actualizado Correctamente',
-          showConfirmButton: true
-        });
-
+    this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
+      swal({
+        type: 'success',
+        title: 'Actualizado Correctamente',
+        showConfirmButton: true
       });
-      console.log(nuevoespacio);
+
+    });
+    console.log(nuevoespacio);
 
 
 
@@ -415,12 +421,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   listSubHq(sede) {
 
-     console.log('si llego la sede', sede);
-    this.spServ.listSubHq(sede).subscribe( res => {
+    console.log('si llego la sede', sede);
+    this.spServ.listSubHq(sede).subscribe(res => {
 
-     this.subsedes = res;
+      this.subsedes = res;
 
-      console.log( 'subsedes',  res);
+      console.log('subsedes', res);
 
     });
 
@@ -429,10 +435,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   // lista todas las sedes de la plataforma
   listHq() {
 
-    this.spServ.listHq().subscribe(  (res) =>  {
+    this.spServ.listHq().subscribe((res) => {
 
-       this.sedes = res;
-       console.log( 'sedes', res);
+      this.sedes = res;
+      console.log('sedes', res);
 
     });
 
@@ -476,7 +482,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   updateFaciliti(idSp) {
 
     if (idSp) {
-      const  relatedSpaces = {};
+      const relatedSpaces = {};
       relatedSpaces[idSp] = true;
 
 
@@ -526,15 +532,45 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   getPrgramming(id) {
+
+    console.log('id de la practica', id);
     this.horarios = [];
-    this.afs.collection('practice/' + id + '/programmingData')
-      .valueChanges()
-      .subscribe(data => {
-        const prog = data[0];
-        const el = prog['schedule'].forEach(element => {
-          this.horarios.push(element);
+    this.noEsPrac = [];
+    return this.afs.collection('practice/' + id + '/programmingData')
+      .ref.get()
+      .then(data => {
+        data.forEach(onSnapshop => {
+
+          const Pr = onSnapshop.data();
+
+          console.log(Pr.noStudents);
+
+          const practicaH = {
+
+            numeroEs: Pr.noStudents,
+            horario: Pr.schedule,
+            id
+          };
+          //  crear un array de objetos numero de estudiantes y practicas
+          this.noEsPrac.push(practicaH);
+          // crea un array con los horarios de la practica
+          Pr.schedule.forEach(element => {
+            this.horarios.push(element);
+          });
+
         });
-      });
+
+        //  crear un array de objetos numero de estudiantes y practicas
+        // this.noEsPrac.push(practica);
+        // prog['schedule'].forEach(element => {
+        //   this.horarios.push(element);
+        // });
+
+      }).catch(e => console.log('ocurrio un err', e));
+
+
+
+
   }
 
   // valida si ya existe un espacio para que pueda ser vinculado
@@ -564,17 +600,17 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     }
   }
 
-  getIdSubHq( id ) {
-    console.log( 'llego este id', id);
+  getIdSubHq(id) {
+    console.log('llego este id', id);
     this.idsh = id;
   }
 
   /* setea campos del objeto */
   clearObj() {
     this.space.totalArea = '';
-    this.space.capacity = '';
+    this.space.capacity = 0;
     this.space.freeArea = '';
-    this.space.indxSa = '';
+    this.space.indxSa = 0;
     this.space.minArea = '';
     this.space.ocupedArea = '';
     this.space.spaceData.building = '';
@@ -583,8 +619,111 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
+  // obtiene el total de personas dentro de un laboratorio
+  getTotalLab() {
+    console.log('obtiene total del laboratorio');
+
+    return new Promise((resolve, reject) => {
+      let pers;
+      let cont = 0;
+      let personalLab;
+      this.afs.doc('cfFacil/' + this.idlab)
+        .ref.get()
+        .then((res) => {
+          pers = res.data().relatedPers;
+
+          for (const key in pers) {
+            if (pers.hasOwnProperty(key)) {
+              const element = pers[key];
+
+              console.log(element);
+              // valida si es personal activo
+              if (element) {
+                cont++;
+              }
+
+            }
+          }
+          personalLab = cont;
+
+          // devuelve la cantidad de personas en el laboratorio actual
+          resolve(personalLab);
+
+        }).catch(err => console.log('ocurrio un error', err));
+    });
+
+  }
+
+
+  getTotalEstPrac() {
+
+    return new Promise((resolve, reject) => {
+      const now = moment().format();
+      console.log(now);
+      let estudiantesPractica = 0;
+      // recorrer cada una de las programaciones del espacio
+      this.noEsPrac.forEach(programing => {
+        // recorrer cada uno de los horarios de las programming
+        programing.horario.forEach(fecha => {
+          console.log('fech ob', fecha);
+          // si la fecha coincide con la actual acomular en el total de estudiantes
+          if (moment('2018-09-13T09:39:11.106Z').isBetween('2018-09-13T09:31:11.106Z', '2018-09-13T10:41:11.106Z')) {
+
+            console.log('todo correcto');
+            // tslint:disable-next-line:radix
+            estudiantesPractica += parseInt(programing.numeroEs);
+          }
+        });
+
+      });
+
+      // devuelve el total de estudiantes en el momento actual
+      console.log('total de estudiantes en la practica', estudiantesPractica);
+      resolve(estudiantesPractica);
+    });
+  }
+
+  totalOcupacion() {
+
+    this.getTotalLab().then((personalLab: number) => {
+
+      this.getTotalEstPrac().then((estudiantesPract: number) => {
+
+        this.ocupacionAct = personalLab + estudiantesPract;
+        // tslint:disable-next-line:radix
+        this.space.indxSa =  (this.space.capacity ) / (personalLab + estudiantesPract);
+
+      });
+    });
+  }
+
+  getActividadAct() {
+
+    this.noEsPrac.forEach( prog =>  {
+
+      prog.horario.forEach(fecha => {
+
+        const now = moment().format();
+
+        if (moment(now).isBetween(fecha.start , fecha.end )) {
+
+          this.afs.doc( 'practice/' +  prog.id  )
+          .valueChanges()
+          .subscribe( ok => {
+
+            this.actividadAct.push(prog.practiceName);
+            console.log(ok);
+
+          });
+        }
+
+
+      });
+
+    });
+  }
 }
