@@ -90,6 +90,10 @@
 .customWidthClass{
   flex: 0 0 50px;
 }
+
+.large{
+  flex: 0 0 300px;
+}
 /* estilos calendar */
 
 

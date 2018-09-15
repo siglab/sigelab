@@ -57,10 +57,14 @@
 
                         <mat-table #tablePrac #sortPrac="matSort" [dataSource]="dataSourcePrac" matSort>
 
+                          <ng-container   matColumnDef="nombre">
+                            <mat-header-cell [ngClass]="'large'"  *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell [ngClass]="'large'"   *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
 
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          <ng-container matColumnDef="codigo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Codigo Practica </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.codigo}} </mat-cell>
                           </ng-container>
 
                           <ng-container matColumnDef="programacion.semestre">
@@ -68,21 +72,15 @@
                             <mat-cell *matCellDef="let element"> {{element.programacion.semestre}} </mat-cell>
                           </ng-container>
 
-                          <ng-container matColumnDef="programacion.estudiantes">
+                          <ng-container   [ngClass]="'customWidthClass'"   matColumnDef="programacion.estudiantes">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Numero estudiantes </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element.programacion.estudiantes}} </mat-cell>
                           </ng-container>
 
-
-
                           <ng-container matColumnDef="activo">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> estado </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.activo}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.activo | activo}} </mat-cell>
                           </ng-container>
-
-
-
-
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPrac"></mat-header-row>
                           <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;"
@@ -93,7 +91,6 @@
                           [showFirstLastButtons]="true">
                         </mat-paginator>
                       </div>
-
 
                     </div>
                     <!-- /.box-body -->
@@ -127,6 +124,10 @@
 
                         <mat-table #tablePrac #sortPracIn="matSort" [dataSource]="dataSourcePracIn" matSort>
 
+                          <ng-container matColumnDef="codigo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Codigo Practica </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.codigo}} </mat-cell>
+                          </ng-container>
 
                           <ng-container matColumnDef="nombre">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
@@ -147,7 +148,7 @@
 
                           <ng-container matColumnDef="activo">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> estado </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.activo}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.activo | activo}} </mat-cell>
                           </ng-container>
 
 
@@ -208,7 +209,7 @@
                       <mat-option  [value]= "this.year + '-' + '01'"  >
                         Periodo 01
                       </mat-option>
-                      <mat-option [value]= "this.year + '-' + '02'"   >
+                      <mat-option  [value]= "this.year + '-' + '02'"   >
                         Periodo 02
                       </mat-option>
                     </mat-select>

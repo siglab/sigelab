@@ -81,6 +81,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+    const now = moment().format();
+    console.log(now);
     this.getRoles();
     this.sus = this.obs.currentObjectEsp.subscribe(data => {
 
@@ -96,6 +98,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
             switch (property) {
+
               case 'spaceData.place': return item.spaceData.place;
 
               case 'spaceData.building': return item.spaceData.building;
@@ -258,36 +261,35 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-        if (item[clave]) {
-          this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
-            const espacio = data.payload.data();
+        this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
+          const espacio = data.payload.data();
 
-            // funciona con una programacion, cuando hayan mas toca crear otro metodo
-            if (espacio) {
-              console.log('espacioo', espacio);
-              const space = {
-                id_space: data.payload.id,
-                capacity: espacio.capacity,
-                createdAt: espacio.createdAt,
-                freeArea: espacio.freeArea,
-                headquarter: espacio.headquarter,
-                indxSa: espacio.indxSa,
-                map: espacio.map,
-                minArea: espacio.minArea,
-                ocupedArea: espacio.ocupedArea,
-                totalArea: espacio.totalArea,
-                spaceData: espacio.spaceData,
-                active: espacio.active
+          // funciona con una programacion, cuando hayan mas toca crear otro metodo
+          if (espacio) {
+            console.log('espacioo', espacio);
+            const space = {
+              id_space: data.payload.id,
+              capacity: espacio.capacity,
+              createdAt: espacio.createdAt,
+              freeArea: espacio.freeArea,
+              headquarter: espacio.headquarter,
+              indxSa: espacio.indxSa,
+              map: espacio.map,
+              minArea: espacio.minArea,
+              ocupedArea: espacio.ocupedArea,
+              totalArea: espacio.totalArea,
+              spaceData: espacio.spaceData,
+              active: item[clave]
 
-              };
+            };
 
-              arr.push(space);
-            }
-
+            arr.push(space);
+          }
 
 
-          });
-        }
+
+        });
+
 
       }
     }
@@ -297,6 +299,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
+
     return this.afs.doc('cfFacil/' + idlab).ref.get();
 
   }
@@ -338,7 +341,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.map = item.map;
     this.space.active = item.active;
 
-    console.log('capacidad a', item.capacity );
+    console.log('capacidad a', item.capacity);
     // optener datos un espacio especifico
 
     this.cargarImagen(this.space.map);
@@ -348,7 +351,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         ok.forEach(element => {
 
-          this.getPrgramming(element).then(() => this.totalOcupacion());
+          this.getPrgramming(element).then(() => {
+
+            this.totalOcupacion();
+            this.getActividadAct();
+
+          });
 
         });
       }, 1000);
@@ -402,9 +410,35 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   actualizarEspacio() {
-    const nuevoespacio = this.space;
+
+    const nuevoespacio = {
+      capacity: this.space.capacity,
+      createdAt: '',
+      freeArea: this.space.freeArea,
+      headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
+      subHq: this.space.subHq,
+      map: this.space.capacity,
+      minArea: this.space.minArea,
+      ocupedArea: this.space.ocupedArea,
+      totalArea: this.space.totalArea,
+      spaceData: {
+        building: this.space.spaceData.building,
+        place: this.space.spaceData.place,
+        floor: this.space.spaceData.floor
+      },
+    };
+
+    const nuevoEstado = {
+      relatedSpaces: {}
+    };
+    // asigna el estado editado al espacio dentro del lab
+    nuevoEstado.relatedSpaces[this.idsp] = this.space.active;
 
     this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
+
+      // actualiza el estado del espacio dentro del laboratorio
+      this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+
       swal({
         type: 'success',
         title: 'Actualizado Correctamente',
@@ -412,6 +446,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       });
 
     });
+
+
+
     console.log(nuevoespacio);
 
 
@@ -671,7 +708,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         programing.horario.forEach(fecha => {
           console.log('fech ob', fecha);
           // si la fecha coincide con la actual acomular en el total de estudiantes
-          if (moment('2018-09-13T09:39:11.106Z').isBetween('2018-09-13T09:31:11.106Z', '2018-09-13T10:41:11.106Z')) {
+          if (moment(now).isBetween(fecha.start, fecha.end)) {
 
             console.log('todo correcto');
             // tslint:disable-next-line:radix
@@ -693,9 +730,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
       this.getTotalEstPrac().then((estudiantesPract: number) => {
 
-        this.ocupacionAct = personalLab + estudiantesPract;
+        this.ocupacionAct = personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0 ;
         // tslint:disable-next-line:radix
-        this.space.indxSa =  (this.space.capacity ) / (personalLab + estudiantesPract);
+        this.space.indxSa = (this.space.capacity) / (personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0 );
 
       });
     });
@@ -703,22 +740,23 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   getActividadAct() {
 
-    this.noEsPrac.forEach( prog =>  {
+    this.noEsPrac.forEach(prog => {
 
       prog.horario.forEach(fecha => {
 
         const now = moment().format();
 
-        if (moment(now).isBetween(fecha.start , fecha.end )) {
+        if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56:46-05:00', '2018-09-14T18:56:46-05:00')) {
 
-          this.afs.doc( 'practice/' +  prog.id  )
-          .valueChanges()
-          .subscribe( ok => {
+          this.afs.doc('practice/' + prog.id)
+            .valueChanges()
+            .subscribe(ok => {
 
-            this.actividadAct.push(prog.practiceName);
-            console.log(ok);
+              console.log('llego este id', prog.id);
+              this.actividadAct.push(ok['practiceName']);
+              console.log(ok);
 
-          });
+            });
         }
 
 

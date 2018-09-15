@@ -78,3 +78,13 @@ divScroll1::-webkit-scrollbar-track
   color: black;
 }
 
+.large{
+  flex: 0 0 250px;
+}
+
+.medium{
+  flex: 0 0 100px;
+}
+.small{
+  flex: 0 0 50px;
+}
