@@ -11,12 +11,15 @@ import { Subscription } from 'rxjs';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 
-import * as $ from 'jquery';
+import * as $AB from 'jquery';
+
+declare var $: any;
 
 import { ActivatedRoute } from '@angular/router';
 import { map, take, debounceTime } from 'rxjs/operators';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { EspaciosService } from '../../mod-nivel2/services/espacios.service';
 
 @Component({
   selector: 'app-admin-laboratorios-3',
@@ -26,6 +29,17 @@ import { ToastrService } from 'ngx-toastr';
 export class AdminLaboratorios3Component implements OnInit {
 
 
+  // VARIABLES DE LA VISTA ADMIN LABORATORIOS 3
+
+  laboratoriosEstructurados = [];
+
+  labo = {
+    nombre:'',
+    email:''
+  };
+
+  idlab:any;
+
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
   dataSource = new MatTableDataSource([]);
@@ -33,43 +47,13 @@ export class AdminLaboratorios3Component implements OnInit {
   @ViewChild('sort') sort: MatSort;
 
 
-  user: any;
+  // VARIABLES DE LA VISTA ADMIN LABORATORIOS 2
 
-
-  // VARIABLES QUE SE UTILIZAN PARA LOS DATATABLES DE SERVICIOS Y PRACTICAS
-  itemsel: any;
-
-
-  moduloinfo = false;
-
-
-  labestructurado:any;
-  laboratoriosEstructurados = [];
-
-
-  cambios:any;
-
+  itemsel: Observable<Array<any>>;
 
   tablesel = '';
 
   seleccionado: any;
-
-  infolab = {
-    //facilityAdmin:'',
-    knowledgeArea:'',
-    researchGroup:'',
-    cfName:'',
-    otros: {
-      direccion: '',
-      email: '',
-      telefono: ''
-    }
-  };
-
-  checks = {};
-
-  sugerencia:any;
-
 
     // INICIALIZACION DATATABLE EQUIPOS
     displayedColumnsEquipos = ['nombre'];
@@ -107,23 +91,43 @@ export class AdminLaboratorios3Component implements OnInit {
     @ViewChild('paginatorSolicitudes') paginatorSolicitudes: MatPaginator;
     @ViewChild('sortSolicitudes') sortSolicitudes: MatSort;
 
-    // INICIALIZACION DATATABLE espacios
-    displayedColumnsSpace = ['capacidad', 'arealibre', 'totalarea', 'spaceData.building', 'spaceData.place'];
-    dataSourceSpace = new MatTableDataSource([]);
-    @ViewChild('paginatorSpace') paginatorSpace: MatPaginator;
-    @ViewChild('sortSpace') sortSpace: MatSort;
 
-    // INICIALIZACION DATATABLE PERSONAL Activo
-    displayedColumnsPers = ['nombre', 'email', 'tipo'];
-    dataSourcePers = new MatTableDataSource([]);
-    @ViewChild('paginatorPers') paginatorPers: MatPaginator;
-    @ViewChild('sortPers') sortPers: MatSort;
+    user:any;
 
-    // INICIALIZACION DATATABLE PERSONAL InActivo
-    displayedColumnsPersIn = ['nombre', 'email', 'tipo'];
-    dataSourcePersIn = new MatTableDataSource([]);
-    @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
-    @ViewChild('sortPersIn') sortPersIn: MatSort;
+    labestructurado:any;
+
+    infolab = {
+      cfName:'',
+      headquarter:'',
+      subHq:'',
+      cfDescr:'',
+      faculties:{},
+      departments:{},
+      mainSpace:'',
+      cfConditions:'',
+      cfAvailability:[],
+      otros: {
+        email: '',
+      },
+      facilActivity:{
+        extension:false,
+        research:false,
+        teaching:false
+      }
+    };
+
+
+    checks = {};
+
+    cambios = [];
+
+    sugerencia:any;
+
+    encargado = '';
+
+    moduloNivel3 = false;
+    moduloPermiso = false;
+    rol: any;
 
 
     iconos = {
@@ -138,125 +142,320 @@ export class AdminLaboratorios3Component implements OnInit {
       solicitud:false
     };
 
-
-    /*VARIABLES DE LA VISTA DE ESPACIOS*/
-
-    mensaje = false;
-    idlab;
-    sede = 'san fernando';
-    idsp;
-    space = {
-      capacity: '',
-      createdAt: '',
-      freeArea: '',
-      headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
-      subHq: '',
-      indxSa: '',
-      map: '',
-      minArea: '',
-      ocupedArea: '',
-      totalArea: '',
-      spaceData: { building: '', place: '', floor: '' },
-      active: false
-    };
-
     espaciosel:any;
     plano:Observable<any>;
 
     sus: Subscription;
 
-    //espaestructurado: any;
+    sedes = [];
+    subsedes = [];
+    facultades = [];
+    departamentos = [];
 
+    diassemana = [{id:'1', nombre:'LUNES'},{id:'2', nombre:'MARTES'},{id:'3', nombre:'MIERCOLES'},
+                  {id:'4', nombre:'JUEVES'},{id:'5', nombre:'VIERNES'},{id:'6', nombre:'SABADO'},
+                  {id:'7', nombre:'DOMINGO'}];
 
-    /*VARIABLES DE LA VISTA PERSONAL */
-    status = '';
-    dispo;
-    rolc = 'editar';
+    espacios = [];
 
-    nombre;
-    apellido;
-    email;
-    rol;
-    estado;
-    idu;
-    idp;
-    activos = [];
-    inactivos = [];
+    listaFacultades = [];
+    listaDepartamentos = [];
+    listaDisponibilidad = [];
+    listaTelefonos = [];
+    listaActividad = [
+      {id:'extension', name:'Extension'}, {id:'research', name:'Investigacion'},
+      {id:'teaching', name:'Docencia'}];
+    selectfacul = '';
+    selectdepar = '';
+
+    selectdia = 0;
+    selectHinicio = '';
+    selectHFinal = '';
+
+    telefono = '';
+
+    listaFaculSugeridos = [];
+    listaDeparSugeridos = [];
+    listaDispoSugeridos = [];
+    listaTelSugeridos = [];
+
     fecha = new Date();
-    addP;
-    // objeto persona:
-    person = {
-      cfBirthdate: '',
-      cfGender: '',
-      cfUri: '',
-      cfFamilyNames: '',
-      cfFirstNames: '',
-      cfOtherNames: '',
-      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
-      cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
-      cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
-      cfFacil: '',
-      active: true,
-      user: '',
-      lvl: '',
-      email: '',
-      type: '',
-      relatedEquipments: {},
-      createdAt: this.fecha.toISOString(),
-      updatedAt: this.fecha.toISOString()
 
-    };
-    // objeto usuario
-
-    usuario = {
-      email: '',
-      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
-      appRoles: { IKLoR5biu1THaAMG4JOz: true },
-      cfPers: '',
-      active: true,
-      createdAt: this.fecha.toISOString(),
-      updatedAt: this.fecha.toISOString()
-
-    };
-
-    labo = {
-      nombre:'',
-      email:''
-    };
-
-    persestructurado: any;
+    selecactividad = new FormControl();
 
 
-  constructor( private afs: AngularFirestore,
-               private storage: AngularFireStorage,
-               private toastr: ToastrService) {
+    // VARIABLES DE LA VISTA ADMIN ESPACIOS
+
+
+    // VARIABLES DE LA VISTA ADMIN PERSONAL
+
+
+  constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
+              private service:EspaciosService) {
   }
 
   ngOnInit() {
 
     this.getUserId();
+    this.getRoles();
+    this.cargarSedes();
+    this.cargarSubsedes();
+    this.cargarFacultades();
+
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    this.estructurarLab().then(() => {
+    this.estructurarLaboratorios().then(() => {
       console.log(this.laboratoriosEstructurados);
-      this.dataSource.data = this.laboratoriosEstructurados;
-      setTimeout(()=>{
 
-        if(this.laboratoriosEstructurados.length != 0){
+      this.resetIconos();
+
+     
+      this.dataSource.data = this.laboratoriosEstructurados;
+      setTimeout(() => {
+
+        if (this.laboratoriosEstructurados.length != 0) {
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         }
 
-
       }, 1500);
-     //s this.limpiarData();
-
-
-
+      //s this.limpiarData();
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
+
+  }
+
+  // METODOS DE LA INTERFAZ NIVEL 3
+
+  // METODO QUE CAMBIA AL LABORATORIO SELECCIONADO
+  cambiarLaboratorio(item) {
+
+
+    console.log(item);
+    this.idlab = item.uid;
+    // this.dataSourceSpace = new MatTableDataSource(item.espacios);
+
+    this.itemsel = Observable.of(item);
+    this.labestructurado = item;
+    this.limpiarData();
+    // this.dataSourceSpace.sortingDataAccessor = (item, property) => {
+    //   switch (property) {
+    //     case 'spaceData.place': return item.spaceData.place;
+
+    //     case 'spaceData.building': return item.spaceData.building;
+
+    //     default: return item[property];
+    //   }
+    // };
+
+    if (this.labestructurado) {
+      if (this.labestructurado.objectActividad.extension) {
+        this.dataSourceServicios.data = this.labestructurado.servicios;
+        this.dataSourceServicios.sort = this.sortServicios;
+        this.dataSourceServicios.paginator = this.paginatorServicios;
+
+        this.dataSourceSolicitudes.data = this.labestructurado.solicitudes;
+        this.dataSourceSolicitudes.sort = this.sortSolicitudes;
+        this.dataSourceSolicitudes.paginator = this.paginatorSolicitudes;
+      }
+      if (this.labestructurado.objectActividad.research) {
+        this.dataSourceProyectos.data = this.labestructurado.proyectos;
+        this.dataSourceProyectos.sort = this.sortProyectos;
+        this.dataSourceProyectos.paginator = this.paginatorProyectos;
+      }
+      if (this.labestructurado.objectActividad.teaching) {
+        this.dataSourcePracticas.data = this.labestructurado.practicas;
+        this.dataSourcePracticas.sort = this.sortPracticas;
+        this.dataSourcePracticas.paginator = this.paginatorPracticas;
+      }
+
+      this.dataSourceEquipos.data = this.labestructurado.equipos;
+      this.dataSourceEquipos.sort = this.sortEquipos;
+      this.dataSourceEquipos.paginator = this.paginatorEquipos;
+
+      this.dataSourcePersonal.data = this.labestructurado.personal;
+      this.dataSourcePersonal.sort = this.sortPersonal;
+      this.dataSourcePersonal.paginator = this.paginatorPersonal;
+
+    }
+
+
+  }
+
+  // METODOS DE LA VISTA ADMIN LABORATORIOS 3
+  estructurarLaboratorios() {
+    let laboratorioObject = {};
+    this.laboratoriosEstructurados = [];
+
+    let promise = new Promise((resolve, reject) => {
+
+      this.getLaboratorios().then(labo => {
+        labo.forEach(doc => {
+          const laboratorio = doc.data();
+
+          if (laboratorio.headquarter) {
+            this.buscarSede(laboratorio.headquarter).then(se => {
+              const sede = se.data();
+              if (laboratorio.subHq) {
+                this.buscarSubSede(laboratorio.subHq).then(sub => {
+                  const subsede = sub.data();
+                  this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+                    const duenoLab = dueno.data();
+                    if (duenoLab) {
+                      // convertir boolean a cadena de caracteres para estado del laboratorio
+                      let estadoLab;
+                      if (laboratorio.active === true) {
+                        estadoLab = 'Activo';
+                      } else if (laboratorio.active === false) {
+                        estadoLab = 'Inactivo';
+                      }
+
+                      laboratorioObject = {
+                        uid: doc.id,
+                        nombre: laboratorio.cfName,
+                        descripcion: laboratorio.cfDescr,
+                        escuela: laboratorio.knowledgeArea,
+                        inves: laboratorio.researchGroup,
+                        objectActividad: laboratorio.facilActivity,
+                        actividad: this.actividades(laboratorio.facilActivity),
+                        director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                        iddueno: laboratorio.facilityAdmin,
+                        sede: { id: laboratorio.headquarter, nombre: sede.cfName },
+                        subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
+                        espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
+                        espacioPrincipal: laboratorio.mainSpace,
+                        telefonos: this.estructuraTelefonos(doc.id),
+                        info: { email: laboratorio.otros.email },
+                        equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+                        personal: this.estructurarPersonas(laboratorio.relatedPers),
+                        facultades: this.estructurarFacultades(laboratorio.faculties),
+                        departamentos: this.estructurarDepartamentos(laboratorio.departments),
+                        espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
+                        cambios: laboratorio.suggestedChanges,
+                        disponibilidad: laboratorio.cfAvailability,
+                        condiciones: laboratorio.cfConditions,
+                        estado: estadoLab
+                      };
+
+                      if (laboratorio.facilActivity.extension) {
+                        laboratorioObject['solicitudes'] = this.estructurarServicios(laboratorio.relatedServices).arr2;
+                        laboratorioObject['servicios'] = this.estructurarServicios(laboratorio.relatedServices).arr;
+                      }
+                      if (laboratorio.facilActivity.research) {
+                        laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
+                      }
+                      if (laboratorio.facilActivity.teaching) {
+                        laboratorioObject['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices);
+                      }
+
+                      this.cambios = this.pendientes(laboratorio.suggestedChanges);
+
+                      this.laboratoriosEstructurados.push(laboratorioObject);
+
+                      if (this.laboratoriosEstructurados.length == labo.size) {
+                        resolve();
+                      }
+
+                    }
+                  });
+                });
+              }
+
+
+            });
+          }
+        });
+
+
+      })
+    });
+
+    return promise;
+
+  }
+
+  nuevoLaboratorio() {
+
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se crea el Laboratorio',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    const objFacil = {
+      cfAcro: '',
+      cfUri: '',
+      cfName: '',
+      category: '',
+      foundationYear: '',
+      knowledgeArea: '',
+      researchGroup: '',
+      cfDescr: '',
+      cfKeyw: [],
+      headquarter: '',
+      subHq: '',
+      faculties: {},
+      departments: {
+        facultadid: {}
+      },
+      cfClass: 'cf7799e7-3477-11e1-b86c-0800200c9a66',
+      cfClassScheme: 'da0e5a01-c73e-4489-8cf7-917e9efcdad4',
+      cfAvailability: '',
+      cfConditions: [],
+      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+      facilityAdmin: '',
+      mainSpace: '',
+      facilActivity: { teaching: true, research: true, extension: false },
+      relatedPers: {},
+      relatedEquipments: {},
+      relatedMeasurement: {},
+      relatedServices: {},
+      relatedFacilities: {},
+      relatedSpaces: {},
+      relatedPractices: {},
+      relatedRequest: {},
+      relatedProjects: {},
+      suggestedChanges: [],
+      otros: { direccion: '', email: '', telefono: '' },
+      cfPrice: 0,
+      cfCurrCode: 'COP',
+      active: false,
+      createdAt: this.fecha.toISOString(),
+      updatedAt: this.fecha.toISOString()
+
+    };
+
+    objFacil.cfName = this.labo.nombre;
+
+    this.afs.collection('cfPers', ref => ref.where('email', '==', this.labo.email))
+      .snapshotChanges().subscribe(data => {
+        if (data.length) {
+          const keyDirector = data[0].payload.doc.id;
+          objFacil.facilityAdmin = keyDirector;
+
+          this.afs.collection('cfFacil').add(objFacil).then(dato => {
+            swal({
+              type: 'success',
+              title: 'Laboratorio creado',
+              showConfirmButton: true
+            });
+            console.log(dato.id);
+          });
+
+        } else {
+          swal({
+            type: 'error',
+            title: 'el correo ingresado no se encuentra en los registros',
+            showConfirmButton: true
+          });
+        }
+        console.log(objFacil);
+
+      });
 
   }
 
@@ -265,83 +464,58 @@ export class AdminLaboratorios3Component implements OnInit {
     this.seleccionado = item;
   }
 
+  getLaboratorios() {
+    return this.afs.collection('cfFacil').ref.get();
+  }
 
 
-  estructurarLab(){
-    this.labestructurado = {};
-    this.laboratoriosEstructurados = [];
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 
-   let promise = new Promise((resolve,reject)=>{
-
-    this.getLaboratorios().subscribe(labo=>{
-      for (let i = 0; i < labo.length; i++) {
-
-        const laboratorio = labo[i].payload.doc.data();
-
-        this.buscarDirector(laboratorio.facilityAdmin).subscribe(dueno => {
-          const duenoLab = dueno.payload.data();
-          if (duenoLab) {
-
-              console.log('ejecutame este');
-
-                // convertir boolean a cadena de caracteres para estado del laboratorio
-              let estadoLab;
-                if (laboratorio.active === true) {
-                estadoLab = 'Activo';
-                } else if ( laboratorio.active === false ) {
-                estadoLab = 'Inactivo';
-                }
-              this.labestructurado = {
-                uid: labo[i].payload.doc.id,
-                nombre: laboratorio.cfName,
-                escuela: laboratorio.knowledgeArea,
-                inves: laboratorio.researchGroup,
-                director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                iddueno: laboratorio.facilityAdmin,
-                espacioPrin:  this.buscarEspacio(laboratorio.mainSpace),
-                info: {dir: laboratorio.otros.direccion, tel: laboratorio.otros.telefono, cel: '', email: laboratorio.otros.email},
-                servicios: this.estructurarServicios(laboratorio.relatedServices).arr,
-                practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
-                equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                personal: this.estructurarPers(laboratorio.relatedPers),
-                personalIna: this.estructurarPersIna(laboratorio.relatedPers),
-                proyectos: this.estructurarProyectos(laboratorio.relatedProjects),
-                solicitudes: this.estructurarServicios(laboratorio.relatedServices).arr2,
-                espacios: this.estructurarSpace(laboratorio.relatedSpaces),
-                cambios: laboratorio.suggestedChanges,
-                estado: estadoLab
-              };
-
-              //sconsole.log(this.labestructurado);
-
-              this.laboratoriosEstructurados.push(this.labestructurado);
-
-             this.cambios = this.pendientes(laboratorio.suggestedChanges);
-
-             this.cambios = [];
+  // METODOS DE LA VISTA ADMIN LABORATORIOS 2
 
 
-          }
-        });
+  selectorActividad(){
+    this.infolab.facilActivity = {
+      extension:false,
+      research:false,
+      teaching:false
+    };
+    this.selecactividad.value.forEach(element => {
 
-        if(i == labo.length-1){
-          resolve();
-        }
+      for (let i = 0; i < this.listaActividad.length; i++) {
+        if(this.listaActividad[i].name == element){
+          this.infolab.facilActivity[this.listaActividad[i].id] = true;
+        }     
       }
-
-    })
-   });
-
-   return promise;
-
+    
+    });
+   
   }
 
 
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarDirector(iddirector) {
-    return this.afs.doc('cfPers/' + iddirector).snapshotChanges();
+  buscarLab(idlab) {
+    return this.afs.doc('cfFacil/' + idlab).ref.get();
+  }
 
+  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  buscarDirector(iddirector) {
+    return this.afs.doc('cfPers/' + iddirector).ref.get();
+  }
+
+   // METODO QUE TRAE UNA SEDE ESPECIFICA DEPENDIENDO EL ID-SEDE
+  buscarSede(idsede) {
+    return this.afs.doc('headquarter/' + idsede).ref.get();
+  }
+
+  // METODO QUE TRAE UNA SUBSEDE ESPECIFICA DEPENDIENDO EL ID-SUBSEDE
+  buscarSubSede(idsub) {
+    return this.afs.doc('cfPAddr/' + idsub).ref.get();
   }
 
   // METODO QUE TRAE UN ESPACIO ESPECIFICO DEPENDIENDO EL ID-ESPACIO
@@ -349,14 +523,17 @@ export class AdminLaboratorios3Component implements OnInit {
     let arr = [];
     for (let i = 0; i < 1; i++) {
       if(idespacio){
-        this.afs.doc('space/' + idespacio).snapshotChanges().subscribe(data=>{
-         arr.push(data.payload.data());
+        this.afs.doc('space/' + idespacio).ref.get().then(data=>{
+       
+         arr.push(data.data());
         });
       }
     }
 
-    return arr;
+    return arr;;
+
   }
+
 
 
    // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -371,40 +548,36 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
-            const servicio =  data.payload.data();
+          this.afs.doc('cfSrv/' + clave).ref.get().then(data => {
+            const servicio =  data.data();
             const serv = {
               nombre: servicio.cfName,
               descripcion: servicio.cfDesc,
               precio: servicio.cfPrice,
               activo: servicio.active,
               variaciones: this.variations(clave),
-              uid: data.payload.id
+              uid: data.id
              };
              arr.push(serv);
 
-            this.afs.collection<any>('cfSrvReserv',
-            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'pendiente'))
-            .snapshotChanges().subscribe(dataSol => {
+            this.getSolicitudes(clave).then(dataSol => {
+              dataSol.forEach(doc => {
+                const element = doc.data();
 
-              for (let i = 0; i < dataSol.length; i++) {
-                const element = dataSol[i].payload.doc.data();
-
-                this.getPersonId(element.user).subscribe(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
                     descripcionServ: servicio.cfDesc,
-                    precioServ: servicio.cfPrice,
+                    precioServ: element.cfPrice,
                     activoServ: servicio.active,
-                    email: usuario.payload.data().email,
-                    uidServ: dataSol[i].payload.doc.id,
+                    email: element.emailuser,
+                    uidServ: doc.id,
+                    fecha: element.createdAt.split('T')[0],
                     estado: element.status
                   };
 
                   arr2.push(solicitud);
-                });
-
-              }
+               
+              });
 
 
             });
@@ -417,6 +590,54 @@ export class AdminLaboratorios3Component implements OnInit {
 
     return {arr, arr2};
   }
+
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarPracticas(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('practice/' + clave).ref.get().then(data => {
+           const practica =  data.data();
+            this.afs.doc('practice/' + clave ).collection('programmingData').ref.get().then(data2 => {
+
+              data2.forEach(doc=>{
+                const prog = doc.data();
+
+                if(prog){
+                  const pract = {
+                    nombre: practica.practiceName,
+                    programacion: {
+                      id_pro: doc.id,
+                      estudiantes: prog.noStudents,
+                      horario: prog.schedule,
+                      semestre: prog.semester
+                    },
+                    activo: practica.active
+                   };
+
+                   arr.push(pract);
+                }
+              })
+
+
+
+              });
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
 
 
    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -438,9 +659,9 @@ export class AdminLaboratorios3Component implements OnInit {
                   nombre: equip.cfName,
                   activo: equip.active,
                   precio: equip.price,
-                  componentes:this.estructurarComponents(clave)
-                  // servicios:this.estructurarServicios(equip.relatedSrv).arr,
-                  // practicas:this.estructurarPracticas(equip.relatedPrac)
+                  componentes:this.estructurarComponents(clave),
+                  servicios:this.estructurarServicios(equip.relatedSrv).arr,
+                  practicas:this.estructurarPracticas(equip.relatedPrac)
                 };
 
 
@@ -490,6 +711,62 @@ export class AdminLaboratorios3Component implements OnInit {
 
     // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarPersonas(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers =  data.payload.data();
+            let persona = {};
+            if(pers.user){
+              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                if(dataper.payload.data()){
+
+                  persona = {
+                    id: clave,
+                    nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                    activo: pers.active,
+                    email: dataper.payload.data().email,
+                    idpers: clave,
+                    iduser: pers.user
+                  };
+
+                  arr.push(persona);
+                } else {
+
+                  persona = {
+                    id: clave,
+                    nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                    activo: pers.active,
+                    email: '',
+                    idpers: clave,
+                    iduser: ''
+                  };
+                  arr.push(persona);
+
+                }
+
+              });
+            }
+
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+
+    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarProyectos(item) {
 
     const arr = [];
@@ -520,7 +797,68 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-  estructurarSpace(item) {
+    // METODO QUE ESTRUCTURA LA DATA DE LAS FACULTADES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarFacultades(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+           this.afs.doc('faculty/' + clave).snapshotChanges().subscribe(data => {
+           const facultad =  data.payload.data();
+             arr.push({id:clave, nombre:facultad.facultyName});
+           });
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+   // METODO QUE ESTRUCTURA LA DATA DE LAS FACULTADES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarDepartamentos(facultades) {
+
+    const arr = [];
+
+    for (const clave in facultades) {
+      if (facultades.hasOwnProperty(clave)) {
+        for (const key in facultades[clave]) {
+          if (facultades[clave].hasOwnProperty(key)) {
+            if (facultades[clave][key]) {
+              this.afs.doc('faculty/' + clave).collection('departments')
+              .doc(key).snapshotChanges().subscribe(data => {
+              const departamento =  data.payload.data();
+                arr.push({idfacul:clave, id:key, nombre:departamento.departmentName});
+              });
+           }
+
+          }
+        }
+
+      }
+    }
+
+    return arr;
+  }
+
+  estructuraTelefonos(idlab){
+    let tels = [];
+    this.afs.doc('cfFacil/'+idlab).collection('cfEAddr').ref.get().then(data=>{
+      data.forEach(element=>{
+        tels.push({id:element.id, nombre:element.data().cfEAddrValue});
+      });
+    });
+
+    return tels;
+  }
+
+  estructurarSpace(item, keyprincipal) {
 
     const arr = [];
 
@@ -546,7 +884,7 @@ export class AdminLaboratorios3Component implements OnInit {
                   ocupedArea: espacio.ocupedArea,
                   totalArea: espacio.totalArea,
                   spaceData: espacio.spaceData,
-                  active: espacio.active
+
                 };
 
                 arr.push(space);
@@ -558,10 +896,66 @@ export class AdminLaboratorios3Component implements OnInit {
       }
     }
 
-    console.log(arr);
     return arr;
   }
 
+  actividades(actividad){
+    let arrayActividades = [];
+    const actividades = {
+      extension: 'Extension',
+      research: 'Investigacion',
+      teaching: 'Docencia'
+    };
+    for (const key in actividad) {
+      if (actividad.hasOwnProperty(key)) {
+        if(actividad[key]){
+          arrayActividades.push(actividades[key]);
+        }
+        
+      }
+    }
+
+    return arrayActividades;
+  }
+
+
+  cargarSedes(){
+    this.afs.collection('headquarter').snapshotChanges().subscribe(data=>{
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i].payload.doc.data();
+        this.sedes.push({id:data[i].payload.doc.id, nombre:element.cfName});
+      }
+    });
+  }
+
+  cargarSubsedes(){
+    this.afs.collection('cfPAddr').snapshotChanges().subscribe(data=>{
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i].payload.doc.data();
+        this.subsedes.push({id:data[i].payload.doc.id, nombre:element.cfAddrline1});
+      }
+    });
+  }
+
+  cargarFacultades(){
+    this.afs.collection('faculty').snapshotChanges().subscribe(data=>{
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i].payload.doc.data();
+        this.facultades.push({id:data[i].payload.doc.id, nombre:element.facultyName});
+        this.cargarDepartamentos(data[i].payload.doc.id);
+      }
+    });
+  }
+
+
+  cargarDepartamentos(idfacul){
+    this.afs.doc('faculty/'+idfacul).collection('departments').snapshotChanges().subscribe(data=>{
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i].payload.doc.data();
+        this.departamentos.push({id:data[i].payload.doc.id, idfacul:idfacul, nombre:element.departmentName});
+      }
+    });
+  }
 
 
 
@@ -595,13 +989,12 @@ export class AdminLaboratorios3Component implements OnInit {
     return  this.afs.doc('cfPers/'+persid).snapshotChanges();
   }
 
-  // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
-  getLaboratorios() {
-    return this.afs.collection<any>('cfFacil').snapshotChanges();
+  getSolicitudes(id){
+    const col = this.afs.collection('cfSrvReserv');
+    const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'pendiente');
 
+    return refer.get();
   }
-
-
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
@@ -619,249 +1012,345 @@ export class AdminLaboratorios3Component implements OnInit {
     return {nom1: name1, nom2: name2};
   }
 
-  cambiarLaboratorio(item){
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
 
+    this.rol = JSON.parse(localStorage.getItem('rol'));
 
-    console.log(item);
-    this.idlab = item.uid;
-    this.dataSourceSpace = new MatTableDataSource(item.espacios);
+    for (const clave in this.rol) {
+      if (this.rol[clave]) {
 
-    this.itemsel = Observable.of(item);
-    this.dataSourceSpace.sortingDataAccessor = (item, property) => {
-      switch (property) {
-        case 'spaceData.place': return item.spaceData.place;
-
-        case 'spaceData.building': return item.spaceData.building;
-
-        default: return item[property];
-      }
-    };
-
-    setTimeout(() => {
-        if (item.espacios.length > 0 ) {
-          this.dataSourceSpace.paginator = this.paginatorSpace;
-          this.dataSourceSpace.sort = this.sortSpace;
+        if ((clave === 'moduloNivel2')) {
+          this.moduloNivel3 = true;
         }
-        swal.close();
-      }, 1000);
-
-    if(this.laboratoriosEstructurados){
-      this.dataSourceEquipos.data = item.equipos;
-
-      this.dataSourcePersonal.data = item.personal;
-
-      this.dataSourceServicios.data = item.servicios;
-
-      this.dataSourceProyectos.data = item.proyectos;
-
-      this.dataSourcePracticas.data = item.practicas;
-
-      this.dataSourceSolicitudes.data = item.solicitudes;
-
-      setTimeout(() => {
-
-        this.dataSourceEquipos.sort = this.sortEquipos;
-        this.dataSourceEquipos.paginator = this.paginatorEquipos;
-
-        this.dataSourcePersonal.sort = this.sortPersonal;
-        this.dataSourcePersonal.paginator = this.paginatorPersonal;
-
-        this.dataSourceServicios.sort = this.sortServicios;
-        this.dataSourceServicios.paginator = this.paginatorServicios;
-
-        this.dataSourceProyectos.sort = this.sortProyectos;
-        this.dataSourceProyectos.paginator = this.paginatorProyectos;
-
-        this.dataSourcePracticas.sort = this.sortPracticas;
-        this.dataSourcePracticas.paginator = this.paginatorPracticas;
-
-        this.dataSourceSolicitudes.sort = this.sortSolicitudes;
-        this.dataSourceSolicitudes.paginator = this.paginatorSolicitudes;
-
-      }, 1500);
-
-
+        if ((clave === 'moduloDosPermiso')) {
+          this.moduloPermiso = true;
+        }
+      }
     }
-
-
-    this.dataSourcePers.data = item.personal;
-    this.dataSourcePersIn.data = item.personalIna;
-
-    const ambiente = this;
-
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
-
-
-    setTimeout(function () {
-      if (item.personal !== 0) {
-
-        ambiente.dataSourcePers.sort = ambiente.sortPers;
-        ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
-        ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
-        ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
-
-      }
-
-      swal.close();
-
-    }, 2000);
   }
 
-  nuevoLaboratorio(){
+  arregloEspacios(){
+    this.espacios = [];
+    this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data=>{
 
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se crea el Laboratorio',
-      onOpen: () => {
-        swal.showLoading();
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i].payload.doc.data().spaceData;
+        this.espacios.push({id:data[i].payload.doc.id, nombre:element.building + ' - ' +element.place});
       }
     });
-
-    const objFacil = {
-      cfAcro: '',
-      cfUri: '',
-      cfName: '',
-      category: '',
-      foundationYear: '',
-      knowledgeArea: '',
-      researchGroup: '',
-      cfDescr: '',
-      cfKeyw: [],
-      headquarter: '',
-      subHq: '',
-      faculties: {},
-      departments: {
-        facultadid: {}
-      },
-      cfClass: 'cf7799e7-3477-11e1-b86c-0800200c9a66',
-      cfClassScheme: 'da0e5a01-c73e-4489-8cf7-917e9efcdad4',
-      cfAvailability: '',
-      cfConditions: [],
-      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
-      facilityAdmin: '',
-      mainSpace: '',
-      facilActivity: { teaching: true, research: true, extension: false },
-      relatedPers: {},
-      relatedEquipments: {},
-      relatedMeasurement: {},
-      relatedServices: {},
-      relatedFacilities: {},
-      relatedSpaces: {},
-      relatedPractices: {},
-      relatedRequest: {},
-      relatedProjects: {},
-      suggestedChanges:[],
-      otros: { direccion: '' , email: '', telefono: '' },
-      cfPrice: 0,
-      cfCurrCode: 'COP',
-      active: false,
-      createdAt: this.fecha.toISOString(),
-      updatedAt: this.fecha.toISOString()
-
-    };
-
-    objFacil.cfName = this.labo.nombre;
-
-    this.afs.collection('cfPers', ref => ref.where('email', '==', this.labo.email))
-    .snapshotChanges().subscribe(data => {
-      if(data.length){
-        const keyDirector = data[0].payload.doc.id;
-        objFacil.facilityAdmin = keyDirector;
-
-        this.afs.collection('cfFacil').add(objFacil).then(dato=>{
-          swal({
-            type: 'success',
-            title: 'Laboratorio creado',
-            showConfirmButton: true
-          });
-          console.log(dato.id);
-        });
-
-      } else {
-        swal({
-          type: 'error',
-          title: 'el correo ingresado no se encuentra en los registros',
-          showConfirmButton: true
-        });
-      }
-      console.log(objFacil);
-
-    });
-
   }
 
 
   editar(){
 
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se ejecuta la solicitud',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
-    this.afs.doc('cfFacil/' + this.itemsel.value.uid).update(this.infolab).then(data=>{
-      //this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
-
-      swal.close();
+    if(this.moduloNivel3){
       swal({
-        type: 'success',
-        title: 'Sugerencia de cambios ingresada',
-        showConfirmButton: true
-      }).then(()=>{
-        const mod = $('#modal2');
-        mod.removeClass('show');
+
+        type: 'warning',
+        title: 'Esta seguro que desea enviar los cambios realizados',
+        showCancelButton: true,
+        confirmButtonText: 'Si, enviar',
+        cancelButtonText: 'No, Cancelar'
+
+      }).then((result) => {
+
+        if (result.value) {
+       
+          swal({
+            title: 'Cargando un momento...',
+            text: 'espere mientras se ejecuta la solicitud',
+            onOpen: () => {
+              swal.showLoading();
+            }
+          });
+    
+          this.infolab.cfAvailability = this.listaDisponibilidad;
+          this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades,'faculties');
+          this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos,'departments');
+          this.selectorActividad();
+    
+          this.estructurarEnvioActividades();
+    
+    
+          this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
+    
+            swal.close();
+            swal({
+              type: 'success',
+              title: 'Cambios Realizados',
+              showConfirmButton: true
+            }).then(()=>{
+              // this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+            });
+    
+          });
+
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+          swal(
+            'Solicitud Cancelada',
+            '',
+            'error'
+          );
+        }
+
       });
 
-    });
+
+    } else {
+      let aux = {
+        suggestedChanges: this.labestructurado.cambios
+      };
+
+      const dataEstructurada = this.estructurarDataCambios();
+
+      if(dataEstructurada.length != 0){
+
+        swal({
+
+          type: 'warning',
+          title: 'Esta seguro que desea enviar la sugerencia de cambios',
+          showCancelButton: true,
+          confirmButtonText: 'Si, Solicitar',
+          cancelButtonText: 'No, Cancelar'
+
+        }).then((result) => {
+
+          if (result.value) {
+            swal({
+              title: 'Cargando un momento...',
+              text: 'espere mientras se ejecuta la solicitud',
+              onOpen: () => {
+                swal.showLoading();
+              }
+            });
+
+
+            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
+              aux.suggestedChanges.push({
+                pos: this.labestructurado.cambios.length,
+                data: dataEstructurada,
+                uid: this.user.uid,
+                fecha: this.fecha.getDate()+'/'+(this.fecha.getMonth()+1)+'/'+this.fecha.getFullYear(),
+                nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
+                estado: 'pendiente'
+              });
+
+              this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
+                  swal.close();
+                  swal({
+                    type: 'success',
+                    title: 'Sugerencia de cambios ingresada',
+                    showConfirmButton: true
+                  });
+              });
+            });
+
+
+
+          } else if (result.dismiss === swal.DismissReason.cancel) {
+            swal(
+              'Solicitud Cancelada',
+              '',
+              'error'
+            );
+          }
+
+        });
+
+      } else {
+        swal({
+          type: 'error',
+          title: 'No ha sugerido ningun cambio',
+          showConfirmButton: true
+        });
+      }
+
+    }
 
   }
+
 
   enviarSugerencia(){
 
-    let cont = 0;
-    const cambio = this.infolab;
-    for (const key in this.checks) {
-      if (this.checks.hasOwnProperty(key)) {
-        const element = this.checks[key];
-        if(element){
-          const aux = this.sugerencia.data[cont].llave.split('.');
+    swal({
 
-          if(aux.length != 2){
-            cambio[aux[0]] = this.sugerencia.data[cont].info;
-          } else {
-            cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
+      type: 'warning',
+      title: 'Esta seguro que desea editar los datos actuales con la sugerencia seleccionada',
+      showCancelButton: true,
+      confirmButtonText: 'Si, Solicitar',
+      cancelButtonText: 'No, Cancelar'
+
+    }).then((result) => {
+
+      if (result.value) {
+
+        swal({
+          title: 'Cargando un momento...',
+          text: 'espere mientras se ejecuta la solicitud',
+          onOpen: () => {
+            swal.showLoading();
           }
+        });
 
+        let cont = 0;
+        const cambio = JSON.parse(JSON.stringify(this.infolab));
+        cambio['cfAvailability'] = this.listaDisponibilidad;
+        cambio['facilActivity'] = {};
+        for (const key in this.checks) {
+          if (this.checks.hasOwnProperty(key)) {
+            const element = this.checks[key];
+            if(element){
+              const aux = this.sugerencia.data[cont].llave.split('.');
+
+              if(aux.length != 2){
+                if(aux == 'faculties' || aux == 'departments'){
+                  if(this.sugerencia.data[cont].quitar){
+                    const obj = {};
+                    obj[aux] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
+                    cambio[aux[0]] = {};
+                    this.servicioEditarFacDep(obj);
+                  }else{
+                    cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
+                  }
+                }else if(aux == 'cfAvailability'){
+
+                  cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info,this.sugerencia.data[cont].quitar);
+
+                }else if (aux == 'cfEAddr'){
+                  if(this.sugerencia.data[cont].quitar){               
+                    this.EnviarcfEAddr(this.sugerencia.data[cont].infoaux, false);
+                  }else{
+                    this.EnviarcfEAddr(this.sugerencia.data[cont].info, true);
+                  }
+                }else if(aux == 'facilActivity'){
+              
+                  if(this.sugerencia.data[cont].quitar){
+                    const obj = {};
+                    obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
+                                    
+                    this.servicioEditarActividad(obj);
+                  }else{
+                    cambio[aux[0]] = {};
+
+                    cambio[aux[0]] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].info, true);
+                  }
+                }else{
+                  cambio[aux[0]] = this.sugerencia.data[cont].info;
+                }
+
+              } else {
+                cambio[aux[0]][aux[1]] = this.sugerencia.data[cont].info;
+              }
+
+            }
+            cont++;
+          }
         }
-        cont++;
+        cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
+
+        this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio,{merge:true}).then(data=>{
+          swal(
+            'Cambios Aprobados',
+            '',
+            'success'
+          );
+          this.sugerencia = undefined;
+          this.limpiarData();
+         // this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+
+        });
+
+
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
       }
-    }
 
-
-    cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.uid, 'aprobado');
-
-
-    console.log(cambio);
-
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio);
+    });
 
 
 
   }
 
-  cambiarEstadoSugerencia(uid, estado){
-    const cam = this.labestructurado.cambios;
+  estructurarEnvioSugerenciaFacDep(arr, tipo){
+    const obj = {};
+    for (let i = 0; i < arr.length; i++) {
+      if(tipo == 'faculties'){
+        obj[arr[i].id] = true;
+      }else{
+        if(!obj[arr[i].idfacul]){
+          obj[arr[i].idfacul] = {};
+          obj[arr[i].idfacul][arr[i].id] = true;
+        }else{
+          obj[arr[i].idfacul][arr[i].id] = true;
+        }
+      }
+    }
+    return obj;
+  }
+
+  estructurarEnvioSuferenciaDisponibilidad(arr, quitar){
+    let obj = [];
+    if(!quitar){
+      obj =  this.labestructurado.disponibilidad;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      obj.push(arr[i]);
+    }
+    return obj;
+  }
+
+  estructurarEnvioActividades(){
+    const retirado = this.elementosRetirados(this.listaTelefonos, this.labestructurado.telefonos);
+    this.EnviarcfEAddr(retirado,false)
+    const agregado =  this.elementosRetirados(this.labestructurado.telefonos, this.listaTelefonos);
+    this.EnviarcfEAddr(agregado, true);
+  }
+
+  EnviarcfEAddr(data, accion){
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+      if(accion){
+        this.afs.doc('cfFacil/'+this.labestructurado.uid).collection('cfEAddr')
+        .add({cfClass:'', cfClassScheme:'', cfEAddrValue:element.nombre})
+      }else{
+        this.afs.doc('cfFacil/'+this.labestructurado.uid).collection('cfEAddr')
+        .doc(element.id).delete();
+      }
+
+    }
+  }
+
+  estructurarEnvioSugerenciaActividad(data, value){
+    let auxactiviti = {};
+
+    for (let i = 0; i < data.length; i++) {
+      auxactiviti[data[i].id] = value;
+    }
+
+    return auxactiviti;
+  }
+
+  servicioEditarFacDep(obj){
+    return this.afs.doc('cfFacil/'+this.labestructurado.uid).update(obj);
+  }
+
+  servicioEditarActividad(obj){
+    return this.afs.doc('cfFacil/'+this.labestructurado.uid).set(obj, {merge:true});
+  }
+
+
+  cambiarEstadoSugerencia(pos, estado){
+    const cam = this.labestructurado.cambios.slice();
     for (let i = 0; i < cam.length; i++) {
       const element = cam[i];
 
-      if(element.uid == uid){
+      if(element.pos == pos  && element.estado == 'pendiente'){
         element.estado = estado;
         for (let j = 0; j < element.data.length; j++) {
           const element2 = element.data[j];
@@ -875,16 +1364,33 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   desaprobarSugerencia(){
-    const cambio = {};
-    cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.uid, 'desaprobado');
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se ejecuta la solicitud',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
 
-    console.log(cambio);
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio);
+    const cambio = {};
+    cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
+
+    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
+      swal({
+        type: 'success',
+        title:'Cambios Desaprobados',
+        showConfirmButton: true
+      });
+      this.sugerencia = undefined;
+      //this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+    });
   }
 
   estructurarDataCambios(){
-    const aux1 = ['info.dir','info.email','info.tel'];
-    const aux2 = ['otros.direccion', 'otros.email', 'otros.telefono'];
+    const aux1 = ['facultades','departamentos','disponibilidad', 'telefonos','actividad', 'descripcion', 'condiciones', 'sede', 'subsede', 'espacioPrincipal','info.email'];
+    const aux2 = ['faculties', 'departments', 'cfAvailability', 'cfEAddr', 'facilActivity','cfDescr', 'cfConditions','headquarter', 'subHq', 'mainSpace', 'otros.email'];
+    const aux3 = ['this.listaFaculSugeridos', 'this.listaDeparSugeridos', 'this.listaDispoSugeridos', 'this.listaTelSugeridos'];
+    const aux4 = ['this.listaFacultades', 'this.listaDepartamentos', 'this.listaDisponibilidad', 'this.listaTelefonos'];
     const data = [];
     let element;
     let element2;
@@ -893,25 +1399,175 @@ export class AdminLaboratorios3Component implements OnInit {
 
       element = aux1[i].split('.');
       element2 = aux2[i].split('.');
-
+      let infoauxiliar = this.infolab[element2];
 
       if(element.length != 2){
+        if((aux1[i] == 'facultades') || (aux1[i] == 'departamentos') || (aux1[i] == 'disponibilidad') || (aux1[i] == 'telefonos')){
+          const sugeridos = [];
+          for (let j = 0; j < eval(aux3[i]).length; j++) {
+            const element = eval(aux3[i])[j];
+            sugeridos.push(element);
+          }
 
-        if(this.labestructurado[element] != this.infolab[element2]){
-           data.push({llave: aux2[i], nombre: element2[0], info:this.infolab[element2], cambio: false});
+          if(sugeridos.length != 0){
+            data.push({llave: aux2[i], nombre: aux1[i],info:sugeridos, cambio: false});
+          }
+
+            const arr1 = eval(aux4[i]);
+            const arr2 = eval('this.labestructurado.'+aux1[i]);
+            const retirados = this.elementosRetirados(arr1,arr2);
+            if(retirados.length != 0){
+              data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retirados, info:arr1,cambio: false});
+            }
+          
+         
+        }else if(aux1[i] == 'actividad'){
+          this.selectorActividad();
+
+          const sugeridosAct = [];
+          const retiradosAct = [];
+
+          for (const key in this.infolab.facilActivity) {
+            if (this.infolab.facilActivity.hasOwnProperty(key)) {
+
+              if(this.infolab.facilActivity[key] != this.labestructurado.objectActividad[key]){
+                if(this.infolab.facilActivity[key]){
+                  sugeridosAct.push({id:key, nombre:this.listaActividad.find(o => o.id == key).name});
+                }else{
+                  retiradosAct.push({id:key, nombre:this.listaActividad.find(o => o.id == key).name});
+                }
+              }
+              
+            }
+          }
+
+
+          if(sugeridosAct.length != 0){
+            data.push({llave: aux2[i], nombre: aux1[i],info:sugeridosAct, cambio: false});
+           
+          }
+          
+          if(retiradosAct.length != 0){
+            data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retiradosAct, info:[],cambio: false});
+          }
+        }else{
+      
+          let auxiliar = this.labestructurado[element];
+          let nombre = element2[0];
+
+
+          if(aux1[i] == 'sede' || aux1[i] == 'subsede' ){
+            auxiliar = this.labestructurado[element].id;
+            nombre = aux1[i];
+
+            infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
+          }
+          if((aux1[i] == 'descripcion')||aux1[i] == 'condiciones'){
+            nombre = aux1[i];
+
+          }
+
+          if(aux1[i] == 'espacioPrincipal'){
+            nombre = aux1[i];
+            infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
+          }
+
+          if(auxiliar != this.infolab[element2]){
+             data.push({llave: aux2[i], nombre: nombre, infoaux: infoauxiliar, info:this.infolab[element2], cambio: false});
+          }
         }
-      } else {
 
+      } else {
+        infoauxiliar = this.infolab[element2[0]][element2[1]];
         if(this.labestructurado[element[0]][element[1]] != this.infolab[element2[0]][element2[1]]) {
-          data.push({llave: aux2[i], nombre: element2[1], info: this.infolab[element2[0]][element2[1]], cambio: false});
+          data.push({llave: aux2[i], nombre: element2[1], infoaux: infoauxiliar, info: this.infolab[element2[0]][element2[1]], cambio: false});
         }
 
       }
 
 
     }
-    console.log(data);
+
+
     return data;
+  }
+
+  buscarArreglo(id, arreglo){
+    let arr = '';
+    if(arreglo == 'sede'){
+      arr = 'this.sedes';
+    }else if(arreglo == 'subsede'){
+      arr = 'this.subsedes';
+    }else{
+      arr = 'this.espacios';
+    }
+
+    for (let i = 0; i < eval(arr).length; i++) {
+      const element = eval(arr)[i];
+      if(element.id == id){
+        return element.nombre;
+      }
+
+    }
+  }
+
+  elementosRetirados(arr1, arr2){
+    let arr = [];
+    let encontro = false;
+
+    for (let i = 0; i < arr2.length; i++) {
+      encontro = false;
+
+      if(arr1.length == 0){
+        arr.push(arr2[i]);
+
+      }else{
+
+        for (let j = 0; j < arr1.length; j++) {
+
+          if(arr2[i].id){
+            if(arr2[i].id == arr1[j].id){
+              encontro = true;
+              break;
+            }
+          }
+
+       }
+
+       if(!encontro){
+         arr.push(arr2[i]);
+       }
+      }
+    }
+
+    return arr;
+  }
+
+  elementosAgregados(arr1, arr2){
+    let arr = [];
+    let encontro = false;
+
+    for (let i = 0; i < arr2.length; i++) {
+      encontro = false;
+   
+      for (let j = 0; j < arr1.length; j++) {
+
+        if(arr2[i].id){
+          if(arr2[i].id == arr1[j].id){
+            encontro = true;
+            break;
+          }
+        }
+
+     }
+
+       if(!encontro){
+         arr.push(arr2[i]);
+       }
+      
+    }
+
+    return arr;
   }
 
   pendientes(item){
@@ -950,20 +1606,17 @@ export class AdminLaboratorios3Component implements OnInit {
 
   // METODO QUE BUSCA LA SUGERENCIA QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarSugerencia(item){
-    for (let i = 0; i < this.itemsel.value.cambios.length; i++) {
-      const element = this.itemsel.value.cambios[i];
-      if(element.uid == item){
+    for (let i = 0; i < this.labestructurado.cambios.length; i++) {
+      const element = this.labestructurado.cambios[i];
+      if(element.pos == item && element.estado == 'pendiente'){
         return element;
       }
     }
   }
 
   cambiarEspacioSel(item){
-
-
     if(item != 'inicial'){
       this.espaciosel = this.buscarEspacioLocal(item);
-      console.log(this.espaciosel);
     } else {
       this.espaciosel = undefined;
     }
@@ -991,9 +1644,8 @@ export class AdminLaboratorios3Component implements OnInit {
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarEspacioLocal(item){
-
-    for (let i = 0; i < this.itemsel.value.espacios.length; i++) {
-      const element = this.itemsel.value.espacios[i];
+    for (let i = 0; i < this.labestructurado.espacios.length; i++) {
+      const element = this.labestructurado.espacios[i];
       if(element.id_space == item){
         return element;
       }
@@ -1001,15 +1653,29 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   limpiarData(){
-    this.seleccionado = 'inicial';
+    this.seleccionado = undefined;
     this.sugerencia = undefined;
-    this.infolab.otros.email = this.itemsel.value.info.email;
-    this.infolab.otros.direccion = this.itemsel.value.info.dir;
-    this.infolab.otros.telefono = this.itemsel.value.info.tel;
-    this.infolab.cfName = this.itemsel.value.nombre;
-    this.infolab.knowledgeArea = this.itemsel.value.escuela;
-    this.infolab.researchGroup = this.itemsel.value.inves;
-   // this.infolab.facilityAdmin = this.itemsel.value.iddueno;
+
+    this.infolab.otros.email = this.labestructurado.info.email;
+
+    this.infolab.cfName = this.labestructurado.nombre;
+    this.infolab.headquarter = this.labestructurado.sede.id;
+    this.infolab.subHq = this.labestructurado.subsede.id;
+    this.infolab.cfDescr = this.labestructurado.descripcion;
+    this.listaFacultades = this.labestructurado.facultades.slice();
+    this.listaDepartamentos = this.labestructurado.departamentos.slice();
+    this.infolab.mainSpace = this.labestructurado.espacioPrincipal;
+    this.infolab.cfConditions = this.labestructurado.condiciones;
+    this.listaDisponibilidad = this.labestructurado.disponibilidad.slice();
+    this.listaTelefonos = this.labestructurado.telefonos.slice();
+
+    this.selecactividad.setValue(this.labestructurado.actividad);
+
+    this.listaFaculSugeridos = [];
+    this.listaDeparSugeridos = [];
+    this.listaDispoSugeridos = [];
+    this.listaTelSugeridos = [];
+    this.arregloEspacios();
 
   }
 
@@ -1022,16 +1688,177 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
+  quitarelemento(id, list){
+
+    let lista;
+    let sugerido;
+    if(list == 'facultad'){
+      lista = eval('this.listaFacultades');
+      sugerido = eval('this.listaFaculSugeridos');
+    }else{
+      lista = eval('this.listaDepartamentos');
+      sugerido = eval('this.listaDeparSugeridos');
+    }
+      const encontrado = lista.find((element, index) => {
+        if(element.id == id){
+          lista.splice(index, 1);
+          if(this.moduloPermiso){
+            sugerido.splice(index, 1);
+          }
+          return true;
+        }
+        return false;
+      });
+
+      swal({
+        type: 'success',
+        title: list+' Eliminada',
+        showConfirmButton: true
+      });
+
+  }
+
+  agregarElemento(list){
+    let lista = '';
+
+    let select = '';
+
+    const objeto = {};
+
+    if(list == 'facultad'){
+      lista = 'this.listaFacultades';
+      select = 'this.selectfacul';
+
+    }else{
+      lista = 'this.listaDepartamentos';
+      select = 'this.selectdepar';
+    }
+
+
+    const selecsss = eval(select);
+
+    const encontrado = eval(lista).find((element, index) => {
+
+      if(element.id == selecsss){
+        return true;
+      }
+      return false;
+    });
+
+    if(!encontrado){
+
+     this.buscarElemento(list,select,lista);
+
+      swal({
+        type: 'success',
+        title: list + ' agregada',
+        showConfirmButton: true
+      });
+    }else{
+      swal({
+        type: 'error',
+        title: 'Esta '+list+' ya se encuentra agregada',
+        showConfirmButton: true
+      });
+    }
+  }
+
+  buscarElemento(list, select, lista){
+    let array = '';
+    let sugerido = '';
+    if(list == 'facultad'){
+      array = 'this.facultades';
+      sugerido = 'this.listaFaculSugeridos';
+    }else{
+      array = 'this.departamentos';
+      sugerido = 'this.listaDeparSugeridos';
+    }
+    const selector = eval(select);
+    const listafinal =  eval(lista);
+    const listasugerida = eval(sugerido);
+    eval(array).find((element, index) => {
+
+      if(element.id == selector){
+        listafinal.push(element);
+        if(this.moduloPermiso){
+          listasugerida.push(element);
+        }
+      }
+
+    });
+  }
+
+  agregarDisponibilidad(){
+    const cadena = this.diassemana[this.selectdia-1].nombre + ' : ' + this.selectHinicio + '-' +this.selectHFinal;
+    this.listaDisponibilidad.push({id:this.selectdia,nombre:cadena});
+    if(this.moduloPermiso){
+      this.listaDispoSugeridos.push({id:this.selectdia,nombre:cadena});
+    }
+
+    swal({
+      type: 'success',
+      title: 'disponibilidad agregada',
+      showConfirmButton: true
+    });
+
+  }
+
+  quitarDisponibilidad(id){
+    const encontrado = this.listaDisponibilidad.find((element, index) => {
+      if(element.id == id){
+        this.listaDisponibilidad.splice(index, 1);
+        if(this.moduloPermiso){
+          this.listaDispoSugeridos.splice(index, 1);
+        }
+        return true;
+      }
+      return false;
+    });
+
+    swal({
+      type: 'success',
+      title:'Diponibilidad Eliminada',
+      showConfirmButton: true
+    });
+  }
+
+  agregarTelefonos(){
+    this.listaTelefonos.push({id:this.listaTelefonos.length,nombre:this.telefono});
+    if(this.moduloPermiso){
+      this.listaTelSugeridos.push({id:this.listaTelefonos.length,nombre:this.telefono});
+    }
+
+    swal({
+      type: 'success',
+      title: 'telefono agregado',
+      showConfirmButton: true
+    });
+    this.telefono = '';
+
+  }
+
+  quitarTelefonos(id){
+    const encontrado = this.listaTelefonos.find((element, index) => {
+      if(element.id == id){
+        this.listaTelefonos.splice(index, 1);
+        if(this.moduloPermiso){
+          this.listaTelSugeridos.splice(index, 1);
+        }
+        return true;
+      }
+      return false;
+    });
+
+    swal({
+      type: 'success',
+      title:'Telefono Eliminado',
+      showConfirmButton: true
+    });
+  }
 
 
 
   // FILTADORES DE LAS TABLAS
-
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-  }
 
   applyFilterEquipos(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -1058,6 +1885,7 @@ export class AdminLaboratorios3Component implements OnInit {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourcePracticas.filter = filterValue;
   }
+
   applyFilterSolicitudes(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
@@ -1065,613 +1893,22 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-
-
-  /*METODOS DE LA VISTA DE ESPACIOS*/
-
-
-
-  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
-  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarPracticas(item) {
-
-    const arr = [];
-    const arr2 = [];
-    const arr3 = [];
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
-
-        if (item[clave]) {
-          this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
-            const practica = data.payload.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').valueChanges().subscribe(data2 => {
-
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
-
-              if (prog) {
-                const pract = {
-                  nombre: practica.practiceName,
-                  programacion: {
-                    estudiantes: prog['noStudents'],
-                    diahora: prog['schedule'],
-                    semestre: prog['semester']
-                  },
-                  activo: practica.active
-                };
-                 // construye los eventos para el calendario de cada laboratorio
-                const evento = {
-
-                    title: this.ajustarTexto(practica.practiceName).nom1 ,
-                    start: prog['schedule'],
-                    color: 'green',
-                };
-
-
-                  arr2.push(evento);
-
-                if ( practica.active ) {
-
-                  arr.push( pract );
-                } else {
-                  arr3.push( pract );
-                }
-              }
-
-
-            });
-
-          });
-        }
-
-      }
-    }
-
-    return {arr, arr2, arr3};
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
   }
 
-
-
-
-  /* asigna la fila de la tabla a variables ngmodel */
-  cambiardataEspacio(item) {
-    console.log(item);
-    this.idsp = item.id_space;
-    this.space.totalArea = item.totalArea;
-    this.space.capacity = item.capacity;
-    this.space.freeArea = item.freeArea;
-    this.space.indxSa = item.indxSa;
-    this.space.minArea = item.minArea;
-    this.space.ocupedArea = item.ocupedArea;
-    this.space.spaceData.building = item.spaceData.building;
-    this.space.spaceData.floor = item.spaceData.floor;
-    this.space.spaceData.place = item.spaceData.place;
-    this.space.map = item.map;
-    this.space.active = item.active;
-
-    this.cargarImagenVistaEspacio(this.space.map);
-    this.listPracticeforSpace();
-
-
-
-  }
-
-  /* este metodo carga la imagen desde firebase con un parametro nombre de la imagen */
-  cargarImagenVistaEspacio(name: string) {
-
-    if (name) {
-      this.mensaje = false;
-      const ref = this.storage.ref('planos/' + name + '.png');
-      this.plano = ref.getDownloadURL();
-    } else {
-      this.mensaje = true;
-    }
-
-
-
-  }
-
-  setSpace() {
-
-    const nuevoespacio = this.space;
-    this.buscarSede().then((ok: string) => {
-      nuevoespacio.subHq = ok;
-      this.afs.collection('space').add(nuevoespacio).then( (data) => {
-           // agrega el nuevo espacio al laboratorio actual
-          this.updateFaciliti( data.id );
-      });
-      console.log(nuevoespacio);
-    });
-  }
-
-  actualizarEspacio() {
-    const nuevoespacio = this.space;
-
-    this.buscarSede().then((ok: string) => {
-      nuevoespacio.subHq = ok;
-
-       this.afs.doc( 'space/' + this.idsp ).set( nuevoespacio, { merge: true} ).then( () => {
-        swal({
-          type: 'success',
-          title: 'Actualizado Correctamente',
-          showConfirmButton: true
-        });
-
-       });
-      console.log(this.itemsel.value);
-    });
-
-
-  }
-
-  /* metodo para buscar una subsede de cali  */
-  buscarSede() {
-
-    return new Promise((resolve, reject) => {
-      this.afs.collection<any>('cfPAddr',
-        ref => ref.where('cfAddrline1', '==', this.sede))
-        .snapshotChanges().subscribe(data => {
-          const idnuevo = data[0].payload.doc.id;
-
-          console.log(idnuevo);
-          resolve(idnuevo);
-        });
-    });
-
-  }
-
-
-
-  applyFilterEspace(filterValue: string) {
-
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSourceSpace.filter = filterValue;
-  }
-
-
-  initCalendar( horario  ) {
-
-
-    console.log('entro este es el horario', horario );
-    const containerEl = $('#cal');
-    containerEl.fullCalendar( 'destroy' );
-
-
-    containerEl.fullCalendar({
-      // licencia
-      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-      // options here
-      height: 420,
-
-      header: {
-
-        left: '',
-        center: 'tittle',
-        right: 'today prev,next'
-      },
-      events: horario  ,
-
-      defaultView: 'month',
-
-    });
-  }
-
-  updateFaciliti( idSp ) {
-
-
-    const  relatedSpaces = {};
-    relatedSpaces[idSp] = true;
-
-
-    console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil' ).doc(this.idlab).set(relatedSpaces  , { merge: true })
-                   .then( () => {
-
-                    swal({
-                      type: 'success',
-                      title: 'Creado Correctamente',
-                      showConfirmButton: true
-                    });
-                   });
-
-  }
-
-  /* listar horario por espacio  */
-
-  listPracticeforSpace() {
-
-    console.log('entro el prro');
-
-    const arr = [];
-
-      this.afs.doc('practice/AmtSFtg3m5SrSc5iO2vK').collection('programmingData',
-      ref => ref.where('space', '==', '1xCjO5lRbstnW20U2Lyz'))
-      .snapshotChanges().subscribe(data => {
-          if ( data) {
-          data.forEach(element => {
-            const elemento = element.payload.doc.data();
-              arr.push( elemento );
-          });
-        }
-      });
-
-      console.log(arr);
-
-  }
-
-
-  /* setea campos del objeto */
-  clearObj() {
-    this.space.totalArea = '';
-    this.space.capacity = '';
-    this.space.freeArea = '';
-    this.space.indxSa = '';
-    this.space.minArea = '';
-    this.space.ocupedArea = '';
-    this.space.spaceData.building = '';
-    this.space.spaceData.floor = '';
-    this.space.spaceData.place = '';
-  }
-
-
-
-
-
-  /*METODOS DE LA VISTA PERSONAS*/
-
-  estructuraIdPers(key) {
-
-    const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).subscribe(labo => {
-        const laboratorio = labo.payload.data();
-
-        let estadoLab;
-        if (laboratorio.active === true) {
-          estadoLab = 'Activo';
-        } else if (laboratorio.active === false) {
-          estadoLab = 'Inactivo';
-        }
-
-        this.persestructurado = {
-          personal: this.estructurarPers(laboratorio.relatedPers),
-          personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
-          estado: estadoLab,
-          uid: key
-        };
-
-        resolve();
-
-      });
-    });
-
-    return promise;
-
-  }
-
-  estructurarPers(item) {
-
-    const arr1 = [];
-
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
-        if (item[clave]) {
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
-
-            let persona = {};
-            if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
-                const user = dataper.payload.data();
-                // funciona con una programacion, cuando hayan mas toca crear otro metodo
-
-                persona = {
-                  roles: user.appRoles,
-                  nombre: pers.cfFirstNames,
-                  apellidos: pers.cfFamilyNames,
-                  activo: pers.active,
-                  tipo: pers.type,
-                  email: user.email,
-                  idpers: clave,
-                  iduser: pers.user,
-                };
-
-                if (pers.active) {
-                  arr1.push(persona);
-                }
-
-              });
-            } else {
-
-              persona = {
-                roles: '',
-                nombre: pers.cfFirstNames,
-                apellidos: pers.cfFamilyNames,
-                activo: pers.active,
-                tipo: pers.type,
-                email: pers.email,
-                idpers: clave,
-                iduser: pers.user,
-              };
-
-              if (pers.active) {
-                arr1.push(persona);
-              }
-            }
-          });
-        }
-      }
-    }
-    return arr1;
-  }
-
-  estructurarPersIna(item) {
-
-    const arr1 = [];
-
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
-        if (item[clave]) {
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
-            let persona = {};
-
-            if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
-                // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                persona = {
-                  nombre: pers.cfFirstNames,
-                  apellidos: pers.cfFamilyNames,
-                  activo: pers.active,
-                  tipo: pers.type,
-                  email: dataper.payload.data().email,
-                  roles: dataper.payload.data().appRoles,
-                  idpers: clave,
-                  iduser: pers.user,
-                };
-
-                if (!pers.active) {
-                  arr1.push(persona);
-                }
-
-              });
-            } else {
-              persona = {
-                nombre: pers.cfFirstNames,
-                apellidos: pers.cfFamilyNames,
-                activo: pers.active,
-                tipo: pers.type,
-                email: '',
-                roles: '',
-                idpers: clave,
-                iduser: pers.user,
-              };
-
-              if (!pers.active) {
-                arr1.push(persona);
-              }
-
-
-            }
-          });
-        }
-      }
-    }
-    return arr1;
-  }
-
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
-
-  }
-
-
-  consultarRol() {
-
-    return new Promise((resolve, reject) => {
-      this.afs.collection<any>('appRoles',
-        ref => ref.where('roleName', '==', this.rolc))
-        .snapshotChanges().subscribe(data => {
-          const idnuevo = data[0].payload.doc.id;
-
-          console.log(idnuevo);
-          resolve(idnuevo);
-        });
-    });
-  }
-
-  applyFilterPers(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSourcePers.filter = filterValue;
-  }
-
-  cambiardataPersonal(item) {
-
-    console.log(item);
-
-    this.nombre = item.nombre;
-    this.estado = item.activo;
-    this.email = item.email;
-    this.apellido = item.apellidos;
-    this.rol = item.tipo;
-    this.idp = item.idpers;
-    this.idu = item.iduser;
-
-
-    // this.seleccionado = item;
-
-  }
-
-  actualizarPers() {
-
-
-    if (!this.idu) {
-
-
-      swal({
-        type: 'info',
-        title: 'La persona seleccionada aun no cuenta con un usuario asociado',
-        showConfirmButton: true
-      });
-    } else {
-
-      // $('#modal').modal('hide');
-
-      /* objeto para persona  */
-      const pers = {
-        active: this.estado,
-        cfFirstNames: this.nombre,
-        cfFamilyNames: this.apellido
-      };
-      /* objeto para usuario */
-      const user = {
-        active: this.estado,
-        appRoles: ''
-      };
-
-      /* metodo que consulta el rol */
-
-      console.log(' se va actualizar esta persona', pers);
-
-      this.consultarRol().then((ok) => {
-        console.log(ok);
-       // user.appRoles = this.register.setBoolean(ok);
-        /* metodo firebase para subir un usuario actualizado */
-
-        console.log('usuario con el rol', user);
-
-        this.afs.collection('user').doc(this.idu).set(user, { merge: true });
-
-        console.log('usuario con el rol', user);
-
-      }).then(() => {
-        /* metodo firebase para subir una persona actualizada */
-        this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
-          () => {
-            swal({
-              type: 'success',
-              title: 'usuario actualizado correctamente',
-              showConfirmButton: true
-            });
-
-          }
-
-        );
-      });
-
-    }
-
-
-  }
-
-
-
-  /* metodo para crear una  nueva persona dentro dl lab*/
-
-  setPers() {
-
-    if (this.email) {
-      this.person.email = this.email;
-      const pers = this.person;
-      pers.cfFacil = this.idlab;
-      console.log(pers);
-      this.afs.collection('cfPers').add(pers)
-        .then(ok => {
-
-          this.updateFacilitiPers(ok.id);
-
-          swal({
-            type: 'success',
-            title: 'persona creada correctamente',
-            showConfirmButton: true
-          });
-
-        });
-
-    } else {
-
-      this.toastr.info('Es necesario el campo email', 'Email requerido');
-
-    }
-
-  }
-
-
-  /* actualizar la coleccion cfPers con el nuevo id del usuario */
-
-  updatePers(idU, pathP) {
-
-    this.afs.collection('cfPers').doc(pathP).update({ user: idU });
-
-  }
-
-  /* actualizar el laboratorio con el nuevo id del document pers */
-
-  updateFacilitiPers(idP) {
-
-    console.log('entrooooooo');
-    const facil = {
-      relatedPers: {}
+  resetIconos(){ 
+    this.iconos = {
+      info:false,
+      equipos:false,
+      personal:false,
+      espacio:false,
+      espacioaso:false,
+      servicio:false,
+      proyecto:false,
+      practica:false,
+      solicitud:false
     };
-    facil.relatedPers[idP] = true;
-
-
-    console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
-
-  }
-
-  emailcheck($event) {
-    this.addP = '';
-    const q = $event.target.value;
-    if (q.trim() === '') {
-      this.status = 'Campo obligatorio';
-      // this.dispo = false;
-    } else {
-      this.status = 'Confirmando disponibilidad';
-      const collref = this.afs.collection('cfPers').ref;
-      const queryref = collref.where('email', '==', q);
-      queryref.get().then((snapShot) => {
-        if (snapShot.empty) {
-          this.status = 'Email disponible';
-          this.dispo = true;
-        } else {
-          console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
-          this.dispo = false;
-          this.addP = snapShot.docs[0].id;
-        }
-      });
-    }
-  }
-
-  addLabPers(id: string) {
-
-    if (id) {
-      const lab = {
-        relatedPers: {}
-      };
-
-      lab.relatedPers[id] = true;
-
-      this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
-        .then(() => {
-
-          //$('#modal1').modal('hide');
-          this.toastr.success('Almacenado correctamente.', 'exito!');
-        });
-    } else {
-
-      this.toastr.warning('Ocurrio un error, intente ingresar el email otra vez.');
-
-    }
-
-
   }
 
 

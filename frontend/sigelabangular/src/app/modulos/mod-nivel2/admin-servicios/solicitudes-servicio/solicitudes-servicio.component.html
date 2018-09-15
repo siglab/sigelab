@@ -194,6 +194,11 @@
                     <div class="box-body">
                         <form  id="form-workserv" class="" name="form-workserv" action="#">
                             <fieldset>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="estado"><strong>Estado:</strong> {{servicioActivoSel.status}}</label>
+                                    </div>
+                                </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{servicioActivoSel.nombre}}</label>
@@ -204,24 +209,38 @@
                                   <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servicioActivoSel.descripcion}}</label>
                                 </div>
                               </div>
-                              <div *ngIf="servicioActivoSel.variaciones.length == 0" class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                                  <div class="form-group" *ngFor="let item of servicioActivoSel.condiciones; let i = index">
-                                      <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                  </div>            
+                              <div *ngIf="servicioActivoSel.condicionesSrv.length != 0" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                    <div class="form-group" *ngFor="let item of servicioActivoSel.condicionesSrv; let i = index">
+                                        <label class="control-label" for="precioserv"><input disabled name="{{'checkboxSrv' + i}}" [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]" type="checkbox"> {{item.conditionText}}</label>
+                                    </div>            
+                                  </div>
                                 </div>
-                              </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="precioserv"><strong>Precio: $</strong> {{servicioActivoSel.precio}}</label>
                                 </div>
                               </div>
                               <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="estado"><strong>Estado:</strong> {{servicioActivoSel.status}}</label>
+                                  <div class="row">
+                                      <div *ngIf="servicioActivoSel.nombreParametros.length != 0" class="col-md-12">
+                                          <label class="control-label" for="precioserv">
+                                              <strong>Parametros de variacion:</strong>
+                                          </label>
+                                          <div class="form-group">
+                                            <div class="col-md-6" *ngFor="let item of servicioActivoSel.nombreParametros; let i = index;">
+                                                <label class="control-label" for="parvar">{{item}}
+                                                    <input class="form-control" id="item" name="item" disabled value="{{this.servicioActivoSel.parametrosSrv[i].value}}" type="text"> </label>
+                                            </div>
+                                            
+                                          </div>
+                  
+                                      </div>
+                                  </div>
+                                    
                                 </div>
-                            </div>
+
                             <div *ngIf="servicioActivoSel.status == 'aceptada'" class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="aceptado"><strong>Aceptado por:</strong> {{servicioActivoSel.acepto}}</label>
@@ -316,6 +335,24 @@
                                   <label class="control-label" for="precioserv"><strong>Precio: $</strong> {{variation.precio}}</label>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div *ngIf="variation.parametros != 0" class="col-md-12">
+                                        <label class="control-label" for="precioserv">
+                                            <strong>Parametros de variacion:</strong>
+                                        </label>
+                                        <div class="form-group">
+                                          <div class="col-md-6" *ngFor="let item of variation.parametros; let i = index;">
+                                              <label class="control-label" for="parvar">{{item}}
+                                                  <input class="form-control" id="item" name="item" disabled value="{{this.valorParametro[i]}}" type="text"> </label>
+                                          </div>
+                                         
+                                        </div>
+                
+                                    </div>
+                                </div>
+                                 
+                              </div>
                           
         
                           </fieldset> 

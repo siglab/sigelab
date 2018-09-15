@@ -78,7 +78,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     relatedMeasurement:{},
     relatedServices:{},
     updatedAt:'',
-    residuos:false
+    residuos:false,
+    descuento:'0',
+    parametros:[]
   };
 
   objectvariation = {
@@ -89,8 +91,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     cfPrice:'',
     createdAt:'',
     updateAt:'',
-    residuos:false
-  }
+    residuos:false,
+    parametros:[]
+  };
 
   variaciones = [];
   variacionesCambiadas = [];
@@ -114,6 +117,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   role:any;
   moduloNivel2 = false;
 
+  parametro = '';
+  listaParametrosServicio = [];
+
+  parametroVar = '';
+  listaParametrosVariacion = [];
+
+  seleccion = false;
   constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
 
   ngOnInit() {
@@ -121,6 +131,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
+      this.seleccion = true;
       this.moduloinfo = false;
       this.resetIconos();
       swal({
@@ -137,9 +148,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           this.getCollectionServ(data.uid).then(servicios =>{
 
             this.servasocestructurados = this.estructurarDataServ(servicios);
-            this.getLaboratorio(this.lab_id).subscribe(labo => {
-              this.equipos = this.estructurarEquipos(labo.payload.data().relatedEquipments);
-              console.log(this.equipos);
+            this.getLaboratorio(this.lab_id).then(labo => {
+              this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
+            
               if(this.servasocestructurados ){
                 this.dataSource.data = this.servasocestructurados;
                 this.dataSourceEquip = new MatTableDataSource(this.equipos);
@@ -230,7 +241,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   getLaboratorio(labid){
-    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
+    return this.afs.doc('cfFacil/' + labid).ref.get();
   }
 
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
@@ -263,7 +274,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           creado: elemento.createdAt,
           editado: elemento.updatedAt,
           active: elemento.active,
-          residuos:elemento.residuos
+          residuos:elemento.residuos,
+          descuento:elemento.descuento,
+          parametros: elemento.parametros 
         }
       };
 
@@ -422,6 +435,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.srv.createdAt = this.itemsel.infoServ.creado;
     this.srv.updatedAt = this.itemsel.infoServ.editado;
     this.srv.active = this.itemsel.infoServ.active;
+    this.srv.residuos = this.itemsel.infoServ.residuos;
+    this.srv.descuento = this.itemsel.infoServ.descuento;
+    this.srv.parametros = this.itemsel.infoServ.parametros;
 
     this.variaciones = this.itemsel.infoServ.variaciones.slice();
 
@@ -430,7 +446,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   cambiarDataEditarVariacion(item){
-    console.log(this.variaciones);
+
     this.nuevaVar = false;
     this.objectvariation = item.data;
 
@@ -442,7 +458,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.srv.updatedAt = fecha.toISOString();
     this.srv.cfFacil = this.lab_id;
   
-
+    this.srv.parametros = this.listaParametrosServicio;
     this.selection.selected.forEach((element) => {
 
       if (element.id) {
@@ -474,7 +490,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                 type: 'success',
                 title: 'creado correctamente',
                 showConfirmButton: true
-              });
+              }).then(()=>{
+                this.cerrarModal('modal2');
+              });;
             }
 
           });
@@ -484,6 +502,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           type: 'success',
           title: 'creado correctamente',
           showConfirmButton: true
+        }).then(()=>{
+          this.cerrarModal('modal2');
         });
       }
 
@@ -549,10 +569,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           swal.close();
           swal({
             type: 'success',
-            title: 'creado correctamente',
+            title: 'Editado correctamente',
             showConfirmButton: true
+          }).then(()=>{
+            this.variaciones = [];
+            this.cerrarModal('modal1');
           });
-          this.variaciones = [];
+         
         }
 
       }
@@ -584,6 +607,42 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.srv.cfCondition.splice(index, 1);
   }
 
+  agregarParametro(servar){
+    if(servar == 'servicio'){
+      this.listaParametrosServicio.push(this.parametro);
+      this.parametro = '';
+    } else {
+      this.listaParametrosVariacion.push(this.parametroVar);
+      this.parametroVar = '';
+    }
+  }
+
+  quitarParametro(index, servar){
+    if(servar == 'servicio'){
+      this.listaParametrosServicio.splice(index,1);
+    } else {
+      this.listaParametrosVariacion.splice(index,1);
+    }
+  }
+
+  agregarParametroEdit(servar){
+    if(servar == 'servicio'){
+      this.srv.parametros.push(this.parametro);
+      this.parametro = '';
+    } else {
+      this.objectvariation.parametros.push(this.parametroVar);
+      this.parametroVar = '';
+    }
+  }
+
+  quitarParametroEdit(index, servar){
+    if(servar == 'servicio'){
+      this.srv.parametros.splice(index,1);
+    } else {
+      this.objectvariation.parametros.splice(index,1);
+    }
+  }
+
   agregarCondicionVariacion(){
     this.objectvariation.cfConditions.push(this.condicionvar);
     this.condicionvar = '';
@@ -592,6 +651,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   quitarCondicionVariacion(index){
     this.objectvariation.cfConditions.splice(index, 1);
   }
+
+
 
   nuevaVariacion(){
     this.nuevaVar = true;
@@ -602,6 +663,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     const fecha = new Date();
     this.objectvariation.createdAt = fecha.toISOString();
     this.objectvariation.updateAt = fecha.toISOString();
+    this.objectvariation.parametros = this.listaParametrosVariacion;
     if(!this.editar){
       this.variaciones.push(this.objectvariation);
     } else {
@@ -694,8 +756,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       cfPrice:'',
       createdAt:'',
       updateAt:'',
-      residuos:false
-    }
+      residuos:false,
+      parametros: []
+    };
+
+    this.listaParametrosVariacion = [];
   }
 
   inicializarServicio(){
@@ -716,8 +781,12 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       relatedMeasurement:{},
       relatedServices:{},
       updatedAt:'',
-      residuos:false
+      residuos:false,
+      descuento:'0',
+      parametros:[]
     };
+
+    this.listaParametrosServicio = [];
   }
 
   nuevoEspacio(){

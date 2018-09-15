@@ -62,6 +62,7 @@ comentario = '';
    condicion:any;
 
    condicionesobjeto = {};
+   condicionesobjetoSrv = {};
 
    buttons = true;
 
@@ -90,6 +91,9 @@ comentario = '';
    moduloNivel2 = false;
    moduloServicios = false;
 
+
+   valorParametro = [];
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore, 
               private http: Http, private storage: AngularFireStorage) {
   //this.obs.changeSolServ(this.servicioso);
@@ -109,8 +113,8 @@ comentario = '';
       if(data.length != 0){
         this.alertaCargando();
 
-        this.getCollectionReserv(data.uid).subscribe(data1 => {
-         
+        this.getCollectionReserv(data.uid).then(data1 => {
+   
           this.estructurarServiciosActivos(data1, data).then(datos=>{
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
@@ -166,10 +170,10 @@ comentario = '';
   }
 
   getCollectionReserv(labid) {
-    this.collectionReserv = this.afs.collection('cfSrvReserv',
-      ref => ref.where('cfFacil', '==', labid));
+    const col =  this.afs.collection('cfSrvReserv');
+    const refer = col.ref.where('cfFacil', '==', labid);
 
-    return this.collectionReserv.snapshotChanges();
+    return refer.get();
   }
 
   estructurarServiciosActivos(data, lab) {
@@ -177,9 +181,9 @@ comentario = '';
     let promise = new Promise((resolve, reject) => {
       const activo = [];
       const historial = [];
-  
-      for (let index = 0; index < data.length; index++) {
-        const elemento = data[index].payload.doc.data();
+      
+      data.forEach(doc => {
+        const elemento = doc.data();
         this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
           const servicio =  data2.data();   
           const Reserv = {
@@ -193,14 +197,18 @@ comentario = '';
             activo: servicio.active,
             variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
             condiciones: elemento.conditionsLog,
+            condicionesSrv: elemento.conditionsLogServ,
             comentario: elemento.comments,
             usuario: elemento.emailuser,
             fecha: elemento.createdAt.split('T')[0],
             uidserv: data2.id,
-            uidreserv: data[index].payload.doc.id,
+            uidreserv: doc.id,
             path: elemento.path,
             acepto: elemento.acceptedBy,
-            fechaTermino: elemento.updatedAt.split('T')[0]
+            fechaTermino: elemento.updatedAt.split('T')[0],
+            parametrosVar:elemento.parametros,
+            parametrosSrv: elemento.parametrosSrv,
+            nombreParametros:servicio.parametros
           };
 
           if(elemento.dateAccepted){
@@ -213,15 +221,14 @@ comentario = '';
               historial.push(Reserv);
             } 
   
-  
-            if(data.length == (activo.length+historial.length)){
+            if(data.size == (activo.length+historial.length)){
               resolve({data:activo, data2:historial});
             }
   
   
         });
-  
-      }
+      });
+     
     });
    
 
@@ -306,16 +313,17 @@ comentario = '';
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
-           const variacion =  data.payload.data();
+          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).ref.get().then(data => {
+           const variacion =  data.data();
 
             const vari = {
               id: clave,
               nombre: variacion.cfName,
               descripcion: variacion.cfDescription,
               precio: variacion.cfPrice,
-              activo: variacion.active
-              };
+              activo: variacion.active,
+              parametros:variacion.parametros
+            };
 
               arr.push(vari);
 
@@ -441,7 +449,7 @@ comentario = '';
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
-
+    this.estructurarCondicionesSrv(item.condicionesSrv);
     this.moduloinfo = true;
     console.log(item);
     if(table == 'activo'){
@@ -459,7 +467,11 @@ comentario = '';
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
       this.condicion =  this.buscarCondicion(item);
-      console.log(this.condicion);
+      for (let i = 0; i < this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros.length; i++) {
+        const element = this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
+        this.valorParametro.push(element.value);
+      }
+    
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
@@ -495,6 +507,15 @@ comentario = '';
     for (let i = 0; i < condiciones.length; i++) {
       //const element = condiciones[i];
       this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
+    }
+  }
+
+   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+   estructurarCondicionesSrv(condiciones){
+    this.condicionesobjetoSrv = {};
+    for (let i = 0; i < condiciones.length; i++) {
+      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
+ 
     }
   }
 

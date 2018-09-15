@@ -43,17 +43,21 @@ export class QuerysAutenticadoService {
                 status: elemento.status,
                 nombre: servicio.cfName,
                 descripcion: servicio.cfDesc,
-                precio: servicio.cfPrice,
+                precio: elemento.cfPrice,
                 activo: servicio.active,
                 variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
                 condiciones: elemento.conditionsLog,
+                condicionesSrv: elemento.conditionsLogServ,
                 comentario: elemento.comments,
                 usuario: elemento.emailuser,
                 fecha: elemento.createdAt.split('T')[0],
                 uid: data2.id,
                 uidreserv: data[index].payload.doc.id,
                 acepto: elemento.acceptedBy,
-                path: elemento.path     
+                path: elemento.path,
+                parametrosVar:elemento.parametros,
+                parametrosSrv: elemento.parametrosSrv,
+                nombreParametros:servicio.parametros
               };
   
               if(elemento.status == 'aceptada' || elemento.status == 'pendiente' || elemento.status == 'procesada'){
@@ -90,15 +94,16 @@ export class QuerysAutenticadoService {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {        
-          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
-           const variacion =  data.payload.data();
+          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).ref.get().then(data => {
+           const variacion =  data.data();
        
             const vari = {
               id: clave,
               nombre: variacion.cfName,
               descripcion: variacion.cfDescription,
               precio: variacion.cfPrice,
-              activo: variacion.active
+              activo: variacion.active,
+              parametros:variacion.parametros
               };
 
               arr.push(vari);      

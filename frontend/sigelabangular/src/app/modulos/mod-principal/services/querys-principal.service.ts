@@ -29,8 +29,9 @@ export class QuerysPrincipalService {
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
   getLaboratorios() {
-    return this.afs.collection('cfFacil', 
-            ref => ref.where('active','==',true)).ref.get();
+    const colle = this.afs.collection('cfFacil');
+    const refer = colle.ref.where('active','==',true);
+    return refer.get();
   }
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
@@ -148,6 +149,8 @@ export class QuerysPrincipalService {
                             variaciones: this.variations(doc.id),
                             equipos: this.estructurarEquipos(elemento.relatedEquipments),
                             condiciones: elemento.cfCondition,
+                            parametros: elemento.parametros,
+                            descuento:elemento.descuento,
                             uid: doc.id
                           },
                           infoLab: {
@@ -354,6 +357,8 @@ export class QuerysPrincipalService {
               activo: servicio.active,
               equipos: this.estructurarEquipos(servicio.relatedEquipments),
               condiciones: servicio.cfCondition,
+              descuento:servicio.descuento,
+              parametros:servicio.parametros,
               variaciones: this.variations(clave),
               uid: data.id
              };

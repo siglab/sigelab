@@ -44,8 +44,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   buttoncancel = false;
 
   variation:any;
+  valorParametro = [];
+
   condicion:any;
   condicionesobjeto = {};
+  condicionesobjetoSrv = {};
 
   comentario = '';
 
@@ -105,9 +108,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
+    this.estructurarCondicionesSrv(item.condicionesSrv);
     this.buttoncancel = false;
     this.moduloinfo = true;
    
+    console.log(this.servsel);
   }
 
   mostrardata2(item) {
@@ -115,27 +120,33 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
+    this.estructurarCondicionesSrv(item.condicionesSrv);
     this.moduloinfo = true;
     if(this.servsel.status == 'pendiente'){
       this.buttoncancel = true;
     }else{
       this.buttoncancel = false;
     }
+
+    console.log(this.servsel);
   }
 
   cambiarVariacion(item){
 
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
+      for (let i = 0; i < this.servsel.parametrosVar.find(o => o.id == this.variation.id).parametros.length; i++) {
+        const element = this.servsel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
+        this.valorParametro.push(element.value);
+      }
+    
       this.condicion =  this.buscarCondicion(item);
-      console.log(this.condicion);
+   
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
       this.condicion = undefined;
     }
-
-    console.log(item);
 
   }
 
@@ -163,19 +174,21 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   estructurarCondiciones(condiciones){
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
+ 
       this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
+     
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariacionesCond(condiciones){
-    this.condicionesobjeto = {};
+  estructurarCondicionesSrv(condiciones){
+    this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
+ 
     }
   }
+
 
   cancelarSolicitudServicio() {
     swal({

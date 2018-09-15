@@ -190,38 +190,57 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           this.estructurarLab(data.uid).then(() => {
             this.itemsel = Observable.of(this.labestructurado);
             this.limpiarData();
-            const ambiente = this;
-
+          
+            console.log(this.labestructurado);
             if(this.labestructurado){
               if(this.labestructurado.objectActividad.extension){
                 this.dataSourceServicios.data = this.labestructurado.servicios;
-                this.dataSourceServicios.sort = this.sortServicios;
-                this.dataSourceServicios.paginator = this.paginatorServicios;
+               
 
                 this.dataSourceSolicitudes.data = this.labestructurado.solicitudes;
-                this.dataSourceSolicitudes.sort = this.sortSolicitudes;
-                this.dataSourceSolicitudes.paginator = this.paginatorSolicitudes;
+               
+
+                setTimeout(()=>{
+                  this.dataSourceServicios.sort = this.sortServicios;
+                  this.dataSourceServicios.paginator = this.paginatorServicios;
+                  
+                  this.dataSourceSolicitudes.sort = this.sortSolicitudes;
+                  this.dataSourceSolicitudes.paginator = this.paginatorSolicitudes;
+                }, 1500);
               }
               if(this.labestructurado.objectActividad.research){
                 this.dataSourceProyectos.data = this.labestructurado.proyectos;
-                this.dataSourceProyectos.sort = this.sortProyectos;
-                this.dataSourceProyectos.paginator = this.paginatorProyectos;
+               
+
+                setTimeout(()=>{
+                  this.dataSourceProyectos.sort = this.sortProyectos;
+                  this.dataSourceProyectos.paginator = this.paginatorProyectos;
+                }, 1500);
+
               }
               if(this.labestructurado.objectActividad.teaching){
                 this.dataSourcePracticas.data = this.labestructurado.practicas;
-                this.dataSourcePracticas.sort = this.sortPracticas;
-                this.dataSourcePracticas.paginator = this.paginatorPracticas;
+
+                setTimeout(()=>{
+                  this.dataSourcePracticas.sort = this.sortPracticas;
+                  this.dataSourcePracticas.paginator = this.paginatorPracticas;
+                }, 1500);
               }
           
                 this.dataSourceEquipos.data = this.labestructurado.equipos;
-                this.dataSourceEquipos.sort = this.sortEquipos;
-                this.dataSourceEquipos.paginator = this.paginatorEquipos;
-
+                
                 this.dataSourcePersonal.data = this.labestructurado.personal;
-                this.dataSourcePersonal.sort = this.sortPersonal;
-                this.dataSourcePersonal.paginator = this.paginatorPersonal;
+                
 
-                swal.close();
+                setTimeout(()=>{
+                  this.dataSourceEquipos.sort = this.sortEquipos;
+                  this.dataSourceEquipos.paginator = this.paginatorEquipos;
+
+                  this.dataSourcePersonal.sort = this.sortPersonal;
+                  this.dataSourcePersonal.paginator = this.paginatorPersonal;
+                  swal.close();
+                }, 1500);
+              
 
             }
 
@@ -276,19 +295,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   }
 
-  addEquipo() {
-    const eq = {
-     cfOrgUnit: '',
-     ciNumber: '87696898',
-     projectDesc: 'proyecto que busca la geomatizacion de zonas urbanas de cali',
-     projectName: 'PROYECTO CARTOGRAPHER',
-     relatedFacilities: {cfFacilId: true},
-     relaedPers: {cfPersId: true}
-    };
-
-    this.afs.collection('project').add(eq);
-  }
-
 
   estructurarLab(key){
     this.labestructurado = {};
@@ -339,8 +345,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     };
 
                     if(laboratorio.facilActivity.extension){
-                      this.labestructurado['solicitudes'] = this.estructurarServicios(laboratorio.relatedServices).arr2;
-                      this.labestructurado['servicios'] = this.estructurarServicios(laboratorio.relatedServices).arr;
+                      const servicesol = this.estructurarServicios(laboratorio.relatedServices);
+                      this.labestructurado['solicitudes'] = servicesol.arr2;
+                      this.labestructurado['servicios'] = servicesol.arr;
                     }
                     if(laboratorio.facilActivity.research){
                       this.labestructurado['proyectos'] =  this.estructurarProyectos(laboratorio.relatedProjects);
@@ -458,25 +465,24 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
              };
              arr.push(serv);
 
-            this.afs.collection<any>('cfSrvReserv',
-            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'pendiente'))
-            .ref.get().then(dataSol => {
+            this.getSolicitudes(clave).then(dataSol => {
+   
               dataSol.forEach(doc => {
                 const element = doc.data();
 
-                this.getPersonId(element.user).subscribe(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
                     descripcionServ: servicio.cfDesc,
-                    precioServ: servicio.cfPrice,
+                    precioServ: element.cfPrice,
                     activoServ: servicio.active,
-                    email: usuario.payload.data().email,
+                    email: element.emailuser,
                     uidServ: doc.id,
+                    fecha: element.createdAt.split('T')[0],
                     estado: element.status
                   };
 
                   arr2.push(solicitud);
-                });
+               
               });
 
 
@@ -559,9 +565,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   nombre: equip.cfName,
                   activo: equip.active,
                   precio: equip.price,
-                  componentes:this.estructurarComponents(clave),
-                  servicios:this.estructurarServicios(equip.relatedSrv).arr,
-                  practicas:this.estructurarPracticas(equip.relatedPrac)
+                  componentes:this.estructurarComponents(clave)
                 };
 
 
@@ -882,7 +886,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   getPersonId(userid) {
-    return this.afs.doc('user/' + userid).snapshotChanges();
+    return this.afs.doc('user/' + userid).ref.get();
   }
 
   getPersona(persid) {
@@ -894,6 +898,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     return this.afs.collection<any>('cfFacil',
       ref => ref.where('facilityAdmin', '==', persid)).snapshotChanges();
 
+  }
+
+  getSolicitudes(id){
+    const col = this.afs.collection('cfSrvReserv');
+    const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'pendiente');
+
+    return refer.get();
   }
 
 
