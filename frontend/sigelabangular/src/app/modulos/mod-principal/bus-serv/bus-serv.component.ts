@@ -34,6 +34,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     campoCondicion = '';
     condicionesobjeto = {};
+    condicionesobjetoServ = {};
+
+    parametros = {};
+    parametrosServ = {};
 
     variation:any;
     variacionSel = "";
@@ -72,6 +76,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
     // abrer loading mientras se cargan los datos
     swal({
       title: 'Cargando un momento...',
@@ -85,7 +90,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
       this.query.estructurarDataServ(data).then(datos => {
 
-        console.log(datos['data']);
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -115,8 +119,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
-      console.log(this.variation);
-      this.estructurarVariaciones(this.variation.data.cfConditions);
+      this.estructurarVariaciones(this.variation.data.cfConditions, this.variation.data.parametros);
     } else {
       this.variation = undefined;
     }
@@ -125,26 +128,49 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
-  estructuraCondiciones(variations){
+  estructuraCondiciones(condiciones, tipo){
     const arr = [];
-    for (let i = 0; i < variations.length; i++) {
-      const element = variations[i];
+    for (let i = 0; i < condiciones.length; i++) {
 
+      let aux;
+      if(tipo != 'servicio'){
+        aux = this.condicionesobjeto["checkbox"+i]
+      }else{
+        aux = this.condicionesobjetoServ["checkboxServ"+i]
+      }
       const vari = {
-        conditionText: variations[i],
-        aceptada: this.condicionesobjeto["checkbox"+i]
+        conditionText: condiciones[i],
+        aceptada: aux
       }
       arr.push(vari);
     }
     return arr;
   }
 
-  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariaciones(condiciones){
+   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarVariaciones(condiciones, parametros){
     this.condicionesobjeto = {};
+    this.parametros = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
       this.condicionesobjeto["checkbox"+i] = true;
+    }
+
+    for (let i = 0; i < parametros.length; i++) {
+      this.parametros["input"+i] = '';
+    }
+  }
+
+  estructurarCondicionesServicio(condiciones, parametros){
+    this.condicionesobjetoServ = {};
+    this.parametrosServ = {};
+    for (let i = 0; i < condiciones.length; i++) {
+
+      this.condicionesobjetoServ["checkboxServ"+i] = true;
+    }
+
+    for (let i = 0; i < parametros.length; i++) {
+      //const element = condiciones[i];
+      this.parametrosServ["inputServ"+i] = '';
     }
   }
 
@@ -158,10 +184,22 @@ export class BusServComponent implements OnInit, AfterViewInit {
     });
   
     if(!encontrado){
+      const auxiliar = [];
+      if(this.parametros){
+        let cont = 0;
+      
+        for (const key in this.parametros) {
+          if (this.parametros.hasOwnProperty(key)) {
+            auxiliar.push({id:cont, value:this.parametros[key]});
+            cont++;
+          }
+        }
+      }
       this.listaVariaciones.push({
         data: this.variation,
-        condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
-      }); 
+        condiciones: this.estructuraCondiciones(this.variation.data.cfConditions, 'var'),
+        parametros: auxiliar
+      });
       this.preciototal += parseInt(this.variation.data.cfPrice);
       swal({
         type: 'success',
@@ -226,7 +264,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
         path:[],
         datauser:{type:'', ci:''},
         emailuser: this.user.email,
-        acceptedBy:''
+        acceptedBy:'',
+        parametrosSrv:[],
+        parametros:[]
       };
 
         swal({
@@ -247,14 +287,26 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.selectedVariations[element.data.id] = true; 
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
                 
+                cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
 
               cfSrvReserv.cfPrice = ''+this.preciototal;
     
-            } else {
-              cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.itemsel.infoServ.condiciones);
+            } 
+
+            if(this.itemsel.infoServ.condiciones.length != 0){
+              cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
             }
 
+            if(this.parametrosServ){
+              let cont = 0;
+              for (const key in this.parametrosServ) {
+                if (this.parametrosServ.hasOwnProperty(key)) {
+                  cfSrvReserv.parametrosSrv.push({id:cont, value:this.parametrosServ[key]});
+                  cont++;
+                }
+              }
+            }
             if(this.usuariounivalle){
               cfSrvReserv.typeuser = 'interno'
              // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
@@ -268,18 +320,21 @@ export class BusServComponent implements OnInit, AfterViewInit {
               email: this.user.email, 
               uid: this.user.uid});
            
-              console.log(cfSrvReserv);
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-
-              this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email);
-
-              this.limpiarDatos();
 
               swal({
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
+              }).then(()=>{
+                this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email);
+
+                this.limpiarDatos();
+
+                this.moduloinfo = false;
+
+                $('html, body').animate({ scrollTop: '0px' }, 'slow');
               });
 
             }).catch(error => {
@@ -328,7 +383,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) { 
-    console.log(item);
+
     this.listaVariaciones = [];
     this.variation = undefined;
     this.campoCondicion = '';
@@ -336,11 +391,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
    $('html, body').animate({ scrollTop: '400px' }, 'slow');
     this.itemsel = item;
 
-    if(item.infoServ.variaciones.length == 0){
-      if(item.infoServ.condiciones.length !== 0){
-        this.estructurarVariaciones(item.infoServ.condiciones);
-      }
-
+    if(item.infoServ.condiciones.length !== 0){
+      this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
     }
     
 

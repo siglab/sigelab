@@ -62,6 +62,7 @@ comentario = '';
    condicion:any;
 
    condicionesobjeto = {};
+   condicionesobjetoSrv = {};
 
    buttons = true;
 
@@ -69,12 +70,15 @@ comentario = '';
 
    iconos = {
      sabs:false,
-     info:false
+     info:false,
+     archivos:false
    }
 
    sus: Subscription;
 
   files = [];
+
+  listaArchivos = [];
   filePath:any;
   ref:any;
 
@@ -87,10 +91,13 @@ comentario = '';
    moduloNivel2 = false;
    moduloServicios = false;
 
-constructor(private obs: ObservablesService, private afs: AngularFirestore,
-            private http: Http, private storage: AngularFireStorage) {
- //this.obs.changeSolServ(this.servicioso);
-}
+
+   valorParametro = [];
+
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+              private http: Http, private storage: AngularFireStorage) {
+  //this.obs.changeSolServ(this.servicioso);
+  }
 
   ngOnInit() {
 
@@ -106,39 +113,20 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       if(data.length != 0){
         this.alertaCargando();
 
-        this.getCollectionReserv(data.uid).subscribe(data1 => {
+        this.getCollectionReserv(data.uid).then(data1 => {
+   
+          this.estructurarServiciosActivos(data1, data).then(datos=>{
+              this.dataSource.data = datos['data'];
+              this.dataSource.sort = this.sort;
+              this.dataSource.paginator = this.paginator;
 
-          this.datos = this.estructurarServiciosActivos(data1, data);
-          this.histodatos = this.estructurarHistorialServicios(data1, data);
+              this.dataSource2.data = datos['data2'];
+              this.dataSource2.sort = this.sort2;
+              this.dataSource2.paginator = this.paginator2;
 
-          this.dataSource.data = this.datos;
-          this.dataSource2.data = this.histodatos;
-
-            setTimeout(() => {
-              if(this.datos){
-                this.dataSource.sort = this.sort;
-                this.dataSource.paginator = this.paginator;
-              }
-
-              if(this.histodatos){
-                this.dataSource2.sort = this.sort2;
-                this.dataSource2.paginator = this.paginator2;
-              }
-
-              if(this.datos.length != 0 || this.histodatos.length != 0){
-                this.cerrarAlerta();
-              } else {
-
-                swal({
-                  type: 'error',
-                  title: 'No existen solicitudes de servicios a la fecha',
-                  showConfirmButton: true
-                });
-
-              }
-
-            }, 1500);
-
+              this.cerrarAlerta();
+          });     
+                          
         });
       } else{
         swal({
@@ -182,93 +170,72 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
   }
 
   getCollectionReserv(labid) {
-    this.collectionReserv = this.afs.collection('cfSrvReserv',
-      ref => ref.where('cfFacil', '==', labid));
+    const col =  this.afs.collection('cfSrvReserv');
+    const refer = col.ref.where('cfFacil', '==', labid);
 
-    return this.collectionReserv.snapshotChanges();
+    return refer.get();
   }
 
   estructurarServiciosActivos(data, lab) {
-    const activo = [];
 
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-      this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-        const servicio =  data2.payload.data();
+    let promise = new Promise((resolve, reject) => {
+      const activo = [];
+      const historial = [];
+      
+      data.forEach(doc => {
+        const elemento = doc.data();
+        this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
+          const servicio =  data2.data();   
+          const Reserv = {
+            uidlab: elemento.cfFacil,
+            nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
+            infolab: lab.labo,
+            status: elemento.status,
+            nombre: servicio.cfName,
+            descripcion: servicio.cfDesc,
+            precio: elemento.cfPrice,
+            activo: servicio.active,
+            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
+            condiciones: elemento.conditionsLog,
+            condicionesSrv: elemento.conditionsLogServ,
+            comentario: elemento.comments,
+            usuario: elemento.emailuser,
+            fecha: elemento.createdAt.split('T')[0],
+            uidserv: data2.id,
+            uidreserv: doc.id,
+            path: elemento.path,
+            acepto: elemento.acceptedBy,
+            fechaTermino: elemento.updatedAt.split('T')[0],
+            parametrosVar:elemento.parametros,
+            parametrosSrv: elemento.parametrosSrv,
+            nombreParametros:servicio.parametros
+          };
 
-            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){
-              this.getEmailUser(elemento.user).subscribe(email =>{
-                const Reserv = {
-                  uidlab: elemento.cfFacil,
-                  nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
-                  infolab: lab.labo,
-                  status: elemento.status,
-                  nombre: servicio.cfName,
-                  descripcion: servicio.cfDesc,
-                  precio: servicio.cfPrice,
-                  activo: servicio.active,
-                  variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-                  condiciones: elemento.conditionsLog,
-                  comentario: elemento.comments,
-                  usuario: email.payload.data().email,
-                  fecha: elemento.createdAt.split('T')[0],
-                  uidserv: data2.payload.id,
-                  uidreserv: data[index].payload.doc.id,
-                  path: elemento.path,
-                  acepto: elemento.acceptedBy
-                };
-                activo.push(Reserv);
-              });
+          if(elemento.dateAccepted){
+            Reserv['fechaAcepto'] = elemento.dateAccepted.split('T')[0];
+          }
+  
+            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){                 
+              activo.push(Reserv);        
+            }else{
+              historial.push(Reserv);
+            } 
+  
+            if(data.size == (activo.length+historial.length)){
+              resolve({data:activo, data2:historial});
             }
-
+  
+  
+        });
       });
+     
+    });
+   
 
-    }
-
-    return activo;
+    return promise;
   }
 
-  estructurarHistorialServicios(data, lab) {
-
-    const historial = [];
-
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-      this.afs.doc('cfSrv/' + elemento.cfSrv).snapshotChanges().subscribe(data2 => {
-        const servicio =  data2.payload.data();
-
-            if(elemento.status != 'aceptada' && elemento.status != 'pendiente' && elemento.status != 'procesada'){
-              this.getEmailUser(elemento.user).subscribe(email =>{
-                const Reserv = {
-                  uidlab: elemento.cfFacil,
-                  nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
-                  infolab:lab.labo,
-                  status: elemento.status,
-                  nombre: servicio.cfName,
-                  descripcion: servicio.cfDesc,
-                  precio: servicio.cfPrice,
-                  activo: servicio.active,
-                  variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-                  condiciones: elemento.conditionsLog,
-                  comentario: elemento.comments,
-                  usuario: email.payload.data().email,
-                  fecha: elemento.createdAt.split('T')[0],
-                  uidserv: data2.payload.id,
-                  path: elemento.path,
-                  uidreserv: data[index].payload.doc.id
-                };
-                historial.push(Reserv);
-
-              });
-            }
-
-      });
-
-    }
-
-    return historial;
-  }
-
+  
   alistarVariables(event){
     console.log(event.target.files);
     let tamano = false;
@@ -287,7 +254,10 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
         'error'
       );
     }else{
-      this.files = event.target.files;
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.listaArchivos.push(event.target.files[i]);
+      }
+      
     }
 
   }
@@ -296,12 +266,12 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
     let filespath = [];
 
-      if(this.servicioActivoSel.path.length != 0){
-        filespath = this.servicioActivoSel.path;
-      }
+    if(this.servicioActivoSel.path.length != 0){
+      filespath = this.servicioActivoSel.path;
+    }
 
-    let files = this.files;
-    let filesIndex = _.range(files.length)
+    let files = this.listaArchivos;
+    let filesIndex = _.range(files.length);
     _.each(filesIndex, (idx) => {
       this.currentUpload = new Upload(files[idx]);
       this.uploadFile(this.currentUpload);
@@ -343,16 +313,17 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).snapshotChanges().subscribe(data => {
-           const variacion =  data.payload.data();
+          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).ref.get().then(data => {
+           const variacion =  data.data();
 
             const vari = {
               id: clave,
               nombre: variacion.cfName,
               descripcion: variacion.cfDescription,
               precio: variacion.cfPrice,
-              activo: variacion.active
-              };
+              activo: variacion.active,
+              parametros:variacion.parametros
+            };
 
               arr.push(vari);
 
@@ -364,6 +335,74 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
 
     return arr;
   }
+
+
+  quitarArchivo(index){
+
+    this.listaArchivos.splice(index, 1);
+    swal(
+      'archivo retirado',
+      '',
+      'error'
+    );
+  }
+
+  eliminarArchivo(index){
+    swal({
+
+      type: 'warning',
+      title: 'Esta seguro que desea eliminar este archivo de la solicitud',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'No, Cancelar'
+
+    }).then((result) => {
+
+      if (result.value) {
+        let nuevopath = [];
+        this.servicioActivoSel.path.forEach(element => {
+          if(element != this.servicioActivoSel.path[index]){
+            nuevopath.push(element);
+          }
+        });
+        
+        const ref = this.storage.ref(this.servicioActivoSel.path[index]);
+        ref.delete().subscribe(()=>{
+
+          this.afs.doc('cfSrvReserv/'+this.servicioActivoSel.uidreserv).update({
+            path:nuevopath
+          }).then(()=> {
+
+            
+            swal({
+              type: 'success',
+              title: 'archivo eliminado',
+              showConfirmButton: true
+            }).then(()=>{
+              this.servicioActivoSel.path.splice(index,1);
+            });
+          });
+        }); ;
+       
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal(
+          'Solicitud Cancelada',
+          '',
+          'error'
+        );
+      }
+
+    });
+ 
+  }
+
+  descargarArchivo(index){
+    const ref = this.storage.ref(this.servicioActivoSel.path[index]);
+    ref.getDownloadURL().subscribe(data => {
+      window.open(data);
+    }); ;
+  }
+
 
   getEmailUser(userid){
     return this.afs.doc('user/' + userid).snapshotChanges();
@@ -410,7 +449,7 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
-
+    this.estructurarCondicionesSrv(item.condicionesSrv);
     this.moduloinfo = true;
     console.log(item);
     if(table == 'activo'){
@@ -428,7 +467,11 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
       this.condicion =  this.buscarCondicion(item);
-      console.log(this.condicion);
+      for (let i = 0; i < this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros.length; i++) {
+        const element = this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
+        this.valorParametro.push(element.value);
+      }
+    
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
@@ -463,18 +506,19 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
       //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
     }
   }
 
-  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariacionesCond(condiciones){
-    this.condicionesobjeto = {};
+   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+   estructurarCondicionesSrv(condiciones){
+    this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
+ 
     }
   }
+
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario(){
@@ -568,34 +612,39 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
         //this.alertaCargando();
         const reserva = {
           status: estado,
-          acceptedBy: this.user.email,
           updatedAt: new Date().toISOString()
         };
         if(estado == 'procesada'){
           const filespath = this.uploadMulti();
-
-          reserva['path'] = filespath;
-
-          this.servicioActivoSel.status = estado;
-
-          console.log(reserva);
-          this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
-            this.cerrarAlerta();
-                this.alertaExito('Reserva '+estado);
-          });
-        }else{
-
-          this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update({status:estado}).then(()=>{
-            this.cerrarAlerta();
-                this.alertaExito('Reserva '+estado);
-          });
-
-
+          reserva['path'] = filespath;                        
+        } else if(estado == 'aceptada'){
+          reserva['acceptedBy'] = this.user.email;
+          reserva['dateAccepted'] = new Date().toISOString();
         }
 
+        this.servicioActivoSel.status = estado;     
+
+        this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
+          if(estado == 'procesada'){
+            swal({
+              type: 'success',
+              title: 'Solicitud procesada',
+              showConfirmButton: true
+            }).then(()=>{
+              this.cerrarModal('modalProcesar');
+              this.listaArchivos = [];
+            });
+           
+          }else{
+            this.cerrarAlerta();
+            this.alertaExito('Reserva '+estado);
+          }
+         
+        });
+    
         this.moduloinfo = false;
-
-
+        this.resetIconos();
+       
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -646,6 +695,11 @@ constructor(private obs: ObservablesService, private afs: AngularFirestore,
     $('#'+modal).modal('hide');
   }
 
+  resetIconos(){
+    this.iconos.info = false;
+    this.iconos.sabs = false;
+    this.iconos.archivos = false;
+  }
 
 
 }

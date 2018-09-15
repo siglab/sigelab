@@ -44,15 +44,20 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   buttoncancel = false;
 
   variation:any;
+  valorParametro = [];
+
   condicion:any;
   condicionesobjeto = {};
+  condicionesobjetoSrv = {};
 
   comentario = '';
 
   iconos = {
     info:false,
     sabs:false
-  }
+  };
+
+  fecha = new Date();
 
   constructor(private querys: QuerysAutenticadoService, 
               private observer: ObserverAutenticadoService,
@@ -103,9 +108,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
+    this.estructurarCondicionesSrv(item.condicionesSrv);
     this.buttoncancel = false;
     this.moduloinfo = true;
    
+    console.log(this.servsel);
   }
 
   mostrardata2(item) {
@@ -113,41 +120,36 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
+    this.estructurarCondicionesSrv(item.condicionesSrv);
     this.moduloinfo = true;
     if(this.servsel.status == 'pendiente'){
       this.buttoncancel = true;
     }else{
       this.buttoncancel = false;
     }
+
+    console.log(this.servsel);
   }
 
   cambiarVariacion(item){
 
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
+      for (let i = 0; i < this.servsel.parametrosVar.find(o => o.id == this.variation.id).parametros.length; i++) {
+        const element = this.servsel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
+        this.valorParametro.push(element.value);
+      }
+    
       this.condicion =  this.buscarCondicion(item);
-      console.log(this.condicion);
+   
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
       this.condicion = undefined;
     }
 
-    console.log(item);
-
   }
 
-  descargarDoc(){
-    console.log(this.servsel.path);
-
-    for (let i = 0; i < this.servsel.path.length; i++) {
-      const ref = this.storage.ref(this.servsel.path[i]);
-    
-      ref.getDownloadURL().subscribe(data => {
-        window.open(data);
-      }); 
-    }
-  }
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarVariacion(item){
@@ -172,19 +174,21 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   estructurarCondiciones(condiciones){
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+ 
+      this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
+     
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariacionesCond(condiciones){
-    this.condicionesobjeto = {};
+  estructurarCondicionesSrv(condiciones){
+    this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].accepted;
+      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
+ 
     }
   }
+
 
   cancelarSolicitudServicio() {
     swal({
@@ -195,7 +199,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.value) {
-        this.querys.cancerlarSolicitud(this.servsel.uidreserv).then(() => {
+        const fecha = this.fecha.toISOString();
+        this.querys.cancerlarSolicitud(this.servsel.uidreserv, fecha).then(() => {
 
           swal({
             type: 'success',
@@ -303,6 +308,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
       });
     });
+  }
+
+  descargarArchivo(index){
+    const ref = this.storage.ref(this.servsel.path[index]);
+    ref.getDownloadURL().subscribe(data => {
+      window.open(data);
+    }); ;
   }
 
 

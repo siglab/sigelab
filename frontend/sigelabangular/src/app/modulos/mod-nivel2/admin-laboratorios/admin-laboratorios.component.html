@@ -23,7 +23,7 @@
 
               <div class="box-body">
                 <div class="row">
-                  <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div  *ngIf="this.labestructurado.objectActividad.extension" class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-aqua">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -39,7 +39,7 @@
                     <!-- /.info-box -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div  *ngIf="this.labestructurado.objectActividad.research" class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-red">
                         <i class="fa fa-suitcase"></i>
@@ -59,7 +59,7 @@
                   <!-- fix for small devices only -->
                   <div class="clearfix visible-sm-block"></div>
 
-                  <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div  *ngIf="this.labestructurado.objectActividad.extension" class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-green">
                         <i class="fa fa-group"></i>
@@ -75,7 +75,7 @@
                     <!-- /.info-box -->
                   </div>
                   <!-- /.col -->
-                  <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div *ngIf="this.labestructurado.objectActividad.teaching" class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                       <span class="info-box-icon bg-yellow">
                         <i class="glyphicon glyphicon-ok"></i>
@@ -173,6 +173,14 @@
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
+                                  <label class="control-label" for="activ"><strong>Actividades :</strong></label>
+                                    <ul>
+                                      <li *ngFor="let item of itemsel.actividad;">{{item}} </li>
+                                    </ul>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
                                   <label class="control-label" for="espacio">
                                     <strong>Encargado:</strong> {{this.itemsel.director}}</label>
                                 </div>
@@ -253,7 +261,7 @@
                       </div>
                   </div>
 
-                  <div class="box box-danger">
+                  <div *ngIf="this.labestructurado.objectActividad.teaching" class="box box-danger">
                       <div class="box-header">
                         <h4 (click)="cambiarIcono('practica')" class="box-title">
                           <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" class="collapsed" aria-expanded="false">
@@ -297,7 +305,7 @@
                       </div>
                   </div>
 
-                  <div class="box box-danger">
+                  <div *ngIf="this.labestructurado.objectActividad.extension" class="box box-danger">
                       <div class="box-header">
                         <h4 (click)="cambiarIcono('solicitud')" class="box-title">
                           <a style="color: black;" data-toggle="collapse" data-parent="#accordion" href="#collapseSol" class="collapsed" aria-expanded="false">
@@ -549,7 +557,7 @@
                     </div>
                   </div>
 
-                  <div class="box box-danger">
+                  <div *ngIf="this.labestructurado.objectActividad.extension" class="box box-danger">
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('servicio')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ" class="collapsed" aria-expanded="false">
@@ -593,7 +601,7 @@
                     </div>
                   </div>
 
-                  <div class="box box-danger">
+                  <div *ngIf="this.labestructurado.objectActividad.research" class="box box-danger">
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('proyecto')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseProy" class="collapsed" aria-expanded="false">
@@ -780,6 +788,18 @@
                                   </ul>
                               </div>
                             </div>
+
+
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="listAct"><strong>Actividad :</strong></label>
+                                <mat-form-field>
+                                  <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecactividad" multiple >
+                                    <mat-option *ngFor="let opciones of this.listaActividad;" [value]="opciones.name">{{opciones.name}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                            </div>
                             
                             <div class="form-group">
                               <div class="col-md-12">
@@ -871,7 +891,7 @@
                                               <label class="control-label" for="espacio">
                                                 <input name="{{'checkbox' + i}}" [(ngModel)]="checks['checkbox'+ i]" type="checkbox">
                                                 <strong>{{item.nombre}}:</strong>
-                                                <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')||(item.nombre == 'telefonos')">
+                                                <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')||(item.nombre == 'telefonos')||(item.nombre == 'actividad')">
                                                   <ul *ngIf="!item.quitar">
                                                     <li *ngFor="let sug of item.info"><strong>Agregar: </strong>{{sug.nombre}}</li>
                                                   </ul>
@@ -879,7 +899,7 @@
                                                     <li *ngFor="let sug of item.infoaux"><strong>Quitar: </strong>{{sug.nombre}}</li>
                                                   </ul>
                                                 </div>
-                                                <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')&&(item.nombre != 'telefonos')">
+                                                <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')&&(item.nombre != 'telefonos')&&(item.nombre != 'actividad')">
                                                     {{item.infoaux}}
                                                 </div>
 
@@ -1090,7 +1110,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadosol">
-                      <strong>Precio:</strong> {{seleccionado.precioServ}}</label>
+                      <strong>Precio: $</strong> {{seleccionado.precioServ}}</label>
                   </div>
                 </div>
                 <div class="form-group">
@@ -1111,6 +1131,12 @@
                     <label class="control-label">
                       <strong style="color: red;">INFORMACION DE LA SOLICITUD</strong>
                     </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadosol">
+                      <strong>Fecha de la solicitud:</strong> {{seleccionado.fecha}}</label>
                   </div>
                 </div>
                 <div class="form-group">

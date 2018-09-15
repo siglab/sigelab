@@ -46,6 +46,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   campoCondicion = '';
   condiciones = [];
   condicionesobjeto = {};
+  condicionesobjetoServ = {};
+
+  parametros = {};
+  parametrosServ = {};
 
   variation:any;
   variacionSel = "";
@@ -113,7 +117,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
     // trae los datos de los laboratorios
     this.query.getLaboratorios().then(data => {
+     
       this.query.estructurarDataLab(data).then(datos => {
+
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -142,9 +148,21 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
 
     if(!encontrado){
+      const auxiliar = [];
+      if(this.parametros){
+        let cont = 0;
+      
+        for (const key in this.parametros) {
+          if (this.parametros.hasOwnProperty(key)) {
+            auxiliar.push({id:cont, value:this.parametros[key]});
+            cont++;
+          }
+        }
+      }
       this.listaVariaciones.push({
         data: this.variation,
-        condiciones: this.estructuraCondiciones(this.variation.data.cfConditions)
+        condiciones: this.estructuraCondiciones(this.variation.data.cfConditions, 'var'),
+        parametros: auxiliar
       });
       this.preciototal += parseInt(this.variation.data.cfPrice);
       swal({
@@ -210,7 +228,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         typeuser:'externo',
         datauser:{type:'', ci:''},
         emailuser: this.user.email,
-        acceptedBy:''
+        acceptedBy:'',
+        parametrosSrv:[],
+        parametros:[]
       };
 
         swal({
@@ -225,17 +245,31 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
           if (result.value) {
             if(reserva == 'convariaciones'){
-
+    
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
                 cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
+                
+                cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
 
               cfSrvReserv.cfPrice = ''+this.preciototal;
 
-            } else {
-              cfSrvReserv.conditionsLog =  this.estructuraCondiciones(this.servsel.condiciones);
+            } 
+
+            if(this.servsel.condiciones.length != 0){
+              cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.servsel.condiciones, 'servicio');
+            }
+
+            if(this.parametrosServ){
+              let cont = 0;
+              for (const key in this.parametrosServ) {
+                if (this.parametrosServ.hasOwnProperty(key)) {
+                  cfSrvReserv.parametrosSrv.push({id:cont, value:this.parametrosServ[key]});
+                  cont++;
+                }
+              }
             }
 
             if(this.usuariounivalle){
@@ -252,8 +286,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               email: this.user.email,
               uid: this.user.uid});
 
+              console.log(cfSrvReserv);
+
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-              this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email);
+              //this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email);
 
               this.limpiarDatos();
 
@@ -341,7 +377,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
     if(item != 'inicial'){
       this.variation = this.buscarVariacion(item);
-      this.estructurarVariaciones(this.variation.data.cfConditions);
+      this.estructurarVariaciones(this.variation.data.cfConditions, this.variation.data.parametros);
     } else {
       this.variation = undefined;
     }
@@ -354,13 +390,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.servsel = item;
     this.listaVariaciones = [];
-
-    if(item.variaciones.length == 0){
-      if(item.condiciones.length !== 0){
-        console.log('entro');
-        this.estructurarVariaciones(item.condiciones);
-      }
-
+    if(item.condiciones.length !== 0){
+      this.estructurarCondicionesServicio(item.condiciones, item.parametros);
     }
 
   }
@@ -417,14 +448,19 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
-  estructuraCondiciones(variations){
+  estructuraCondiciones(condiciones, tipo){
     const arr = [];
-    for (let i = 0; i < variations.length; i++) {
-      const element = variations[i];
+    for (let i = 0; i < condiciones.length; i++) {
 
+      let aux;
+      if(tipo != 'servicio'){
+        aux = this.condicionesobjeto["checkbox"+i]
+      }else{
+        aux = this.condicionesobjetoServ["checkboxServ"+i]
+      }
       const vari = {
-        conditionText: variations[i],
-        accepted: this.condicionesobjeto["checkbox"+i]
+        conditionText: condiciones[i],
+        aceptada: aux
       }
       arr.push(vari);
     }
@@ -432,11 +468,29 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariaciones(condiciones){
+  estructurarVariaciones(condiciones, parametros){
     this.condicionesobjeto = {};
+    this.parametros = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
       this.condicionesobjeto["checkbox"+i] = true;
+    }
+
+    for (let i = 0; i < parametros.length; i++) {
+      this.parametros["input"+i] = '';
+    }
+  }
+
+  estructurarCondicionesServicio(condiciones, parametros){
+    this.condicionesobjetoServ = {};
+    this.parametrosServ = {};
+    for (let i = 0; i < condiciones.length; i++) {
+
+      this.condicionesobjetoServ["checkboxServ"+i] = true;
+    }
+
+    for (let i = 0; i < parametros.length; i++) {
+      //const element = condiciones[i];
+      this.parametrosServ["inputServ"+i] = '';
     }
   }
 
@@ -462,7 +516,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   removerMarker() {
     if (this.layer != null) {
-      console.log('remover');
       this.layer.remove();
     }
   }

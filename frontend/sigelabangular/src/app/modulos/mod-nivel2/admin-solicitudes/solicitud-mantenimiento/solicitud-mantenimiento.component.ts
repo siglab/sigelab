@@ -24,8 +24,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
   datos:any;
   histodatos:any;
 
-  displayedColumns = ['nombre', 'fecha', 'tipo', 'estado'];
-  displayedColumns2 = ['nombre', 'fecha', 'laboratorio', 'estado'];
+  displayedColumns = ['id','nombre', 'fecha', 'tipo', 'estado'];
+  displayedColumns2 = ['id','nombre', 'fecha', 'laboratorio', 'estado'];
 
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource([]);
@@ -87,7 +87,13 @@ export class SolicitudMantenimientoComponent implements OnInit {
     servicio:false,
     variacion:false,
     equipos:false,
-    componentes:false
+    componentes:false,
+    panico:false
+  };
+
+  panico = {
+    nombre:'',
+    descripcion:''
   };
 
   lab_id:any;
@@ -96,6 +102,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   user:any;
 
+  listaArchivos = [];
   files = [];
   filePath:any;
   ref:any;
@@ -127,40 +134,23 @@ export class SolicitudMantenimientoComponent implements OnInit {
         this.lab_id = data.uid;
 
         this.getCollectionSolicitudes(data.uid).then(data1 => {
-          console.log(data1);
-          this.datos = this.estructurarSolicitudesActivas(data1, data);
-          this.histodatos = this.datos;
-          
-            setTimeout(() => {
-              if(this.datos){
-                this.dataSource.data = this.datos;
-                this.dataSource.sort = this.sort;
-                this.dataSource.paginator = this.paginator;
-              }
 
-              if(this.histodatos){
-                this.dataSource2.data = this.histodatos;
-                this.dataSource2.sort = this.sort2;
-                this.dataSource2.paginator = this.paginator2;
-              }
+          this.datos = this.estructurarSolicitudesActivas(data1, data).then(datos => {
+            this.dataSource.data = datos['data'];
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
 
-              if(this.datos.length != 0 || this.histodatos.length != 0){
-                this.cerrarAlerta();
-              } else {    
-                swal({
-                  type: 'error',
-                  title: 'No existen solicitudes de mantenimiento a la fecha',
-                  showConfirmButton: true
-                });
-                
-              }
-             
-            }, 1500);
+            this.dataSource2.data = datos['data2'];
+            this.dataSource2.sort = this.sort2;
+            this.dataSource2.paginator = this.paginator2;
+
+            this.cerrarAlerta();
+          });
                      
         });
 
-        this.getLaboratorio(data.uid).subscribe(labo => {
-          this.equipos = this.estructurarEquipos(labo.payload.data().relatedEquipments);
+        this.getLaboratorio(data.uid).then(labo => {
+          this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
 
           this.dataSourceEquip = new MatTableDataSource(this.equipos);
 
@@ -185,11 +175,13 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   // METODOS PARA SUBIR UNA COTIZACION
 
+
+   
   alistarVariables(event){
-    console.log(event.target.files);
+  
     let tamano = false;
     for (let i = 0; i < event.target.files.length; i++) {
-      console.log(event.target.files[i].size);
+      
       if(event.target.files[i].size >= 33554432){
         tamano = true;
         break;
@@ -203,9 +195,14 @@ export class SolicitudMantenimientoComponent implements OnInit {
         'error'
       );
     }else{
-      this.files = event.target.files; 
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.listaArchivos.push(event.target.files[i]);
+      }
+      
     }
+   
   }
+
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
@@ -228,7 +225,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
   uploadMulti() {
     let filespath = [];
 
-    let files = this.files;
+    let files = this.listaArchivos;
     let filesIndex = _.range(files.length)
     _.each(filesIndex, (idx) => {
       this.currentUpload = new Upload(files[idx]);
@@ -295,13 +292,16 @@ export class SolicitudMantenimientoComponent implements OnInit {
   }
 
   estructurarSolicitudesActivas(data, lab) {
-    const activo = [];
 
-    data.forEach(doc => {
-      const elemento = doc.data();
+    let promise = new Promise((resolve, reject)=>{
+      const activo = [];
 
-      this.getEmailUser(elemento.createdBy).subscribe(email => {
-        this.getEquipo(elemento.relatedEquipments).subscribe(equipo => {
+      const historial = [];
+
+      data.forEach(doc => {
+        const elemento = doc.data();
+  
+        this.getEmailUser(elemento.createdBy).then(email => {
           const Solicitud = {
             uidsol:doc.id,
             uidlab: elemento.cfFacil,
@@ -310,77 +310,60 @@ export class SolicitudMantenimientoComponent implements OnInit {
             status: elemento.status,
             tipo: elemento.maintenanceType,
             descripcion: elemento.requestDesc,
-            usuario: email.payload.data().email,
+            usuario: email.data().email,
             activo: elemento.active,
-            equipo: equipo.payload.data(),
-            nombreEquip: equipo.payload.data().cfName,
             componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
             fecha: elemento.createdAt.split('T')[0],
             editado: elemento.updatedAt.split('T')[0],
-            proveedores: elemento.providersInfo
+            proveedores: elemento.providersInfo,
+            path: elemento.path
           };
-          activo.push(Solicitud);
-        });
+          if(elemento.relatedEquipments != ''){
+            this.getEquipo(elemento.relatedEquipments).then(equipo => {
+              Solicitud['equipo'] = equipo.data();
+              Solicitud['nombreEquip'] = equipo.data().cfName;
+            });
+          }else{
+            Solicitud['equipo'] = {};
+            Solicitud['nombreEquip'] = 'no especificado';  
+            Solicitud['panicoequipo'] =  elemento.panicoequipo;
+            Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
 
+          }
+          if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
+            activo.push(Solicitud);
+          } else {
+            historial.push(Solicitud);
+          }
+
+
+          if(data.size == (activo.length+historial.length)){
+            resolve({data:activo, data2: historial});
+          }
+
+
+  
+        });
       });
+  
     });
 
 
-    
-
-    return activo;
+    return promise;
   }
 
   getEmailUser(userid){
-    return this.afs.doc('user/' + userid).snapshotChanges();
+    return this.afs.doc('user/' + userid).ref.get();
   }
 
   getEquipo(equipid){
-    return this.afs.doc('cfEquip/' + equipid).snapshotChanges();
+    return this.afs.doc('cfEquip/' + equipid).ref.get();
   }
 
   getLaboratorio(labid){
-    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
+    return this.afs.doc('cfFacil/' + labid).ref.get();
   }
 
-  estructurarHistorialSolicitudes(data, lab) {
-
-    const historial = [];
-
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-
-      this.getEmailUser(elemento.createdBy).subscribe(email => {
-        this.getEquipo(elemento.relatedEquipments).subscribe(equipo => {
-          const Solicitud = {
-            uidsol:data[index].payload.id,
-            uidlab: elemento.cfFacil,
-            uidespacio: elemento.headquarter,
-            nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
-            status: elemento.status,
-            tipo: elemento.maintenanceType,
-            descripcion: elemento.requestDesc,
-            usuario: email.payload.data().email,
-            activo: elemento.active,
-            equipo: equipo.payload.data(),
-            nombreEquip: equipo.payload.data().cfName,
-            componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
-            fecha: elemento.createdAt.split('T')[0],
-            editado: elemento.updatedAt.split('T')[0],
-            proveedores: elemento.providersInfo
-          };
-
-          historial.push(Solicitud);
-        });
-
-      });
-      
-      
-
-    }
-
-    return historial;
-  }
 
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -394,12 +377,12 @@ export class SolicitudMantenimientoComponent implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-           const equip =  data.payload.data();
+           this.afs.doc('cfEquip/' + clave).ref.get().then(data => {
+           const equip =  data.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 const equipo = {
-                  id: data.payload.id,
+                  id: data.id,
                   nombre: equip.cfName,
                   activo: equip.active,
                   precio: equip.price,
@@ -477,7 +460,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
      return arr;
   }
 
-  agregarSolicitudMan(){
+  agregarSolicitudMan(tipo){
     this.alertaCargando();
     const fecha = new Date();
     this.reserMan.cfFacil = this.lab_id;
@@ -494,7 +477,11 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     this.reserMan.path = this.uploadMulti();
 
-    console.log(this.reserMan);
+    if(tipo == 'panico'){
+      this.reserMan.maintenanceType = 'panico';
+      this.reserMan['panicoequipo'] = this.panico.nombre;
+      this.reserMan['panicodescripcion'] = this.panico.descripcion;
+    }
 
     this.afs.collection('request').add(this.reserMan).then(data => {
 
@@ -510,6 +497,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
         if (result.value) {
           result.dismiss === swal.DismissReason.cancel
+          this.cerrarModal('modal2');
+          this.listaArchivos = [];
+          this.inicializarMante();
         }
 
       });
@@ -525,9 +515,25 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   cambiarDataComponentes(item){
    this.dataSourceComp = new MatTableDataSource(item.componentes);
-
-    console.log(item);
   }
+
+  descargarArchivo(index){
+    const ref = this.storage.ref(this.solsel.path[index]);
+    ref.getDownloadURL().subscribe(data => {
+      window.open(data);
+    }); ;
+  }
+
+  quitarArchivo(index){
+
+    this.listaArchivos.splice(index, 1);
+    swal(
+      'archivo retirado',
+      '',
+      'error'
+    );
+  }
+
 
   agregarProovedor(){
     this.proovedor.contactNumbers.push(this.telproov.tel1);
@@ -656,6 +662,26 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   cerrarModal(modal){
     $('#'+modal).modal('hide');
+  }
+
+  inicializarMante(){
+    this.reserMan = {
+      cfOrgUnit:'',
+      headquarter:'',
+      cfFacil:'',
+      createdBy:'',
+      requestDesc:'',
+      requestType:'mantenimiento',
+      maintenanceType:'',
+      providersInfo:[],
+      relatedEquipments:'',
+      relatedComponents:{},
+      status:'pendiente',
+      active:true,
+      createdAt:'',
+      updatedAt:'',
+      path:[]
+    };
   }
   
 }

@@ -14,6 +14,7 @@ declare var $: any;
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
+import { FormControl } from '@angular/forms';
 
 
 @Component({
@@ -82,6 +83,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       cfAvailability:[],
       otros: {
         email: '',
+      },
+      facilActivity:{
+        extension:false,
+        research:false,
+        teaching:false
       }
     };
 
@@ -131,6 +137,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     listaDepartamentos = [];
     listaDisponibilidad = [];
     listaTelefonos = [];
+    listaActividad = [
+      {id:'extension', name:'Extension'}, {id:'research', name:'Investigacion'},
+      {id:'teaching', name:'Docencia'}];
     selectfacul = '';
     selectdepar = '';
 
@@ -147,6 +156,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     fecha = new Date();
 
+    selecactividad = new FormControl();
+
   constructor(private obs: ObservablesService, private afs: AngularFirestore,
               private storage: AngularFireStorage, private service:EspaciosService) {
   }
@@ -162,8 +173,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     this.sus = this.obs.currentObjectLab.subscribe(data => {
 
-      console.log(data);
-      console.log(this.labestructurado);
+     this.resetIconos();
 
       this.labestructurado = undefined;
       this.itemsel = Observable.of(this.labestructurado);
@@ -180,46 +190,57 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           this.estructurarLab(data.uid).then(() => {
             this.itemsel = Observable.of(this.labestructurado);
             this.limpiarData();
-            const ambiente = this;
+          
             console.log(this.labestructurado);
-
             if(this.labestructurado){
-                this.dataSourceEquipos.data = this.labestructurado.equipos;
-
-                this.dataSourcePersonal.data = this.labestructurado.personal;
-
+              if(this.labestructurado.objectActividad.extension){
                 this.dataSourceServicios.data = this.labestructurado.servicios;
-
-                this.dataSourceProyectos.data = this.labestructurado.proyectos;
-
-                this.dataSourcePracticas.data = this.labestructurado.practicas;
+               
 
                 this.dataSourceSolicitudes.data = this.labestructurado.solicitudes;
+               
 
-                setTimeout(function() {
+                setTimeout(()=>{
+                  this.dataSourceServicios.sort = this.sortServicios;
+                  this.dataSourceServicios.paginator = this.paginatorServicios;
+                  
+                  this.dataSourceSolicitudes.sort = this.sortSolicitudes;
+                  this.dataSourceSolicitudes.paginator = this.paginatorSolicitudes;
+                }, 1500);
+              }
+              if(this.labestructurado.objectActividad.research){
+                this.dataSourceProyectos.data = this.labestructurado.proyectos;
+               
 
-                  ambiente.dataSourceEquipos.sort = ambiente.sortEquipos;
-                  ambiente.dataSourceEquipos.paginator = ambiente.paginatorEquipos;
-
-                  ambiente.dataSourcePersonal.sort = ambiente.sortPersonal;
-                  ambiente.dataSourcePersonal.paginator = ambiente.paginatorPersonal;
-
-                  ambiente.dataSourceServicios.sort = ambiente.sortServicios;
-                  ambiente.dataSourceServicios.paginator = ambiente.paginatorServicios;
-
-                  ambiente.dataSourceProyectos.sort = ambiente.sortProyectos;
-                  ambiente.dataSourceProyectos.paginator = ambiente.paginatorProyectos;
-
-                  ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
-                  ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
-
-                  ambiente.dataSourceSolicitudes.sort = ambiente.sortSolicitudes;
-                  ambiente.dataSourceSolicitudes.paginator = ambiente.paginatorSolicitudes;
-
-                  swal.close();
-
+                setTimeout(()=>{
+                  this.dataSourceProyectos.sort = this.sortProyectos;
+                  this.dataSourceProyectos.paginator = this.paginatorProyectos;
                 }, 1500);
 
+              }
+              if(this.labestructurado.objectActividad.teaching){
+                this.dataSourcePracticas.data = this.labestructurado.practicas;
+
+                setTimeout(()=>{
+                  this.dataSourcePracticas.sort = this.sortPracticas;
+                  this.dataSourcePracticas.paginator = this.paginatorPracticas;
+                }, 1500);
+              }
+          
+                this.dataSourceEquipos.data = this.labestructurado.equipos;
+                
+                this.dataSourcePersonal.data = this.labestructurado.personal;
+                
+
+                setTimeout(()=>{
+                  this.dataSourceEquipos.sort = this.sortEquipos;
+                  this.dataSourceEquipos.paginator = this.paginatorEquipos;
+
+                  this.dataSourcePersonal.sort = this.sortPersonal;
+                  this.dataSourcePersonal.paginator = this.paginatorPersonal;
+                  swal.close();
+                }, 1500);
+              
 
             }
 
@@ -274,19 +295,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   }
 
-  addEquipo() {
-    const eq = {
-     cfOrgUnit: '',
-     ciNumber: '87696898',
-     projectDesc: 'proyecto que busca la geomatizacion de zonas urbanas de cali',
-     projectName: 'PROYECTO CARTOGRAPHER',
-     relatedFacilities: {cfFacilId: true},
-     relaedPers: {cfPersId: true}
-    };
-
-    this.afs.collection('project').add(eq);
-  }
-
 
   estructurarLab(key){
     this.labestructurado = {};
@@ -315,6 +323,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       descripcion: laboratorio.cfDescr,
                       escuela: laboratorio.knowledgeArea,
                       inves: laboratorio.researchGroup,
+                      objectActividad: laboratorio.facilActivity,
+                      actividad: this.actividades(laboratorio.facilActivity),
                       director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                       iddueno: laboratorio.facilityAdmin,
                       sede: {id:laboratorio.headquarter, nombre:sede.cfName},
@@ -323,12 +333,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       espacioPrincipal: laboratorio.mainSpace,
                       telefonos: this.estructuraTelefonos(labo.id),
                       info:{email: laboratorio.otros.email},
-                      servicios: this.estructurarServicios(laboratorio.relatedServices).arr,
-                      practicas: this.estructurarPracticas(laboratorio.relatedPractices),
                       equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                      personal: this.estructurarPersonas(laboratorio.relatedPers),
-                      proyectos: this.estructurarProyectos(laboratorio.relatedProjects),
-                      solicitudes: this.estructurarServicios(laboratorio.relatedServices).arr2,
+                      personal: this.estructurarPersonas(laboratorio.relatedPers),   
                       facultades: this.estructurarFacultades(laboratorio.faculties),
                       departamentos: this.estructurarDepartamentos(laboratorio.departments),
                       espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
@@ -338,7 +344,18 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       estado: estadoLab
                     };
 
-
+                    if(laboratorio.facilActivity.extension){
+                      const servicesol = this.estructurarServicios(laboratorio.relatedServices);
+                      this.labestructurado['solicitudes'] = servicesol.arr2;
+                      this.labestructurado['servicios'] = servicesol.arr;
+                    }
+                    if(laboratorio.facilActivity.research){
+                      this.labestructurado['proyectos'] =  this.estructurarProyectos(laboratorio.relatedProjects);
+                    }
+                    if(laboratorio.facilActivity.teaching){
+                      this.labestructurado['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices);
+                    }
+                
                     this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
 
@@ -363,6 +380,25 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
    return promise;
 
+  }
+
+
+  selectorActividad(){
+    this.infolab.facilActivity = {
+      extension:false,
+      research:false,
+      teaching:false
+    };
+    this.selecactividad.value.forEach(element => {
+
+      for (let i = 0; i < this.listaActividad.length; i++) {
+        if(this.listaActividad[i].name == element){
+          this.infolab.facilActivity[this.listaActividad[i].id] = true;
+        }     
+      }
+    
+    });
+   
   }
 
 
@@ -393,7 +429,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     for (let i = 0; i < 1; i++) {
       if(idespacio){
         this.afs.doc('space/' + idespacio).ref.get().then(data=>{
-          console.log(data);
+       
          arr.push(data.data());
         });
       }
@@ -429,25 +465,24 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
              };
              arr.push(serv);
 
-            this.afs.collection<any>('cfSrvReserv',
-            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'pendiente'))
-            .ref.get().then(dataSol => {
+            this.getSolicitudes(clave).then(dataSol => {
+   
               dataSol.forEach(doc => {
                 const element = doc.data();
 
-                this.getPersonId(element.user).subscribe(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
                     descripcionServ: servicio.cfDesc,
-                    precioServ: servicio.cfPrice,
+                    precioServ: element.cfPrice,
                     activoServ: servicio.active,
-                    email: usuario.payload.data().email,
+                    email: element.emailuser,
                     uidServ: doc.id,
+                    fecha: element.createdAt.split('T')[0],
                     estado: element.status
                   };
 
                   arr2.push(solicitud);
-                });
+               
               });
 
 
@@ -530,9 +565,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   nombre: equip.cfName,
                   activo: equip.active,
                   precio: equip.price,
-                  componentes:this.estructurarComponents(clave),
-                  servicios:this.estructurarServicios(equip.relatedSrv).arr,
-                  practicas:this.estructurarPracticas(equip.relatedPrac)
+                  componentes:this.estructurarComponents(clave)
                 };
 
 
@@ -770,6 +803,25 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     return arr;
   }
 
+  actividades(actividad){
+    let arrayActividades = [];
+    const actividades = {
+      extension: 'Extension',
+      research: 'Investigacion',
+      teaching: 'Docencia'
+    };
+    for (const key in actividad) {
+      if (actividad.hasOwnProperty(key)) {
+        if(actividad[key]){
+          arrayActividades.push(actividades[key]);
+        }
+        
+      }
+    }
+
+    return arrayActividades;
+  }
+
 
   cargarSedes(){
     this.afs.collection('headquarter').snapshotChanges().subscribe(data=>{
@@ -834,7 +886,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   getPersonId(userid) {
-    return this.afs.doc('user/' + userid).snapshotChanges();
+    return this.afs.doc('user/' + userid).ref.get();
   }
 
   getPersona(persid) {
@@ -846,6 +898,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     return this.afs.collection<any>('cfFacil',
       ref => ref.where('facilityAdmin', '==', persid)).snapshotChanges();
 
+  }
+
+  getSolicitudes(id){
+    const col = this.afs.collection('cfSrvReserv');
+    const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'pendiente');
+
+    return refer.get();
   }
 
 
@@ -887,7 +946,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   arregloEspacios(){
     this.espacios = [];
     this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data=>{
-      console.log(data);
+
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data().spaceData;
         this.espacios.push({id:data[i].payload.doc.id, nombre:element.building + ' - ' +element.place});
@@ -898,33 +957,59 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   editar(){
 
-
-
     if(this.moduloNivel2){
       swal({
-        title: 'Cargando un momento...',
-        text: 'espere mientras se ejecuta la solicitud',
-        onOpen: () => {
-          swal.showLoading();
+
+        type: 'warning',
+        title: 'Esta seguro que desea enviar los cambios realizados',
+        showCancelButton: true,
+        confirmButtonText: 'Si, enviar',
+        cancelButtonText: 'No, Cancelar'
+
+      }).then((result) => {
+
+        if (result.value) {
+       
+          swal({
+            title: 'Cargando un momento...',
+            text: 'espere mientras se ejecuta la solicitud',
+            onOpen: () => {
+              swal.showLoading();
+            }
+          });
+    
+          this.infolab.cfAvailability = this.listaDisponibilidad;
+          this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades,'faculties');
+          this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos,'departments');
+          this.selectorActividad();
+    
+          this.estructurarEnvioActividades();
+    
+    
+          this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
+    
+            swal.close();
+            swal({
+              type: 'success',
+              title: 'Cambios Realizados',
+              showConfirmButton: true
+            }).then(()=>{
+               this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+            });
+    
+          });
+
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+          swal(
+            'Solicitud Cancelada',
+            '',
+            'error'
+          );
         }
-      });
-
-      this.infolab.cfAvailability = this.listaDisponibilidad;
-      this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades,'faculties');
-      this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos,'departments');
-      console.log(this.infolab);
-      this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
-
-        swal.close();
-        swal({
-          type: 'success',
-          title: 'Sugerencia de cambios ingresada',
-          showConfirmButton: true
-        }).then(()=>{
-          this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
-        });
 
       });
+
+
     } else {
       let aux = {
         suggestedChanges: this.labestructurado.cambios
@@ -964,7 +1049,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                 estado: 'pendiente'
               });
 
-              console.log(aux);
               this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
                   swal.close();
                   swal({
@@ -1023,8 +1107,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         });
 
         let cont = 0;
-        const cambio = this.infolab;
+        const cambio = JSON.parse(JSON.stringify(this.infolab));
         cambio['cfAvailability'] = this.listaDisponibilidad;
+        cambio['facilActivity'] = {};
         for (const key in this.checks) {
           if (this.checks.hasOwnProperty(key)) {
             const element = this.checks[key];
@@ -1046,11 +1131,22 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info,this.sugerencia.data[cont].quitar);
 
                 }else if (aux == 'cfEAddr'){
-                  if(this.sugerencia.data[cont].quitar){
-
+                  if(this.sugerencia.data[cont].quitar){               
                     this.EnviarcfEAddr(this.sugerencia.data[cont].infoaux, false);
                   }else{
                     this.EnviarcfEAddr(this.sugerencia.data[cont].info, true);
+                  }
+                }else if(aux == 'facilActivity'){
+              
+                  if(this.sugerencia.data[cont].quitar){
+                    const obj = {};
+                    obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
+                                    
+                    this.servicioEditarActividad(obj);
+                  }else{
+                    cambio[aux[0]] = {};
+
+                    cambio[aux[0]] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].info, true);
                   }
                 }else{
                   cambio[aux[0]] = this.sugerencia.data[cont].info;
@@ -1064,7 +1160,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             cont++;
           }
         }
-        console.log(cambio);
         cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
 
         this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio,{merge:true}).then(data=>{
@@ -1120,8 +1215,14 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     for (let i = 0; i < arr.length; i++) {
       obj.push(arr[i]);
     }
-    console.log(obj);
     return obj;
+  }
+
+  estructurarEnvioActividades(){
+    const retirado = this.elementosRetirados(this.listaTelefonos, this.labestructurado.telefonos);
+    this.EnviarcfEAddr(retirado,false)
+    const agregado =  this.elementosRetirados(this.labestructurado.telefonos, this.listaTelefonos);
+    this.EnviarcfEAddr(agregado, true);
   }
 
   EnviarcfEAddr(data, accion){
@@ -1138,8 +1239,22 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     }
   }
 
+  estructurarEnvioSugerenciaActividad(data, value){
+    let auxactiviti = {};
+
+    for (let i = 0; i < data.length; i++) {
+      auxactiviti[data[i].id] = value;
+    }
+
+    return auxactiviti;
+  }
+
   servicioEditarFacDep(obj){
     return this.afs.doc('cfFacil/'+this.labestructurado.uid).update(obj);
+  }
+
+  servicioEditarActividad(obj){
+    return this.afs.doc('cfFacil/'+this.labestructurado.uid).set(obj, {merge:true});
   }
 
 
@@ -1173,7 +1288,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     const cambio = {};
     cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
 
-    console.log(cambio);
     this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
       swal({
         type: 'success',
@@ -1186,8 +1300,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   estructurarDataCambios(){
-    const aux1 = ['facultades','departamentos','disponibilidad', 'telefonos','descripcion', 'condiciones', 'sede', 'subsede', 'espacioPrincipal','info.email'];
-    const aux2 = ['faculties', 'departments', 'cfAvailability', 'cfEAddr','cfDescr', 'cfConditions','headquarter', 'subHq', 'mainSpace', 'otros.email'];
+    const aux1 = ['facultades','departamentos','disponibilidad', 'telefonos','actividad', 'descripcion', 'condiciones', 'sede', 'subsede', 'espacioPrincipal','info.email'];
+    const aux2 = ['faculties', 'departments', 'cfAvailability', 'cfEAddr', 'facilActivity','cfDescr', 'cfConditions','headquarter', 'subHq', 'mainSpace', 'otros.email'];
     const aux3 = ['this.listaFaculSugeridos', 'this.listaDeparSugeridos', 'this.listaDispoSugeridos', 'this.listaTelSugeridos'];
     const aux4 = ['this.listaFacultades', 'this.listaDepartamentos', 'this.listaDisponibilidad', 'this.listaTelefonos'];
     const data = [];
@@ -1218,9 +1332,39 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             if(retirados.length != 0){
               data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retirados, info:arr1,cambio: false});
             }
+          
+         
+        }else if(aux1[i] == 'actividad'){
+          this.selectorActividad();
+
+          const sugeridosAct = [];
+          const retiradosAct = [];
+
+          for (const key in this.infolab.facilActivity) {
+            if (this.infolab.facilActivity.hasOwnProperty(key)) {
+
+              if(this.infolab.facilActivity[key] != this.labestructurado.objectActividad[key]){
+                if(this.infolab.facilActivity[key]){
+                  sugeridosAct.push({id:key, nombre:this.listaActividad.find(o => o.id == key).name});
+                }else{
+                  retiradosAct.push({id:key, nombre:this.listaActividad.find(o => o.id == key).name});
+                }
+              }
+              
+            }
+          }
 
 
+          if(sugeridosAct.length != 0){
+            data.push({llave: aux2[i], nombre: aux1[i],info:sugeridosAct, cambio: false});
+           
+          }
+          
+          if(retiradosAct.length != 0){
+            data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retiradosAct, info:[],cambio: false});
+          }
         }else{
+      
           let auxiliar = this.labestructurado[element];
           let nombre = element2[0];
 
@@ -1257,7 +1401,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     }
 
-    console.log(data);
+
     return data;
   }
 
@@ -1312,6 +1456,33 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     return arr;
   }
 
+  elementosAgregados(arr1, arr2){
+    let arr = [];
+    let encontro = false;
+
+    for (let i = 0; i < arr2.length; i++) {
+      encontro = false;
+   
+      for (let j = 0; j < arr1.length; j++) {
+
+        if(arr2[i].id){
+          if(arr2[i].id == arr1[j].id){
+            encontro = true;
+            break;
+          }
+        }
+
+     }
+
+       if(!encontro){
+         arr.push(arr2[i]);
+       }
+      
+    }
+
+    return arr;
+  }
+
   pendientes(item){
    const arr = [];
     for (let j = 0; j < item.length; j++) {
@@ -1359,7 +1530,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   cambiarEspacioSel(item){
     if(item != 'inicial'){
       this.espaciosel = this.buscarEspacioLocal(item);
-      console.log(this.espaciosel);
     } else {
       this.espaciosel = undefined;
     }
@@ -1411,6 +1581,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.infolab.cfConditions = this.labestructurado.condiciones;
     this.listaDisponibilidad = this.labestructurado.disponibilidad.slice();
     this.listaTelefonos = this.labestructurado.telefonos.slice();
+
+    this.selecactividad.setValue(this.labestructurado.actividad);
 
     this.listaFaculSugeridos = [];
     this.listaDeparSugeridos = [];
@@ -1636,6 +1808,20 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   cerrarModal(modal){
     $('#'+modal).modal('hide');
+  }
+
+  resetIconos(){ 
+    this.iconos = {
+      info:false,
+      equipos:false,
+      personal:false,
+      espacio:false,
+      espacioaso:false,
+      servicio:false,
+      proyecto:false,
+      practica:false,
+      solicitud:false
+    };
   }
 
 

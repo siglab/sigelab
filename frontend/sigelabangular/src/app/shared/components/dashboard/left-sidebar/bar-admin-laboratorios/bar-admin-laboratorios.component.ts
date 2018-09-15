@@ -32,21 +32,22 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     if (localStorage.getItem('usuario')) {
       this.getUserId();
       this.getRoles();
-      this.getPersonId(this.user.uid).subscribe(person => {
+      this.getPersonId(this.user.uid).then(person => {
         this.laboratorios2 = [];
         if (this.moduloNivel2) {
-          this.getLaboratorios(person.payload.data().cfPers).subscribe(labs => {
+          this.getLaboratorios(person.data().cfPers).subscribe(labs => {
 
             this.laboratorios2 = this.estructuraIdLab(labs);
+
+            console.log(this.laboratorios2);
           });
         }
         if (this.moduloPermiso) {
-          this.getPersona(person.payload.data().cfPers).subscribe(pers => {
+          this.getPersona(person.data().cfPers).subscribe(pers => {
             this.laboratorios2 = this.getLaboratoriosPermiso(pers.payload.data().cfFacil);
             console.log(this.laboratorios2);
           });
         }
-
 
       });
 
@@ -97,7 +98,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
 
   getPersonId(userid) {
-    return this.afs.doc('user/' + userid).snapshotChanges();
+    return this.afs.doc('user/' + userid).ref.get();
   }
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS

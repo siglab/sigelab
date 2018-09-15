@@ -339,10 +339,31 @@
                           </label>
                           <div class="form-group" *ngFor="let item of servsel.condiciones; let i = index">
                             <label class="control-label" for="precioserv">
-                              <input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
+                                <input name="{{'checkboxServ' + i}}" [(ngModel)]="condicionesobjetoServ['checkboxServ'+ i]" type="checkbox"> {{item}}</label>
                           </div>
 
                         </div>
+                      </div>
+                      <div *ngIf="usuariounivalle" class="form-group">
+                          <div class="col-md-12">
+                              <label class="control-label" for="descripserv">
+                                  <strong>Descuento Univalle:</strong> {{servsel.descuento}} %</label>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div *ngIf="servsel.parametros.length != 0" class="col-md-12">
+                              <label class="control-label" for="precioserv">
+                                  <strong>Parametros de servicio:</strong>
+                              </label>
+                              <div class="form-group" *ngFor="let item of servsel.parametros; let i = index">
+                                <div class="col-md-6">
+                                    <label class="control-label" for="parserv">{{item}}
+                                        <input class="form-control" name="{{'inputServ' + i}}" [(ngModel)]="parametrosServ['inputServ'+ i]" type="text"> </label>
+                                </div>
+                                
+                              </div>
+
+                          </div>
                       </div>
                       <div *ngIf="servsel.equipos.length != 0" class="form-group">
                         <div class="col-md-12 text-center">
@@ -467,6 +488,22 @@
                         </div>
                       </div>
                       <div class="form-group">
+                          <div *ngIf="variation.data.parametros != 0" class="col-md-12">
+                              <label class="control-label" for="precioserv">
+                                  <strong>Parametros de variacion:</strong>
+                              </label>
+                              <div class="form-group" *ngFor="let item of variation.data.parametros; let i = index">
+                                <div class="col-md-6">
+                                    <label class="control-label" for="parvar">{{item}}
+                                        <input class="form-control" name="{{'input' + i}}" [(ngModel)]="parametros['input'+ i]" type="text"> </label>
+                                </div>
+
+                              </div>
+      
+                          </div>
+                      </div>
+                     
+                      <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
                             <strong>Condiciones:</strong>
@@ -532,7 +569,7 @@
                     </label>
                     <div class="form-group" *ngFor="let item of servsel.condiciones; let i = index">
                       <label class="control-label" for="precioserv">
-                        <input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
+                        <input name="{{'checkboxServ' + i}}" [(ngModel)]="condicionesobjetoServ['checkboxServ'+ i]" type="checkbox"> {{item}}</label>
                     </div>
 
                   </div>
@@ -542,6 +579,26 @@
                     <label class="control-label" for="precioserv">
                       <strong>Precio: </strong>${{servsel.precio}}</label>
                   </div>
+                </div>
+
+                <div *ngIf="usuariounivalle" class="form-group">
+                    <div class="col-md-12">
+                        <p>como es un usuario de la univalle, tiene derecho a un descuento sobre el costo total</p>
+                        <label class="control-label" for="descripserv">
+                            <strong>Descuento Univalle:</strong> {{servsel.descuento}} %</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div *ngIf="servsel.parametros.length != 0" class="col-md-12">
+                        <label class="control-label" for="precioserv">
+                            <strong>Parametros de servicio:</strong>
+                        </label>
+                        <ul>
+                            <li *ngFor="let item of servsel.parametros;">{{item}}</li>
+                        </ul>
+
+                    </div>
                 </div>
 
                 <div *ngIf="usuariounivalle">

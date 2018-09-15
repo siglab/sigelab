@@ -73,7 +73,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     modelEquipoSel = {
       cfName: '',
-      price: ''
+      price: '',
+      cfDescr:'',
+      model:'',
+      updatedAt: new Date().toISOString()
     };
 
     ventana = false;
@@ -110,16 +113,14 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         if(!this.equiestructurado){
           this.estructurarEquip(data.uid, data.labo).then(() => {
             this.itemsel = Observable.of(this.equiestructurado.equipos);
-             console.log(this.equiestructurado);
-             console.log(this.infosabs);
+        
             this.dataSourceEquip.data = this.equiestructurado.equipos;
 
-            const ambiente = this;
 
-             setTimeout(function() {
-               if (ambiente.equiestructurado.equipos != 0) {
-                 ambiente.dataSourceEquip.sort = ambiente.sortEquip;
-                 ambiente.dataSourceEquip.paginator = ambiente.paginatorEquip;
+             setTimeout(() => {
+               if (this.equiestructurado.equipos != 0) {
+                  this.dataSourceEquip.sort = this.sortEquip;
+                  this.dataSourceEquip.paginator = this.paginatorEquip;
                   // cierra loading luego de cargados los datos
                   swal.close();
                } else {
@@ -261,23 +262,22 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const arr = [];
 
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
+    this.afs.collection('practice', ref => 
+      ref.where('relatedEquipments.'+item,'==',true)).ref.get().then(data =>{
+        data.forEach(doc => {
+          const practica =  doc.data();
+            this.afs.doc('practice/' + doc.id ).collection('programmingData').ref.get()
+                .then(data2 => {
 
-        if (item[clave]) {
-           this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
-           const practica =  data.payload.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').snapshotChanges().subscribe(data2 => {
+             data2.forEach(progdoc => {
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0].payload.doc.data();
+              const prog = progdoc.data();
 
               if(prog){
                 const pract = {
                   nombre: practica.practiceName,
                   programacion: {
-                    id_pro: data2[0].payload.doc.id,
+                    id_pro: progdoc.id,
                     estudiantes: prog.noStudents,
                     horario: prog.schedule,
                     semestre: prog.semester
@@ -287,15 +287,11 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
                  arr.push(pract);
               }
-
-
-              });
-
-           });
-        }
-
-      }
-    }
+             });
+    
+            });
+        });
+      })
 
     return arr;
   }
@@ -320,12 +316,14 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                 const equipo = {
                   id: doc.id,
                   nombre: equip.cfName,
+                  descripcion: equip.cfDescr,
+                  modelo: equip.model,
                   activo: equip.active,
                   precio: equip.price,
-                  // infoSab: this.consultarSabs(equip.inventory),
+                  inventario: equip.inventory,
                   componentes: this.estructurarComponents(clave),
                   servicios:  this.estructurarServicios(equip.relatedSrv).arr,
-                  practicas: this.estructurarPracticas(equip.relatedPrac)
+                  practicas: this.estructurarPracticas(doc.id)
                 };
 
                 arr.push(equipo);
@@ -468,6 +466,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.modelEquipoSel.cfName = this.equiposel.nombre;
     this.modelEquipoSel.price = this.equiposel.precio;
+    this.modelEquipoSel.cfDescr = this.equiposel.descripcion;
+    this.modelEquipoSel.model = this.equiposel.modelo;
 
 
     this.dataSourceComponentes.data = item.componentes;
@@ -503,6 +503,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         type: 'success',
         title: 'Exito',
         showConfirmButton: true
+      }).then(()=>{
+        this.cerrarModal('modal2');
       });
     });
   }
@@ -512,6 +514,12 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSourceComponentes.data = [];
     this.dataSourcePracticas.data = [];
     this.dataSourceServicios.data = [];
+
+    this.iconos.componente = false;
+    this.iconos.info = false;
+    this.iconos.practica = false;
+    this.iconos.sabs = false;
+    this.iconos.servicio = false;
   }
 
   cambiarInfoModal(row, table) {
