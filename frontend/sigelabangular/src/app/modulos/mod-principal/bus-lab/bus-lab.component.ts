@@ -55,6 +55,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   variacionSel = "";
 
   preciototal = 0;
+  descuento = 0;
+  preciocondescuento = 0;
 
 
 
@@ -98,7 +100,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] === 'correounivalle.edu.co'){
+      if(this.user.email.split('@')[1] === 'gmail.com'){
         this.usuariounivalle = true;
       }
     }
@@ -165,6 +167,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         parametros: auxiliar
       });
       this.preciototal += parseInt(this.variation.data.cfPrice);
+      if(this.usuariounivalle){
+        this.descuento = this.preciototal*(parseFloat(this.servsel.descuento)/100);
+        this.preciocondescuento = this.preciototal - this.descuento;
+      }
       swal({
         type: 'success',
         title: 'Variacion agregada',
@@ -230,8 +236,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         emailuser: this.user.email,
         acceptedBy:'',
         parametrosSrv:[],
-        parametros:[]
+        parametros:[],
+        descuento:this.descuento,
+        precioTotal:this.servsel.precio
       };
+
+        if(this.usuariounivalle){
+          cfSrvReserv.cfPrice = ''+this.preciocondescuento;
+        }
 
         swal({
 
@@ -253,8 +265,17 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 
                 cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
+              
+              cfSrvReserv.precioTotal = ''+this.preciototal;
 
-              cfSrvReserv.cfPrice = ''+this.preciototal;
+              if(this.usuariounivalle){
+                cfSrvReserv.cfPrice = ''+this.preciocondescuento;
+              }else{
+                cfSrvReserv.cfPrice = ''+this.preciototal;
+              
+              }
+
+             
 
             } 
 
@@ -386,12 +407,20 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   cambiarDataServicio(item) {
-    this.campoCondicion = '';
+    this.limpiarDatos();
     this.variation = undefined;
     this.servsel = item;
-    this.listaVariaciones = [];
+  
     if(item.condiciones.length !== 0){
       this.estructurarCondicionesServicio(item.condiciones, item.parametros);
+    }
+
+    
+    if(this.usuariounivalle){
+      if(item.variaciones.length == 0){
+        this.descuento = this.servsel.precio*(parseFloat(this.servsel.descuento)/100);
+        this.preciocondescuento = this.servsel.precio - this.descuento;
+      }
     }
 
   }
@@ -544,6 +573,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   limpiarDatos(){
     this.campoCondicion = '';
     this.listaVariaciones = [];
+    this.descuento = 0;
+    this.preciototal = 0;
+    this.preciocondescuento = 0;
   }
 
 

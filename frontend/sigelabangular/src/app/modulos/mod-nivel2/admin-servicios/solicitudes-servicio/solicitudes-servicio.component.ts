@@ -208,7 +208,9 @@ comentario = '';
             fechaTermino: elemento.updatedAt.split('T')[0],
             parametrosVar:elemento.parametros,
             parametrosSrv: elemento.parametrosSrv,
-            nombreParametros:servicio.parametros
+            nombreParametros:servicio.parametros,
+            precioTotal: elemento.precioTotal,
+            descuento:elemento.descuento
           };
 
           if(elemento.dateAccepted){

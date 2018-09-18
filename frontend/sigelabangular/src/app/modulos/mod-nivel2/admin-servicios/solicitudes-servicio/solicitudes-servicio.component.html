@@ -217,11 +217,22 @@
                                     </div>            
                                   </div>
                                 </div>
-                              <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Precio: $</strong> {{servicioActivoSel.precio}}</label>
-                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Precio Inicial: $</strong> {{servicioActivoSel.precioTotal}}</label>
+                                  </div>
                               </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Descuento: $</strong> {{servicioActivoSel.descuento}}</label>
+                                  </div>
+                              </div>
+                                
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Precio Total con descuento: $</strong> {{servicioActivoSel.precio}}</label>
+                                  </div>
+                                </div>
                               <div class="form-group">
                                   <div class="row">
                                       <div *ngIf="servicioActivoSel.nombreParametros.length != 0" class="col-md-12">
@@ -262,8 +273,8 @@
                               <div class="col-md-12 text-center form-group">
   
                                 <div *ngIf="(servicioActivoSel.status == 'pendiente') && (moduloNivel2 || moduloServicios)" class="col-md-6" style="float: right;">
-                                    <button class="btn btn-success btn-md" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
-                                    <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
+                                    <button class="btn btn-success" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
+                                    <button class="btn btn-danger" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
                                 </div>
                                 <div *ngIf="(servicioActivoSel.status == 'aceptada') && (moduloNivel2 || moduloServicios)" class="col-md-12">
                                     <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalProcesar">PROCESAR</button>

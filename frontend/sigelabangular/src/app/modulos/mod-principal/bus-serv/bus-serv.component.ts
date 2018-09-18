@@ -43,6 +43,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
     variacionSel = "";
 
     preciototal = 0;
+    descuento = 0;
+    preciocondescuento = 0;
 
     // INICIALIZACION DATATABLE lABORATORIOS
     displayedColumns = ['nombreserv', 'nombrelab'];
@@ -69,7 +71,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
               private ruta: Router, private http: Http) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] == 'correounivalle.edu.co'){
+      if(this.user.email.split('@')[1] == 'gmail.com'){
         this.usuariounivalle = true;
       }
     }
@@ -201,6 +203,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
         parametros: auxiliar
       });
       this.preciototal += parseInt(this.variation.data.cfPrice);
+      if(this.usuariounivalle){
+        this.descuento = this.preciototal*(parseFloat(this.itemsel.infoServ.descuento)/100);
+        this.preciocondescuento = this.preciototal - this.descuento;
+      }
       swal({
         type: 'success',
         title: 'Variacion agregada',
@@ -266,8 +272,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
         emailuser: this.user.email,
         acceptedBy:'',
         parametrosSrv:[],
-        parametros:[]
+        parametros:[],
+        descuento:this.descuento,
+        precioTotal:this.itemsel.infoServ.precio
       };
+
+      if(this.usuariounivalle){
+        cfSrvReserv.cfPrice = ''+this.preciocondescuento;
+      }
 
         swal({
 
@@ -290,7 +302,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
 
-              cfSrvReserv.cfPrice = ''+this.preciototal;
+              cfSrvReserv.precioTotal = ''+this.preciototal;
+
+              if(this.usuariounivalle){
+                cfSrvReserv.cfPrice = ''+this.preciocondescuento;
+              }else{
+                cfSrvReserv.cfPrice = ''+this.preciototal;
+              
+              }
     
             } 
 
@@ -383,16 +402,22 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) { 
-
-    this.listaVariaciones = [];
+    this.limpiarDatos();
     this.variation = undefined;
-    this.campoCondicion = '';
+ 
      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
    $('html, body').animate({ scrollTop: '400px' }, 'slow');
     this.itemsel = item;
 
     if(item.infoServ.condiciones.length !== 0){
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
+    }
+
+    if(this.usuariounivalle){
+      if(item.infoServ.variaciones.length == 0){
+        this.descuento = this.itemsel.infoServ.precio*(parseFloat(this.itemsel.infoServ.descuento)/100);
+        this.preciocondescuento = this.itemsel.infoServ.precio - this.descuento;
+      }
     }
     
 
@@ -457,6 +482,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
   limpiarDatos(){
     this.campoCondicion = '';
     this.listaVariaciones = [];
+    this.preciototal = 0;
+    this.descuento = 0; 
+    this.preciocondescuento = 0;
   }
 
 

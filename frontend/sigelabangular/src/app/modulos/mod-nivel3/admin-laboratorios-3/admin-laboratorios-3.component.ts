@@ -34,11 +34,11 @@ export class AdminLaboratorios3Component implements OnInit {
   laboratoriosEstructurados = [];
 
   labo = {
-    nombre:'',
-    email:''
+    nombre: '',
+    email: ''
   };
 
-  idlab:any;
+  idlab: any;
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
@@ -55,143 +55,143 @@ export class AdminLaboratorios3Component implements OnInit {
 
   seleccionado: any;
 
-    // INICIALIZACION DATATABLE EQUIPOS
-    displayedColumnsEquipos = ['nombre'];
-    dataSourceEquipos = new MatTableDataSource([]);
-    @ViewChild('paginatorEquipos') paginatorEquipos: MatPaginator;
-    @ViewChild('sortEquipos') sortEquipos: MatSort;
+  // INICIALIZACION DATATABLE EQUIPOS
+  displayedColumnsEquipos = ['nombre'];
+  dataSourceEquipos = new MatTableDataSource([]);
+  @ViewChild('paginatorEquipos') paginatorEquipos: MatPaginator;
+  @ViewChild('sortEquipos') sortEquipos: MatSort;
 
-    // INICIALIZACION DATATABLE PERSONAL
-    displayedColumnsPersonal = ['nombre'];
-    dataSourcePersonal = new MatTableDataSource([]);
-    @ViewChild('paginatorPersonal') paginatorPersonal: MatPaginator;
-    @ViewChild('sortPersonal') sortPersonal: MatSort;
+  // INICIALIZACION DATATABLE PERSONAL
+  displayedColumnsPersonal = ['nombre'];
+  dataSourcePersonal = new MatTableDataSource([]);
+  @ViewChild('paginatorPersonal') paginatorPersonal: MatPaginator;
+  @ViewChild('sortPersonal') sortPersonal: MatSort;
 
-    // INICIALIZACION DATATABLE SERVICIOS
-    displayedColumnsServicios = ['nombre'];
-    dataSourceServicios = new MatTableDataSource([]);
-    @ViewChild('paginatorServicios') paginatorServicios: MatPaginator;
-    @ViewChild('sortServicios') sortServicios: MatSort;
+  // INICIALIZACION DATATABLE SERVICIOS
+  displayedColumnsServicios = ['nombre'];
+  dataSourceServicios = new MatTableDataSource([]);
+  @ViewChild('paginatorServicios') paginatorServicios: MatPaginator;
+  @ViewChild('sortServicios') sortServicios: MatSort;
 
-    // INICIALIZACION DATATABLE PROYECTOS
-    displayedColumnsProyectos = ['nombre'];
-    dataSourceProyectos = new MatTableDataSource([]);
-    @ViewChild('paginatorProyectos') paginatorProyectos: MatPaginator;
-    @ViewChild('sortProyectos') sortProyectos: MatSort;
+  // INICIALIZACION DATATABLE PROYECTOS
+  displayedColumnsProyectos = ['nombre'];
+  dataSourceProyectos = new MatTableDataSource([]);
+  @ViewChild('paginatorProyectos') paginatorProyectos: MatPaginator;
+  @ViewChild('sortProyectos') sortProyectos: MatSort;
 
-    // INICIALIZACION DATATABLE EQUIPOS
-    displayedColumnsPracticas = ['nombre'];
-    dataSourcePracticas = new MatTableDataSource([]);
-    @ViewChild('paginatorPracticas') paginatorPracticas: MatPaginator;
-    @ViewChild('sortPracticas') sortPracticas: MatSort;
+  // INICIALIZACION DATATABLE EQUIPOS
+  displayedColumnsPracticas = ['nombre'];
+  dataSourcePracticas = new MatTableDataSource([]);
+  @ViewChild('paginatorPracticas') paginatorPracticas: MatPaginator;
+  @ViewChild('sortPracticas') sortPracticas: MatSort;
 
-    // INICIALIZACION DATATABLE SOLICITUDES
-    displayedColumnsSolicitudes = ['nombre', 'email'];
-    dataSourceSolicitudes = new MatTableDataSource([]);
-    @ViewChild('paginatorSolicitudes') paginatorSolicitudes: MatPaginator;
-    @ViewChild('sortSolicitudes') sortSolicitudes: MatSort;
-
-
-    user:any;
-
-    labestructurado:any;
-
-    infolab = {
-      cfName:'',
-      headquarter:'',
-      subHq:'',
-      cfDescr:'',
-      faculties:{},
-      departments:{},
-      mainSpace:'',
-      cfConditions:'',
-      cfAvailability:[],
-      otros: {
-        email: '',
-      },
-      facilActivity:{
-        extension:false,
-        research:false,
-        teaching:false
-      }
-    };
+  // INICIALIZACION DATATABLE SOLICITUDES
+  displayedColumnsSolicitudes = ['nombre', 'email'];
+  dataSourceSolicitudes = new MatTableDataSource([]);
+  @ViewChild('paginatorSolicitudes') paginatorSolicitudes: MatPaginator;
+  @ViewChild('sortSolicitudes') sortSolicitudes: MatSort;
 
 
-    checks = {};
+  user: any;
 
-    cambios = [];
+  labestructurado: any;
 
-    sugerencia:any;
-
-    encargado = '';
-
-    moduloNivel3 = false;
-    moduloPermiso = false;
-    rol: any;
-
-
-    iconos = {
-      info:false,
-      equipos:false,
-      personal:false,
-      espacio:false,
-      espacioaso:false,
-      servicio:false,
-      proyecto:false,
-      practica:false,
-      solicitud:false
-    };
-
-    espaciosel:any;
-    plano:Observable<any>;
-
-    sus: Subscription;
-
-    sedes = [];
-    subsedes = [];
-    facultades = [];
-    departamentos = [];
-
-    diassemana = [{id:'1', nombre:'LUNES'},{id:'2', nombre:'MARTES'},{id:'3', nombre:'MIERCOLES'},
-                  {id:'4', nombre:'JUEVES'},{id:'5', nombre:'VIERNES'},{id:'6', nombre:'SABADO'},
-                  {id:'7', nombre:'DOMINGO'}];
-
-    espacios = [];
-
-    listaFacultades = [];
-    listaDepartamentos = [];
-    listaDisponibilidad = [];
-    listaTelefonos = [];
-    listaActividad = [
-      {id:'extension', name:'Extension'}, {id:'research', name:'Investigacion'},
-      {id:'teaching', name:'Docencia'}];
-    selectfacul = '';
-    selectdepar = '';
-
-    selectdia = 0;
-    selectHinicio = '';
-    selectHFinal = '';
-
-    telefono = '';
-
-    listaFaculSugeridos = [];
-    listaDeparSugeridos = [];
-    listaDispoSugeridos = [];
-    listaTelSugeridos = [];
-
-    fecha = new Date();
-
-    selecactividad = new FormControl();
+  infolab = {
+    cfName: '',
+    headquarter: '',
+    subHq: '',
+    cfDescr: '',
+    faculties: {},
+    departments: {},
+    mainSpace: '',
+    cfConditions: '',
+    cfAvailability: [],
+    otros: {
+      email: '',
+    },
+    facilActivity: {
+      extension: false,
+      research: false,
+      teaching: false
+    }
+  };
 
 
-    // VARIABLES DE LA VISTA ADMIN ESPACIOS
+  checks = {};
+
+  cambios = [];
+
+  sugerencia: any;
+
+  encargado = '';
+
+  moduloNivel3 = false;
+  moduloPermiso = false;
+  rol: any;
 
 
-    // VARIABLES DE LA VISTA ADMIN PERSONAL
+  iconos = {
+    info: false,
+    equipos: false,
+    personal: false,
+    espacio: false,
+    espacioaso: false,
+    servicio: false,
+    proyecto: false,
+    practica: false,
+    solicitud: false
+  };
+
+  espaciosel: any;
+  plano: Observable<any>;
+
+  sus: Subscription;
+
+  sedes = [];
+  subsedes = [];
+  facultades = [];
+  departamentos = [];
+
+  diassemana = [{ id: '1', nombre: 'LUNES' }, { id: '2', nombre: 'MARTES' }, { id: '3', nombre: 'MIERCOLES' },
+  { id: '4', nombre: 'JUEVES' }, { id: '5', nombre: 'VIERNES' }, { id: '6', nombre: 'SABADO' },
+  { id: '7', nombre: 'DOMINGO' }];
+
+  espacios = [];
+
+  listaFacultades = [];
+  listaDepartamentos = [];
+  listaDisponibilidad = [];
+  listaTelefonos = [];
+  listaActividad = [
+    { id: 'extension', name: 'Extension' }, { id: 'research', name: 'Investigacion' },
+    { id: 'teaching', name: 'Docencia' }];
+  selectfacul = '';
+  selectdepar = '';
+
+  selectdia = 0;
+  selectHinicio = '';
+  selectHFinal = '';
+
+  telefono = '';
+
+  listaFaculSugeridos = [];
+  listaDeparSugeridos = [];
+  listaDispoSugeridos = [];
+  listaTelSugeridos = [];
+
+  fecha = new Date();
+
+  selecactividad = new FormControl();
+
+
+  // VARIABLES DE LA VISTA ADMIN ESPACIOS
+
+
+  // VARIABLES DE LA VISTA ADMIN PERSONAL
 
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
-              private service:EspaciosService) {
+    private service: EspaciosService) {
   }
 
   ngOnInit() {
@@ -209,7 +209,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
       this.resetIconos();
 
-     
+
       this.dataSource.data = this.laboratoriosEstructurados;
       setTimeout(() => {
 
@@ -295,15 +295,15 @@ export class AdminLaboratorios3Component implements OnInit {
         labo.forEach(doc => {
           const laboratorio = doc.data();
 
-          if (laboratorio.headquarter) {
-            this.buscarSede(laboratorio.headquarter).then(se => {
-              const sede = se.data();
-              if (laboratorio.subHq) {
-                this.buscarSubSede(laboratorio.subHq).then(sub => {
-                  const subsede = sub.data();
-                  this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
-                    const duenoLab = dueno.data();
-                    if (duenoLab) {
+          this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+            const duenoLab = dueno.data();
+            if (duenoLab) {
+              if (laboratorio.headquarter) {
+                this.buscarSede(laboratorio.headquarter).then(se => {
+                  const sede = se.data();
+                  if (laboratorio.subHq) {
+                    this.buscarSubSede(laboratorio.subHq).then(sub => {
+                      const subsede = sub.data();
                       // convertir boolean a cadena de caracteres para estado del laboratorio
                       let estadoLab;
                       if (laboratorio.active === true) {
@@ -340,8 +340,9 @@ export class AdminLaboratorios3Component implements OnInit {
                       };
 
                       if (laboratorio.facilActivity.extension) {
-                        laboratorioObject['solicitudes'] = this.estructurarServicios(laboratorio.relatedServices).arr2;
-                        laboratorioObject['servicios'] = this.estructurarServicios(laboratorio.relatedServices).arr;
+                        const aux = this.estructurarServicios(laboratorio.relatedServices);
+                        laboratorioObject['solicitudes'] = aux.arr2;
+                        laboratorioObject['servicios'] = aux.arr;
                       }
                       if (laboratorio.facilActivity.research) {
                         laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
@@ -358,14 +359,18 @@ export class AdminLaboratorios3Component implements OnInit {
                         resolve();
                       }
 
-                    }
-                  });
+
+                    });
+                  }
+
+
                 });
               }
 
+            }
+          });
 
-            });
-          }
+
         });
 
 
@@ -399,9 +404,7 @@ export class AdminLaboratorios3Component implements OnInit {
       headquarter: '',
       subHq: '',
       faculties: {},
-      departments: {
-        facultadid: {}
-      },
+      departments: {},
       cfClass: 'cf7799e7-3477-11e1-b86c-0800200c9a66',
       cfClassScheme: 'da0e5a01-c73e-4489-8cf7-917e9efcdad4',
       cfAvailability: '',
@@ -409,7 +412,7 @@ export class AdminLaboratorios3Component implements OnInit {
       cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
       facilityAdmin: '',
       mainSpace: '',
-      facilActivity: { teaching: true, research: true, extension: false },
+      facilActivity: { teaching: false, research: false, extension: false },
       relatedPers: {},
       relatedEquipments: {},
       relatedMeasurement: {},
@@ -431,19 +434,19 @@ export class AdminLaboratorios3Component implements OnInit {
 
     objFacil.cfName = this.labo.nombre;
 
-    this.afs.collection('cfPers', ref => ref.where('email', '==', this.labo.email))
-      .snapshotChanges().subscribe(data => {
-        if (data.length) {
-          const keyDirector = data[0].payload.doc.id;
-          objFacil.facilityAdmin = keyDirector;
-
-          this.afs.collection('cfFacil').add(objFacil).then(dato => {
-            swal({
-              type: 'success',
-              title: 'Laboratorio creado',
-              showConfirmButton: true
+      this.getFacilityAdmin(this.labo.email).then(data => {
+        if (data.size != 0) {
+          data.forEach(doc => {
+            const keyDirector = doc.id;
+            objFacil.facilityAdmin = keyDirector;
+  
+            this.afs.collection('cfFacil').add(objFacil).then(dato => {
+              swal({
+                type: 'success',
+                title: 'Laboratorio creado',
+                showConfirmButton: true
+              });
             });
-            console.log(dato.id);
           });
 
         } else {
@@ -465,7 +468,15 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   getLaboratorios() {
-    return this.afs.collection('cfFacil').ref.get();
+    const col = this.afs.collection('cfFacil');
+    const ref = col.ref.where('active','==',true);
+    return ref.get();
+  }
+
+  getFacilityAdmin(email){
+    const col = this.afs.collection('cfPers');
+    const refer = col.ref.where('email', '==', this.labo.email);
+    return refer.get();
   }
 
 
@@ -478,22 +489,22 @@ export class AdminLaboratorios3Component implements OnInit {
   // METODOS DE LA VISTA ADMIN LABORATORIOS 2
 
 
-  selectorActividad(){
+  selectorActividad() {
     this.infolab.facilActivity = {
-      extension:false,
-      research:false,
-      teaching:false
+      extension: false,
+      research: false,
+      teaching: false
     };
     this.selecactividad.value.forEach(element => {
 
       for (let i = 0; i < this.listaActividad.length; i++) {
-        if(this.listaActividad[i].name == element){
+        if (this.listaActividad[i].name == element) {
           this.infolab.facilActivity[this.listaActividad[i].id] = true;
-        }     
+        }
       }
-    
+
     });
-   
+
   }
 
 
@@ -508,7 +519,7 @@ export class AdminLaboratorios3Component implements OnInit {
     return this.afs.doc('cfPers/' + iddirector).ref.get();
   }
 
-   // METODO QUE TRAE UNA SEDE ESPECIFICA DEPENDIENDO EL ID-SEDE
+  // METODO QUE TRAE UNA SEDE ESPECIFICA DEPENDIENDO EL ID-SEDE
   buscarSede(idsede) {
     return this.afs.doc('headquarter/' + idsede).ref.get();
   }
@@ -522,10 +533,10 @@ export class AdminLaboratorios3Component implements OnInit {
   buscarEspacio(idespacio) {
     let arr = [];
     for (let i = 0; i < 1; i++) {
-      if(idespacio){
-        this.afs.doc('space/' + idespacio).ref.get().then(data=>{
-       
-         arr.push(data.data());
+      if (idespacio) {
+        this.afs.doc('space/' + idespacio).ref.get().then(data => {
+
+          arr.push(data.data());
         });
       }
     }
@@ -536,20 +547,21 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
 
-   // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS SERVICIOS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
   estructurarServicios(item) {
 
     const arr = [];
     const arr2 = [];
-
+    console.log(item);
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
           this.afs.doc('cfSrv/' + clave).ref.get().then(data => {
-            const servicio =  data.data();
+           
+            const servicio = data.data();
             const serv = {
               nombre: servicio.cfName,
               descripcion: servicio.cfDesc,
@@ -557,38 +569,38 @@ export class AdminLaboratorios3Component implements OnInit {
               activo: servicio.active,
               variaciones: this.variations(clave),
               uid: data.id
-             };
-             arr.push(serv);
+            };
+            arr.push(serv);
 
             this.getSolicitudes(clave).then(dataSol => {
               dataSol.forEach(doc => {
                 const element = doc.data();
 
-                  const solicitud = {
-                    nombreServ: servicio.cfName,
-                    descripcionServ: servicio.cfDesc,
-                    precioServ: element.cfPrice,
-                    activoServ: servicio.active,
-                    email: element.emailuser,
-                    uidServ: doc.id,
-                    fecha: element.createdAt.split('T')[0],
-                    estado: element.status
-                  };
+                const solicitud = {
+                  nombreServ: servicio.cfName,
+                  descripcionServ: servicio.cfDesc,
+                  precioServ: element.cfPrice,
+                  activoServ: servicio.active,
+                  email: element.emailuser,
+                  uidServ: doc.id,
+                  fecha: element.createdAt.split('T')[0],
+                  estado: element.status
+                };
 
-                  arr2.push(solicitud);
-               
+                arr2.push(solicitud);
+
               });
 
 
             });
 
-           });
+          });
         }
 
       }
     }
 
-    return {arr, arr2};
+    return { arr, arr2 };
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -602,14 +614,14 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('practice/' + clave).ref.get().then(data => {
-           const practica =  data.data();
-            this.afs.doc('practice/' + clave ).collection('programmingData').ref.get().then(data2 => {
+          this.afs.doc('practice/' + clave).ref.get().then(data => {
+            const practica = data.data();
+            this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
 
-              data2.forEach(doc=>{
+              data2.forEach(doc => {
                 const prog = doc.data();
 
-                if(prog){
+                if (prog) {
                   const pract = {
                     nombre: practica.practiceName,
                     programacion: {
@@ -619,17 +631,17 @@ export class AdminLaboratorios3Component implements OnInit {
                       semestre: prog.semester
                     },
                     activo: practica.active
-                   };
+                  };
 
-                   arr.push(pract);
+                  arr.push(pract);
                 }
               })
 
 
 
-              });
+            });
 
-           });
+          });
         }
 
       }
@@ -640,7 +652,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
 
-   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarEquipos(item) {
 
@@ -651,25 +663,23 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-           const equip =  data.payload.data();
+          this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
+            const equip = data.payload.data();
 
-             // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                const equipo = {
-                  nombre: equip.cfName,
-                  activo: equip.active,
-                  precio: equip.price,
-                  componentes:this.estructurarComponents(clave),
-                  servicios:this.estructurarServicios(equip.relatedSrv).arr,
-                  practicas:this.estructurarPracticas(equip.relatedPrac)
-                };
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const equipo = {
+              nombre: equip.cfName,
+              activo: equip.active,
+              precio: equip.price,
+              componentes: this.estructurarComponents(clave)
+            };
 
 
 
-                arr.push(equipo);
+            arr.push(equipo);
 
 
-           });
+          });
         }
 
       }
@@ -678,38 +688,38 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-      // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarComponents(item){
+  estructurarComponents(item) {
     const arr = [];
 
     this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data();
 
-          const componente = {
-            id: data[i].payload.doc.id,
-            nombre: element.cfName,
-            descripcion: element.cfDescription,
-            precio: element.cfPrice,
-            marca: element.brand,
-            modelo: element.model,
-            estado: element.active
-          };
+        const componente = {
+          id: data[i].payload.doc.id,
+          nombre: element.cfName,
+          descripcion: element.cfDescription,
+          precio: element.cfPrice,
+          marca: element.brand,
+          modelo: element.model,
+          estado: element.active
+        };
 
-          arr.push(componente);
+        arr.push(componente);
 
 
 
       }
 
-     });
+    });
 
-     return arr;
+    return arr;
   }
 
 
-    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPersonas(item) {
 
@@ -720,13 +730,13 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers =  data.payload.data();
+          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers = data.payload.data();
             let persona = {};
-            if(pers.user){
+            if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if(dataper.payload.data()){
+                if (dataper.payload.data()) {
 
                   persona = {
                     id: clave,
@@ -755,7 +765,7 @@ export class AdminLaboratorios3Component implements OnInit {
               });
             }
 
-           });
+          });
         }
 
       }
@@ -765,7 +775,7 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-    // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarProyectos(item) {
 
@@ -776,19 +786,19 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
-            const project =  data.payload.data();
+          this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
+            const project = data.payload.data();
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const proyecto = {
-                nombre: project.projectName,
-                descripcion: project.projectDesc,
-                id: project.ciNumber
-              };
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const proyecto = {
+              nombre: project.projectName,
+              descripcion: project.projectDesc,
+              id: project.ciNumber
+            };
 
-              arr.push(proyecto);
+            arr.push(proyecto);
 
-           });
+          });
         }
 
       }
@@ -797,7 +807,7 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-    // METODO QUE ESTRUCTURA LA DATA DE LAS FACULTADES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS FACULTADES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarFacultades(item) {
 
@@ -808,10 +818,10 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('faculty/' + clave).snapshotChanges().subscribe(data => {
-           const facultad =  data.payload.data();
-             arr.push({id:clave, nombre:facultad.facultyName});
-           });
+          this.afs.doc('faculty/' + clave).snapshotChanges().subscribe(data => {
+            const facultad = data.payload.data();
+            arr.push({ id: clave, nombre: facultad.facultyName });
+          });
         }
 
       }
@@ -820,7 +830,7 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-   // METODO QUE ESTRUCTURA LA DATA DE LAS FACULTADES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS FACULTADES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarDepartamentos(facultades) {
 
@@ -832,11 +842,11 @@ export class AdminLaboratorios3Component implements OnInit {
           if (facultades[clave].hasOwnProperty(key)) {
             if (facultades[clave][key]) {
               this.afs.doc('faculty/' + clave).collection('departments')
-              .doc(key).snapshotChanges().subscribe(data => {
-              const departamento =  data.payload.data();
-                arr.push({idfacul:clave, id:key, nombre:departamento.departmentName});
-              });
-           }
+                .doc(key).snapshotChanges().subscribe(data => {
+                  const departamento = data.payload.data();
+                  arr.push({ idfacul: clave, id: key, nombre: departamento.departmentName });
+                });
+            }
 
           }
         }
@@ -847,11 +857,11 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-  estructuraTelefonos(idlab){
+  estructuraTelefonos(idlab) {
     let tels = [];
-    this.afs.doc('cfFacil/'+idlab).collection('cfEAddr').ref.get().then(data=>{
-      data.forEach(element=>{
-        tels.push({id:element.id, nombre:element.data().cfEAddrValue});
+    this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
+      data.forEach(element => {
+        tels.push({ id: element.id, nombre: element.data().cfEAddrValue });
       });
     });
 
@@ -870,25 +880,25 @@ export class AdminLaboratorios3Component implements OnInit {
           this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
             const espacio = data.payload.data();
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              if (espacio) {
-                const space = {
-                  id_space: data.payload.id,
-                  capacity: espacio.capacity,
-                  createdAt: espacio.createdAt,
-                  freeArea: espacio.freeArea,
-                  headquarter: espacio.headquarter,
-                  indxSa: espacio.indxSa,
-                  map: espacio.map,
-                  minArea: espacio.minArea,
-                  ocupedArea: espacio.ocupedArea,
-                  totalArea: espacio.totalArea,
-                  spaceData: espacio.spaceData,
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            if (espacio) {
+              const space = {
+                id_space: data.payload.id,
+                capacity: espacio.capacity,
+                createdAt: espacio.createdAt,
+                freeArea: espacio.freeArea,
+                headquarter: espacio.headquarter,
+                indxSa: espacio.indxSa,
+                map: espacio.map,
+                minArea: espacio.minArea,
+                ocupedArea: espacio.ocupedArea,
+                totalArea: espacio.totalArea,
+                spaceData: espacio.spaceData,
 
-                };
+              };
 
-                arr.push(space);
-              }
+              arr.push(space);
+            }
 
           });
         }
@@ -899,7 +909,7 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-  actividades(actividad){
+  actividades(actividad) {
     let arrayActividades = [];
     const actividades = {
       extension: 'Extension',
@@ -908,10 +918,10 @@ export class AdminLaboratorios3Component implements OnInit {
     };
     for (const key in actividad) {
       if (actividad.hasOwnProperty(key)) {
-        if(actividad[key]){
+        if (actividad[key]) {
           arrayActividades.push(actividades[key]);
         }
-        
+
       }
     }
 
@@ -919,40 +929,40 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-  cargarSedes(){
-    this.afs.collection('headquarter').snapshotChanges().subscribe(data=>{
+  cargarSedes() {
+    this.afs.collection('headquarter').snapshotChanges().subscribe(data => {
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data();
-        this.sedes.push({id:data[i].payload.doc.id, nombre:element.cfName});
+        this.sedes.push({ id: data[i].payload.doc.id, nombre: element.cfName });
       }
     });
   }
 
-  cargarSubsedes(){
-    this.afs.collection('cfPAddr').snapshotChanges().subscribe(data=>{
+  cargarSubsedes() {
+    this.afs.collection('cfPAddr').snapshotChanges().subscribe(data => {
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data();
-        this.subsedes.push({id:data[i].payload.doc.id, nombre:element.cfAddrline1});
+        this.subsedes.push({ id: data[i].payload.doc.id, nombre: element.cfAddrline1 });
       }
     });
   }
 
-  cargarFacultades(){
-    this.afs.collection('faculty').snapshotChanges().subscribe(data=>{
+  cargarFacultades() {
+    this.afs.collection('faculty').snapshotChanges().subscribe(data => {
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data();
-        this.facultades.push({id:data[i].payload.doc.id, nombre:element.facultyName});
+        this.facultades.push({ id: data[i].payload.doc.id, nombre: element.facultyName });
         this.cargarDepartamentos(data[i].payload.doc.id);
       }
     });
   }
 
 
-  cargarDepartamentos(idfacul){
-    this.afs.doc('faculty/'+idfacul).collection('departments').snapshotChanges().subscribe(data=>{
+  cargarDepartamentos(idfacul) {
+    this.afs.doc('faculty/' + idfacul).collection('departments').snapshotChanges().subscribe(data => {
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data();
-        this.departamentos.push({id:data[i].payload.doc.id, idfacul:idfacul, nombre:element.departmentName});
+        this.departamentos.push({ id: data[i].payload.doc.id, idfacul: idfacul, nombre: element.departmentName });
       }
     });
   }
@@ -960,10 +970,10 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
-  variations(clave){
+  variations(clave) {
     const variaciones = [];
     this.afs.doc('cfSrv/' + clave).collection('variations').snapshotChanges().subscribe(data => {
-      if(data){
+      if (data) {
         for (let i = 0; i < data.length; i++) {
           const element = data[i].payload.doc.data();
           variaciones.push(element);
@@ -986,10 +996,10 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   getPersona(persid) {
-    return  this.afs.doc('cfPers/'+persid).snapshotChanges();
+    return this.afs.doc('cfPers/' + persid).snapshotChanges();
   }
 
-  getSolicitudes(id){
+  getSolicitudes(id) {
     const col = this.afs.collection('cfSrvReserv');
     const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'pendiente');
 
@@ -1009,7 +1019,7 @@ export class AdminLaboratorios3Component implements OnInit {
       }
     }
 
-    return {nom1: name1, nom2: name2};
+    return { nom1: name1, nom2: name2 };
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
@@ -1030,21 +1040,21 @@ export class AdminLaboratorios3Component implements OnInit {
     }
   }
 
-  arregloEspacios(){
+  arregloEspacios() {
     this.espacios = [];
-    this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data=>{
+    this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data => {
 
       for (let i = 0; i < data.length; i++) {
         const element = data[i].payload.doc.data().spaceData;
-        this.espacios.push({id:data[i].payload.doc.id, nombre:element.building + ' - ' +element.place});
+        this.espacios.push({ id: data[i].payload.doc.id, nombre: element.building + ' - ' + element.place });
       }
     });
   }
 
 
-  editar(){
+  editar() {
 
-    if(this.moduloNivel3){
+    if (this.moduloNivel3) {
       swal({
 
         type: 'warning',
@@ -1056,7 +1066,7 @@ export class AdminLaboratorios3Component implements OnInit {
       }).then((result) => {
 
         if (result.value) {
-       
+
           swal({
             title: 'Cargando un momento...',
             text: 'espere mientras se ejecuta la solicitud',
@@ -1064,26 +1074,26 @@ export class AdminLaboratorios3Component implements OnInit {
               swal.showLoading();
             }
           });
-    
+
           this.infolab.cfAvailability = this.listaDisponibilidad;
-          this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades,'faculties');
-          this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos,'departments');
+          this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades, 'faculties');
+          this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos, 'departments');
           this.selectorActividad();
-    
+
           this.estructurarEnvioActividades();
-    
-    
-          this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
-    
+
+
+          this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data => {
+
             swal.close();
             swal({
               type: 'success',
               title: 'Cambios Realizados',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               // this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
             });
-    
+
           });
 
         } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -1104,7 +1114,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
       const dataEstructurada = this.estructurarDataCambios();
 
-      if(dataEstructurada.length != 0){
+      if (dataEstructurada.length != 0) {
 
         swal({
 
@@ -1126,23 +1136,23 @@ export class AdminLaboratorios3Component implements OnInit {
             });
 
 
-            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person=>{
+            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person => {
               aux.suggestedChanges.push({
                 pos: this.labestructurado.cambios.length,
                 data: dataEstructurada,
                 uid: this.user.uid,
-                fecha: this.fecha.getDate()+'/'+(this.fecha.getMonth()+1)+'/'+this.fecha.getFullYear(),
+                fecha: this.fecha.getDate() + '/' + (this.fecha.getMonth() + 1) + '/' + this.fecha.getFullYear(),
                 nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
                 estado: 'pendiente'
               });
 
-              this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux,{merge:true}).then(()=>{
-                  swal.close();
-                  swal({
-                    type: 'success',
-                    title: 'Sugerencia de cambios ingresada',
-                    showConfirmButton: true
-                  });
+              this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux, { merge: true }).then(() => {
+                swal.close();
+                swal({
+                  type: 'success',
+                  title: 'Sugerencia de cambios ingresada',
+                  showConfirmButton: true
+                });
               });
             });
 
@@ -1171,7 +1181,7 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-  enviarSugerencia(){
+  enviarSugerencia() {
 
     swal({
 
@@ -1200,42 +1210,42 @@ export class AdminLaboratorios3Component implements OnInit {
         for (const key in this.checks) {
           if (this.checks.hasOwnProperty(key)) {
             const element = this.checks[key];
-            if(element){
+            if (element) {
               const aux = this.sugerencia.data[cont].llave.split('.');
 
-              if(aux.length != 2){
-                if(aux == 'faculties' || aux == 'departments'){
-                  if(this.sugerencia.data[cont].quitar){
+              if (aux.length != 2) {
+                if (aux == 'faculties' || aux == 'departments') {
+                  if (this.sugerencia.data[cont].quitar) {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                     cambio[aux[0]] = {};
                     this.servicioEditarFacDep(obj);
-                  }else{
+                  } else {
                     cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                   }
-                }else if(aux == 'cfAvailability'){
+                } else if (aux == 'cfAvailability') {
 
-                  cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info,this.sugerencia.data[cont].quitar);
+                  cambio[aux[0]] = this.estructurarEnvioSuferenciaDisponibilidad(this.sugerencia.data[cont].info, this.sugerencia.data[cont].quitar);
 
-                }else if (aux == 'cfEAddr'){
-                  if(this.sugerencia.data[cont].quitar){               
+                } else if (aux == 'cfEAddr') {
+                  if (this.sugerencia.data[cont].quitar) {
                     this.EnviarcfEAddr(this.sugerencia.data[cont].infoaux, false);
-                  }else{
+                  } else {
                     this.EnviarcfEAddr(this.sugerencia.data[cont].info, true);
                   }
-                }else if(aux == 'facilActivity'){
-              
-                  if(this.sugerencia.data[cont].quitar){
+                } else if (aux == 'facilActivity') {
+
+                  if (this.sugerencia.data[cont].quitar) {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
-                                    
+
                     this.servicioEditarActividad(obj);
-                  }else{
+                  } else {
                     cambio[aux[0]] = {};
 
                     cambio[aux[0]] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].info, true);
                   }
-                }else{
+                } else {
                   cambio[aux[0]] = this.sugerencia.data[cont].info;
                 }
 
@@ -1247,9 +1257,9 @@ export class AdminLaboratorios3Component implements OnInit {
             cont++;
           }
         }
-        cambio['suggestedChanges'] =  this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
+        cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
 
-        this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio,{merge:true}).then(data=>{
+        this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio, { merge: true }).then(data => {
           swal(
             'Cambios Aprobados',
             '',
@@ -1257,7 +1267,7 @@ export class AdminLaboratorios3Component implements OnInit {
           );
           this.sugerencia = undefined;
           this.limpiarData();
-         // this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+          // this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
 
         });
 
@@ -1276,16 +1286,16 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
-  estructurarEnvioSugerenciaFacDep(arr, tipo){
+  estructurarEnvioSugerenciaFacDep(arr, tipo) {
     const obj = {};
     for (let i = 0; i < arr.length; i++) {
-      if(tipo == 'faculties'){
+      if (tipo == 'faculties') {
         obj[arr[i].id] = true;
-      }else{
-        if(!obj[arr[i].idfacul]){
+      } else {
+        if (!obj[arr[i].idfacul]) {
           obj[arr[i].idfacul] = {};
           obj[arr[i].idfacul][arr[i].id] = true;
-        }else{
+        } else {
           obj[arr[i].idfacul][arr[i].id] = true;
         }
       }
@@ -1293,10 +1303,10 @@ export class AdminLaboratorios3Component implements OnInit {
     return obj;
   }
 
-  estructurarEnvioSuferenciaDisponibilidad(arr, quitar){
+  estructurarEnvioSuferenciaDisponibilidad(arr, quitar) {
     let obj = [];
-    if(!quitar){
-      obj =  this.labestructurado.disponibilidad;
+    if (!quitar) {
+      obj = this.labestructurado.disponibilidad;
     }
 
     for (let i = 0; i < arr.length; i++) {
@@ -1305,28 +1315,28 @@ export class AdminLaboratorios3Component implements OnInit {
     return obj;
   }
 
-  estructurarEnvioActividades(){
+  estructurarEnvioActividades() {
     const retirado = this.elementosRetirados(this.listaTelefonos, this.labestructurado.telefonos);
-    this.EnviarcfEAddr(retirado,false)
-    const agregado =  this.elementosRetirados(this.labestructurado.telefonos, this.listaTelefonos);
+    this.EnviarcfEAddr(retirado, false)
+    const agregado = this.elementosRetirados(this.labestructurado.telefonos, this.listaTelefonos);
     this.EnviarcfEAddr(agregado, true);
   }
 
-  EnviarcfEAddr(data, accion){
+  EnviarcfEAddr(data, accion) {
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
-      if(accion){
-        this.afs.doc('cfFacil/'+this.labestructurado.uid).collection('cfEAddr')
-        .add({cfClass:'', cfClassScheme:'', cfEAddrValue:element.nombre})
-      }else{
-        this.afs.doc('cfFacil/'+this.labestructurado.uid).collection('cfEAddr')
-        .doc(element.id).delete();
+      if (accion) {
+        this.afs.doc('cfFacil/' + this.labestructurado.uid).collection('cfEAddr')
+          .add({ cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre })
+      } else {
+        this.afs.doc('cfFacil/' + this.labestructurado.uid).collection('cfEAddr')
+          .doc(element.id).delete();
       }
 
     }
   }
 
-  estructurarEnvioSugerenciaActividad(data, value){
+  estructurarEnvioSugerenciaActividad(data, value) {
     let auxactiviti = {};
 
     for (let i = 0; i < data.length; i++) {
@@ -1336,26 +1346,26 @@ export class AdminLaboratorios3Component implements OnInit {
     return auxactiviti;
   }
 
-  servicioEditarFacDep(obj){
-    return this.afs.doc('cfFacil/'+this.labestructurado.uid).update(obj);
+  servicioEditarFacDep(obj) {
+    return this.afs.doc('cfFacil/' + this.labestructurado.uid).update(obj);
   }
 
-  servicioEditarActividad(obj){
-    return this.afs.doc('cfFacil/'+this.labestructurado.uid).set(obj, {merge:true});
+  servicioEditarActividad(obj) {
+    return this.afs.doc('cfFacil/' + this.labestructurado.uid).set(obj, { merge: true });
   }
 
 
-  cambiarEstadoSugerencia(pos, estado){
+  cambiarEstadoSugerencia(pos, estado) {
     const cam = this.labestructurado.cambios.slice();
     for (let i = 0; i < cam.length; i++) {
       const element = cam[i];
 
-      if(element.pos == pos  && element.estado == 'pendiente'){
+      if (element.pos == pos && element.estado == 'pendiente') {
         element.estado = estado;
         for (let j = 0; j < element.data.length; j++) {
           const element2 = element.data[j];
 
-          element2.cambio = this.checks['checkbox'+j];
+          element2.cambio = this.checks['checkbox' + j];
 
         }
       }
@@ -1363,7 +1373,7 @@ export class AdminLaboratorios3Component implements OnInit {
     return cam;
   }
 
-  desaprobarSugerencia(){
+  desaprobarSugerencia() {
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se ejecuta la solicitud',
@@ -1375,10 +1385,10 @@ export class AdminLaboratorios3Component implements OnInit {
     const cambio = {};
     cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
 
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data=>{
+    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data => {
       swal({
         type: 'success',
-        title:'Cambios Desaprobados',
+        title: 'Cambios Desaprobados',
         showConfirmButton: true
       });
       this.sugerencia = undefined;
@@ -1386,9 +1396,9 @@ export class AdminLaboratorios3Component implements OnInit {
     });
   }
 
-  estructurarDataCambios(){
-    const aux1 = ['facultades','departamentos','disponibilidad', 'telefonos','actividad', 'descripcion', 'condiciones', 'sede', 'subsede', 'espacioPrincipal','info.email'];
-    const aux2 = ['faculties', 'departments', 'cfAvailability', 'cfEAddr', 'facilActivity','cfDescr', 'cfConditions','headquarter', 'subHq', 'mainSpace', 'otros.email'];
+  estructurarDataCambios() {
+    const aux1 = ['facultades', 'departamentos', 'disponibilidad', 'telefonos', 'actividad', 'descripcion', 'condiciones', 'sede', 'subsede', 'espacioPrincipal', 'info.email'];
+    const aux2 = ['faculties', 'departments', 'cfAvailability', 'cfEAddr', 'facilActivity', 'cfDescr', 'cfConditions', 'headquarter', 'subHq', 'mainSpace', 'otros.email'];
     const aux3 = ['this.listaFaculSugeridos', 'this.listaDeparSugeridos', 'this.listaDispoSugeridos', 'this.listaTelSugeridos'];
     const aux4 = ['this.listaFacultades', 'this.listaDepartamentos', 'this.listaDisponibilidad', 'this.listaTelefonos'];
     const data = [];
@@ -1401,27 +1411,27 @@ export class AdminLaboratorios3Component implements OnInit {
       element2 = aux2[i].split('.');
       let infoauxiliar = this.infolab[element2];
 
-      if(element.length != 2){
-        if((aux1[i] == 'facultades') || (aux1[i] == 'departamentos') || (aux1[i] == 'disponibilidad') || (aux1[i] == 'telefonos')){
+      if (element.length != 2) {
+        if ((aux1[i] == 'facultades') || (aux1[i] == 'departamentos') || (aux1[i] == 'disponibilidad') || (aux1[i] == 'telefonos')) {
           const sugeridos = [];
           for (let j = 0; j < eval(aux3[i]).length; j++) {
             const element = eval(aux3[i])[j];
             sugeridos.push(element);
           }
 
-          if(sugeridos.length != 0){
-            data.push({llave: aux2[i], nombre: aux1[i],info:sugeridos, cambio: false});
+          if (sugeridos.length != 0) {
+            data.push({ llave: aux2[i], nombre: aux1[i], info: sugeridos, cambio: false });
           }
 
-            const arr1 = eval(aux4[i]);
-            const arr2 = eval('this.labestructurado.'+aux1[i]);
-            const retirados = this.elementosRetirados(arr1,arr2);
-            if(retirados.length != 0){
-              data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retirados, info:arr1,cambio: false});
-            }
-          
-         
-        }else if(aux1[i] == 'actividad'){
+          const arr1 = eval(aux4[i]);
+          const arr2 = eval('this.labestructurado.' + aux1[i]);
+          const retirados = this.elementosRetirados(arr1, arr2);
+          if (retirados.length != 0) {
+            data.push({ llave: aux2[i], quitar: true, nombre: aux1[i], infoaux: retirados, info: arr1, cambio: false });
+          }
+
+
+        } else if (aux1[i] == 'actividad') {
           this.selectorActividad();
 
           const sugeridosAct = [];
@@ -1430,57 +1440,57 @@ export class AdminLaboratorios3Component implements OnInit {
           for (const key in this.infolab.facilActivity) {
             if (this.infolab.facilActivity.hasOwnProperty(key)) {
 
-              if(this.infolab.facilActivity[key] != this.labestructurado.objectActividad[key]){
-                if(this.infolab.facilActivity[key]){
-                  sugeridosAct.push({id:key, nombre:this.listaActividad.find(o => o.id == key).name});
-                }else{
-                  retiradosAct.push({id:key, nombre:this.listaActividad.find(o => o.id == key).name});
+              if (this.infolab.facilActivity[key] != this.labestructurado.objectActividad[key]) {
+                if (this.infolab.facilActivity[key]) {
+                  sugeridosAct.push({ id: key, nombre: this.listaActividad.find(o => o.id == key).name });
+                } else {
+                  retiradosAct.push({ id: key, nombre: this.listaActividad.find(o => o.id == key).name });
                 }
               }
-              
+
             }
           }
 
 
-          if(sugeridosAct.length != 0){
-            data.push({llave: aux2[i], nombre: aux1[i],info:sugeridosAct, cambio: false});
-           
+          if (sugeridosAct.length != 0) {
+            data.push({ llave: aux2[i], nombre: aux1[i], info: sugeridosAct, cambio: false });
+
           }
-          
-          if(retiradosAct.length != 0){
-            data.push({llave: aux2[i], quitar:true,nombre: aux1[i],infoaux:retiradosAct, info:[],cambio: false});
+
+          if (retiradosAct.length != 0) {
+            data.push({ llave: aux2[i], quitar: true, nombre: aux1[i], infoaux: retiradosAct, info: [], cambio: false });
           }
-        }else{
-      
+        } else {
+
           let auxiliar = this.labestructurado[element];
           let nombre = element2[0];
 
 
-          if(aux1[i] == 'sede' || aux1[i] == 'subsede' ){
+          if (aux1[i] == 'sede' || aux1[i] == 'subsede') {
             auxiliar = this.labestructurado[element].id;
             nombre = aux1[i];
 
             infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
           }
-          if((aux1[i] == 'descripcion')||aux1[i] == 'condiciones'){
+          if ((aux1[i] == 'descripcion') || aux1[i] == 'condiciones') {
             nombre = aux1[i];
 
           }
 
-          if(aux1[i] == 'espacioPrincipal'){
+          if (aux1[i] == 'espacioPrincipal') {
             nombre = aux1[i];
             infoauxiliar = this.buscarArreglo(this.infolab[element2], aux1[i]);
           }
 
-          if(auxiliar != this.infolab[element2]){
-             data.push({llave: aux2[i], nombre: nombre, infoaux: infoauxiliar, info:this.infolab[element2], cambio: false});
+          if (auxiliar != this.infolab[element2]) {
+            data.push({ llave: aux2[i], nombre: nombre, infoaux: infoauxiliar, info: this.infolab[element2], cambio: false });
           }
         }
 
       } else {
         infoauxiliar = this.infolab[element2[0]][element2[1]];
-        if(this.labestructurado[element[0]][element[1]] != this.infolab[element2[0]][element2[1]]) {
-          data.push({llave: aux2[i], nombre: element2[1], infoaux: infoauxiliar, info: this.infolab[element2[0]][element2[1]], cambio: false});
+        if (this.labestructurado[element[0]][element[1]] != this.infolab[element2[0]][element2[1]]) {
+          data.push({ llave: aux2[i], nombre: element2[1], infoaux: infoauxiliar, info: this.infolab[element2[0]][element2[1]], cambio: false });
         }
 
       }
@@ -1492,90 +1502,90 @@ export class AdminLaboratorios3Component implements OnInit {
     return data;
   }
 
-  buscarArreglo(id, arreglo){
+  buscarArreglo(id, arreglo) {
     let arr = '';
-    if(arreglo == 'sede'){
+    if (arreglo == 'sede') {
       arr = 'this.sedes';
-    }else if(arreglo == 'subsede'){
+    } else if (arreglo == 'subsede') {
       arr = 'this.subsedes';
-    }else{
+    } else {
       arr = 'this.espacios';
     }
 
     for (let i = 0; i < eval(arr).length; i++) {
       const element = eval(arr)[i];
-      if(element.id == id){
+      if (element.id == id) {
         return element.nombre;
       }
 
     }
   }
 
-  elementosRetirados(arr1, arr2){
+  elementosRetirados(arr1, arr2) {
     let arr = [];
     let encontro = false;
 
     for (let i = 0; i < arr2.length; i++) {
       encontro = false;
 
-      if(arr1.length == 0){
+      if (arr1.length == 0) {
         arr.push(arr2[i]);
 
-      }else{
+      } else {
 
         for (let j = 0; j < arr1.length; j++) {
 
-          if(arr2[i].id){
-            if(arr2[i].id == arr1[j].id){
+          if (arr2[i].id) {
+            if (arr2[i].id == arr1[j].id) {
               encontro = true;
               break;
             }
           }
 
-       }
+        }
 
-       if(!encontro){
-         arr.push(arr2[i]);
-       }
+        if (!encontro) {
+          arr.push(arr2[i]);
+        }
       }
     }
 
     return arr;
   }
 
-  elementosAgregados(arr1, arr2){
+  elementosAgregados(arr1, arr2) {
     let arr = [];
     let encontro = false;
 
     for (let i = 0; i < arr2.length; i++) {
       encontro = false;
-   
+
       for (let j = 0; j < arr1.length; j++) {
 
-        if(arr2[i].id){
-          if(arr2[i].id == arr1[j].id){
+        if (arr2[i].id) {
+          if (arr2[i].id == arr1[j].id) {
             encontro = true;
             break;
           }
         }
 
-     }
+      }
 
-       if(!encontro){
-         arr.push(arr2[i]);
-       }
-      
+      if (!encontro) {
+        arr.push(arr2[i]);
+      }
+
     }
 
     return arr;
   }
 
-  pendientes(item){
-   const arr = [];
+  pendientes(item) {
+    const arr = [];
     for (let j = 0; j < item.length; j++) {
       const element = item[j];
 
-      if(element.estado == 'pendiente'){
+      if (element.estado == 'pendiente') {
         arr.push(element);
       }
 
@@ -1584,9 +1594,9 @@ export class AdminLaboratorios3Component implements OnInit {
     return arr;
   }
 
-  cambiarSugerencia(item){
+  cambiarSugerencia(item) {
 
-    if(item != 'inicial'){
+    if (item != 'inicial') {
       this.sugerencia = this.buscarSugerencia(item);
       this.estructurarChecks(this.sugerencia.data);
     } else {
@@ -1596,26 +1606,26 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarChecks(item){
+  estructurarChecks(item) {
     this.checks = {};
     for (let i = 0; i < item.length; i++) {
       //const element = condiciones[i];
-      this.checks["checkbox"+i] = false;
+      this.checks["checkbox" + i] = false;
     }
   }
 
   // METODO QUE BUSCA LA SUGERENCIA QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-  buscarSugerencia(item){
+  buscarSugerencia(item) {
     for (let i = 0; i < this.labestructurado.cambios.length; i++) {
       const element = this.labestructurado.cambios[i];
-      if(element.pos == item && element.estado == 'pendiente'){
+      if (element.pos == item && element.estado == 'pendiente') {
         return element;
       }
     }
   }
 
-  cambiarEspacioSel(item){
-    if(item != 'inicial'){
+  cambiarEspacioSel(item) {
+    if (item != 'inicial') {
       this.espaciosel = this.buscarEspacioLocal(item);
     } else {
       this.espaciosel = undefined;
@@ -1633,9 +1643,9 @@ export class AdminLaboratorios3Component implements OnInit {
           swal.showLoading();
         }
       });
-     const ref = this.storage.ref('planos/' + this.espaciosel.map + '.png');
+      const ref = this.storage.ref('planos/' + this.espaciosel.map + '.png');
       this.plano = ref.getDownloadURL();
-      if(this.plano){
+      if (this.plano) {
         swal.close();
       }
     }
@@ -1643,16 +1653,16 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-  buscarEspacioLocal(item){
+  buscarEspacioLocal(item) {
     for (let i = 0; i < this.labestructurado.espacios.length; i++) {
       const element = this.labestructurado.espacios[i];
-      if(element.id_space == item){
+      if (element.id_space == item) {
         return element;
       }
     }
   }
 
-  limpiarData(){
+  limpiarData() {
     this.seleccionado = undefined;
     this.sugerencia = undefined;
 
@@ -1679,8 +1689,8 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
@@ -1688,48 +1698,48 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-  quitarelemento(id, list){
+  quitarelemento(id, list) {
 
     let lista;
     let sugerido;
-    if(list == 'facultad'){
+    if (list == 'facultad') {
       lista = eval('this.listaFacultades');
       sugerido = eval('this.listaFaculSugeridos');
-    }else{
+    } else {
       lista = eval('this.listaDepartamentos');
       sugerido = eval('this.listaDeparSugeridos');
     }
-      const encontrado = lista.find((element, index) => {
-        if(element.id == id){
-          lista.splice(index, 1);
-          if(this.moduloPermiso){
-            sugerido.splice(index, 1);
-          }
-          return true;
+    const encontrado = lista.find((element, index) => {
+      if (element.id == id) {
+        lista.splice(index, 1);
+        if (this.moduloPermiso) {
+          sugerido.splice(index, 1);
         }
-        return false;
-      });
+        return true;
+      }
+      return false;
+    });
 
-      swal({
-        type: 'success',
-        title: list+' Eliminada',
-        showConfirmButton: true
-      });
+    swal({
+      type: 'success',
+      title: list + ' Eliminada',
+      showConfirmButton: true
+    });
 
   }
 
-  agregarElemento(list){
+  agregarElemento(list) {
     let lista = '';
 
     let select = '';
 
     const objeto = {};
 
-    if(list == 'facultad'){
+    if (list == 'facultad') {
       lista = 'this.listaFacultades';
       select = 'this.selectfacul';
 
-    }else{
+    } else {
       lista = 'this.listaDepartamentos';
       select = 'this.selectdepar';
     }
@@ -1739,48 +1749,48 @@ export class AdminLaboratorios3Component implements OnInit {
 
     const encontrado = eval(lista).find((element, index) => {
 
-      if(element.id == selecsss){
+      if (element.id == selecsss) {
         return true;
       }
       return false;
     });
 
-    if(!encontrado){
+    if (!encontrado) {
 
-     this.buscarElemento(list,select,lista);
+      this.buscarElemento(list, select, lista);
 
       swal({
         type: 'success',
         title: list + ' agregada',
         showConfirmButton: true
       });
-    }else{
+    } else {
       swal({
         type: 'error',
-        title: 'Esta '+list+' ya se encuentra agregada',
+        title: 'Esta ' + list + ' ya se encuentra agregada',
         showConfirmButton: true
       });
     }
   }
 
-  buscarElemento(list, select, lista){
+  buscarElemento(list, select, lista) {
     let array = '';
     let sugerido = '';
-    if(list == 'facultad'){
+    if (list == 'facultad') {
       array = 'this.facultades';
       sugerido = 'this.listaFaculSugeridos';
-    }else{
+    } else {
       array = 'this.departamentos';
       sugerido = 'this.listaDeparSugeridos';
     }
     const selector = eval(select);
-    const listafinal =  eval(lista);
+    const listafinal = eval(lista);
     const listasugerida = eval(sugerido);
     eval(array).find((element, index) => {
 
-      if(element.id == selector){
+      if (element.id == selector) {
         listafinal.push(element);
-        if(this.moduloPermiso){
+        if (this.moduloPermiso) {
           listasugerida.push(element);
         }
       }
@@ -1788,11 +1798,11 @@ export class AdminLaboratorios3Component implements OnInit {
     });
   }
 
-  agregarDisponibilidad(){
-    const cadena = this.diassemana[this.selectdia-1].nombre + ' : ' + this.selectHinicio + '-' +this.selectHFinal;
-    this.listaDisponibilidad.push({id:this.selectdia,nombre:cadena});
-    if(this.moduloPermiso){
-      this.listaDispoSugeridos.push({id:this.selectdia,nombre:cadena});
+  agregarDisponibilidad() {
+    const cadena = this.diassemana[this.selectdia - 1].nombre + ' : ' + this.selectHinicio + '-' + this.selectHFinal;
+    this.listaDisponibilidad.push({ id: this.selectdia, nombre: cadena });
+    if (this.moduloPermiso) {
+      this.listaDispoSugeridos.push({ id: this.selectdia, nombre: cadena });
     }
 
     swal({
@@ -1803,11 +1813,11 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
-  quitarDisponibilidad(id){
+  quitarDisponibilidad(id) {
     const encontrado = this.listaDisponibilidad.find((element, index) => {
-      if(element.id == id){
+      if (element.id == id) {
         this.listaDisponibilidad.splice(index, 1);
-        if(this.moduloPermiso){
+        if (this.moduloPermiso) {
           this.listaDispoSugeridos.splice(index, 1);
         }
         return true;
@@ -1817,15 +1827,15 @@ export class AdminLaboratorios3Component implements OnInit {
 
     swal({
       type: 'success',
-      title:'Diponibilidad Eliminada',
+      title: 'Diponibilidad Eliminada',
       showConfirmButton: true
     });
   }
 
-  agregarTelefonos(){
-    this.listaTelefonos.push({id:this.listaTelefonos.length,nombre:this.telefono});
-    if(this.moduloPermiso){
-      this.listaTelSugeridos.push({id:this.listaTelefonos.length,nombre:this.telefono});
+  agregarTelefonos() {
+    this.listaTelefonos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
+    if (this.moduloPermiso) {
+      this.listaTelSugeridos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
     }
 
     swal({
@@ -1837,11 +1847,11 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
-  quitarTelefonos(id){
+  quitarTelefonos(id) {
     const encontrado = this.listaTelefonos.find((element, index) => {
-      if(element.id == id){
+      if (element.id == id) {
         this.listaTelefonos.splice(index, 1);
-        if(this.moduloPermiso){
+        if (this.moduloPermiso) {
           this.listaTelSugeridos.splice(index, 1);
         }
         return true;
@@ -1851,7 +1861,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     swal({
       type: 'success',
-      title:'Telefono Eliminado',
+      title: 'Telefono Eliminado',
       showConfirmButton: true
     });
   }
@@ -1893,21 +1903,21 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  resetIconos(){ 
+  resetIconos() {
     this.iconos = {
-      info:false,
-      equipos:false,
-      personal:false,
-      espacio:false,
-      espacioaso:false,
-      servicio:false,
-      proyecto:false,
-      practica:false,
-      solicitud:false
+      info: false,
+      equipos: false,
+      personal: false,
+      espacio: false,
+      espacioaso: false,
+      servicio: false,
+      proyecto: false,
+      practica: false,
+      solicitud: false
     };
   }
 

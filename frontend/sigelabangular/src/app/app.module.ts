@@ -95,6 +95,8 @@ import { InicioAppComponent } from './modulos/mod-principal/inicio-app/inicio-ap
 import { AdminUsuariosComponent } from './modulos/mod-nivel3/admin-usuarios/admin-usuarios.component';
 import { ActivePipe } from './shared/services/active.pipe';
 
+import { NgxEditorModule } from 'ngx-editor';
+import { HttpClientModule } from '@angular/common/http';
 
 // libreria date time-picker
 
@@ -166,7 +168,8 @@ import { ActivePipe } from './shared/services/active.pipe';
     MatSelectModule,
     MatDialogModule,
     ToastrModule.forRoot(),
-
+    NgxEditorModule,
+    HttpClientModule
 
   ],
   providers: [

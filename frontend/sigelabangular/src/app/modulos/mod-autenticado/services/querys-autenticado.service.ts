@@ -57,7 +57,9 @@ export class QuerysAutenticadoService {
                 path: elemento.path,
                 parametrosVar:elemento.parametros,
                 parametrosSrv: elemento.parametrosSrv,
-                nombreParametros:servicio.parametros
+                nombreParametros:servicio.parametros,
+                descuento:elemento.descuento,
+                precioTotal: elemento.precioTotal
               };
   
               if(elemento.status == 'aceptada' || elemento.status == 'pendiente' || elemento.status == 'procesada'){
