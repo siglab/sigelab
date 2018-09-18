@@ -9,7 +9,7 @@ import { Subject } from 'rxjs/Subject';
 export class SidebarComponent implements OnInit {
 
   public static updateUserStatus: Subject<boolean> = new Subject();
-
+  photoDummie =  './assets/img/userdummie.png';
   usuario;
   imgUsr;
   moduloPrincipal = false;

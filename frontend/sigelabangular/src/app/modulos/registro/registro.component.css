@@ -1,0 +1,11 @@
+.title {
+  font-family: Ubuntu-Bold;
+  font-size: 30px;
+  color: #f10d0d;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-align: center;
+
+  width: 100%;
+  display: block;
+}

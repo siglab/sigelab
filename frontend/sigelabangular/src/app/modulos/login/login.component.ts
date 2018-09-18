@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     // loading mientras se crea el usuario
 
 
-     this._loginService.login();
+    this._loginService.login();
 
 
     //  this._loginService.login().then( () => {
@@ -58,13 +58,36 @@ export class LoginComponent implements OnInit {
 
       this._loginService.loginEmail(this.email, this.pass).then(ok => {
 
-        this.ruta.navigate(['principal']).then(() => {
+        if (ok['emailVerified']) {
+
+          this.ruta.navigate(['principal']).then(() => {
+            swal({
+              type: 'success',
+              title: 'Ingreso correcto',
+              showConfirmButton: true
+            });
+
+          });
+
+        } else {
+
           swal({
-            type: 'success',
-            title: 'Ingreso correcto',
+            type: 'info',
+            title: 'Hace falta verificar su cuenta',
             showConfirmButton: true
           });
 
+        }
+
+
+        console.log('respuesta log', ok);
+
+
+      }).catch(err => {
+        swal({
+          type: 'error',
+          title: 'Ocurrio un error, verifique sus datos y vuelva a intentarlo',
+          showConfirmButton: true
         });
 
       });

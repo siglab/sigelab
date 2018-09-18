@@ -73,6 +73,17 @@ export class LoginService {
   }
 
 
+  recoverPassword(email) {
+    return this.afAuth.auth.sendPasswordResetEmail(email);
+
+  }
+  sendVerificationemail() {
+    const user = this.afAuth.auth.currentUser;
+
+    return user.sendEmailVerification();
+  }
+
+
 
   stateChangesUser() {
 
@@ -114,8 +125,8 @@ export class LoginService {
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
 
-          resolve();
-        });
+          resolve(data);
+        }).catch(err => reject(err) );
     });
   }
 
@@ -143,7 +154,14 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.afAuth.auth.createUserWithEmailAndPassword(email, pass).then(
         (ok) => {
-          console.log('usuario creado');
+          const user: any = firebase.auth().currentUser;
+           user.sendEmailVerification().then((success) => {
+            swal({
+                  type: 'info',
+                  title: 'Un mensaje de verificacion fue enviado a su correo',
+                  showConfirmButton: true
+                });
+             } ) ;
           resolve(ok);
         }).catch(function (error) {
           console.log(error.message);
