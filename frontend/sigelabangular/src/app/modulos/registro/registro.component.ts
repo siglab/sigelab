@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { LoginService } from '../login/login-service/login.service';
 import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -12,11 +13,13 @@ export class RegistroComponent implements OnInit {
 
   email: string;
   pass: string;
+  pass2: string;
   addU: string;
   status: string;
   dispo = false;
   constructor(private afs: AngularFirestore,
-    private regSrv: LoginService) { }
+              private regSrv: LoginService,
+              private router: Router) { }
 
   ngOnInit() {
   }
@@ -42,8 +45,8 @@ export class RegistroComponent implements OnInit {
          } else {
           console.log(snapShot.docs[0].id);
            this.status = 'Ya existe un usuario en el sistema con el email ingresado.';
-          this.dispo = false;
-         this.addU = snapShot.docs[0].id;
+           this.dispo = false;
+           this.addU = snapShot.docs[0].id;
          }
       });
     }
@@ -57,20 +60,33 @@ export class RegistroComponent implements OnInit {
         title: 'Hay campos importantes vacios.',
         showConfirmButton: true
       });
-    } else {
+    } if ( this.pass === this.pass2 ) {
 
       this.regSrv.createUser(this.email, this.pass).then(
         (ok) => {
-          swal({
-            type: 'success',
-            title: 'Usuario creado correctamente.',
-            showConfirmButton: true
-          });
+          // swal({
+          //   type: 'success',
+          //   title: 'Usuario creado correctamente.',
+          //   showConfirmButton: true
+          // });
 
+
+          this.email = '' ;
+          this.pass = '' ;
+          this.pass2 = '';
+
+          this.router.navigate(['/login']);
 
           console.log('usuario creado', ok);
         }
       );
+    } else {
+
+      swal({
+         type: 'info',
+          title: 'La contraseña no coincide .',
+          showConfirmButton: true
+        });
     }
 
 

@@ -78,14 +78,22 @@
 
                                         <ng-container matColumnDef="nombre">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                          <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          <mat-cell   *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
 
+                                        <ng-container matColumnDef="codigo">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
+                                          <mat-cell   *matCellDef="let element"> {{element.cc}} </mat-cell>
+                                        </ng-container>
 
+                                        <ng-container matColumnDef="estado">
+                                            <mat-header-cell  [ngClass]="'small'"  *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                            <mat-cell [ngClass]="'small'"    *matCellDef="let element"> {{element.activo  | activo }} </mat-cell>
+                                          </ng-container>
 
                                         <ng-container matColumnDef="email">
-                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                          <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          <mat-header-cell [ngClass]="'large'"  *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                          <mat-cell [ngClass]="'large'"  *matCellDef="let element"> {{element.email}} </mat-cell>
                                         </ng-container>
 
                                         <ng-container matColumnDef="tipo">
@@ -140,10 +148,19 @@
 
                                       <mat-table #tablePersIn #sortPers="matSort" [dataSource]="dataSourcePersIn" matSort>
 
+                                        <ng-container matColumnDef="estado">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.activo | activo }} </mat-cell>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="codigo">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
+                                          <mat-cell   *matCellDef="let element"> {{element.cc}} </mat-cell>
+                                        </ng-container>
 
                                         <ng-container matColumnDef="nombre">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                          <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          <mat-cell  [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
 
                                         <ng-container matColumnDef="email">
@@ -303,7 +320,7 @@
                     <div class="form-group">
                       <div class="col-sm-12">
                         <label class="switch">
-                          <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" checked>
+                          <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" >
                           <span class="slider round"></span>
                         </label>
                       </div>
@@ -392,6 +409,15 @@
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="nombreprub">
+                        <strong>Codigo o CC:</strong>
+                      </label>
+                      <input [(ngModel)]="this.person.cc" id="escuelaedit" name="codigo" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="nombreprub">
                         <strong>Apellidos:</strong>
                       </label>
                       <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
@@ -416,10 +442,7 @@
                         <strong> Tipo personal:</strong>
                       </label>
                       <select class="form-control" [(ngModel)]="this.person.type" name="tipo">
-                        <option value="Funcionario">Funcionario </option>
-                        <option value="Estudiante">Estudiante</option>
-                        <option value="Contratista">Contratista</option>
-                        <option value="Otro">Otro</option>
+                        <option *ngFor="let item of tipo" value = "{{item}}"> {{item}} </option>
                       </select>
                     </div>
                   </div>

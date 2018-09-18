@@ -172,7 +172,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     console.log(this.role);
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave == 'moduloNivel2')) {
+        if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }

@@ -51,6 +51,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     user: '',
     roleId: '',
     email: '',
+    cc: '',
     type: '',
     relatedEquipments: {},
     createdAt: this.fecha.toISOString(),
@@ -74,14 +75,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'email', 'tipo'];
+  displayedColumnsPers = ['nombre', 'email', 'tipo', 'estado', 'codigo'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
   @ViewChild('sortPers') sortPers: MatSort;
 
   // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre', 'email', 'tipo'];
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'estado', 'codigo' ];
   dataSourcePersIn = new MatTableDataSource([]);
 
   @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
@@ -228,17 +229,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       this.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
 
-        let estadoLab;
-        if (laboratorio.active === true) {
-          estadoLab = 'Activo';
-        } else if (laboratorio.active === false) {
-          estadoLab = 'Inactivo';
-        }
 
         this.persestructurado = {
           personal: this.estructurarPers(laboratorio.relatedPers),
           personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
-          estado: estadoLab,
+          estado: laboratorio.active,
           uid: key
         };
 
@@ -259,6 +254,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
         if (item[clave]) {
+            console.log(item[clave]);
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
 
@@ -266,42 +262,40 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 const user = dataper.payload.data();
-                // funciona con una programacion, cuando hayan mas toca crear otro metodo
-
                 persona = {
                   roles: user.appRoles,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
-                  activo: pers.active,
-                  tipo: pers.type,
-                  email: user.email,
+                  cc: pers.cc ? pers.cc : 'ninguno',
+                  activo: item[clave],
+                  tipo: pers.type ? pers.type : 'ninguno'  ,
+                  email: user.email ? user.email : 'ninguno asociado' ,
                   idpers: clave,
                   iduser: pers.user,
                 };
 
-                if (pers.active) {
-                  arr1.push(persona);
-                }
+                arr1.push(persona);
 
               });
             } else {
-
               persona = {
                 roles: '',
+                cc: pers.cc ? pers.cc : 'ninguno',
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
-                activo: pers.active,
-                tipo: pers.type,
+                activo: item[clave],
+                tipo: pers.type ?  pers.type : ' ninguno' ,
                 email: pers.email,
                 idpers: clave,
                 iduser: pers.user,
               };
 
-              if (pers.active) {
-                arr1.push(persona);
-              }
+
+              arr1.push(persona);
+
             }
           });
+
         }
       }
     }
@@ -315,45 +309,44 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
-        if (item[clave]) {
+        if (!item[clave]) {
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
             let persona = {};
-
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 persona = {
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
-                  activo: pers.active,
-                  tipo: pers.type,
-                  email: dataper.payload.data().email,
+                  activo: item[clave],
+                  cc: pers.cc ? pers.cc : 'ninguno' ,
+                  tipo: pers.type ? pers.type : 'ninguno' ,
+                  email: dataper.payload.data().email ?  dataper.payload.data().email : 'ninguno asociado',
                   roles: dataper.payload.data().appRoles,
                   idpers: clave,
                   iduser: pers.user,
                 };
 
-                if (!pers.active) {
-                  arr1.push(persona);
-                }
+                arr1.push(persona);
+
 
               });
             } else {
               persona = {
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
-                activo: pers.active,
+                activo: item[clave],
                 tipo: pers.type,
-                email: '',
-                roles: '',
+                cc: pers.cc ?  pers.cc : 'ninguno' ,
+                email: 'ninguno',
+                roles: 'ninguno',
                 idpers: clave,
                 iduser: pers.user,
               };
 
-              if (!pers.active) {
-                arr1.push(persona);
-              }
+              arr1.push(persona);
+
 
 
             }
@@ -366,6 +359,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarLab(idlab) {
+
     return this.afs.doc('cfFacil/' + idlab).ref.get();
 
   }
@@ -394,7 +388,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   cambiardata(item, table) {
     this.tablesel = table;
     console.log(item);
-
     this.nombre = item.nombre;
     this.estado = item.activo;
     this.email = item.email;
@@ -417,65 +410,53 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   actualizarPers() {
 
+    // $('#modal').modal('hide');
 
-    if (!this.idu) {
+    /* objeto para persona  */
+    const pers = {
+      cfFirstNames: this.nombre,
+      cfFamilyNames: this.apellido,
+      type: this.type,
+      updatedAt: new Date().toISOString()
+    };
+    /* objeto para usuario */
+    const user = {
+      appRoles: {}
+    };
 
+    const nuevoEstado = {
+      relatedPers: {},
+      updatedAt: new Date().toISOString()
 
-      swal({
-        type: 'info',
-        title: 'La persona seleccionada aun no cuenta con un usuario asociado',
-        showConfirmButton: true
-      });
-    } else {
+    };
 
-      // $('#modal').modal('hide');
+    console.log('usuario con el rol', user);
+    console.log(' se va actualizar esta persona', pers);
 
-      /* objeto para persona  */
-      const pers = {
-        active: this.estado,
-        cfFirstNames: this.nombre,
-        cfFamilyNames: this.apellido,
-        type: this.type
-      };
-      /* objeto para usuario */
-      const user = {
-        active: this.estado,
-        appRoles: {}
-      };
+    user.appRoles[this.rol] = true;
+    nuevoEstado.relatedPers[this.idp] = this.estado;
 
-      /* metodo que consulta el rol */
+    /* metodo firebase para subir un usuario actualizado */
 
-      console.log(' se va actualizar esta persona', pers);
-
-
-
-      user.appRoles[this.rol] = true;
-
-      console.log('usuario con el rol', user);
-      /* metodo firebase para subir un usuario actualizado */
-
+    if (this.idu) {
       this.afs.collection('user').doc(this.idu).set(user, { merge: true })
         .then(() => {
-
-          this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
-            () => {
-              swal({
-                type: 'success',
-                title: 'usuario actualizado correctamente',
-                showConfirmButton: true
-              });
-
-            });
         });
 
-
-
-
-      /* metodo firebase para subir una persona actualizada */
-
-
-
     }
+    this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
+      () => {
+
+        this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+        swal({
+          type: 'success',
+          title: 'usuario actualizado correctamente',
+          showConfirmButton: true
+        });
+
+      });
+
+    /* metodo firebase para subir una persona actualizada */
 
 
   }
@@ -486,7 +467,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   setPers() {
 
-    if (this.email) {
+    if (this.email && this.person.cc) {
       this.person.email = this.email;
       const pers = this.person;
       pers.cfFacil[this.idlab] = true;
@@ -531,7 +512,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     } else {
 
-      this.toastr.info('Es necesario el campo email', 'Email requerido');
+      swal({
+        type: 'error',
+        title: 'Campos importantes vacios',
+        showConfirmButton: true
+      });
 
     }
 
@@ -597,6 +582,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.person.cfFirstNames = snapShot.docs[0].data().cfFirstNames;
           this.person.roleId = snapShot.docs[0].data().roleId;
           this.person.type = snapShot.docs[0].data().type;
+          console.log(this.person.type);
           this.person.cfGender = snapShot.docs[0].data().cfGender;
           this.person.cfBirthdate = snapShot.docs[0].data().cfBirthdate;
         }
@@ -631,7 +617,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   cerrarModal(modal) {
-    $('#' + modal ).modal('hide');
+    $('#' + modal).modal('hide');
   }
 
   setValue() {

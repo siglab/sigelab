@@ -63,10 +63,10 @@ export class AdminPracticasComponent implements OnInit {
   interfaz: boolean;
 
   info: any;
-  displayedColumnsPrac = ['nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
+  displayedColumnsPrac = [ 'codigo',  'nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
   dataSourcePrac = new MatTableDataSource([]);
 
-  displayedColumnsPracIn = ['nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
+  displayedColumnsPracIn = [ 'codigo', 'nombre', 'programacion.semestre', 'programacion.estudiantes', 'activo'];
   dataSourcePracIn = new MatTableDataSource([]);
   // equipos
   displayedColumnsEquip = ['select', 'nombre'];
@@ -269,7 +269,6 @@ export class AdminPracticasComponent implements OnInit {
   estructurarPracticas(item) {
 
     const arr = [];
-    const arr2 = [];
     const arr3 = [];
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
@@ -290,6 +289,7 @@ export class AdminPracticasComponent implements OnInit {
                   id_pract: data.payload.id,
                   nombre: practica.practiceName,
                   residuos: practica.residuos,
+                  codigo : practica.subjectCode,
                   equipos: this.estructurarEquipos(practica.relatedEquipments),
                   espacio: this.getOnlySpace(prog['space']),
                   programacion: {
@@ -301,15 +301,9 @@ export class AdminPracticasComponent implements OnInit {
                   activo: practica.active
                 };
                 // construye los eventos para el calendario de cada laboratorio
-                const evento = {
-
-                  title: this.ajustarTexto(practica.practiceName).nom1,
-                  start: prog['schedule'],
-                  color: 'green',
-                };
 
 
-                arr2.push(evento);
+
 
                 if (practica.active) {
 
@@ -328,7 +322,7 @@ export class AdminPracticasComponent implements OnInit {
       }
     }
 
-    return { arr, arr2, arr3 };
+    return { arr , arr3 };
   }
   // equipos
   isAllSelected() {
@@ -515,7 +509,7 @@ export class AdminPracticasComponent implements OnInit {
     console.log(row.programacion.horario);
   }
 
-  addPractice( stepper ) {
+  addPractice(stepper) {
 
     const fecha = new Date();
 
@@ -574,7 +568,11 @@ export class AdminPracticasComponent implements OnInit {
           this.obs.changeObjectPra({ nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab });
         });
 
-        this.toastr.success('Almacenado Correctamente!');
+        swal({
+          type: 'success',
+          title: 'Almacenado correctamente',
+          showConfirmButton: true
+        });
 
         // this.clearObj();
         stepper.reset();
@@ -630,6 +628,9 @@ export class AdminPracticasComponent implements OnInit {
       events: horario,
       timeFormat: 'H(:mm)'
     });
+
+    containerEl.fullCalendar('gotoDate', horario[0].start  );
+
   }
   changeColor(value) {
 
@@ -638,7 +639,7 @@ export class AdminPracticasComponent implements OnInit {
   }
   agregarEvento() {
 
-    if ( !this.evento.title || !this.evento.start  || !this.evento.start   ) {
+    if (!this.evento.title || !this.evento.start || !this.evento.start) {
       swal({
         type: 'error',
         title: 'Hay un campo importante vacio.',
@@ -661,7 +662,7 @@ export class AdminPracticasComponent implements OnInit {
 
       this.initCalendar(arr);
 
-         swal({
+      swal({
         type: 'success',
         title: 'Nuevo evento agregado',
         showConfirmButton: true
@@ -712,11 +713,11 @@ export class AdminPracticasComponent implements OnInit {
 
   clearObj() {
 
-     this.residuos = false;
-     this.nameP = '';
-     this.code = '';
-     this.programming.semester = '';
-     this.programming.noStudents = '';
+    this.residuos = false;
+    this.nameP = '';
+    this.code = '';
+    this.programming.semester = '';
+    this.programming.noStudents = '';
 
 
   }

@@ -4,7 +4,6 @@
     <h1>
       Espacios
     </h1>
-    <button (click)="probarFecha()"> borrar</button>
   </section>
 
   <!-- Main content -->
@@ -243,7 +242,7 @@
                         <div class="form-group">
                           <div class="col-md-12">
                             <div class="form-group row">
-
+                              <label  class="col-sm-2 col-form-label" for="indice" >Actividad actual:</label>
                               <ul *ngIf="this.actividadAct.length > 0" class="col-sm-5 col-form-label">
 
                                 <li *ngFor="let item of this.actividadAct"> {{item}} </li>
