@@ -21,34 +21,37 @@ export class LoginService {
   login() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
       response => {
+        swal({
+          title: 'Cargando un momento...',
+          text: 'espere mientras se cargan los datos',
+          onOpen: () => {
+            swal.showLoading();
+          }
+        });
+
+
         console.log('entro a login');
         this.usuario = response.user;
         localStorage.setItem('usuario', JSON.stringify(this.usuario));
 
+        this.consultarPermisos(this.usuario.uid).then(() => {
 
-          // this.stateChangesUser().then( (res) => {
-          //   setTimeout(() => {
-          //     console.log(res);
+          this.ruta.navigate(['principal']);
+          swal.close();
 
-          //   }, 2000);
-          // } );
-         this.ruta.navigate(['principal']);
-         this.consultarPermisos( this.usuario.uid).then( () => {
-
+        }).catch(() => {
+          swal({
+            type: 'error',
+            title: 'Ocurrio un error al intentar ingresar',
+            showConfirmButton: true
           });
 
-        // this.consultarPermisos(this.usuario.uid).then(() => {
+          swal.close();
 
 
+        });
 
-        // }).catch(() => {
-        //   swal({
-        //     type: 'error',
-        //     title: 'Ocurrio un error al intentar ingresar',
-        //     showConfirmButton: true
-        //   });
 
-        // });
 
       }).catch(error => {
         // alerta en caso de error
@@ -99,10 +102,10 @@ export class LoginService {
 
             console.log(change.newIndex);
             // agrega todos los ids de la coleccion usuario por primera vez
-             indice = change.newIndex;
+            indice = change.newIndex;
           }
         });
-        resolve( indice );
+        resolve(indice);
       });
 
 
@@ -126,7 +129,7 @@ export class LoginService {
           localStorage.setItem('usuario', JSON.stringify(data));
 
           resolve(data);
-        }).catch(err => reject(err) );
+        }).catch(err => reject(err));
     });
   }
 
@@ -155,13 +158,13 @@ export class LoginService {
       this.afAuth.auth.createUserWithEmailAndPassword(email, pass).then(
         (ok) => {
           const user: any = firebase.auth().currentUser;
-           user.sendEmailVerification().then((success) => {
+          user.sendEmailVerification().then((success) => {
             swal({
-                  type: 'info',
-                  title: 'Un mensaje de verificacion fue enviado a su correo',
-                  showConfirmButton: true
-                });
-             } ) ;
+              type: 'info',
+              title: 'Un mensaje de verificacion fue enviado a su correo',
+              showConfirmButton: true
+            });
+          });
           resolve(ok);
         }).catch(function (error) {
           console.log(error.message);
@@ -189,6 +192,7 @@ export class LoginService {
       return this.getUser(id).then(data => {
         console.log('entro al metodo', this.usuario.uid);
 
+          console.log('resultado de la data', data);
         localStorage.setItem('persona', JSON.stringify(data.data()));
         if (data.data()) {
           const rol = data.data().appRoles;
@@ -240,7 +244,30 @@ export class LoginService {
 
         }
 
+      }).catch((err) => {
+
+        console.log('ocurrio un error el usuario aun no existe', err);
+        reject(err);
+        this.consultarPermisos(this.usuario.uid).then(() => {
+
+          this.ruta.navigate(['principal']);
+          swal.close();
+
+        }).catch(() => {
+          swal({
+            type: 'error',
+            title: 'Ocurrio un error al intentar ingresar',
+            showConfirmButton: true
+          });
+
+          swal.close();
+
+
+        });
+
       });
+
+
     });
   }
 

@@ -359,7 +359,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           });
 
         });
-      }, 1000);
+      }, 2000);
     });
 
   }
@@ -504,16 +504,17 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       height: 420,
 
       header: {
-
-        left: '',
-        center: 'tittle',
-        right: 'today prev,next'
+        left:   'title',
+        center: '',
+        right:  'today prev,next'
       },
       events: horario,
 
       defaultView: 'month',
 
     });
+
+    containerEl.fullCalendar('gotoDate', horario[0].start  );
   }
   // actualiza el laboratorio con una nueva referencia de espacio
   updateFaciliti(idSp) {
@@ -548,6 +549,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   /* listar horario por espacio  */
 
   listPracticeforSpace(idSpace) {
+
+
     // traer array con todas las referencias de practicas con el espacio relacionado
     return new Promise((resolve, reject) => {
       const pathPrograming = [];
@@ -592,6 +595,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.noEsPrac.push(practicaH);
           // crea un array con los horarios de la practica
           Pr.schedule.forEach(element => {
+
             this.horarios.push(element);
           });
 
@@ -730,9 +734,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
       this.getTotalEstPrac().then((estudiantesPract: number) => {
 
-        this.ocupacionAct = personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0 ;
+        this.ocupacionAct = personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0;
         // tslint:disable-next-line:radix
-        this.space.indxSa = (this.space.capacity) / (personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0 );
+        this.space.indxSa = (this.space.capacity) / (personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0);
 
       });
     });
@@ -740,27 +744,38 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   getActividadAct() {
 
+    this.actividadAct = [];
+    let encontrado = false;
+    console.log('array para la consulta', this.noEsPrac);
+
     this.noEsPrac.forEach(prog => {
 
       prog.horario.forEach(fecha => {
 
         const now = moment().format();
 
-        if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56:46-05:00', '2018-09-14T18:56:46-05:00')) {
+        if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56', '2018-09-14T18:56')) {
 
-          this.afs.doc('practice/' + prog.id)
-            .valueChanges()
-            .subscribe(ok => {
-
-              console.log('llego este id', prog.id);
-              this.actividadAct.push(ok['practiceName']);
-              console.log(ok);
-
-            });
+            encontrado = true;
         }
 
 
       });
+
+
+      if (encontrado) {
+
+        this.afs.doc('practice/' + prog.id)
+        .valueChanges()
+        .subscribe(ok => {
+
+          console.log('llego este id', prog.id);
+
+          this.actividadAct.push(ok['practiceName']);
+          console.log('resultado consulta', ok);
+
+        });
+      }
 
     });
   }

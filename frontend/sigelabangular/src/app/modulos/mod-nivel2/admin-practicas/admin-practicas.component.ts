@@ -44,6 +44,7 @@ export class AdminPracticasComponent implements OnInit {
     color: ''
   };
   horaE;
+  horaF;
   programming = {
     semester: '',
     noStudents: '',
@@ -622,8 +623,9 @@ export class AdminPracticasComponent implements OnInit {
       // options here
       height: 450,
       header: {
-        center: 'title',
-        right: 'today prev,next'
+        left:   'title',
+        center: '',
+        right:  'today prev,next'
       },
       events: horario,
       timeFormat: 'H(:mm)'
@@ -651,6 +653,7 @@ export class AdminPracticasComponent implements OnInit {
       const nev = {
         title: this.evento.title,
         start: this.evento.start + 'T' + this.horaE,
+        end: this.evento.start + 'T' + this.horaF,
         allDay: false,
         color: this.evento.color
       };
