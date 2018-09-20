@@ -1,4 +1,4 @@
-/* 
+/*
 @import 'https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css';
 
 @import 'https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css';
@@ -14,7 +14,7 @@
 
 /*# sourceMappingURL=bootstrap.min.css.map */
 
-
+@import '../../../../assets/css/bootstrap.min.css';
 
 
 /* estyles propios */

@@ -228,7 +228,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
         }
       });
-    
+
 
     });
 
@@ -332,14 +332,14 @@ export class ComunicacionMasivaComponent implements OnInit {
                   } else {
                     ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true)';
                   }
-                 
+
                 }else if(key =="escuela"){
                   if(this.formSelect['departamento'].value.length != 0){
                     ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true))';
                   }else{
                     ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true)';
                   }
-                
+
                 }else{
                   ifquery += 'element["'+arr[key]+'"] == "'+element3+'")';
                 }
@@ -357,7 +357,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
               }
             }
-           
+
 
             if(key != 'departamento'){
               ifquery += ' && ';
@@ -410,7 +410,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
           notificaciones.push(director.data().user);
 
-         
+
 
           if(cont != coincidencias.length-1){
             correos += email + ','
@@ -433,12 +433,12 @@ export class ComunicacionMasivaComponent implements OnInit {
         }
 
       }, 2000);
-    
+
 
 
     });
 
-       
+
     this.servicioalmacenarHistorial(item);
   }
 
@@ -450,7 +450,7 @@ export class ComunicacionMasivaComponent implements OnInit {
         {para: correos,
           asunto: this.correo.asunto,
           mensaje: this.correo.mensaje}).subscribe((res) => {
-        if(res.status == 200){
+        if(res.status === 200){
           console.log('funco');
           //this.cerrarAlerta();
           this.limpiarDatos();
@@ -522,27 +522,27 @@ export class ComunicacionMasivaComponent implements OnInit {
       const key = this.historialsel.filtro[i];
       this.formCheckBox[key].setValue(true);
 
-      if(key != 'universidad'){  
+      if(key != 'universidad'){
         this.formSelect[key].enable();
         this.formCheckBox['universidad'].setValue(false);
         if((key == 'escuela') || (key == 'departamento')){
           let valoresform = [];
-  
+
           this.historialsel.valores[key].forEach(element => {
-          
+
             const objenc = this.listSelect[key].find(o => o.id == element.id);
-  
+
             valoresform.push(objenc);
           });
-  
-          this.formSelect[key].setValue(valoresform);         
-          
+
+          this.formSelect[key].setValue(valoresform);
+
         }else{
-          this.formSelect[key].setValue(this.historialsel.valores[key]);   
+          this.formSelect[key].setValue(this.historialsel.valores[key]);
         }
       }
     }
-   
+
     if(item == 'reenviar'){
       this.notificacion = this.historialsel.mensaje;
       this.correo.asunto = this.historialsel.asunto;
@@ -572,29 +572,29 @@ export class ComunicacionMasivaComponent implements OnInit {
         const element = this.formCheckBox[clave].value;
 
         if(element){
-          
+
           if(clave == 'universidad'){
             texto[clave] = 'Toda la universidad';
           } else {
             const array = this.listSelect[clave];
             const array2 = this.formSelect[clave].value;
-       
+
             for (let i = 0; i < array2.length; i++) {
               let element = array2[i];
               if((clave == 'departamento')||(clave == 'escuela')){
                 element = array2[i].id;
               }
-              const enc = array.find(o => o.id == element);  
+              const enc = array.find(o => o.id == element);
               if(enc){
-                auxiliar.push(enc.nombre);     
-              }  
-              
+                auxiliar.push(enc.nombre);
+              }
+
             }
-  
+
             texto[clave] = auxiliar;
           }
 
-          
+
         }
       }
     }
@@ -611,11 +611,11 @@ export class ComunicacionMasivaComponent implements OnInit {
           if(clave == 'universidad'){
             valores[clave] = 'universidad';
           }else{
-        
+
             valores[clave] = this.formSelect[clave].value;
-       
+
           }
-         
+
         }
       }
     }
@@ -645,8 +645,8 @@ export class ComunicacionMasivaComponent implements OnInit {
     setTimeout(()=>{
       $("#mensajeHtml").html(this.historialsel.mensaje);
     }, 1000);
-  
-    
+
+
   }
 
   applyFilter(filterValue: string) {
@@ -663,7 +663,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     this.listSelect.escuela = [];
     this.estructurarSedes();
     this.estructurarFacultades();
-   
+
 
 
     this.objsel = {

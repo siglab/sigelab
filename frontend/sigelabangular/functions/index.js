@@ -4,7 +4,9 @@ const admin = require('firebase-admin');
 
 const nodemailer = require('nodemailer');
 
-const cors = require('cors')({ origin: true });
+const cors = require('cors')({
+  origin: true
+});
 
 const mod = require('./conf');
 
@@ -16,8 +18,105 @@ const ref = admin.firestore();
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send("Hello from Firebase!");
+exports.helloWorld = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+
+    ref.collection("cfPers").where("email", "==", req.email)
+      .get()
+      .then((querySnapshot) => {
+        if (querySnapshot.empty) {
+
+          const fecha = new Date();
+          const role = 'npKRYaA0u9l4C43YSruA';
+
+          const usr = {
+            cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+            cfPers: '',
+            appRoles: {},
+            createdAt: fecha.toISOString(),
+            email: req.email
+          };
+
+          usr.appRoles[role] = true;
+
+          ref.doc(`/user/${event.uid}`).set(usr)
+            .then(() => {
+
+               console.log('se creo un nuevo usuario');
+
+                res.status(200).send({
+                response: 'Usuario creado con exito!'
+              });
+
+            })
+            .catch(err => {
+
+              res.status(500).send({
+                response: 'ocurrio un error al crear el nuevo usuario'
+              });
+              console.log('ocurrio un error al crear el nuevo usuario', err)
+
+            });
+
+          // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
+
+        } else {
+
+          const personas = [];
+          let role;
+          const fecha = new Date();
+
+          querySnapshot.forEach(doc => {
+
+            role = doc.data().roleId;
+            personas.push(doc.id);
+
+          });
+
+          const persona = personas[0];
+
+          const usr = {
+            cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+            cfPers: persona,
+            appRoles: {},
+            createdAt: fecha.toISOString(),
+            email: event.email
+
+          };
+
+          // para el nivel 3 es necesario pasar el campo tipo string a un objeto
+          usr.appRoles[role] = true;
+
+          const pers = {
+            user: event.uid
+          };
+
+          ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
+              merge: true
+            })
+            .then(() => {
+               console.log('se asocio correctamente el usuario')
+               res.status(200).send({
+                response: 'Se asocio correctamente el usuario!'
+              });
+            })
+            .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
+
+          return ref.doc(`/user/${event.uid}`).set(usr)
+            .then(() => console.log('se asocio correctamente la persona'))
+            .catch(err => console.log('no se pudo asociar correctamente la persona', err));
+
+
+        }
+
+      });
+
+
+
+
+    res.status(200).send(req.body);
+
+  });
 });
 
 
@@ -64,9 +163,9 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
         usr.appRoles[role] = true;
 
-      return  ref.doc(`/user/${event.uid}`).set(usr)
-                 .then( () => console.log('se creo un nuevo usuario') )
-                 .catch( err => console.log('ocurrio un error al crear el nuevo usuario', err));
+        return ref.doc(`/user/${event.uid}`).set(usr)
+          .then(() => console.log('se creo un nuevo usuario'))
+          .catch(err => console.log('ocurrio un error al crear el nuevo usuario', err));
 
         // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
 
@@ -97,14 +196,18 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
         // para el nivel 3 es necesario pasar el campo tipo string a un objeto
         usr.appRoles[role] = true;
 
-        const pers = { user: event.uid };
-        ref.doc(`cfPers/${usr.cfPers}`).set(pers, { merge: true })
-           .then( () => console.log('se asocio correctamente el usuario'))
-           .catch( err => console.log('no se pudo asociar correctamente el usuario', err));
+        const pers = {
+          user: event.uid
+        };
+        ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
+            merge: true
+          })
+          .then(() => console.log('se asocio correctamente el usuario'))
+          .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
 
-       return  ref.doc(`/user/${event.uid}`).set(usr)
-            .then( () => console.log('se asocio correctamente la persona'))
-            .catch( err => console.log('no se pudo asociar correctamente la persona', err) );
+        return ref.doc(`/user/${event.uid}`).set(usr)
+          .then(() => console.log('se asocio correctamente la persona'))
+          .catch(err => console.log('no se pudo asociar correctamente la persona', err));
 
       }
     }).catch(err => console.log('fallo la consulta', err));
