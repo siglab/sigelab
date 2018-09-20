@@ -258,6 +258,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
 
+
             let persona = {};
             if (pers.user) {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {

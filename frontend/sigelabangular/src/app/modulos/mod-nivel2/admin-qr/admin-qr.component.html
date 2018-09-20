@@ -189,6 +189,8 @@
           <div class="box box-danger">
             <div class="box-header with-border">
               <h3 class="box-title">Recuperar Qr</h3>
+
+              <button  data-dismiss="modal"  [routerLink]= " ['/principal/qrinventario/' + this.secQrUrl]  "  style= "float: right" class="btn btn-success" >Ver <i class="fa fa-arrow-right"></i> </button>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -196,10 +198,10 @@
               <div class="box-body">
                 <div class="form-group has-info" [ngClass]="{ 'has-success': this.dispo }" >
                   <label class="control-label" for="estadoserv">
-                    <strong>Numero :</strong>
+                    <strong>Numero:</strong>
                   </label>
 
-                  <input (focusout)="searchInventory($event)" type="text" class="form-control" id="inputEmail3" placeholder="">
+                  <input placeholder="Numero Inventario" (focusout)="searchInventory($event)" type="text" class="form-control" id="inputEmail3" placeholder="">
                   <span class="help-block">{{status}}</span>
                 </div>
 

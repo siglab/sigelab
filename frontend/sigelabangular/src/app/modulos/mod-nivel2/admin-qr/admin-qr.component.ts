@@ -41,6 +41,7 @@ export class AdminQrComponent implements OnInit {
 
   role: any;
   moduloNivel3 = false;
+  secQrUrl;
 
   constructor(private afs: AngularFirestore, private qrserv: QrService, private router: Router) { }
 
@@ -167,7 +168,7 @@ export class AdminQrComponent implements OnInit {
     this.cod_qr = '';
     const q = $event.target.value;
     if (q.trim() === '') {
-      this.status = 'Ingrese numero del iventario';
+      this.status = 'Ingrese un numero de inventario valido.';
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
@@ -244,7 +245,9 @@ export class AdminQrComponent implements OnInit {
 
     console.log(row);
 
-    this.router.navigate( ['principal/qrinventario', row.secQr] );
+    this.secQrUrl = row.secQr;
+
+   // this.router.navigate( ['principal/qrinventario', row.secQr] );
 
 
   }

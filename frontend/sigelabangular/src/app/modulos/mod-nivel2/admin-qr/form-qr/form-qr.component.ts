@@ -58,6 +58,9 @@ export class FormQrComponent implements OnInit {
 
   ngOnInit() {
 
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
+
     this.qrser.getUser().then((res: Array<any> ) => {
       this.spaces = [];
       this.spaces = res;

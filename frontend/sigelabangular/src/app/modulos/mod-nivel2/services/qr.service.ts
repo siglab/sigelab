@@ -47,6 +47,9 @@ export class QrService {
       .catch(this.handleErrorObservable);
   }
 
+
+
+
   extractData(res: Response) {
     const body = res.json();
     return body || {};
