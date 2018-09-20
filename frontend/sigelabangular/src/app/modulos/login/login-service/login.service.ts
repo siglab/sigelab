@@ -49,7 +49,6 @@ export class LoginService {
         // }, err => console.log(err));
 
 
-        setTimeout(() => {
           this.consultarPermisos(this.usuario.uid).then(() => {
 
             setTimeout(() => {
@@ -60,9 +59,6 @@ export class LoginService {
 
 
           });
-
-        }, 2000);
-
 
 
       }).catch(error => {

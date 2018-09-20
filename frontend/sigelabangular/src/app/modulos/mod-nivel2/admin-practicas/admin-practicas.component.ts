@@ -575,7 +575,7 @@ export class AdminPracticasComponent implements OnInit {
           showConfirmButton: true
         });
 
-        // this.clearObj();
+        this.clearObj();
         stepper.reset();
 
 
