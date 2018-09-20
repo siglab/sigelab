@@ -175,7 +175,7 @@ export class LoginService {
     this.getUser(id).subscribe(data => {
       console.log('entro al metodo consultar permisos', this.usuario.uid);
 
-      console.log( 'data valuechanges',  data);
+      console.log('data valuechanges', data);
 
       if (data) {
         console.log('resultado de la data', data);
@@ -248,7 +248,7 @@ export class LoginService {
   }
 
 
-  postCloudFunction( usuario ) {
+  postCloudFunction(usuario) {
     return this.http.post(this.url2, usuario)
       .map(this.extractData)
       .catch(this.handleErrorObservable);
