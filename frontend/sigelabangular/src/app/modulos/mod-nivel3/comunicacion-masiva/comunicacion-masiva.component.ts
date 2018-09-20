@@ -76,10 +76,6 @@ export class ComunicacionMasivaComponent implements OnInit {
     escuela:[]
   };
 
-  toppings = new FormControl();
-  toppingList = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
-
-  disableSelect = new FormControl(false);
 
   constructor(private afs:AngularFirestore, private http:Http) {
 
@@ -664,14 +660,6 @@ export class ComunicacionMasivaComponent implements OnInit {
     this.estructurarSedes();
     this.estructurarFacultades();
    
-
-
-    this.objsel = {
-      sede:'inicial',
-      facultad:'inicial',
-      departamento:'inicial',
-      escuela:'inicial'
-    };
 
     this.correo = {
       asunto:'',

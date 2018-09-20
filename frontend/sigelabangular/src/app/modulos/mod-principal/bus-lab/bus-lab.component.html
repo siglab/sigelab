@@ -344,7 +344,7 @@
 
                         </div>
                       </div>
-                      <div *ngIf="usuariounivalle" class="form-group">
+                      <div *ngIf="this.user && usuariounivalle" class="form-group">
                           <div class="col-md-12">
                               <label class="control-label" for="descripserv">
                                   <strong>Descuento Univalle:</strong> {{servsel.descuento}} %</label>
@@ -435,7 +435,7 @@
                         </div>
                       </div>
 
-                      <div class="form-group">
+                      <div *ngIf="this.user" class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="condiciones">
                             <strong>Comentarios:</strong>
@@ -528,7 +528,7 @@
 
                         </div>
                       </div>
-                      <div class="form-group">
+                      <div *ngIf="this.user" class="form-group">
                         <div class="col-md-12 text-center">
                           <button class="btn btn-danger" type="button" (click)="agregarSolicitudServicio()">Agregar variacion</button>
                         </div>
@@ -602,14 +602,14 @@
                     </div>
                 </div>
 
-                <div *ngIf="usuariounivalle" class="form-group">
+                <div *ngIf="this.user && usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
                       <strong>Total descuento: </strong>$ {{this.descuento}}</label>
                   </div>
                 </div>
 
-                <div *ngIf="usuariounivalle" class="form-group">
+                <div *ngIf="this.user && usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
                       <strong>Precio Total con descuento: </strong>$ {{this.preciocondescuento}}</label>
@@ -632,7 +632,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="usuariounivalle">
+                <div *ngIf="this.user && usuariounivalle">
                   <div class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
                       <p>como es un usuario de la univalle, debe escoger de manera obligatoria una de las siguientes opciones</p>
@@ -643,7 +643,7 @@
                     </div>
                   </div>
 
-                  <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
+                  <div *ngIf="this.user && habilitarci" class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
                       <label class="control-label" for="UNIV">
                         <strong>CI:</strong>
@@ -659,7 +659,7 @@
                     <button class="btn2 btn-danger danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">Ver equipos asociados</button>
                   </div>
                 </div>
-                <div class="form-group">
+                <div *ngIf="this.user" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="condiciones">
                       <strong>Comentarios:</strong>

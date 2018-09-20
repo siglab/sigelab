@@ -1,211 +1,152 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-       Laboratorios
-      </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i> Home</a>
-        </li>
-        <li class="active">Dashboard laboratorios</li>
-      </ol>
+        <h1>
+            Solicitudes de mantenimiento
+        </h1>
+
     </section>
 
     <!-- Main content -->
-    <section class="content" *ngIf="itemsel | async; let itemsel">
+    <section *ngIf="itemsel" class="content">
 
-      <!-- Componente central de busqueda -->
+        <!-- Componente central de busqueda -->
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="box box-danger">
 
-    <div class="row">
-        <div class="col-md-12 col-lg-12">
-          <div class="box box-danger">
-            <div class="box-header" >
-              <div class="form-group">
-                <div class="col-md-12">
-                    <i class="fa fa-map"></i>
-                    <h3 class="box-title">Solicitudes </h3>
-                </div>
-              </div>
-            </div>
+                    <div class="box-body">
 
-            <div class="box-body">
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs">
+                                <li>
+                                    <a class="tablas" data-toggle="tab" href="#home">
+                                        ACTIVOS</a>
+                                </li>
+                                <li>
+                                    <a class="tablas" data-toggle="tab" href="#menu1">
+                                        INACTIVOS</a>
+                                </li>
+                            </ul>
 
-                <ul class="nav nav-tabs" >
-                    <li><a class="tablas" data-toggle="tab"  href="#mantenimiento" >
-                      MANTENIMIENTO</a></li>
-                    <li><a class="tablas" data-toggle="tab" href="#reposicion">
-                      REPOSICION O COMPRA</a></li>
-                      <li><a class="tablas" data-toggle="tab" href="#baja">
-                      BAJA</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div id="mantenimiento" class="tab-pane fade in active">
-
-
-                      <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                          <div class="box box-danger">
-                            <div class="box-header" >
-                              <div class="form-group">
+                            <div class="row" style="margin-top:30px;">
                                 <div class="col-md-12">
-                                    <i class="fa fa-map"></i>
-                                    <h3 class="box-title">Solicitudes de Mantenimiento</h3>
-                                </div>
-                              </div>
-                            </div>
+                                    <div class="box box-danger">
+                                        <div class="tab-content">
+                                            <div id="home" class="tab-pane fade in active">
+                                                <div class="box-header">
+                                                    <i class="fa fa-flask"></i>
 
-                            <div class="box-body">
+                                                    <h3 class="box-title">ACTIVOS</h3>
+                                                </div>
+                                                <div class="box-body">
 
-                              <div class="col-md-6">
-                                <div class="box box-danger">
+                                                    <div class="table-responsive">
 
-
-                                  <div class="box-body">
-                                    <div class="box-body">
-
-                                        <ul class="nav nav-tabs" >
-                                            <li><a class="tablas" data-toggle="tab"  href="#home" >
-                                              ACTIVOS</a></li>
-                                            <li><a class="tablas" data-toggle="tab" href="#menu1">
-                                            INACTIVOS</a></li>
-                                        </ul>
-
-                                        <div class="row" style="margin-top:30px;">
-                                            <div class="col-md-12">
-                                                <div class="box box-danger">
-                                                    <div class="tab-content">
-                                                        <div id="home" class="tab-pane fade in active">
-                                                            <div class="box-header">
-                                                                <i class="fa fa-flask"></i>
-
-                                                                <h3 class="box-title">ACTIVOS</h3>
+                                                        <div class="example-container mat-elevation-z8">
+                                                            <div class="example-header">
+                                                                <mat-form-field>
+                                                                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por numero solicitud, nombre equipo, fecha y tipo de mantenimiento">
+                                                                </mat-form-field>
                                                             </div>
-                                                            <div class="box-body">
 
-                                                                <div class="box box-danger">
-                                                                    <div class="box-header">
-                                                                      <i class="fa fa-map"></i>
+                                                            <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
+                                                                <!-- Position Column -->
+                                                                <ng-container matColumnDef="id">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> id </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.uidsol}} </mat-cell>
+                                                                </ng-container>
+                                                                <!-- Position Column -->
+                                                                <ng-container matColumnDef="nombre">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.nombreEquip}} </mat-cell>
+                                                                </ng-container>
 
-                                                                      <h3 class="box-title">Solicitudes</h3>
-                                                                      <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} ACTIVAS</h3>
-                                                                    </div>
-                                                                    <!-- /.box-header -->
-                                                                    <div class="box-body">
-                                                                        <div class="box-body divScroll">
-                                                                          <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                                            </div>
-                                                                          <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                                              <table class=" table row-border hover table-condensed">
-                                                                                  <thead>
-                                                                                      <tr>
-                                                                                          <th>NUMERO</th>
-                                                                                          <th>FECHA</th>
-                                                                                          <th>TIPO</th>
-                                                                                          <th>EQUIPO</th>
-                                                                                          <th>ESTADO</th>
+                                                                <!-- Name Column -->
+                                                                <ng-container matColumnDef="fecha">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                                </ng-container>
 
-                                                                                      </tr>
-                                                                                      </thead>
-                                                                                      <tbody>
-                                                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i=index">
-                                                                                          <td>
-                                                                                              {{i}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              ACEPTADA
-                                                                                          </td>
-                                                                                      </tr>
-                                                                                      </tbody>
+                                                                <!-- Weight Column -->
+                                                                <ng-container matColumnDef="tipo">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                                                </ng-container>
 
-                                                                              </table>
+                                                                <!-- Symbol Column -->
+                                                                <ng-container matColumnDef="estado">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                                                </ng-container>
 
-                                                                          </div>
-                                                                        </div>
-                                                                    </div>
-                                                                  <!-- /.box-body -->
-                                                                </div>
+                                                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                                <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataSolicitud(row)"></mat-row>
+                                                            </mat-table>
 
-                                                            </div>
-                                                        </div>
-
-                                                        <div id="menu1" class="tab-pane fade">
-                                                            <div class="box-header">
-                                                                <i class="fa fa-flask"></i>
-
-                                                                <h3 class="box-title">INACTIVOS</h3>
-                                                            </div>
-                                                            <div class="box-body">
-
-                                                                <div class="box box-danger">
-                                                                    <div class="box-header">
-                                                                      <i class="fa fa-map"></i>
-
-                                                                      <h3 class="box-title">Proyectos</h3>
-                                                                      <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} INACTIVAS</h3>
-                                                                    </div>
-                                                                    <!-- /.box-header -->
-                                                                    <div class="box-body">
-                                                                        <div class="box-body divScroll">
-                                                                          <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                                            </div>
-                                                                          <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                                              <table class=" table row-border hover table-condensed">
-                                                                                  <thead>
-                                                                                      <tr>
-                                                                                          <th>NUMERO</th>
-                                                                                          <th>FECHA</th>
-                                                                                          <th>TIPO</th>
-                                                                                          <th>EQUIPO</th>
-                                                                                          <th>ESTADO</th>
-
-                                                                                      </tr>
-                                                                                      </thead>
-                                                                                      <tbody>
-                                                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i=index">
-                                                                                          <td>
-                                                                                              {{i}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              ACEPTADA
-                                                                                          </td>
-                                                                                      </tr>
-                                                                                      </tbody>
-
-                                                                              </table>
-
-                                                                          </div>
-                                                                        </div>
-                                                                    </div>
-                                                                  <!-- /.box-body -->
-                                                                </div>
-
-                                                            </div>
+                                                            <mat-paginator #paginator="matPaginator" [pageSize]="4" [pageSizeOptions]="[2, 3, 4]" [showFirstLastButtons]="true">
+                                                            </mat-paginator>
                                                         </div>
                                                     </div>
 
+                                                </div>
+                                            </div>
+
+                                            <div id="menu1" class="tab-pane fade">
+                                                <div class="box-header">
+                                                    <i class="fa fa-flask"></i>
+
+                                                    <h3 class="box-title">INACTIVOS</h3>
+                                                </div>
+                                                <div class="box-body">
+
+                                                    <div class="table-responsive">
+                                                        <div class="example-container mat-elevation-z8">
+                                                            <div class="example-header">
+                                                                <mat-form-field>
+                                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar por numero solicitud, nombre equipo, fecha y tipo de mantenimiento">
+                                                                </mat-form-field>
+                                                            </div>
+
+                                                            <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+
+                                                                <!-- Position Column -->
+                                                                <ng-container matColumnDef="id">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> id </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.uidsol}} </mat-cell>
+                                                                </ng-container>
+                                                                <!-- Position Column -->
+                                                                <ng-container matColumnDef="nombre">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.nombreEquip}} </mat-cell>
+                                                                </ng-container>
+
+                                                                <!-- Name Column -->
+                                                                <ng-container matColumnDef="fecha">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                                                </ng-container>
+
+                                                                <!-- Weight Column -->
+                                                                <ng-container matColumnDef="laboratorio">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
+                                                                </ng-container>
+
+                                                                <!-- Symbol Column -->
+                                                                <ng-container matColumnDef="estado">
+                                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                                    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                                                </ng-container>
+
+                                                                <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                                                <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataSolicitud(row)"></mat-row>
+                                                            </mat-table>
+
+                                                            <mat-paginator #paginator2="matPaginator" [pageSize]="4" [pageSizeOptions]="[2, 3, 4]" [showFirstLastButtons]="true">
+                                                            </mat-paginator>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -213,660 +154,672 @@
 
 
                                     </div>
-                                  </div>
-                                <!-- /.box-body -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="this.solsel" class="col-md-6">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">INFORMACION DE SOLICITUD</h3>
                                 </div>
 
-                              </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form id="form-work" class="" name="form-work" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ccpas">
+                                                        <strong>No Solicitud: </strong>
+                                                        {{this.solsel.uidsol}}
+                                                    </label>
 
-                              <div class="col-md-6 col-lg-6">
-                                  <div class="box box-danger">
-                                    <div class="box-header">
-                                      <i class="fa fa-map"></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nac">
+                                                        <strong>Fecha Solicitud: </strong>
+                                                        {{this.solsel.fecha}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="name">
+                                                        <strong>Laboratorio solicitante: </strong>
+                                                        {{this.solsel.nombrelab}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ciuor">
+                                                        <strong>Fecha ultima edicion: </strong>
+                                                        {{this.solsel.editado}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ciudes">
+                                                        <strong>Usuario solicitante: </strong>
+                                                        {{this.solsel.usuario}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ciudes">
+                                                        <strong>Tipo Mantenimiento: </strong>
+                                                        {{this.solsel.tipo}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ciudes">
+                                                        <strong>Descripcion: </strong>
+                                                        {{this.solsel.descripcion}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ciudes">
+                                                        <strong>Datos Proveedor:</strong>
+                                                    </label>
+                                                    <ul>
+                                                        <li *ngFor="let item of solsel.proveedores">
+                                                            {{item.name}}
+                                                            <ul>
+                                                                <li *ngFor="let item2 of item.contactNumbers; let i = index">tel {{i}} : {{item2}}</li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
 
-                                      <h3 class="box-title">INFORMACION DE SOLICITUD</h3>
+                                            <div class="row" style="margin-top:20px;">
+                                                <div class="col-md-12 text-center form-group">
+                    
+                                                  <div class="col-md-6" style="float: right;">
+                                                      <div class="row">
+                                                            <button *ngIf="this.solsel.status == 'pendiente'" class="btn btn-success" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
+                                                            <button *ngIf="this.solsel.status == 'pendiente'" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal2">RECHAZAR</button>
+                                                            <button *ngIf="this.solsel.status == 'aceptada'" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal1">CONLCUIR MANTENIMIENTO</button>
+                                                      </div>
+                                                      
+                                                  </div>
+                                                  
+                                                </div>
+                                              </div>
+
+
+                                        </fieldset>
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="this.solsel && (this.solsel.tipo != 'panico')" class="col-md-6">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">INFORMACION DE EQUIPO VINCULADO</h3>
+                                </div>
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form id="form-work" class="" name="form-work" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nac">
+                                                        <strong>No Invetario: </strong>
+                                                        {{this.solsel.equipo.inventory}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ccpas">
+                                                        <strong>Nombre Equipo: </strong>
+                                                        {{this.solsel.equipo.cfName}}
+                                                    </label>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nac">
+                                                        <strong>Precio: $</strong>
+                                                        {{this.solsel.equipo.price}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="ciudes">
+                                                        <strong>COMPONENTES ASOCIADOS:</strong>
+                                                    </label>
+                                                    <ul>
+                                                        <li *ngFor="let item of solsel.componentes">
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <label class="control-label" for="nac">
+                                                                        <strong>Nombre: </strong>
+                                                                        {{item.nombre}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <label class="control-label" for="ccpas">
+                                                                        <strong>Descripcion: </strong>
+                                                                        {{item.descripcion}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <label class="control-label" for="nac">
+                                                                        <strong>Precio: </strong>
+                                                                        {{item.precio}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <label class="control-label" for="ciuor">
+                                                                        <strong>Marca: </strong>
+                                                                        {{item.marca}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <label class="control-label" for="ciuor">
+                                                                        <strong>Modelo: </strong>
+                                                                        {{item.modelo}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <label class="control-label" for="ciuor">
+                                                                        <strong>Estado: </strong>
+                                                                        {{item.estado}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+
+                                        </fieldset>
+                                    </form>
+
+                                    <div *ngIf="this.infosabs" class="box box-danger">
+                                        <div class="box-header">
+                                          <h4 (click)="cambiarIcono('sabs')" class="box-title">
+                                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
+                                              INFORMACION DE SABS
+                                            </a>
+                                          </h4>
+                                
+                                        </div>
+                                        <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                          <div class="box-body">
+                                            <form  id="form-work" class="" name="form-work" action="#">
+                                                <fieldset>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="nac"><strong>Codigo: </strong>
+                                                            {{this.infosabs.codInventario}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ccpas"><strong>Responsable: </strong>
+                                                            {{this.infosabs.responsable}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ciuor"><strong>Serial: </strong>
+                                                            {{this.infosabs.numSerial}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ciuor"><strong>Marca: </strong>
+                                                            {{this.infosabs.nombreMarca}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ciuor"><strong>Ubicacion: </strong>
+                                                            {{this.infosabs.ubicacion}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ciuor"><strong>Fecha Aceptacion: </strong>
+                                                            {{this.infosabs.fechaAceptacion}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ciuor"><strong>Costo Inicial: </strong>
+                                                            {{this.infosabs.costoInicial}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                          <label class="control-label" for="ciuor"><strong>Estado: </strong>
+                                                            {{this.infosabs.estado}}
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                    
+                                                </fieldset>
+                                            </form>
+                                          </div>
+                                        </div>
                                     </div>
 
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="this.solsel && (this.solsel.tipo == 'panico')" class="col-md-6">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">INFORMACION DE SOLICITUD DE PANICO</h3>
+                                </div>
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form action="">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nombre">
+                                                        <strong>Nombre de Equipo:</strong>
+                                                    </label>
+                                                    {{solsel.panicoequipo}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="descripcion">
+                                                        <strong>Descripcion del problema:</strong>
+                                                    </label>
+                                                    {{solsel.panicodescripcion}}
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="box box-danger">
+                                    <div class="box-header">
+                                        <i class="fa fa-map"></i>
+                                
+                                        <h3 class="box-title">Historial de Solicitudes</h3>
+                        
+                                    </div>
+                                
+                                    <div class="box-body">
+                                        <div class="col-md-6">
+                                            <div class="panel-group" id="accordion">
+                        
+                                                <div *ngFor="let item of solicitudesCoin; let i = index;" class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}"><strong>No Solicitud: </strong>{{item.uidsol}}</a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse{{i}}" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            <form action="">
+                                                                <fieldset>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label" for="nombre">
+                                                                                <strong>Fecha de Solicitud:</strong>
+                                                                            </label>
+                                                                            {{item.fecha}}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label" for="descripcion">
+                                                                                <strong>Tipo Mantenimiento:</strong>
+                                                                            </label>
+                                                                            {{item.tipo}}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label" for="descripcion">
+                                                                                <strong>Estado de Solicitud:</strong>
+                                                                            </label>
+                                                                            {{item.status}}
+                                                                        </div>
+                                                                    </div>
+                        
+                                                                </fieldset>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            
+                                            <div class="col-md-6" style="text-align: center;">
+                                                <div class="box box-solid box-info">
+                                                    <div class="box-header">
+                                                        <h1 class="box-title">{{this.solicitudesEjecu}}</h1>
+                                                    </div>
+    
+                                                    <div class="box-body">
+                                                        <h5>NUMERO DE SOLICITUDES EJECUTADAS PARA EL MISMO EQUIPO</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" style="text-align: center;">
+                                                <div class="box box-solid box-warning">
+                                                    <div class="box-header">
+                                                        <h1 class="box-title">$ {{this.montoSolicitudes}}</h1>
+                                                    </div>
+    
+                                                    <div class="box-body">
+                                                        <h5>MONTO TOTAL DE MANTENIMIENTOS EJECUTADOS PARA EL MISMO EQUIPO</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+ 
+                                        </div>
+            
+                                    </div>
+                                
+                                
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="this.solsel && (solsel.path.length != 0)" class="col-md-6">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">COTIZACIONES ADJUNTAS</h3>
+                                </div>
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="listfacul">
+                                                        <strong>Cotizaciones Agregadas :</strong>
+                                                    </label>
+                                                    <ul class="nav nav-stacked">
+                                                        <li *ngFor="let item of this.solsel.path; let i = index;">
+                                                            <a>{{item}}
+                                                                <span (click)="descargarArchivo(i)" class="puntero pull-left badge bg-green">bajar</span>
+                                                            </a>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="this.solsel && (solsel.status == 'rechazada')" class="col-md-6">
+                                <div class="box box-danger">
+                                    <div class="box-header">
+                                        <i class="fa fa-map"></i>
+    
+                                        <h3 class="box-title">MOTIVO DEL RECHAZO</h3>
+                                    </div>
+    
                                     <!-- /.box-header -->
                                     <div class="box-body">
-
-                                        <form  id="form-work" class="" name="form-work" action="#">
+                                        <form id="form-workserv3" class="" name="form-workserv3" action="#">
                                             <fieldset>
                                                 <div class="form-group">
                                                     <div class="col-md-12">
-                                                      <label class="control-label" for="ccpas"><strong>No Solicitud: </strong></label>
-
+                                                        {{this.solsel.comment}}
                                                     </div>
+    
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="nac"><strong>Fecha Solicitud: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciuor"><strong>Fecha ultima edicion: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Usuario solicitante: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Tipo Mantenimiento: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Estado Equipo: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Descripcion: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Datos PRoveedor: </strong></label>
-                                                    </div>
-                                                </div>
-
                                             </fieldset>
+    
+    
                                         </form>
-
-
-                                        <div class="box box-danger">
-                                            <div class="box-header">
-                                              <i class="fa fa-map"></i>
-
-                                              <h3 class="box-title">Equipo Vinculado</h3>
-                                              <h3 class="box-title" style="float: right;">{{this.itemsel.equipos.length}} Equipos</h3>
-                                            </div>
-                                            <!-- /.box-header -->
-                                            <div class="box-body">
-                                                <div class="box-body divScroll1">
-                                                  <div *ngIf="this.itemsel.equipos.length == 0">
-                                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                                    </div>
-                                                  <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                                      <table class=" table row-border hover table-condensed">
-                                                          <thead>
-                                                              <tr>
-                                                                  <th>Nombre</th>
-                                                                  <th>Estado</th>
-                                                                  <th>No Inventario</th>
-                                                              </tr>
-                                                              </thead>
-                                                              <tbody>
-                                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos; let i = index">
-                                                                  <td>
-                                                                      {{item.nombre}}
-                                                                  </td>
-                                                                  <td>
-                                                                      ACTIVO
-                                                                  </td>
-                                                                  <td>
-                                                                      {{i}}
-                                                                  </td>
-                                                              </tr>
-                                                              </tbody>
-
-                                                      </table>
-
-                                                  </div>
-                                                </div>
-                                            </div>
-                                          <!-- /.box-body -->
-                                        </div>
-
-                                        <div class="box box-danger">
-                                            <div class="box-header">
-                                              <i class="fa fa-map"></i>
-
-                                              <h3 class="box-title">Accesorios y Componentes</h3>
-                                              <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} Componentes y/o Accesorios</h3>
-                                            </div>
-                                            <!-- /.box-header -->
-                                            <div class="box-body">
-                                                <div class="box-body divScroll1">
-                                                  <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                                    </div>
-                                                  <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                      <table class=" table row-border hover table-condensed">
-                                                          <thead>
-                                                              <tr>
-                                                                  <th>Nombre</th>
-                                                                  <th>Estado</th>
-                                                                  <th>No Inventario</th>
-                                                              </tr>
-                                                              </thead>
-                                                              <tbody>
-                                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i = index">
-                                                                  <td>
-                                                                      {{item.nombre}}
-                                                                  </td>
-                                                                  <td>
-                                                                    ACTIVO
-                                                                  </td>
-                                                                  <td>
-                                                                      {{i}}
-                                                                  </td>
-                                                              </tr>
-                                                              </tbody>
-
-                                                      </table>
-
-                                                  </div>
-                                                </div>
-                                            </div>
-                                          <!-- /.box-body -->
-                                        </div>
-
-                                        <div class="row" style="float: right;">
-                                          <form>
-                                              <button class="btn-success btn-lg success" type="button" >Aceptar</button>
-                                              <button class="btn-danger btn-lg danger" type="button" >Cancelar</button>
-                                              <button class="btn-warning btn-lg warning" type="button" >Concluir</button>
-                                          </form>
-
-
-                                        </div>
-
+    
                                     </div>
-                                  <!-- /.box-body -->
-                                  </div>
-
-                                  <div class="box box-danger" style="margin-top: 40px;">
-                                      <div class="box-header">
-                                        <h3 class="box-title">OTRAS SOLICITUDES VINCULADAS AL MISMO EQUIPO</h3>
-                                        <h3 class="box-title" style="float: right;">{{this.itemsel.equipos.length}} Solicitudes encontradas</h3>
-                                      </div>
-                                      <!-- /.box-header -->
-                                      <div class="box-body">
-                                          <div class="box-body divScroll1">
-                                            <div *ngIf="this.itemsel.equipos.length == 0">
-                                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                              </div>
-                                            <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                                <table class=" table row-border hover table-condensed">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No Solicitud</th>
-                                                            <th>Fecha</th>
-                                                            <th>Tipo</th>
-                                                            <th>Estado</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos; let i = index">
-                                                            <td>
-                                                                {{i}}
-                                                            </td>
-                                                            <td>
-                                                                {{item.nombre}}
-                                                            </td>
-                                                            <td>
-                                                                {{item.nombre}}
-                                                            </td>
-                                                            <td>
-                                                               ACTIVO
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-
-                                                </table>
-
-                                            </div>
-                                          </div>
-
-                                          <div class="row" style="margin-top: 40px;">
-                                              <div class="col-md-3 col-lg-6" style="text-align: center;">
-                                                  <div class="box box-solid box-warning">
-                                                      <div class="box-header">
-                                                        <h1 class="box-title">3</h1>
-                                                      </div>
-
-                                                      <div class="box-body">
-                                                          <h5>MANTENIMIENTOS EN LOS ULTIMOS 2 AÑOS</h5>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-3 col-lg-6" style="text-align: center;">
-                                                  <div class="box box-solid box-warning">
-                                                      <div class="box-header">
-                                                        <h1 class="box-title">$ 57980000</h1>
-                                                      </div>
-
-                                                      <div class="box-body">
-                                                          <h5>MONTO INVERTIDO EN LOS ULTIMOS DOS AÑOS</h5>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-
-                                      </div>
-                                    <!-- /.box-body -->
-                                  </div>
-
-
-                              </div>
-
-
+    
+                                </div>
+    
                             </div>
 
-
-
-                          </div>
+                        <div *ngIf="!this.solsel">
+                            <h2>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h2>
                         </div>
-                      </div>
 
 
                     </div>
 
-                    <div id="reposicion" class="tab-pane fade">
-                      <div class="row">
-                        <div class="col-md-12 col-lg-12">
-                          <div class="box box-danger">
-                            <div class="box-header" >
-                              <div class="form-group">
-                                <div class="col-md-12">
-                                    <i class="fa fa-map"></i>
-                                    <h3 class="box-title">Solicitudes de Reposicion</h3>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="box-body">
-
-                              <div class="col-md-6">
-                                <div class="box box-danger">
-
-
-                                  <div class="box-body">
-                                    <div class="box-body">
-
-                                        <ul class="nav nav-tabs" >
-                                            <li><a class="tablas" data-toggle="tab"  href="#home" >
-                                              ACTIVOS</a></li>
-                                            <li><a class="tablas" data-toggle="tab" href="#menu1">
-                                            INACTIVOS</a></li>
-                                        </ul>
-
-                                        <div class="row" style="margin-top:30px;">
-                                            <div class="col-md-12">
-                                                <div class="box box-danger">
-                                                    <div class="tab-content">
-                                                        <div id="home" class="tab-pane fade in active">
-                                                            <div class="box-header">
-                                                                <i class="fa fa-flask"></i>
-
-                                                                <h3 class="box-title">ACTIVOS</h3>
-                                                            </div>
-                                                            <div class="box-body">
-
-                                                                <div class="box box-danger">
-                                                                    <div class="box-header">
-                                                                      <i class="fa fa-map"></i>
-
-                                                                      <h3 class="box-title">Solicitudes</h3>
-                                                                      <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} ACTIVAS</h3>
-                                                                    </div>
-                                                                    <!-- /.box-header -->
-                                                                    <div class="box-body">
-                                                                        <div class="box-body divScroll">
-                                                                          <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                                            </div>
-                                                                          <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                                              <table class=" table row-border hover table-condensed">
-                                                                                  <thead>
-                                                                                      <tr>
-                                                                                          <th>NUMERO</th>
-                                                                                          <th>FECHA</th>
-                                                                                          <th>TIPO</th>
-                                                                                          <th>EQUIPO</th>
-                                                                                          <th>ESTADO</th>
-
-                                                                                      </tr>
-                                                                                      </thead>
-                                                                                      <tbody>
-                                                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i=index">
-                                                                                          <td>
-                                                                                              {{i}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              ACEPTADA
-                                                                                          </td>
-                                                                                      </tr>
-                                                                                      </tbody>
-
-                                                                              </table>
-
-                                                                          </div>
-                                                                        </div>
-                                                                    </div>
-                                                                  <!-- /.box-body -->
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div id="menu1" class="tab-pane fade">
-                                                            <div class="box-header">
-                                                                <i class="fa fa-flask"></i>
-
-                                                                <h3 class="box-title">INACTIVOS</h3>
-                                                            </div>
-                                                            <div class="box-body">
-
-                                                                <div class="box box-danger">
-                                                                    <div class="box-header">
-                                                                      <i class="fa fa-map"></i>
-
-                                                                      <h3 class="box-title">Proyectos</h3>
-                                                                      <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} INACTIVAS</h3>
-                                                                    </div>
-                                                                    <!-- /.box-header -->
-                                                                    <div class="box-body">
-                                                                        <div class="box-body divScroll">
-                                                                          <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                                                                            </div>
-                                                                          <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                                              <table class=" table row-border hover table-condensed">
-                                                                                  <thead>
-                                                                                      <tr>
-                                                                                          <th>NUMERO</th>
-                                                                                          <th>FECHA</th>
-                                                                                          <th>TIPO</th>
-                                                                                          <th>EQUIPO</th>
-                                                                                          <th>ESTADO</th>
-
-                                                                                      </tr>
-                                                                                      </thead>
-                                                                                      <tbody>
-                                                                                      <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i=index">
-                                                                                          <td>
-                                                                                              {{i}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              {{item.nombre}}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                              ACEPTADA
-                                                                                          </td>
-                                                                                      </tr>
-                                                                                      </tbody>
-
-                                                                              </table>
-
-                                                                          </div>
-                                                                        </div>
-                                                                    </div>
-                                                                  <!-- /.box-body -->
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                  </div>
-                                <!-- /.box-body -->
-                                </div>
-
-                              </div>
-
-                              <div class="col-md-6 col-lg-6">
-                                  <div class="box box-danger">
-                                    <div class="box-header">
-                                      <i class="fa fa-map"></i>
-
-                                      <h3 class="box-title">INFORMACION DE SOLICITUD</h3>
-                                    </div>
-
-                                    <!-- /.box-header -->
-                                    <div class="box-body">
-
-                                        <form  id="form-work" class="" name="form-work" action="#">
-                                            <fieldset>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ccpas"><strong>No Solicitud: </strong></label>
-
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="nac"><strong>Fecha Solicitud: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciuor"><strong>Fecha ultima edicion: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Usuario solicitante: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Tipo Mantenimiento: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Estado Equipo: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Descripcion: </strong></label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                      <label class="control-label" for="ciudes"><strong>Datos PRoveedor: </strong></label>
-                                                    </div>
-                                                </div>
-
-                                            </fieldset>
-                                        </form>
-
-
-                                        <div class="box box-danger">
-                                            <div class="box-header">
-                                              <i class="fa fa-map"></i>
-
-                                              <h3 class="box-title">Equipo Vinculado</h3>
-                                              <h3 class="box-title" style="float: right;">{{this.itemsel.equipos.length}} Equipos</h3>
-                                            </div>
-                                            <!-- /.box-header -->
-                                            <div class="box-body">
-                                                <div class="box-body divScroll1">
-                                                  <div *ngIf="this.itemsel.equipos.length == 0">
-                                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                                    </div>
-                                                  <div *ngIf="this.itemsel.equipos.length != 0" class="list-group">
-                                                      <table class=" table row-border hover table-condensed">
-                                                          <thead>
-                                                              <tr>
-                                                                  <th>Nombre</th>
-                                                                  <th>Estado</th>
-                                                                  <th>No Inventario</th>
-                                                              </tr>
-                                                              </thead>
-                                                              <tbody>
-                                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.equipos; let i = index">
-                                                                  <td>
-                                                                      {{item.nombre}}
-                                                                  </td>
-                                                                  <td>
-                                                                      ACTIVO
-                                                                  </td>
-                                                                  <td>
-                                                                      {{i}}
-                                                                  </td>
-                                                              </tr>
-                                                              </tbody>
-
-                                                      </table>
-
-                                                  </div>
-                                                </div>
-                                            </div>
-                                          <!-- /.box-body -->
-                                        </div>
-
-                                        <div class="box box-danger">
-                                            <div class="box-header">
-                                              <i class="fa fa-map"></i>
-
-                                              <h3 class="box-title">Accesorios y Componentes</h3>
-                                              <h3 class="box-title" style="float: right;">{{this.itemsel.solicitudes.length}} Componentes y/o Accesorios</h3>
-                                            </div>
-                                            <!-- /.box-header -->
-                                            <div class="box-body">
-                                                <div class="box-body divScroll1">
-                                                  <div *ngIf="this.itemsel.solicitudes.length == 0">
-                                                      <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
-                                                    </div>
-                                                  <div *ngIf="this.itemsel.solicitudes.length != 0" class="list-group">
-                                                      <table class=" table row-border hover table-condensed">
-                                                          <thead>
-                                                              <tr>
-                                                                  <th>Nombre</th>
-                                                                  <th>Estado</th>
-                                                                  <th>No Inventario</th>
-                                                              </tr>
-                                                              </thead>
-                                                              <tbody>
-                                                              <tr style="cursor:pointer" *ngFor="let item of this.itemsel.solicitudes; let i = index">
-                                                                  <td>
-                                                                      {{item.nombre}}
-                                                                  </td>
-                                                                  <td>
-                                                                    ACTIVO
-                                                                  </td>
-                                                                  <td>
-                                                                      {{i}}
-                                                                  </td>
-                                                              </tr>
-                                                              </tbody>
-
-                                                      </table>
-
-                                                  </div>
-                                                </div>
-                                            </div>
-                                          <!-- /.box-body -->
-                                        </div>
-
-                                        <div class="row" style="float: right;">
-                                          <form>
-                                              <button class="btn-success btn-lg success" type="button" >Aceptar</button>
-                                              <button class="btn-danger btn-lg danger" type="button" >Cancelar</button>
-                                              <button class="btn-warning btn-lg warning" type="button" >Concluir</button>
-                                          </form>
-
-
-                                        </div>
-
-                                    </div>
-                                  <!-- /.box-body -->
-                                  </div>
-
-                                  <div class="box box-danger" style="margin-top: 40px;">
-                                      <div class="box-header">
-                                        <h3 class="box-title">OTROS INDICADORES</h3>
-                                      </div>
-                                      <!-- /.box-header -->
-                                      <div class="box-body">
-
-                                          <div class="row" style="margin-top: 40px;">
-                                              <div class="col-md-3 col-lg-6" style="text-align: center;">
-                                                  <div class="box box-solid box-warning">
-                                                      <div class="box-header">
-                                                        <h1 class="box-title">3</h1>
-                                                      </div>
-
-                                                      <div class="box-body">
-                                                          <h5>MANTENIMIENTOS EN LOS ULTIMOS 2 AÑOS</h5>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-3 col-lg-6" style="text-align: center;">
-                                                  <div class="box box-solid box-warning">
-                                                      <div class="box-header">
-                                                        <h1 class="box-title">$ 57980000</h1>
-                                                      </div>
-
-                                                      <div class="box-body">
-                                                          <h5>MONTO INVERTIDO EN LOS ULTIMOS DOS AÑOS</h5>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-
-                                      </div>
-                                    <!-- /.box-body -->
-                                  </div>
-
-
-                              </div>
-
-
-                            </div>
-
-
-
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <div id="baja" class="tab-pane fade">
-                        <h1>menu2</h1>
-                      </div>
                 </div>
-
             </div>
-          </div>
         </div>
-    </div>
 
 
 
     </section>
 
+    <section>
+        <h2 *ngIf="!itemsel">NO SE HA SELECCIONADO NINGUN LABORATORIO</h2>
+    </section>
 
 
-  </div>
+
+
+</div>
+
+
+<!-- MODAL QUE PERMITE LA CREACION DE UN NUEVA SOLICITUD DE MANTENIMIENTO -->
+<div class="modal fade" id="modal2" role="dialog">
+    <div Class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal2')"></span>
+                <h3 class="box-title">Rechazar solicitud de mantenimiento</h3>
+
+            </div>
+            <div class="modal-body">
+                
+                <div class="box box-danger">
+                    <div class="box-body">
+                        <form id="form-work2" class="" name="form-work2" action="#">
+                            <fieldset>
+                                
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="descripcion">
+                                            <strong>Comentario de rechazo de mantenimiento:</strong>
+                                        </label>
+                                        <textarea name="descripcion" rows="4" [(ngModel)]="this.comentario" id="descripcion" style="width: 100%;"></textarea>
+                                    </div>
+                                </div>
+                                
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div *ngIf="this.comentario != ''" class="row">
+                    <div class="col-md-12">
+                        <form style="margin-top: 30px;">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-md-12 text-center">
+                                        <button (click)="cambiarEstadoSolicitud('rechazado')" class="btn btn-danger" type="button">Rechazar Solicitud</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL QUE PERMITE LA CREACION DE UN NUEVA SOLICITUD DE MANTENIMIENTO -->
+<div class="modal fade" id="modal1" role="dialog">
+    <div Class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal2')"></span>
+                <h3 class="box-title">Nueva solicitud de mantenimiento</h3>
+
+            </div>
+            <div class="modal-body">
+                <div class="box-group" id="accordionModal">
+                    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false"
+                                    class="collapsed">
+                                    INFORMACION DE SOLICITUD
+                                </a>
+                            </h4>
+                            <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio"
+                                aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.servicio, 'glyphicon-minus':iconosModal.servicio}"></span>
+                            </a>
+                        </div>
+                        <div id="collapseServicio" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <form id="form-work2" class="" name="form-work2" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <p>por favor ingrese el costo en numero entero, es decir sin puntos o comas <br>
+                                                Ejemplo: 120000000</p>
+                                                <input class="form-control" [(ngModel)]="this.costo" type="text" name="costo">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="cot">
+                                                    <strong>Seleccione Archivos:</strong>
+                                                </label>
+                                                <div class="btn btn-default btn-file">
+                                                    <i class="fa fa-paperclip"></i> File
+                                                    <input class="form-control" type="file" name="attachment" multiple="multiple" (change)="alistarVariables($event)">
+                                                </div>
+                                                <p class="help-block">Max. 32MB</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="listfacul">
+                                                    <strong>Archivos Agregados :</strong>
+                                                </label>
+                                                <ul class="nav nav-stacked">
+                                                    <li *ngFor="let item of this.listaArchivos; let i = index;">
+                                                        <a>{{item.name}}
+                                                            <span (click)="quitarArchivo(i)" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form style="margin-top: 30px;">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-md-12 text-center">
+                                        <button (click)="cambiarEstadoSolicitud('concluir')" class="btn btn-danger" type="button">CONCLUIR MANTENIMIENTO</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

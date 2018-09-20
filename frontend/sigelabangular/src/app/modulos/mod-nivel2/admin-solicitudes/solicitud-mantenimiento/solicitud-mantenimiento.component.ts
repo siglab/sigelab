@@ -69,7 +69,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
     active:true,
     createdAt:'',
     updatedAt:'',
-    path:[]
+    path:[],
+    costo:'0',
+    acceptedBy:''
   };
 
   proovedor = {
@@ -119,6 +121,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
   }
 
   ngOnInit() {
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.getRoles();
 
     if (localStorage.getItem('usuario')) {
@@ -286,9 +290,10 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
 
   getCollectionSolicitudes(labid) {
-    return this.afs.collection('request',
-      ref => ref.where('requestType', '==', 'mantenimiento')
-      .where('cfFacil','==',labid)).ref.get();
+    const col = this.afs.collection('request');
+    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('cfFacil','==',labid)
+    return refer.get();
+     
   }
 
   estructurarSolicitudesActivas(data, lab) {
@@ -318,6 +323,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
             proveedores: elemento.providersInfo,
             path: elemento.path
           };
+          if(elemento.comment){
+            Solicitud['comment'] = elemento.comment;
+          }
           if(elemento.relatedEquipments != ''){
             this.getEquipo(elemento.relatedEquipments).then(equipo => {
               Solicitud['equipo'] = equipo.data();
@@ -579,7 +587,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
       active:true,
       createdAt:'',
       updatedAt:'',
-      path:[]
+      path:[],
+      costo:'0',
+      acceptedBy:''
     };
   }
 
@@ -680,7 +690,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
       active:true,
       createdAt:'',
       updatedAt:'',
-      path:[]
+      path:[],
+      costo:'0',
+      acceptedBy:''
     };
   }
   
