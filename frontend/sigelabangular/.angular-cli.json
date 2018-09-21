@@ -40,6 +40,7 @@
         "../node_modules/moment/min/moment.min.js",
         "../node_modules/fullcalendar/dist/fullcalendar.min.js",
         "../node_modules/fullcalendar-scheduler/dist/scheduler.js",
+        "assets/js/bootstrap-better-nav.js",
         "../node_modules/qtip2/dist/jquery.qtip.js"
 
 

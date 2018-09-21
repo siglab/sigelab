@@ -19,6 +19,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   itemsel: Observable<Array<any>>;
   button = true;
   fecha = new Date();
+  semester;
   // objeto persona:
   person = {
     cfBirthdate: '',
@@ -406,6 +407,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         projectDesc: this.proyecto.descripcion,
         active: this.proyecto.estado,
         relatedPers: {},
+        semester: this.semester,
         updatedAt: this.fecha.toISOString()
       };
 

@@ -313,7 +313,7 @@
                   <i class="fa fa-address-card-o"></i>
 
                   <h3 class="box-title">Informacion de servicio</h3>
-                  
+
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -360,7 +360,7 @@
                                     <label class="control-label" for="parserv">{{item}}
                                         <input class="form-control" name="{{'inputServ' + i}}" [(ngModel)]="parametrosServ['inputServ'+ i]" type="text"> </label>
                                 </div>
-                                
+
                               </div>
 
                           </div>
@@ -407,7 +407,7 @@
                             <strong>Total descuento: </strong>$ {{this.descuento}}</label>
                         </div>
                       </div>
-      
+
                       <div *ngIf="usuariounivalle" class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
@@ -430,7 +430,8 @@
                         <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
                           <div class="col-md-12">
                             <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
-                            <input id="univ" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
+                            <input id="univ" (focusout)="ciCheck($event)"   [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
+                             <p> {{status}} </p>
                           </div>
                         </div>
                       </div>
@@ -512,10 +513,10 @@
                                 </div>
 
                               </div>
-      
+
                           </div>
                       </div>
-                     
+
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
@@ -626,7 +627,7 @@
                               <label class="control-label" for="parserv">{{item}}
                                   <input class="form-control" name="{{'inputServ' + i}}" [(ngModel)]="parametrosServ['inputServ'+ i]" type="text"> </label>
                           </div>
-                          
+
                         </div>
 
                     </div>
@@ -648,8 +649,8 @@
                       <label class="control-label" for="UNIV">
                         <strong>CI:</strong>
                       </label>
-                      <input id="univ" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
-                      <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
+                      <input id="univ"   (focusout)="ciCheck($event)"  [(ngModel)]="this.valorci" name="univci" class="form-control" type="text">
+                      <p> {{status}} </p>
                     </div>
                   </div>
                 </div>
