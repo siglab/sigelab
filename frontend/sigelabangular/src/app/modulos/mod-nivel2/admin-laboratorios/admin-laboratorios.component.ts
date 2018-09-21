@@ -984,7 +984,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           this.selectorActividad();
     
           this.estructurarEnvioActividades();
-    
+          
+          if(this.infolab.mainSpace){
+            this.infolab['active'] = true; 
+          }
     
           this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data=>{
     

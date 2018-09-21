@@ -18,6 +18,7 @@ export class SidebarComponent implements OnInit {
   moduloPermiso = false;
   moduloServicios = false;
   moduloSolicitudes = false;
+  moduloNivel25 = false;
   rolUser: any;
 
   constructor() {
@@ -68,6 +69,11 @@ export class SidebarComponent implements OnInit {
         }
         if ((clave === 'moduloNivel3')) {
           this.moduloNivel3 = true;
+
+        }
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
 
         }
       }

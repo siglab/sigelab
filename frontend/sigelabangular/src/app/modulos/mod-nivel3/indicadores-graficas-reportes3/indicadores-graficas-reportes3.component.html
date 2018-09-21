@@ -1,452 +1,418 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-          INDICADORES, ESTADISTICAS Y REPORTES
-      </h1>
+        <h1>
+            INDICADORES, ESTADISTICAS Y REPORTES
+        </h1>
     </section>
-  
+
     <!-- Main content -->
     <section class="content">
-  
-      <!-- Componente central de busquedad -->
-  
-  
-      <div class="row">
-          <div class="col-md-12 col-lg-12">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <i class="fa fa-flask"></i>
-                    <h3 class="box-title">FILTROS</h3>
+
+        <!-- Componente central de busquedad -->
+
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="box box-danger">
+                    <div class="box-header">
+                        <i class="fa fa-flask"></i>
+                        <h3 class="box-title">FILTROS</h3>
+                    </div>
+
+                    <div class="box-body">
+
+                        <div class="col-md-4">
+                            <p *ngIf="moduloNivel3">
+                                <mat-checkbox [formControl]="formCheckBox.universidad" (change)="controlChecks('universidad')">Universidad</mat-checkbox>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <mat-checkbox [formControl]="formCheckBox.sede" (change)="controlChecks('sede')">Seccional</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-form-field>
+                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Seccionales" [formControl]="formSelect.sede" multiple>
+                                        <mat-option *ngFor="let sede of listSelect.sede" [value]="sede.id">{{sede.nombre}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <mat-checkbox [formControl]="formCheckBox.subsede" (change)="controlChecks('subsede')">Sede</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-form-field>
+                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Sedes" [formControl]="formSelect.subsede" multiple>
+                                        <mat-option *ngFor="let sede of listSelect.subsede" [value]="sede.id">{{sede.nombre}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <mat-checkbox [formControl]="formCheckBox.facultad" (change)="controlChecks('facultad')">Facultad</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-form-field>
+                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Facultades" [formControl]="formSelect.facultad" multiple>
+                                        <mat-option *ngFor="let fac of listSelect.facultad" [value]="fac.id">{{fac.nombre}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <mat-checkbox [formControl]="formCheckBox.departamento" (change)="controlChecks('departamento')">Departamento</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-form-field>
+                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todos los Departamentos" [formControl]="formSelect.departamento" multiple>
+                                        <mat-option *ngFor="let dep of listSelect.departamento" [value]="dep">{{dep.nombre}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                                <mat-checkbox (change)="ejecutarGraficos()" [formControl]="formCheckBox.escuela" (change)="controlChecks('escuela')">Escuela</mat-checkbox>
+                            </p>
+                            <p>
+                                <mat-form-field>
+                                    <mat-select placeholder="Todas las Escuelas" [formControl]="formSelect.escuela" multiple>
+                                        <mat-option *ngFor="let esc of listSelect.escuela" [value]="esc">{{esc.nombre}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="box-body">
-                    <form id="form-work" class="" name="form-work" action="#">
+                <div class="box box-danger" style="margin-top: 40px;">
+                    <div class="box-header">
+                        <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">Generar Reporte</button>
+                    </div>
 
-                            <fieldset>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-md-2">
+                    <div class="box-body">
 
-                                        <label><input class="checkbox" type="checkbox" id="universidad" name="universidad" [(ngModel)]="checkBox.universidad" (change)="controlChecks('universidad')" >Universidad</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-2">
-                                            <label><input class="checkbox" type="checkbox" name="sede" id="sede" [(ngModel)]="checkBox.sede" (change)="controlChecks('sede')" >Sede</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-3">
-                                        <label class="control-label" for="variatiosede"><strong>Sede</strong></label>
-                                        <select style="height: 100%; width: 100%;" name="variatiosede" id="variatiosede" [(ngModel)]="objsel.sede" (change)="aplicarFiltro($event.target.value, 'sede')" >
-                                            <option value="inicial">Seleccione una sede</option>
-                                            <option *ngFor="let item of sedes" value="{{item.id}}" >{{item.nombre}}</option>
-                                        </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-2">
-                                            <label><input class="checkbox" type="checkbox" id="facultad" name="facultad"  [(ngModel)]="checkBox.facultad" (change)="controlChecks('facultad')" >Facultad</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-3">
-                                        <label class="control-label" for="variatiofacul"><strong>Facultad</strong></label>
-                                        <select style="height: 100%; width: 100%;" name="variatiofacultad" id="variatiofacultad" [(ngModel)]="objsel.facultad" (change)="aplicarFiltro($event.target.value, 'facultad')">
-                                            <option value="inicial">Seleccione una facultad</option>
-                                            <option *ngFor="let item of facultads" value="{{item.id}}" >{{item.nombre}}</option>
-                                        </select>
-                                        </div>
-                                    </div>
-
+                        <div class="col-md-7 col-lg-7">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-search"></i>
+                                    <h3 class="box-title">LABORATORIOS</h3>
                                 </div>
 
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-md-2">
-
-                                        <label><input class="checkbox" type="checkbox" id="departamento" name="departamento" [(ngModel)]="checkBox.departamento" (change)="controlChecks('departamento')" >Departamento</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-5">
-                                        <label class="control-label" for="variatiodepar"><strong>Departamento</strong></label>
-                                        <select style="height: 100%; width: 100%;" name="variatiodepartamento" id="variatiodepartamento" [(ngModel)]="objsel.departamento" (change)="aplicarFiltro($event.target.value, 'departamento')">
-                                            <option value="inicial">Seleccione un departamento</option>
-                                            <option *ngFor="let item of departamentos" value="{{item.id}}" >{{item.nombre}}</option>
-                                        </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-2">
-                                            <label><input class="checkbox" type="checkbox" id="escuela" name="escuela" [(ngModel)]="checkBox.escuela" (change)="controlChecks('escuela')">Escuela</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-3">
-                                        <label class="control-label" for="variatioescuela"><strong>Escuela</strong></label>
-                                        <select style="height: 100%; width: 100%;" name="variatioescuela" id="variatioescuela" [(ngModel)]="objsel.escuela" (change)="aplicarFiltro($event.target.value, 'escuela')">
-                                            <option value="inicial">Seleccione una escuela</option>
-                                            <option *ngFor="let item of escuelas" value="{{item.id}}" >{{item.nombre}}</option>
-                                        </select>
-                                        </div>
-                                    </div>
+                                <div class="box-body divScroll1">
+                                    <ngx-charts-advanced-pie-chart [view]="viewLabs" [scheme]="colorSchemeLabs" [results]="singleLabs" [label]="tituloLabs" (select)="onSelectLabs($event)">
+                                    </ngx-charts-advanced-pie-chart>
 
                                 </div>
+                            </div>
+                        </div>
 
-                            </fieldset>
-                    </form>
+                        <div class="col-md-5 col-lg-5">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-search"></i>
+                                    <h3 class="box-title">OTROS INDICADORES</h3>
+                                </div>
+
+                                <div class="box-body divScroll1">
+
+                                    <div class="row">
+                                        <div class="col-md-2 col-lg-5" style="text-align: center;">
+                                            <div class="box box-solid box-info">
+                                                <div class="box-header">
+                                                    <h1 class="box-title">{{indprac.pracactivas}}</h1>
+                                                </div>
+
+                                                <div class="box-body">
+                                                    <h5>PRACTICAS ACTIVAS SEMESTRE ACTUAL</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-lg-7" style="text-align: center;">
+                                            <div class="box box-solid box-warning">
+                                                <div class="box-header">
+                                                    <h1 class="box-title">{{indprac.estudiantes}}</h1>
+                                                </div>
+
+                                                <div class="box-body">
+                                                    <h5>ESTUDIANTES ATENDIDOS EN PRACTICAS DEL SEMESTRE ACTUAL</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2 col-lg-5" style="text-align: center;">
+                                            <div class="box box-solid box-success">
+                                                <div class="box-header">
+                                                    <h1 class="box-title">{{indproy.proyactivos}}</h1>
+                                                </div>
+
+                                                <div class="box-body">
+                                                    <h5>PROYECTOS ACTIVOS</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-lg-7">
+                                            <div class="box box-solid box-primary" style="text-align: center;">
+                                                <div class="box-header">
+                                                    <h1 class="box-title">{{indproy.estudiantes}}</h1>
+                                                </div>
+
+                                                <div class="box-body">
+                                                    <h5>ESTUDIANTES VINCULADOS A PROYECTOS Y LABORATORIOS</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-lg-12">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-search"></i>
+                                    <h3 class="box-title">SERVICIOS</h3>
+                                </div>
+
+                                <div class="box-body divScroll1">
+                                    <div class="col-md-8 col-lg-8">
+                                        <ngx-charts-advanced-pie-chart [view]="viewServs" [scheme]="colorSchemeServs" [results]="singleServs" [label]="tituloServs"
+                                            (select)="onSelectServs($event)">
+                                        </ngx-charts-advanced-pie-chart>
+
+                                    </div>
+
+                                    <div class="col-md-4 col-lg-4" style="text-align: center;">
+                                        <div class="row">
+                                            <div class="box box-solid box-info">
+                                                <div class="box-header">
+                                                    <h1 class="box-title">{{indserv.prestados}}</h1>
+                                                </div>
+
+                                                <div class="box-body">
+                                                    <h5>SERVICIOS PRESTADOS AÑO ACTUAL</h5>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="box box-solid box-primary">
+                                                <div class="box-header">
+                                                    <h1 class="box-title">$ {{indserv.monto}}</h1>
+                                                </div>
+
+                                                <div class="box-body">
+                                                    <h5>MONTO RECAUDADO RECORRIDO DEL AÑO </h5>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-lg-12">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-search"></i>
+                                    <h3 class="box-title">GRAFICO</h3>
+                                </div>
+
+                                <div class="box-body divScroll2">
+                                    <ul class="nav nav-tabs" style="margin-bottom: 20px;">
+                                        <li>
+                                            <a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(1)">
+                                                HISTORIAL SERVICIOS</a>
+                                        </li>
+                                        <li>
+                                            <a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(2)">
+                                                HISTORIAL PRACTICAS</a>
+                                        </li>
+                                        <li>
+                                            <a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(3)">
+                                                HISTORIAL</a>
+                                        </li>
+                                    </ul>
+
+                                    <div id="home" class="tab-pane fade in active" style="margin-top: 10px; height: 100%;">
+
+                                        <ngx-charts-line-chart [view]="viewLine" [scheme]="colorSchemeLine" [results]="multiLine" [gradient]="gradientLine" [xAxis]="showXAxis"
+                                            [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" [xAxisTickFormatting]="xAxisTickFormatting"
+                                            [timeline]="timeline" (select)="onSelectLine($event)">
+
+                                        </ngx-charts-line-chart>
+                                        <button *ngIf="cont && serv" (click)="monto()" style="margin-top:10px;">Monto</button>
+                                        <button *ngIf="!cont && serv" (click)="monto()" style="margin-top:10px;">Servicios</button>
+
+                                    </div>
+
+                                    <div id="menu1" class="tab-pane fade">
+                                        <h1>PRACTICAS</h1>
+                                    </div>
+
+                                    <div id="menu2" class="tab-pane fade">
+                                        <h1>OTROS</h1>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="box box-danger">
+                                    <div class="box-header">
+                                        <i class="fa fa-search"></i>
+                                        <h3 class="box-title">INDICADORES DE CLASIFICACION DE LABORATORIOS</h3>
+                                    </div>
+
+                                    <div class="box-body divScroll3">
+                                        <div *ngIf="this.graficoBarras" class="row">
+                                            <ngx-charts-bar-vertical-2d [view]="viewBar" [scheme]="colorSchemeBar" [results]="singleBar" [gradient]="gradientBar" [xAxis]="showXAxisBar"
+                                                [yAxis]="showYAxisBar" [legend]="showLegendBar" [showXAxisLabel]="showXAxisLabelBar"
+                                                [showYAxisLabel]="showYAxisLabelBar" [xAxisLabel]="xAxisLabelBar" [yAxisLabel]="yAxisLabelBar"
+                                                (select)="onSelectBar($event)">
+                                            </ngx-charts-bar-vertical-2d>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 col-lg-12">
+                                                <div class="box box-danger">
+                                                    <div class="box-header">
+                                                        <h3 class="box-title">INDICADORES</h3>
+                                                    </div>
+
+                                                    <div class="box-body">
+
+                                                        <div class="row">
+                                                            <div class="col-md-3 col-lg-3" style="text-align: center;">
+                                                                <div class="box box-solid box-info">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.docencia.ac+this.arregloBarra.docencia.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN ACTIVIDADES DE DOCENCIA</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 col-lg-3" style="text-align: center;">
+                                                                <div class="box box-solid box-warning">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.extension.ac+this.arregloBarra.extension.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN ACTIVIDADES DE EXTENSION</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 col-lg-3">
+                                                                <div class="box box-solid box-primary" style="text-align: center;">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.investigacion.ac+this.arregloBarra.investigacion.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN ACTIVIDADES DE INVESTIGACION</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 col-lg-3">
+                                                                <div class="box box-solid box-primary" style="text-align: center;">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.doexin.ac+this.arregloBarra.doexin.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN LAS 3 ACTIVIDADES</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-4 col-lg-4" style="text-align: center;">
+                                                                <div class="box box-solid box-success">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.docinv.ac+this.arregloBarra.docinv.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN SOLAMENTE ACTIVIDADES DE DOCENCIA E INVESTIGACION</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 col-lg-4">
+                                                                <div class="box box-solid box-primary" style="text-align: center;">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.extinv.ac+this.arregloBarra.extinv.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN SOLAMENTE ACTIVIDADES DE EXTENSION E INVESTIGACION</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 col-lg-4">
+                                                                <div class="box box-solid box-primary" style="text-align: center;">
+                                                                    <div class="box-header">
+                                                                        <h1 class="box-title">{{this.arregloBarra.docext.ac+this.arregloBarra.docext.in}}</h1>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        <h5>REALIZAN SOLAMENTE ACTIVIDADES DE DOCENCIA Y EXTENSION</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
-
             </div>
+        </div>
 
-            <div class="box box-danger" style="margin-top: 40px;">
-                <div class="box-header" >
-                  <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" >Generar Reporte</button>
-                </div>
-
-                <div class="box-body">
-
-                  <div class="col-md-7 col-lg-7">
-                    <div class="box box-danger">
-                      <div class="box-header" >
-                        <i class="fa fa-search"></i>
-                        <h3 class="box-title">LABORATORIOS</h3>
-                      </div>
-
-                      <div class="box-body divScroll1">
-                          <ngx-charts-advanced-pie-chart
-                          [view]="viewLabs"
-                          [scheme]="colorSchemeLabs"
-                          [results]="singleLabs"
-                          [label]="tituloLabs"
-                          (select)="onSelectLabs($event)">
-                        </ngx-charts-advanced-pie-chart>
-
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-5 col-lg-5">
-                    <div class="box box-danger">
-                      <div class="box-header" >
-                        <i class="fa fa-search"></i>
-                        <h3 class="box-title">OTROS INDICADORES</h3>
-                      </div>
-
-                      <div class="box-body divScroll1">
-
-                        <div class="row">
-                            <div class="col-md-2 col-lg-5" style="text-align: center;">
-                                <div class="box box-solid box-info">
-                                    <div class="box-header">
-                                      <h1 class="box-title">{{indprac.pracactivas}}</h1>
-                                    </div>
-
-                                    <div class="box-body">
-                                        <h5>PRACTICAS ACTIVAS SEMESTRE ACTUAL</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-7" style="text-align: center;">
-                                <div class="box box-solid box-warning">
-                                    <div class="box-header">
-                                      <h1 class="box-title">{{indprac.estudiantes}}</h1>
-                                    </div>
-
-                                    <div class="box-body">
-                                        <h5>ESTUDIANTES ATENDIDOS EN PRACTICAS DEL SEMESTRE ACTUAL</h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 col-lg-5" style="text-align: center;">
-                                <div class="box box-solid box-success">
-                                    <div class="box-header">
-                                      <h1 class="box-title">{{indproy.proyactivos}}</h1>
-                                    </div>
-
-                                    <div class="box-body">
-                                        <h5>PROYECTOS ACTIVOS</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-7">
-                                <div class="box box-solid box-primary" style="text-align: center;">
-                                    <div class="box-header">
-                                      <h1 class="box-title">{{indproy.estudiantes}}</h1>
-                                    </div>
-
-                                    <div class="box-body">
-                                        <h5>ESTUDIANTES VINCULADOS A PROYECTOS Y LABORATORIOS</h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-12 col-lg-12">
-                    <div class="box box-danger">
-                        <div class="box-header" >
-                            <i class="fa fa-search"></i>
-                            <h3 class="box-title">SERVICIOS</h3>
-                          </div>
-
-                      <div class="box-body divScroll1">
-                        <div class="col-md-8 col-lg-8">
-                            <ngx-charts-advanced-pie-chart
-                            [view]="viewServs"
-                            [scheme]="colorSchemeServs"
-                            [results]="singleServs"
-                            [label]="tituloServs"
-                            (select)="onSelectServs($event)">
-                          </ngx-charts-advanced-pie-chart>
-
-                        </div>
-
-                        <div class="col-md-4 col-lg-4" style="text-align: center;">
-                          <div class="row">
-                              <div class="box box-solid box-info">
-                                  <div class="box-header">
-                                    <h1 class="box-title">{{indserv.prestados}}</h1>
-                                  </div>
-
-                                  <div class="box-body">
-                                      <h5>SERVICIOS PRESTADOS AÑO ACTUAL</h5>
-                                  </div>
-                              </div>
-
-                          </div>
-
-                          <div class="row">
-                              <div class="box box-solid box-primary">
-                                  <div class="box-header">
-                                    <h1 class="box-title">$ {{indserv.monto}}</h1>
-                                  </div>
-
-                                  <div class="box-body">
-                                      <h5>MONTO RECAUDADO RECORRIDO DEL AÑO </h5>
-                                  </div>
-                              </div>
-
-                          </div>
-
-                        </div>
-
-
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-12 col-lg-12">
-                    <div class="box box-danger">
-                        <div class="box-header" >
-                            <i class="fa fa-search"></i>
-                            <h3 class="box-title">GRAFICO</h3>
-                          </div>
-
-                      <div class="box-body divScroll2">
-                          <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-                              <li><a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(1)">
-                                HISTORIAL SERVICIOS</a></li>
-                              <li><a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(2)">
-                                HISTORIAL PRACTICAS</a></li>
-                                <li><a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(3)">
-                                HISTORIAL</a></li>
-                          </ul>
-
-                          <div id="home" class="tab-pane fade in active" style="margin-top: 10px; height: 100%;">
-
-                            <ngx-charts-line-chart
-                            [view]="viewLine"
-                            [scheme]="colorSchemeLine"
-                            [results]="multiLine"
-                            [gradient]="gradientLine"
-                            [xAxis]="showXAxis"
-                            [yAxis]="showYAxis"
-                            [legend]="showLegend"
-                            [showXAxisLabel]="showXAxisLabel"
-                            [showYAxisLabel]="showYAxisLabel"
-                            [xAxisLabel]="xAxisLabel"
-                            [yAxisLabel]="yAxisLabel"
-                            [autoScale]="autoScale"
-                            [xAxisTickFormatting]="xAxisTickFormatting"
-                            [timeline]="timeline"
-                            (select)="onSelectLine($event)">
-
-                          </ngx-charts-line-chart>
-                          <button (click)="monto()" style="margin-top:10px;">Monto</button>
-
-                          </div>
-
-                          <div id="menu1" class="tab-pane fade">
-                         <h1>PRACTICAS</h1>
-                          </div>
-
-                          <div id="menu2" class="tab-pane fade">
-                          <h1>OTROS</h1>
-                          </div>
-
-
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div class="row">
-                    <div class="col-md-12 col-lg-12">
-                      <div class="box box-danger">
-                          <div class="box-header" >
-                              <i class="fa fa-search"></i>
-                              <h3 class="box-title">INDICADORES DE CLASIFICACION DE LABORATORIOS</h3>
-                            </div>
-
-                        <div class="box-body divScroll3">
-                          <div class="row">
-                              <ngx-charts-bar-vertical-2d
-                              [view]="viewBar"
-                              [scheme]="colorSchemeBar"
-                              [results]="singleBar"
-                              [gradient]="gradientBar"
-                              [xAxis]="showXAxisBar"
-                              [yAxis]="showYAxisBar"
-                              [legend]="showLegendBar"
-                              [showXAxisLabel]="showXAxisLabelBar"
-                              [showYAxisLabel]="showYAxisLabelBar"
-                              [xAxisLabel]="xAxisLabelBar"
-                              [yAxisLabel]="yAxisLabelBar"
-                              (select)="onSelectBar($event)">
-                            </ngx-charts-bar-vertical-2d>
-
-                          </div>
-
-                          <div class="row">
-                              <div class="col-md-12 col-lg-12">
-                                  <div class="box box-danger">
-                                    <div class="box-header" >
-                                      <h3 class="box-title">INDICADORES</h3>
-                                    </div>
-
-                                    <div class="box-body">
-
-                                      <div class="row">
-                                          <div class="col-md-3 col-lg-3" style="text-align: center;">
-                                              <div class="box box-solid box-info">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">70</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN ACTIVIDADES DE DOCENCIA</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-3 col-lg-3" style="text-align: center;">
-                                              <div class="box box-solid box-warning">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">35</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN ACTIVIDADES DE EXTENSION</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-3 col-lg-3">
-                                              <div class="box box-solid box-primary" style="text-align: center;">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">90</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN ACTIVIDADES DE INVESTIGACION</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-3 col-lg-3">
-                                              <div class="box box-solid box-primary" style="text-align: center;">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">25</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN LAS 3 ACTIVIDADES</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-md-4 col-lg-4" style="text-align: center;">
-                                              <div class="box box-solid box-success">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">26</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN SOLAMENTE ACTIVIDADES DE DOCENCIA E INVESTIGACION</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-4 col-lg-4">
-                                              <div class="box box-solid box-primary" style="text-align: center;">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">40</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN SOLAMENTE ACTIVIDADES DE EXTENSION E INVESTIGACION</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-4 col-lg-4">
-                                              <div class="box box-solid box-primary" style="text-align: center;">
-                                                  <div class="box-header">
-                                                    <h1 class="box-title">36</h1>
-                                                  </div>
-
-                                                  <div class="box-body">
-                                                      <h5>REALIZAN SOLAMENTE ACTIVIDADES DE DOCENCIA Y EXTENSION</h5>
-                                                  </div>
-                                              </div>
-                                          </div>
-
-                                      </div>
-
-
-
-                                    </div>
-                                  </div>
-                                </div>
-                          </div>
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
-          </div>
-      </div>
-  
     </section>
-  
-  
-  
+
+
+
 </div>
-  
