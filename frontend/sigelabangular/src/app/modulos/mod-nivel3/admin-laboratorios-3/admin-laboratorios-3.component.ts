@@ -5,6 +5,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 
+import * as moment from 'moment';
+
 import swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 
@@ -39,6 +41,10 @@ export class AdminLaboratorios3Component implements OnInit {
   };
 
   idlab: any;
+
+  persona:any;
+
+  faculty:any;
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
@@ -126,6 +132,7 @@ export class AdminLaboratorios3Component implements OnInit {
   encargado = '';
 
   moduloNivel3 = false;
+  moduloNivel25 = false;
   moduloPermiso = false;
   rol: any;
 
@@ -186,15 +193,133 @@ export class AdminLaboratorios3Component implements OnInit {
 
   // VARIABLES DE LA VISTA ADMIN ESPACIOS
 
+  itemselesp:Observable<Array<any>>;
+  //plano: Observable<any>;
+  actividadAct = [];
+  dispo;
+  idnewSp;
+  status;
+  mensaje = false;
+  ocupacionAct;
+
+  idsh;
+
+  sedesEsp = [];
+  subsedesEsp = [];
+  noEsPrac = [];
+  idsp;
+  //tablesel = '';
+  horarios = [];
+  space = {
+    capacity: 0,
+    createdAt: '',
+    freeArea: '',
+    headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
+    subHq: '',
+    indxSa: 0,
+    map: '',
+    minArea: '',
+    ocupedArea: '',
+    totalArea: '',
+    spaceData: { building: '', place: '', floor: '' },
+    active: false
+  };
+
+  horariopractica;
+  formtrue = false;
+  //sus: Subscription;
+
+  // INICIALIZACION DATATABLE espacios
+  displayedColumnsSpace = ['capacidad', 'arealibre', 'active', 'totalarea', 'spaceData.building', 'spaceData.place'];
+  dataSourceSpace = new MatTableDataSource([]);
+
+  @ViewChild('paginatorSpace') paginatorSpace: MatPaginator;
+  @ViewChild('sortSpace') sortSpace: MatSort;
+
+  espaestructurado: any;
+
+  role: any;
+
+
 
   // VARIABLES DE LA VISTA ADMIN PERSONAL
+  rolc = '';
+  itemselPrac: Observable<Array<any>>;
+  nombre;
+  apellido;
+  email;
 
+  estado;
+  idu;
+  idp;
+  tipo = ['Funcionario', 'Estudiante', 'Contratista', 'Otro'];
+  type;
+
+  activos = [];
+  inactivos = [];
+  addP;
+  // objeto persona:
+  person = {
+    cfBirthdate: '',
+    cfGender: '',
+    cfUri: '',
+    cfFamilyNames: '',
+    cfFirstNames: '',
+    cfOtherNames: '',
+    cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+    cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
+    cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
+    cfFacil: {},
+    active: true,
+    user: '',
+    roleId: '',
+    email: '',
+    cc: '',
+    type: '',
+    relatedEquipments: {},
+    createdAt: this.fecha.toISOString(),
+    updatedAt: this.fecha.toISOString()
+
+  };
+  // objeto usuario
+
+  usuario = {
+    email: '',
+    cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+    appRoles: { IKLoR5biu1THaAMG4JOz: true },
+    cfPers: '',
+    active: true,
+    createdAt: this.fecha.toISOString(),
+    updatedAt: this.fecha.toISOString()
+
+  };
+
+
+  persestructurado: any;
+
+  // INICIALIZACION DATATABLE PERSONAL Activo
+  displayedColumnsPers = ['nombre', 'email', 'tipo', 'estado', 'codigo'];
+  dataSourcePers = new MatTableDataSource([]);
+
+  @ViewChild('paginatorPers') paginatorPers: MatPaginator;
+  @ViewChild('sortPers') sortPers: MatSort;
+
+  // INICIALIZACION DATATABLE PERSONAL InActivo
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'estado', 'codigo' ];
+  dataSourcePersIn = new MatTableDataSource([]);
+
+  @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
+  @ViewChild('sortPersIn') sortPersIn: MatSort;
+
+
+  niveles = [];
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
-    private service: EspaciosService) {
+    private service: EspaciosService,  private toastr: ToastrService) {
   }
 
   ngOnInit() {
+    this.persona = JSON.parse(localStorage.getItem('persona'));
 
     this.getUserId();
     this.getRoles();
@@ -202,13 +327,16 @@ export class AdminLaboratorios3Component implements OnInit {
     this.cargarSubsedes();
     this.cargarFacultades();
 
+    this.getRolesNivel2();
+
+    const now = moment().format();
+
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+ 
     this.estructurarLaboratorios().then(() => {
-      console.log(this.laboratoriosEstructurados);
 
       this.resetIconos();
-
 
       this.dataSource.data = this.laboratoriosEstructurados;
       setTimeout(() => {
@@ -219,7 +347,6 @@ export class AdminLaboratorios3Component implements OnInit {
         }
 
       }, 1500);
-      //s this.limpiarData();
     });
   }
 
@@ -231,24 +358,20 @@ export class AdminLaboratorios3Component implements OnInit {
 
   // METODO QUE CAMBIA AL LABORATORIO SELECCIONADO
   cambiarLaboratorio(item) {
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
 
-
-    console.log(item);
     this.idlab = item.uid;
-    // this.dataSourceSpace = new MatTableDataSource(item.espacios);
+   
 
     this.itemsel = Observable.of(item);
     this.labestructurado = item;
     this.limpiarData();
-    // this.dataSourceSpace.sortingDataAccessor = (item, property) => {
-    //   switch (property) {
-    //     case 'spaceData.place': return item.spaceData.place;
-
-    //     case 'spaceData.building': return item.spaceData.building;
-
-    //     default: return item[property];
-    //   }
-    // };
 
     if (this.labestructurado) {
       if (this.labestructurado.objectActividad.extension) {
@@ -281,6 +404,77 @@ export class AdminLaboratorios3Component implements OnInit {
 
     }
 
+    this.estructuraEspacio(item.uid).then(() => {
+      this.listHq();
+      this.itemselesp = Observable.of(this.espaestructurado.espacios);
+      console.log(this.espaestructurado);
+
+      this.dataSourceSpace = new MatTableDataSource(this.espaestructurado.espacios);
+      // this.listSubHq();
+
+      this.dataSourceSpace.sortingDataAccessor = (item, property) => {
+        switch (property) {
+
+          case 'spaceData.place': return item.spaceData.place;
+
+          case 'spaceData.building': return item.spaceData.building;
+
+          default: return item[property];
+        }
+      };
+
+
+      setTimeout(() => {
+        if (this.espaestructurado.espacios.length > 0) {
+          this.dataSourceSpace.paginator = this.paginatorSpace;
+          this.dataSourceSpace.sort = this.sortSpace;
+          swal.close();
+        } else {
+          swal({
+            type: 'error',
+            title: 'No existen espacios asociados al laboratorio',
+            showConfirmButton: true
+          });
+        }
+
+      }, 1000);
+
+
+    });
+
+    this.estructuraIdPers(item.uid).then(() => {
+
+      this.itemselPrac = Observable.of(this.persestructurado.personal);
+      console.log(this.persestructurado);
+
+      this.dataSourcePers.data = this.persestructurado.personal;
+      this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
+
+      const ambiente = this;
+
+      setTimeout(function () {
+        if (ambiente.persestructurado.personal !== 0) {
+
+          ambiente.dataSourcePers.sort = ambiente.sortPers;
+          ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+          ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
+          ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
+
+          swal.close();
+
+        } else {
+          swal({
+            type: 'error',
+            title: 'No existe personal asociado al laboratorio',
+            showConfirmButton: true
+          });
+        }
+
+
+
+      }, 2000);
+
+    });
 
   }
 
@@ -291,90 +485,181 @@ export class AdminLaboratorios3Component implements OnInit {
 
     let promise = new Promise((resolve, reject) => {
 
-      this.getLaboratorios().then(labo => {
-        labo.forEach(doc => {
-          const laboratorio = doc.data();
 
-          this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
-            const duenoLab = dueno.data();
-            if (duenoLab) {
-              if (laboratorio.headquarter) {
-                this.buscarSede(laboratorio.headquarter).then(se => {
-                  const sede = se.data();
-                  if (laboratorio.subHq) {
-                    this.buscarSubSede(laboratorio.subHq).then(sub => {
-                      const subsede = sub.data();
-                      // convertir boolean a cadena de caracteres para estado del laboratorio
-                      let estadoLab;
-                      if (laboratorio.active === true) {
-                        estadoLab = 'Activo';
-                      } else if (laboratorio.active === false) {
-                        estadoLab = 'Inactivo';
+    if(this.moduloNivel25){
+      this.getFaculty().then(() => {
+        this.getLaboratoriosFaculty(this.faculty).then(labo => {
+          console.log(labo);
+          labo.forEach(doc => {
+            const laboratorio = doc.data();
+           
+              this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+                const duenoLab = dueno.data();
+                if (duenoLab) {
+                  if (laboratorio.headquarter) {
+                    this.buscarSede(laboratorio.headquarter).then(se => {
+                      const sede = se.data();
+                      if (laboratorio.subHq) {
+                        this.buscarSubSede(laboratorio.subHq).then(sub => {
+                          const subsede = sub.data();
+                          // convertir boolean a cadena de caracteres para estado del laboratorio
+                          let estadoLab;
+                          if (laboratorio.active === true) {
+                            estadoLab = 'Activo';
+                          } else if (laboratorio.active === false) {
+                            estadoLab = 'Inactivo';
+                          }
+  
+                          laboratorioObject = {
+                            uid: doc.id,
+                            nombre: laboratorio.cfName,
+                            descripcion: laboratorio.cfDescr,
+                            escuela: laboratorio.knowledgeArea,
+                            inves: laboratorio.researchGroup,
+                            objectActividad: laboratorio.facilActivity,
+                            actividad: this.actividades(laboratorio.facilActivity),
+                            director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                            iddueno: laboratorio.facilityAdmin,
+                            sede: { id: laboratorio.headquarter, nombre: sede.cfName },
+                            subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
+                            espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
+                            espacioPrincipal: laboratorio.mainSpace,
+                            telefonos: this.estructuraTelefonos(doc.id),
+                            info: { email: laboratorio.otros.email },
+                            equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+                            personal: this.estructurarPersonas(laboratorio.relatedPers),
+                            facultades: this.estructurarFacultades(laboratorio.faculties),
+                            departamentos: this.estructurarDepartamentos(laboratorio.departments),
+                            espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
+                            cambios: laboratorio.suggestedChanges,
+                            disponibilidad: laboratorio.cfAvailability,
+                            condiciones: laboratorio.cfConditions,
+                            estado: estadoLab
+                          };
+  
+                          if (laboratorio.facilActivity.extension) {
+                            const aux = this.estructurarServicios(laboratorio.relatedServices);
+                            laboratorioObject['solicitudes'] = aux.arr2;
+                            laboratorioObject['servicios'] = aux.arr;
+                          }
+                          if (laboratorio.facilActivity.research) {
+                            laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
+                          }
+                          if (laboratorio.facilActivity.teaching) {
+                            laboratorioObject['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices).arr4;
+                          }
+  
+                          this.cambios = this.pendientes(laboratorio.suggestedChanges);
+  
+                          this.laboratoriosEstructurados.push(laboratorioObject);
+  
+                          if (this.laboratoriosEstructurados.length == labo.size) {
+                            resolve();
+                          }
+  
+  
+                        });
                       }
-
-                      laboratorioObject = {
-                        uid: doc.id,
-                        nombre: laboratorio.cfName,
-                        descripcion: laboratorio.cfDescr,
-                        escuela: laboratorio.knowledgeArea,
-                        inves: laboratorio.researchGroup,
-                        objectActividad: laboratorio.facilActivity,
-                        actividad: this.actividades(laboratorio.facilActivity),
-                        director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                        iddueno: laboratorio.facilityAdmin,
-                        sede: { id: laboratorio.headquarter, nombre: sede.cfName },
-                        subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
-                        espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
-                        espacioPrincipal: laboratorio.mainSpace,
-                        telefonos: this.estructuraTelefonos(doc.id),
-                        info: { email: laboratorio.otros.email },
-                        equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                        personal: this.estructurarPersonas(laboratorio.relatedPers),
-                        facultades: this.estructurarFacultades(laboratorio.faculties),
-                        departamentos: this.estructurarDepartamentos(laboratorio.departments),
-                        espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
-                        cambios: laboratorio.suggestedChanges,
-                        disponibilidad: laboratorio.cfAvailability,
-                        condiciones: laboratorio.cfConditions,
-                        estado: estadoLab
-                      };
-
-                      if (laboratorio.facilActivity.extension) {
-                        const aux = this.estructurarServicios(laboratorio.relatedServices);
-                        laboratorioObject['solicitudes'] = aux.arr2;
-                        laboratorioObject['servicios'] = aux.arr;
-                      }
-                      if (laboratorio.facilActivity.research) {
-                        laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
-                      }
-                      if (laboratorio.facilActivity.teaching) {
-                        laboratorioObject['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices);
-                      }
-
-                      this.cambios = this.pendientes(laboratorio.suggestedChanges);
-
-                      this.laboratoriosEstructurados.push(laboratorioObject);
-
-                      if (this.laboratoriosEstructurados.length == labo.size) {
-                        resolve();
-                      }
-
-
+  
+  
                     });
                   }
-
-
-                });
-              }
-
-            }
+  
+                }
+              });
+            
+  
           });
+  
+        });
+      });
+    }else{
+      this.getLaboratorios().then(labo => {
+        console.log(labo);
+        labo.forEach(doc => {
+          const laboratorio = doc.data();
+         
+            this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+              const duenoLab = dueno.data();
+              if (duenoLab) {
+                if (laboratorio.headquarter) {
+                  this.buscarSede(laboratorio.headquarter).then(se => {
+                    const sede = se.data();
+                    if (laboratorio.subHq) {
+                      this.buscarSubSede(laboratorio.subHq).then(sub => {
+                        const subsede = sub.data();
+                        // convertir boolean a cadena de caracteres para estado del laboratorio
+                        let estadoLab;
+                        if (laboratorio.active === true) {
+                          estadoLab = 'Activo';
+                        } else if (laboratorio.active === false) {
+                          estadoLab = 'Inactivo';
+                        }
 
+                        laboratorioObject = {
+                          uid: doc.id,
+                          nombre: laboratorio.cfName,
+                          descripcion: laboratorio.cfDescr,
+                          escuela: laboratorio.knowledgeArea,
+                          inves: laboratorio.researchGroup,
+                          objectActividad: laboratorio.facilActivity,
+                          actividad: this.actividades(laboratorio.facilActivity),
+                          director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                          iddueno: laboratorio.facilityAdmin,
+                          sede: { id: laboratorio.headquarter, nombre: sede.cfName },
+                          subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
+                          espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
+                          espacioPrincipal: laboratorio.mainSpace,
+                          telefonos: this.estructuraTelefonos(doc.id),
+                          info: { email: laboratorio.otros.email },
+                          equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+                          personal: this.estructurarPersonas(laboratorio.relatedPers),
+                          facultades: this.estructurarFacultades(laboratorio.faculties),
+                          departamentos: this.estructurarDepartamentos(laboratorio.departments),
+                          espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
+                          cambios: laboratorio.suggestedChanges,
+                          disponibilidad: laboratorio.cfAvailability,
+                          condiciones: laboratorio.cfConditions,
+                          estado: estadoLab
+                        };
+
+                        if (laboratorio.facilActivity.extension) {
+                          const aux = this.estructurarServicios(laboratorio.relatedServices);
+                          laboratorioObject['solicitudes'] = aux.arr2;
+                          laboratorioObject['servicios'] = aux.arr;
+                        }
+                        if (laboratorio.facilActivity.research) {
+                          laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
+                        }
+                        if (laboratorio.facilActivity.teaching) {
+                          laboratorioObject['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices).arr4;
+                        }
+
+                        this.cambios = this.pendientes(laboratorio.suggestedChanges);
+
+                        this.laboratoriosEstructurados.push(laboratorioObject);
+
+                        if (this.laboratoriosEstructurados.length == labo.size) {
+                          resolve();
+                        }
+
+
+                      });
+                    }
+
+
+                  });
+                }
+
+              }
+            });
+          
 
         });
 
+      });
+    }
 
-      })
     });
 
     return promise;
@@ -469,8 +754,25 @@ export class AdminLaboratorios3Component implements OnInit {
 
   getLaboratorios() {
     const col = this.afs.collection('cfFacil');
-    const ref = col.ref.where('active','==',true);
-    return ref.get();
+    let refer = col.ref.where('active','==',true);
+    return refer.get();
+  }
+
+  getLaboratoriosFaculty(id){
+    const col = this.afs.collection('cfFacil');
+    let refer = col.ref.where('active','==',true).where('faculties.'+id,'==', true);
+    return refer.get();
+  }
+
+
+  getFaculty(){
+    let promise = new Promise((resolve, reject) => {
+      this.getPersona(this.persona.cfPers).then(doc => {
+        this.faculty = doc.data().faculty;
+        resolve();
+      });   
+    });
+    return promise;
   }
 
   getFacilityAdmin(email){
@@ -507,12 +809,6 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
-
-
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).ref.get();
-  }
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarDirector(iddirector) {
@@ -553,7 +849,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     const arr = [];
     const arr2 = [];
-    console.log(item);
+  
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
@@ -603,52 +899,6 @@ export class AdminLaboratorios3Component implements OnInit {
     return { arr, arr2 };
   }
 
-  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
-  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarPracticas(item) {
-
-    const arr = [];
-
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
-
-        if (item[clave]) {
-          this.afs.doc('practice/' + clave).ref.get().then(data => {
-            const practica = data.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
-
-              data2.forEach(doc => {
-                const prog = doc.data();
-
-                if (prog) {
-                  const pract = {
-                    nombre: practica.practiceName,
-                    programacion: {
-                      id_pro: doc.id,
-                      estudiantes: prog.noStudents,
-                      horario: prog.schedule,
-                      semestre: prog.semester
-                    },
-                    activo: practica.active
-                  };
-
-                  arr.push(pract);
-                }
-              })
-
-
-
-            });
-
-          });
-        }
-
-      }
-    }
-
-    return arr;
-  }
 
 
 
@@ -663,8 +913,8 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-            const equip = data.payload.data();
+          this.afs.doc('cfEquip/' + clave).ref.get().then(data => {
+            const equip = data.data();
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
@@ -693,12 +943,12 @@ export class AdminLaboratorios3Component implements OnInit {
   estructurarComponents(item) {
     const arr = [];
 
-    this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
+    this.afs.collection('cfEquip/' + item + '/components').ref.get().then(data => {
+      data.forEach(doc => {
+        const element = doc.data();
 
         const componente = {
-          id: data[i].payload.doc.id,
+          id: doc.id,
           nombre: element.cfName,
           descripcion: element.cfDescription,
           precio: element.cfPrice,
@@ -709,9 +959,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
         arr.push(componente);
 
-
-
-      }
+      });
 
     });
 
@@ -730,19 +978,19 @@ export class AdminLaboratorios3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
+          this.afs.doc('cfPers/' + clave).ref.get().then(data => {
+            const pers = data.data();
             let persona = {};
             if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+              this.afs.doc('user/' + pers.user).ref.get().then(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if (dataper.payload.data()) {
+                if (dataper.data()) {
 
                   persona = {
                     id: clave,
                     nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                     activo: pers.active,
-                    email: dataper.payload.data().email,
+                    email: dataper.data().email,
                     idpers: clave,
                     iduser: pers.user
                   };
@@ -996,7 +1244,7 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   getPersona(persid) {
-    return this.afs.doc('cfPers/' + persid).snapshotChanges();
+    return this.afs.doc('cfPers/' + persid).ref.get();
   }
 
   getSolicitudes(id) {
@@ -1006,39 +1254,6 @@ export class AdminLaboratorios3Component implements OnInit {
     return refer.get();
   }
 
-  // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
-  ajustarTexto(nombre) {
-    const nombreArr = nombre.split(' ');
-    let name1 = '';
-    let name2 = '';
-    for (let i = 0; i < nombreArr.length; i++) {
-      if (i < 3) {
-        name1 += nombreArr[i] + ' ';
-      } else {
-        name2 += nombreArr[i] + ' ';
-      }
-    }
-
-    return { nom1: name1, nom2: name2 };
-  }
-
-  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
-
-        if ((clave === 'moduloNivel2')) {
-          this.moduloNivel3 = true;
-        }
-        if ((clave === 'moduloDosPermiso')) {
-          this.moduloPermiso = true;
-        }
-      }
-    }
-  }
 
   arregloEspacios() {
     this.espacios = [];
@@ -1082,6 +1297,9 @@ export class AdminLaboratorios3Component implements OnInit {
 
           this.estructurarEnvioActividades();
 
+          if(this.infolab.mainSpace){
+            this.infolab['active'] = true; 
+          }
 
           this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data => {
 
@@ -1136,13 +1354,13 @@ export class AdminLaboratorios3Component implements OnInit {
             });
 
 
-            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person => {
+            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).then(person => {
               aux.suggestedChanges.push({
                 pos: this.labestructurado.cambios.length,
                 data: dataEstructurada,
                 uid: this.user.uid,
                 fecha: this.fecha.getDate() + '/' + (this.fecha.getMonth() + 1) + '/' + this.fecha.getFullYear(),
-                nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
+                nombre: person.data().cfFirstNames + ' ' + person.data().cfFamilyNames,
                 estado: 'pendiente'
               });
 
@@ -1922,4 +2140,1048 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
+  // METODOS DE LA VISTA ESPACIOS
+     // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
+        }
+      }
+    }
+  }
+
+  estructuraEspacio(key) {
+    const promise = new Promise((resolve, reject) => {
+      this.buscarLab(key).then(labo => {
+        const laboratorio = labo.data();
+
+        let estadoLab;
+        if (laboratorio.active === true) {
+          estadoLab = 'Activo';
+        } else if (laboratorio.active === false) {
+          estadoLab = 'Inactivo';
+        }
+
+        this.espaestructurado = {
+          practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
+          espacios: this.estructurarSpaceVista(laboratorio.relatedSpaces),
+          uid: key
+        };
+
+        resolve();
+
+      });
+    });
+
+    return promise;
+
+  }
+
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
+  estructurarPracticas(item) {
+
+    const arr = [];
+    const arr2 = [];
+    const arr3 = [];
+    const arr4 = [];
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        if (item[clave]) {
+          this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
+            const practica = data.payload.data();
+            this.afs.doc('practice/' + clave).collection('programmingData').valueChanges().subscribe(data2 => {
+
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              const prog = data2[0];
+
+              if (prog) {
+                const pract = {
+                  nombre: practica.practiceName,
+                  programacion: {
+                    estudiantes: prog['noStudents'],
+                    diahora: prog['schedule'],
+                    semestre: prog['semester'],
+                    spaceid: prog['space']
+                  },
+                  activo: practica.active
+                };
+                // construye los eventos para el calendario de cada laboratorio
+                const evento = {
+
+                  title: this.ajustarTexto(practica.practiceName).nom1,
+                  start: prog['schedule'],
+                  color: 'green',
+                };
+
+
+                arr2.push(evento);
+
+                if (practica.active) {
+
+                  arr.push(pract);
+                } else {
+                  arr3.push(pract);
+                }
+
+                arr4.push(pract);
+              }
+
+
+            });
+
+          });
+        }
+
+      }
+    }
+
+    return { arr, arr2, arr3, arr4 };
+  }
+
+  estructurarSpaceVista(item) {
+
+    const arr = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+
+        this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
+          const espacio = data.payload.data();
+
+          // funciona con una programacion, cuando hayan mas toca crear otro metodo
+          if (espacio) {
+            console.log('espacioo', espacio);
+            const space = {
+              id_space: data.payload.id,
+              capacity: espacio.capacity,
+              createdAt: espacio.createdAt,
+              freeArea: espacio.freeArea,
+              headquarter: espacio.headquarter,
+              indxSa: espacio.indxSa,
+              map: espacio.map,
+              minArea: espacio.minArea,
+              ocupedArea: espacio.ocupedArea,
+              totalArea: espacio.totalArea,
+              spaceData: espacio.spaceData,
+              active: item[clave]
+
+            };
+
+            arr.push(space);
+          }
+
+
+
+        });
+
+
+      }
+    }
+
+    return arr;
+  }
+
+  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  buscarLab(idlab) {
+
+    return this.afs.doc('cfFacil/' + idlab).ref.get();
+
+  }
+
+  // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
+  ajustarTexto(nombre) {
+    console.log(nombre);
+    const nombreArr = nombre.split(' ');
+    let name1 = '';
+    let name2 = '';
+    for (let i = 0; i < nombreArr.length; i++) {
+      if (i < 3) {
+        name1 += nombreArr[i] + ' ';
+      } else {
+        name2 += nombreArr[i] + ' ';
+      }
+    }
+
+    return { nom1: name1, nom2: name2 };
+  }
+
+
+
+  /* asigna la fila de la tabla a variables ngmodel */
+  cambiardataEspace(item) {
+
+    this.formtrue = true;
+    console.log(item);
+    this.idsp = item.id_space;
+    this.space.totalArea = item.totalArea;
+    this.space.capacity = item.capacity;
+    this.space.freeArea = item.freeArea;
+    this.space.indxSa = item.indxSa;
+    this.space.minArea = item.minArea;
+    this.space.ocupedArea = item.ocupedArea;
+    this.space.spaceData.building = item.spaceData.building;
+    this.space.spaceData.floor = item.spaceData.floor;
+    this.space.spaceData.place = item.spaceData.place;
+    this.space.map = item.map;
+    this.space.active = item.active;
+
+    console.log('capacidad a', item.capacity);
+    // optener datos un espacio especifico
+
+    this.cargarImagenEspace(this.space.map);
+    this.listPracticeforSpace(this.idsp).then((ok: any) => {
+
+      console.log(ok);
+      setTimeout(() => {
+        ok.forEach(element => {
+
+          this.getPrgramming(element).then(() => {
+
+            this.totalOcupacion();
+            this.getActividadAct();
+
+          });
+
+        });
+      }, 2000);
+    });
+
+  }
+
+  /* este metodo carga la imagen desde firebase con un parametro nombre de la imagen */
+  cargarImagenEspace(name: string) {
+
+    if (name) {
+      this.mensaje = false;
+      const ref = this.storage.ref('planos/' + name + '.png');
+
+      ref.getDownloadURL()
+        .subscribe(res => {
+          this.plano = res;
+        });
+
+    } else {
+      this.mensaje = true;
+    }
+
+
+
+  }
+
+  // necesario el id de la subsede para almacenarlo en los metodos de los espacios
+  setSpace() {
+
+    if (!this.space.spaceData.building && !this.space.spaceData.building) {
+
+      swal({
+        type: 'info',
+        title: 'Hay campos vacios importantes.',
+        showConfirmButton: true
+      });
+
+    }
+    const nuevoespacio = this.space;
+
+    nuevoespacio.subHq = this.idsh;
+    this.afs.collection('space').add(nuevoespacio).then((data) => {
+      // agrega el nuevo espacio al laboratorio actual
+      this.updateFaciliti(data.id);
+    });
+    console.log(nuevoespacio);
+
+
+
+  }
+
+  actualizarEspacio() {
+
+    const nuevoespacio = {
+      capacity: this.space.capacity,
+      createdAt: '',
+      freeArea: this.space.freeArea,
+      headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
+      subHq: this.space.subHq,
+      map: this.space.capacity,
+      minArea: this.space.minArea,
+      ocupedArea: this.space.ocupedArea,
+      totalArea: this.space.totalArea,
+      spaceData: {
+        building: this.space.spaceData.building,
+        place: this.space.spaceData.place,
+        floor: this.space.spaceData.floor
+      },
+    };
+
+    const nuevoEstado = {
+      relatedSpaces: {}
+    };
+    // asigna el estado editado al espacio dentro del lab
+    nuevoEstado.relatedSpaces[this.idsp] = this.space.active;
+
+    this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
+
+      // actualiza el estado del espacio dentro del laboratorio
+      this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+
+      swal({
+        type: 'success',
+        title: 'Actualizado Correctamente',
+        showConfirmButton: true
+      });
+
+    });
+
+
+
+    console.log(nuevoespacio);
+
+
+
+  }
+
+
+  listSubHq(sede) {
+
+    console.log('si llego la sede', sede);
+    this.service.listSubHq(sede).subscribe(res => {
+
+      this.subsedesEsp = res;
+
+      console.log('subsedes', res);
+
+    });
+
+  }
+
+  // lista todas las sedes de la plataforma
+  listHq() {
+
+    this.service.listHq().subscribe((res) => {
+
+      this.sedesEsp = res;
+      console.log('sedes', res);
+
+    });
+
+  }
+
+  applyFilterPers(filterValue: string) {
+
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceSpace.filter = filterValue;
+  }
+
+
+  initCalendar() {
+
+    console.log(this.horarios);
+    const horario = this.horarios;
+    const containerEl: JQuery = $AB('#cal');
+    containerEl.fullCalendar('destroy');
+
+
+    containerEl.fullCalendar({
+      // licencia
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      // options here
+      height: 420,
+
+      header: {
+        left:   'title',
+        center: '',
+        right:  'today prev,next'
+      },
+      events: horario,
+
+      defaultView: 'month',
+
+    });
+
+    containerEl.fullCalendar('gotoDate', horario[0].start  );
+  }
+  // actualiza el laboratorio con una nueva referencia de espacio
+  updateFaciliti(idSp) {
+
+    if (idSp) {
+      const relatedSpaces = {};
+      relatedSpaces[idSp] = true;
+
+
+      console.log('revisar este lab', this.idlab);
+      this.afs.collection('cfFacil').doc(this.idlab).set({ relatedSpaces }, { merge: true })
+        .then(() => {
+
+          swal({
+            type: 'success',
+            title: 'Creado Correctamente',
+            showConfirmButton: true
+          });
+        });
+
+    } else {
+
+      swal({
+        type: 'info',
+        title: 'Hace falta campos importantes',
+        showConfirmButton: true
+      });
+    }
+
+  }
+
+  /* listar horario por espacio  */
+
+  listPracticeforSpace(idSpace) {
+
+
+    // traer array con todas las referencias de practicas con el espacio relacionado
+    return new Promise((resolve, reject) => {
+      const pathPrograming = [];
+      const pracRef = this.afs.collection('practice').ref;
+      const query = pracRef.where('relatedSpaces.' + idSpace, '==', true);
+      query.get().then(ok => {
+
+        ok.forEach(doc => {
+          pathPrograming.push(doc.id);
+        });
+      });
+
+      resolve(pathPrograming);
+
+    });
+
+
+
+  }
+
+  getPrgramming(id) {
+
+    console.log('id de la practica', id);
+    this.horarios = [];
+    this.noEsPrac = [];
+    return this.afs.collection('practice/' + id + '/programmingData')
+      .ref.get()
+      .then(data => {
+        data.forEach(onSnapshop => {
+
+          const Pr = onSnapshop.data();
+
+          console.log(Pr.noStudents);
+
+          const practicaH = {
+
+            numeroEs: Pr.noStudents,
+            horario: Pr.schedule,
+            id
+          };
+          //  crear un array de objetos numero de estudiantes y practicas
+          this.noEsPrac.push(practicaH);
+          // crea un array con los horarios de la practica
+          Pr.schedule.forEach(element => {
+
+            this.horarios.push(element);
+          });
+
+        });
+
+        //  crear un array de objetos numero de estudiantes y practicas
+        // this.noEsPrac.push(practica);
+        // prog['schedule'].forEach(element => {
+        //   this.horarios.push(element);
+        // });
+
+      }).catch(e => console.log('ocurrio un err', e));
+
+
+
+
+  }
+
+  // valida si ya existe un espacio para que pueda ser vinculado
+  spaceCheck(ed, sp) {
+    this.idnewSp = '';
+
+    console.log(ed, sp);
+
+    if (ed.trim() === '' || sp.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Buscando espacio ...';
+      const collref = this.afs.collection('space').ref;
+      const queryref = collref.where('spaceData.building', '==', ed).where('spaceData.place', '==', sp);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'Espacio no encontrado, ingrese los datos de forma manual';
+          this.dispo = true;
+        } else {
+          console.log(snapShot.docs[0].id);
+          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el boton vincular.';
+          this.dispo = false;
+          this.idnewSp = snapShot.docs[0].id;
+        }
+      });
+    }
+  }
+
+  getIdSubHq(id) {
+    console.log('llego este id', id);
+    this.idsh = id;
+  }
+
+  /* setea campos del objeto */
+  clearObj() {
+    this.space.totalArea = '';
+    this.space.capacity = 0;
+    this.space.freeArea = '';
+    this.space.indxSa = 0;
+    this.space.minArea = '';
+    this.space.ocupedArea = '';
+    this.space.spaceData.building = '';
+    this.space.spaceData.floor = '';
+    this.space.spaceData.place = '';
+  }
+
+  // obtiene el total de personas dentro de un laboratorio
+  getTotalLab() {
+    console.log('obtiene total del laboratorio');
+
+    return new Promise((resolve, reject) => {
+      let pers;
+      let cont = 0;
+      let personalLab;
+      this.afs.doc('cfFacil/' + this.idlab)
+        .ref.get()
+        .then((res) => {
+          pers = res.data().relatedPers;
+
+          for (const key in pers) {
+            if (pers.hasOwnProperty(key)) {
+              const element = pers[key];
+
+              console.log(element);
+              // valida si es personal activo
+              if (element) {
+                cont++;
+              }
+
+            }
+          }
+          personalLab = cont;
+
+          // devuelve la cantidad de personas en el laboratorio actual
+          resolve(personalLab);
+
+        }).catch(err => console.log('ocurrio un error', err));
+    });
+
+  }
+
+
+  getTotalEstPrac() {
+
+    return new Promise((resolve, reject) => {
+      const now = moment().format();
+      console.log(now);
+      let estudiantesPractica = 0;
+      // recorrer cada una de las programaciones del espacio
+      this.noEsPrac.forEach(programing => {
+        // recorrer cada uno de los horarios de las programming
+        programing.horario.forEach(fecha => {
+          console.log('fech ob', fecha);
+          // si la fecha coincide con la actual acomular en el total de estudiantes
+          if (moment(now).isBetween(fecha.start, fecha.end)) {
+
+            console.log('todo correcto');
+            // tslint:disable-next-line:radix
+            estudiantesPractica += parseInt(programing.numeroEs);
+          }
+        });
+
+      });
+
+      // devuelve el total de estudiantes en el momento actual
+      console.log('total de estudiantes en la practica', estudiantesPractica);
+      resolve(estudiantesPractica);
+    });
+  }
+
+  totalOcupacion() {
+
+    this.getTotalLab().then((personalLab: number) => {
+
+      this.getTotalEstPrac().then((estudiantesPract: number) => {
+
+        this.ocupacionAct = personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0;
+        // tslint:disable-next-line:radix
+        this.space.indxSa = (this.space.capacity) / (personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0);
+
+      });
+    });
+  }
+
+  getActividadAct() {
+
+    this.actividadAct = [];
+    let encontrado = false;
+    console.log('array para la consulta', this.noEsPrac);
+
+    this.noEsPrac.forEach(prog => {
+
+      prog.horario.forEach(fecha => {
+
+        const now = moment().format();
+
+        if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56', '2018-09-14T18:56')) {
+
+            encontrado = true;
+        }
+
+
+      });
+
+
+      if (encontrado) {
+
+        this.afs.doc('practice/' + prog.id)
+        .valueChanges()
+        .subscribe(ok => {
+
+          console.log('llego este id', prog.id);
+
+          this.actividadAct.push(ok['practiceName']);
+          console.log('resultado consulta', ok);
+
+        });
+      }
+
+    });
+  }
+
+
+  // METODOS DE LA VISTA PERSONAL 2
+
+  // METODO QUE CONSULTA TODOS LOS ROLES NIVEL 2
+  getRolesNivel2() {
+    this.afs.collection('appRoles').snapshotChanges().subscribe(datos => {
+      for (let i = 0; i < datos.length; i++) {
+        const element = datos[i].payload.doc.data();
+        if (element.lvl === 'perfiles2') {
+
+          this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName });
+          console.log(this.niveles);
+
+        }
+
+
+      }
+    });
+  }
+
+
+  estructuraIdPers(key) {
+
+    const promise = new Promise((resolve, reject) => {
+      this.buscarLab(key).then(labo => {
+        const laboratorio = labo.data();
+
+
+        this.persestructurado = {
+          personal: this.estructurarPers(laboratorio.relatedPers),
+          personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
+          estado: laboratorio.active,
+          uid: key
+        };
+
+        resolve();
+
+      });
+    });
+
+    return promise;
+
+  }
+
+  estructurarPers(item) {
+
+    const arr1 = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+        if (item[clave]) {
+            console.log(item[clave]);
+          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers = data.payload.data();
+
+
+            let persona = {};
+            if (pers.user) {
+              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+                const user = dataper.payload.data();
+                persona = {
+                  roles: user.appRoles,
+                  nombre: pers.cfFirstNames,
+                  apellidos: pers.cfFamilyNames,
+                  cc: pers.cc ? pers.cc : 'ninguno',
+                  activo: item[clave],
+                  tipo: pers.type ? pers.type : 'ninguno'  ,
+                  email: user.email ? user.email : 'ninguno asociado' ,
+                  idpers: clave,
+                  iduser: pers.user,
+                };
+
+                arr1.push(persona);
+
+              });
+            } else {
+              persona = {
+                roles: '',
+                cc: pers.cc ? pers.cc : 'ninguno',
+                nombre: pers.cfFirstNames,
+                apellidos: pers.cfFamilyNames,
+                activo: item[clave],
+                tipo: pers.type ?  pers.type : ' ninguno' ,
+                email: pers.email,
+                idpers: clave,
+                iduser: pers.user,
+              };
+
+
+              arr1.push(persona);
+
+            }
+          });
+
+        }
+      }
+    }
+    return arr1;
+  }
+
+  estructurarPersIna(item) {
+
+    const arr1 = [];
+
+    for (const clave in item) {
+      // Controlando que json realmente tenga esa propiedad
+      if (item.hasOwnProperty(clave)) {
+        if (!item[clave]) {
+          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
+            const pers = data.payload.data();
+            let persona = {};
+            if (pers.user) {
+              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                persona = {
+                  nombre: pers.cfFirstNames,
+                  apellidos: pers.cfFamilyNames,
+                  activo: item[clave],
+                  cc: pers.cc ? pers.cc : 'ninguno' ,
+                  tipo: pers.type ? pers.type : 'ninguno' ,
+                  email: dataper.payload.data().email ?  dataper.payload.data().email : 'ninguno asociado',
+                  roles: dataper.payload.data().appRoles,
+                  idpers: clave,
+                  iduser: pers.user,
+                };
+
+                arr1.push(persona);
+
+
+              });
+            } else {
+              persona = {
+                nombre: pers.cfFirstNames,
+                apellidos: pers.cfFamilyNames,
+                activo: item[clave],
+                tipo: pers.type,
+                cc: pers.cc ?  pers.cc : 'ninguno' ,
+                email: 'ninguno',
+                roles: 'ninguno',
+                idpers: clave,
+                iduser: pers.user,
+              };
+
+              arr1.push(persona);
+
+
+
+            }
+          });
+        }
+      }
+    }
+    return arr1;
+  }
+
+
+
+  consultarRol() {
+
+    return new Promise((resolve, reject) => {
+      this.afs.collection<any>('appRoles',
+        ref => ref.where('roleName', '==', this.rolc))
+        .snapshotChanges().subscribe(data => {
+          const idnuevo = data[0].payload.doc.id;
+
+          console.log(idnuevo);
+          resolve(idnuevo);
+        });
+    });
+  }
+
+  applyFilterPersona(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourcePers.filter = filterValue;
+  }
+
+  cambiardataPersona(item, table) {
+    this.tablesel = table;
+    console.log(item);
+    this.nombre = item.nombre;
+    this.estado = item.activo;
+    this.email = item.email;
+    this.type = item.tipo;
+
+    this.apellido = item.apellidos;
+    for (const key in item.roles) {
+      if (item.roles.hasOwnProperty(key)) {
+        this.rol = key;
+      }
+    }
+
+    this.idp = item.idpers;
+    this.idu = item.iduser;
+
+
+    // this.seleccionado = item;
+
+  }
+
+  actualizarPers() {
+
+    // $('#modal').modal('hide');
+
+    /* objeto para persona  */
+    const pers = {
+      cfFirstNames: this.nombre,
+      cfFamilyNames: this.apellido,
+      type: this.type,
+      updatedAt: new Date().toISOString()
+    };
+    /* objeto para usuario */
+    const user = {
+      appRoles: {}
+    };
+
+    const nuevoEstado = {
+      relatedPers: {},
+      updatedAt: new Date().toISOString()
+
+    };
+
+    console.log('usuario con el rol', user);
+    console.log(' se va actualizar esta persona', pers);
+
+    user.appRoles[this.rol] = true;
+    nuevoEstado.relatedPers[this.idp] = this.estado;
+
+    /* metodo firebase para subir un usuario actualizado */
+
+    if (this.idu) {
+      this.afs.collection('user').doc(this.idu).set(user, { merge: true })
+        .then(() => {
+        });
+
+    }
+    this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
+      () => {
+
+        this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+        swal({
+          type: 'success',
+          title: 'usuario actualizado correctamente',
+          showConfirmButton: true
+        });
+
+      });
+
+    /* metodo firebase para subir una persona actualizada */
+
+
+  }
+
+
+
+  /* metodo para crear una  nueva persona dentro dl lab*/
+
+  setPers() {
+
+    if (this.email && this.person.cc) {
+      this.person.email = this.email;
+      const pers = this.person;
+      pers.cfFacil[this.idlab] = true;
+
+      const collref = this.afs.collection('user').ref;
+      const queryref = collref.where('email', '==', pers.email);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+
+          this.afs.collection('cfPers').add(pers)
+            .then(ok => {
+
+              this.updateFacilitiPers(ok.id);
+
+              swal({
+                type: 'success',
+                title: 'persona creada correctamente',
+                showConfirmButton: true
+              });
+
+            });
+        } else {
+
+          pers.user = snapShot.docs[0].id;
+
+          this.afs.collection('cfPers').add(pers)
+            .then(ok => {
+
+              this.updateFacilitiPers(ok.id);
+              this.updatedUser(pers.user, ok.id);
+              swal({
+                type: 'success',
+                title: 'persona creada correctamente',
+                showConfirmButton: true
+              });
+
+            });
+        }
+      });
+
+
+
+    } else {
+
+      swal({
+        type: 'error',
+        title: 'Campos importantes vacios',
+        showConfirmButton: true
+      });
+
+    }
+
+  }
+
+  updatedUser(path, cfPers) {
+
+    const newUser = {
+      cfPers,
+      appRoles: {}
+    };
+    // asigna como boolean el id del rol al usuario
+    newUser.appRoles[this.person.roleId] = true;
+    console.log(newUser);
+    this.afs.doc('user/' + path).set(newUser, { merge: true });
+
+  }
+
+  /* actualizar la coleccion cfPers con el nuevo id del usuario */
+
+  updatePers(idU, pathP) {
+
+    this.afs.collection('cfPers').doc(pathP).update({ user: idU });
+
+  }
+
+  /* actualizar el laboratorio con el nuevo id del document pers */
+
+  updateFacilitiPers(idP) {
+
+    console.log('entrooooooo');
+    const facil = {
+      relatedPers: {}
+    };
+    facil.relatedPers[idP] = true;
+
+
+    console.log('revisar este lab', this.idlab);
+    this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
+
+  }
+
+  emailcheck($event) {
+    this.addP = '';
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('cfPers').ref;
+      const queryref = collref.where('email', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'Email disponible';
+          this.dispo = true;
+        } else {
+          console.log(snapShot.docs[0].id);
+          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
+          this.dispo = true;
+          this.addP = snapShot.docs[0].id;
+          this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;
+          this.person.cfFirstNames = snapShot.docs[0].data().cfFirstNames;
+          this.person.roleId = snapShot.docs[0].data().roleId;
+          this.person.type = snapShot.docs[0].data().type;
+          console.log(this.person.type);
+          this.person.cfGender = snapShot.docs[0].data().cfGender;
+          this.person.cfBirthdate = snapShot.docs[0].data().cfBirthdate;
+        }
+      });
+    }
+  }
+
+  addLabPers(id: string) {
+
+    if (id) {
+      const lab = {
+        relatedPers: {}
+      };
+
+
+      lab.relatedPers[id] = true;
+
+      this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
+        .then(() => {
+
+          $('#modal1').modal('hide');
+          this.toastr.success('Almacenado correctamente.', 'exito!');
+        });
+    } else {
+
+      this.toastr.warning('Ocurrio un error, intente ingresar el email otra vez.');
+
+    }
+
+
+  }
+
+
+  setValue() {
+
+    this.email = '';
+  }
 }

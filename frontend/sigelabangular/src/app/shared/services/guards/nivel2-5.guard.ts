@@ -12,7 +12,7 @@ export class Nivel25Guard implements CanActivate {
       if(rol){
         for (const clave in rol) {
           if (rol[clave]) {
-            if (clave == 'moduloNivel2-5') {
+            if (clave == 'moduloNivel25') {
               return true;
             } else {
               return false;

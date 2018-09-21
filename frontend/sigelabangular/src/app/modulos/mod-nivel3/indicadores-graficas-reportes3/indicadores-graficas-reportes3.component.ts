@@ -142,18 +142,70 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   };
   graficoBarras = false;
 
+  role:any;
+  moduloNivel3 = false;
+  moduloNivel25 = false;
+
+  persona:any;
+  faculty:any;
   constructor(private afs: AngularFirestore) {
 
   }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
+    this.persona = JSON.parse(localStorage.getItem('persona'));
+    this.getRoles();
     this.estructurarSedes();
-    this.estructurarFacultades();
     this.estructurarTodasSubSedes();
+    if(this.moduloNivel3){  
+      this.estructurarFacultades();     
+    }
+
+    if(this.moduloNivel25){
+      this.getFaculty().then(()=>{
+        this.estructurarFacultad(this.faculty);
+
+        this.formCheckBox.facultad.setValue(true);
+        this.formCheckBox.facultad.disable();
+        this.formSelect.facultad.setValue([this.faculty]);
+        this.formSelect.facultad.disable();
+
+        this.ejecutarGraficos();
+      });
+      
+    }
+   
   }
 
+  getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
+        }
+      }
+    }
+  }
+
+  getFaculty(){
+    let promise = new Promise((resolve, reject) => {
+      this.getPersona(this.persona.cfPers).then(doc => {
+        this.faculty = doc.data().faculty;
+        resolve();
+      });   
+    });
+    return promise;
+  }
+  getPersona(persid) {
+    return this.afs.doc('cfPers/' + persid).ref.get();
+  }
 
   estructurarSedes(){
 
@@ -227,6 +279,21 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     });
   }
 
+  estructurarFacultad(id){
+    this.listSelect.facultad = [];
+    this.buscaFacultad(id).then(doc=>{
+
+      this.listSelect.facultad.push({
+        id:doc.id,
+        nombre: doc.data().facultyName
+      });
+       
+      this.estructurarDeparamentos(doc.id);
+     
+    });
+  }
+
+
   estructurarFacultadesWitSede(keysede){
     this.listSelect.facultad = [];
     this.buscaFacultadWitSede(keysede).then(datos=>{
@@ -282,7 +349,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     const arr = ['sede','subsede','facultad','departamento', 'escuela'];
     if(item == 'universidad'){
       if(this.formCheckBox[item].value){
-        this.ejecutarGraficos();
+        
         arr.forEach(elemen=>{
           this.formCheckBox[elemen].setValue(false);
           this.formSelect[elemen].setValue('');

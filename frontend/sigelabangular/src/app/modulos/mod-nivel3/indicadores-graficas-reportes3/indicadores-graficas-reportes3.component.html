@@ -23,17 +23,17 @@
                     <div class="box-body">
 
                         <div class="col-md-4">
-                            <p>
+                            <p *ngIf="moduloNivel3">
                                 <mat-checkbox [formControl]="formCheckBox.universidad" (change)="controlChecks('universidad')">Universidad</mat-checkbox>
                             </p>
                         </div>
                         <div class="col-md-4">
                             <p>
-                                <mat-checkbox [formControl]="formCheckBox.sede" (change)="controlChecks('sede')">Sede</mat-checkbox>
+                                <mat-checkbox [formControl]="formCheckBox.sede" (change)="controlChecks('sede')">Seccional</mat-checkbox>
                             </p>
                             <p>
                                 <mat-form-field>
-                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Sedes" [formControl]="formSelect.sede" multiple>
+                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Seccionales" [formControl]="formSelect.sede" multiple>
                                         <mat-option *ngFor="let sede of listSelect.sede" [value]="sede.id">{{sede.nombre}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -41,11 +41,11 @@
                         </div>
                         <div class="col-md-4">
                             <p>
-                                <mat-checkbox [formControl]="formCheckBox.subsede" (change)="controlChecks('subsede')">SubSede</mat-checkbox>
+                                <mat-checkbox [formControl]="formCheckBox.subsede" (change)="controlChecks('subsede')">Sede</mat-checkbox>
                             </p>
                             <p>
                                 <mat-form-field>
-                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Subsedes" [formControl]="formSelect.subsede" multiple>
+                                    <mat-select (change)="ejecutarGraficos()" placeholder="Todas las Sedes" [formControl]="formSelect.subsede" multiple>
                                         <mat-option *ngFor="let sede of listSelect.subsede" [value]="sede.id">{{sede.nombre}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
