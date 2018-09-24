@@ -704,13 +704,13 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     return new Promise((resolve, reject) => {
       const now = moment().format();
-      console.log(now);
+      console.log( 'momento actual', now);
       let estudiantesPractica = 0;
       // recorrer cada una de las programaciones del espacio
       this.noEsPrac.forEach(programing => {
         // recorrer cada uno de los horarios de las programming
         programing.horario.forEach(fecha => {
-          console.log('fech ob', fecha);
+          console.log('fecha que llega al foreach', fecha);
           // si la fecha coincide con la actual acomular en el total de estudiantes
           if (moment(now).isBetween(fecha.start, fecha.end)) {
 
@@ -732,11 +732,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     this.getTotalLab().then((personalLab: number) => {
 
+      console.log('personal actual en el laboratorio', personalLab  );
       this.getTotalEstPrac().then((estudiantesPract: number) => {
-
-        this.ocupacionAct = personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0;
+        console.log('personal actual en la practica ', estudiantesPract  );
+        this.ocupacionAct = (personalLab ? personalLab : 0 ) + ( estudiantesPract ? estudiantesPract : 0 );
         // tslint:disable-next-line:radix
-        this.space.indxSa = (this.space.capacity) / (personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0);
+        this.space.indxSa = ( this.ocupacionAct / this.space.capacity );
 
       });
     });
@@ -754,7 +755,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
         const now = moment().format();
 
-        if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56', '2018-09-14T18:56')) {
+        if (moment(now).isBetween(fecha.start, fecha.end)) {
 
             encontrado = true;
         }

@@ -1,6 +1,6 @@
 /*  url para la api  sabs*/
 
-export const URLAPI = 'http://192.168.1.6:1337/inventario/buscar';
+export const URLAPI = 'http://10.144.17.234:1337/inventario/buscar';
 
 
 /* url para el qr*/

@@ -1,8 +1,9 @@
 import { QrService } from './../../services/qr.service';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import swal from 'sweetalert2';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-form-qr',
@@ -10,6 +11,14 @@ import swal from 'sweetalert2';
   styleUrls: ['./form-qr.component.css']
 })
 export class FormQrComponent implements OnInit {
+
+  seleccionLab = true;
+  // atributos tabla  laboratorios
+  displayedColumnsFacil = ['nombre'];
+  dataSourceFacil = new MatTableDataSource();
+  @ViewChild('paginatorFacil') paginatorFacil: MatPaginator;
+  @ViewChild('sortFacil') sortFacil: MatSort;
+
   id;
   idspace;
   idlab;
@@ -53,18 +62,22 @@ export class FormQrComponent implements OnInit {
 
   constructor(
     private _Activatedroute: ActivatedRoute,
-    private qrser: QrService
+    private qrser: QrService,
+    private qrserv: QrService
   ) { }
 
   ngOnInit() {
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+    this.qrserv.listCfFacil().subscribe(data => {
 
-    this.qrser.getUser().then((res: Array<any> ) => {
-      this.spaces = [];
-      this.spaces = res;
+      console.log('data labs', data);
+      this.dataSourceFacil.data = data;
     });
+
+
+
     this.getRoles();
 
 
@@ -142,7 +155,7 @@ export class FormQrComponent implements OnInit {
           this.inventario.marca = '';
           this.inventario.estado = '';
         }
-      }, err =>   swal({
+      }, err => swal({
         type: 'error',
         title: 'Error al conectar a SABS.',
         showConfirmButton: true
@@ -255,7 +268,7 @@ export class FormQrComponent implements OnInit {
         space: this.idspace,
         brand: this.inventario.marca,
         model: '',
-        price: this.inventario.costoinicial,
+        price: '',
         active: true,
         createdAt: fecha.toISOString(),
         cfConditions: []
@@ -296,4 +309,26 @@ export class FormQrComponent implements OnInit {
       this.formularioComp = true;
     }
   }
+
+  applyFilterLab(filterValue: string) {
+
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceFacil.filter = filterValue;
+
+  }
+
+  cambiardataLab(row) {
+
+    console.log(row.relatedSpaces);
+    this.qrserv.getSpaces( row.relatedSpaces)
+    .then( (dataSpace: any) =>  {
+      this.spaces = [];
+      this.spaces = dataSpace;
+     console.log( 'espacio asociado',  dataSpace);
+
+     this.seleccionLab = false;
+    });
+ }
+
 }
