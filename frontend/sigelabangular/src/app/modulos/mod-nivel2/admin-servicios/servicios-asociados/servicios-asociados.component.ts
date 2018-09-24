@@ -555,7 +555,14 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         const variacion = this.variaciones[j];
         if(variacion.id == 'nuevo'){
           this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations').add(variacion.data).then(()=>{
-
+            swal({
+              type: 'success',
+              title: 'Editado correctamente',
+              showConfirmButton: true
+            }).then(()=>{
+              this.variaciones = [];
+              this.cerrarModal('modal1');
+            });
           });
         } else {
           this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')

@@ -53,13 +53,15 @@ export class QuerysAutenticadoService {
                 fecha: elemento.createdAt.split('T')[0],
                 uid: data2.id,
                 uidreserv: data[index].payload.doc.id,
-                acepto: elemento.acceptedBy,
+                acepto: elemento.acceptedBy != '' ? elemento.acceptedBy : 'sin aceptar',
                 path: elemento.path,
                 parametrosVar:elemento.parametros,
                 parametrosSrv: elemento.parametrosSrv,
                 nombreParametros:servicio.parametros,
                 descuento:elemento.descuento,
-                precioTotal: elemento.precioTotal
+                precioTotal: elemento.precioTotal,
+                fechaEdicion: elemento.updatedAt.split('T')[0],
+                fechaAceptacion: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
               };
   
               if(elemento.status == 'aceptada' || elemento.status == 'pendiente' || elemento.status == 'procesada'){

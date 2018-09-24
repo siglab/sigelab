@@ -18,7 +18,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <button *ngIf="moduloNivel2 || moduloSolicitudes" style="float: right;" class="btn btn-danger" type="button" data-toggle="modal"
-                                    data-target="#modal2">Nueva Solicitud</button>
+                                    data-target="#modal2" (click)="limpiarDatos()">Nueva Solicitud</button>
                             </div>
                         </div>
                     </div>
@@ -231,15 +231,18 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="ciudes">
-                                                        <strong>Datos Proveedor:</strong>
+                                                        <strong>Datos Proveedores:</strong>
                                                     </label>
-                                                    <ul>
-                                                        <li *ngFor="let item of solsel.proveedores">
-                                                            {{item.name}}
-                                                            <ul>
-                                                                <li *ngFor="let item2 of item.contactNumbers; let i = index">tel {{i}} : {{item2}}</li>
-                                                            </ul>
-                                                        </li>
+                                                    <ul *ngFor="let item of solsel.proveedores">
+                                                        <label class="control-label" for="ciudes">
+                                                            <strong>Proovedor {{item.name}}:</strong>
+                                                        </label>
+                                                        <li>
+                                                            <strong>Telefono:</strong> {{item.contactNumbers}}</li>
+                                                        <li>
+                                                            <strong>Correo:</strong> {{item.correo}}</li>
+                                                        <li>
+                                                            <strong>Costo: $</strong> {{item.cot}}</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -291,7 +294,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div *ngIf="solsel.componentes.length != 0" class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="ciudes">
                                                         <strong>COMPONENTES ASOCIADOS:</strong>
@@ -362,43 +365,43 @@
                         </div>
 
                         <div *ngIf="this.solsel && (this.solsel.tipo == 'panico')" class="col-md-6">
-                                <div class="box box-danger">
-                                    <div class="box-header">
-                                        <i class="fa fa-map"></i>
-    
-                                        <h3 class="box-title">INFORMACION DE SOLICITUD DE PANICO</h3>
-                                    </div>
-    
-                                    <!-- /.box-header -->
-                                    <div class="box-body">
-                                        <form action="">
-                                            <fieldset>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        <label class="control-label" for="nombre">
-                                                            <strong>Nombre de Equipo:</strong>
-                                                        </label>
-                                                        {{solsel.panicoequipo}}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        <label class="control-label" for="descripcion">
-                                                            <strong>Descripcion del problema:</strong>
-                                                        </label>
-                                                        {{solsel.panicodescripcion}}
-                                                    </div>
-                                                </div>
-                                              
-                                            </fieldset>
-                                        </form>
-                        
-    
-                                    </div>
-    
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">INFORMACION DE SOLICITUD DE PANICO</h3>
                                 </div>
-    
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form action="">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nombre">
+                                                        <strong>Nombre de Equipo:</strong>
+                                                    </label>
+                                                    {{solsel.panicoequipo}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="descripcion">
+                                                        <strong>Descripcion del problema:</strong>
+                                                    </label>
+                                                    {{solsel.panicodescripcion}}
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+
+
+                                </div>
+
                             </div>
+
+                        </div>
 
 
                         <div *ngIf="this.solsel && (solsel.path.length != 0)" class="col-md-6">
@@ -438,33 +441,33 @@
 
                         </div>
                         <div *ngIf="this.solsel && (solsel.status == 'rechazada')" class="col-md-6">
-                                <div class="box box-danger">
-                                    <div class="box-header">
-                                        <i class="fa fa-map"></i>
-    
-                                        <h3 class="box-title">MOTIVO DEL RECHAZO</h3>
-                                    </div>
-    
-                                    <!-- /.box-header -->
-                                    <div class="box-body">
-                                        <form id="form-workserv3" class="" name="form-workserv3" action="#">
-                                            <fieldset>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        {{this.solsel.comment}}
-                                                    </div>
-    
-                                                </div>
-                                            </fieldset>
-    
-    
-                                        </form>
-    
-                                    </div>
-    
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">MOTIVO DEL RECHAZO</h3>
                                 </div>
-    
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    {{this.solsel.comment}}
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+
+                                    </form>
+
+                                </div>
+
                             </div>
+
+                        </div>
 
                         <div *ngIf="!this.solsel">
                             <h2>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h2>
@@ -577,7 +580,7 @@
                                                     <strong>Proveedores:</strong>
                                                 </label>
                                                 <div class="form-group">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <label class="control-label" for="nombre">
                                                             <strong>Nombre de proveedor:</strong>
                                                         </label>
@@ -585,19 +588,27 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <label class="control-label" for="tel1">
-                                                            <strong>Tel 1:</strong>
+                                                            <strong>Telefono:</strong>
                                                         </label>
-                                                        <input id="tel1" [(ngModel)]="this.telproov.tel1" name="tel1" class="form-control" type="text">
+                                                        <input id="tel1" [(ngModel)]="this.proovedor.contactNumbers" name="tel1" class="form-control" type="number">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <label class="control-label" for="tel2">
-                                                            <strong>Tel 2:</strong>
+                                                            <strong>Correo:</strong>
                                                         </label>
-                                                        <input id="tel2" [(ngModel)]="this.telproov.tel2" name="tel2" class="form-control" type="text">
+                                                        <input id="tel2" [(ngModel)]="this.proovedor.correo" name="tel2" class="form-control" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-3">
+                                                        <label class="control-label" for="tel2">
+                                                            <strong>Precio Cotizacion:</strong>
+                                                        </label>
+                                                        <input id="cot" [(ngModel)]="this.proovedor.cot" name="cot" class="form-control" type="number">
                                                     </div>
                                                 </div>
 

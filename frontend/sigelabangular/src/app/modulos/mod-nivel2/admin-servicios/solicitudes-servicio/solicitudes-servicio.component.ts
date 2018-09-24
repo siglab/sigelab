@@ -38,8 +38,8 @@ histoServicioSel:any;
 comentario = '';
 
 
-  displayedColumns = ['nombre', 'fecha', 'email', 'estado'];
-  displayedColumns2 = ['nombre', 'fecha', 'laboratorio', 'estado'];
+  displayedColumns = ['nombre', 'fecha', 'edicion','aceptacion','estado', 'email'];
+  displayedColumns2 = ['nombre', 'fecha', 'laboratorio', 'edicion', 'aceptacion', 'estado'];
 
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource([]);
@@ -204,13 +204,15 @@ comentario = '';
             uidserv: data2.id,
             uidreserv: doc.id,
             path: elemento.path,
-            acepto: elemento.acceptedBy,
+            residuos:servicio.residuos ? 'Si' : 'No',
+            acepto: elemento.acceptedBy != '' ? elemento.acceptedBy : 'sin aceptar',
             fechaTermino: elemento.updatedAt.split('T')[0],
             parametrosVar:elemento.parametros,
             parametrosSrv: elemento.parametrosSrv,
             nombreParametros:servicio.parametros,
             precioTotal: elemento.precioTotal,
-            descuento:elemento.descuento
+            descuento:elemento.descuento,
+            fechaAceptacion: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
           };
 
           if(elemento.dateAccepted){
@@ -324,7 +326,8 @@ comentario = '';
               descripcion: variacion.cfDescription,
               precio: variacion.cfPrice,
               activo: variacion.active,
-              parametros:variacion.parametros
+              parametros:variacion.parametros,
+              residuos: variacion.residuos ? 'Si' : 'No'
             };
 
               arr.push(vari);
@@ -550,7 +553,7 @@ comentario = '';
         this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
           if(this.servicioActivoSel.status != 'pendiente'){
             this.alertaExito('Comentario enviado');
-            this.enviarEmails();
+            this.enviarNotificacionEmails();
           }
         });
 
@@ -567,7 +570,7 @@ comentario = '';
 
   }
 
-  enviarEmails(){
+  enviarNotificacionEmails(){
 
     let emailSolicitante = '';
     let emailAcepto = '';
@@ -598,6 +601,30 @@ comentario = '';
     });
   }
 
+  enviarEmails(){
+
+    let emailSolicitante = '';
+
+    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const asunto = 'CAMBIO DE ESTADO DE LA SOLICITTUD DE SERVICIO';
+    let destino = '';
+
+    emailSolicitante = this.servicioActivoSel.usuario;
+
+    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
+                    this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
+                    ' por el usuario con el correo ' + emailSolicitante;
+
+    
+    destino = emailSolicitante;
+    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+      if(res.status == 200){
+        //this.cerrarAlerta();
+      } else {
+        this.alertaError('fallo al enviar correos');
+      }
+    });
+  }
 
   cambiarEstadoSolicitud(estado){
     swal({
@@ -643,6 +670,8 @@ comentario = '';
           }
          
         });
+
+        this.enviarEmails();
     
         this.moduloinfo = false;
         this.resetIconos();

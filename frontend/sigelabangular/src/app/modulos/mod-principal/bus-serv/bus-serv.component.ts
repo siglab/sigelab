@@ -347,7 +347,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
               }).then(()=>{
-                this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email);
+                this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
 
                 this.limpiarDatos();
 

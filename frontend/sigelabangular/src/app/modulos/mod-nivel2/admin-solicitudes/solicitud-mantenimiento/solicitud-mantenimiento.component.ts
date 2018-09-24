@@ -71,19 +71,18 @@ export class SolicitudMantenimientoComponent implements OnInit {
     updatedAt:'',
     path:[],
     costo:'0',
-    acceptedBy:''
+    acceptedBy:'',
+    faculties:{}
   };
 
   proovedor = {
     name:'',
-    contactNumbers:[],
-    attachments:{}
+    contactNumbers:'',
+    attachments:{},
+    cot:'',
+    correo:''
   };
 
-  telproov = {
-    tel1:'',
-    tel2:''
-  }
 
   iconosModal = {
     servicio:false,
@@ -129,27 +128,33 @@ export class SolicitudMantenimientoComponent implements OnInit {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
     }
     this.obs.currentObjectSolMan.subscribe(data => {
-
       if(data.length != 0){
 
         this.alertaCargando();
-                
         this.itemsel = data;
         this.lab_id = data.uid;
 
         this.getCollectionSolicitudes(data.uid).then(data1 => {
+          if(data1.size != 0){
+            this.datos = this.estructurarSolicitudesActivas(data1, data).then(datos => {
+              this.dataSource.data = datos['data'];
+              this.dataSource.sort = this.sort;
+              this.dataSource.paginator = this.paginator;
+  
+              this.dataSource2.data = datos['data2'];
+              this.dataSource2.sort = this.sort2;
+              this.dataSource2.paginator = this.paginator2;
+  
+              this.cerrarAlerta();
+            });
+          }else{
+            swal({
+              type: 'error',
+              title: 'El laboratorio seleccionado aun no tiene solicitudes de mantenimiento',
+              showConfirmButton: true
+            });
+          }
 
-          this.datos = this.estructurarSolicitudesActivas(data1, data).then(datos => {
-            this.dataSource.data = datos['data'];
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-
-            this.dataSource2.data = datos['data2'];
-            this.dataSource2.sort = this.sort2;
-            this.dataSource2.paginator = this.paginator2;
-
-            this.cerrarAlerta();
-          });
                      
         });
 
@@ -478,7 +483,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     this.selection.selected.forEach(equipo => {
       this.reserMan.relatedEquipments = equipo.id;
     });
-
+    this.reserMan.faculties = this.itemsel.labo.faculties;
     this.selection2.selected.forEach(componente => {
       this.reserMan.relatedComponents[componente.id] = true;
     });
@@ -544,8 +549,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
 
   agregarProovedor(){
-    this.proovedor.contactNumbers.push(this.telproov.tel1);
-    this.proovedor.contactNumbers.push(this.telproov.tel2);
+
     this.reserMan.providersInfo.push(this.proovedor);
     this.inicializarProovedor();
 
@@ -560,14 +564,12 @@ export class SolicitudMantenimientoComponent implements OnInit {
   inicializarProovedor(){
     this.proovedor = {
       name:'',
-      contactNumbers:[],
-      attachments:{}
+      contactNumbers:'',
+      attachments:{},
+      cot:'',
+      correo:''
     };
-  
-    this.telproov = {
-      tel1:'',
-      tel2:''
-    }
+
   }
 
   inicializarSolicitud(){
@@ -589,7 +591,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
       updatedAt:'',
       path:[],
       costo:'0',
-      acceptedBy:''
+      acceptedBy:'',
+      faculties:{}
     };
   }
 
@@ -692,10 +695,37 @@ export class SolicitudMantenimientoComponent implements OnInit {
       updatedAt:'',
       path:[],
       costo:'0',
-      acceptedBy:''
+      acceptedBy:'',
+      faculties:{}
     };
   }
   
+  limpiarDatos(){
+    
+  this.reserMan = {
+    cfOrgUnit:'',
+    headquarter:'',
+    cfFacil:'',
+    createdBy:'',
+    requestDesc:'',
+    requestType:'mantenimiento',
+    maintenanceType:'',
+    providersInfo:[],
+    relatedEquipments:'',
+    relatedComponents:{},
+    status:'pendiente',
+    active:true,
+    createdAt:'',
+    updatedAt:'',
+    path:[],
+    costo:'0',
+    acceptedBy:'',
+    faculties:{}
+  };
+
+  this.selection.clear();
+  this.selection2.clear();
+  }
 }
 
 

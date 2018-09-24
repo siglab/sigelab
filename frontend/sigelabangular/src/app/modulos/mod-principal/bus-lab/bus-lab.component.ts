@@ -309,8 +309,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
               console.log(cfSrvReserv);
 
+
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-              //this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email);
+              this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email, this.itemsel.personal);
 
               this.limpiarDatos();
 
@@ -326,7 +327,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
               swal({
                 type: 'error',
-                title: error,
+                title: ''+error,
                 showConfirmButton: true
               });
 

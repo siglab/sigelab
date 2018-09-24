@@ -61,15 +61,31 @@
 
                                               <!-- Name Column -->
                                               <ng-container matColumnDef="fecha">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Solicitud </mat-header-cell>
                                                 <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
                                               </ng-container>
+
+
+                                              <!-- Weight Column -->
+                                              <ng-container matColumnDef="edicion">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ulima Edicion </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.fechaTermino}} </mat-cell>
+                                              </ng-container>
+
+
+                                              <!-- Weight Column -->
+                                              <ng-container matColumnDef="aceptacion">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptacion </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
+                                              </ng-container>
+
 
                                               <!-- Weight Column -->
                                               <ng-container matColumnDef="email">
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
                                                 <mat-cell *matCellDef="let element"> {{element.usuario}} </mat-cell>
                                               </ng-container>
+
 
                                               <!-- Symbol Column -->
                                               <ng-container matColumnDef="estado">
@@ -124,6 +140,19 @@
                                           <ng-container matColumnDef="laboratorio">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
+                                          </ng-container>
+
+                                          <!-- Weight Column -->
+                                          <ng-container matColumnDef="edicion">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ulima Edicion </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.fechaTermino}} </mat-cell>
+                                          </ng-container>
+
+
+                                          <!-- Weight Column -->
+                                          <ng-container matColumnDef="aceptacion">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptacion </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
                                           </ng-container>
 
                                           <!-- Symbol Column -->
@@ -207,6 +236,11 @@
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servicioActivoSel.descripcion}}</label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="descripserv"><strong>El servicio genera residuos:</strong> {{servicioActivoSel.residuos}}</label>
                                 </div>
                               </div>
                               <div *ngIf="servicioActivoSel.condicionesSrv.length != 0" class="form-group">
@@ -332,6 +366,11 @@
                                 <div class="col-md-12">
                                   <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.descripcion}}</label>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="descripserv"><strong>La variacion genera residuos:</strong> {{variation.residuos}}</label>
+                              </div>
                             </div>
                             <div *ngIf="condicion" class="form-group">
                                 <div class="col-md-12">

@@ -90,6 +90,7 @@ export class QuerysPrincipalService {
                       info: {email: elemento.otros.email},
                       servicios: this.estructurarServicios(elemento.relatedServices),
                       practicas: this.estructurarPracticas(elemento.relatedPractices),
+                      personal: this.buscarAnalistas(elemento.relatedPers),
                       condiciones: elemento.cfConditions,
                       disponibilidad: elemento.cfAvailability
                     };
@@ -157,6 +158,7 @@ export class QuerysPrincipalService {
                             uid: elemento.cfFacil,
                             direspacio: direspa,
                             telefonos: this.estructuraTelefonos(elemento.cfFacil),
+                            personal: this.buscarAnalistas(labencontrado.relatedPers),
                             desc: labencontrado.cfDescr,
                             email: labencontrado.otros.email,
                             escuela: labencontrado.knowledgeArea,
@@ -461,7 +463,7 @@ export class QuerysPrincipalService {
   }
 
 
-  enviarEmails(nombreserv,emailSolicitante, emailEncargado, emailLaboratorio){
+  enviarEmails(nombreserv,emailSolicitante, emailEncargado, emailLaboratorio, analistas){
 
 
     const fecha = new Date();
@@ -471,20 +473,59 @@ export class QuerysPrincipalService {
     const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
     const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
     let destino = '';
+    if(analistas){
+      for (let i = 0; i < analistas.length; i++) {
+        destino += analistas[i] + ','     
+      }
+    }
+ 
     const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' + 
                       nombreserv + ', esta fue solicitada en la fecha ' + fechaes +
                       ' por el usuario con el correo: ' + emailSolicitante +'.';
 
-    destino = emailSolicitante + ',' + emailEncargado;
+    destino += emailSolicitante + ',' + emailEncargado + ',' +emailLaboratorio;
 
-    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-      if(res.status == 200){
-        console.log('notificaciones enviadas');
-      } else {
-        console.log('error notificaciones');
+
+    console.log(destino);
+
+    // this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+    //   if(res.status == 200){
+    //     console.log('notificaciones enviadas');
+    //   } else {
+    //     console.log('error notificaciones');
+    //   }
+    // });
+
+  }
+
+  buscarAnalistas(personas){
+    const arra = [];
+    for (const key in personas) {
+      if (personas.hasOwnProperty(key)) {
+        if(personas[key]){
+          this.buscarDirector(key).then(doc => {
+            this.buscarUsuario(doc.data().user).then(user => {
+              for (const key in user.data().appRoles) {
+                if (user.data().appRoles.hasOwnProperty(key)) {
+                  if(user.data().appRoles[key]){
+                    if(key == '6ITqecW7XrgTLaW6fpn6'){
+                      arra.push(doc.data().email);
+                    }
+                  }               
+                }
+              }
+            });
+          });
+        }
+        
       }
-    });
+    }
 
+    return arra;
+  }
+
+  buscarUsuario(id){
+    return this.afs.collection('user').doc(id).ref.get();
   }
 
 

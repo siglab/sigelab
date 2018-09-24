@@ -124,6 +124,13 @@ export class SolicitudesNivel3Component implements OnInit {
   comentario = '';
   costo = '';
 
+  role:any;
+  moduloNivel3 = false;
+  moduloNivel25 = false;
+
+  persona:any;
+  faculty:any;
+
   constructor(private afs: AngularFirestore, private storage:AngularFireStorage, private http:Http) {
   }
 
@@ -134,32 +141,62 @@ export class SolicitudesNivel3Component implements OnInit {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
     }
+
+    if (localStorage.getItem('persona')) {
+      this.persona = JSON.parse(localStorage.getItem('persona'));   
+    }
     
     this.alertaCargando();
-                
-
-    this.getCollectionSolicitudes().then(data1 => {
-      this.itemsel = data1;
-      this.estructurarSolicitudesActivas(data1).then(datos => {
-
-        this.dataSource.data = datos['data'];
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-
-        this.dataSource2.data = datos['data2'];
-        this.dataSource2.sort = this.sort2;
-        this.dataSource2.paginator = this.paginator2;
-
-        this.cerrarAlerta();
+    
+    if(this.moduloNivel3){
+      this.getCollectionSolicitudes().then(data1 => {
+        this.itemsel = data1;
+        this.estructurarSolicitudesActivas(data1).then(datos => {
+  
+          this.dataSource.data = datos['data'];
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+  
+          this.dataSource2.data = datos['data2'];
+          this.dataSource2.sort = this.sort2;
+          this.dataSource2.paginator = this.paginator2;
+  
+          this.cerrarAlerta();
+        });
+                   
       });
-                 
-    });
+    }
+
+    if(this.moduloNivel25){
+      this.getFaculty().then(() => {
+        this.getCollectionSolicitudesFacultad(this.faculty).then(data1 => {
+          this.itemsel = data1;
+          this.estructurarSolicitudesActivas(data1).then(datos => {
+    
+            this.dataSource.data = datos['data'];
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+    
+            this.dataSource2.data = datos['data2'];
+            this.dataSource2.sort = this.sort2;
+            this.dataSource2.paginator = this.paginator2;
+    
+            this.cerrarAlerta();
+          });
+                     
+        });
+      })
+      
+    }
+
+  
 
   }
 
   // METODOS PARA SUBIR UNA COTIZACION
 
   cambiarEstadoSolicitud(estado){
+    this.alertaCargando();
     const obj = {
       acceptedBy:this.user.email,
       updatedAt: new Date().toISOString(),
@@ -170,14 +207,16 @@ export class SolicitudesNivel3Component implements OnInit {
     if(estado == 'rechazado'){
       obj['comment'] = this.comentario;
       obj.status = 'rechazada';
+
       this.afs.collection('request').doc(this.solsel.uidsol).update(obj).then(()=>{
-        console.log('hecho');
+        this.alertaExito('Solicitud Rechazada');
         this.solsel.status = 'rechazada';
       });
     }else if(estado == 'aceptada'){
       obj.status = 'aceptada';
+      obj['dateAccepted'] =  new Date().toISOString();
       this.afs.collection('request').doc(this.solsel.uidsol).update(obj).then(()=>{
-        console.log('hecho');
+        this.alertaExito('Solicitud Aceptada');
         this.solsel.status = 'aceptada';
       });
     }else{
@@ -189,7 +228,7 @@ export class SolicitudesNivel3Component implements OnInit {
       }
       
       this.afs.collection('request').doc(this.solsel.uidsol).update(obj).then(()=>{
-        console.log('hecho');
+        this.alertaExito('Solicitud Concluida');
         this.solsel.status = 'realizada';
       });
     }
@@ -224,24 +263,6 @@ export class SolicitudesNivel3Component implements OnInit {
    
   }
 
-
-  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.rol);
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
-        if ((clave === 'moduloNivel2')) {
-          this.moduloNivel2 = true;
-        }
-
-        if ((clave === 'moduloSolicitudes')) {
-          this.moduloSolicitudes = true;
-        }
-      }
-    }
-  }
 
   uploadMulti() {
     let filespath = [];
@@ -312,6 +333,13 @@ export class SolicitudesNivel3Component implements OnInit {
     return refer.get();
   }
 
+  getCollectionSolicitudesFacultad(id) {
+    const col = this.afs.collection('request');
+    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('faculties.'+id, '==', true);
+ 
+    return refer.get();
+  }
+
   estructurarSolicitudesActivas(data) {
     this.datos = [];
     let promise = new Promise((resolve, reject)=>{
@@ -339,7 +367,8 @@ export class SolicitudesNivel3Component implements OnInit {
               editado: elemento.updatedAt.split('T')[0],
               proveedores: elemento.providersInfo,
               path: elemento.path,
-              costo:elemento.costo
+              costo:elemento.costo,
+              acepto: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
             };
             if(elemento.comment){
               Solicitud['comment'] = elemento.comment;
@@ -502,6 +531,7 @@ export class SolicitudesNivel3Component implements OnInit {
 
     this.infosabs = undefined;
 
+
     if(item.idEquipo){
       console.log('paso');
       this.consultaEquipo(item.idEquipo).then(data => {
@@ -567,6 +597,34 @@ export class SolicitudesNivel3Component implements OnInit {
     return promise;
   }
 
+  getRoles() {
+
+    this.role = JSON.parse(localStorage.getItem('rol'));
+    for (const clave in this.role) {
+      if (this.role[clave]) {
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
+        }
+      }
+    }
+  }
+
+  getFaculty(){
+    let promise = new Promise((resolve, reject) => {
+      this.getPersona(this.persona.cfPers).then(doc => {
+        this.faculty = doc.data().faculty;
+        resolve();
+      });   
+    });
+    return promise;
+  }
+  getPersona(persid) {
+    return this.afs.doc('cfPers/' + persid).ref.get();
+  }
   
 
   buscarCoincidenciasSolicitudes(item){
@@ -747,6 +805,10 @@ export class SolicitudesNivel3Component implements OnInit {
 
   cerrarModal(modal){
     $('#'+modal).modal('hide');
+  }
+
+  inicializar(){
+    this.solsel = undefined;
   }
 
   inicializarMante(){

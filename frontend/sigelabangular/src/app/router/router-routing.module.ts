@@ -35,6 +35,7 @@ import { Nivel2Guard } from '../shared/services/guards/nivel2.guard';
 import { Nivel25Guard } from '../shared/services/guards/nivel2-5.guard';
 import { Nivel3Guard } from '../shared/services/guards/nivel3.guard';
 import { InicioAppComponent } from '../modulos/mod-principal/inicio-app/inicio-app.component';
+import { AdminUsuariosComponent } from '../modulos/mod-nivel3/admin-usuarios/admin-usuarios.component';
 
 
 const routes: Routes = [
@@ -59,11 +60,10 @@ const routes: Routes = [
       { path: 'adminproyectos', component: AdminProyectosComponent, canActivate: [Nivel2Guard]},
       { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate: [Nivel2Guard]},
 
-      { path: 'adminlaboratorios25', component: AdminLaboratorios25Component, canActivate: [Nivel25Guard]},
-      { path: 'indicadores25', component: IndicadoresGraficasReportesComponent, canActivate: [Nivel25Guard]},
 
       { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
       { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel3Guard]},
+      { path: 'usuarios', component: AdminUsuariosComponent, canActivate: [Nivel3Guard]},
       { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
       { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}

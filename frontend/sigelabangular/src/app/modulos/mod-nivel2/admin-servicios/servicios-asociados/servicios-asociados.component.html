@@ -294,7 +294,7 @@
                                                 <label class="control-label" for="precio">
                                                     <strong>Precio: $</strong>
                                                 </label>
-                                                <input id="precio" [(ngModel)]="this.srv.cfPrice" name="precio" class="form-control" type="text">
+                                                <input id="precio" [(ngModel)]="this.srv.cfPrice" name="precio" class="form-control" type="number">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -309,7 +309,7 @@
                                             <div class="col-md-12 text-center">    
                                                 <input id="residuonuevoser" name="residuonuevoser" [(ngModel)]="this.srv.residuos" type="checkbox">  
                                                 <label class="control-label" for="descripcion">                 
-                                                    <strong>La Servicio genera residuos</strong>
+                                                    <strong>El Servicio genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
@@ -341,7 +341,7 @@
                                                 </label>
                                                 <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando punto: <br>
                                                    Ejemplo: 10, 5.9 , 25, 4.2 </p>
-                                                <input id="descuento" [(ngModel)]="this.srv.descuento" name="descuento" type="text" class="form-control">
+                                                <input id="descuento" [(ngModel)]="this.srv.descuento" name="descuento" type="number" class="form-control">
                                             </div>
                                         </div>
 
@@ -408,7 +408,7 @@
                                                 <label class="control-label" for="precio">
                                                     <strong>Precio: $</strong>
                                                 </label>
-                                                <input id="precio" [(ngModel)]="this.objectvariation.cfPrice" name="precio" class="form-control" type="text">
+                                                <input id="precio" [(ngModel)]="this.objectvariation.cfPrice" name="precio" class="form-control" type="number">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -630,7 +630,7 @@
                                                 <label class="control-label" for="precio">
                                                     <strong>Precio: $</strong>
                                                 </label>
-                                                <input id="precio" [(ngModel)]="this.srv.cfPrice" name="precio" class="form-control" type="text">
+                                                <input id="precio" [(ngModel)]="this.srv.cfPrice" name="precioSrv" class="form-control" type="number">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -677,7 +677,7 @@
                                                 </label>
                                                 <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando punto: <br>
                                                     Ejemplo: 10, 5.9 , 25, 4.2 </p>
-                                                <input id="descuentoedit" [(ngModel)]="this.srv.descuento" name="descuentoedit" type="text" class="form-control">
+                                                <input id="descuentoedit" [(ngModel)]="this.srv.descuento" name="descuentoedit" type="number" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -773,7 +773,7 @@
                                                 <label class="control-label" for="precio">
                                                     <strong>Precio: $</strong>
                                                 </label>
-                                                <input id="precio" [(ngModel)]="this.objectvariation.cfPrice" name="precio" class="form-control" type="text">
+                                                <input id="precio" [(ngModel)]="this.objectvariation.cfPrice" name="precio" class="form-control" type="number">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -990,7 +990,7 @@
                         <fieldset>
                             <div class="form-group">
                                 <div class="col-md-12 text-center">
-                                    <button (click)="editarServicio()" class="btn btn-danger" type="button">Editar Servicio</button>
+                                    <button (click)="editarServicio()" class="btn btn-danger" type="button">Guardar Cambios</button>
 
                                 </div>
 

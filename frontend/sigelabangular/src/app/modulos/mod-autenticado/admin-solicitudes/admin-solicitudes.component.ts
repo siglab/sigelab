@@ -18,14 +18,14 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   user: any;
 
   // INICIALIZACION DATATABLE SERVICIO ACTIVOS
-  displayedColumns = ['nombre', 'precio', 'estado'];
+  displayedColumns = ['nombre', 'precio', 'edicion', 'estado', 'aceptacion'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
 
 
   // INICIALIZACION DATATABLE SERVICIOS
-  displayedColumns2 = ['nombre', 'precio', 'estado'];
+  displayedColumns2 = ['nombre', 'precio', 'edicion', 'estado', 'aceptacion'];
   dataSource2 = new MatTableDataSource([]);
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
@@ -332,6 +332,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   ocultar() {
     this.moduloinfo = false;
+    this.incializarIconos();
   }
 
   cambiarIcono(box){

@@ -461,7 +461,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
               precio: servicio.cfPrice,
               activo: servicio.active,
               variaciones: this.variations(clave),
-              uid: data.id
+              uid: data.id,
+              residuos: servicio.residuos ? 'Si' : 'No'
              };
              arr.push(serv);
 
