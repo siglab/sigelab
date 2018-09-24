@@ -16,6 +16,8 @@ export class LoginService {
   usuario;
   url2 = '';
   usersid = [];
+  contExec = 0;
+
   constructor(public afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private ruta: Router,
@@ -49,16 +51,25 @@ export class LoginService {
         // }, err => console.log(err));
 
 
-          this.consultarPermisos(this.usuario.uid).then(() => {
+        this.consultarPermisos(this.usuario.uid).then(() => {
 
-            setTimeout(() => {
+
+          this.ruta.navigate(['principal']);
+          swal.close();
+          /*  setTimeout(() => {
 
               this.ruta.navigate(['principal']);
               swal.close();
-            }, 3000);
+            }, 5000); */
 
 
-          });
+        }).catch( err => {
+
+          console.log(err);
+          swal.close();
+          this.login();
+
+        });
 
 
       }).catch(error => {
@@ -68,6 +79,7 @@ export class LoginService {
           title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
           showConfirmButton: true
         });
+        swal.close();
         console.log(error);
       });
 
@@ -168,66 +180,78 @@ export class LoginService {
 
   async consultarPermisos(id) {
 
-    this.getUser(id).subscribe(data => {
-      console.log('entro al metodo consultar permisos', this.usuario.uid);
+    return new Promise((resolve, reject) => {
 
-      console.log('data valuechanges', data);
+      return this.getUser(id).subscribe(data => {
+        console.log('entro al metodo consultar permisos', this.usuario.uid);
 
-      if (data) {
-        console.log('resultado de la data', data);
-        localStorage.setItem('persona', JSON.stringify(data));
-        const rol = data['appRoles'];
-        let rolelength = 0;
-        // tslint:disable-next-line:forin
-        for (const key in rol) {
-          rolelength++;
-        }
+        console.log('data valuechanges', data);
 
-        const permisos = {};
-        let cont = 0;
-        for (const clave in rol) {
-          if (rol[clave]) {
-            return this.getRol(clave).then(datarol => {
-              const permission = datarol.data().permissions;
-              let rollength = 0;
-              let controle = 0;
-              // tslint:disable-next-line:forin
-              for (const key in permission) {
-                rollength++;
-              }
+        if (data) {
+          console.log('resultado de la data', data);
+          localStorage.setItem('persona', JSON.stringify(data));
+          const rol = data['appRoles'];
+          let rolelength = 0;
+          // tslint:disable-next-line:forin
+          for (const key in rol) {
+            rolelength++;
+          }
 
-              if (permission) {
+          const permisos = {};
+          let cont = 0;
+          for (const clave in rol) {
+            if (rol[clave]) {
+              return this.getRol(clave).then(datarol => {
+                const permission = datarol.data().permissions;
+                let rollength = 0;
+                let controle = 0;
                 // tslint:disable-next-line:forin
-                for (const llave in permission) {
-                  permisos[llave] = permission[llave];
-                  controle++;
+                for (const key in permission) {
+                  rollength++;
+                }
 
-                  if (controle === rollength) {
-                    cont++;
+                if (permission) {
+                  // tslint:disable-next-line:forin
+                  for (const llave in permission) {
+                    permisos[llave] = permission[llave];
+                    controle++;
 
-                    console.log(rolelength, cont);
-                    if (rolelength === cont) {
-                      console.log(permisos);
-                      console.log('termino el metodo de rols');
+                    if (controle === rollength) {
+                      cont++;
 
-                      return localStorage.setItem('rol', JSON.stringify(permisos));
+                      console.log(rolelength, cont);
+                      if (rolelength === cont) {
+                        console.log(permisos);
+                        console.log('termino el metodo de rols');
 
 
+                        if (data) {
+                          localStorage.setItem('rol', JSON.stringify(permisos));
+                          resolve({ok : 'termino' });
+                        } else {
+
+                           reject( 'error'  );
+                        }
+
+
+
+                      }
                     }
                   }
                 }
-              }
 
 
-            }).catch(err => console.log('error consultando el rol', err));
+              }).catch(err => console.log('error consultando el rol', err));
+            }
+
+
           }
-
 
         }
 
-      }
-
+      });
     });
+
 
   }
 

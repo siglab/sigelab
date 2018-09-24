@@ -25,17 +25,24 @@ export class AdminQrComponent implements OnInit {
   dispo = false;
   marca_equip;
   precio_equip;
+
   // atributos tabla qr active
   displayedColumnsQr = ['SecuenciaQr'];
   dataSourceQr = new MatTableDataSource();
-
   @ViewChild('paginatorQr') paginatorQr: MatPaginator;
   @ViewChild('sortQr') sortQr: MatSort;
+
+
+   // atributos tabla  laboratorios
+   displayedColumnsFacil = ['nombre'];
+   dataSourceFacil = new MatTableDataSource();
+   @ViewChild('paginatorFacil') paginatorFacil: MatPaginator;
+   @ViewChild('sortFacil') sortFacil: MatSort;
+
+
   // atributos tabla qr inactive
   displayedColumnsQrIn = ['SecuenciaQr'];
   dataSourceQrIn = new MatTableDataSource();
-
-
   @ViewChild('paginatorQrIn') paginatorQrIn: MatPaginator;
   @ViewChild('sortQrIn') sortQrIn: MatSort;
 
@@ -55,6 +62,12 @@ export class AdminQrComponent implements OnInit {
 
       console.log(this.dataSourceQr.data);
 
+    });
+
+    this.qrserv.listCfFacil().subscribe( data => {
+
+         console.log( 'data labs', data);
+        this.dataSourceFacil.data = data;
     });
 
 
@@ -252,7 +265,33 @@ export class AdminQrComponent implements OnInit {
 
   }
 
-  applyFilter(value) {
+
+  cambiardataInac(row) {
+
+    console.log(row);
+    this.secQrUrl = row.secQr;
+    this.router.navigate( ['principal/qrinventario', row.secQr] );
+
+  }
+
+  cambiardataLab(row) {
+
+     console.log(row);
+     this.qrserv.getSpaces( row.relatedSpaces)
+     .then( dataSpace =>  {
+
+      console.log(dataSpace);
+     });
+  }
+
+   applyFilterLab(filterValue: string) {
+
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceFacil.filter = filterValue;
+  }
+
+  applyFilter( value) {
 
   }
 }

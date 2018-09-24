@@ -24,6 +24,7 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
     ref.collection("cfPers").where("email", "==", req.email)
       .get()
       .then((querySnapshot) => {
+
         if (querySnapshot.empty) {
 
           const fecha = new Date();
@@ -324,7 +325,21 @@ exports.consultaQuiUv = functions.https.onRequest((req, res) => {
 
 
 
+//FUNCION QUE BUSCA LA INFORMACION PARA QUIUV POR ID
 
+exports.consultaQuiUvId = functions.https.onRequest((req, res) => {
+
+
+
+  cors(req, res, () => {
+
+    quivId(req.body, res);
+
+  });
+
+
+
+});
 
 
 
@@ -337,14 +352,9 @@ exports.consultaQuiUv = functions.https.onRequest((req, res) => {
 let quiv = (req, res) => {
 
 
-
   var tabla = req.tabla;
 
-
-
   let consulta = '';
-
-
 
   if (tabla == 'espacios') {
 
@@ -373,12 +383,15 @@ let quiv = (req, res) => {
   ref.collection(consulta)
 
     .get()
-
     .then((querySnapshot) => {
 
       const data = []
 
+      if( querySnapshot.empty  ) {
 
+        res.status(404).send({ resp : 'La coleccion no existe' });
+
+      }
 
       // add data from the 5 most recent comments to the array
 
@@ -388,13 +401,77 @@ let quiv = (req, res) => {
 
       });
 
-
-
       if (res) {
 
         res.status(200).send(data);
 
         console.log('hecho');
+
+      } else {
+
+        res.status(500).send({error: 'ocurrio un error'});
+      }
+
+
+
+    });
+
+
+
+};
+
+
+let quivId = (req, res) => {
+
+  var tabla = req.tabla;
+  var id = req.id;
+
+  console.log( 'id de la consulta', id);
+  let consulta = '';
+
+
+
+  if (tabla == 'espacios') {
+
+    consulta = 'space';
+
+  } else if (tabla == 'servicios') {
+
+    consulta = 'cfSrv';
+
+  } else if (tabla == 'pruebas') {
+
+    consulta = 'practice';
+
+  } else if (tabla == 'proyectos') {
+
+    consulta = 'project';
+
+  } else if (tabla == 'personal') {
+
+    consulta = 'cfPers';
+
+  }
+
+  ref.doc(`/${consulta}/${id}`)
+    .get()
+    .then((consulta) => {
+
+
+      if (!consulta.exists) {
+
+        res.status(404).send({ resp : 'El id no existe' });
+      }
+
+
+      if (consulta.exists) {
+
+        res.status(200).send(consulta.data());
+
+        console.log('hecho');
+
+      } else {
+        res.status(500).send({ resp : 'Ocurrio un error inesperado' });
 
       }
 

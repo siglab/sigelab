@@ -127,7 +127,7 @@ export class QrService {
 
   }
 
-  getSpaces(item, idlab) {
+  getSpaces(item, idlab ?) {
     this.arraygeneral = [];
     return new Promise((resolve, reject) => {
       for (const clave in item) {
@@ -266,4 +266,16 @@ export class QrService {
 
     this.afs.doc('qr/' + idQr).set(newqr, { merge: true });
   }
+
+
+
+  listCfFacil() {
+
+   return this.afs.collection( 'cfFacil', ref => ref.where( 'active' , '==' , true ) ).valueChanges();
+
+  }
+
+
+
+
 }

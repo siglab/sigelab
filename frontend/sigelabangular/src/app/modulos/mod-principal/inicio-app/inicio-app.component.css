@@ -15,6 +15,7 @@
 /*# sourceMappingURL=bootstrap.min.css.map */
 
 @import '../../../../assets/css/bootstrap.min.css';
+@import 'https://unpkg.com/@bootstrapstudio/bootstrap-better-nav/dist/bootstrap-better-nav.min.css';
 
 
 /* estyles propios */

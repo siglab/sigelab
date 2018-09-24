@@ -40,6 +40,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   prubsel: any;
   equipsel: any;
 
+  // variables ci check
+  status;
+  disponible;
+  nameProject;
+
+
   moduloinfo = false;
   layer = null;
 
@@ -97,6 +103,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   constructor(private observer: ObserverPrincipalService,
               private query: QuerysPrincipalService,
+              private afs: AngularFirestore,
               private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
@@ -119,7 +126,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
     // trae los datos de los laboratorios
     this.query.getLaboratorios().then(data => {
-     
+
       this.query.estructurarDataLab(data).then(datos => {
 
         this.dataSource.data = datos['data'];
@@ -153,7 +160,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       const auxiliar = [];
       if(this.parametros){
         let cont = 0;
-      
+
         for (const key in this.parametros) {
           if (this.parametros.hasOwnProperty(key)) {
             auxiliar.push({id:cont, value:this.parametros[key]});
@@ -257,27 +264,27 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
           if (result.value) {
             if(reserva == 'convariaciones'){
-    
+
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
                 cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
-                
+
                 cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
-              
+
               cfSrvReserv.precioTotal = ''+this.preciototal;
 
               if(this.usuariounivalle){
                 cfSrvReserv.cfPrice = ''+this.preciocondescuento;
               }else{
                 cfSrvReserv.cfPrice = ''+this.preciototal;
-              
+
               }
 
-             
 
-            } 
+
+            }
 
             if(this.servsel.condiciones.length != 0){
               cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.servsel.condiciones, 'servicio');
@@ -411,12 +418,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.limpiarDatos();
     this.variation = undefined;
     this.servsel = item;
-  
+
     if(item.condiciones.length !== 0){
       this.estructurarCondicionesServicio(item.condiciones, item.parametros);
     }
 
-    
+
     if(this.usuariounivalle){
       if(item.variaciones.length == 0){
         this.descuento = this.servsel.precio*(parseFloat(this.servsel.descuento)/100);
@@ -579,5 +586,27 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.preciocondescuento = 0;
   }
 
+  ciCheck($event) {
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('project').ref;
+      const queryref = collref.where('ciNumber', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'El CI ingresado no se encuentra asociado a ningun proyecto actual';
+          this.disponible = true;
+        } else {
+          console.log(snapShot.docs[0].id);
+          this.nameProject = snapShot.docs[0].data().projectName;
+          this.status = 'Nombre del proyecto: ' + this.nameProject;
+
+        }
+      });
+    }
+  }
 
 }

@@ -26,7 +26,59 @@
 
 
 
-    <div class="col-md-12" style="margin-top: 20px;">
+    <!-- mostrar una vez para cargar espacios -->
+    <div class="col-md-12" style="margin-top: 20px;" *ngIf="seleccionLab">
+
+      <div class=" box box-danger">
+
+        <div>
+          <div class="box-header">
+
+            <i class="fa fa-build"></i>
+
+            <h3 class="box-title">Selecciona un laboratorio</h3>
+          </div>
+          <!-- /.box-header -->
+          <div *ngIf="dataSourceFacil.data.length == 0">
+            <h3> No se logro cargar ningun laboratorio</h3>
+          </div>
+          <div class="box-body" *ngIf="dataSourceFacil.data.length > 0">
+
+            <div class="example-container mat-elevation-z8">
+              <div class="example-header">
+                <mat-form-field>
+                  <input style="outline: none;" matInput (keyup)="applyFilterLab($event.target.value)" placeholder="Buscar laboratorio">
+                </mat-form-field>
+              </div>
+
+              <mat-table #tableFacil [dataSource]="dataSourceFacil" matSort>
+
+                <ng-container matColumnDef="nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.cfName}} </mat-cell>
+                </ng-container>
+
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsFacil"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" style="cursor: pointer;" (click)="cambiardataLab(row)"></mat-row>
+              </mat-table>
+
+              <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                [showFirstLastButtons]="true">
+              </mat-paginator>
+            </div>
+
+          </div>
+          <!-- /.box-body -->
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <div class="col-md-12" style="margin-top: 20px;" *ngIf="!this.seleccionLab" >
 
       <div class="box box-danger">
 
@@ -66,7 +118,8 @@
 
                     </label>
 
-                    <input disabled="true" id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo" class="form-control" type="text">
+                    <input disabled="true" id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo"
+                      class="form-control" type="text">
 
                   </div>
 
@@ -82,7 +135,8 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control" type="text">
+                    <input disabled="true" [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial"
+                      class="form-control" type="text">
 
                   </div>
 
@@ -100,7 +154,8 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion" class="form-control" type="text">
+                    <input disabled="true" [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion" class="form-control"
+                      type="text">
 
                   </div>
 
@@ -118,7 +173,8 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
+                    <input disabled="true" [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control"
+                      type="text">
 
                   </div>
 
@@ -139,7 +195,8 @@
 
                   </label>
 
-                  <input (focusout)="codeCheck($event)" id="invetory" [(ngModel)]="this.iventory" name="codigo" class="form-control" type="text">
+                  <input (focusout)="codeCheck($event)" id="invetory" [(ngModel)]="this.iventory" name="codigo" class="form-control"
+                    type="text">
 
                   <span class="help-block"> {{status}}</span>
 
@@ -169,8 +226,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.responsable" id="escuelaedit" name="responsable" class="form-control"
-                      type="text">
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.responsable" id="escuelaedit" name="responsable"
+                      class="form-control" type="text">
 
 
 
@@ -190,8 +247,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [ngClass]="{disabled : this.formEdit}" [(ngModel)]="inventario.ubicacion" id="escuelaedit"
-                      name="ubicacion" class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [ngClass]="{disabled : this.formEdit}" [(ngModel)]="inventario.ubicacion"
+                      id="escuelaedit" name="ubicacion" class="form-control" type="text">
 
                   </div>
 
@@ -211,8 +268,8 @@
 
                     </label>
 
-                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control"
-                      type="text">
+                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial"
+                      class="form-control" type="text">
 
                   </div>
 
@@ -230,8 +287,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion"
-                      class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit"
+                      name="fechaaceptacion" class="form-control" type="text">
 
                   </div>
 
@@ -249,7 +306,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado"
+                      class="form-control" type="text">
 
                   </div>
 
@@ -273,7 +331,8 @@
 
                       <option value="inicial">Seleccione un espacio</option>
 
-                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place}} </option>
+                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place}}
+                      </option>
 
 
 
