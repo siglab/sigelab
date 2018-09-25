@@ -9,6 +9,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 
 import * as _ from "lodash";
 import * as firebase from 'firebase/app';
+import { Http } from '@angular/http';
 
 
 declare var $: any;
@@ -116,7 +117,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
   moduloNivel2 = false;
   moduloSolicitudes = false;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, private storage:AngularFireStorage) {
+  constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+              private storage:AngularFireStorage, private http:Http) {
   }
 
   ngOnInit() {
@@ -497,6 +499,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     }
 
     this.afs.collection('request').add(this.reserMan).then(data => {
+      this.enviarNotificacionesCorreo();
 
       swal({
         type: 'success',
@@ -652,6 +655,140 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     this.afs.collection('request').add(reser);
   }
+
+
+  enviarNotificacionesCorreo(){
+    let ids = [];
+    let email = [];
+    let cont = 1;
+    this.buscarUsuarioNivel3().then(docs => {
+      docs.forEach(doc => {
+        ids.push(doc.id);
+        email.push(doc.data().email);
+        if(docs.size == cont){
+          this.enviarNotificaciones(ids, this.user.email);
+          this.enviarEmails(email, this.user.email);
+        }else{
+          cont++;
+        }
+      })   
+    });
+
+    ids = [];
+    email = [];
+    cont = 1;
+
+    this.buscarUsuarioNivel25().then(docs => {
+      docs.forEach(doc => {
+        this.buscarPersona(doc.data().cfPers).then(persona => {
+
+          for (const key in this.itemsel.labo.faculties) {
+            if (this.itemsel.labo.faculties.hasOwnProperty(key)) {
+  
+              if(persona.data().faculty[key]){
+                ids.push(doc.id);
+                email.push(doc.data().email);
+              }
+              
+            }
+          }
+          
+          if(docs.size == cont){
+            this.enviarNotificaciones(ids, this.user.email);
+            this.enviarEmails(email, this.user.email);
+          }else{
+            cont++;
+          }
+      
+        });
+
+
+
+      });  
+    });
+
+
+   
+  }
+
+  enviarNotificaciones(notificaciones, emailSolicitante){
+
+    const fecha = new Date().toISOString().split('T')[0];
+
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento:, esta fue solicitada en la fecha ' + 
+                      fecha +
+                      ' por el usuario con el correo: ' + emailSolicitante +'.';
+
+    const obj = {
+      asunto: 'Solicitud de mantenimiento',
+      mensaje:mensaje,
+      fecha: new Date().toISOString().split('T')[0],
+      estado: 'sinver'
+    };
+
+    for (let i = 0; i < notificaciones.length; i++) {
+      const element = notificaciones[i];
+
+      this.enviarNotificacion(element, obj).then(()=>{
+       
+      });
+
+    }
+
+  }
+
+  enviarEmails(emailSolicitante,analistas){
+
+
+    const fecha = new Date();
+    const fechaes = fecha.getDate()+'/'+(fecha.getMonth()+1)+'/'+fecha.getFullYear();
+   
+
+    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
+    let destino = '';
+    if(analistas){
+      for (let i = 0; i < analistas.length; i++) {
+        destino += analistas[i] + ','     
+      }
+    }
+ 
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento: ' + 
+                       ', esta fue solicitada en la fecha ' + fechaes +
+                      ' por el usuario con el correo: ' + emailSolicitante +'.';
+
+    destino += emailSolicitante;
+
+    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+      if(res.status == 200){
+        console.log('notificaciones enviadas');
+      } else {
+        console.log('error notificaciones');
+      }
+    });
+
+  }
+
+  enviarNotificacion(iduser, object){
+    return this.afs.doc('user/'+iduser).collection('notification').add(object);
+  }
+
+  buscarUsuarioNivel3(){
+    const col = this.afs.collection('user');
+    const refer = col.ref.where('appRoles.lCpNW2BmPgMSHCD1EBpT','==',true);
+    return refer.get();
+  }
+
+  buscarUsuarioNivel25(){
+    const col = this.afs.collection('user');
+    const refer = col.ref.where('appRoles.PFhLR4X2n9ybaZU3CR75','==',true);
+    return refer.get();
+  }
+
+  buscarPersona(id){
+    return this.afs.collection('cfPers').doc(id).ref.get();
+  }
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace

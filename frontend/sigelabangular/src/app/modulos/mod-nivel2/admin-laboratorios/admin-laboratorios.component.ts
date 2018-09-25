@@ -88,7 +88,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         extension:false,
         research:false,
         teaching:false
-      }
+      },
+      updatedAt: new Date().toISOString()
     };
 
 
@@ -301,11 +302,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
    let promise = new Promise((resolve,reject)=>{
     this.buscarLab(key).then(labo => {
       const laboratorio = labo.data();
-      if(laboratorio.headquarter){
-        this.buscarSede(laboratorio.headquarter).then(se=>{
+   
+        this.buscarSede(laboratorio.headquarter ? laboratorio.headquarter : 'tygd').then(se=>{
           const sede = se.data();
-          if(laboratorio.subHq){
-            this.buscarSubSede(laboratorio.subHq).then(sub=>{
+     
+            this.buscarSubSede(laboratorio.subHq ? laboratorio.subHq : 'mfij').then(sub=>{
               const subsede = sub.data();
               this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
                 const duenoLab = dueno.data();
@@ -327,8 +328,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       actividad: this.actividades(laboratorio.facilActivity),
                       director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                       iddueno: laboratorio.facilityAdmin,
-                      sede: {id:laboratorio.headquarter, nombre:sede.cfName},
-                      subsede: {id:laboratorio.subHq, nombre:subsede.cfAddrline1},
+                      sede: {id:laboratorio.headquarter, nombre:sede ? sede.cfName : ''},
+                      subsede: {id:laboratorio.subHq, 
+                                nombre:subsede ? subsede.cfAddrline1 : ''},
                       espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
                       espacioPrincipal: laboratorio.mainSpace,
                       telefonos: this.estructuraTelefonos(labo.id),
@@ -368,11 +370,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                 }
               });
             });
-          }
+          
 
 
         });
-      }
+      
 
 
     })

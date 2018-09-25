@@ -168,23 +168,40 @@ export class SolicitudesNivel3Component implements OnInit {
     }
 
     if(this.moduloNivel25){
-      this.getFaculty().then(() => {
-        this.getCollectionSolicitudesFacultad(this.faculty).then(data1 => {
-          this.itemsel = data1;
-          this.estructurarSolicitudesActivas(data1).then(datos => {
-    
-            this.dataSource.data = datos['data'];
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-    
-            this.dataSource2.data = datos['data2'];
-            this.dataSource2.sort = this.sort2;
-            this.dataSource2.paginator = this.paginator2;
-    
-            this.cerrarAlerta();
-          });
-                     
-        });
+      this.getFaculty().then(retor => {
+        let cont = 0;
+        let array = [];
+        for (const key in this.faculty) {
+          if (this.faculty.hasOwnProperty(key)) {
+            this.getCollectionSolicitudesFacultad(key).then(data1 => {
+              data1.forEach(doc => {
+                array.push(doc);
+              });
+              cont++;
+              console.log(retor['size'], cont);
+              if(retor['size'] == cont){
+                this.itemsel = array;
+                console.log(array);
+                this.estructurarSolicitudesActivas(array).then(datos => {
+          
+                  this.dataSource.data = datos['data'];
+                  this.dataSource.sort = this.sort;
+                  this.dataSource.paginator = this.paginator;
+          
+                  this.dataSource2.data = datos['data2'];
+                  this.dataSource2.sort = this.sort2;
+                  this.dataSource2.paginator = this.paginator2;
+          
+                  this.cerrarAlerta();
+                });
+              }
+              
+                         
+            });
+            
+          }
+        }
+      
       })
       
     }
@@ -347,63 +364,65 @@ export class SolicitudesNivel3Component implements OnInit {
 
       const historial = [];
 
-      data.forEach(doc => {
-        const elemento = doc.data();
-        this.getLaboratorio(elemento.cfFacil).then(lab => {
-          this.getEmailUser(elemento.createdBy).then(email => {
-            const Solicitud = {
-              uidsol:doc.id,
-              uidlab: elemento.cfFacil,
-              uidespacio: elemento.headquarter,
-              nombrelab: lab.data().cfName,
-              status: elemento.status,
-              tipo: elemento.maintenanceType,
-              descripcion: elemento.requestDesc,
-              usuario: email.data().email,
-              activo: elemento.active,
-              idEquipo: elemento.relatedEquipments,
-              componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
-              fecha: elemento.createdAt.split('T')[0],
-              editado: elemento.updatedAt.split('T')[0],
-              proveedores: elemento.providersInfo,
-              path: elemento.path,
-              costo:elemento.costo,
-              acepto: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
-            };
-            if(elemento.comment){
-              Solicitud['comment'] = elemento.comment;
-            }
-            if(elemento.relatedEquipments != ''){
-              this.getEquipo(elemento.relatedEquipments).then(equipo => {
-                Solicitud['equipo'] = equipo.data();
-                Solicitud['nombreEquip'] = equipo.data().cfName;
-              });
-            }else{
-              Solicitud['equipo'] = {};
-              Solicitud['nombreEquip'] = 'no especificado';  
-              Solicitud['panicoequipo'] =  elemento.panicoequipo;
-              Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
-  
-            }
-            if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
-              activo.push(Solicitud);
-            } else {
-              historial.push(Solicitud);
-            }
+     for (let index = 0; index < data.length; index++) {
+       const doc = data[index];
+       const elemento = doc.data();
+       this.getLaboratorio(elemento.cfFacil).then(lab => {
+         this.getEmailUser(elemento.createdBy).then(email => {
+           const Solicitud = {
+             uidsol:doc.id,
+             uidlab: elemento.cfFacil,
+             uidespacio: elemento.headquarter,
+             nombrelab: lab.data().cfName,
+             status: elemento.status,
+             tipo: elemento.maintenanceType,
+             descripcion: elemento.requestDesc,
+             usuario: email.data().email,
+             activo: elemento.active,
+             idEquipo: elemento.relatedEquipments,
+             componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
+             fecha: elemento.createdAt.split('T')[0],
+             editado: elemento.updatedAt.split('T')[0],
+             proveedores: elemento.providersInfo,
+             path: elemento.path,
+             costo:elemento.costo,
+             acepto: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
+           };
+           if(elemento.comment){
+             Solicitud['comment'] = elemento.comment;
+           }
+           if(elemento.relatedEquipments != ''){
+             this.getEquipo(elemento.relatedEquipments).then(equipo => {
+               Solicitud['equipo'] = equipo.data();
+               Solicitud['nombreEquip'] = equipo.data().cfName;
+             });
+           }else{
+             Solicitud['equipo'] = {};
+             Solicitud['nombreEquip'] = 'no especificado';  
+             Solicitud['panicoequipo'] =  elemento.panicoequipo;
+             Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
+ 
+           }
+           if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
+             activo.push(Solicitud);
+           } else {
+             historial.push(Solicitud);
+           }
 
-            this.datos.push(Solicitud);
-  
-  
-            if(data.size == (activo.length+historial.length)){
-              resolve({data:activo, data2: historial});
-            }
-  
-  
-    
-          });
-        });
-        
-      });
+           this.datos.push(Solicitud);
+ 
+ 
+           if(data.length == (activo.length+historial.length)){
+             resolve({data:activo, data2: historial});
+           }
+ 
+ 
+   
+         });
+       });
+       
+       
+     }
   
     });
 
@@ -614,10 +633,17 @@ export class SolicitudesNivel3Component implements OnInit {
   }
 
   getFaculty(){
+   let size = 0;
     let promise = new Promise((resolve, reject) => {
       this.getPersona(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
-        resolve();
+        for (const key in this.faculty) {
+          if (this.faculty.hasOwnProperty(key)) {
+            
+            size++;
+          }
+        }
+        resolve({size:size});
       });   
     });
     return promise;

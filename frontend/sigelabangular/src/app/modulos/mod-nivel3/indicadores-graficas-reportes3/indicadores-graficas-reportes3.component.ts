@@ -164,11 +164,17 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
     if(this.moduloNivel25){
       this.getFaculty().then(()=>{
-        this.estructurarFacultad(this.faculty);
-
+        const val = [];
+        for (const key in this.faculty) {
+          if (this.faculty.hasOwnProperty(key)) {
+            this.estructurarFacultad(key);
+            val.push(key);
+          }
+        }
+        this.formSelect.facultad.setValue(val);
         this.formCheckBox.facultad.setValue(true);
         this.formCheckBox.facultad.disable();
-        this.formSelect.facultad.setValue([this.faculty]);
+       
         this.formSelect.facultad.disable();
 
         this.ejecutarGraficos();
@@ -235,32 +241,6 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     });
   }
 
-  estructurarSubSedes(sedes){
-    this.listSelect.subsede = [];
-
-      for (let i = 0; i < this.listSelect.sede.length; i++) {
-        const element = this.listSelect.sede[i];
-
-        this.buscaSubSede(element.id).then(datos=>{
-          datos.forEach(doc => {
-            const sede = doc.data();
-            this.listSelect.subsede.push({
-              id: doc.id,
-              nombre: sede.cfAddrline1 + ' - ' + sede.cfCityTown
-            });
-          });
-
-        });
-      }
-
-      for (let j = 0; j < this.listSelect.subsede.length; j++) {
-        const element = this.listSelect.subsede[j];
-        this.estructurarFacultadesWitSede(element.id);
-      }
-
-
-  }
-
 
   estructurarFacultades(){
     this.listSelect.facultad = [];
@@ -280,7 +260,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
   estructurarFacultad(id){
-    this.listSelect.facultad = [];
+    //this.listSelect.facultad = [];
     this.buscaFacultad(id).then(doc=>{
 
       this.listSelect.facultad.push({
@@ -294,27 +274,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
 
-  estructurarFacultadesWitSede(keysede){
-    this.listSelect.facultad = [];
-    this.buscaFacultadWitSede(keysede).then(datos=>{
-
-      datos.forEach(doc => {
-        const facultad = doc.data();
-        this.listSelect.facultad.push({
-          id:doc.id,
-          nombre: facultad.facultyName
-        });
-
-        this.estructurarDeparamentos(doc.id);
-      });
-
-    });
-  }
-
-
   estructurarDeparamentos(keyfacul){
-    this.listSelect.departamento = [];
-    this.listSelect.escuela = [];
+    if(this.moduloNivel3){
+      this.listSelect.departamento = [];
+      this.listSelect.escuela = [];
+    }
+ 
     this.buscaDepartamento(keyfacul)
     .then(departamento => {
       departamento.forEach(doc => {

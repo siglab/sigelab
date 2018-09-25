@@ -30,59 +30,33 @@ export class LoginService {
   }
 
   login() {
-
-    return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
-      response => {
-        swal({
-          title: 'Cargando un momento...',
-          text: 'espere mientras se cargan los datos',
-          onOpen: () => {
-            swal.showLoading();
-          }
+    let promise = new Promise((resolve, reject) => {
+      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
+        response => {
+  
+          console.log('entro a login');
+          this.usuario = response.user;
+          localStorage.setItem('usuario', JSON.stringify(this.usuario));
+  
+  
+          this.consultarPermisos(this.usuario.uid).then(() => {
+            resolve();
+  
+          }).catch( err => {
+ 
+            console.log(err);
+            reject();
+          });
+  
+  
+        }).catch(error => {
+          // alerta en caso de error
+         reject();
+          console.log(error);
         });
-
-        console.log('entro a login');
-        this.usuario = response.user;
-        localStorage.setItem('usuario', JSON.stringify(this.usuario));
-
-        // this.postCloudFunction(this.usuario).subscribe(data => {
-        //   console.log(data);
-        //   console.log(data.body);
-        // }, err => console.log(err));
-
-
-        this.consultarPermisos(this.usuario.uid).then(() => {
-
-
-          this.ruta.navigate(['principal']);
-          swal.close();
-          /*  setTimeout(() => {
-
-              this.ruta.navigate(['principal']);
-              swal.close();
-            }, 5000); */
-
-
-        }).catch( err => {
-
-          console.log(err);
-          swal.close();
-          this.login();
-
-        });
-
-
-      }).catch(error => {
-        // alerta en caso de error
-        swal({
-          type: 'error',
-          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
-          showConfirmButton: true
-        });
-        swal.close();
-        console.log(error);
-      });
-
+    });
+    
+    return promise;
 
   }
 
@@ -113,17 +87,27 @@ export class LoginService {
   /* login usando email y password */
   loginEmail(email: string, pass: string) {
 
-    return new Promise((resolve, reject) => {
+    let promise = new Promise((resolve, reject) => {
 
       this.afAuth.auth.signInWithEmailAndPassword(email, pass)
         .then(data => {
           console.log('login email');
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
-
-          resolve(data);
+          
+          if(this.usuario){
+            this.consultarPermisos(this.usuario.uid).then(() => {
+              resolve(data); 
+            }).catch( err => {
+              reject();
+            });
+          }else{
+            reject();
+          }
         }).catch(err => reject(err));
     });
+
+    return promise;
   }
 
   /* envia un email a un usuario para restablecer su pass*/
@@ -178,14 +162,11 @@ export class LoginService {
   }
 
 
-  async consultarPermisos(id) {
+  consultarPermisos(id) {
 
-    return new Promise((resolve, reject) => {
+    let promise = new Promise((resolve, reject) => {
 
-      return this.getUser(id).subscribe(data => {
-        console.log('entro al metodo consultar permisos', this.usuario.uid);
-
-        console.log('data valuechanges', data);
+      this.getUser(id).subscribe(data => {
 
         if (data) {
           console.log('resultado de la data', data);
@@ -201,7 +182,7 @@ export class LoginService {
           let cont = 0;
           for (const clave in rol) {
             if (rol[clave]) {
-              return this.getRol(clave).then(datarol => {
+               this.getRol(clave).then(datarol => {
                 const permission = datarol.data().permissions;
                 let rollength = 0;
                 let controle = 0;
@@ -221,19 +202,15 @@ export class LoginService {
 
                       console.log(rolelength, cont);
                       if (rolelength === cont) {
-                        console.log(permisos);
-                        console.log('termino el metodo de rols');
 
-
-                        if (data) {
+                        if (permisos) {
+                          console.log(permisos);
                           localStorage.setItem('rol', JSON.stringify(permisos));
                           resolve({ok : 'termino' });
                         } else {
 
                            reject( 'error'  );
                         }
-
-
 
                       }
                     }
@@ -251,6 +228,8 @@ export class LoginService {
 
       });
     });
+
+    return promise;
 
 
   }

@@ -1,12 +1,27 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Injectable()
 export class ObservablesService {
 
 
 
-  constructor() { }
+  constructor(private afs:AngularFirestore) { }
+
+
+  consultarNotificaciones(id){
+
+    const col = this.afs.collection('user').doc(id).collection('notification',
+     ref => ref.where('estado','==','sinver'));
+
+    return col.snapshotChanges();
+  }
+
+  finalizarNotificacion(user, id){
+
+    return this.afs.collection('user').doc(user).collection('notification').doc(id).update({estado:'visto'});
+  }
 
 
   private object = new BehaviorSubject<any>([]);

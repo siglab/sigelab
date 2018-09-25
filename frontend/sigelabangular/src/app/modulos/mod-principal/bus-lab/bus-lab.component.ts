@@ -318,8 +318,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-              this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email, this.itemsel.personal);
+              this.enviarNotificacionesCorreo();
 
+              this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email, this.itemsel.personal);
+             
               this.limpiarDatos();
 
               this.cerrarModal('myModalLabs');
@@ -363,6 +365,31 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     }
 
   }
+
+  enviarNotificacionesCorreo(){
+    const ids = [];
+    this.query.buscarDirector(this.itemsel.iddirecto).then(doc => {
+      this.query.enviarNotificaciones([doc.data().user], this.servsel.nombre, this.user.email);
+    });
+ 
+    let cont = 0;
+    for (let i = 0; i < this.itemsel.personal.length; i++) {
+      this.query.buscarUsuarioWithEmail(this.itemsel.personal).then(docs => {
+        docs.forEach(doc => {
+          ids.push(doc.id);
+
+          if(this.itemsel.personal.length == cont){
+            this.query.enviarNotificaciones(ids, this.servsel.nombre, this.user.email);
+          }else{
+            cont++;
+          }
+        })   
+      })
+      
+    }
+   
+  }
+
 
   cambiardata(item) {
 

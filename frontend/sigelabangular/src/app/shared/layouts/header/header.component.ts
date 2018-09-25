@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../../modulos/login/login-service/login.service';
 import { Router } from '@angular/router';
 import swal from 'sweetalert2';
+import { ObservablesService } from '../../services/observables.service';
+
+declare var $: any;
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -13,7 +16,9 @@ export class HeaderComponent implements OnInit {
   itemLogout: boolean;
   itemNotificacion: boolean;
 
-  constructor(private ruta: Router, private _loginService: LoginService) { }
+  notifications = [];
+
+  constructor(private ruta: Router, private _loginService: LoginService, private obs:ObservablesService) { }
 
 
 
@@ -26,7 +31,20 @@ export class HeaderComponent implements OnInit {
       console.log(this.usuario);
       // se visualizan los elementos
       this.itemLogout = true;
-      this.itemNotificacion = false;
+      this.itemNotificacion = true;
+
+      this.obs.consultarNotificaciones(this.usuario.uid).subscribe(datos => {
+        for (let index = 0; index < datos.length; index++) {
+          const element = datos[index].payload.doc;
+          this.notifications.push({
+            id:element.id,
+            mensaje:element.data().mensaje,
+            asunto:element.data().asunto,
+            fecha:element.data().fecha
+          });
+        }
+      });
+      
 
     } else {
       // no se visualizan los elementos
@@ -46,6 +64,16 @@ export class HeaderComponent implements OnInit {
 
 
     });
+  }
+
+  cerrarModal(modal){
+    $('#'+modal).modal('hide');
+  }
+
+  finalizar(id, index){
+    this.obs.finalizarNotificacion(this.usuario.uid, id);
+
+    this.notifications.splice(index, 1);
   }
 
 }

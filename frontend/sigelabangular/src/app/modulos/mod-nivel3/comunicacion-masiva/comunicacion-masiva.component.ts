@@ -462,6 +462,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   servicioNotificacion(notificaciones){
 
     const obj = {
+      asunto:'Correo masivo difusion',
       mensaje:this.notificacion,
       fecha: new Date().toISOString(),
       estado: 'sinver'

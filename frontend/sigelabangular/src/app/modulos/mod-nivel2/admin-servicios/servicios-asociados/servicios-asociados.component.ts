@@ -234,10 +234,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
 
   getCollectionServ(labid) {
-    this.collectionReserv = this.afs.collection('cfSrv',
-      ref => ref.where('cfFacil', '==', labid));
+    const col = this.afs.collection('cfSrv');
+    const refer = col.ref.where('cfFacil', '==', labid)
 
-    return this.collectionReserv.ref.get();
+    return refer.get();
   }
 
   getLaboratorio(labid){

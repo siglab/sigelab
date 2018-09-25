@@ -18,28 +18,43 @@ export class LoginComponent implements OnInit {
     private _loginService: LoginService) { }
 
   ngOnInit() {
+
+    if(localStorage.getItem('usuario')){
+      this.ruta.navigate(['principal']);
+    }
   }
 
 
   ingresar() {
     // loading mientras se crea el usuario
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
 
+     this._loginService.login().then( () => {
+       // mensaje de bienvenida
+       swal({
+        type: 'success',
+        title: 'Ingreso correcto',
+        showConfirmButton: true
+      });
 
-    this._loginService.login();
+      this.ruta.navigate(['principal']);
+         
 
+     }).catch(error => {
+        // this.ingresar();
 
-    //  this._loginService.login().then( () => {
-    //    // mensaje de bienvenida
-
-
-
-    //       this.ruta.navigate(['principal' ]).then ( () => {
-    //             swal.close();
-    //       });
-
-    //  }).catch(error => {
-    //     // this.ingresar();
-    //  });
+        swal({
+          type: 'error',
+          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
+          showConfirmButton: true
+        });
+     });
   }
 
 
@@ -60,14 +75,13 @@ export class LoginComponent implements OnInit {
 
         if (ok['emailVerified']) {
 
-          this.ruta.navigate(['principal']).then(() => {
-            swal({
-              type: 'success',
-              title: 'Ingreso correcto',
-              showConfirmButton: true
-            });
-
+          swal({
+            type: 'success',
+            title: 'Ingreso correcto',
+            showConfirmButton: true
           });
+
+          this.ruta.navigate(['principal']);
 
         } else {
 
@@ -84,11 +98,7 @@ export class LoginComponent implements OnInit {
 
 
       }).catch(err => {
-        swal({
-          type: 'error',
-          title: 'Ocurrio un error, verifique sus datos y vuelva a intentarlo',
-          showConfirmButton: true
-        });
+        this.ingresarEmail(em, ps);
 
       });
     }

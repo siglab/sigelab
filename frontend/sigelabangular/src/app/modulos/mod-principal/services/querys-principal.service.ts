@@ -81,6 +81,7 @@ export class QuerysPrincipalService {
                       nombre: elemento.cfName,
                       escuela: elemento.knowledgeArea,
                       inves: elemento.researchGroup,
+                      iddirecto:elemento.facilityAdmin,
                       desc: elemento.cfDescr,
                       direspacio: direspa,
                       director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
@@ -159,6 +160,7 @@ export class QuerysPrincipalService {
                             direspacio: direspa,
                             telefonos: this.estructuraTelefonos(elemento.cfFacil),
                             personal: this.buscarAnalistas(labencontrado.relatedPers),
+                            iddirecto:labencontrado.facilityAdmin,
                             desc: labencontrado.cfDescr,
                             email: labencontrado.otros.email,
                             escuela: labencontrado.knowledgeArea,
@@ -488,13 +490,13 @@ export class QuerysPrincipalService {
 
     console.log(destino);
 
-    // this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-    //   if(res.status == 200){
-    //     console.log('notificaciones enviadas');
-    //   } else {
-    //     console.log('error notificaciones');
-    //   }
-    // });
+    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+      if(res.status == 200){
+        console.log('notificaciones enviadas');
+      } else {
+        console.log('error notificaciones');
+      }
+    });
 
   }
 
@@ -524,8 +526,46 @@ export class QuerysPrincipalService {
     return arra;
   }
 
+
+  enviarNotificaciones(notificaciones, nombreserv, emailSolicitante){
+    console.log(notificaciones);
+    const fecha = new Date().toISOString().split('T')[0];
+
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' + 
+                      nombreserv + ', esta fue solicitada en la fecha ' + fecha +
+                      ' por el usuario con el correo: ' + emailSolicitante +'.';
+
+    const obj = {
+      asunto: 'Solciitud de servicio',
+      mensaje:mensaje,
+      fecha: new Date().toISOString().split('T')[0],
+      estado: 'sinver'
+    };
+
+    for (let i = 0; i < notificaciones.length; i++) {
+      const element = notificaciones[i];
+
+      this.enviarNotificacion(element, obj).then(()=>{
+       
+      });
+
+    }
+
+  }
+
+
   buscarUsuario(id){
     return this.afs.collection('user').doc(id).ref.get();
+  }
+
+  buscarUsuarioWithEmail(email){
+    const col = this.afs.collection('user');
+    const refer = col.ref.where('email', '==', email);
+    return refer.get();
+  }
+
+  enviarNotificacion(iduser, object){
+    return this.afs.doc('user/'+iduser).collection('notification').add(object);
   }
 
 

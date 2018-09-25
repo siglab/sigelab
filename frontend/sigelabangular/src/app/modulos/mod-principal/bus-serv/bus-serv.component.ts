@@ -347,6 +347,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
               }).then(()=>{
+                this.enviarNotificacionesCorreo();
+                
                 this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
 
                 this.limpiarDatos();
@@ -389,6 +391,31 @@ export class BusServComponent implements OnInit, AfterViewInit {
     }
 
   }
+
+  enviarNotificacionesCorreo(){
+    const ids = [];
+    this.query.buscarDirector(this.itemsel.infoLab.iddirecto).then(doc => {
+      this.query.enviarNotificaciones([doc.data().user], this.itemsel.nombreserv, this.user.email);
+    });
+ 
+    let cont = 0;
+    for (let i = 0; i < this.itemsel.infoLab.personal.length; i++) {
+      this.query.buscarUsuarioWithEmail(this.itemsel.infoLab.personal).then(docs => {
+        docs.forEach(doc => {
+          ids.push(doc.id);
+
+          if(this.itemsel.personal.length == cont){
+            this.query.enviarNotificaciones(ids, this.itemsel.nombreserv, this.user.email);
+          }else{
+            cont++;
+          }
+        })   
+      })
+      
+    }
+   
+  }
+
 
 
   loadMap(item) {

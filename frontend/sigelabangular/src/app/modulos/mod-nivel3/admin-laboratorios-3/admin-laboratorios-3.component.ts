@@ -40,11 +40,14 @@ export class AdminLaboratorios3Component implements OnInit {
     email: ''
   };
 
+  
   idlab: any;
 
-  persona:any;
+  persona: any;
 
-  faculty:any;
+  faculty: any;
+
+  size = 0;
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
@@ -119,7 +122,8 @@ export class AdminLaboratorios3Component implements OnInit {
       extension: false,
       research: false,
       teaching: false
-    }
+    },
+    updatedAt: new Date().toISOString()
   };
 
 
@@ -193,7 +197,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
   // VARIABLES DE LA VISTA ADMIN ESPACIOS
 
-  itemselesp:Observable<Array<any>>;
+  itemselesp: Observable<Array<any>>;
   //plano: Observable<any>;
   actividadAct = [];
   dispo;
@@ -305,7 +309,7 @@ export class AdminLaboratorios3Component implements OnInit {
   @ViewChild('sortPers') sortPers: MatSort;
 
   // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'estado', 'codigo' ];
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'estado', 'codigo'];
   dataSourcePersIn = new MatTableDataSource([]);
 
   @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
@@ -315,7 +319,7 @@ export class AdminLaboratorios3Component implements OnInit {
   niveles = [];
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
-    private service: EspaciosService,  private toastr: ToastrService) {
+    private service: EspaciosService, private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -333,7 +337,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
- 
+
     this.estructurarLaboratorios().then(() => {
 
       this.resetIconos();
@@ -367,7 +371,7 @@ export class AdminLaboratorios3Component implements OnInit {
     });
 
     this.idlab = item.uid;
-   
+
 
     this.itemsel = Observable.of(item);
     this.labestructurado = item;
@@ -485,100 +489,109 @@ export class AdminLaboratorios3Component implements OnInit {
 
     let promise = new Promise((resolve, reject) => {
 
+    let contlabo = 0;
 
-    if(this.moduloNivel25){
-      this.getFaculty().then(() => {
-        this.getLaboratoriosFaculty(this.faculty).then(labo => {
+      if (this.moduloNivel25) {
+        this.getFaculty().then(() => {
+          for (const key in this.faculty) {
+            if (this.faculty.hasOwnProperty(key)) {
+ 
+              this.getLaboratoriosFaculty(key).then(labo => {
+
+                contlabo += labo.size;
+                labo.forEach(doc => {
+                  const laboratorio = doc.data();
+
+                  this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+                    const duenoLab = dueno.data();
+                    if (duenoLab) {
+                      if (laboratorio.headquarter) {
+                        this.buscarSede(laboratorio.headquarter).then(se => {
+                          const sede = se.data();
+                          if (laboratorio.subHq) {
+                            this.buscarSubSede(laboratorio.subHq).then(sub => {
+                              const subsede = sub.data();
+                              // convertir boolean a cadena de caracteres para estado del laboratorio
+                              let estadoLab;
+                              if (laboratorio.active === true) {
+                                estadoLab = 'Activo';
+                              } else if (laboratorio.active === false) {
+                                estadoLab = 'Inactivo';
+                              }
+
+                              laboratorioObject = {
+                                uid: doc.id,
+                                nombre: laboratorio.cfName,
+                                descripcion: laboratorio.cfDescr,
+                                escuela: laboratorio.knowledgeArea,
+                                inves: laboratorio.researchGroup,
+                                objectActividad: laboratorio.facilActivity,
+                                actividad: this.actividades(laboratorio.facilActivity),
+                                director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                                iddueno: laboratorio.facilityAdmin,
+                                sede: { id: laboratorio.headquarter, nombre: sede.cfName },
+                                subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
+                                espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
+                                espacioPrincipal: laboratorio.mainSpace,
+                                telefonos: this.estructuraTelefonos(doc.id),
+                                info: { email: laboratorio.otros.email },
+                                equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+                                personal: this.estructurarPersonas(laboratorio.relatedPers),
+                                facultades: this.estructurarFacultades(laboratorio.faculties),
+                                departamentos: this.estructurarDepartamentos(laboratorio.departments),
+                                espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
+                                cambios: laboratorio.suggestedChanges,
+                                disponibilidad: laboratorio.cfAvailability,
+                                condiciones: laboratorio.cfConditions,
+                                estado: estadoLab
+                              };
+
+                              if (laboratorio.facilActivity.extension) {
+                                const aux = this.estructurarServicios(laboratorio.relatedServices);
+                                laboratorioObject['solicitudes'] = aux.arr2;
+                                laboratorioObject['servicios'] = aux.arr;
+                              }
+                              if (laboratorio.facilActivity.research) {
+                                laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
+                              }
+                              if (laboratorio.facilActivity.teaching) {
+                                laboratorioObject['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices).arr4;
+                              }
+
+                              this.cambios = this.pendientes(laboratorio.suggestedChanges);
+
+                              this.laboratoriosEstructurados.push(laboratorioObject);
+
+                              console.log(this.laboratoriosEstructurados.length, contlabo);
+                              if (this.laboratoriosEstructurados.length == contlabo) {                         
+                                resolve();
+                              }                           
+
+                            });
+                          }
+
+
+                        });
+                      }
+
+                    }
+                  });
+
+
+                });
+
+              });
+
+            }
+          }
+
+        });
+      } else {
+        this.getLaboratorios().then(labo => {
           console.log(labo);
           labo.forEach(doc => {
             const laboratorio = doc.data();
-           
-              this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
-                const duenoLab = dueno.data();
-                if (duenoLab) {
-                  if (laboratorio.headquarter) {
-                    this.buscarSede(laboratorio.headquarter).then(se => {
-                      const sede = se.data();
-                      if (laboratorio.subHq) {
-                        this.buscarSubSede(laboratorio.subHq).then(sub => {
-                          const subsede = sub.data();
-                          // convertir boolean a cadena de caracteres para estado del laboratorio
-                          let estadoLab;
-                          if (laboratorio.active === true) {
-                            estadoLab = 'Activo';
-                          } else if (laboratorio.active === false) {
-                            estadoLab = 'Inactivo';
-                          }
-  
-                          laboratorioObject = {
-                            uid: doc.id,
-                            nombre: laboratorio.cfName,
-                            descripcion: laboratorio.cfDescr,
-                            escuela: laboratorio.knowledgeArea,
-                            inves: laboratorio.researchGroup,
-                            objectActividad: laboratorio.facilActivity,
-                            actividad: this.actividades(laboratorio.facilActivity),
-                            director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                            iddueno: laboratorio.facilityAdmin,
-                            sede: { id: laboratorio.headquarter, nombre: sede.cfName },
-                            subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
-                            espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
-                            espacioPrincipal: laboratorio.mainSpace,
-                            telefonos: this.estructuraTelefonos(doc.id),
-                            info: { email: laboratorio.otros.email },
-                            equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                            personal: this.estructurarPersonas(laboratorio.relatedPers),
-                            facultades: this.estructurarFacultades(laboratorio.faculties),
-                            departamentos: this.estructurarDepartamentos(laboratorio.departments),
-                            espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
-                            cambios: laboratorio.suggestedChanges,
-                            disponibilidad: laboratorio.cfAvailability,
-                            condiciones: laboratorio.cfConditions,
-                            estado: estadoLab
-                          };
-  
-                          if (laboratorio.facilActivity.extension) {
-                            const aux = this.estructurarServicios(laboratorio.relatedServices);
-                            laboratorioObject['solicitudes'] = aux.arr2;
-                            laboratorioObject['servicios'] = aux.arr;
-                          }
-                          if (laboratorio.facilActivity.research) {
-                            laboratorioObject['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
-                          }
-                          if (laboratorio.facilActivity.teaching) {
-                            laboratorioObject['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices).arr4;
-                          }
-  
-                          this.cambios = this.pendientes(laboratorio.suggestedChanges);
-  
-                          this.laboratoriosEstructurados.push(laboratorioObject);
-  
-                          if (this.laboratoriosEstructurados.length == labo.size) {
-                            resolve();
-                          }
-  
-  
-                        });
-                      }
-  
-  
-                    });
-                  }
-  
-                }
-              });
-            
-  
-          });
-  
-        });
-      });
-    }else{
-      this.getLaboratorios().then(labo => {
-        console.log(labo);
-        labo.forEach(doc => {
-          const laboratorio = doc.data();
-         
+
             this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
               const duenoLab = dueno.data();
               if (duenoLab) {
@@ -653,12 +666,12 @@ export class AdminLaboratorios3Component implements OnInit {
 
               }
             });
-          
+
+
+          });
 
         });
-
-      });
-    }
+      }
 
     });
 
@@ -719,31 +732,31 @@ export class AdminLaboratorios3Component implements OnInit {
 
     objFacil.cfName = this.labo.nombre;
 
-      this.getFacilityAdmin(this.labo.email).then(data => {
-        if (data.size != 0) {
-          data.forEach(doc => {
-            const keyDirector = doc.id;
-            objFacil.facilityAdmin = keyDirector;
-  
-            this.afs.collection('cfFacil').add(objFacil).then(dato => {
-              swal({
-                type: 'success',
-                title: 'Laboratorio creado',
-                showConfirmButton: true
-              });
+    this.getFacilityAdmin(this.labo.email).then(data => {
+      if (data.size != 0) {
+        data.forEach(doc => {
+          const keyDirector = doc.id;
+          objFacil.facilityAdmin = keyDirector;
+
+          this.afs.collection('cfFacil').add(objFacil).then(dato => {
+            swal({
+              type: 'success',
+              title: 'Laboratorio creado',
+              showConfirmButton: true
             });
           });
+        });
 
-        } else {
-          swal({
-            type: 'error',
-            title: 'el correo ingresado no se encuentra en los registros',
-            showConfirmButton: true
-          });
-        }
-        console.log(objFacil);
+      } else {
+        swal({
+          type: 'error',
+          title: 'el correo ingresado no se encuentra en los registros',
+          showConfirmButton: true
+        });
+      }
+      console.log(objFacil);
 
-      });
+    });
 
   }
 
@@ -754,28 +767,28 @@ export class AdminLaboratorios3Component implements OnInit {
 
   getLaboratorios() {
     const col = this.afs.collection('cfFacil');
-    let refer = col.ref.where('active','==',true);
+    let refer = col.ref.where('active', '==', true);
     return refer.get();
   }
 
-  getLaboratoriosFaculty(id){
+  getLaboratoriosFaculty(id) {
     const col = this.afs.collection('cfFacil');
-    let refer = col.ref.where('active','==',true).where('faculties.'+id,'==', true);
+    let refer = col.ref.where('active', '==', true).where('faculties.' + id, '==', true);
     return refer.get();
   }
 
 
-  getFaculty(){
+  getFaculty() {
     let promise = new Promise((resolve, reject) => {
       this.getPersona(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
         resolve();
-      });   
+      });
     });
     return promise;
   }
 
-  getFacilityAdmin(email){
+  getFacilityAdmin(email) {
     const col = this.afs.collection('cfPers');
     const refer = col.ref.where('email', '==', this.labo.email);
     return refer.get();
@@ -849,14 +862,14 @@ export class AdminLaboratorios3Component implements OnInit {
 
     const arr = [];
     const arr2 = [];
-  
+
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
           this.afs.doc('cfSrv/' + clave).ref.get().then(data => {
-           
+
             const servicio = data.data();
             const serv = {
               nombre: servicio.cfName,
@@ -864,6 +877,7 @@ export class AdminLaboratorios3Component implements OnInit {
               precio: servicio.cfPrice,
               activo: servicio.active,
               variaciones: this.variations(clave),
+              residuos:servicio.residuos ? 'Si' : 'No',
               uid: data.id
             };
             arr.push(serv);
@@ -1297,9 +1311,11 @@ export class AdminLaboratorios3Component implements OnInit {
 
           this.estructurarEnvioActividades();
 
-          if(this.infolab.mainSpace){
-            this.infolab['active'] = true; 
+          if (this.infolab.mainSpace) {
+            this.infolab['active'] = true;
           }
+
+
 
           this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data => {
 
@@ -2141,7 +2157,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
   // METODOS DE LA VISTA ESPACIOS
-     // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
 
     this.role = JSON.parse(localStorage.getItem('rol'));
@@ -2500,9 +2516,9 @@ export class AdminLaboratorios3Component implements OnInit {
       height: 420,
 
       header: {
-        left:   'title',
+        left: 'title',
         center: '',
-        right:  'today prev,next'
+        right: 'today prev,next'
       },
       events: horario,
 
@@ -2510,7 +2526,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     });
 
-    containerEl.fullCalendar('gotoDate', horario[0].start  );
+    containerEl.fullCalendar('gotoDate', horario[0].start);
   }
   // actualiza el laboratorio con una nueva referencia de espacio
   updateFaciliti(idSp) {
@@ -2747,7 +2763,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
         if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56', '2018-09-14T18:56')) {
 
-            encontrado = true;
+          encontrado = true;
         }
 
 
@@ -2757,15 +2773,15 @@ export class AdminLaboratorios3Component implements OnInit {
       if (encontrado) {
 
         this.afs.doc('practice/' + prog.id)
-        .valueChanges()
-        .subscribe(ok => {
+          .valueChanges()
+          .subscribe(ok => {
 
-          console.log('llego este id', prog.id);
+            console.log('llego este id', prog.id);
 
-          this.actividadAct.push(ok['practiceName']);
-          console.log('resultado consulta', ok);
+            this.actividadAct.push(ok['practiceName']);
+            console.log('resultado consulta', ok);
 
-        });
+          });
       }
 
     });
@@ -2823,7 +2839,7 @@ export class AdminLaboratorios3Component implements OnInit {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
         if (item[clave]) {
-            console.log(item[clave]);
+          console.log(item[clave]);
           this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
             const pers = data.payload.data();
 
@@ -2838,8 +2854,8 @@ export class AdminLaboratorios3Component implements OnInit {
                   apellidos: pers.cfFamilyNames,
                   cc: pers.cc ? pers.cc : 'ninguno',
                   activo: item[clave],
-                  tipo: pers.type ? pers.type : 'ninguno'  ,
-                  email: user.email ? user.email : 'ninguno asociado' ,
+                  tipo: pers.type ? pers.type : 'ninguno',
+                  email: user.email ? user.email : 'ninguno asociado',
                   idpers: clave,
                   iduser: pers.user,
                 };
@@ -2854,7 +2870,7 @@ export class AdminLaboratorios3Component implements OnInit {
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
-                tipo: pers.type ?  pers.type : ' ninguno' ,
+                tipo: pers.type ? pers.type : ' ninguno',
                 email: pers.email,
                 idpers: clave,
                 iduser: pers.user,
@@ -2890,9 +2906,9 @@ export class AdminLaboratorios3Component implements OnInit {
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   activo: item[clave],
-                  cc: pers.cc ? pers.cc : 'ninguno' ,
-                  tipo: pers.type ? pers.type : 'ninguno' ,
-                  email: dataper.payload.data().email ?  dataper.payload.data().email : 'ninguno asociado',
+                  cc: pers.cc ? pers.cc : 'ninguno',
+                  tipo: pers.type ? pers.type : 'ninguno',
+                  email: dataper.payload.data().email ? dataper.payload.data().email : 'ninguno asociado',
                   roles: dataper.payload.data().appRoles,
                   idpers: clave,
                   iduser: pers.user,
@@ -2908,7 +2924,7 @@ export class AdminLaboratorios3Component implements OnInit {
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
                 tipo: pers.type,
-                cc: pers.cc ?  pers.cc : 'ninguno' ,
+                cc: pers.cc ? pers.cc : 'ninguno',
                 email: 'ninguno',
                 roles: 'ninguno',
                 idpers: clave,
