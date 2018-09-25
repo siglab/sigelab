@@ -398,7 +398,7 @@
 
                       <option value="inicial">Seleccione un espacio</option>
 
-                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place}}
+                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place? item.spaceData.place : item.spaceData.build   }}
                       </option>
 
 

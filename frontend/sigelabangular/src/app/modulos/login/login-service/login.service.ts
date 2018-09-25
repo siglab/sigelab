@@ -33,29 +33,29 @@ export class LoginService {
     let promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
         response => {
-  
+
           console.log('entro a login');
           this.usuario = response.user;
           localStorage.setItem('usuario', JSON.stringify(this.usuario));
-  
-  
+
+
           this.consultarPermisos(this.usuario.uid).then(() => {
             resolve();
-  
+
           }).catch( err => {
- 
+
             console.log(err);
             reject();
           });
-  
-  
+
+
         }).catch(error => {
           // alerta en caso de error
          reject();
           console.log(error);
         });
     });
-    
+
     return promise;
 
   }
@@ -87,7 +87,7 @@ export class LoginService {
   /* login usando email y password */
   loginEmail(email: string, pass: string) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
 
       this.afAuth.auth.signInWithEmailAndPassword(email, pass)
         .then(data => {
@@ -95,13 +95,13 @@ export class LoginService {
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
 
-          if(this.usuario){
+          if (this.usuario) {
             this.consultarPermisos(this.usuario.uid).then(() => {
-              resolve(data); 
+              resolve(data);
             }).catch( err => {
               reject();
             });
-          }else{
+          } else {
             reject();
           }
         }).catch(err => reject(err));
@@ -164,7 +164,7 @@ export class LoginService {
 
   consultarPermisos(id) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
 
       this.getUser(id).subscribe(data => {
 

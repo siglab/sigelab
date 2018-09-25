@@ -1,0 +1,144 @@
+[debug] [2018-09-25T17:05:11.439Z] ----------------------------------------------------------------------
+[debug] [2018-09-25T17:05:11.443Z] Command:       /usr/bin/node /usr/bin/firebase deploy
+[debug] [2018-09-25T17:05:11.444Z] CLI Version:   4.2.0
+[debug] [2018-09-25T17:05:11.444Z] Platform:      linux
+[debug] [2018-09-25T17:05:11.444Z] Node Version:  v8.12.0
+[debug] [2018-09-25T17:05:11.444Z] Time:          Tue Sep 25 2018 12:05:11 GMT-0500 (-05)
+[debug] [2018-09-25T17:05:11.444Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-09-25T17:05:11.465Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-09-25T17:05:11.466Z] > authorizing via signed-in user
+[debug] [2018-09-25T17:05:11.469Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-09-25T17:05:11.469Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+
+[debug] [2018-09-25T17:05:12.029Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:12.036Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/sigelab-univalle  
+ 
+[debug] [2018-09-25T17:05:13.084Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'sigelab-univalle'...
+[info] 
+[info] i  deploying database, storage, firestore, functions, hosting
+[info] ✔  functions: Finished running predeploy script.
+[info] i  database: checking rules syntax...
+[debug] [2018-09-25T17:05:16.088Z] >>> HTTP REQUEST PUT https://sigelab-univalle.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null"
+  }
+}
+[debug] [2018-09-25T17:05:16.807Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules syntax for database sigelab-univalle is valid
+[debug] [2018-09-25T17:05:16.810Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/sigelab-univalle  
+ 
+[debug] [2018-09-25T17:05:18.229Z] <<< HTTP RESPONSE 200
+[info] i  storage: checking storage.rules for compilation errors...
+[debug] [2018-09-25T17:05:18.233Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/sigelab-univalle:test  
+
+[debug] [2018-09-25T17:05:18.750Z] <<< HTTP RESPONSE 200
+[info] ✔  storage: rules file storage.rules compiled successfully
+[info] i  firestore: checking firestore.rules for compilation errors...
+[debug] [2018-09-25T17:05:18.755Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/sigelab-univalle:test  
+
+[debug] [2018-09-25T17:05:19.085Z] <<< HTTP RESPONSE 200
+[info] ✔  firestore: rules file firestore.rules compiled successfully
+[debug] [2018-09-25T17:05:19.090Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "firebase-admin": "~6.0.0",
+    "firebase-functions": "^2.0.3",
+    "nodemailer": "^4.6.8"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2018-09-25T17:05:19.092Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/sigelab-univalle?view=CONSUMER_VIEW  
+ 
+[debug] [2018-09-25T17:05:19.094Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/sigelab-univalle?view=CONSUMER_VIEW  
+ 
+[debug] [2018-09-25T17:05:20.623Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2018-09-25T17:05:20.678Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:20.679Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/sigelab-univalle  
+ 
+[debug] [2018-09-25T17:05:21.604Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:21.605Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/803777606972:getServerAppConfig  
+ 
+[debug] [2018-09-25T17:05:22.293Z] <<< HTTP RESPONSE 200
+[info] i  storage: uploading rules storage.rules...
+[debug] [2018-09-25T17:05:22.302Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/sigelab-univalle/rulesets  
+
+[debug] [2018-09-25T17:05:22.840Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:22.840Z] [rules] created ruleset projects/sigelab-univalle/rulesets/577844db-58ef-44e2-ad5f-619a50a7ac1a
+[info] i  firestore: uploading rules firestore.rules...
+[debug] [2018-09-25T17:05:22.843Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/sigelab-univalle/rulesets  
+
+[debug] [2018-09-25T17:05:22.845Z] >>> HTTP REQUEST GET https://firestore.googleapis.com/v1beta1/projects/sigelab-univalle/databases/(default)/indexes  
+ 
+[debug] [2018-09-25T17:05:23.342Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:23.342Z] [rules] created ruleset projects/sigelab-univalle/rulesets/13702311-97ed-4d0c-b276-b671f70fdf2b
+[debug] [2018-09-25T17:05:23.720Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[info] i  functions: packaged functions (741.7 KB) for uploading
+[debug] [2018-09-25T17:05:24.560Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/sigelab-univalle/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2018-09-25T17:05:25.564Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:25.566Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-7a17401d-1f90-402c-aa81-edd244898aaf/6e529e2c-5a27-4bd6-aa95-64bdf422929e.zip?GoogleAccessId=service-803777606972@gcf-admin-robot.iam.gserviceaccount.com&Expires=1537896925&Signature=qXWb3vZJHa3u%2B4VdavTP5HFcB97e7fFqueklb4BnOkCGa2e%2FbUycdvrGbygCuEGEckO4UexiCgPpoi%2BYS8KyfiIXlwg6q40MNiAScwZxq3IP4E6u3lYRn3TinH5q71esAn2z7Fa8Ffx9M5zByr6sNucLxoq4Oxr%2BCaOi8gE6sC8KHBKbE9SPRz11qJ5KycjEe25AXRSIBswg2G1kBm0nvY0uePO1H59AobxHBzghOZSFZjnHaoD7IL5be%2BWGaSKvIRjpZXo%2BD0PVqxTQ4oJBTaLOEcEiHff83yuU62s4nNNFUE5dqssXUg6O7n3TH5HM10Jx5ty%2Bz9fpt2kBSoAlGQ%3D%3D  
+
+[debug] [2018-09-25T17:05:27.047Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting[sigelab-univalle]: beginning deploy...
+[info] i  hosting[sigelab-univalle]: found 0 files in dist
+[info] ✔  hosting[sigelab-univalle]: file upload complete
+[debug] [2018-09-25T17:05:27.062Z] [hosting] deploy completed after 12ms
+[info] i  database: releasing rules...
+[debug] [2018-09-25T17:05:27.659Z] >>> HTTP REQUEST PUT https://sigelab-univalle.firebaseio.com/.settings/rules.json  
+ {
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null"
+  }
+}
+[debug] [2018-09-25T17:05:28.421Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules for database sigelab-univalle released successfully
+[debug] [2018-09-25T17:05:28.423Z] [rules] releasing firebase.storage/sigelab-univalle.appspot.com with ruleset projects/sigelab-univalle/rulesets/577844db-58ef-44e2-ad5f-619a50a7ac1a
+[debug] [2018-09-25T17:05:28.424Z] >>> HTTP REQUEST PATCH https://firebaserules.googleapis.com/v1/projects/sigelab-univalle/releases/firebase.storage/sigelab-univalle.appspot.com  
+
+[debug] [2018-09-25T17:05:29.034Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:29.035Z] [rules] updated release projects/sigelab-univalle/releases/firebase.storage/sigelab-univalle.appspot.com
+[info] ✔  storage: released rules storage.rules to firebase.storage/sigelab-univalle.appspot.com
+[debug] [2018-09-25T17:05:29.035Z] [rules] releasing cloud.firestore with ruleset projects/sigelab-univalle/rulesets/13702311-97ed-4d0c-b276-b671f70fdf2b
+[debug] [2018-09-25T17:05:29.036Z] >>> HTTP REQUEST PATCH https://firebaserules.googleapis.com/v1/projects/sigelab-univalle/releases/cloud.firestore  
+
+[debug] [2018-09-25T17:05:29.609Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-25T17:05:29.609Z] [rules] updated release projects/sigelab-univalle/releases/cloud.firestore
+[info] ✔  firestore: released rules firestore.rules to cloud.firestore
+[debug] [2018-09-25T17:05:29.616Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/sigelab-univalle/locations/-/functions  
+ 
+[debug] [2018-09-25T17:05:30.654Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating Node.js 6 function helloWorld(us-central1)...
+[debug] [2018-09-25T17:05:30.660Z] Trigger is:  {"httpsTrigger":{}}
+[info] i  functions: updating Node.js 6 function CreateUser(us-central1)...
+[debug] [2018-09-25T17:05:30.661Z] Trigger is:  {"eventTrigger":{"resource":"projects/sigelab-univalle","eventType":"providers/firebase.auth/eventTypes/user.create","service":"firebaseauth.googleapis.com"}}
+[info] i  functions: updating Node.js 6 function enviarCorreo(us-central1)...
+[debug] [2018-09-25T17:05:30.662Z] Trigger is:  {"httpsTrigger":{}}
+[info] i  functions: updating Node.js 6 function consultaQuiUv(us-central1)...
+[debug] [2018-09-25T17:05:30.663Z] Trigger is:  {"httpsTrigger":{}}
+[info] i  functions: updating Node.js 6 function consultaQuiUvId(us-central1)...
+[debug] [2018-09-25T17:05:30.664Z] Trigger is:  {"httpsTrigger":{}}
+[info] 
+The following functions are found in your project but do not exist in your local source code:
+	disablePractices(us-central1)
+
+If you are renaming a function or changing its region, it is recommended that you create the new function first before deleting the old one to prevent event loss. For more info, visit https://firebase.google.com/docs/functions/manage-functions#modify
+
