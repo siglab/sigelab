@@ -5,6 +5,7 @@ import swal from 'sweetalert2';
 import { URLAPI } from '../../../config';
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators/map';
 
 @Injectable()
 export class QrService {
@@ -33,6 +34,8 @@ export class QrService {
 
   // consulta los datos en sabs
   postSabs(cod) {
+
+    console.log('si llego el codigo' , cod);
     const body = {
       codInventario: cod,
       codLab: '5646',
@@ -271,7 +274,13 @@ export class QrService {
 
   listCfFacil() {
 
-   return this.afs.collection( 'cfFacil', ref => ref.where( 'active' , '==' , true ) ).valueChanges();
+   return this.afs.collection( 'cfFacil', ref => ref.where( 'active' , '==' , true ) ).snapshotChanges().pipe(
+    map(actions => actions.map(a => {
+      const data = a.payload.doc.data();
+      const id = a.payload.doc.id;
+      return { id, ... data };
+    }))
+  );
 
   }
 

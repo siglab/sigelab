@@ -54,13 +54,13 @@ export class LoginService {
         this.consultarPermisos(this.usuario.uid).then(() => {
 
 
-          this.ruta.navigate(['principal']);
+          // this.ruta.navigate(['principal']);
           swal.close();
-          /*  setTimeout(() => {
+            setTimeout(() => {
 
               this.ruta.navigate(['principal']);
               swal.close();
-            }, 5000); */
+            }, 5000);
 
 
         }).catch( err => {
