@@ -22,6 +22,7 @@ declare var $: any;
 })
 export class AdminEspaciosComponent implements OnInit, OnDestroy {
   plano: Observable<any>;
+  activitySpaces = [];
   actividadAct = [];
   dispo;
   idnewSp;
@@ -354,7 +355,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.getPrgramming(element).then(() => {
 
             this.totalOcupacion();
-            this.getActividadAct();
+            this.getActividadAct().then(res => {
+
+              console.log('array resultado', res);
+            });
 
           });
 
@@ -504,9 +508,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       height: 420,
 
       header: {
-        left:   'title',
+        left: 'title',
         center: '',
-        right:  'today prev,next'
+        right: 'today prev,next'
       },
       events: horario,
 
@@ -514,7 +518,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     });
 
-    containerEl.fullCalendar('gotoDate', horario[0].start  );
+    containerEl.fullCalendar('gotoDate', horario[0].start);
   }
   // actualiza el laboratorio con una nueva referencia de espacio
   updateFaciliti(idSp) {
@@ -704,7 +708,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     return new Promise((resolve, reject) => {
       const now = moment().format();
-      console.log( 'momento actual', now);
+      console.log('momento actual', now);
       let estudiantesPractica = 0;
       // recorrer cada una de las programaciones del espacio
       this.noEsPrac.forEach(programing => {
@@ -732,12 +736,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     this.getTotalLab().then((personalLab: number) => {
 
-      console.log('personal actual en el laboratorio', personalLab  );
+      console.log('personal actual en el laboratorio', personalLab);
       this.getTotalEstPrac().then((estudiantesPract: number) => {
-        console.log('personal actual en la practica ', estudiantesPract  );
-        this.ocupacionAct = (personalLab ? personalLab : 0 ) + ( estudiantesPract ? estudiantesPract : 0 );
+        console.log('personal actual en la practica ', estudiantesPract);
+        this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
         // tslint:disable-next-line:radix
-        this.space.indxSa = ( this.ocupacionAct / this.space.capacity );
+        this.space.indxSa = (this.ocupacionAct / this.space.capacity);
 
       });
     });
@@ -746,38 +750,49 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   getActividadAct() {
 
     this.actividadAct = [];
-    let encontrado = false;
-    console.log('array para la consulta', this.noEsPrac);
 
-    this.noEsPrac.forEach(prog => {
+     const actSpaces = [];
 
-      prog.horario.forEach(fecha => {
+    // let encontrado = false;
 
-        const now = moment().format();
+    return new Promise((resolve, reject) => {
 
-        if (moment(now).isBetween(fecha.start, fecha.end)) {
+      console.log('array para la consulta', this.noEsPrac);
 
-            encontrado = true;
-        }
+      this.noEsPrac.forEach(prog => {
 
+        prog.horario.forEach(fecha => {
+
+          const now = moment().format();
+
+          if (moment(now).isBetween(fecha.start, fecha.end)) {
+
+            // console.log(fecha.start);
+
+            actSpaces.push(prog.id);
+
+          }
+        });
+      });
+
+      resolve( actSpaces);
+    });
+
+
+    // console.log( 'arreglo de practicas act', this.activitySpaces);
+
+    /*
+    this.afs.doc('practice/' + prog.id)
+      .valueChanges()
+      .subscribe(ok => {
+
+        console.log('llego este id', prog.id);
+
+        this.actividadAct.push(ok['practiceName']);
+        console.log('resultado consulta', ok);
 
       });
 
-
-      if (encontrado) {
-
-        this.afs.doc('practice/' + prog.id)
-        .valueChanges()
-        .subscribe(ok => {
-
-          console.log('llego este id', prog.id);
-
-          this.actividadAct.push(ok['practiceName']);
-          console.log('resultado consulta', ok);
-
-        });
-      }
-
-    });
+      */
   }
 }

@@ -94,7 +94,7 @@ export class LoginService {
           console.log('login email');
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
-          
+
           if(this.usuario){
             this.consultarPermisos(this.usuario.uid).then(() => {
               resolve(data); 

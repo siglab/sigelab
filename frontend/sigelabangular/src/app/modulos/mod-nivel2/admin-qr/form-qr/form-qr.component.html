@@ -78,7 +78,7 @@
 
 
 
-    <div class="col-md-12" style="margin-top: 20px;" *ngIf="!this.seleccionLab" >
+    <div class="col-md-12" style="margin-top: 20px;" *ngIf="!this.seleccionLab">
 
       <div class="box box-danger">
 
@@ -135,8 +135,8 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial"
-                      class="form-control" type="text">
+                    <input disabled="true" [(ngModel)]="inventario.costoinicial" name="costoinicial" class="form-control"
+                      type="text">
 
                   </div>
 
@@ -150,16 +150,86 @@
 
                     <label class="control-label" for="nombreprub">
 
-                      <strong> Marca: :</strong>
+                      <strong> Marca: </strong>
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion" class="form-control"
+                    <input disabled="true" [(ngModel)]="inventario.marca" name="marca" class="form-control" type="text">
+
+                  </div>
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                  <div class="col-md-6">
+
+                    <label class="control-label" for="nombreprub">
+
+                      <strong> Fecha Aceptacion :</strong>
+
+                    </label>
+
+                    <input disabled="true" [(ngModel)]="fecha_Aceptacion" name="fechaaceptacion" class="form-control"
                       type="text">
 
                   </div>
 
                 </div>
+
+
+                <div class="form-group">
+
+                  <div class="col-md-6">
+
+                    <label class="control-label" for="nombreprub">
+
+                      <strong> Responsable :</strong>
+
+                    </label>
+
+                    <input disabled="true" [(ngModel)]="responsable" name="responsable" class="form-control" type="text">
+
+                  </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <div class="col-md-6">
+
+                    <label class="control-label" for="nombreprub">
+
+                      <strong> Ubicación :</strong>
+
+                    </label>
+
+                    <input disabled="true" [(ngModel)]="ubicacion" name="ubicacion" class="form-control" type="text">
+
+                  </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <div class="col-md-6">
+
+                    <label class="control-label" for="nombreprub">
+
+                      <strong> Edificio :</strong>
+
+                    </label>
+
+                    <input disabled="true" [(ngModel)]="edificio" name="edificio" class="form-control" type="text">
+
+                  </div>
+
+                </div>
+
 
 
 
@@ -209,9 +279,6 @@
               <!-- formulario de consulta sabs -->
 
               <div *ngIf="this.formulario">
-
-
-
 
 
 

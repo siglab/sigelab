@@ -30,6 +30,7 @@ export class FormQrComponent implements OnInit {
   statusComponent;
   formularioComp = false;
   arrComponents = [];
+
   //  modelo inventario
   inventario = {
     codeinventario: '',
@@ -40,6 +41,15 @@ export class FormQrComponent implements OnInit {
     estado: '',
     espacio: ''
   };
+
+  //  campos adicionales sabs
+  fecha_Aceptacion;
+  responsable;
+  ubicacion;
+  edificio;
+  cod_lab;
+
+
 
 
   componente = {
@@ -76,10 +86,7 @@ export class FormQrComponent implements OnInit {
       this.dataSourceFacil.data = data;
     });
 
-
-
     this.getRoles();
-
 
     this._Activatedroute.params.subscribe(params => {
       this.id = params['id'];
@@ -92,13 +99,31 @@ export class FormQrComponent implements OnInit {
     });
 
     this.formFirebase = false;
+
     this.qrser.getIdQr(this.id).then(res => {
       console.log('trae algo', res);
+
+      // oculta o muestra partes del template si existen datos asociados
       this.formFirebase = true;
+      this.seleccionLab = false;
+
       this.inventario.codeinventario = res['inventory'];
       this.inventario.marca = res['brand'];
-      this.inventario.costoinicial = res['price'];
       this.inventario.estado = res['active'];
+
+      this.qrser.postSabs(res['inventory']).subscribe(data => {
+
+        console.log('datos sabs', data);
+
+        this.fecha_Aceptacion = data.inventario.fechaAceptacion;
+        this.responsable = data.inventario.responsable;
+        this.ubicacion = data.inventario.ubicacion;
+        this.edificio = data.inventario.edificio;
+        this.cod_lab = data.inventario.codLab;
+
+      }, err => console.log('error conectando sabs', err)
+
+      );
 
     }).catch(err => { console.log(err); });
   }
@@ -320,15 +345,15 @@ export class FormQrComponent implements OnInit {
 
   cambiardataLab(row) {
 
-    console.log(row.relatedSpaces);
-    this.qrserv.getSpaces( row.relatedSpaces)
-    .then( (dataSpace: any) =>  {
-      this.spaces = [];
-      this.spaces = dataSpace;
-     console.log( 'espacio asociado',  dataSpace);
+    console.log(row.id);
+    this.qrserv.getSpaces(row.relatedSpaces , row.id)
+      .then((dataSpace: any) => {
+        this.spaces = [];
+        this.spaces = dataSpace;
+        console.log('espacio asociado', dataSpace);
 
-     this.seleccionLab = false;
-    });
- }
+        this.seleccionLab = false;
+      });
+  }
 
 }
