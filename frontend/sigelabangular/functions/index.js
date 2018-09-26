@@ -603,3 +603,25 @@ exports.activePractices = functions.https.onRequest((req, res) => {
   }
 
 });
+
+exports.dbonUpdate =  functions.firestore
+.document('cfFacil/{labId}').onUpdate((change, context) => {
+
+  const newValue = change.after.data();
+
+  // ...or the previous value before this update
+  const previousValue = change.before.data();
+ 
+
+  // access a particular field as you would any JS property
+  const authVar = context.params; // Auth information for the user.
+  // const authType = context.authType; // Permissions level for the user.
+  const contexto = context;
+  const pathId = context.params.labId; // The ID in the Path.
+  const eventId = context.eventId; // A unique event ID.
+  const timestamp = context.timestamp; // The timestamp at which the event happened.
+  const eventType = context.eventType; // The type of the event that triggered this function.
+  const resource = context.resource; // The resource which triggered the event.
+  console.log('pathId',pathId,'newValue*:',newValue,'previousValue*:',previousValue);
+  // ...
+});
