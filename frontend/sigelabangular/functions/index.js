@@ -502,13 +502,14 @@ exports.disablePractices = functions.https.onRequest((req, res) => {
         return data;
 
       }).then((data) => {
-        return new Promise((resolve, reject) => {
+
+        var promisePractices = new Promise((resolve, reject) => {
           var datalength = Object.keys(data).length;
           var cont = 0;
 
           for (const key in data) {
             if (data.hasOwnProperty(key)) {
-
+              var datalab = data[key];
               ref.doc(`practice/${key}/`)
                 .update({ active: false })
                 .then(function (done) {
@@ -530,8 +531,48 @@ exports.disablePractices = functions.https.onRequest((req, res) => {
           }
         })
 
-      })
+        var promisecfFacil = new Promise((resolve, reject) => {
 
+          var datalength = Object.keys(data).length;
+          var cont = 0;
+
+          for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+              var datalab = data[key];
+              var pathPractice = `cfFacil/${datalab.cfFacil}/`;
+           
+              var practica = {
+                relatedPractices: {}
+              };
+              practica.relatedPractices[key] = false;
+
+
+              ref.doc(pathPractice)
+                .set(practica, { merge: true })
+                .then(function (done) {
+
+                  cont++;
+                  // console.log(datalength,cont);
+
+                  if (cont == datalength) {
+                    resolve();
+                  }
+
+                }).catch(error => {
+                  // console.log(datalength,cont)
+
+                  reject(error);
+                });
+            }
+          }
+        })
+        return Promise.all([promisePractices, promisecfFacil]).then((data) => {
+          console.log('success')
+        }).catch(error => {
+          return error;
+        });
+
+      })
       .then((data) => {
         res.send('success');
 
@@ -604,24 +645,24 @@ exports.activePractices = functions.https.onRequest((req, res) => {
 
 });
 
-exports.dbonUpdate =  functions.firestore
-.document('cfFacil/{labId}').onUpdate((change, context) => {
+exports.dbonUpdate = functions.firestore
+  .document('cfFacil/{labId}').onUpdate((change, context) => {
 
-  const newValue = change.after.data();
+    const newValue = change.after.data();
 
-  // ...or the previous value before this update
-  const previousValue = change.before.data();
- 
+    // ...or the previous value before this update
+    const previousValue = change.before.data();
 
-  // access a particular field as you would any JS property
-  const authVar = context.params; // Auth information for the user.
-  // const authType = context.authType; // Permissions level for the user.
-  const contexto = context;
-  const pathId = context.params.labId; // The ID in the Path.
-  const eventId = context.eventId; // A unique event ID.
-  const timestamp = context.timestamp; // The timestamp at which the event happened.
-  const eventType = context.eventType; // The type of the event that triggered this function.
-  const resource = context.resource; // The resource which triggered the event.
-  console.log('pathId',pathId,'newValue*:',newValue,'previousValue*:',previousValue);
-  // ...
-});
+
+    // access a particular field as you would any JS property
+    const authVar = context.params; // Auth information for the user.
+    // const authType = context.authType; // Permissions level for the user.
+    const contexto = context;
+    const pathId = context.params.labId; // The ID in the Path.
+    const eventId = context.eventId; // A unique event ID.
+    const timestamp = context.timestamp; // The timestamp at which the event happened.
+    const eventType = context.eventType; // The type of the event that triggered this function.
+    const resource = context.resource; // The resource which triggered the event.
+    console.log('pathId', pathId, 'newValue*:', newValue, 'previousValue*:', previousValue);
+    // ...
+  });
