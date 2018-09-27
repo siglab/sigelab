@@ -602,13 +602,14 @@ exports.activePractices = functions.https.onRequest((req, res) => {
         return data;
 
       }).then((data) => {
-        return new Promise((resolve, reject) => {
+
+        var promisePractices = new Promise((resolve, reject) => {
           var datalength = Object.keys(data).length;
           var cont = 0;
 
           for (const key in data) {
             if (data.hasOwnProperty(key)) {
-
+              var datalab = data[key];
               ref.doc(`practice/${key}/`)
                 .update({ active: true })
                 .then(function (done) {
@@ -630,8 +631,48 @@ exports.activePractices = functions.https.onRequest((req, res) => {
           }
         })
 
-      })
+        var promisecfFacil = new Promise((resolve, reject) => {
 
+          var datalength = Object.keys(data).length;
+          var cont = 0;
+
+          for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+              var datalab = data[key];
+              var pathPractice = `cfFacil/${datalab.cfFacil}/`;
+           
+              var practica = {
+                relatedPractices: {}
+              };
+              practica.relatedPractices[key] = true;
+
+
+              ref.doc(pathPractice)
+                .set(practica, { merge: true })
+                .then(function (done) {
+
+                  cont++;
+                  // console.log(datalength,cont);
+
+                  if (cont == datalength) {
+                    resolve();
+                  }
+
+                }).catch(error => {
+                  // console.log(datalength,cont)
+
+                  reject(error);
+                });
+            }
+          }
+        })
+        return Promise.all([promisePractices, promisecfFacil]).then((data) => {
+          console.log('success')
+        }).catch(error => {
+          return error;
+        });
+
+      })
       .then((data) => {
         res.send('success');
 
@@ -664,5 +705,11 @@ exports.dbonUpdate = functions.firestore
     const eventType = context.eventType; // The type of the event that triggered this function.
     const resource = context.resource; // The resource which triggered the event.
     console.log('pathId', pathId, 'newValue*:', newValue, 'previousValue*:', previousValue);
+    return ref.collection(`logs`)
+      .add({
+        currentVer: newValue,
+        previousVer: previousValue,
+        context: context
+      });
     // ...
   });
