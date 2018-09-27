@@ -630,7 +630,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
           console.log(snapShot.docs[0].id);
           this.nameProject = snapShot.docs[0].data().projectName;
           this.status = 'Nombre del proyecto: ' + this.nameProject;
-
+          this.valorci = snapShot.docs[0].id;
         }
       });
     }

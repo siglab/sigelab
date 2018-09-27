@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, style } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { FormControl } from '@angular/forms';
+
+var domtoimage = require('dom-to-image');
+import { saveAs } from 'file-saver/FileSaver';
 
 declare var $: any;
 
@@ -235,7 +238,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         const sede = doc.data();
         this.listSelect.subsede.push({
           id:doc.id,
-          nombre: sede.cfAddrline1 + ' - ' + sede.cfCityTown
+          nombre: sede.cfAddrline2 ? sede.cfAddrline2 : sede.cfAddrline1
         });
       });
     });
@@ -321,6 +324,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           this.formSelect[elemen].disable();
           this.formCheckBox[elemen].disable();
         });
+
+        this.ejecutarGraficos();
 
       }else{
         arr.forEach(elemen=>{
@@ -1377,6 +1382,43 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   buscaLaboratorios(){
     return this.afs.collection('cfFacil').ref.get();
+   }
+
+
+
+   prueba(){
+    const f=new Date();
+    const cad=f.getHours()+":"+f.getMinutes()+":"+f.getSeconds(); 
+    const ambiente = this;
+    const scale = 'scale(0.85)'; 
+    domtoimage.toPng(document.getElementById('grafica'))
+    .then(function (dataUrl) {
+        var img = new Image();
+        img.src = dataUrl;
+        
+        const printWindow = window.open('', '', 'height=400,width=800');
+        printWindow.document.write('<html><head><title>DIV Contents</title>');
+        printWindow.document.write('</head><body style="height:100%; width:100%;">');
+        printWindow.document.write('<strong> Hora de Generacion: '+cad+' </strong>');
+        printWindow.document.write('<br><strong> Correo del generador: : '+ambiente.persona.email+' </strong>');
+        printWindow.document.body.appendChild(img);
+        printWindow.document.write('</body></html>');
+
+        printWindow.document.head.style.transform = scale; 
+        printWindow.document.body.style.transform = scale;  
+
+        printWindow.document.close()
+
+        setTimeout(()=>{
+          printWindow.print();
+        }, 1000);
+        
+
+    })
+    .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+    });
+
    }
   
 

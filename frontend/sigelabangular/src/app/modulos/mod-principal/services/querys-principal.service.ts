@@ -2,6 +2,7 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
+import { URLCORREO } from '../../../config';
 
 @Injectable()
 export class QuerysPrincipalService {
@@ -472,7 +473,7 @@ export class QuerysPrincipalService {
     const fechaes = fecha.getDate()+'/'+(fecha.getMonth()+1)+'/'+fecha.getFullYear();
    
 
-    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const url = URLCORREO;
     const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
     let destino = '';
     if(analistas){
@@ -504,6 +505,7 @@ export class QuerysPrincipalService {
     const arra = [];
     for (const key in personas) {
       if (personas.hasOwnProperty(key)) {
+       
         if(personas[key]){
           this.buscarDirector(key).then(doc => {
             this.buscarUsuario(doc.data().user).then(user => {

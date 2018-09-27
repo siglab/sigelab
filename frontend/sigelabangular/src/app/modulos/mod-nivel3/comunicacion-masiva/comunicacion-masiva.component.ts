@@ -7,6 +7,7 @@ declare var $: any;
 
 import swal from 'sweetalert2';
 import { FormControl } from '@angular/forms';
+import { URLCORREO } from '../../../config';
 
 @Component({
   selector: 'app-comunicacion-masiva',
@@ -129,7 +130,7 @@ export class ComunicacionMasivaComponent implements OnInit {
         const sede = doc.data();
         this.listSelect.subsede.push({
           id:doc.id,
-          nombre: sede.cfAddrline1 + ' - ' + sede.cfCityTown
+          nombre: sede.cfAddrline2 ? sede.cfAddrline2 : sede.cfAddrline1
         });
       });
     });
@@ -422,10 +423,10 @@ export class ComunicacionMasivaComponent implements OnInit {
         setTimeout(()=>{
         if(item == 'correo'){
           console.log(correos);
-          //this.servicioCorreo(correos);
+          this.servicioCorreo(correos);
         } else {
           console.log(notificaciones);
-          //this.servicioNotificacion(notificaciones);
+          this.servicioNotificacion(notificaciones);
         }
 
       }, 2000);
@@ -440,7 +441,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   servicioCorreo(correos){
 
-      const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+      const url = URLCORREO;
 
       this.http.post(url,
         {para: correos,

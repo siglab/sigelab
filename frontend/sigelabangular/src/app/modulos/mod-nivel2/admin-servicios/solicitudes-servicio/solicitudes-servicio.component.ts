@@ -15,6 +15,7 @@ declare var $: any;
 
 import * as _ from "lodash";
 import * as firebase from 'firebase/app';
+import { URLCORREO } from '../../../../config';
 
 @Component({
   selector: 'app-solicitudes-servicio',
@@ -114,8 +115,8 @@ comentario = '';
         this.alertaCargando();
 
         this.getCollectionReserv(data.uid).then(data1 => {
-   
-          this.estructurarServiciosActivos(data1, data).then(datos=>{
+          if(data1.size != 0){
+            this.estructurarServiciosActivos(data1, data).then(datos=>{
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
               this.dataSource.paginator = this.paginator;
@@ -125,7 +126,11 @@ comentario = '';
               this.dataSource2.paginator = this.paginator2;
 
               this.cerrarAlerta();
-          });     
+            });
+          } else {
+            this.alertaError('No tiene solicitudes de servicio registradas aun')
+          }
+              
                           
         });
       } else{
@@ -576,7 +581,7 @@ comentario = '';
     let emailAcepto = '';
     let emailEncargado = '';
     let emailLaboratorio = '';
-    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const url = URLCORREO;
     const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
     let destino = '';
 
@@ -601,22 +606,22 @@ comentario = '';
     });
   }
 
-  enviarEmails(){
+  enviarEmails(estado, emaildirector){
 
     let emailSolicitante = '';
 
-    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const url = URLCORREO;
     const asunto = 'CAMBIO DE ESTADO DE LA SOLICITTUD DE SERVICIO';
     let destino = '';
 
     emailSolicitante = this.servicioActivoSel.usuario;
 
-    const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
-                    this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
-                    ' por el usuario con el correo ' + emailSolicitante;
+    const mensaje = 'Se le notifica que se ha cambiado el estado de la solicitud del servicio '  +
+                    this.servicioActivoSel.nombre + ', solicitada la fecha ' + this.servicioActivoSel.fecha +
+                    ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' +estado ;
 
     
-    destino = emailSolicitante;
+    destino = emailSolicitante + ',' +emaildirector;
     this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
       if(res.status == 200){
         //this.cerrarAlerta();
@@ -670,9 +675,11 @@ comentario = '';
           }
          
         });
-
-        this.enviarEmails();
+        this.getPersona(this.servicioActivoSel.infolab.facilityAdmin).subscribe(persona => {
+          this.enviarEmails(estado, persona.payload.data().email);
     
+        });
+   
         this.moduloinfo = false;
         this.resetIconos();
        

@@ -150,19 +150,24 @@ export class SolicitudesNivel3Component implements OnInit {
     
     if(this.moduloNivel3){
       this.getCollectionSolicitudes().then(data1 => {
-        this.itemsel = data1;
-        this.estructurarSolicitudesActivas(data1).then(datos => {
-  
-          this.dataSource.data = datos['data'];
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-  
-          this.dataSource2.data = datos['data2'];
-          this.dataSource2.sort = this.sort2;
-          this.dataSource2.paginator = this.paginator2;
-  
-          this.cerrarAlerta();
-        });
+        if(data1.size != 0){
+          this.itemsel = data1;
+          this.estructurarSolicitudesActivas(data1).then(datos => {
+    
+            this.dataSource.data = datos['data'];
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+    
+            this.dataSource2.data = datos['data2'];
+            this.dataSource2.sort = this.sort2;
+            this.dataSource2.paginator = this.paginator2;
+    
+            this.cerrarAlerta();
+          });
+        }else{
+          this.alertaError('No se han generado solicitudes de mantenimiento aun');
+        }
+
                    
       });
     }
@@ -178,22 +183,26 @@ export class SolicitudesNivel3Component implements OnInit {
                 array.push(doc);
               });
               cont++;
-              console.log(retor['size'], cont);
+    
               if(retor['size'] == cont){
                 this.itemsel = array;
-                console.log(array);
-                this.estructurarSolicitudesActivas(array).then(datos => {
+                if(array.length != 0){
+                  this.estructurarSolicitudesActivas(array).then(datos => {
           
-                  this.dataSource.data = datos['data'];
-                  this.dataSource.sort = this.sort;
-                  this.dataSource.paginator = this.paginator;
-          
-                  this.dataSource2.data = datos['data2'];
-                  this.dataSource2.sort = this.sort2;
-                  this.dataSource2.paginator = this.paginator2;
-          
-                  this.cerrarAlerta();
-                });
+                    this.dataSource.data = datos['data'];
+                    this.dataSource.sort = this.sort;
+                    this.dataSource.paginator = this.paginator;
+            
+                    this.dataSource2.data = datos['data2'];
+                    this.dataSource2.sort = this.sort2;
+                    this.dataSource2.paginator = this.paginator2;
+            
+                    this.cerrarAlerta();
+                  });
+                }else{
+                  this.alertaError('No se han generado solicitudes de mantenimiento aun');
+                }
+            
               }
               
                          

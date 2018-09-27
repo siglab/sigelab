@@ -34,7 +34,7 @@
                 <div class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
-                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por laboratorio, escuela, director e investigacion">
+                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por laboratorio, correo laboratorio, director, correo directos, estado laboratorio, fecha de ultima actualizacion">
                     </mat-form-field>
                   </div>
 
@@ -47,21 +47,33 @@
                     </ng-container>
 
                     <!-- Name Column -->
-                    <ng-container matColumnDef="escuela">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header> Escuela </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.escuela}} </mat-cell>
+                    <ng-container matColumnDef="correolab">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Laboratorio </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
                     </ng-container>
 
                     <!-- Weight Column -->
-                    <ng-container matColumnDef="investigacion">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header> Investigacion </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.inves}} </mat-cell>
+                    <ng-container matColumnDef="correodir">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Director </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.emaildirector}} </mat-cell>
+                    </ng-container>
+
+                     <!-- Weight Column -->
+                     <ng-container matColumnDef="ultima">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ultima Edicion </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.ultima}} </mat-cell>
                     </ng-container>
 
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="director">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Director </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.director}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="estado">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.estado}} </mat-cell>
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -1034,6 +1046,24 @@
                                       <textarea class="form-control" name="condi" id="condi" [(ngModel)]="this.infolab.cfConditions" rows="5"></textarea>
                                     </div>
                                   </div>
+
+                                  <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="condi">
+                                          <strong>Activar/Inactivar:</strong>
+                                        </label>
+                                      <div class="form-group row">
+                                        <div class="col-sm-12">
+                                          <label class="switch">
+                                            <input name="active" [(ngModel)]="this.activo" id="activo" type="checkbox" >
+                                            <span class="slider round"></span>
+                                          </label>
+                                        </div>
+                                      </div>
+                  
+                                    </div>
+                                  </div>
+
                                   <div class="form-group">
                                     <div class="col-md-12">
                                       <button (click)="editar()" class="btn2 btn-danger btn-lg btn-block danger" type="button">Guardar Cambios</button>
@@ -2050,13 +2080,14 @@
                       <label class="control-label" for="email">
                         <strong>Email Encargado:</strong>
                       </label>
-                      <input  id="email" [(ngModel)]="this.labo.email" name="email" class="form-control" type="text">
+                      <input (focusout)="ciCheck($event)"  id="email" [(ngModel)]="this.labo.email" name="email" class="form-control" type="text">
+                      <p> {{status}} </p>
                     </div>
                   </div>
 
   
   
-                  <div class="form-group">
+                  <div *ngIf="this.disponible" class="form-group">
                     <div class="col-md-12 text-center">
                       <button style="margin-top: 20px;" (click)="nuevoLaboratorio()" class="btn btn-danger" type="button">Crear Laboratorio</button>
                     </div>

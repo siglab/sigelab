@@ -10,6 +10,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as _ from "lodash";
 import * as firebase from 'firebase/app';
 import { Http } from '@angular/http';
+import { URLCORREO } from '../../../../config';
 
 
 declare var $: any;
@@ -744,7 +745,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     const fechaes = fecha.getDate()+'/'+(fecha.getMonth()+1)+'/'+fecha.getFullYear();
    
 
-    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const url = URLCORREO;
     const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
     let destino = '';
     if(analistas){

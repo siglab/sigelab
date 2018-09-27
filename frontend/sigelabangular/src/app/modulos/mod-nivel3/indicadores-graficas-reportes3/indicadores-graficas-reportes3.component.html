@@ -92,21 +92,21 @@
 
                 </div>
 
-                <div class="box box-danger" style="margin-top: 40px;">
+                <div class="box box-danger" style="margin-top: 40px;" id="grafica">
                     <div class="box-header">
-                        <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button">Generar Reporte</button>
+                        <button style="float: right;" class="btn2 btn-danger btn-lg danger" type="button" (click)="prueba()">Generar Reporte</button>
                     </div>
 
                     <div class="box-body">
 
-                        <div class="col-md-7 col-lg-7">
+                        <div class="col-md-7 col-lg-7" >
                             <div class="box box-danger">
                                 <div class="box-header">
                                     <i class="fa fa-search"></i>
                                     <h3 class="box-title">LABORATORIOS</h3>
                                 </div>
 
-                                <div class="box-body divScroll1">
+                                <div class="box-body">
                                     <ngx-charts-advanced-pie-chart [view]="viewLabs" [scheme]="colorSchemeLabs" [results]="singleLabs" [label]="tituloLabs" (select)="onSelectLabs($event)">
                                     </ngx-charts-advanced-pie-chart>
 
@@ -121,7 +121,7 @@
                                     <h3 class="box-title">OTROS INDICADORES</h3>
                                 </div>
 
-                                <div class="box-body divScroll1">
+                                <div class="box-body">
 
                                     <div class="row">
                                         <div class="col-md-2 col-lg-5" style="text-align: center;">
@@ -188,7 +188,7 @@
                                     <h3 class="box-title">SERVICIOS</h3>
                                 </div>
 
-                                <div class="box-body divScroll1">
+                                <div class="box-body">
                                     <div class="col-md-8 col-lg-8">
                                         <ngx-charts-advanced-pie-chart [view]="viewServs" [scheme]="colorSchemeServs" [results]="singleServs" [label]="tituloServs"
                                             (select)="onSelectServs($event)">
@@ -237,7 +237,7 @@
                                     <h3 class="box-title">GRAFICO</h3>
                                 </div>
 
-                                <div class="box-body divScroll2">
+                                <div class="box-body">
                                     <ul class="nav nav-tabs" style="margin-bottom: 20px;">
                                         <li>
                                             <a class="tablas" data-toggle="tab" (click)="cambiarGraficaLine(1)">
@@ -287,7 +287,7 @@
                                         <h3 class="box-title">INDICADORES DE CLASIFICACION DE LABORATORIOS</h3>
                                     </div>
 
-                                    <div class="box-body divScroll3">
+                                    <div class="box-body">
                                         <div *ngIf="this.graficoBarras" class="row">
                                             <ngx-charts-bar-vertical-2d [view]="viewBar" [scheme]="colorSchemeBar" [results]="singleBar" [gradient]="gradientBar" [xAxis]="showXAxisBar"
                                                 [yAxis]="showYAxisBar" [legend]="showLegendBar" [showXAxisLabel]="showXAxisLabelBar"
