@@ -15,6 +15,9 @@ admin.initializeApp(functions.config().firebase);
 
 const ref = admin.firestore();
 
+ref.settings({ timestampsInSnapshots: true });
+
+
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -43,9 +46,9 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
           ref.doc(`/user/${event.uid}`).set(usr)
             .then(() => {
 
-               console.log('se creo un nuevo usuario');
+              console.log('se creo un nuevo usuario');
 
-                res.status(200).send({
+              res.status(200).send({
                 response: 'Usuario creado con exito!'
               });
 
@@ -93,11 +96,11 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
           };
 
           ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
-              merge: true
-            })
+            merge: true
+          })
             .then(() => {
-               console.log('se asocio correctamente el usuario')
-               res.status(200).send({
+              console.log('se asocio correctamente el usuario')
+              res.status(200).send({
                 response: 'Se asocio correctamente el usuario!'
               });
             })
@@ -201,8 +204,8 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
           user: event.uid
         };
         ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
-            merge: true
-          })
+          merge: true
+        })
           .then(() => console.log('se asocio correctamente el usuario'))
           .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
 
@@ -387,9 +390,9 @@ let quiv = (req, res) => {
 
       const data = []
 
-      if( querySnapshot.empty  ) {
+      if (querySnapshot.empty) {
 
-        res.status(404).send({ resp : 'La coleccion no existe' });
+        res.status(404).send({ resp: 'La coleccion no existe' });
 
       }
 
@@ -409,7 +412,7 @@ let quiv = (req, res) => {
 
       } else {
 
-        res.status(500).send({error: 'ocurrio un error'});
+        res.status(500).send({ error: 'ocurrio un error' });
       }
 
 
@@ -426,7 +429,7 @@ let quivId = (req, res) => {
   var tabla = req.tabla;
   var id = req.id;
 
-  console.log( 'id de la consulta', id);
+  console.log('id de la consulta', id);
   let consulta = '';
 
 
@@ -460,7 +463,7 @@ let quivId = (req, res) => {
 
       if (!consulta.exists) {
 
-        res.status(404).send({ resp : 'El id no existe' });
+        res.status(404).send({ resp: 'El id no existe' });
       }
 
 
@@ -471,7 +474,7 @@ let quivId = (req, res) => {
         console.log('hecho');
 
       } else {
-        res.status(500).send({ resp : 'Ocurrio un error inesperado' });
+        res.status(500).send({ resp: 'Ocurrio un error inesperado' });
 
       }
 
@@ -482,3 +485,143 @@ let quivId = (req, res) => {
 
 
 };
+
+
+
+exports.disablePractices = functions.https.onRequest((req, res) => {
+  var token = req.get('x-token');
+  if (token == '123456789') {
+    ref.collection('practice')
+      .get()
+      .then((querySnapshot) => {
+        const data = {}
+
+        querySnapshot.forEach(doc => {
+          data[doc.id] = doc.data();
+        });
+        return data;
+
+      }).then((data) => {
+        return new Promise((resolve, reject) => {
+          var datalength = Object.keys(data).length;
+          var cont = 0;
+
+          for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+
+              ref.doc(`practice/${key}/`)
+                .update({ active: false })
+                .then(function (done) {
+
+                  cont++;
+                  // console.log(datalength,cont);
+
+                  if (cont == datalength) {
+                    resolve();
+                  }
+
+                }).catch(error => {
+                  // console.log(datalength,cont)
+
+                  reject(error);
+                });
+
+            }
+          }
+        })
+
+      })
+
+      .then((data) => {
+        res.send('success');
+
+      }).catch(error => {
+        res.send(error);
+      });
+
+  } else {
+    res.send('not authorized');
+
+  }
+
+});
+
+
+exports.activePractices = functions.https.onRequest((req, res) => {
+  var token = req.get('x-token');
+  if (token == '123456789') {
+    ref.collection('practice')
+      .get()
+      .then((querySnapshot) => {
+        const data = {}
+
+        querySnapshot.forEach(doc => {
+          data[doc.id] = doc.data();
+        });
+        return data;
+
+      }).then((data) => {
+        return new Promise((resolve, reject) => {
+          var datalength = Object.keys(data).length;
+          var cont = 0;
+
+          for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+
+              ref.doc(`practice/${key}/`)
+                .update({ active: true })
+                .then(function (done) {
+
+                  cont++;
+                  // console.log(datalength,cont);
+
+                  if (cont == datalength) {
+                    resolve();
+                  }
+
+                }).catch(error => {
+                  // console.log(datalength,cont)
+
+                  reject(error);
+                });
+
+            }
+          }
+        })
+
+      })
+
+      .then((data) => {
+        res.send('success');
+
+      }).catch(error => {
+        res.send(error);
+      });
+  } else {
+    res.send('not authorized');
+
+  }
+
+});
+
+exports.dbonUpdate =  functions.firestore
+.document('cfFacil/{labId}').onUpdate((change, context) => {
+
+  const newValue = change.after.data();
+
+  // ...or the previous value before this update
+  const previousValue = change.before.data();
+ 
+
+  // access a particular field as you would any JS property
+  const authVar = context.params; // Auth information for the user.
+  // const authType = context.authType; // Permissions level for the user.
+  const contexto = context;
+  const pathId = context.params.labId; // The ID in the Path.
+  const eventId = context.eventId; // A unique event ID.
+  const timestamp = context.timestamp; // The timestamp at which the event happened.
+  const eventType = context.eventType; // The type of the event that triggered this function.
+  const resource = context.resource; // The resource which triggered the event.
+  console.log('pathId',pathId,'newValue*:',newValue,'previousValue*:',previousValue);
+  // ...
+});
