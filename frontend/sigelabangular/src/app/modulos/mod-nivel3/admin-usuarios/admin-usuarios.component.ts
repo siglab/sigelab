@@ -9,6 +9,7 @@ import { LoginService } from '../../login/login-service/login.service';
 import swal from 'sweetalert2';
 import { Observable } from '@firebase/util';
 import { element } from 'protractor';
+import { QrService } from '../../mod-nivel2/services/qr.service';
 
 declare var $: any;
 
@@ -18,17 +19,29 @@ declare var $: any;
   styleUrls: ['./admin-usuarios.component.css']
 })
 export class AdminUsuariosComponent implements OnInit {
-  rolc = '';
+  permisions = {
+    clientRoles: {}
+  };
+
+  permisions2 = {
+    appRoles: {}
+  };
+
+
+
+  rolSelect;
+  arrayPract = [];
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
   apellido;
-  email;
+  email = '';
   rol;
-  estado;
+  estado_u;
+  estado_p;
   idu;
   idp;
-  tipo = ['Funcionario', 'Estudiante', 'Contratista', 'Otro'];
+  tipo = ['Funcionario', 'Estudiante', 'Contratista', 'Otro', 'Ninguno'];
   type;
   idlab;
   activos = [];
@@ -37,21 +50,17 @@ export class AdminUsuariosComponent implements OnInit {
   addP;
   // objeto persona:
   person = {
-    cfBirthdate: '',
-    cfGender: '',
-    cfUri: '',
+
     cfFamilyNames: '',
     cfFirstNames: '',
-    cfOtherNames: '',
-    cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+    cfOrgUnit: 'i9dzCErPCO4n9WUfjxR9',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
     cfFacil: {},
     active: true,
     user: '',
-    roleId: '',
-    email: '',
-    cc: '',
+    roleId: '',   // necesario consulta
+    clientRoles : {},
     type: '',
     relatedEquipments: {},
     createdAt: this.fecha.toISOString(),
@@ -81,13 +90,18 @@ export class AdminUsuariosComponent implements OnInit {
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
   @ViewChild('sortPers') sortPers: MatSort;
 
-  // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'estado', 'codigo' ];
-  dataSourcePersIn = new MatTableDataSource([]);
+  // atributos tabla  laboratorios
+  displayedColumnsFacil = ['nombre'];
+  dataSourceFacil = new MatTableDataSource();
+  @ViewChild('paginatorFacil') paginatorFacil: MatPaginator;
+  @ViewChild('sortFacil') sortFacil: MatSort;
 
-  @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
-  @ViewChild('sortPersIn') sortPersIn: MatSort;
 
+    // atributos tabla  facultades
+    displayedColumnsFacul = ['nombre'];
+    dataSourceFacul = new MatTableDataSource();
+    @ViewChild('paginatorFacul') paginatorFacul: MatPaginator;
+    @ViewChild('sortFacul') sortFacul: MatSort;
 
 
 
@@ -104,7 +118,7 @@ export class AdminUsuariosComponent implements OnInit {
   constructor(private obs: ObservablesService,
     private afs: AngularFirestore,
     private toastr: ToastrService,
-    private register: LoginService) { }
+    private userService: QrService) { }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
@@ -113,16 +127,24 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.getRoles();
 
-    this.estructuraIdPers().then(data => {
+    this.userService.listCfFacil().subscribe(data => {
+
+      console.log('data labs', data);
+      this.dataSourceFacil.data = data;
+    });
+
+
+    this.estructuraIdPers().then((data: any) => {
 
       // validators email
 
-      console.log(data['user']);
+      console.log(data.user);
 
-      this.dataSourcePers.data = data['user'];
-      this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
+      this.dataSourcePers.data = data.user;
+      // this.dataSourcePers.sort = this.sortPers;
+      // this.dataSourcePers.paginator = this.paginatorPers;
+      console.log('variable talb', this.dataSourcePers.data);
 
-      const ambiente = this;
 
       swal({
         title: 'Cargando un momento...',
@@ -133,13 +155,12 @@ export class AdminUsuariosComponent implements OnInit {
       });
 
 
-      setTimeout(function () {
-        if (ambiente.persestructurado.personal !== 0) {
+      setTimeout(() => {
+        if (data.user.length !== 0) {
 
-          ambiente.dataSourcePers.sort = ambiente.sortPers;
-          ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
-          ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
-          ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
+          this.dataSourcePers.sort = this.sortPers;
+          this.dataSourcePers.paginator = this.paginatorPers;
+
 
           swal.close();
 
@@ -178,8 +199,11 @@ export class AdminUsuariosComponent implements OnInit {
   getRolesNivel2() {
     this.afs.collection('appRoles').snapshotChanges().subscribe(datos => {
       for (let i = 0; i < datos.length; i++) {
+        // tslint:disable-next-line:no-shadowed-variable
         const element = datos[i].payload.doc.data();
-        if (element.lvl === 'perfiles2') {
+
+
+        if (element.lvl !== 'nivel1' && element.lvl !== 'nivel3') {
 
           this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName });
           console.log(this.niveles);
@@ -193,36 +217,47 @@ export class AdminUsuariosComponent implements OnInit {
 
 
   estructuraIdPers() {
-    const usuarios = []
+    const usuarios = [];
     const promise = new Promise((resolve, reject) => {
       this.buscarUsuarios().then(user => {
 
         user.forEach(doc => {
+          // tslint:disable-next-line:no-shadowed-variable
           const element = doc.data();
+
           console.log(element.cfPers);
-          this.getPersona(element.cfPers).then(data => {
+
+
+          this.getPersona(element.cfPers ? element.cfPers : '123').then(data => {
             this.nombresRoles(element.appRoles).then(rol => {
+              const persona = data.data() ? data.data() : ' ninguno';
+
               console.log(rol['role']);
-              const usuario  = {
-                id:doc.id,
-                nombre: data.data().cfFirstNames + ' ' + data.data().cfFamilyNames,
-                idPers:element.cfPers,
-                email:element.email,
-                roles: rol['role']
+              const usuario = {
+                id: doc.id,
+                nombre: persona['cfFirstNames'] ? persona['cfFirstNames'] : 'Ninguno',
+                apellido: persona['cfFamilyNames'] ? persona['cfFamilyNames'] : 'Ninguno',
+                idPers: element.cfPers,
+                email: element.email,
+                estado_p: persona['active'],
+                estado_u: element.active,
+                type: persona['type'],
+                roles: rol['role'],
+                llave: rol['llave']
               };
 
               usuarios.push(usuario);
+              if (user.size === usuarios.length) {
+                resolve({ user: usuarios });
+              }
             });
 
-            console.log(user.size, usuarios.length);
-            if(user.size == usuarios.length){
-              resolve({user:usuarios});
-            }
+
 
           });
         });
 
-      
+
 
       });
     });
@@ -238,61 +273,73 @@ export class AdminUsuariosComponent implements OnInit {
 
   }
 
-  getPersona(id){
+  getPersona(id) {
     return this.afs.collection('cfPers').doc(id).ref.get();
   }
 
-  nombresRoles(roles){
+  nombresRoles(roles) {
     let nameroles = '';
+    const llaves = [];
+
     let sixe = 0;
     for (const key in roles) {
       if (roles.hasOwnProperty(key)) {
-       if(roles[key]){
-        sixe++;
-       }       
+        if (roles[key]) {
+          sixe++;
+        }
       }
     }
     let contador = 0;
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       for (const key in roles) {
         if (roles.hasOwnProperty(key)) {
-          if(roles[key]){
+
+          if (roles[key]) {
+
             this.consultarNombreRol(key).then(doc => {
-              nameroles += doc.data().roleName + ',';
+
+              if (doc.data().roleName !== 'nivel1') {
+
+                llaves.push({ id: doc.id, nombre: doc.data().roleName });
+              }
+
+
+              if (sixe > 1) {
+
+                nameroles += doc.data().roleName + ',';
+
+
+
+              } if (sixe === 1) {
+
+                nameroles = doc.data().roleName;
+
+              }
+
+
+
+
               contador++;
-              if(sixe == contador){
-                resolve({role:nameroles});
+
+              if (sixe === contador) {
+                resolve({ role: nameroles, llave: llaves });
               }
             });
           }
-          
+
         }
-   
+
       }
-      
+
     });
 
     return promise;
   }
 
-  consultarNombreRol(id){
+  consultarNombreRol(id) {
     return this.afs.collection('appRoles').doc(id).ref.get();
   }
 
-
-  consultarRol() {
-
-    return new Promise((resolve, reject) => {
-      this.afs.collection<any>('appRoles',
-        ref => ref.where('roleName', '==', this.rolc))
-        .snapshotChanges().subscribe(data => {
-          const idnuevo = data[0].payload.doc.id;
-
-          console.log(idnuevo);
-          resolve(idnuevo);
-        });
-    });
-  }
 
   applyFilterPers(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -301,22 +348,28 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   cambiardata(item, table) {
+
+    this.arrayPract = item.llave;
     this.tablesel = table;
     console.log(item);
+    this.apellido = item.apellido;
     this.nombre = item.nombre;
-    this.estado = item.activo;
+    this.estado_u = item.estado_u;
+    this.estado_p = item.estado_p;
     this.email = item.email;
-    this.type = item.tipo;
+    this.type = item.type ? item.type : 'Ninguno';
 
-    this.apellido = item.apellidos;
     for (const key in item.roles) {
       if (item.roles.hasOwnProperty(key)) {
         this.rol = key;
       }
     }
 
-    this.idp = item.idpers;
-    this.idu = item.iduser;
+    this.idp = item.idPers;
+
+    console.log(this.idp);
+    this.idu = item.id;
+
 
 
     // this.seleccionado = item;
@@ -325,20 +378,26 @@ export class AdminUsuariosComponent implements OnInit {
 
   actualizarPers() {
 
+
     // $('#modal').modal('hide');
 
-    /* objeto para persona  */
+    //  objeto para persona
     const pers = {
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
       type: this.type,
+      clientRoles : this.permisions,
+      active : this.estado_p,
       updatedAt: new Date().toISOString()
     };
-    /* objeto para usuario */
+    // objeto para usuario
     const user = {
-      appRoles: {}
+      appRoles: this.permisions2,
+      active : this.estado_u,
+      updatedAt: new Date().toISOString()
     };
 
+    // nuevo estado del laboratorio
     const nuevoEstado = {
       relatedPers: {},
       updatedAt: new Date().toISOString()
@@ -349,9 +408,9 @@ export class AdminUsuariosComponent implements OnInit {
     console.log(' se va actualizar esta persona', pers);
 
     user.appRoles[this.rol] = true;
-    nuevoEstado.relatedPers[this.idp] = this.estado;
+    nuevoEstado.relatedPers[this.idp] = this.estado_p;
 
-    /* metodo firebase para subir un usuario actualizado */
+    // metodo firebase para subir un usuario actualizado
 
     if (this.idu) {
       this.afs.collection('user').doc(this.idu).set(user, { merge: true })
@@ -359,19 +418,29 @@ export class AdminUsuariosComponent implements OnInit {
         });
 
     }
-    this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
-      () => {
 
-        this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
-        swal({
-          type: 'success',
-          title: 'usuario actualizado correctamente',
-          showConfirmButton: true
+    if ( this.idp  ) {
+
+
+      this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
+        () => {
+
+
+          // toca resetear en todos los laboratorios no solo
+
+          this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+          swal({
+            type: 'success',
+            title: 'usuario actualizado correctamente',
+            showConfirmButton: true
+          });
+
         });
 
-      });
 
-    /* metodo firebase para subir una persona actualizada */
+    }
+
+    // metodo firebase para subir una persona actualizada
 
 
   }
@@ -379,7 +448,7 @@ export class AdminUsuariosComponent implements OnInit {
 
 
   /* metodo para crear una  nueva persona dentro dl lab*/
-
+/*
   setPers() {
 
     if (this.email && this.person.cc) {
@@ -436,7 +505,7 @@ export class AdminUsuariosComponent implements OnInit {
     }
 
   }
-
+ */
   updatedUser(path, cfPers) {
 
     const newUser = {
@@ -474,6 +543,8 @@ export class AdminUsuariosComponent implements OnInit {
 
   }
 
+
+  /*
   emailcheck($event) {
     this.addP = '';
     const q = $event.target.value;
@@ -504,7 +575,7 @@ export class AdminUsuariosComponent implements OnInit {
       });
     }
   }
-
+  */
   addLabPers(id: string) {
 
     if (id) {
@@ -519,11 +590,19 @@ export class AdminUsuariosComponent implements OnInit {
         .then(() => {
 
           $('#modal1').modal('hide');
-          this.toastr.success('Almacenado correctamente.', 'exito!');
+          swal({
+            type: 'success',
+            title: 'Almacenado correctamente',
+            showConfirmButton: true
+          });
         });
     } else {
 
-      this.toastr.warning('Ocurrio un error, intente ingresar el email otra vez.');
+      swal({
+        type: 'error',
+        title: 'Intente ingresar el email denuevo',
+        showConfirmButton: true
+      });
 
     }
 
@@ -539,5 +618,120 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.email = '';
   }
+
+  quitarelemento(i) {
+
+    this.arrayPract.splice(i, 1);
+
+    console.log(this.arrayPract);
+
+  }
+  applyFilterLab(filterValue: string) {
+
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceFacil.filter = filterValue;
+
+  }
+
+  cambiardataLab(row) {
+
+    console.log(row.id);
+    this.idlab = row.id;
+
+
+  }
+
+
+  buscarElemento() {
+
+
+
+
+  }
+
+  asignarRolaLaboratorio() {
+
+
+
+    if (this.rolSelect) {
+
+      // pushar al array los roles nuevos
+      this.niveles.forEach(  elemen => {
+
+        if ( elemen.id === this.rolSelect) {
+
+         this.arrayPract.push(elemen);
+        }
+
+     });
+
+
+      // es administrador asigna permisos dentro de app roles pero tiene ese unico rol
+      if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
+
+        if (this.person.clientRoles[this.idlab]) {
+            this.person.clientRoles[this.idlab][this.rolSelect] = true;
+
+
+        } else {
+
+          this.usuario.appRoles[this.idlab] = {};
+          this.usuario.appRoles[this.idlab][this.rolSelect] = true;
+        }
+
+      }
+      //  si no es nivel 2.5 asigna roles dentro del objeto client roles y necesario agregar facultades
+      if (this.rolSelect !== 'PFhLR4X2n9ybaZU3CR75'  &&  this.rolSelect !== 'S9wr9uK5BBF4yQZ7CwqX' ) {
+
+        if (this.person.clientRoles[this.idlab]) {
+          this.person.clientRoles[this.idlab][this.rolSelect] = true;
+
+
+        } else {
+
+          this.person.clientRoles[this.idlab] = {};
+          this.person.clientRoles[this.idlab][this.rolSelect] = true;
+        }
+
+        console.log(this.permisions);
+
+        // asigna permisos dentro de app - roles porque es nivel 2.5 como unico rol
+      } else {
+
+        if (this.usuario.appRoles[this.idlab]) {
+          this.usuario.appRoles[this.idlab][this.rolSelect] = true;
+
+
+        } else {
+
+          this.usuario.appRoles[this.idlab] = {};
+          this.usuario.appRoles[this.idlab][this.rolSelect] = true;
+        }
+
+        console.log(this.permisions2);
+
+      }
+
+      console.log(this.niveles);
+
+
+
+    } else {
+
+      swal({
+        type: 'info',
+        title: 'Debe seleccionar el nuevo rol primero',
+        showConfirmButton: true
+      });
+
+    }
+
+
+
+
+
+  }
+
 
 }

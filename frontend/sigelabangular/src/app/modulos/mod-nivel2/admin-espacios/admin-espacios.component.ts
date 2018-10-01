@@ -696,16 +696,28 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     const personalLab = this.espaestructurado.personal;
     this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
     // tslint:disable-next-line:radix
-    this.space.indxSa = (this.ocupacionAct / this.space.capacity);
+
+    if ( this.space.capacity === 0) {
+
+      console.log(' capacidad igual a cero');
+
+      this.space.indxSa = 0;
+
+    } if (this.space.capacity > 0 ) {
+
+      console.log(' capacidad mayor a cero');
+      this.space.indxSa = (this.ocupacionAct / this.space.capacity);
+
+    }
   }
 
   getActividadAct(arreglo) {
 
+    console.log('si entro al metodo act actual');
     return new Promise((resolve, reject) => {
 
       this.actSpaces = [];
       let estudiantes = 0;
-
       let cont = 1;
       let encontrado = false;
       console.log('array para la consulta', arreglo);
@@ -717,9 +729,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         prog.programacion.diahora.forEach(fecha => {
 
           const now = moment().format();
-          if (moment(now).isBetween('2018-09-25T11:11', '2018-09-25T18:11')) {
+          if (moment(now).isBetween('2018-09-27T09:11', '2018-09-27T18:11')) {
 
-            // console.log(fecha.start);
+            console.log('entro a la condicion actual');
             encontrado = true;
 
           }
@@ -727,6 +739,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
         if (encontrado) {
           this.actSpaces.push(prog.nombre);
+
           estudiantes += parseInt(prog.programacion.estudiantes, 10);
         }
 

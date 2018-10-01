@@ -38,7 +38,8 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
             cfPers: '',
             appRoles: {},
             createdAt: fecha.toISOString(),
-            email: req.email
+            email: req.email,
+            active: true
           };
 
           usr.appRoles[role] = true;
@@ -84,7 +85,8 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
             cfPers: persona,
             appRoles: {},
             createdAt: fecha.toISOString(),
-            email: event.email
+            email: event.email,
+            active: true
 
           };
 

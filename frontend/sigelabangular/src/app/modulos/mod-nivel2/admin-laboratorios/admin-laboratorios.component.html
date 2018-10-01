@@ -723,18 +723,18 @@
                                       <div class="col-md-6">
                                           <label class="control-label"><strong> hasta :</strong></label>
                                         <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">
-                                      </div>      
+                                      </div>
                                     <div class="input-group">
                                       <mat-form-field>
                                           <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un dia de la semana" >
                                             <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
                                           </mat-select>
-                                        </mat-form-field>     
+                                        </mat-form-field>
                                       <span class="input-group-btn">
                                         <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarDisponibilidad()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                       </span>
                                     </div>
-                                </div>                                          
+                                </div>
                             </div>
                             <div class="form-group">
                               <div class="col-md-12">
@@ -744,7 +744,8 @@
                                   </ul>
                               </div>
                             </div>
-                          
+
+                            <!-- copiar admin usuarios -->
                             <div class="col-md-12">
                                 <label class="control-label" for="facul"><strong>Facultades :</strong></label>
                                 <div class="input-group">
@@ -752,9 +753,9 @@
                                         <mat-select name="facul" id="facul" [(value)]="selectfacul" placeholder="Seleccione una Facultad" >
                                           <mat-option *ngFor="let item of this.facultades" value="{{item.id}}">{{item.nombre}}</mat-option>
                                         </mat-select>
-                                      </mat-form-field>       
+                                      </mat-form-field>
                                     <span class="input-group-btn">
-                                      <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('facultad')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                      <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('facultad')"><span  class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                     </span>
                                   </div>
                             </div>
@@ -774,12 +775,12 @@
                                       <mat-select name="depar" id="depar" [(value)]="selectdepar" placeholder="Seleccione un departamento" >
                                         <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>
                                       </mat-select>
-                                    </mat-form-field>         
+                                    </mat-form-field>
                                   <span class="input-group-btn">
                                     <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('departamento')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                   </span>
                                 </div>
-                            </div>                     
+                            </div>
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="listfacul"><strong>Departamentos Agregados :</strong></label>
@@ -800,7 +801,7 @@
                                 </mat-form-field>
                               </div>
                             </div>
-                            
+
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="emailedit">
@@ -810,19 +811,19 @@
                               </div>
                             </div>
 
-                    
+
                             <div class="col-md-12">
                                 <label class="control-label" for="tel"><strong>Telefonos :</strong></label>
                               <div class="input-group">
-                                  
+
                                 <input id="tel" [(ngModel)]="telefono" name="tel" type="text" class="form-control">
                                 <span class="input-group-btn">
                                       <button class="btn btn-success" type="button" (click)="agregarTelefonos()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                 </span>
                               </div>
                             </div>
-                          
-                          
+
+
 
                             <div class="form-group" >
                               <div class="col-md-12">
@@ -832,8 +833,8 @@
                                   </ul>
                               </div>
                             </div>
-                            
-                            
+
+
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="condi">

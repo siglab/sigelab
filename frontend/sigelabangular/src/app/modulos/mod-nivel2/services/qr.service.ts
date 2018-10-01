@@ -202,7 +202,6 @@ export class QrService {
 
     }
 
-
   }
 
   updateQrDoc(id, idEquip) {
@@ -283,6 +282,17 @@ export class QrService {
   );
 
   }
+
+  listCfFaculties () {
+    return this.afs.collection( 'faculty' ).snapshotChanges().pipe(
+     map(actions => actions.map(a => {
+       const data = a.payload.doc.data();
+       const id = a.payload.doc.id;
+       return { id, ... data };
+     }))
+   );
+
+   }
 
 
 

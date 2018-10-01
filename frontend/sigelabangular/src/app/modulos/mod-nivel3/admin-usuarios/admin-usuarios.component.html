@@ -7,7 +7,7 @@
   </section>
 
   <!-- Main content -->
-  <section class="content" *ngIf="itemsel | async; let itemsel">
+  <section class="content">
 
     <!-- Componente central de busqueda -->
 
@@ -18,7 +18,8 @@
             <div class="form-group">
               <div class="col-md-12">
 
-                <button *ngIf="moduloNivel2" data-toggle="modal" (click)= "setValue()"   data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar
+                <button *ngIf="moduloNivel2" data-toggle="modal" (click)="setValue()" data-target="#modal1" style="float: right;"
+                  class="btn btn-danger" type="button">Agregar
                   Personal</button>
               </div>
             </div>
@@ -33,24 +34,13 @@
                 <div class="box-body">
                   <div class="box-body">
 
-                    <ul class="nav nav-tabs">
-                      <li>
-                        <a class="tablas" data-toggle="tab" href="#home">
-                          Activos</a>
-                      </li>
-                      <li>
-                        <a class="tablas" data-toggle="tab" href="#menu1">
-                          Inactivos</a>
-                      </li>
-                    </ul>
-
                     <div class="row" style="margin-top:20px;">
                       <div class="col-md-12">
                         <div class="box box-danger">
                           <div class="tab-content">
                             <div id="home" class="tab-pane fade in active">
 
-                              <div class="box-body" *ngIf="this.itemsel">
+                              <div class="box-body">
 
                                 <div>
                                   <div class="box-header">
@@ -69,7 +59,8 @@
                                     <div class="example-container mat-elevation-z8" *ngIf="dataSourcePers.data.length != 0">
                                       <div class="example-header">
                                         <mat-form-field>
-                                          <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
+                                          <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)"
+                                            placeholder="Buscar Personal">
                                         </mat-form-field>
                                       </div>
 
@@ -78,29 +69,36 @@
 
                                         <ng-container matColumnDef="nombre">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                          <mat-cell   *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
 
 
                                         <ng-container matColumnDef="email">
-                                          <mat-header-cell [ngClass]="'large'"  *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                          <mat-cell [ngClass]="'large'"  *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          <mat-header-cell [ngClass]="'large'" *matHeaderCellDef mat-sort-header> Email
+                                          </mat-header-cell>
+                                          <mat-cell [ngClass]="'large'" *matCellDef="let element"> {{element.email}}
+                                          </mat-cell>
                                         </ng-container>
 
                                         <ng-container matColumnDef="perfiles">
-                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Perfiles </mat-header-cell>
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Perfiles
+                                          </mat-header-cell>
                                           <mat-cell *matCellDef="let element"> {{element.roles}} </mat-cell>
                                         </ng-container>
 
-
-
+                                        <ng-container matColumnDef="estado">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Perfiles
+                                          </mat-header-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.roles}} </mat-cell>
+                                        </ng-container>
 
                                         <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
-                                        <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"
-                                          data-toggle="modal" data-target="#modal"></mat-row>
+                                        <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;"
+                                          (click)="cambiardata(row, 'activos')"></mat-row>
                                       </mat-table>
 
-                                      <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                      <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                                        [showFirstLastButtons]="true">
                                       </mat-paginator>
                                     </div>
                                   </div>
@@ -112,7 +110,7 @@
 
                             <div id="menu1" class="tab-pane fade">
 
-                            
+
                             </div>
                           </div>
 
@@ -129,12 +127,7 @@
 
             </div>
 
-
-
-
           </div>
-
-
 
         </div>
       </div>
@@ -142,9 +135,255 @@
 
 
 
+    <div class="col-md-12">
+
+      <h2 class="text-center" *ngIf="!this.email">
+
+        Seleccione una persona
+
+      </h2>
+      <div class="box box-danger" *ngIf="this.email">
+        <div class="box-header text-center">
+          <i class="fa fa-users"></i>
+          <h3 class="box-title">Informacion del Personal</h3>
+
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <form id="form-dash2equip" class="" name="form-dash2equip">
+            <fieldset>
+              <div class="form-group row" *ngIf="this.idp">
+
+                <div class="col-md-12">
+                  <label class="col-md-2 control-label" for="nombreprub">
+                    <strong>Nombre:</strong>
+                  </label>
+                  <div class="col-md-10">
+                    <input [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="form-group row" *ngIf="this.idp">
+                <div class="col-md-12">
+                  <label class="control-label col-sm-2" for="nombreprub">
+                    <strong>Apellidos:</strong>
+                  </label>
+                  <div class="col-md-10">
+                    <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="form-group row" *ngIf="this.idp">
+                <div class="col-md-12">
+                  <label class="control-label col-sm-2" for="nombreprub">
+                    <strong>tipo:</strong>
+                  </label>
+                  <div class="col-md-10">
+
+                    <select class="form-control" [(ngModel)]="this.type" name="tipo">
+
+                      <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
+
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label class="control-label col-sm-2" for="estadoserv">
+                    <strong>Email:</strong>
+                  </label>
+
+                  <div class="col-md-10">
+                    <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="col-md-12">
+                <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
+                <div class="input-group">
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="this.rolSelect" class="alt" name="rolesSelect" id="facul">
+                      <mat-option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </mat-option>
+
+
+                    </mat-select>
+                  </mat-form-field>
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modal" tabindex="-1"><i
+                        class="fa fa-plus"></i></button>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-12">
+                  <label class="control-label" for="listfacul"><strong>Roles actuales :</strong></label>
+                  <ul class="nav nav-stacked" *ngIf="this.arrayPract.length > 0">
+                    <li *ngFor="let item of this.arrayPract; let i= index;"><a> <strong> {{item.nombre}} </strong>
+                        <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span></a></li>
+                  </ul>
+                  <h5 *ngIf="this.arrayPract.length === 0"> El usuario tiene un rol de acceso básico.</h5>
+                </div>
+              </div>
+
+              <div class="form-group row" style="margin-top:19px;">
+                <div class="col-md-12">
+
+                  <label class="control-label" for="listfacul"><strong>Inactivar usuario :</strong></label>
+
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <label class="switch">
+                        <input name="active" [(ngModel)]="this.estado_u" id="activo" type="checkbox">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+
+              <div *ngIf="this.idp" class="form-group row" style="margin-top:19px;">
+                <div class="col-md-12">
+
+                  <label class="control-label" for="listfacul"><strong>Inactivar Personal :</strong></label>
+
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <label class="switch">
+                        <input name="active" [(ngModel)]="this.estado_p" id="activo" type="checkbox">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+            </fieldset>
+
+
+          </form>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar <i class="fa fa-refresh"></i>
+          </button>
+
+        </div>
+      </div>
+
+
+
+    </div>
+
+
+
+    <!--  modal seleccionar laboratorio -->
+    <div class="modal fade" id="modal" role="dialog">
+      <div class="modal-dialog modal-md">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+          <div class="modal-body">
+            <div class="box box-danger">
+              <div class="box-header text-center">
+                <i class="fa fa-build"></i>
+                <h3  *ngIf="this.rolSelect !== 'PFhLR4X2n9ybaZU3CR75' " class="box-title">Seleccione el laboratorio al que desea asignar el rol.</h3>
+                <h3  *ngIf="this.rolSelect  == 'PFhLR4X2n9ybaZU3CR75' " class="box-title">Seleccione una facultad a la que desea asignar el rol.</h3>
+
+                <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal')"></span>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+
+                <div *ngIf="this.rolSelect !== 'PFhLR4X2n9ybaZU3CR75' " class="example-container mat-elevation-z8">
+                  <div class="example-header">
+                    <mat-form-field>
+                      <input style="outline: none;" matInput (keyup)="applyFilterLab($event.target.value)" placeholder="Buscar laboratorio">
+                    </mat-form-field>
+                  </div>
+
+                  <mat-table #tableFacil [dataSource]="dataSourceFacil" matSort>
+
+                    <ng-container matColumnDef="nombre">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.cfName}} </mat-cell>
+                    </ng-container>
+
+
+
+                    <mat-header-row *matHeaderRowDef="displayedColumnsFacil"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" style="cursor: pointer;" (click)="cambiardataLab(row)"></mat-row>
+                  </mat-table>
+
+                  <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                  </mat-paginator>
+                </div>
+
+
+                <div *ngIf="this.rolSelect == 'PFhLR4X2n9ybaZU3CR75' " class="example-container mat-elevation-z8">
+                  <div class="example-header">
+                    <mat-form-field>
+                      <input style="outline: none;" matInput (keyup)="applyFilterLab($event.target.value)" placeholder="Buscar laboratorio">
+                    </mat-form-field>
+                  </div>
+
+                  <mat-table #tableFacil [dataSource]="dataSourceFacil" matSort>
+
+                    <ng-container matColumnDef="nombre">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.cfName}} </mat-cell>
+                    </ng-container>
+
+
+
+                    <mat-header-row *matHeaderRowDef="displayedColumnsFacil"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" style="cursor: pointer;" (click)="cambiardataLab(row)"></mat-row>
+                  </mat-table>
+
+                  <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true">
+                  </mat-paginator>
+                </div>
+
+                <h3  *ngIf="!this.rolSelect" > Debe Seleccionar un rol primero  </h3>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" (click)="asignarRolaLaboratorio()" class="btn btn-success">Asignar <i class="fa fa-plus"></i>
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
   </section>
 
 
 </div>
-
-
