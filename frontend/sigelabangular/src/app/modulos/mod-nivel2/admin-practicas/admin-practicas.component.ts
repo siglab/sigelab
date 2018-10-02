@@ -275,7 +275,7 @@ export class AdminPracticasComponent implements OnInit {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-
+        if (item[clave]) {
           this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
             const practica = data.payload.data();
             this.afs.doc('practice/' + clave).collection('programmingData').snapshotChanges().subscribe(data2 => {
@@ -318,7 +318,7 @@ export class AdminPracticasComponent implements OnInit {
             });
 
           });
-
+        }
 
       }
     }

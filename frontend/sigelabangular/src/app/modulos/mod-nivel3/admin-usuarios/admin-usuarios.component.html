@@ -314,7 +314,7 @@
               <!-- /.box-header -->
               <div class="box-body">
 
-                <div *ngIf="this.rolSelect !== 'PFhLR4X2n9ybaZU3CR75' " class="example-container mat-elevation-z8">
+                <div *ngIf="this.rolSelect  != 'PFhLR4X2n9ybaZU3CR75' " class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
                       <input style="outline: none;" matInput (keyup)="applyFilterLab($event.target.value)" placeholder="Buscar laboratorio">
@@ -339,7 +339,7 @@
                   </mat-paginator>
                 </div>
 
-
+                         <!-- muestra lista de facultades -->
                 <div *ngIf="this.rolSelect == 'PFhLR4X2n9ybaZU3CR75' " class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
@@ -347,20 +347,20 @@
                     </mat-form-field>
                   </div>
 
-                  <mat-table #tableFacil [dataSource]="dataSourceFacil" matSort>
+                  <mat-table #tableFacul [dataSource]="dataSourceFacul" matSort>
 
                     <ng-container matColumnDef="nombre">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.cfName}} </mat-cell>
+                      <mat-cell *matCellDef="let element"> {{element.facultyName}} </mat-cell>
                     </ng-container>
 
 
 
-                    <mat-header-row *matHeaderRowDef="displayedColumnsFacil"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" style="cursor: pointer;" (click)="cambiardataLab(row)"></mat-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumnsFacul"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsFacul;" style="cursor: pointer;" (click)="cambiarDataFacultad(row)"></mat-row>
                   </mat-table>
 
-                  <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                  <mat-paginator #paginatorFacul="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                     [showFirstLastButtons]="true">
                   </mat-paginator>
                 </div>
