@@ -446,9 +446,9 @@ export class ComunicacionMasivaComponent implements OnInit {
         {para: correos,
           asunto: this.correo.asunto,
           mensaje: this.correo.mensaje}).subscribe((res) => {
-        if(res.status === 200){
+        if (res.status === 200) {
           console.log('funco');
-          //this.cerrarAlerta();
+          // this.cerrarAlerta();
           this.limpiarDatos();
         } else {
           console.log('fallo al enviar correos');

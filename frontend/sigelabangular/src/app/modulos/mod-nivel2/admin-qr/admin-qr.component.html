@@ -25,6 +25,8 @@
 
         <button class="btn btn-primary" (click)="addNewQr(QrCantidad)"> generar QR </button>
 
+        <button *ngIf="this.arrayCsv.length > 0" class="btn btn-success" (click)="downloadCsvDoc()"> Descargar archivo Csv </button>
+
       </div>
 
       <div class="text-center">
@@ -76,10 +78,13 @@
 
                           <div class="example-container mat-elevation-z8">
                             <div class="example-header">
+                                <button (click)="downloadAllTableCsv()" mat-raised-button  color="primary" style="float: right;" >csv</button>
                               <mat-form-field>
                                 <input style="outline: none;" matInput (keyup)="cambiardataInac($event.target.value)"
                                   placeholder="Buscar referencia">
                               </mat-form-field>
+
+
                             </div>
 
                             <mat-table #tableQr [dataSource]="dataSourceQrIn" matSort>

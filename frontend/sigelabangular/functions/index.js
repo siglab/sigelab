@@ -304,6 +304,22 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
 
 
+exports.disabledUser = functions.https.onRequest((req, res) => {
+
+
+  cors(req, res, () => {
+
+
+
+    userDisabled(req.body, res);
+
+
+
+  });
+
+});
+
+
 
 
 
@@ -349,7 +365,21 @@ exports.consultaQuiUvId = functions.https.onRequest((req, res) => {
 
 
 
+ let userDisabled = ( req, res ) => {
 
+
+  admin.auth().deleteUser( req.id ).then(() => {
+
+    console.log("Successfully deleted user");
+    res.status(200).send( {resp : ' Usuario eliminado con exito!' } )
+  })
+  .catch((error) => {
+    console.log("Error deleting user:", error);
+    res.status(500).send( {resp : ' Ocurrio un error eliminando el usuario' } )
+
+  });
+
+ }
 
 
 

@@ -62,7 +62,7 @@ import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-niv
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
 
 // tslint:disable-next-line:max-line-length
-import { MatNativeDateModule, MatTableModule, MatInputModule, MatPaginator, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule } from '@angular/material';
+import { MatNativeDateModule, MatTableModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule } from '@angular/material';
 
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
@@ -160,6 +160,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatNativeDateModule,
     ReactiveFormsModule,
     MatTableModule,
+    MatButtonModule,
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,

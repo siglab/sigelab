@@ -10,11 +10,12 @@ import { Http, Response } from '@angular/http';
 
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
+import { URLDISABLED } from '../../../config';
 
 @Injectable()
 export class LoginService {
   usuario;
-  url2 = '';
+  urlDisabled = URLDISABLED;
   usersid = [];
   contExec = 0;
 
@@ -30,7 +31,7 @@ export class LoginService {
   }
 
   login() {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
         response => {
 
@@ -161,6 +162,9 @@ export class LoginService {
 
   }
 
+  // disabled auth user
+
+
 
   consultarPermisos(id) {
 
@@ -247,10 +251,12 @@ export class LoginService {
   }
 
 
-  postCloudFunction(usuario) {
-    return this.http.post(this.url2, usuario)
-      .map(this.extractData)
-      .catch(this.handleErrorObservable);
+
+
+  disabledAuth(id) {
+    return this.http.post(this.urlDisabled, {id})
+    .map(this.extractData)
+    .catch(this.handleErrorObservable);
   }
 
   extractData(res: Response) {
