@@ -58,13 +58,13 @@ export class QuerysPrincipalService {
   estructurarDataLab(data: any) {
 
     this.datosLabsEstructurados = [];
- 
+
     const promise = new Promise((resolve,reject) => {
 
       data.forEach(doc => {
-        
+
         const elemento = doc.data();
-        if(elemento.facilityAdmin !== '') {
+        if (elemento.facilityAdmin !== '') {
           this.buscarDirector(elemento.facilityAdmin).then(dueno => {
             const duenoLab = dueno.data();
 
@@ -98,7 +98,7 @@ export class QuerysPrincipalService {
                     };
 
                       this.datosLabsEstructurados.push(laboratorio);
-                    
+
                       // console.log(this.datosLabsEstructurados, data.size);
                       if(this.datosLabsEstructurados.length == data.size){
                         resolve({data:this.datosLabsEstructurados});
@@ -111,10 +111,10 @@ export class QuerysPrincipalService {
             }
         });
         }
-       
+
       });
     });
-      
+
 
     return promise;
   }
@@ -132,16 +132,16 @@ export class QuerysPrincipalService {
           if (elemento.cfFacil) {
             this.buscarLaboratorio(elemento.cfFacil).then(lab => {
               const labencontrado = lab.data();
-    
+
               if (labencontrado) {
                 this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
                   const duenoLab = dueno.data();
                   if (duenoLab && labencontrado.mainSpace) {
-    
+
                     this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
-    
+
                       const espacioLab = espacio.data();
-    
+
                       this.buscarDireccion(labencontrado.headquarter,labencontrado.subHq,labencontrado.mainSpace).then(direspa=>{
                         const servicios = {
                           nombreserv: elemento.cfName,
@@ -170,28 +170,28 @@ export class QuerysPrincipalService {
                             emaildir: duenoLab.email,
                             condiciones: labencontrado.cfConditions,
                             disponibilidad: labencontrado.cfAvailability},
-    
+
                           coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
                         };
-    
-                        
+
+
                         this.datosServEstructurados.push(servicios);
-                      
-                        if(this.datosServEstructurados.length == data.size){                        
+
+                        if(this.datosServEstructurados.length == data.size){
                           resolve({data:this.datosServEstructurados});
                         }
                       });
-    
+
                     });
-    
+
                   }
                });
               }
-    
+
             });
           }
-        }   
-  
+        }
+
       });
     });
 
@@ -208,23 +208,23 @@ export class QuerysPrincipalService {
       data.forEach(doc => {
         const elemento = doc.data();
         if(elemento.active){
-  
+
           this.afs.doc('practice/' + doc.id).collection('programmingData').snapshotChanges().subscribe(data2 => {
-  
+
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const prog = data2[0].payload.doc.data();
-    
+
             this.buscarLaboratorio(elemento.cfFacil).then(lab => {
               const labencontrado = lab.data();
-    
+
               this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
                 const duenoLab = dueno.data();
                 if (duenoLab && labencontrado.mainSpace) {
-    
+
                   this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
-    
+
                     const espacioLab = espacio.data();
-    
+
                     const pruebas = {
                       nombreprub: elemento.practiceName,
                       nombrelab: labencontrado.cfName,
@@ -248,25 +248,25 @@ export class QuerysPrincipalService {
                         disponibilidad: labencontrado.cfAvailability},
                       coord: {lat: espacioLab.spaceData.geoRep.longitud, lon: espacioLab.spaceData.geoRep.latitud}
                     };
-    
+
                     this.datosPrubEstructurados.push(pruebas);
 
                     if(this.datosPrubEstructurados.length == data.size){
                       resolve({data:this.datosPrubEstructurados});
                     }
                   });
-    
+
                 }
               });
-    
-    
+
+
             });
           });
         }
       });
     });
 
-    
+
     return promise;
   }
 
@@ -471,18 +471,18 @@ export class QuerysPrincipalService {
 
     const fecha = new Date();
     const fechaes = fecha.getDate()+'/'+(fecha.getMonth()+1)+'/'+fecha.getFullYear();
-   
+
 
     const url = URLCORREO;
     const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
     let destino = '';
     if(analistas){
       for (let i = 0; i < analistas.length; i++) {
-        destino += analistas[i] + ','     
+        destino += analistas[i] + ','
       }
     }
- 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' + 
+
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' +
                       nombreserv + ', esta fue solicitada en la fecha ' + fechaes +
                       ' por el usuario con el correo: ' + emailSolicitante +'.';
 
@@ -505,7 +505,7 @@ export class QuerysPrincipalService {
     const arra = [];
     for (const key in personas) {
       if (personas.hasOwnProperty(key)) {
-       
+
         if(personas[key]){
           this.buscarDirector(key).then(doc => {
             this.buscarUsuario(doc.data().user).then(user => {
@@ -515,13 +515,13 @@ export class QuerysPrincipalService {
                     if(key == '6ITqecW7XrgTLaW6fpn6'){
                       arra.push(doc.data().email);
                     }
-                  }               
+                  }
                 }
               }
             });
           });
         }
-        
+
       }
     }
 
@@ -533,7 +533,7 @@ export class QuerysPrincipalService {
     console.log(notificaciones);
     const fecha = new Date().toISOString().split('T')[0];
 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' + 
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' +
                       nombreserv + ', esta fue solicitada en la fecha ' + fecha +
                       ' por el usuario con el correo: ' + emailSolicitante +'.';
 
@@ -548,7 +548,7 @@ export class QuerysPrincipalService {
       const element = notificaciones[i];
 
       this.enviarNotificacion(element, obj).then(()=>{
-       
+
       });
 
     }

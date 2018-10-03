@@ -107,7 +107,7 @@ export class ServicesNivel3Service {
   buscaPracticas(keyprac, semester) {
     const col = this.afs.doc('practice/' + keyprac).collection('programmingData');
     const ref = col.ref.where('semester', '==', semester);
-    return ref.get();  
+    return ref.get();
   }
 
   buscaProyectos(keyproy) {
@@ -122,19 +122,19 @@ export class ServicesNivel3Service {
 
 
 
-  getServicio(id){
+  getServicio(id) {
     return this.afs.collection('cfSrv').doc(id).ref.get();
   }
 
-  getPractica(id){
+  getPractica(id) {
     return this.afs.collection('practice').doc(id).ref.get();
   }
 
-  getProyecto(id){
+  getProyecto(id) {
     return this.afs.collection('project').doc(id).ref.get();
   }
 
-  getPracticaProgramacion(id){
+  getPracticaProgramacion(id) {
     return this.afs.collection('practice').doc(id).collection('programmingData').ref.get();
   }
 
@@ -142,7 +142,7 @@ export class ServicesNivel3Service {
 
   getServicioPrestado(id){
     const col = this.afs.collection('cfSrvReserv');
-    const refer = col.ref.where('cfSrv','==',id).where('status','==','terminada');
+    const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'terminada');
 
     return refer.get();
   }
@@ -160,7 +160,10 @@ export class ServicesNivel3Service {
   }
 
   setUser(id, doc) {
-    return this.afs.doc('user' + id).set(doc, { merge: true });
+
+    console.log(id, 'id que llego'  );
+
+    return this.afs.doc('user/' + id).set(doc, { merge: true });
   }
 
 
