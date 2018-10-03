@@ -102,6 +102,52 @@ export class ServicesNivel3Service {
 
 
 
+  // servicios
+
+  buscaPracticas(keyprac, semester) {
+    const col = this.afs.doc('practice/' + keyprac).collection('programmingData');
+    const ref = col.ref.where('semester', '==', semester);
+    return ref.get();  
+  }
+
+  buscaProyectos(keyproy) {
+    return this.afs.doc('project/' + keyproy).ref.get();
+  }
+
+  buscaServicioPrestado(keyserv) {
+    const col = this.afs.collection('cfSrvReserv');
+    const refer =  col.ref.where('cfSrv', '==', keyserv) .where('status', '==', 'terminada');
+    return refer.get();
+  }
+
+
+
+  getServicio(id){
+    return this.afs.collection('cfSrv').doc(id).ref.get();
+  }
+
+  getPractica(id){
+    return this.afs.collection('practice').doc(id).ref.get();
+  }
+
+  getProyecto(id){
+    return this.afs.collection('project').doc(id).ref.get();
+  }
+
+  getPracticaProgramacion(id){
+    return this.afs.collection('practice').doc(id).collection('programmingData').ref.get();
+  }
+
+
+
+  getServicioPrestado(id){
+    const col = this.afs.collection('cfSrvReserv');
+    const refer = col.ref.where('cfSrv','==',id).where('status','==','terminada');
+
+    return refer.get();
+  }
+
+
 
   // METODOS DE MODIFICACION
 

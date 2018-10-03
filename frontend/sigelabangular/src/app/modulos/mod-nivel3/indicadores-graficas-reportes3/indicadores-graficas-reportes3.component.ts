@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 
 var domtoimage = require('dom-to-image');
 import { saveAs } from 'file-saver/FileSaver';
+import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
 declare var $: any;
 
@@ -151,7 +152,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   persona:any;
   faculty:any;
-  constructor(private afs: AngularFirestore) {
+  constructor(private serviceMod3: ServicesNivel3Service) {
 
   }
 
@@ -205,20 +206,18 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   getFaculty(){
     let promise = new Promise((resolve, reject) => {
-      this.getPersona(this.persona.cfPers).then(doc => {
+      this.serviceMod3.buscarDirector(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
         resolve();
       });   
     });
     return promise;
   }
-  getPersona(persid) {
-    return this.afs.doc('cfPers/' + persid).ref.get();
-  }
+
 
   estructurarSedes(){
 
-    this.buscaSede().then(datos=>{
+    this.serviceMod3.buscaSede().then(datos=>{
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.sede.push({
@@ -233,7 +232,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
   estructurarTodasSubSedes(){
-    this.buscaTodasSubSede().then(datos=>{
+    this.serviceMod3.buscaTodasSubSede().then(datos=>{
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.subsede.push({
@@ -247,7 +246,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   estructurarFacultades(){
     this.listSelect.facultad = [];
-    this.buscaTodasFacultades().then(datos=>{
+    this.serviceMod3.buscaTodasFacultades().then(datos=>{
 
       datos.forEach(doc => {
         const facultad = doc.data();
@@ -264,7 +263,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   estructurarFacultad(id){
     //this.listSelect.facultad = [];
-    this.buscaFacultad(id).then(doc=>{
+    this.serviceMod3.buscaFacultad(id).then(doc=>{
 
       this.listSelect.facultad.push({
         id:doc.id,
@@ -283,7 +282,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       this.listSelect.escuela = [];
     }
  
-    this.buscaDepartamento(keyfacul)
+    this.serviceMod3.buscaDepartamento(keyfacul)
     .then(departamento => {
       departamento.forEach(doc => {
 
@@ -497,7 +496,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         ifquery = inicio+ifquery+fin;
   
   
-      this.buscaLaboratorios().then(datos=>{
+      this.serviceMod3.buscaLaboratorios().then(datos=>{
   
         let cont = 1;
    
@@ -598,7 +597,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
     for (let i = 0; i < noduplicados.length; i++) {
       const element = noduplicados[i];
-      this.buscaServicioPrestado(element.id).then(datos => {
+      this.serviceMod3.buscaServicioPrestado(element.id).then(datos => {
         console.log(datos);
         if (datos.size != 0) {
 
@@ -636,7 +635,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.indprac.pracactivas = noduplicados.length;
     for (let i = 0; i < noduplicados.length; i++) {
       const element = noduplicados[i];
-      this.buscaPracticas(element.id, semester).then(programacion => {
+      this.serviceMod3.buscaPracticas(element.id, semester).then(programacion => {
         programacion.forEach(element => {
           this.indprac.estudiantes += parseInt(element.data().noStudents);
         });
@@ -661,7 +660,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.indproy.proyactivos = noduplicados.length;
     for (let i = 0; i < noduplicados.length; i++) {
       const element = noduplicados[i];
-      this.buscaProyectos(element.id).then(proy => {
+      this.serviceMod3.buscaProyectos(element.id).then(proy => {
         
         for (const key in proy.data().relatedPers) {
           if (proy.data().relatedPers.hasOwnProperty(key)) {
@@ -695,7 +694,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       };
      
       array.forEach(servicio => {
-        this.getServicio(servicio.id).then(datos => {
+        this.serviceMod3.getServicio(servicio.id).then(datos => {
           const aux2 = parseInt(datos.data().createdAt.split('-')[0]);
           let actual = parseInt(ano);
           for (let i = 0; i < 5; i++) {
@@ -767,7 +766,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       };
      
       array.forEach(servicio => {
-        this.getServicioPrestado(servicio.id).then(datos => {
+        this.serviceMod3.getServicioPrestado(servicio.id).then(datos => {
           datos.forEach(sol => {
             const aux2 = parseInt(sol.data().updatedAt.split('-')[0]);
             let auxmes = parseInt(sol.data().updatedAt.split('-')[1]);
@@ -976,7 +975,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       console.log(array);
       array.forEach(practica => {
       
-        this.getPracticaProgramacion(practica.id).then(datos2 => {     
+        this.serviceMod3.getPracticaProgramacion(practica.id).then(datos2 => {     
           console.log(datos2);       
             datos2.forEach(doc => {
               arrayPracticas[doc.data().semester]++;
@@ -1050,7 +1049,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   
       array.forEach(proyecto => {
 
-        this.getProyecto(proyecto.id).then(doc => {            
+        this.serviceMod3.getProyecto(proyecto.id).then(doc => {            
            let contador = 0;
           
           for (const key in doc.data().relatedPers) {
@@ -1310,87 +1309,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
-  getServicio(id){
-    return this.afs.collection('cfSrv').doc(id).ref.get();
-  }
-
-  getPractica(id){
-    return this.afs.collection('practice').doc(id).ref.get();
-  }
-
-  getProyecto(id){
-    return this.afs.collection('project').doc(id).ref.get();
-  }
-
-  getPracticaProgramacion(id){
-    return this.afs.collection('practice').doc(id).collection('programmingData').ref.get();
-  }
 
 
-
-  getServicioPrestado(id){
-    const col = this.afs.collection('cfSrvReserv');
-    const refer = col.ref.where('cfSrv','==',id).where('status','==','terminada');
-
-    return refer.get();
-  }
-
-
-  // servicios
-
-  buscaPracticas(keyprac, semester) {
-    const col = this.afs.doc('practice/' + keyprac).collection('programmingData');
-    const ref = col.ref.where('semester', '==', semester);
-    return ref.get();
-      
-  }
-
-  buscaProyectos(keyproy) {
-    return this.afs.doc('project/' + keyproy).ref.get();
-  }
-
-  buscaServicioPrestado(keyserv) {
-    const col = this.afs.collection('cfSrvReserv');
-    const refer =  col.ref.where('cfSrv', '==', keyserv) .where('status', '==', 'terminada');
-    return refer.get();
-  }
-
-
-
-  buscaSede(){
-    return  this.afs.collection('headquarter').ref.get();
-  }
-
-  buscaSubSede(keysede){
-    const col = this.afs.collection('cfPAddr');
-    const ref = col.ref.where('headquarter','==',keysede);
-    return  ref.get();
-  }
-
-  buscaTodasSubSede(){
-    return  this.afs.collection('cfPAddr').ref.get();
-  }
-
-  buscaFacultad(keyfacul){
-    return this.afs.doc('faculty/'+keyfacul).ref.get();
-  }
-  buscaTodasFacultades(){
-    return  this.afs.collection('faculty').ref.get();
-  }
-
-  buscaFacultadWitSede(keysede){
-    const col = this.afs.collection('faculty');
-    const ref = col.ref.where('subHq.'+keysede, '==', true);
-    return  ref.get();
-  }
-
-  buscaDepartamento(keyfacultad){
-    return  this.afs.doc('faculty/'+keyfacultad).collection('departments').ref.get();
-  }
-
-  buscaLaboratorios(){
-    return this.afs.collection('cfFacil').ref.get();
-   }
 
   buscaObjectos(){
     let texto = '';
