@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from '@firebase/util';
-import { AdminLaboratorios25Component } from '../../../../../modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
 @Component({
   selector: 'app-bar-admin-laboratorios',
@@ -20,10 +19,12 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   datosLabsEstructurados = [];
 
   user: any;
-  rol: any;
+  facultades: any;
 
   moduloNivel2 = false;
   moduloPermiso = false;
+
+  permisos: any;
 
   constructor(private obs: ObservablesService, private route: Router, private afs: AngularFirestore) { }
 
@@ -31,118 +32,81 @@ export class BarAdminLaboratoriosComponent implements OnInit {
 
     if (localStorage.getItem('usuario')) {
       this.getUserId();
-      this.getRoles();
-      this.getPersonId(this.user.uid).then(person => {
-        this.laboratorios2 = [];
-        if (this.moduloNivel2) {
-          this.getLaboratorios(person.data().cfPers).subscribe(labs => {
+      const labs =  JSON.parse(localStorage.getItem('laboratorios'));
+      this.permisos = JSON.parse(localStorage.getItem('permisos'))
+        this.estructurarLaboratorios(labs).then(() => {
 
-            this.laboratorios2 = this.estructuraIdLab(labs);
+          this.laboratorios2 = this.datosLabsEstructurados;
 
-            console.log(this.laboratorios2);
-          });
-        }
-        if (this.moduloPermiso) {
-          this.getPersona(person.data().cfPers).subscribe(pers => {
-            this.laboratorios2 = this.getLaboratoriosPermiso(pers.payload.data().cfFacil);
-            console.log(this.laboratorios2);
-          });
-        }
-
-      });
-
-
-
+          console.log(this.laboratorios2);
+        });
     }
   }
-  estructuraIdLab(data: any) {
+
+
+  estructurarLaboratorios(labs){
     this.datosLabsEstructurados = [];
 
-    for (let index = 0; index < data.length; index++) {
-      const elemento = data[index].payload.doc.data();
-
-      const laboratorio = {
-
-        nombre: this.ajustarTexto(elemento.cfName),
-        uid: data[index].payload.doc.id,
-        labo: elemento
-      };
-
-        this.datosLabsEstructurados.push(laboratorio);
-
-
+    let size = 0;
+    for (const key in labs) {
+      if (labs.hasOwnProperty(key)) {
+       size++;
+        
+      }
     }
-    return this.datosLabsEstructurados;
+
+    let promise = new Promise((resolve, reject) => {
+      for (const key in labs) {
+        if (labs.hasOwnProperty(key)) {
+          this.getLaboratorio(key).then(doc => {
+            const elemento = doc.data();
+            const laboratorio = {
+              nombre: this.ajustarTexto(elemento.cfName),
+              uid: doc.id,
+              labo: elemento,
+              roles : this.permisos[key]
+            };
+      
+            this.datosLabsEstructurados.push(laboratorio);
+
+            if(size == this.datosLabsEstructurados.length){
+              resolve();
+            } 
+
+          });
+          
+        }
+      }
+    });
+
+    return promise;
+  
   }
+
+  getLaboratorio(id){
+    return this.afs.collection('cfFacil').doc(id).ref.get();
+  }
+
 
   getUserId() {
     this.user = JSON.parse(localStorage.getItem('usuario'));
   }
 
-  getRoles() {
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
-
-        if ((clave === 'moduloNivel2')) {
-          this.moduloNivel2 = true;
-
-        }
-        if ((clave === 'moduloDosPermiso')) {
-          this.moduloPermiso = true;
-
-        }
-      }
-    }
-  }
 
 
   getPersonId(userid) {
     return this.afs.doc('user/' + userid).ref.get();
   }
 
-  // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
-  getLaboratorios(persid) {
-    this.labsColection = this.afs.collection<any>('cfFacil',
-      ref => ref.where('facilityAdmin', '==', persid));
-    return this.labsColection.snapshotChanges();
-  }
 
   getPersona(persid) {
     return  this.afs.doc('cfPers/' + persid).snapshotChanges();
-  }
-
-  // METODO QUE TRAE LA COLECCION DE LOS LABORATORIOS DE LOS CUALES TIENE PERMISOS
-  getLaboratoriosPermiso(arr) {
-    const laboratorios = [];
-
-    for (const key in arr) {
-      if (arr.hasOwnProperty(key)) {
-        this.afs.doc('cfFacil/' + key).ref.get().then(data => {
-
-          const laboratorio = {
-            nombre: this.ajustarTexto(data.data().cfName),
-            uid: data.id,
-            labo: data.data()
-          };
-
-          laboratorios.push(laboratorio);
-
-
-        });
-
-      }
-    }
-
-    return laboratorios;
-
   }
 
 
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
-    console.log(nombre);
     const nombreArr = nombre.split(' ');
     let name1 = '';
     let name2 = '';

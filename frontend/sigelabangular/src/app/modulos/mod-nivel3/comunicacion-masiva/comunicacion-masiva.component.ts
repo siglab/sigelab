@@ -7,6 +7,8 @@ declare var $: any;
 
 import swal from 'sweetalert2';
 import { FormControl } from '@angular/forms';
+import { URLCORREO } from '../../../config';
+import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
 @Component({
   selector: 'app-comunicacion-masiva',
@@ -77,7 +79,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   };
 
 
-  constructor(private afs:AngularFirestore, private http:Http) {
+  constructor(private serviceMod3: ServicesNivel3Service, private http:Http) {
 
 
 
@@ -94,7 +96,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     this.estructurarFacultades();
 
 
-    this.consultarHistorial().subscribe(datos => {
+    this.serviceMod3.consultarHistorial().subscribe(datos => {
       this.historial = datos;
       this.dataSource.data = datos;
 
@@ -109,7 +111,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   estructurarSedes(){
 
-    this.buscaSede().then(datos=>{
+    this.serviceMod3.buscaSede().then(datos=>{
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.sede.push({
@@ -124,12 +126,12 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
   estructurarTodasSubSedes(){
-    this.buscaTodasSubSede().then(datos=>{
+    this.serviceMod3.buscaTodasSubSede().then(datos=>{
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.subsede.push({
           id:doc.id,
-          nombre: sede.cfAddrline1 + ' - ' + sede.cfCityTown
+          nombre: sede.cfAddrline2 ? sede.cfAddrline2 : sede.cfAddrline1
         });
       });
     });
@@ -141,7 +143,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       for (let i = 0; i < this.listSelect.sede.length; i++) {
         const element = this.listSelect.sede[i];
 
-        this.buscaSubSede(element.id).then(datos=>{
+        this.serviceMod3.buscaSubSede(element.id).then(datos=>{
           datos.forEach(doc => {
             const sede = doc.data();
             this.listSelect.subsede.push({
@@ -164,7 +166,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   estructurarFacultades(){
     this.listSelect.facultad = [];
-    this.buscaTodasFacultades().then(datos=>{
+    this.serviceMod3.buscaTodasFacultades().then(datos=>{
 
       datos.forEach(doc => {
         const facultad = doc.data();
@@ -181,7 +183,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   estructurarFacultadesWitSede(keysede){
     this.listSelect.facultad = [];
-    this.buscaFacultadWitSede(keysede).then(datos=>{
+    this.serviceMod3.buscaFacultadWitSede(keysede).then(datos=>{
 
       datos.forEach(doc => {
         const facultad = doc.data();
@@ -200,7 +202,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   estructurarDeparamentos(keyfacul){
     this.listSelect.departamento = [];
     this.listSelect.escuela = [];
-    this.buscaDepartamento(keyfacul)
+    this.serviceMod3.buscaDepartamento(keyfacul)
     .then(departamento => {
       departamento.forEach(doc => {
 
@@ -288,6 +290,8 @@ export class ComunicacionMasivaComponent implements OnInit {
 
     let coincidencias = [];
 
+    let seleccion = false;
+
     const arr = {
             sede:'headquarter',
             subsede:'subHq',
@@ -313,6 +317,8 @@ export class ComunicacionMasivaComponent implements OnInit {
         if(element2.value && key != 'universidad'){
 
           if(this.formSelect[key].value.length != 0){
+            seleccion = true;
+
             ifquery += '(';
 
             for (let i = 0; i < this.formSelect[key].value.length; i++) {
@@ -375,7 +381,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       console.log(ifquery);
 
 
-    this.buscaLaboratorios().then(datos=>{
+    this.serviceMod3.buscaLaboratorios().then(datos=>{
 
       datos.forEach(doc => {
         const element = doc.data();
@@ -385,14 +391,17 @@ export class ComunicacionMasivaComponent implements OnInit {
 
         } else {
 
-         eval(ifquery);
+          if(seleccion){
+            eval(ifquery);
+          }else{
+            swal({
+              type: 'error',
+              title:  'Por favor ingrese algun filtro primero',
+              showConfirmButton: true
+            });
+          }
 
-          // setTimeout(()=>{
-          //   const dupli = this.removeDuplicates(coincidencias,'id');
-          //   console.log(coincidencias);
-          //   console.log(dupli);
-
-          // }, 4000);
+      
 
 
         }
@@ -401,7 +410,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       console.log(coincidencias);
       let cont = 0;
       coincidencias.forEach(doc => {
-        this.buscarDirector(doc.id).then(director => {
+        this.serviceMod3.buscarDirector(doc.id).then(director => {
           const email = director.data().email;
 
           notificaciones.push(director.data().user);
@@ -422,10 +431,20 @@ export class ComunicacionMasivaComponent implements OnInit {
         setTimeout(()=>{
         if(item == 'correo'){
           console.log(correos);
-          //this.servicioCorreo(correos);
+          if(correos.length != 0){
+            this.servicioCorreo(correos);
+          }
+          
         } else {
           console.log(notificaciones);
-          //this.servicioNotificacion(notificaciones);
+          if(notificaciones.length != 0){
+            this.servicioNotificacion(notificaciones);
+          }
+         
+        }
+
+        if(correos.length != 0 || notificaciones.length != 0){
+          this.servicioalmacenarHistorial(item);
         }
 
       }, 2000);
@@ -434,13 +453,13 @@ export class ComunicacionMasivaComponent implements OnInit {
 
     });
 
-
-    this.servicioalmacenarHistorial(item);
+  
+   
   }
 
   servicioCorreo(correos){
 
-      const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+      const url = URLCORREO;
 
       this.http.post(url,
         {para: correos,
@@ -464,7 +483,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     const obj = {
       asunto:'Correo masivo difusion',
       mensaje:this.notificacion,
-      fecha: new Date().toISOString(),
+      fecha: new Date().toISOString().split('T')[0],
       estado: 'sinver'
     };
 
@@ -473,11 +492,13 @@ export class ComunicacionMasivaComponent implements OnInit {
     for (let i = 0; i < notificaciones.length; i++) {
       const element = notificaciones[i];
 
-      this.enviarNotificacion(element, obj).then(()=>{
-        cont++;
+      this.serviceMod3.enviarNotificacion(element, obj).then(()=>{
+       
         if(cont == notificaciones.length-1){
           this.limpiarDatos();
 
+        }else{
+          cont++;
         }
 
       });
@@ -506,8 +527,8 @@ export class ComunicacionMasivaComponent implements OnInit {
       obj.mensaje = this.notificacion;
     }
     console.log(obj);
-    this.agregarHistorial(obj).then(()=>{
-      this.alertaHecho(tipo+' enviado');
+    this.serviceMod3.agregarHistorial(obj).then(()=>{
+      this.alertaHecho('Exito al enviar');
     });
 
   }
@@ -653,13 +674,28 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
   limpiarDatos(){
+
     this.listSelect.sede = [];
     this.listSelect.subsede = [];
     this.listSelect.facultad = [];
     this.listSelect.departamento = [];
     this.listSelect.escuela = [];
     this.estructurarSedes();
+    this.estructurarTodasSubSedes();
     this.estructurarFacultades();
+
+    this.formSelect.sede.setValue([]);
+    this.formSelect.subsede.setValue([]);
+    this.formSelect.facultad.setValue([]);
+    this.formSelect.departamento.setValue([]);
+    this.formSelect.escuela.setValue([]);
+
+    this.formCheckBox.sede.setValue(false);
+    this.formCheckBox.subsede.setValue(false);
+    this.formCheckBox.facultad.setValue(false);
+    this.formCheckBox.departamento.setValue(false);
+    this.formCheckBox.escuela.setValue(false);
+    
 
 
     this.correo = {
@@ -690,62 +726,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarDirector(iddirector) {
-    return this.afs.doc('cfPers/' + iddirector).ref.get();
-  }
 
-  agregarHistorial(obj){
-    return this.afs.collection('cfMailNotification').add(obj);
-  }
-
-  consultarNotificaciones(iduser){
-    return this.afs.doc('user/'+iduser).ref.get();
-  }
-
-  enviarNotificacion(iduser, object){
-    return this.afs.doc('user/'+iduser).collection('notification').add(object);
-  }
-
-  buscaSede(){
-    return  this.afs.collection('headquarter').ref.get();
-  }
-
-  buscaSubSede(keysede){
-    const col = this.afs.collection('cfPAddr');
-    const ref = col.ref.where('headquarter','==',keysede);
-    return  ref.get();
-  }
-
-  buscaTodasSubSede(){
-    return  this.afs.collection('cfPAddr').ref.get();
-  }
-
-  buscaFacultad(keyfacul){
-    return this.afs.doc('faculty/'+keyfacul).ref.get();
-  }
-  buscaTodasFacultades(){
-    return  this.afs.collection('faculty').ref.get();
-  }
-
-  buscaFacultadWitSede(keysede){
-    const col = this.afs.collection('faculty');
-    const ref = col.ref.where('subHq.'+keysede, '==', true);
-    return  ref.get();
-  }
-
-  buscaDepartamento(keyfacultad){
-    return  this.afs.doc('faculty/'+keyfacultad).collection('departments').ref.get();
-  }
-
-  buscaLaboratorios(){
-   return this.afs.collection('cfFacil').ref.get();
-  }
-
-
-  consultarHistorial(){
-    return this.afs.collection('cfMailNotification').valueChanges();
-  }
 
   removeDuplicates(originalArray, prop) {
     var newArray = [];
@@ -762,8 +743,5 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-  prueba(){
-    return this.afs.collection('cfFacil',
-     ref => ref.where('headquarter','==','Vp0lIaYQJ8RGSEBwckdi').where('headquarter','==','hola'))
-  }
+
 }

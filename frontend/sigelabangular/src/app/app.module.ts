@@ -51,10 +51,9 @@ import { BarAdminUsuariosComponent } from './shared/components/dashboard/left-si
 import { BarIndicadoresComponent } from './shared/components/dashboard/left-sidebar/bar-indicadores/bar-indicadores.component';
 // tslint:disable-next-line:max-line-length
 import { BarComunicacionMasivaComponent } from './shared/components/dashboard/left-sidebar/bar-comunicacion-masiva/bar-comunicacion-masiva.component';
-import { AdminLaboratorios25Component } from './modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
+
 import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
-// tslint:disable-next-line:max-line-length
-import { IndicadoresGraficasReportesComponent } from './modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
+
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
@@ -130,9 +129,7 @@ import { HttpClientModule } from '@angular/common/http';
     BarAdminUsuariosComponent,
     BarIndicadoresComponent,
     BarComunicacionMasivaComponent,
-    AdminLaboratorios25Component,
     ComunicacionMasivaComponent,
-    IndicadoresGraficasReportesComponent,
     SolicitudesNivel3Component,
     BarSolicitudesNivel3Component,
     LoginComponent,

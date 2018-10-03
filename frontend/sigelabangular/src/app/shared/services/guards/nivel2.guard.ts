@@ -8,22 +8,12 @@ export class Nivel2Guard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      const rol = JSON.parse(localStorage.getItem('rol'));
-
-      console.log(rol);
-      if(rol){
-        for (const clave in rol) {
-          if (rol[clave]) {
-            if (clave == 'moduloNivel2' || clave == 'moduloDosPermiso' || clave == 'moduloServicios' || clave == 'moduloSolicitudes') {
-              return true;
-            } else {
-              return false;
-            }
-          }
-        }
-      } else {
+      if(localStorage.getItem('nivel2')){
+       return JSON.parse(localStorage.getItem('nivel2'));
+      }else{
         return false;
       }
+
     
   }
 }

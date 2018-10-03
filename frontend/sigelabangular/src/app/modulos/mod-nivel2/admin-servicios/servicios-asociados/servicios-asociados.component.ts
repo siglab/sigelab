@@ -6,6 +6,7 @@ import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subscription } from 'rxjs';
+import { Modulo2Service } from '../../services/modulo2.service';
 
 declare var $: any;
 
@@ -124,13 +125,14 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   listaParametrosVariacion = [];
 
   seleccion = false;
-  constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
+  constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service) { }
 
   ngOnInit() {
-    this.getRoles();
+  
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
+      this.getRoles(data.roles);
       this.seleccion = true;
       this.moduloinfo = false;
       this.resetIconos();
@@ -145,10 +147,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         if(data.length != 0){
 
           this.lab_id = data.uid;
-          this.getCollectionServ(data.uid).then(servicios =>{
+          this.servicioMod2.getCollectionServicios(data.uid).then(servicios =>{
 
             this.servasocestructurados = this.estructurarDataServ(servicios);
-            this.getLaboratorio(this.lab_id).then(labo => {
+            this.servicioMod2.buscarLab(this.lab_id).then(labo => {
               this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
             
               if(this.servasocestructurados ){
@@ -195,12 +197,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
    // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-   getRoles() {
-
-    this.role = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.role);
-    for (const clave in this.role) {
-      if (this.role[clave]) {
+   getRoles(rol) {
+    this.moduloNivel2 = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave == 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -233,16 +233,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
 
-  getCollectionServ(labid) {
-    const col = this.afs.collection('cfSrv');
-    const refer = col.ref.where('cfFacil', '==', labid)
-
-    return refer.get();
-  }
-
-  getLaboratorio(labid){
-    return this.afs.doc('cfFacil/' + labid).ref.get();
-  }
+ 
 
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
   estructurarDataServ(data: any) {
@@ -290,7 +281,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   variations(clave){
 
     const variaciones = [];
-    this.afs.doc('cfSrv/' + clave).collection('variations').ref.get().then(data => {
+    this.servicioMod2.getVariaciones(clave).then(data => {
       if(data){
         data.forEach(doc=>{
           const element = doc.data();
@@ -365,12 +356,12 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-            const equip = data.payload.data();
+          this.servicioMod2.buscarEquipo(clave).then(data => {
+            const equip = data.data();
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
-              id: data.payload.id,
+              id: data.id,
               nombre: equip.cfName,
               activo: equip.active,
               precio: equip.price,
@@ -474,15 +465,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     });
 
 
-    this.afs.collection('cfSrv').add(this.srv).then(data =>{
+    this.servicioMod2.addServicio(this.srv).then(data =>{
       console.log(data);
       const objeto = {relatedServices:{}};
       objeto.relatedServices[data.id] = true;
-      this.afs.doc('cfFacil/' + this.lab_id).set(objeto,{merge:true});
+      this.servicioMod2.setDocLaboratorio(this.lab_id, objeto);
       if(this.variaciones.length != 0){
         for (let i = 0; i < this.variaciones.length; i++) {
           const element = this.variaciones[i];
-          this.afs.collection('cfSrv/' + data.id + '/variations').add(element).then(()=>{
+          this.servicioMod2.addVariaciones(data.id, element).then(()=>{
             //swal.close();
 
             if(i == this.variaciones.length-1){
@@ -513,7 +504,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         };
         if (element.id) {
           srvEquip.relatedSrv[data.id] = true;
-          this.afs.doc('cfEquip/'+element.id).set(srvEquip,{merge:true});
+          this.servicioMod2.setEquipo(element.id, srvEquip);
         }
       });
      
@@ -533,8 +524,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       };
 
       srvequip.relatedSrv[this.itemsel.infoServ.uid] = true;
-      this.afs.doc('cfEquip/'+equipo.id).set(
-        srvequip,{merge:true});
+      this.servicioMod2.setEquipo(equipo.id, srvequip);
     }
     this.srv.cfFacil = this.lab_id;
     this.srv.updatedAt = fecha.toISOString();
@@ -548,13 +538,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.afs.doc('cfSrv/' + this.itemsel.infoServ.uid).update(this.srv).then(()=>{
+    this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(()=>{
 
 
       for (let j = 0; j < this.variaciones.length; j++) {
         const variacion = this.variaciones[j];
         if(variacion.id == 'nuevo'){
-          this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations').add(variacion.data).then(()=>{
+          this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(()=>{
             swal({
               type: 'success',
               title: 'Editado correctamente',
@@ -565,10 +555,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             });
           });
         } else {
-          this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')
-          .doc(variacion.id).update(variacion.data).then(()=>{
+          this.servicioMod2.
+              updateVariciones(this.itemsel.infoServ.uid , variacion.id, variacion.data).then(()=>{
 
-          });
+              });
         }
 
 
@@ -588,9 +578,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       }
 
       for (let i = 0; i < this.variacionesCambiadas.length; i++) {
-        this.afs.collection('cfSrv/' + this.itemsel.infoServ.uid + '/variations')
-          .doc(this.variacionesCambiadas[i].id)
-          .set({active:this.variacionesCambiadas[i].active},{merge:true});
+        this.servicioMod2.setVariaciones(
+          this.itemsel.infoServ.uid, 
+          this.variacionesCambiadas[i].id, 
+          {active:this.variacionesCambiadas[i].active});
 
           if(i == this.variacionesCambiadas.length-1){
             this.variacionesCambiadas = [];

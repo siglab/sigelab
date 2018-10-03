@@ -15,11 +15,12 @@ export class SidebarComponent implements OnInit {
   moduloPrincipal = false;
   moduloNivel2 = false;
   moduloNivel3 = false;
-  moduloPermiso = false;
-  moduloServicios = false;
-  moduloSolicitudes = false;
+  moduloNivel35 = false;
   moduloNivel25 = false;
+  moduloComMasiva = false;
+  moduloQr = false;
   rolUser: any;
+  roleNivel2:any;
 
   constructor() {
 
@@ -42,42 +43,55 @@ export class SidebarComponent implements OnInit {
 
   getRol() {
 
-    this.rolUser = JSON.parse(localStorage.getItem('rol'));
+    if(localStorage.getItem('rol')){
+      console.log(localStorage.getItem('rol'));
+      this.rolUser = JSON.parse(localStorage.getItem('rol'));
+    }
+    
+    if(localStorage.getItem('laboratorios')){
+      localStorage.setItem('nivel2', JSON.stringify(true));
+
+      this.roleNivel2 = JSON.parse(localStorage.getItem('laboratorios'));
+      console.log(this.roleNivel2);
+    }
+   
+
+    if(this.rolUser){
+      for (const clave in this.rolUser) {
+        if (this.rolUser[clave]) {
+          if ((clave === 'moduloPrincipal')) {
+            this.moduloPrincipal = true;
+          }
+  
+          if ((clave === 'moduloNivel3')) {
+            this.moduloNivel3 = true;
+  
+          }
+  
+          if ((clave === 'moduloNivel25')) {
+            this.moduloNivel25 = true;
+          }
+
+          if ((clave === 'moduloQr')) {
+            this.moduloQr = true;
+          }
 
 
-    for (const clave in this.rolUser) {
-      if (this.rolUser[clave]) {
-        if ((clave === 'moduloPrincipal')) {
-          this.moduloPrincipal = true;
+          if ((clave === 'moduloComMasiva')) {
+            this.moduloComMasiva = true;
+          }
 
-        }
-        if ((clave === 'moduloNivel2')) {
-          this.moduloNivel2 = true;
-
-        }
-        if ((clave === 'moduloDosPermiso')) {
-          this.moduloPermiso = true;
-
-        }
-        if ((clave === 'moduloServicios')) {
-          this.moduloServicios = true;
-
-        }
-        if ((clave === 'moduloSolicitudes')) {
-          this.moduloSolicitudes = true;
-
-        }
-        if ((clave === 'moduloNivel3')) {
-          this.moduloNivel3 = true;
-
-        }
-
-        if ((clave === 'moduloNivel25')) {
-          this.moduloNivel25 = true;
-
+          if ((clave === 'moduloNivel35')) {
+            this.moduloNivel35 = true;
+          }
         }
       }
     }
+
+    if(this.roleNivel2){
+      this.moduloNivel2 = true;
+    }
+    
 
   //  console.log(this.moduloPrincipal);
 

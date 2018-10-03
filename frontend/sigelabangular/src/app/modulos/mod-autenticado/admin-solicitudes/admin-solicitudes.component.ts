@@ -6,6 +6,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { URLCORREO } from '../../../config';
 
 declare var $: any;
 @Component({
@@ -73,18 +74,23 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.alertaCargando();
       this.user = JSON.parse(localStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
-         this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {
-          this.dataSource.data = datos['data'];
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator
+        if(data.length != 0){
+          this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {
+          
+            this.dataSource.data = datos['data'];
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator
+  
+            this.dataSource2.data = datos['data2'];
+            this.dataSource2.sort = this.sort2;
+            this.dataSource2.paginator = this.paginator2;
+  
+            this.cerrarAlerta();
+           });
+        }else{
+          this.alertaError('No has solicitado servicios aun')
+        }
 
-          this.dataSource2.data = datos['data2'];
-          this.dataSource2.sort = this.sort2;
-          this.dataSource2.paginator = this.paginator2;
-
-
-          this.cerrarAlerta();
-         });
         
       });
 
@@ -280,7 +286,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     let emailAcepto = '';
     let emailEncargado = '';
     let emailLaboratorio = '';
-    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const url = URLCORREO;
     const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
     let destino = '';
     this.querys.getLab(this.servsel.uidlab).subscribe(lab => {

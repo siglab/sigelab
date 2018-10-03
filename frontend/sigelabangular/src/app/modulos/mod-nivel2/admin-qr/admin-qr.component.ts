@@ -51,7 +51,7 @@ export class AdminQrComponent implements OnInit {
   moduloNivel3 = false;
   secQrUrl;
 
-  constructor(private afs: AngularFirestore, private qrserv: QrService, private router: Router) { }
+  constructor(private qrserv: QrService, private router: Router) { }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
@@ -188,9 +188,7 @@ export class AdminQrComponent implements OnInit {
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
-      const collref = this.afs.collection('cfEquip').ref;
-      const queryref = collref.where('inventory', '==', q);
-      queryref.get().then((snapShot) => {
+      this.qrserv.getEquipForInventory(q).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'El codigo de Inventario no fue encontrado';
           this.dispo = false;
@@ -228,11 +226,7 @@ export class AdminQrComponent implements OnInit {
       /*   */
       this.arrayCsv = [];
       for (let index = 1; index <= cantidad; index++) {
-        this.afs
-          .collection('qr')
-          .add(newqr)
-          .then(ok => {
-
+        this.qrserv.addQr(newqr).then(ok => {
             this.genItQR(ok.id, cantidad, index).then();
 
 
@@ -242,7 +236,7 @@ export class AdminQrComponent implements OnInit {
             };
 
             console.log('nuevo objeto', qrmod);
-            this.afs.doc('qr/' + ok.id).set(qrmod, { merge: true });
+            this.qrserv.setQr(ok.id, qrmod);
 
             console.log('se agrego prro');
           });

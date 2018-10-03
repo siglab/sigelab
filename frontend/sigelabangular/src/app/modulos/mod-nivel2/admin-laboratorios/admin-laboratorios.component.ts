@@ -15,6 +15,7 @@ import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
 import { FormControl } from '@angular/forms';
+import { Modulo2Service } from '../services/modulo2.service';
 
 
 @Component({
@@ -159,22 +160,23 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   selecactividad = new FormControl();
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore,
-    private storage: AngularFireStorage, private service: EspaciosService) {
+  constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service,
+              private storage: AngularFireStorage, private service:EspaciosService) {
   }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.getUserId();
-    this.getRoles();
+   
     this.cargarSedes();
     this.cargarSubsedes();
     this.cargarFacultades();
 
     this.sus = this.obs.currentObjectLab.subscribe(data => {
-
-      this.resetIconos();
+      console.log(data);
+     this.getRoles(data.roles);
+     this.resetIconos();
 
       this.labestructurado = undefined;
       this.itemsel = Observable.of(this.labestructurado);
@@ -299,88 +301,80 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   estructurarLab(key) {
     this.labestructurado = {};
-    let promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).then(labo => {
+    let promise = new Promise((resolve,reject)=>{
+      this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
+    
+          this.servicioMod2.buscarSede(laboratorio.headquarter ? laboratorio.headquarter : 'tygd').then(se=>{
+            const sede = se.data();
+      
+              this.servicioMod2.buscarSubSede(laboratorio.subHq ? laboratorio.subHq : 'mfij').then(sub=>{
+                const subsede = sub.data();
+                this.servicioMod2.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+                  const duenoLab = dueno.data();
+                  if (duenoLab) {
+                        // convertir boolean a cadena de caracteres para estado del laboratorio
+                      let estadoLab;
+                        if (laboratorio.active === true) {
+                        estadoLab = 'Activo';
+                        } else if ( laboratorio.active === false ) {
+                        estadoLab = 'Inactivo';
+                        }
+                      this.labestructurado = {
+                        uid: labo.id,
+                        nombre: this.ajustarTexto(laboratorio.cfName),
+                        descripcion: laboratorio.cfDescr,
+                        escuela: laboratorio.knowledgeArea,
+                        inves: laboratorio.researchGroup,
+                        objectActividad: laboratorio.facilActivity,
+                        actividad: this.actividades(laboratorio.facilActivity),
+                        director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                        iddueno: laboratorio.facilityAdmin,
+                        sede: {id:laboratorio.headquarter, nombre:sede ? sede.cfName : ''},
+                        subsede: {id:laboratorio.subHq, 
+                                  nombre:subsede ? subsede.cfAddrline1 : ''},
+                        espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
+                        espacioPrincipal: laboratorio.mainSpace,
+                        telefonos: this.estructuraTelefonos(labo.id),
+                        info:{email: laboratorio.otros.email},
+                        equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
+                        personal: this.estructurarPersonas(laboratorio.relatedPers),   
+                        facultades: this.estructurarFacultades(laboratorio.faculties),
+                        departamentos: this.estructurarDepartamentos(laboratorio.departments),
+                        espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
+                        cambios: laboratorio.suggestedChanges,
+                        disponibilidad: laboratorio.cfAvailability,
+                        condiciones: laboratorio.cfConditions,
+                        estado: estadoLab
+                      };
 
-        this.buscarSede(laboratorio.headquarter ? laboratorio.headquarter : 'tygd').then(se => {
-          const sede = se.data();
-
-          this.buscarSubSede(laboratorio.subHq ? laboratorio.subHq : 'mfij').then(sub => {
-            const subsede = sub.data();
-            this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
-              const duenoLab = dueno.data();
-              if (duenoLab) {
-                // convertir boolean a cadena de caracteres para estado del laboratorio
-                let estadoLab;
-                if (laboratorio.active === true) {
-                  estadoLab = 'Activo';
-                } else if (laboratorio.active === false) {
-                  estadoLab = 'Inactivo';
-                }
-                this.labestructurado = {
-                  uid: labo.id,
-                  nombre: this.ajustarTexto(laboratorio.cfName),
-                  descripcion: laboratorio.cfDescr,
-                  escuela: laboratorio.knowledgeArea,
-                  inves: laboratorio.researchGroup,
-                  objectActividad: laboratorio.facilActivity,
-                  actividad: this.actividades(laboratorio.facilActivity),
-                  director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                  iddueno: laboratorio.facilityAdmin,
-                  sede: { id: laboratorio.headquarter, nombre: sede ? sede.cfName : '' },
-                  subsede: {
-                    id: laboratorio.subHq,
-                    nombre: subsede ? subsede.cfAddrline1 : ''
-                  },
-                  espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
-                  espacioPrincipal: laboratorio.mainSpace,
-                  telefonos: this.estructuraTelefonos(labo.id),
-                  info: { email: laboratorio.otros.email },
-                  equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                  personal: this.estructurarPersonas(laboratorio.relatedPers),
-                  facultades: this.estructurarFacultades(laboratorio.faculties),
-                  departamentos: this.estructurarDepartamentos(laboratorio.departments),
-                  espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
-                  cambios: laboratorio.suggestedChanges,
-                  disponibilidad: laboratorio.cfAvailability,
-                  condiciones: laboratorio.cfConditions,
-                  estado: estadoLab
-                };
-
-                if (laboratorio.facilActivity.extension) {
-                  const servicesol = this.estructurarServicios(laboratorio.relatedServices);
-                  this.labestructurado['solicitudes'] = servicesol.arr2;
-                  this.labestructurado['servicios'] = servicesol.arr;
-                }
-                if (laboratorio.facilActivity.research) {
-                  this.labestructurado['proyectos'] = this.estructurarProyectos(laboratorio.relatedProjects);
-                }
-                if (laboratorio.facilActivity.teaching) {
-                  this.labestructurado['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices);
-                }
-
-                this.cambios = this.pendientes(laboratorio.suggestedChanges);
+                      if(laboratorio.facilActivity.extension){
+                        const servicesol = this.estructurarServicios(laboratorio.relatedServices);
+                        this.labestructurado['solicitudes'] = servicesol.arr2;
+                        this.labestructurado['servicios'] = servicesol.arr;
+                      }
+                      if(laboratorio.facilActivity.research){
+                        this.labestructurado['proyectos'] =  this.estructurarProyectos(laboratorio.relatedProjects);
+                      }
+                      if(laboratorio.facilActivity.teaching){
+                        this.labestructurado['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices);
+                      }
+                  
+                      this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
 
-                if (this.labestructurado) {
-                  resolve();
-                } else {
-                  reject();
-                }
+                      if(this.labestructurado){
+                        resolve();
+                      } else {
+                        reject();
+                      }
+                  }
 
-              }
-            });
+                });
+              })
           });
-
-
-
         });
-
-
-
-      })
-    });
+      });
 
     return promise;
 
@@ -407,34 +401,14 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
 
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).ref.get();
-  }
-
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarDirector(iddirector) {
-    return this.afs.doc('cfPers/' + iddirector).ref.get();
-  }
-
-  // METODO QUE TRAE UNA SEDE ESPECIFICA DEPENDIENDO EL ID-SEDE
-  buscarSede(idsede) {
-    return this.afs.doc('headquarter/' + idsede).ref.get();
-  }
-
-  // METODO QUE TRAE UNA SUBSEDE ESPECIFICA DEPENDIENDO EL ID-SUBSEDE
-  buscarSubSede(idsub) {
-    return this.afs.doc('cfPAddr/' + idsub).ref.get();
-  }
-
   // METODO QUE TRAE UN ESPACIO ESPECIFICO DEPENDIENDO EL ID-ESPACIO
   buscarEspacio(idespacio) {
     let arr = [];
     for (let i = 0; i < 1; i++) {
-      if (idespacio) {
-        this.afs.doc('space/' + idespacio).ref.get().then(data => {
-
-          arr.push(data.data());
+      if(idespacio){
+       this.servicioMod2.buscarEspacio(idespacio).then(data=>{
+       
+         arr.push(data.data());
         });
       }
     }
@@ -457,8 +431,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + clave).ref.get().then(data => {
-            const servicio = data.data();
+          this.servicioMod2.buscarServicio(clave).then(data => {
+            const servicio =  data.data();
             const serv = {
               nombre: servicio.cfName,
               descripcion: servicio.cfDesc,
@@ -470,8 +444,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             };
             arr.push(serv);
 
-            this.getSolicitudes(clave).then(dataSol => {
-
+            this.servicioMod2.getSolicitudesServiciosForId(clave).then(dataSol => {
+   
               dataSol.forEach(doc => {
                 const element = doc.data();
 
@@ -513,9 +487,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('practice/' + clave).ref.get().then(data => {
-            const practica = data.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
+           this.servicioMod2.buscarPractica(clave).then(data => {
+           const practica =  data.data();
+            this.servicioMod2.buscarProgramacion(clave).then(data2 => {
 
               data2.forEach(doc => {
                 const prog = doc.data();
@@ -562,8 +536,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-            const equip = data.payload.data();
+           this.servicioMod2.buscarEquipo(clave).then(data => {
+           const equip =  data.data();
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
@@ -592,12 +566,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   estructurarComponents(item) {
     const arr = [];
 
-    this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
-
+    this.servicioMod2.buscarComponente(item).then(data => {
+      data.forEach(doc => {
+        const element = doc.data();
         const componente = {
-          id: data[i].payload.doc.id,
+          id: doc.id,
           nombre: element.cfName,
           descripcion: element.cfDescription,
           precio: element.cfPrice,
@@ -608,11 +581,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
         arr.push(componente);
 
-
-
-      }
-
-    });
+      })
+     });
 
     return arr;
   }
@@ -629,19 +599,19 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
+           this.servicioMod2.buscarPersona(clave).then(data => {
+            const pers =  data.data();
             let persona = {};
-            if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+            if(pers.user){
+              this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if (dataper.payload.data()) {
+                if(dataper.data()){
 
                   persona = {
                     id: clave,
                     nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                     activo: pers.active,
-                    email: dataper.payload.data().email,
+                    email: dataper.data().email,
                     idpers: clave,
                     iduser: pers.user
                   };
@@ -685,15 +655,15 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
-            const project = data.payload.data();
+           this.servicioMod2.buscarProyectos(clave).then(data => {
+            const project =  data.data();
 
-            // funciona con una programacion, cuando hayan mas toca crear otro metodo
-            const proyecto = {
-              nombre: project.projectName,
-              descripcion: project.projectDesc,
-              id: project.ciNumber
-            };
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              const proyecto = {
+                nombre: project.projectName,
+                descripcion: project.projectDesc,
+                id: project.ciNumber
+              };
 
             arr.push(proyecto);
 
@@ -717,10 +687,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('faculty/' + clave).snapshotChanges().subscribe(data => {
-            const facultad = data.payload.data();
-            arr.push({ id: clave, nombre: facultad.facultyName });
-          });
+           this.servicioMod2.buscarFacultad(clave).then(data => {
+           const facultad =  data.data();
+             arr.push({id:clave, nombre:facultad.facultyName});
+           });
         }
 
       }
@@ -740,12 +710,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         for (const key in facultades[clave]) {
           if (facultades[clave].hasOwnProperty(key)) {
             if (facultades[clave][key]) {
-              this.afs.doc('faculty/' + clave).collection('departments')
-                .doc(key).snapshotChanges().subscribe(data => {
-                  const departamento = data.payload.data();
-                  arr.push({ idfacul: clave, id: key, nombre: departamento.departmentName });
-                });
-            }
+              this.servicioMod2.buscarDepartamento(clave, key).then(data => {
+              const departamento =  data.data();
+                arr.push({idfacul:clave, id:key, nombre:departamento.departmentName});
+              });
+           }
 
           }
         }
@@ -758,9 +727,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   estructuraTelefonos(idlab) {
     let tels = [];
-    this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
-      data.forEach(element => {
-        tels.push({ id: element.id, nombre: element.data().cfEAddrValue });
+    this.servicioMod2.buscarTelefono(idlab).then(data=>{
+      data.forEach(element=>{
+        tels.push({id:element.id, nombre:element.data().cfEAddrValue});
       });
     });
 
@@ -776,23 +745,23 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
-            const espacio = data.payload.data();
+          this.servicioMod2.buscarEspacio(clave).then(data => {
+            const espacio = data.data();
 
-            // funciona con una programacion, cuando hayan mas toca crear otro metodo
-            if (espacio) {
-              const space = {
-                id_space: data.payload.id,
-                capacity: espacio.capacity,
-                createdAt: espacio.createdAt,
-                freeArea: espacio.freeArea,
-                headquarter: espacio.headquarter,
-                indxSa: espacio.indxSa,
-                map: espacio.map,
-                minArea: espacio.minArea,
-                ocupedArea: espacio.ocupedArea,
-                totalArea: espacio.totalArea,
-                spaceData: espacio.spaceData,
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              if (espacio) {
+                const space = {
+                  id_space: data.id,
+                  capacity: espacio.capacity,
+                  createdAt: espacio.createdAt,
+                  freeArea: espacio.freeArea,
+                  headquarter: espacio.headquarter,
+                  indxSa: espacio.indxSa,
+                  map: espacio.map,
+                  minArea: espacio.minArea,
+                  ocupedArea: espacio.ocupedArea,
+                  totalArea: espacio.totalArea,
+                  spaceData: espacio.spaceData,
 
               };
 
@@ -828,41 +797,37 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
 
-  cargarSedes() {
-    this.afs.collection('headquarter').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
-        this.sedes.push({ id: data[i].payload.doc.id, nombre: element.cfName });
-      }
+  cargarSedes(){
+    this.servicioMod2.getSedes().then(data=>{
+      data.forEach(doc => {
+        this.sedes.push({id:doc.id, nombre:doc.data().cfName});
+      });
     });
   }
 
-  cargarSubsedes() {
-    this.afs.collection('cfPAddr').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
-        this.subsedes.push({ id: data[i].payload.doc.id, nombre: element.cfAddrline1 });
-      }
+  cargarSubsedes(){
+    this.servicioMod2.getSubSedes().then(data=>{
+      data.forEach(doc => {
+        this.subsedes.push({id:doc.id, nombre:doc.data().cfAddrline1});
+      });
     });
   }
 
-  cargarFacultades() {
-    this.afs.collection('faculty').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
-        this.facultades.push({ id: data[i].payload.doc.id, nombre: element.facultyName });
-        this.cargarDepartamentos(data[i].payload.doc.id);
-      }
+  cargarFacultades(){
+    this.servicioMod2.getFacultades().then(data=>{
+      data.forEach(doc => {
+        this.facultades.push({id:doc.id, nombre:doc.data().facultyName});
+        this.cargarDepartamentos(doc.id);
+      });
     });
   }
 
 
-  cargarDepartamentos(idfacul) {
-    this.afs.doc('faculty/' + idfacul).collection('departments').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
-        this.departamentos.push({ id: data[i].payload.doc.id, idfacul: idfacul, nombre: element.departmentName });
-      }
+  cargarDepartamentos(idfacul){
+    this.servicioMod2.getDepartamentos(idfacul).then(data=>{
+      data.forEach(doc => {
+        this.departamentos.push({id:doc.id, idfacul:idfacul, nombre:doc.data().departmentName});
+      });
     });
   }
 
@@ -871,12 +836,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
   variations(clave) {
     const variaciones = [];
-    this.afs.doc('cfSrv/' + clave).collection('variations').snapshotChanges().subscribe(data => {
-      if (data) {
-        for (let i = 0; i < data.length; i++) {
-          const element = data[i].payload.doc.data();
-          variaciones.push(element);
-        }
+    this.servicioMod2.getVariaciones(clave).then(data => {
+      if(data){
+        data.forEach(doc => {
+          variaciones.push(doc.data());
+        });
       } else {
         return variaciones;
       }
@@ -887,30 +851,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
 
   getUserId() {
-    this.user = JSON.parse(localStorage.getItem('usuario'));
+    this.user = this.servicioMod2.getLocalStorageUser();
   }
 
-  getPersonId(userid) {
-    return this.afs.doc('user/' + userid).ref.get();
-  }
-
-  getPersona(persid) {
-    return this.afs.doc('cfPers/' + persid).snapshotChanges();
-  }
-
-  // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
-  getLaboratorios(persid) {
-    return this.afs.collection<any>('cfFacil',
-      ref => ref.where('facilityAdmin', '==', persid)).snapshotChanges();
-
-  }
-
-  getSolicitudes(id) {
-    const col = this.afs.collection('cfSrvReserv');
-    const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'pendiente');
-
-    return refer.get();
-  }
 
 
 
@@ -931,12 +874,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
+  getRoles(rol) {
+    this.moduloNivel2 = false;
+    this.moduloPermiso = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
 
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
@@ -993,9 +935,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           if (this.infolab.mainSpace) {
             this.infolab['active'] = true;
           }
-
-          this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data => {
-
+    
+          this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
+              .then(data=>{
+    
             swal.close();
             swal({
               type: 'success',
@@ -1047,17 +990,18 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             });
 
 
-            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).subscribe(person => {
+            this.servicioMod2.buscarPersona(this.servicioMod2.getLocalStoragePers().cfPers)
+              .then(person=>{
               aux.suggestedChanges.push({
                 pos: this.labestructurado.cambios.length,
                 data: dataEstructurada,
                 uid: this.user.uid,
-                fecha: this.fecha.getDate() + '/' + (this.fecha.getMonth() + 1) + '/' + this.fecha.getFullYear(),
-                nombre: person.payload.data().cfFirstNames + ' ' + person.payload.data().cfFamilyNames,
+                fecha: this.fecha.getDate()+'/'+(this.fecha.getMonth()+1)+'/'+this.fecha.getFullYear(),
+                nombre: person.data().cfFirstNames + ' ' + person.data().cfFamilyNames,
                 estado: 'pendiente'
               });
 
-              this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux, { merge: true }).then(() => {
+             this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, aux).then(()=>{
                 swal.close();
                 swal({
                   type: 'success',
@@ -1130,8 +1074,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                     cambio[aux[0]] = {};
-                    this.servicioEditarFacDep(obj);
-                  } else {
+                    this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, obj);
+                  }else{
                     cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                   }
                 } else if (aux == 'cfAvailability') {
@@ -1149,9 +1093,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   if (this.sugerencia.data[cont].quitar) {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
-
-                    this.servicioEditarActividad(obj);
-                  } else {
+                                    
+                    this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, obj);
+                  }else{
                     cambio[aux[0]] = {};
 
                     cambio[aux[0]] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].info, true);
@@ -1170,7 +1114,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         }
         cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
 
-        this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio, { merge: true }).then(data => {
+        this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, cambio).then(data=>{
           swal(
             'Cambios Aprobados',
             '',
@@ -1236,12 +1180,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   EnviarcfEAddr(data, accion) {
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
-      if (accion) {
-        this.afs.doc('cfFacil/' + this.labestructurado.uid).collection('cfEAddr')
-          .add({ cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre })
-      } else {
-        this.afs.doc('cfFacil/' + this.labestructurado.uid).collection('cfEAddr')
-          .doc(element.id).delete();
+      if(accion){
+        this.servicioMod2.addAddrLaboratorio(this.labestructurado.uid,element.nombre);
+      }else{
+        this.servicioMod2.deleteAddrLaboratorio(this.labestructurado.uid, element.id);
       }
 
     }
@@ -1257,13 +1199,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     return auxactiviti;
   }
 
-  servicioEditarFacDep(obj) {
-    return this.afs.doc('cfFacil/' + this.labestructurado.uid).update(obj);
-  }
-
-  servicioEditarActividad(obj) {
-    return this.afs.doc('cfFacil/' + this.labestructurado.uid).set(obj, { merge: true });
-  }
 
 
   cambiarEstadoSugerencia(pos, estado) {
@@ -1296,7 +1231,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     const cambio = {};
     cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
 
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data => {
+    this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, cambio).then(data=>{
       swal({
         type: 'success',
         title: 'Cambios Desaprobados',

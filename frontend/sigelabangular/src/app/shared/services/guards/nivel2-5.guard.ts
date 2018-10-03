@@ -9,19 +9,17 @@ export class Nivel25Guard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
       const rol = JSON.parse(localStorage.getItem('rol'));
+      console.log(rol);
       if(rol){
-        for (const clave in rol) {
-          if (rol[clave]) {
-            if (clave == 'moduloNivel25') {
-              return true;
-            } else {
-              return false;
-            }
-          }
+        if(rol.hasOwnProperty('moduloComMasiva')){
+          return true;
+        } else {
+          return false;
         }
+        
       } else {
         return false;
       }
-    return true;
+
   }
 }

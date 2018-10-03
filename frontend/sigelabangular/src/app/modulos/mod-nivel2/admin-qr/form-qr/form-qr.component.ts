@@ -72,15 +72,14 @@ export class FormQrComponent implements OnInit {
 
   constructor(
     private _Activatedroute: ActivatedRoute,
-    private qrser: QrService,
-    private qrserv: QrService
+    private qrser: QrService
   ) { }
 
   ngOnInit() {
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    this.qrserv.listCfFacil().subscribe(data => {
+    this.qrser.listCfFacil().subscribe(data => {
 
       console.log('data labs', data);
       this.dataSourceFacil.data = data;
@@ -347,7 +346,7 @@ export class FormQrComponent implements OnInit {
   cambiardataLab(row) {
 
     console.log(row.id);
-    this.qrserv.getSpaces(row.relatedSpaces , row.id)
+    this.qrser.getSpaces(row.relatedSpaces , row.id)
       .then((dataSpace: any) => {
         this.spaces = [];
         this.spaces = dataSpace;

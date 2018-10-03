@@ -1,7 +1,6 @@
 import { FormQrComponent } from './../modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
 import { AdminQrComponent } from './../modulos/mod-nivel2/admin-qr/admin-qr.component';
 import { ComunicacionMasivaComponent } from './../modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
-import { AdminLaboratorios25Component } from './../modulos/mod-nivel2.5/admin-laboratorios-2-5/admin-laboratorios-2-5.component';
 
 import { AdminPracticasComponent } from './../modulos/mod-nivel2/admin-practicas/admin-practicas.component';
 import { AdminEspaciosComponent } from './../modulos/mod-nivel2/admin-espacios/admin-espacios.component';
@@ -22,8 +21,6 @@ import { AdminPersonalComponent } from '../modulos/mod-nivel2/admin-personal/adm
 // tslint:disable-next-line:max-line-length
 import { SolicitudMantenimientoComponent } from '../modulos/mod-nivel2/admin-solicitudes/solicitud-mantenimiento/solicitud-mantenimiento.component';
 import { SolicitudBajaComponent } from '../modulos/mod-nivel2/admin-solicitudes/solicitud-baja/solicitud-baja.component';
-// tslint:disable-next-line:max-line-length
-import { IndicadoresGraficasReportesComponent } from '../modulos/mod-nivel2.5/indicadores-graficas-reportes/indicadores-graficas-reportes.component';
 import { SolicitudesNivel3Component } from '../modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
 import { LoginComponent } from '../modulos/login/login.component';
 import { AdminLaboratorios3Component } from '../modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
@@ -61,11 +58,11 @@ const routes: Routes = [
       { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate: [Nivel2Guard]},
 
 
-      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
-      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel3Guard]},
+      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard]},
+      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel25Guard]},
       { path: 'usuarios', component: AdminUsuariosComponent, canActivate: [Nivel3Guard]},
-      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
-      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
+      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate: [Nivel3Guard]},
+      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard]},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'inicio'},

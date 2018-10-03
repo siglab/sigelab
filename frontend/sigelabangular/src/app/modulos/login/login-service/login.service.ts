@@ -38,9 +38,9 @@ export class LoginService {
           console.log('entro a login');
           this.usuario = response.user;
           localStorage.setItem('usuario', JSON.stringify(this.usuario));
-
-
-          this.consultarPermisos(this.usuario.uid).then(() => {
+  
+  
+          this.consultarTipoUsuario(this.usuario.uid).then(() => {
             resolve();
 
           }).catch( err => {
@@ -66,6 +66,9 @@ export class LoginService {
     localStorage.removeItem('usuario');
     localStorage.removeItem('persona');
     localStorage.removeItem('rol');
+    localStorage.removeItem('laboratorios');
+    localStorage.removeItem('permisos');
+    localStorage.removeItem('nivel2');
     return this.afAuth.auth.signOut();
 
   }
@@ -96,9 +99,9 @@ export class LoginService {
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
 
-          if (this.usuario) {
-            this.consultarPermisos(this.usuario.uid).then(() => {
-              resolve(data);
+          if(this.usuario){
+            this.consultarTipoUsuario(this.usuario.uid).then(() => {
+              resolve(data); 
             }).catch( err => {
               reject();
             });
@@ -166,67 +169,79 @@ export class LoginService {
 
 
 
-  consultarPermisos(id) {
-
-    const promise = new Promise((resolve, reject) => {
+  consultarTipoUsuario(id) {
+    const role = ['UlcSFw3BLPAdLa533QKP','lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75', 
+                  'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
+    let promise = new Promise((resolve, reject) => {
 
       this.getUser(id).subscribe(data => {
 
         if (data) {
-          console.log('resultado de la data', data);
+
           localStorage.setItem('persona', JSON.stringify(data));
           const rol = data['appRoles'];
-          let rolelength = 0;
-          // tslint:disable-next-line:forin
+          let roleAdmin = false;
+
           for (const key in rol) {
-            rolelength++;
+            if (rol.hasOwnProperty(key)) {
+              if(rol[key]){
+                roleAdmin = role.includes(key)         
+              }           
+            }
           }
-
-          const permisos = {};
-          let cont = 0;
-          for (const clave in rol) {
-            if (rol[clave]) {
-               this.getRol(clave).then(datarol => {
-                const permission = datarol.data().permissions;
-                let rollength = 0;
-                let controle = 0;
-                // tslint:disable-next-line:forin
-                for (const key in permission) {
-                  rollength++;
+          console.log(roleAdmin);
+          if(data['cfPers'] == '' || roleAdmin){
+            this.estructurarPermisos(rol).then(ok => {
+              localStorage.setItem('rol', JSON.stringify(ok['permisos']));
+              resolve();
+            });
+          } else {
+            const arr = {};
+            const arrlab = {};
+            this.getPersona(data['cfPers']).then(doc => {
+              const clientRole = doc.data().clientRole;
+              const labs = doc.data().cfFacil;
+              let sizeLabs = 0;
+              let cont = 1;
+              for (const key in labs) {
+                if (labs.hasOwnProperty(key)) {
+                  sizeLabs++;                  
                 }
+              }
 
-                if (permission) {
-                  // tslint:disable-next-line:forin
-                  for (const llave in permission) {
-                    permisos[llave] = permission[llave];
-                    controle++;
+              for (const key in labs) {
+                if (labs.hasOwnProperty(key)) {
+                 if(labs[key]){
 
-                    if (controle === rollength) {
-                      cont++;
-
-                      console.log(rolelength, cont);
-                      if (rolelength === cont) {
-
-                        if (permisos) {
-                          console.log(permisos);
-                          localStorage.setItem('rol', JSON.stringify(permisos));
-                          resolve({ok : 'termino' });
-                        } else {
-
-                           reject( 'error'  );
-                        }
-
+                  arr[key] = true;
+                 
+                  for (const llave in clientRole[key]) {
+                    if (clientRole[key].hasOwnProperty(llave)) {
+                     this.estructurarPermisos(clientRole[key]).then(ok => {
+                      arrlab[key] = ok['permisos'];
+                    
+                      if(sizeLabs == cont){
+       
+                        localStorage.setItem('laboratorios', JSON.stringify(arr));
+                        localStorage.setItem('permisos', JSON.stringify(arrlab));
+                        resolve();
+                      }else{
+                        cont++;
                       }
+                     
+                     });
+                      
                     }
                   }
+                 }                
                 }
+              }
 
-
-              }).catch(err => console.log('error consultando el rol', err));
-            }
-
-
+            });
           }
+
+
+         
 
         }
 
@@ -235,6 +250,65 @@ export class LoginService {
 
     return promise;
 
+  }
+
+  estructurarPermisos(roles){
+
+    let promise = new Promise((resolve, reject) => {
+      let rolelength = 0;
+      // tslint:disable-next-line:forin
+      for (const key in roles) {
+        rolelength++;
+      }
+  
+      const permisos = {};
+      let cont = 0;
+      for (const clave in roles) {
+        if (roles[clave]) {
+           this.getRol(clave).then(datarol => {
+            const permission = datarol.data().permissions;
+            let rollength = 0;
+            let controle = 0;
+            // tslint:disable-next-line:forin
+            for (const key in permission) {
+              rollength++;
+            }
+  
+            if (permission) {
+              // tslint:disable-next-line:forin
+              for (const llave in permission) {
+                permisos[llave] = permission[llave];
+                controle++;
+  
+                if (controle === rollength) {
+                  cont++;
+  
+                  console.log(rolelength, cont);
+                  if (rolelength === cont) {
+  
+                    if (permisos) {
+                      console.log(permisos);
+                  
+                      resolve({permisos : permisos});
+                    } else {
+  
+                       reject( 'error'  );
+                    }
+  
+                  }
+                }
+              }
+            }
+  
+  
+          }).catch(err => console.log('error consultando el rol', err));
+        }
+  
+  
+      }
+    });
+
+    return promise;
 
   }
 
@@ -244,6 +318,10 @@ export class LoginService {
 
   getUser(iduser) {
     return this.afs.doc('user/' + iduser).valueChanges();
+  }
+
+  getPersona(idPers){
+    return this.afs.doc('cfPers/' + idPers).ref.get();
   }
 
   getModulo(idPermiso) {

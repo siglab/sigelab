@@ -20,7 +20,7 @@
                         <div class="col-md-12">
                             <ul class="nav nav-tabs">
                                 <li>
-                                    <a class="tablas" data-toggle="tab" href="#home"  (click)="inicializar()">
+                                    <a class="tablas" data-toggle="tab" href="#home" (click)="inicializar()">
                                         ACTIVOS</a>
                                 </li>
                                 <li>
@@ -245,28 +245,31 @@
                                                         <label class="control-label" for="ciudes">
                                                             <strong>Proovedor {{item.name}}:</strong>
                                                         </label>
-                                                        <li><strong>Telefono:</strong> {{item.contactNumbers}}</li>
-                                                        <li><strong>Correo:</strong> {{item.correo}}</li>
-                                                        <li><strong>Costo: $</strong> {{item.cot}}</li>
+                                                        <li>
+                                                            <strong>Telefono:</strong> {{item.contactNumbers}}</li>
+                                                        <li>
+                                                            <strong>Correo:</strong> {{item.correo}}</li>
+                                                        <li>
+                                                            <strong>Costo: $</strong> {{item.cot}}</li>
                                                     </ul>
                                                 </div>
                                             </div>
-    
 
-                                            <div class="row" style="margin-top:20px;">
+
+                                            <div *ngIf="this.moduloNivel3" class="row" style="margin-top:20px;">
                                                 <div class="col-md-12 text-center form-group">
-                    
-                                                  <div class="col-md-6" style="float: right;">
-                                                      <div class="row">
+
+                                                    <div class="col-md-6" style="float: right;">
+                                                        <div class="row">
                                                             <button *ngIf="this.solsel.status == 'pendiente'" class="btn btn-success" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
                                                             <button *ngIf="this.solsel.status == 'pendiente'" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal2">RECHAZAR</button>
                                                             <button *ngIf="this.solsel.status == 'aceptada'" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal1">CONLCUIR MANTENIMIENTO</button>
-                                                      </div>
-                                                      
-                                                  </div>
-                                                  
+                                                        </div>
+
+                                                    </div>
+
                                                 </div>
-                                              </div>
+                                            </div>
 
 
                                         </fieldset>
@@ -379,79 +382,91 @@
                                         </fieldset>
                                     </form>
 
-                                    <div *ngIf="this.infosabs" class="box box-danger">
+                                    <div *ngIf="this.infosabs == undefined">
+                                        <h3 *ngIf="!viewsabs">Cargando informacion de Sabs...</h3>
+                                        <h3 *ngIf="viewsabs">No se puedo conectar con Sabs...</h3>
+                                    </div>
+                                    <div *ngIf="this.infosabs != undefined" class="box box-danger">
                                         <div class="box-header">
-                                          <h4 (click)="cambiarIcono('sabs')" class="box-title">
-                                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                                              INFORMACION DE SABS
-                                            </a>
-                                          </h4>
-                                
+                                            <h4 (click)="cambiarIcono('sabs')" class="box-title">
+                                                <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
+                                                    INFORMACION DE SABS
+                                                </a>
+                                            </h4>
+
                                         </div>
                                         <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                                          <div class="box-body">
-                                            <form  id="form-work" class="" name="form-work" action="#">
-                                                <fieldset>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="nac"><strong>Codigo: </strong>
-                                                            {{this.infosabs.codInventario}}
-                                                          </label>
+                                            <div class="box-body">
+                                                <form id="form-work" class="" name="form-work" action="#">
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="nac">
+                                                                    <strong>Codigo: </strong>
+                                                                    {{this.infosabs.codInventario}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ccpas"><strong>Responsable: </strong>
-                                                            {{this.infosabs.responsable}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ccpas">
+                                                                    <strong>Responsable: </strong>
+                                                                    {{this.infosabs.responsable}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ciuor"><strong>Serial: </strong>
-                                                            {{this.infosabs.numSerial}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ciuor">
+                                                                    <strong>Serial: </strong>
+                                                                    {{this.infosabs.numSerial}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ciuor"><strong>Marca: </strong>
-                                                            {{this.infosabs.nombreMarca}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ciuor">
+                                                                    <strong>Marca: </strong>
+                                                                    {{this.infosabs.nombreMarca}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ciuor"><strong>Ubicacion: </strong>
-                                                            {{this.infosabs.ubicacion}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ciuor">
+                                                                    <strong>Ubicacion: </strong>
+                                                                    {{this.infosabs.ubicacion}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ciuor"><strong>Fecha Aceptacion: </strong>
-                                                            {{this.infosabs.fechaAceptacion}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ciuor">
+                                                                    <strong>Fecha Aceptacion: </strong>
+                                                                    {{this.infosabs.fechaAceptacion}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ciuor"><strong>Costo Inicial: </strong>
-                                                            {{this.infosabs.costoInicial}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ciuor">
+                                                                    <strong>Costo Inicial: </strong>
+                                                                    {{this.infosabs.costoInicial}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-12">
-                                                          <label class="control-label" for="ciuor"><strong>Estado: </strong>
-                                                            {{this.infosabs.estado}}
-                                                          </label>
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label" for="ciuor">
+                                                                    <strong>Estado: </strong>
+                                                                    {{this.infosabs.estado}}
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                    
-                                                </fieldset>
-                                            </form>
-                                          </div>
+
+                                                    </fieldset>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -505,22 +520,23 @@
                                 <div class="box box-danger">
                                     <div class="box-header">
                                         <i class="fa fa-map"></i>
-                                
+
                                         <h3 class="box-title">Historial de Solicitudes</h3>
-                        
+
                                     </div>
-                                
+
                                     <div class="box-body">
                                         <div class="col-md-6">
                                             <div class="panel-group" id="accordion">
-                        
+
                                                 <div *ngFor="let item of solicitudesCoin; let i = index;" class="panel panel-default">
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title">
-                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}"><strong>No Solicitud: </strong>{{item.uidsol}}</a>
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSol">
+                                                                <strong>No Solicitud: </strong>{{item.uidsol}}</a>
                                                         </h4>
                                                     </div>
-                                                    <div id="collapse{{i}}" class="panel-collapse collapse">
+                                                    <div id="collapseSol" class="panel-collapse collapse">
                                                         <div class="panel-body">
                                                             <form action="">
                                                                 <fieldset>
@@ -548,23 +564,23 @@
                                                                             {{item.status}}
                                                                         </div>
                                                                     </div>
-                        
+
                                                                 </fieldset>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
-                                    
+
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            
+
                                             <div class="col-md-6" style="text-align: center;">
                                                 <div class="box box-solid box-info">
                                                     <div class="box-header">
                                                         <h1 class="box-title">{{this.solicitudesEjecu}}</h1>
                                                     </div>
-    
+
                                                     <div class="box-body">
                                                         <h5>NUMERO DE SOLICITUDES EJECUTADAS PARA EL MISMO EQUIPO</h5>
                                                     </div>
@@ -575,19 +591,19 @@
                                                     <div class="box-header">
                                                         <h1 class="box-title">$ {{this.montoSolicitudes}}</h1>
                                                     </div>
-    
+
                                                     <div class="box-body">
                                                         <h5>MONTO TOTAL DE MANTENIMIENTOS EJECUTADOS PARA EL MISMO EQUIPO</h5>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
- 
+
+
                                         </div>
-            
+
                                     </div>
-                                
-                                
+
+
                                 </div>
                             </div>
 
@@ -631,33 +647,33 @@
                         </div>
 
                         <div *ngIf="this.solsel && (solsel.status == 'rechazada')" class="col-md-6">
-                                <div class="box box-danger">
-                                    <div class="box-header">
-                                        <i class="fa fa-map"></i>
-    
-                                        <h3 class="box-title">MOTIVO DEL RECHAZO</h3>
-                                    </div>
-    
-                                    <!-- /.box-header -->
-                                    <div class="box-body">
-                                        <form id="form-workserv3" class="" name="form-workserv3" action="#">
-                                            <fieldset>
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        {{this.solsel.comment}}
-                                                    </div>
-    
-                                                </div>
-                                            </fieldset>
-    
-    
-                                        </form>
-    
-                                    </div>
-    
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <i class="fa fa-map"></i>
+
+                                    <h3 class="box-title">MOTIVO DEL RECHAZO</h3>
                                 </div>
-    
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    {{this.solsel.comment}}
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+
+                                    </form>
+
+                                </div>
+
                             </div>
+
+                        </div>
 
                         <div *ngIf="!this.solsel">
                             <h2>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h2>
@@ -674,9 +690,6 @@
 
     </section>
 
-    <section>
-        <h2 *ngIf="!itemsel">NO SE HA SELECCIONADO NINGUN LABORATORIO</h2>
-    </section>
 
 
 
@@ -696,12 +709,12 @@
 
             </div>
             <div class="modal-body">
-                
+
                 <div class="box box-danger">
                     <div class="box-body">
                         <form id="form-work2" class="" name="form-work2" action="#">
                             <fieldset>
-                                
+
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <label class="control-label" for="descripcion">
@@ -710,7 +723,7 @@
                                         <textarea name="descripcion" rows="4" [(ngModel)]="this.comentario" id="descripcion" style="width: 100%;"></textarea>
                                     </div>
                                 </div>
-                                
+
                             </fieldset>
                         </form>
                     </div>
@@ -771,8 +784,8 @@
                                     <fieldset>
                                         <div class="form-group">
                                             <div class="col-md-6">
-                                                <p>por favor ingrese el costo en numero entero, es decir sin puntos o comas <br>
-                                                Ejemplo: 120000000</p>
+                                                <p>por favor ingrese el costo en numero entero, es decir sin puntos o comas
+                                                    <br> Ejemplo: 120000000</p>
                                                 <input class="form-control" [(ngModel)]="this.costo" type="text" name="costo">
                                             </div>
                                         </div>

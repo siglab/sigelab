@@ -10,6 +10,7 @@ import swal from 'sweetalert2';
 import { Observable } from '@firebase/util';
 import { element } from 'protractor';
 import { QrService } from '../../mod-nivel2/services/qr.service';
+import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
 declare var $: any;
 
@@ -113,7 +114,7 @@ export class AdminUsuariosComponent implements OnInit {
   niveles = [];
 
   constructor(private obs: ObservablesService,
-    private afs: AngularFirestore,
+    private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
     private userService: QrService) { }
 
@@ -199,21 +200,19 @@ export class AdminUsuariosComponent implements OnInit {
 
   // METODO QUE CONSULTA TODOS LOS ROLES NIVEL 2
   getRolesNivel2() {
-    this.afs.collection('appRoles').snapshotChanges().subscribe(datos => {
-      for (let i = 0; i < datos.length; i++) {
-        // tslint:disable-next-line:no-shadowed-variable
-        const element = datos[i].payload.doc.data();
-
+   this.serviceMod3.getAppRoles().then(datos => {
+     datos.forEach(doc => {
+      const element = doc.data();
 
         if (element.lvl !== 'nivel1' && element.lvl !== 'nivel3') {
 
-          this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName });
+          this.niveles.push({ id: doc.id, nombre: element.roleName });
           console.log(this.niveles);
 
         }
 
-
-      }
+     });
+ 
     });
   }
 
@@ -221,7 +220,7 @@ export class AdminUsuariosComponent implements OnInit {
   estructuraIdPers() {
     const usuarios = [];
     const promise = new Promise((resolve, reject) => {
-      this.buscarUsuarios().then(user => {
+      this.serviceMod3.buscarUsuarios().then(user => {
 
         user.forEach(doc => {
           // tslint:disable-next-line:no-shadowed-variable
@@ -230,7 +229,7 @@ export class AdminUsuariosComponent implements OnInit {
           console.log(element.cfPers);
 
 
-          this.getPersona(element.cfPers ? element.cfPers : '123').then(data => {
+          this.serviceMod3.getPersona(element.cfPers ? element.cfPers : '123').then(data => {
             this.nombresRoles(element.appRoles).then(rol => {
               const persona = data.data() ? data.data() : ' ninguno';
 
@@ -268,16 +267,6 @@ export class AdminUsuariosComponent implements OnInit {
 
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarUsuarios() {
-
-    return this.afs.collection('user').ref.get();
-
-  }
-
-  getPersona(id) {
-    return this.afs.collection('cfPers').doc(id).ref.get();
-  }
 
   nombresRoles(roles) {
     let nameroles = '';
@@ -298,7 +287,7 @@ export class AdminUsuariosComponent implements OnInit {
 
           if (roles[key]) {
 
-            this.consultarNombreRol(key).then(doc => {
+            this.serviceMod3.consultarNombreRol(key).then(doc => {
 
               if (doc.data().roleName !== 'nivel1') {
 
@@ -333,10 +322,6 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     return promise;
-  }
-
-  consultarNombreRol(id) {
-    return this.afs.collection('appRoles').doc(id).ref.get();
   }
 
 
@@ -432,18 +417,17 @@ export class AdminUsuariosComponent implements OnInit {
   // Inactiva la persona de todos los laboratorios
   updateAllFacil() {
 
-    const queryRef = this.afs.collection('cfFacil', ref => ref.where('relatedPers.' + this.idp, '==', true)).ref;
-    queryRef.get().then(result => {
+    this.serviceMod3.getLabsForIdPersona(this.idp).then(result => {
 
       const nuevoEstado = { relatedPers: {} };
 
       nuevoEstado.relatedPers[this.idp] = false;
       // inactiva el usuario dentro de la coleccion persona
-      this.afs.doc('cfPers/' + this.idlab).set({ active: false }, { merge: true });
+      this.serviceMod3.setPersona(this.idlab, { active: false });
 
       // inactiva al usuario dentro de cada laboratorio
       result.forEach(doc => {
-        this.afs.collection('cfFacil').doc(doc.id).set(nuevoEstado, { merge: true });
+       this.serviceMod3.setLaboratorio(doc.id, nuevoEstado);
       });
     });
   }
@@ -451,7 +435,7 @@ export class AdminUsuariosComponent implements OnInit {
   // inactiva un usuario y lo elimina de la auth
   disabledUserAuht() {
 
-    this.afs.doc('user' + this.idu).set({ active: true }, { merge: true });
+    this.serviceMod3.setUser(this.idu, { active: true });
     this._disabledU.disabledAuth(  this.idu ).subscribe( data =>   {
 
       console.log('exito al deshabilitar el usuario de auth');
@@ -488,11 +472,7 @@ export class AdminUsuariosComponent implements OnInit {
   }
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
 
-  updatePers(idU, pathP) {
 
-    this.afs.collection('cfPers').doc(pathP).update({ user: idU });
-
-  }
 
   /* actualizar el laboratorio con el nuevo id del document pers */
 
@@ -506,7 +486,7 @@ export class AdminUsuariosComponent implements OnInit {
 
 
     console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
+   this.serviceMod3.setLaboratorio(this.idlab, facil);
 
   }
 
@@ -522,7 +502,7 @@ export class AdminUsuariosComponent implements OnInit {
 
       lab.relatedPers[id] = true;
 
-      this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
+      this.serviceMod3.setLaboratorio(this.idlab, lab)
         .then(() => {
 
           $('#modal1').modal('hide');

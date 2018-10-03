@@ -7,6 +7,7 @@ import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Http } from '@angular/http';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 declare var $: any;
 @Component({
@@ -15,6 +16,11 @@ declare var $: any;
   styleUrls: ['./bus-serv.component.css']
 })
 export class BusServComponent implements OnInit, AfterViewInit {
+
+  // variables ci check
+  status;
+  disponible;
+  nameProject;
 
   user: any;
 
@@ -26,6 +32,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     moduloinfo = false;
     layer = null;
+
+    llaveci:any;
 
     DefaultIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
@@ -67,7 +75,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     usuariounivalle = false;
 
-  constructor(private observer: ObserverPrincipalService, private query: QuerysPrincipalService,
+  constructor(private observer: ObserverPrincipalService, 
+              private query: QuerysPrincipalService,   private afs: AngularFirestore,
               private ruta: Router, private http: Http) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
@@ -268,7 +277,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         comments:[],
         typeuser:'externo',
         path:[],
-        datauser:{type:'', ci:''},
+        datauser:{type:'', ci:'', llaveci:''},
         emailuser: this.user.email,
         acceptedBy:'',
         parametrosSrv:[],
@@ -328,8 +337,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
             }
             if(this.usuariounivalle){
               cfSrvReserv.typeuser = 'interno'
-             // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+              //cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
               cfSrvReserv.datauser.ci = this.valorci;
+              cfSrvReserv.datauser.llaveci = this.llaveci;
             }
 
             cfSrvReserv.comments.push({
@@ -514,5 +524,27 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.preciocondescuento = 0;
   }
 
+  ciCheck($event) {
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('project').ref;
+      const queryref = collref.where('ciNumber', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'El CI ingresado no se encuentra asociado a ningun proyecto actual';
+          this.disponible = true;
+        } else {
+          console.log(snapShot.docs[0].id);
+          this.nameProject = snapShot.docs[0].data().projectName;
+          this.status = 'Nombre del proyecto: ' + this.nameProject;
+          this.llaveci = snapShot.docs[0].id;
+        }
+      });
+    }
+  }
 
 }

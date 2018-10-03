@@ -10,6 +10,8 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as _ from "lodash";
 import * as firebase from 'firebase/app';
 import { Http } from '@angular/http';
+import { URLCORREO } from '../../../../config';
+import { Modulo2Service } from '../../services/modulo2.service';
 
 
 declare var $: any;
@@ -117,26 +119,28 @@ export class SolicitudMantenimientoComponent implements OnInit {
   moduloNivel2 = false;
   moduloSolicitudes = false;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+  constructor(private obs: ObservablesService,  private servicioMod2:Modulo2Service, 
               private storage:AngularFireStorage, private http:Http) {
   }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    this.getRoles();
+  
 
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
     }
     this.obs.currentObjectSolMan.subscribe(data => {
+
+      this.getRoles(data.roles);
       if(data.length != 0){
 
         this.alertaCargando();
         this.itemsel = data;
         this.lab_id = data.uid;
 
-        this.getCollectionSolicitudes(data.uid).then(data1 => {
+        this.servicioMod2.getCollectionSolicitudesMantenimiento(data.uid).then(data1 => {
           if(data1.size != 0){
             this.datos = this.estructurarSolicitudesActivas(data1, data).then(datos => {
               this.dataSource.data = datos['data'];
@@ -160,7 +164,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
                      
         });
 
-        this.getLaboratorio(data.uid).then(labo => {
+        this.servicioMod2.buscarLab(data.uid).then(labo => {
           this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
 
           this.dataSourceEquip = new MatTableDataSource(this.equipos);
@@ -216,12 +220,11 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.rol);
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
+  getRoles(rol) {
+    this.moduloNivel2 = false;
+    this.moduloSolicitudes = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -296,12 +299,6 @@ export class SolicitudMantenimientoComponent implements OnInit {
   }
 
 
-  getCollectionSolicitudes(labid) {
-    const col = this.afs.collection('request');
-    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('cfFacil','==',labid)
-    return refer.get();
-     
-  }
 
   estructurarSolicitudesActivas(data, lab) {
 
@@ -313,7 +310,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       data.forEach(doc => {
         const elemento = doc.data();
   
-        this.getEmailUser(elemento.createdBy).then(email => {
+        this.servicioMod2.buscarUsuario(elemento.createdBy).then(email => {
           const Solicitud = {
             uidsol:doc.id,
             uidlab: elemento.cfFacil,
@@ -334,7 +331,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
             Solicitud['comment'] = elemento.comment;
           }
           if(elemento.relatedEquipments != ''){
-            this.getEquipo(elemento.relatedEquipments).then(equipo => {
+            this.servicioMod2.buscarEquipo(elemento.relatedEquipments).then(equipo => {
               Solicitud['equipo'] = equipo.data();
               Solicitud['nombreEquip'] = equipo.data().cfName;
             });
@@ -367,19 +364,6 @@ export class SolicitudMantenimientoComponent implements OnInit {
     return promise;
   }
 
-  getEmailUser(userid){
-    return this.afs.doc('user/' + userid).ref.get();
-  }
-
-  getEquipo(equipid){
-    return this.afs.doc('cfEquip/' + equipid).ref.get();
-  }
-
-  getLaboratorio(labid){
-    return this.afs.doc('cfFacil/' + labid).ref.get();
-  }
-
-
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
@@ -392,7 +376,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfEquip/' + clave).ref.get().then(data => {
+          this.servicioMod2.buscarEquipo(clave).then(data => {
            const equip =  data.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
@@ -419,12 +403,12 @@ export class SolicitudMantenimientoComponent implements OnInit {
   estructurarComponents(item){
     const arr = [];
 
-    this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
+    this.servicioMod2.buscarComponente(item).then(data => {
+      data.forEach(doc => {
+        const element = doc.data();
 
           const componente = {
-            id: data[i].payload.doc.id,
+            id: doc.id,
             nombre: element.cfName,
             descripcion: element.cfDescription,
             precio: element.cfPrice,
@@ -434,10 +418,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
           };
   
           arr.push(componente);
-          
-      }
+      });
 
-     });
+    });
 
      return arr;
   }
@@ -452,11 +435,11 @@ export class SolicitudMantenimientoComponent implements OnInit {
        if (componente.hasOwnProperty(clave)) {
  
          if (componente[clave]) {
-            this.afs.collection('cfEquip/' + item + '/components').doc(clave).snapshotChanges().subscribe(data => {
-              const element =  data.payload.data();
+            this.servicioMod2.getComponentForId(item, clave).then(data => {
+              const element =  data.data();
 
             const comp = {
-              id: data.payload.id,
+              id: data.id,
               nombre: element.cfName,
               descripcion: element.cfDescription,
               precio: element.cfPrice,
@@ -498,7 +481,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       this.reserMan['panicodescripcion'] = this.panico.descripcion;
     }
 
-    this.afs.collection('request').add(this.reserMan).then(data => {
+    this.servicioMod2.addSolicitudMantenimiento(this.reserMan).then(data => {
       this.enviarNotificacionesCorreo();
 
       swal({
@@ -653,7 +636,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       updatedAt:fecha.toISOString()
     }
 
-    this.afs.collection('request').add(reser);
+    this.servicioMod2.addSolicitudMantenimiento(reser);
   }
 
 
@@ -661,7 +644,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     let ids = [];
     let email = [];
     let cont = 1;
-    this.buscarUsuarioNivel3().then(docs => {
+    this.servicioMod2.buscarUsuarioNivel3().then(docs => {
       docs.forEach(doc => {
         ids.push(doc.id);
         email.push(doc.data().email);
@@ -678,9 +661,9 @@ export class SolicitudMantenimientoComponent implements OnInit {
     email = [];
     cont = 1;
 
-    this.buscarUsuarioNivel25().then(docs => {
+    this.servicioMod2.buscarUsuarioNivel25().then(docs => {
       docs.forEach(doc => {
-        this.buscarPersona(doc.data().cfPers).then(persona => {
+        this.servicioMod2.buscarPersona(doc.data().cfPers).then(persona => {
 
           for (const key in this.itemsel.labo.faculties) {
             if (this.itemsel.labo.faculties.hasOwnProperty(key)) {
@@ -729,7 +712,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     for (let i = 0; i < notificaciones.length; i++) {
       const element = notificaciones[i];
 
-      this.enviarNotificacion(element, obj).then(()=>{
+      this.servicioMod2.enviarNotificacion(element, obj).then(()=>{
        
       });
 
@@ -744,7 +727,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     const fechaes = fecha.getDate()+'/'+(fecha.getMonth()+1)+'/'+fecha.getFullYear();
    
 
-    const url = 'https://us-central1-develop-univalle.cloudfunctions.net/enviarCorreo';
+    const url = URLCORREO;
     const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
     let destino = '';
     if(analistas){
@@ -769,25 +752,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   }
 
-  enviarNotificacion(iduser, object){
-    return this.afs.doc('user/'+iduser).collection('notification').add(object);
-  }
 
-  buscarUsuarioNivel3(){
-    const col = this.afs.collection('user');
-    const refer = col.ref.where('appRoles.lCpNW2BmPgMSHCD1EBpT','==',true);
-    return refer.get();
-  }
 
-  buscarUsuarioNivel25(){
-    const col = this.afs.collection('user');
-    const refer = col.ref.where('appRoles.PFhLR4X2n9ybaZU3CR75','==',true);
-    return refer.get();
-  }
-
-  buscarPersona(id){
-    return this.afs.collection('cfPers').doc(id).ref.get();
-  }
 
 
   applyFilter(filterValue: string) {

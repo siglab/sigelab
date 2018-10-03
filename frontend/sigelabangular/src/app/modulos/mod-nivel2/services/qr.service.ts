@@ -295,6 +295,22 @@ export class QrService {
    }
 
 
+  getEquipForInventory(inventory){
+    const col = this.afs.collection('cfEquip');
+    const refer = col.ref.where('inventory', '==', inventory);
+
+    return refer.get();
+  }
+
+  addQr(doc){
+    return   this.afs.collection('qr').add(doc);   
+  }
+
+  setQr(idqr, doc){
+    return this.afs.doc('qr/' + idqr).set(doc, { merge: true });
+  }
+
+
 
 
 }

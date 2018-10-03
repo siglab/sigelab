@@ -95,6 +95,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
   habilitarci = false;
   valorci = '';
+  llaveci = '';
 
   usuariounivalle = false;
 
@@ -239,7 +240,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         comments:[],
         path:[],
         typeuser:'externo',
-        datauser:{type:'', ci:''},
+        datauser:{type:'', ci:'', llaveci:''},
         emailuser: this.user.email,
         acceptedBy:'',
         parametrosSrv:[],
@@ -304,6 +305,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               cfSrvReserv.typeuser = 'interno'
               cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
               cfSrvReserv.datauser.ci = this.valorci;
+              cfSrvReserv.datauser.llaveci = this.llaveci;
             }
 
 
@@ -630,7 +632,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
           console.log(snapShot.docs[0].id);
           this.nameProject = snapShot.docs[0].data().projectName;
           this.status = 'Nombre del proyecto: ' + this.nameProject;
-
+          this.llaveci = snapShot.docs[0].id;
         }
       });
     }

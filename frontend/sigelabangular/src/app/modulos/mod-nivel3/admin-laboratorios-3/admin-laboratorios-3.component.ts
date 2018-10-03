@@ -50,7 +50,7 @@ export class AdminLaboratorios3Component implements OnInit {
   size = 0;
 
   // INICIALIZACION DATATABLE lABORATORIOS
-  displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
+  displayedColumns = ['nombre', 'correolab', 'ultima', 'director', 'estado', 'correodir'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
@@ -125,6 +125,8 @@ export class AdminLaboratorios3Component implements OnInit {
     },
     updatedAt: new Date().toISOString()
   };
+
+  activo = true;
 
 
   checks = {};
@@ -339,7 +341,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
     this.estructurarLaboratorios().then(() => {
-
+      console.log(this.laboratoriosEstructurados);
       this.resetIconos();
 
       this.dataSource.data = this.laboratoriosEstructurados;
@@ -358,7 +360,30 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
+  disponible = false;
   // METODOS DE LA INTERFAZ NIVEL 3
+  ciCheck($event) {
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('cfPers').ref;
+      const queryref = collref.where('email', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'El email ingresado no se encuentra registrado';
+          this.disponible = false;
+        } else {
+          console.log(snapShot.docs[0].id);
+          const nameProject = snapShot.docs[0].data().cfFirstNames;
+          this.status = 'Nombre del administrador: ' + nameProject;
+          this.disponible = true;
+        }
+      });
+    }
+  }
 
   // METODO QUE CAMBIA AL LABORATORIO SELECCIONADO
   cambiarLaboratorio(item) {
@@ -375,6 +400,8 @@ export class AdminLaboratorios3Component implements OnInit {
 
     this.itemsel = Observable.of(item);
     this.labestructurado = item;
+    console.log(item.active);
+    this.activo = item.active;
     this.limpiarData();
 
     if (this.labestructurado) {
@@ -512,12 +539,7 @@ export class AdminLaboratorios3Component implements OnInit {
                             this.buscarSubSede(laboratorio.subHq).then(sub => {
                               const subsede = sub.data();
                               // convertir boolean a cadena de caracteres para estado del laboratorio
-                              let estadoLab;
-                              if (laboratorio.active === true) {
-                                estadoLab = 'Activo';
-                              } else if (laboratorio.active === false) {
-                                estadoLab = 'Inactivo';
-                              }
+               
 
                               laboratorioObject = {
                                 uid: doc.id,
@@ -529,6 +551,7 @@ export class AdminLaboratorios3Component implements OnInit {
                                 actividad: this.actividades(laboratorio.facilActivity),
                                 director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                                 iddueno: laboratorio.facilityAdmin,
+                                emaildirector: duenoLab.email,
                                 sede: { id: laboratorio.headquarter, nombre: sede.cfName },
                                 subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
                                 espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
@@ -543,7 +566,9 @@ export class AdminLaboratorios3Component implements OnInit {
                                 cambios: laboratorio.suggestedChanges,
                                 disponibilidad: laboratorio.cfAvailability,
                                 condiciones: laboratorio.cfConditions,
-                                estado: estadoLab
+                                estado: laboratorio.active ? 'Activo' : 'Inactivo',
+                                active: laboratorio.active,
+                                ultima: laboratorio.updatedAt.split('T')[0]
                               };
 
                               if (laboratorio.facilActivity.extension) {
@@ -602,12 +627,6 @@ export class AdminLaboratorios3Component implements OnInit {
                       this.buscarSubSede(laboratorio.subHq).then(sub => {
                         const subsede = sub.data();
                         // convertir boolean a cadena de caracteres para estado del laboratorio
-                        let estadoLab;
-                        if (laboratorio.active === true) {
-                          estadoLab = 'Activo';
-                        } else if (laboratorio.active === false) {
-                          estadoLab = 'Inactivo';
-                        }
 
                         laboratorioObject = {
                           uid: doc.id,
@@ -618,6 +637,7 @@ export class AdminLaboratorios3Component implements OnInit {
                           objectActividad: laboratorio.facilActivity,
                           actividad: this.actividades(laboratorio.facilActivity),
                           director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                          emaildirector: duenoLab.email,
                           iddueno: laboratorio.facilityAdmin,
                           sede: { id: laboratorio.headquarter, nombre: sede.cfName },
                           subsede: { id: laboratorio.subHq, nombre: subsede.cfAddrline1 },
@@ -633,7 +653,9 @@ export class AdminLaboratorios3Component implements OnInit {
                           cambios: laboratorio.suggestedChanges,
                           disponibilidad: laboratorio.cfAvailability,
                           condiciones: laboratorio.cfConditions,
-                          estado: estadoLab
+                          estado: laboratorio.active ? 'Activo' : 'Inactivo',
+                          active: laboratorio.active,
+                          ultima: laboratorio.updatedAt.split('T')[0]
                         };
 
                         if (laboratorio.facilActivity.extension) {
@@ -1312,7 +1334,7 @@ export class AdminLaboratorios3Component implements OnInit {
           this.estructurarEnvioActividades();
 
           if (this.infolab.mainSpace) {
-            this.infolab['active'] = true;
+            this.infolab['active'] = this.activo;
           }
 
 

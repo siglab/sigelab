@@ -173,7 +173,8 @@
                                   <div *ngIf="(itemsel.infoServ.variaciones.length == 0) && habilitarci" class="form-group" style="margin-top: 20px;">
                                     <div class="col-md-12">
                                       <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
-                                      <input id="univ" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
+                                      <input id="univ" (focusout)="ciCheck($event)" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
+                                      <p> {{status}} </p>
                                     </div>
                                   </div>
                                 </div>
@@ -318,10 +319,11 @@
                                   <div class="col-md-12">
                                     <p>como es un usuario de la univalle, debe escoger de manera obligatoria una de las siguientes opciones</p>
                                     <mat-form-field>
-                                      <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivalle" multiple (change)="selectorunivalle()">
+                                      <mat-select  (focusout)="ciCheck($event)" placeholder="Seleccione una o varias opciones" [formControl]="selecunivalle" multiple (change)="selectorunivalle()">
                                         <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
                                       </mat-select>
                                     </mat-form-field>
+                                    <p> {{status}} </p>
                                   </div>
                                 </div>
                                 
