@@ -12,3 +12,7 @@ export const URLQR = 'https://demosigelab.univalle.edu.co/principal/qrinventario
 
 export const URLCORREO = 'https://us-central1-sigelab-univalle.cloudfunctions.net/enviarCorreo';
 
+
+export const URLDISABLED = 'https://us-central1-sigelab-univalle.cloudfunctions.net/disablePractices';
+
+

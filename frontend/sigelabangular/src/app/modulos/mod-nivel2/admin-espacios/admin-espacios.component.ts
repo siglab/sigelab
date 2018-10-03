@@ -23,7 +23,8 @@ declare var $: any;
 })
 export class AdminEspaciosComponent implements OnInit, OnDestroy {
   plano: Observable<any>;
-  activitySpaces = [];
+
+  actSpaces = [];
   actividadAct = [];
   dispo;
   idnewSp;
@@ -181,6 +182,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         this.espaestructurado = {
           practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
           espacios: this.estructurarSpace(laboratorio.relatedSpaces),
+          personal: this.contarPersonal(laboratorio.relatedPers),
           uid: key
         };
 
@@ -198,7 +200,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   estructurarPracticas(item) {
 
     const arr = [];
-    const arr2 = [];
+
     const arr3 = [];
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
@@ -223,17 +225,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
                     },
                     activo: practica.active
                   };
-                  // construye los eventos para el calendario de cada laboratorio
-                  const evento = {
-  
-                    title: this.ajustarTexto(practica.practiceName).nom1,
-                    start: prog['schedule'],
-                    color: 'green',
-                  };
-  
-  
-                  arr2.push(evento);
-  
+
                   if (practica.active) {
   
                     arr.push(pract);
@@ -253,7 +245,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       }
     }
 
-    return { arr, arr2, arr3 };
+    return { arr, arr3 };
   }
 
   estructurarSpace(item) {
@@ -344,22 +336,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.cargarImagen(this.space.map);
     this.listPracticeforSpace(this.idsp).then((ok: any) => {
 
-      console.log(ok);
-      setTimeout(() => {
-        ok.forEach(element => {
+      console.log(ok['data']);
+      this.getActividadAct(ok['data']).then((datos: any) => {
 
-          this.getPrgramming(element).then(() => {
+        this.actividadAct = datos['data'];
 
-            this.totalOcupacion();
-            this.getActividadAct().then(res => {
+        this.totalOcupacion(datos['data2']);
+      });
 
-              console.log('array resultado', res);
-            });
-
-          });
-
-        });
-      }, 2000);
     });
 
   }
@@ -444,12 +428,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     });
 
-
-
     console.log(nuevoespacio);
-
-
-
   }
 
 
@@ -459,7 +438,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.spServ.listSubHq(sede).subscribe(res => {
 
       this.subsedes = res;
-
       console.log('subsedes', res);
 
     });
@@ -470,10 +448,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   listHq() {
 
     this.spServ.listHq().subscribe((res) => {
-
       this.sedes = res;
       console.log('sedes', res);
-
     });
 
   }
@@ -546,20 +522,22 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   /* listar horario por espacio  */
 
   listPracticeforSpace(idSpace) {
-
-
+    const array = [];
+    let cont = 1;
+    console.log(idSpace, this.espaestructurado.practicas);
     // traer array con todas las referencias de practicas con el espacio relacionado
     return new Promise((resolve, reject) => {
-      const pathPrograming = [];
-     
-      this.servicioMod2.getPracticesForIdEspacio(idSpace).then(ok => {
-
-        ok.forEach(doc => {
-          pathPrograming.push(doc.id);
-        });
+      this.espaestructurado.practicas.forEach(element => {
+        if (element.idEspacio[idSpace]) {
+          array.push(element);
+        }
+        console.log(cont, this.espaestructurado.practicas.length)
+        if (cont === this.espaestructurado.practicas.length) {
+          resolve({ data: array });
+        } else {
+          cont++;
+        }
       });
-
-      resolve(pathPrograming);
 
     });
 
@@ -571,9 +549,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     console.log('id de la practica', id);
     this.horarios = [];
-    this.noEsPrac = [];
-    return this.servicioMod2.buscarProgramacion(id)
-      .then(data => {
+    // this.noEsPrac = [];
+    const array = [];
+    return this.servicioMod2.buscarProgramacion(id).then(data => {
+        let conta = 1;
         data.forEach(onSnapshop => {
 
           const Pr = onSnapshop.data();
@@ -587,12 +566,18 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             id
           };
           //  crear un array de objetos numero de estudiantes y practicas
-          this.noEsPrac.push(practicaH);
+          array.push(practicaH);
           // crea un array con los horarios de la practica
           Pr.schedule.forEach(element => {
 
             this.horarios.push(element);
           });
+
+          if (conta === data.size) {
+            return array;
+          } else {
+            conta++;
+          }
 
         });
 
@@ -673,7 +658,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             if (pers.hasOwnProperty(key)) {
               const element = pers[key];
 
-              console.log(element);
               // valida si es personal activo
               if (element) {
                 cont++;
@@ -692,80 +676,91 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
 
-  getTotalEstPrac() {
 
-    return new Promise((resolve, reject) => {
-      const now = moment().format();
-      console.log('momento actual', now);
-      let estudiantesPractica = 0;
-      // recorrer cada una de las programaciones del espacio
-      this.noEsPrac.forEach(programing => {
-        // recorrer cada uno de los horarios de las programming
-        programing.horario.forEach(fecha => {
-          console.log('fecha que llega al foreach', fecha);
-          // si la fecha coincide con la actual acomular en el total de estudiantes
-          if (moment(now).isBetween(fecha.start, fecha.end)) {
+  totalOcupacion(estudiantesPract) {
+    console.log(estudiantesPract, this.espaestructurado.personal);
+    const personalLab = this.espaestructurado.personal;
+    this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
+    // tslint:disable-next-line:radix
 
-            console.log('todo correcto');
-            // tslint:disable-next-line:radix
-            estudiantesPractica += parseInt(programing.numeroEs);
-          }
-        });
+    if ( this.space.capacity === 0) {
 
-      });
+      console.log(' capacidad igual a cero');
 
-      // devuelve el total de estudiantes en el momento actual
-      console.log('total de estudiantes en la practica', estudiantesPractica);
-      resolve(estudiantesPractica);
-    });
+      this.space.indxSa = 0;
+
+    } if (this.space.capacity > 0 ) {
+
+      console.log(' capacidad mayor a cero');
+      this.space.indxSa = (this.ocupacionAct / this.space.capacity);
+
+    }
   }
 
-  totalOcupacion() {
+  getActividadAct(arreglo) {
 
-    this.getTotalLab().then((personalLab: number) => {
-
-      console.log('personal actual en el laboratorio', personalLab);
-      this.getTotalEstPrac().then((estudiantesPract: number) => {
-        console.log('personal actual en la practica ', estudiantesPract);
-        this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
-        // tslint:disable-next-line:radix
-        this.space.indxSa = (this.ocupacionAct / this.space.capacity);
-
-      });
-    });
-  }
-
-  getActividadAct() {
-
-    this.actividadAct = [];
-
-     const actSpaces = [];
-
-    // let encontrado = false;
-
+    console.log('si entro al metodo act actual');
     return new Promise((resolve, reject) => {
 
-      console.log('array para la consulta', this.noEsPrac);
+      this.actSpaces = [];
+      let estudiantes = 0;
+      let cont = 1;
+      let encontrado = false;
+      console.log('array para la consulta', arreglo);
 
-      this.noEsPrac.forEach(prog => {
+      arreglo.forEach(prog => {
 
-        prog.horario.forEach(fecha => {
+        encontrado = false;
+
+        prog.programacion.diahora.forEach(fecha => {
 
           const now = moment().format();
+          if (moment(now).isBetween('2018-09-27T09:11', '2018-09-27T18:11')) {
 
-          if (moment(now).isBetween(fecha.start, fecha.end)) {
-
-            // console.log(fecha.start);
-
-            actSpaces.push(prog.id);
+            console.log('entro a la condicion actual');
+            encontrado = true;
 
           }
         });
+
+        if (encontrado) {
+          this.actSpaces.push(prog.nombre);
+
+          estudiantes += parseInt(prog.programacion.estudiantes, 10);
+        }
+
+        if (cont === arreglo.length) {
+          console.log(this.actSpaces);
+          resolve({ data: this.actSpaces, data2: estudiantes });
+        } else {
+          cont++;
+        }
+
+
       });
 
-      resolve( actSpaces);
     });
 
 
   }
+
+  contarPersonal(item) {
+
+    let cont = 0;
+    for (const key in item) {
+      if (item.hasOwnProperty(key)) {
+        if (item[key]) {
+          cont++;
+        }
+
+
+      }
+
+    }
+    return cont;
+  }
+
+
+
+
 }

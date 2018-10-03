@@ -10,11 +10,12 @@ import { Http, Response } from '@angular/http';
 
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
+import { URLDISABLED } from '../../../config';
 
 @Injectable()
 export class LoginService {
   usuario;
-  url2 = '';
+  urlDisabled = URLDISABLED;
   usersid = [];
   contExec = 0;
 
@@ -30,10 +31,10 @@ export class LoginService {
   }
 
   login() {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
         response => {
-  
+
           console.log('entro a login');
           this.usuario = response.user;
           localStorage.setItem('usuario', JSON.stringify(this.usuario));
@@ -41,21 +42,21 @@ export class LoginService {
   
           this.consultarTipoUsuario(this.usuario.uid).then(() => {
             resolve();
-  
+
           }).catch( err => {
- 
+
             console.log(err);
             reject();
           });
-  
-  
+
+
         }).catch(error => {
           // alerta en caso de error
          reject();
           console.log(error);
         });
     });
-    
+
     return promise;
 
   }
@@ -90,7 +91,7 @@ export class LoginService {
   /* login usando email y password */
   loginEmail(email: string, pass: string) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
 
       this.afAuth.auth.signInWithEmailAndPassword(email, pass)
         .then(data => {
@@ -104,7 +105,7 @@ export class LoginService {
             }).catch( err => {
               reject();
             });
-          }else{
+          } else {
             reject();
           }
         }).catch(err => reject(err));
@@ -163,6 +164,9 @@ export class LoginService {
     return JSON.parse(string);
 
   }
+
+  // disabled auth user
+
 
 
   consultarTipoUsuario(id) {
@@ -325,10 +329,12 @@ export class LoginService {
   }
 
 
-  postCloudFunction(usuario) {
-    return this.http.post(this.url2, usuario)
-      .map(this.extractData)
-      .catch(this.handleErrorObservable);
+
+
+  disabledAuth(id) {
+    return this.http.post(this.urlDisabled, {id})
+    .map(this.extractData)
+    .catch(this.handleErrorObservable);
   }
 
   extractData(res: Response) {

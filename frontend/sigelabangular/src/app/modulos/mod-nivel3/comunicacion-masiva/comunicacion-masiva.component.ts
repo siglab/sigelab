@@ -8,6 +8,7 @@ declare var $: any;
 import swal from 'sweetalert2';
 import { FormControl } from '@angular/forms';
 import { URLCORREO } from '../../../config';
+import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
 @Component({
   selector: 'app-comunicacion-masiva',
@@ -78,7 +79,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   };
 
 
-  constructor(private afs:AngularFirestore, private http:Http) {
+  constructor(private serviceMod3: ServicesNivel3Service, private http:Http) {
 
 
 
@@ -95,7 +96,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     this.estructurarFacultades();
 
 
-    this.consultarHistorial().subscribe(datos => {
+    this.serviceMod3.consultarHistorial().subscribe(datos => {
       this.historial = datos;
       this.dataSource.data = datos;
 
@@ -110,7 +111,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   estructurarSedes(){
 
-    this.buscaSede().then(datos=>{
+    this.serviceMod3.buscaSede().then(datos=>{
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.sede.push({
@@ -125,7 +126,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
   estructurarTodasSubSedes(){
-    this.buscaTodasSubSede().then(datos=>{
+    this.serviceMod3.buscaTodasSubSede().then(datos=>{
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.subsede.push({
@@ -142,7 +143,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       for (let i = 0; i < this.listSelect.sede.length; i++) {
         const element = this.listSelect.sede[i];
 
-        this.buscaSubSede(element.id).then(datos=>{
+        this.serviceMod3.buscaSubSede(element.id).then(datos=>{
           datos.forEach(doc => {
             const sede = doc.data();
             this.listSelect.subsede.push({
@@ -165,7 +166,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   estructurarFacultades(){
     this.listSelect.facultad = [];
-    this.buscaTodasFacultades().then(datos=>{
+    this.serviceMod3.buscaTodasFacultades().then(datos=>{
 
       datos.forEach(doc => {
         const facultad = doc.data();
@@ -182,7 +183,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   estructurarFacultadesWitSede(keysede){
     this.listSelect.facultad = [];
-    this.buscaFacultadWitSede(keysede).then(datos=>{
+    this.serviceMod3.buscaFacultadWitSede(keysede).then(datos=>{
 
       datos.forEach(doc => {
         const facultad = doc.data();
@@ -201,7 +202,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   estructurarDeparamentos(keyfacul){
     this.listSelect.departamento = [];
     this.listSelect.escuela = [];
-    this.buscaDepartamento(keyfacul)
+    this.serviceMod3.buscaDepartamento(keyfacul)
     .then(departamento => {
       departamento.forEach(doc => {
 
@@ -380,7 +381,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       console.log(ifquery);
 
 
-    this.buscaLaboratorios().then(datos=>{
+    this.serviceMod3.buscaLaboratorios().then(datos=>{
 
       datos.forEach(doc => {
         const element = doc.data();
@@ -409,7 +410,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       console.log(coincidencias);
       let cont = 0;
       coincidencias.forEach(doc => {
-        this.buscarDirector(doc.id).then(director => {
+        this.serviceMod3.buscarDirector(doc.id).then(director => {
           const email = director.data().email;
 
           notificaciones.push(director.data().user);
@@ -464,9 +465,9 @@ export class ComunicacionMasivaComponent implements OnInit {
         {para: correos,
           asunto: this.correo.asunto,
           mensaje: this.correo.mensaje}).subscribe((res) => {
-        if(res.status === 200){
+        if (res.status === 200) {
           console.log('funco');
-          //this.cerrarAlerta();
+          // this.cerrarAlerta();
           this.limpiarDatos();
         } else {
           console.log('fallo al enviar correos');
@@ -491,7 +492,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     for (let i = 0; i < notificaciones.length; i++) {
       const element = notificaciones[i];
 
-      this.enviarNotificacion(element, obj).then(()=>{
+      this.serviceMod3.enviarNotificacion(element, obj).then(()=>{
        
         if(cont == notificaciones.length-1){
           this.limpiarDatos();
@@ -526,7 +527,7 @@ export class ComunicacionMasivaComponent implements OnInit {
       obj.mensaje = this.notificacion;
     }
     console.log(obj);
-    this.agregarHistorial(obj).then(()=>{
+    this.serviceMod3.agregarHistorial(obj).then(()=>{
       this.alertaHecho('Exito al enviar');
     });
 
@@ -725,62 +726,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarDirector(iddirector) {
-    return this.afs.doc('cfPers/' + iddirector).ref.get();
-  }
 
-  agregarHistorial(obj){
-    return this.afs.collection('cfMailNotification').add(obj);
-  }
-
-  consultarNotificaciones(iduser){
-    return this.afs.doc('user/'+iduser).ref.get();
-  }
-
-  enviarNotificacion(iduser, object){
-    return this.afs.doc('user/'+iduser).collection('notification').add(object);
-  }
-
-  buscaSede(){
-    return  this.afs.collection('headquarter').ref.get();
-  }
-
-  buscaSubSede(keysede){
-    const col = this.afs.collection('cfPAddr');
-    const ref = col.ref.where('headquarter','==',keysede);
-    return  ref.get();
-  }
-
-  buscaTodasSubSede(){
-    return  this.afs.collection('cfPAddr').ref.get();
-  }
-
-  buscaFacultad(keyfacul){
-    return this.afs.doc('faculty/'+keyfacul).ref.get();
-  }
-  buscaTodasFacultades(){
-    return  this.afs.collection('faculty').ref.get();
-  }
-
-  buscaFacultadWitSede(keysede){
-    const col = this.afs.collection('faculty');
-    const ref = col.ref.where('subHq.'+keysede, '==', true);
-    return  ref.get();
-  }
-
-  buscaDepartamento(keyfacultad){
-    return  this.afs.doc('faculty/'+keyfacultad).collection('departments').ref.get();
-  }
-
-  buscaLaboratorios(){
-   return this.afs.collection('cfFacil').ref.get();
-  }
-
-
-  consultarHistorial(){
-    return this.afs.collection('cfMailNotification').valueChanges();
-  }
 
   removeDuplicates(originalArray, prop) {
     var newArray = [];
@@ -797,8 +743,5 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-  prueba(){
-    return this.afs.collection('cfFacil',
-     ref => ref.where('headquarter','==','Vp0lIaYQJ8RGSEBwckdi').where('headquarter','==','hola'))
-  }
+
 }

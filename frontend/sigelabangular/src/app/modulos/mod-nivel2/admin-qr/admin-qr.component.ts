@@ -25,7 +25,8 @@ export class AdminQrComponent implements OnInit {
   dispo = false;
   marca_equip;
   precio_equip;
-
+  // almacena todas las url
+  arrayCsv = [];
   // atributos tabla qr active
   displayedColumnsQr = ['SecuenciaQr'];
   dataSourceQr = new MatTableDataSource();
@@ -33,11 +34,11 @@ export class AdminQrComponent implements OnInit {
   @ViewChild('sortQr') sortQr: MatSort;
 
 
-   // atributos tabla  laboratorios
-   displayedColumnsFacil = ['nombre'];
-   dataSourceFacil = new MatTableDataSource();
-   @ViewChild('paginatorFacil') paginatorFacil: MatPaginator;
-   @ViewChild('sortFacil') sortFacil: MatSort;
+  // atributos tabla  laboratorios
+  displayedColumnsFacil = ['nombre'];
+  dataSourceFacil = new MatTableDataSource();
+  @ViewChild('paginatorFacil') paginatorFacil: MatPaginator;
+  @ViewChild('sortFacil') sortFacil: MatSort;
 
 
   // atributos tabla qr inactive
@@ -64,10 +65,10 @@ export class AdminQrComponent implements OnInit {
 
     });
 
-    this.qrserv.listCfFacil().subscribe( data => {
+    this.qrserv.listCfFacil().subscribe(data => {
 
-         console.log( 'data labs', data);
-        this.dataSourceFacil.data = data;
+      console.log('data labs', data);
+      this.dataSourceFacil.data = data;
     });
 
 
@@ -96,6 +97,7 @@ export class AdminQrComponent implements OnInit {
 
 
     const urlQR = URLQR + id;
+    this.arrayCsv.push(urlQR);
     return new Promise((resolve, reject) => {
       QRCode.toDataURL(urlQR, { errorCorrectionLevel: 'M' })
         .then(url => {
@@ -136,6 +138,7 @@ export class AdminQrComponent implements OnInit {
       this.img = this.zip.folder('images');
 
       const urlQR = URLQR + this.cod_qr;
+
       return new Promise((resolve, reject) => {
         QRCode.toDataURL(urlQR, { errorCorrectionLevel: 'M' })
           .then(url => {
@@ -221,6 +224,7 @@ export class AdminQrComponent implements OnInit {
       };
 
       /*   */
+      this.arrayCsv = [];
       for (let index = 1; index <= cantidad; index++) {
         this.qrserv.addQr(newqr).then(ok => {
             this.genItQR(ok.id, cantidad, index).then();
@@ -255,7 +259,7 @@ export class AdminQrComponent implements OnInit {
 
     this.secQrUrl = row.secQr;
 
-   // this.router.navigate( ['principal/qrinventario', row.secQr] );
+    // this.router.navigate( ['principal/qrinventario', row.secQr] );
 
 
   }
@@ -265,28 +269,76 @@ export class AdminQrComponent implements OnInit {
 
     console.log(row);
     this.secQrUrl = row.secQr;
-    this.router.navigate( ['principal/qrinventario', row.secQr] );
+    this.router.navigate(['principal/qrinventario', row.secQr]);
 
   }
 
   cambiardataLab(row) {
 
-     console.log(row);
-     this.qrserv.getSpaces( row.relatedSpaces)
-     .then( dataSpace =>  {
+    console.log(row);
+    this.qrserv.getSpaces(row.relatedSpaces)
+      .then(dataSpace => {
 
-      console.log(dataSpace);
-     });
+        console.log(dataSpace);
+      });
   }
 
-   applyFilterLab(filterValue: string) {
+  applyFilterLab(filterValue: string) {
 
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceFacil.filter = filterValue;
   }
 
-  applyFilter( value) {
+  applyFilter(value) {
 
+  }
+
+   // crea un archivo csv a partir de un array de los QRS generados
+  downloadCsvDoc() {
+
+    console.log(this.arrayCsv);
+    let csvContent = '';
+
+    this.arrayCsv.forEach((element) => {
+      csvContent += element + '\r\n';
+    });
+
+    const csvFile = new Blob([csvContent], { type: 'text/csv' });
+
+    const url = window.URL.createObjectURL(csvFile);
+    const save = document.createElement('a');
+    save.href = url;
+    save.target = '_blank';
+    // aquí le damos nombre al archivo
+    save.download = 'dataQrs' + '.csv';
+    save.click();
+  }
+
+  // descarga todos los qrs de la tabla
+  downloadAllTableCsv() {
+
+    const csvTable = this.dataSourceQrIn.data;
+
+    const arrayCsv = [];
+    csvTable.forEach((element: any ) => {
+      const newUrl = ' https://demosigelab.univalle.edu.co/principal/qrinventario/' + element.secQr ;
+      arrayCsv.push( newUrl);
+    });
+
+    let csvContent = '';
+    arrayCsv.forEach((element) => {
+      csvContent += element + '\r\n';
+    });
+
+    const csvFile = new Blob([csvContent], { type: 'text/csv' });
+
+    const url = window.URL.createObjectURL(csvFile);
+    const save = document.createElement('a');
+    save.href = url;
+    save.target = '_blank';
+    // aquí le damos nombre al archivo
+    save.download = 'all-dataQrs' + '.csv';
+    save.click();
   }
 }

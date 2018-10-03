@@ -119,6 +119,7 @@ export class FormQrComponent implements OnInit {
         this.ubicacion = data.inventario.ubicacion;
         this.edificio = data.inventario.edificio;
         this.cod_lab = data.inventario.codLab;
+        this.inventario.costoinicial = data.inventario.costoInicial;
 
       }, err => console.log('error conectando sabs', err)
 

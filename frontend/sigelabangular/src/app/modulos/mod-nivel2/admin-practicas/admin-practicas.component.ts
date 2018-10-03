@@ -760,6 +760,7 @@ export class AdminPracticasComponent implements OnInit {
     this.code = '';
     this.programming.semester = '';
     this.programming.noStudents = '';
+    this.events = [];
 
 
   }
