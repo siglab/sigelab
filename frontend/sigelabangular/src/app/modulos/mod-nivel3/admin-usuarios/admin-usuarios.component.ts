@@ -399,7 +399,6 @@ export class AdminUsuariosComponent implements OnInit {
       this.disabledUserAuht();
     }
 
-    /*
     // metodo firebase para subir un usuario actualizado
     if (this.idu) {
       this.afs.collection('user').doc(this.idu).set(this.usuario, { merge: true })
@@ -421,19 +420,12 @@ export class AdminUsuariosComponent implements OnInit {
           });
 
 
-          // this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
-         //   swal({
-         //   type: 'success',
-         //   title: 'usuario actualizado correctamente',
-         //   showConfirmButton: true
-         // });
-
 
         });
 
 
     }
-     */
+
     // metodo firebase para subir una persona actualizada
   }
 
@@ -630,6 +622,12 @@ export class AdminUsuariosComponent implements OnInit {
           if (elemen.id === this.rolSelect) {
 
             this.arrayPract.push(elemen);
+
+            swal({
+              type: 'success',
+              title: 'Rol agregado con exito, ya puede actualizar.',
+              showConfirmButton: true
+            });
           }
 
         });
@@ -657,6 +655,12 @@ export class AdminUsuariosComponent implements OnInit {
             this.arrayPract = [];
 
             this.arrayPract.push(elemen);
+
+            swal({
+              type: 'success',
+              title: 'Rol agregado con exito, ya puede actualizar.',
+              showConfirmButton: true
+            });
           }
 
         });
@@ -697,6 +701,12 @@ export class AdminUsuariosComponent implements OnInit {
             this.arrayPract = [];
 
             this.arrayPract.push(elemen);
+
+            swal({
+              type: 'success',
+              title: 'Rol agregado con exito, ya puede actualizar.',
+              showConfirmButton: true
+            });
           }
 
         });
