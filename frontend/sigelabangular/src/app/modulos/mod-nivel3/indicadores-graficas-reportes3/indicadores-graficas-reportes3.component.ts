@@ -192,7 +192,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.role = JSON.parse(localStorage.getItem('rol'));
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave === 'moduloNivel3')) {
+        if ((clave === 'moduloNivel3') || (clave === 'moduloNivel35')) {
           this.moduloNivel3 = true;
         }
 
@@ -395,9 +395,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
       this.inicializarGraficoLineaServicios(servicios);
 
-      this.inicializarGraficoLineaPracticas(practicas);
+      this.practicas = practicas;
+      this.proyectos = proyectos;
 
-      this.inicializarGraficoLineaProyectos(proyectos);
+      // this.inicializarGraficoLineaPracticas(practicas);
+
+      // this.inicializarGraficoLineaProyectos(proyectos);
 
       this.inicializarGraficoBarra(datos['data']);
     });
@@ -876,6 +879,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.yAxisLabel = 'Practicas Realizadas Semestre';
     this.practicas = array;
     this.getDatosGraficoPracticas(array).then(datos => {
+      console.log(datos['data'], datos['estu']);
       this.multiLine = [
         {
           'name': 'Practicas Realizadas',
@@ -969,10 +973,11 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         arrayPracticas[semestres[i]] = 0;
         arrayEstudiantes[semestres[i]] = 0;           
       }
-  
+      console.log(array);
       array.forEach(practica => {
-
-        this.getPracticaProgramacion(practica.id).then(datos2 => {            
+      
+        this.getPracticaProgramacion(practica.id).then(datos2 => {     
+          console.log(datos2);       
             datos2.forEach(doc => {
               arrayPracticas[doc.data().semester]++;
               arrayEstudiantes[doc.data().semester] += parseInt(doc.data().noStudents);
@@ -997,8 +1002,10 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
                     'name' : new Date(aux[0]+'-'+aux2+'-31'),
                     'value': arrayEstudiantes[semestres[i]]
                   });
+
           
                   if(i == 4){
+                    console.log(practicas, estudiantes);
                     resolve({data:practicas, estu:estudiantes});        
                   }
                  
@@ -1293,6 +1300,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
      this.serv = true;
 
     } else if (item === 2) {
+      console.log(this.practicas);
       this.inicializarGraficoLineaPracticas(this.practicas);
       this.serv = false;
     } else {
@@ -1384,6 +1392,57 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     return this.afs.collection('cfFacil').ref.get();
    }
 
+  buscaObjectos(){
+    let texto = '';
+    for (const clave in this.formCheckBox) {
+
+      const auxiliar = [];
+      if (this.formCheckBox.hasOwnProperty(clave)) {
+        const element = this.formCheckBox[clave].value;
+
+        if(element){
+
+          if(clave == 'universidad'){
+            texto += '<h3>Toda la universidad</h3>';
+          } else {
+            const array = this.listSelect[clave];
+            let nombre = '';
+            if(clave == 'sede'){
+              nombre = 'seccional';
+              texto += '<h3>'+nombre+'</h3>';
+            }else if(clave == 'subsede'){
+              nombre = 'sede';
+              texto += '<h3>'+nombre+'</h3>';
+            }else{
+              texto += '<h3>'+clave+'</h3>';
+            }
+           
+            const array2 = this.formSelect[clave].value;
+            texto += '<p>'
+            for (let i = 0; i < array2.length; i++) {
+              let element = array2[i];
+              if((clave == 'departamento')||(clave == 'escuela')){
+                element = array2[i].id;
+              }
+              const enc = array.find(o => o.id == element);
+              if(enc){
+                texto += enc.nombre +', ';
+              }
+
+            }
+
+            texto += '</p>';
+
+            
+          }
+
+
+        }
+      }
+    }
+    return texto;
+  }
+
 
 
    prueba(){
@@ -1391,17 +1450,20 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     const cad=f.getHours()+":"+f.getMinutes()+":"+f.getSeconds(); 
     const ambiente = this;
     const scale = 'scale(0.85)'; 
+    const filtros = this.buscaObjectos();
     domtoimage.toPng(document.getElementById('grafica'))
     .then(function (dataUrl) {
         var img = new Image();
         img.src = dataUrl;
         
         const printWindow = window.open('', '', 'height=400,width=800');
-        printWindow.document.write('<html><head><title>DIV Contents</title>');
+        printWindow.document.write('<html><head><title>REPORTE</title>');
         printWindow.document.write('</head><body style="height:100%; width:100%;">');
         printWindow.document.write('<strong> Hora de Generacion: '+cad+' </strong>');
-        printWindow.document.write('<br><strong> Correo del generador: : '+ambiente.persona.email+' </strong>');
         printWindow.document.body.appendChild(img);
+        printWindow.document.write('<br><strong> Correo del generador: : '+ambiente.persona.email+' </strong>');
+        printWindow.document.write('<h1>FILTROS USADOS</h1>');
+        printWindow.document.write(filtros);
         printWindow.document.write('</body></html>');
 
         printWindow.document.head.style.transform = scale; 

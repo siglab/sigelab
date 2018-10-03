@@ -11,13 +11,10 @@ export class AuthGuard implements CanActivate {
       const rol = JSON.parse(localStorage.getItem('rol'));
       console.log(rol);
       if(rol){
-        for (const clave in rol) {
-          if (rol[clave]) {
-            console.log(clave);
-            if (clave == 'moduloPrincipal') {
-              return true;
-            }
-          }
+        if(rol.hasOwnProperty('moduloPrincipal')){
+          return true;
+        }else{
+          return false;
         }
       } else {
         return false;

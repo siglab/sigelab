@@ -157,7 +157,7 @@
 
                           <mat-header-row *matHeaderRowDef="displayedColumnsPracIn"></mat-header-row>
                           <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;"
-                            (click)="cambiardata(row)" data-toggle="modal" data-target="#myModal3"></mat-row>
+                            (click)="activarData(row)"></mat-row>
                         </mat-table>
 
                         <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"

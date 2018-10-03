@@ -12,6 +12,7 @@ import { constrainPoint } from 'fullcalendar/src/util';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
+import { Modulo2Service } from '../services/modulo2.service';
 
 declare var $: any;
 
@@ -34,8 +35,8 @@ export class AdminPracticasComponent implements OnInit {
     numeroEst: '',
     estado: false,
     equipos: [],
-    space: [
-    ]
+    space: [],
+    activo:false
   };
 
   evento = {
@@ -98,7 +99,7 @@ export class AdminPracticasComponent implements OnInit {
   moduloNivel2 = false;
 
   constructor(private obs: ObservablesService,
-    private afs: AngularFirestore,
+    private servicioMod2:Modulo2Service,
     private toastr: ToastrService) {
   }
 
@@ -106,17 +107,16 @@ export class AdminPracticasComponent implements OnInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    this.getRoles();
+  
     this.metodoInicio();
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.role = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.role);
-    for (const clave in this.role) {
-      if (this.role[clave]) {
+  getRoles(rol) {
+    console.log(rol);
+    this.moduloNivel2 = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -127,8 +127,17 @@ export class AdminPracticasComponent implements OnInit {
 
   async metodoInicio() {
 
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se cargan los datos',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+
     this.obs.currentObjectPra.subscribe(data => {
 
+      this.getRoles(data.roles);
 
       if (data.length !== 0) {
         this.estructurarDataPrac(data.uid).then(() => {
@@ -147,6 +156,33 @@ export class AdminPracticasComponent implements OnInit {
           this.dataSourceEquip = new MatTableDataSource(this.pracestructurado.equipos);
 
           this.dataSourceEsp = new MatTableDataSource(this.pracestructurado.espacios);
+
+
+          setTimeout(() => {
+            if (this.pracestructurado) {
+
+              this.dataSourcePrac.sort = this.sortPrac;
+              this.dataSourcePrac.paginator = this.paginatorPrac;
+
+              this.dataSourcePracIn.sort = this.sortPracIn;
+              this.dataSourcePracIn.paginator = this.paginatorPracIn;
+
+              this.dataSourceEquip.sort = this.sortEquip;
+              this.dataSourceEquip.paginator = this.paginatorEquip;
+
+              this.dataSourceEsp.sort = this.sortEsp;
+              this.dataSourceEsp.paginator = this.paginatorEsp;
+
+              swal.close();
+            } else {
+              swal({
+                type: 'error',
+                title: 'No existen practicas asociadas al laboratorio',
+                showConfirmButton: true
+              });
+            }
+
+          }, 2000);
 
           // data acesor activos
           this.dataSourcePrac.sortingDataAccessor = (item, property) => {
@@ -177,40 +213,6 @@ export class AdminPracticasComponent implements OnInit {
             return dataStr.indexOf(transformedFilter) !== -1;
           };
 
-          swal({
-            title: 'Cargando un momento...',
-            text: 'espere mientras se cargan los datos',
-            onOpen: () => {
-              swal.showLoading();
-            }
-          });
-
-          setTimeout(() => {
-            if (this.pracestructurado.practicas.length > 0) {
-
-              this.dataSourcePrac.sort = this.sortPrac;
-              this.dataSourcePrac.paginator = this.paginatorPrac;
-
-              this.dataSourcePracIn.sort = this.sortPracIn;
-              this.dataSourcePracIn.paginator = this.paginatorPracIn;
-
-              this.dataSourceEquip.sort = this.sortEquip;
-              this.dataSourceEquip.paginator = this.paginatorEquip;
-
-              this.dataSourceEsp.sort = this.sortEsp;
-              this.dataSourceEsp.paginator = this.paginatorEsp;
-
-              swal.close();
-            } else {
-              swal({
-                type: 'error',
-                title: 'No existen practicas asociadas al laboratorio',
-                showConfirmButton: true
-              });
-            }
-
-          }, 2000);
-
 
         });
       } else {
@@ -230,7 +232,7 @@ export class AdminPracticasComponent implements OnInit {
   estructurarDataPrac(key) {
 
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).then(labo => {
+      this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
 
         let estadoLab;
@@ -250,7 +252,11 @@ export class AdminPracticasComponent implements OnInit {
           id_lab: key,
           nombre: laboratorio.cfName
         };
-        resolve();
+
+        if(this.pracestructurado){
+          resolve();
+        }
+       
 
       });
     });
@@ -259,11 +265,6 @@ export class AdminPracticasComponent implements OnInit {
 
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).ref.get();
-
-  }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAestructurarPracticasS ASOCIADOS
@@ -275,50 +276,51 @@ export class AdminPracticasComponent implements OnInit {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-        if (item[clave]) {
-          this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
-            const practica = data.payload.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').snapshotChanges().subscribe(data2 => {
+   
+        this.servicioMod2.buscarPractica(clave).then(data => {
+          const practica = data.data();
+          this.servicioMod2.buscarProgramacion(clave).then(data2 => {
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0].payload.doc.data();
-
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            
+            data2.forEach(prog => {
               if (prog) {
                 console.log('id que ingreso del espacio', prog['space']);
-
+  
                 const pract = {
-                  id_pract: data.payload.id,
+                  id_pract: data.id,
                   nombre: practica.practiceName,
-                  residuos: practica.residuos,
+                  residuos: practica.residuos ?  practica.residuos : false,
                   codigo : practica.subjectCode,
                   equipos: this.estructurarEquipos(practica.relatedEquipments),
-                  espacio: this.getOnlySpace(prog['space']),
+                  espacio: this.getOnlySpace(prog.data().space),
                   programacion: {
-                    id_pro: data2[0].payload.doc.id,
-                    estudiantes: prog.noStudents,
-                    horario: prog.schedule,
-                    semestre: prog.semester
+                    id_pro: prog.id,
+                    estudiantes: prog.data().noStudents,
+                    horario: prog.data().schedule,
+                    semestre: prog.data().semester
                   },
                   activo: practica.active
                 };
                 // construye los eventos para el calendario de cada laboratorio
 
-
-
-
+  
                 if (practica.active) {
-
+  
                   arr.push(pract);
                 } else {
                   arr3.push(pract);
                 }
               }
-
-
+  
             });
 
+
+
           });
-        }
+
+        });
+        
 
       }
     }
@@ -354,14 +356,14 @@ export class AdminPracticasComponent implements OnInit {
 
     const arr = [];
     if (clave) {
-      this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
-        const espacio = data.payload.data();
+      this.servicioMod2.buscarEspacio(clave).then(data => {
+        const espacio = data.data();
 
 
         // funciona con una programacion, cuando hayan mas toca crear otro metodo
         if (espacio) {
           const space = {
-            id_space: data.payload.id,
+            id_space: data.id,
             capacity: espacio.capacity,
             createdAt: espacio.createdAt,
             freeArea: espacio.freeArea,
@@ -392,13 +394,13 @@ export class AdminPracticasComponent implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
-            const espacio = data.payload.data();
+         this.servicioMod2.buscarEspacio(clave).then(data => {
+            const espacio = data.data();
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             if (espacio) {
               const space = {
-                id_space: data.payload.id,
+                id_space: data.id,
                 capacity: espacio.capacity,
                 createdAt: espacio.createdAt,
                 freeArea: espacio.freeArea,
@@ -435,12 +437,12 @@ export class AdminPracticasComponent implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfEquip/' + clave).snapshotChanges().subscribe(data => {
-            const equip = data.payload.data();
+          this.servicioMod2.buscarEquipo(clave).then(data => {
+            const equip = data.data();
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
-              id: data.payload.id,
+              id: data.id,
               nombre: equip.cfName,
               activo: equip.active,
               precio: equip.price,
@@ -497,6 +499,7 @@ export class AdminPracticasComponent implements OnInit {
   cambiardata(row) {
     console.log(row);
     this.practica = row;
+    this.practica.activo = row.activo;
 
     this.practica.nombre = row.nombre;
     this.practica.numeroEst = row.programacion.estudiantes;
@@ -508,6 +511,36 @@ export class AdminPracticasComponent implements OnInit {
     this.id_pro = row.programacion.id_pro;
     this.initCalendarModal(row.programacion.horario);
     console.log(row.programacion.horario);
+  
+  }
+
+  activarData(row){
+    console.log(row);
+    $('html, body').animate({ scrollTop: '600px' }, 'slow');
+    this.nameP = row.nombre;
+    this.code = row.codigo;
+    this.programming.semester = row.programacion.semestre;
+    this.programming.noStudents = row.programacion.estudiantes;
+    this.residuos = row.residuos;
+
+    this.selection.clear();
+    const arra = [];
+    for (let i = 0; i < row.equipos.length; i++) {
+      const element = row.equipos[i];
+      for (let j = 0; j < this.pracestructurado.equipos.length; j++) {
+        const element2 = this.pracestructurado.equipos[j];
+
+        if(element.id == element2.id){
+          console.log(element2);
+        //this.selection.isSelected(element2);
+        this.selection.select(element2)
+        console.log(this.selection.selected);
+        }
+        
+      }
+  
+    }
+    
   }
 
   addPractice(stepper) {
@@ -562,21 +595,20 @@ export class AdminPracticasComponent implements OnInit {
     console.log(this.mainSpace);
     if (practica) {
 
-      this.afs.collection('practice').add(practica).then(ok => {
+     this.servicioMod2.addPractica(practica).then(ok => {
         facil.relatedPractices[ok.id] = true;
-        this.afs.doc('cfFacil/' + this.id_lab).set(facil, { merge: true });
-        this.afs.doc('practice/' + ok.id).collection('programmingData').add(programming).then(() => {
-          this.obs.changeObjectPra({ nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab });
-        });
+        this.servicioMod2.setDocLaboratorio(this.id_lab,facil);
+        this.servicioMod2.addProgramacion(ok.id, programming).then(() => {
+        
+          swal({
+            type: 'success',
+            title: 'Almacenado correctamente',
+            showConfirmButton: true
+          });
 
-        swal({
-          type: 'success',
-          title: 'Almacenado correctamente',
-          showConfirmButton: true
+          this.clearObj();
+          stepper.reset();
         });
-
-        this.clearObj();
-        stepper.reset();
 
 
       });
@@ -691,16 +723,23 @@ export class AdminPracticasComponent implements OnInit {
 
     };
 
-    this.afs.doc('practice/' + this.id_prc).set(practica, { merge: true }).then(ok => {
 
-      this.afs.doc('practice/' + this.id_prc + '/programmingData/' + this.id_pro).set(prog, { merge: true }).then(() => {
+    this.servicioMod2.setPractica(this.id_prc, practica).then(ok => {
+
+      this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog).then(() => {
         this.obs.changeObjectPra({ nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab });
       });
 
-      this.toastr.success('Actualizado correctamente');
-
+      swal({
+        type: 'success',
+        title: 'Actualizado Correctamente',
+        showConfirmButton: true
+      });
 
     });
+    
+
+
 
 
   }

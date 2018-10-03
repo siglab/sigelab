@@ -61,11 +61,11 @@ const routes: Routes = [
       { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate: [Nivel2Guard]},
 
 
-      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
-      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel3Guard]},
+      { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard]},
+      { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel25Guard]},
       { path: 'usuarios', component: AdminUsuariosComponent, canActivate: [Nivel3Guard]},
-      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
-      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard || Nivel25Guard]},
+      { path: 'indicadores3', component: IndicadoresGraficasReportes3Component, canActivate: [Nivel3Guard]},
+      { path: 'solicitudes3', component: SolicitudesNivel3Component, canActivate: [Nivel3Guard]},
       { path: '', pathMatch: 'full', redirectTo: 'busquedalaboratorio'}
     ]},
   { path: '', pathMatch: 'full', redirectTo: 'inicio'},

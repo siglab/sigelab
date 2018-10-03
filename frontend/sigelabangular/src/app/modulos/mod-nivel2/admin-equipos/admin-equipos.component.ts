@@ -13,6 +13,8 @@ import { URLAPI } from '../../../config';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
+import { Modulo2Service } from '../services/modulo2.service';
+import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 declare var $: any;
 
@@ -86,18 +88,19 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     rol:any;
     moduloNivel2 = false;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, private http: Http) {
+  constructor(private obs: ObservablesService, private http: Http, private servicioMod2:Modulo2Service ) {
 
   }
 
   ngOnInit() {
     // abre loading mientras se cargan los datos
     this.ventana = true;
-    this.getRoles();
+   
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.sus = this.obs.currentObjectequip.subscribe(data => {
 
+      this.getRoles(data.roles);
       console.log(data);
       this.equiestructurado = undefined;
       this.iniciliazarTablas();
@@ -157,12 +160,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
+  getRoles(rol) {
+    this.moduloNivel2 = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave == 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -209,12 +210,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + clave).snapshotChanges().subscribe(data => {
-            const servicio =  data.payload.data();
+          this.servicioMod2.buscarServicio(clave).then(data => {
+            const servicio =  data.data();
 
-            this.afs.collection<any>('cfSrvReserv',
-            ref => ref.where('cfSrv', '==', clave).where('status', '==', 'creada'))
-            .snapshotChanges().subscribe(dataSol => {
+            this.servicioMod2.getSolicitudesServiciosForId(clave).then(dataSol => {
 
               const serv = {
                nombre: servicio.cfName,
@@ -222,28 +221,25 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                precio: servicio.cfPrice,
                activo: servicio.active,
                variaciones: this.variations(clave),
-               uid: data.payload.id
+               uid: data.id
               };
               arr.push(serv);
 
-              for (let i = 0; i < dataSol.length; i++) {
-                const element = dataSol[i].payload.doc.data();
-                this.getPersonId(element.user).subscribe(usuario => {
+              dataSol.forEach(doc => {
+                this.servicioMod2.buscarUsuario(doc.data().user).then(usuario => {
                   const solicitud = {
                     nombreServ: servicio.cfName,
                     descripcionServ: servicio.cfDesc,
                     precioServ: servicio.cfPrice,
                     activoServ: servicio.active,
-                    email: usuario.payload.data().email,
-                    uidServ: dataSol[i].payload.doc.id,
-                    estado: element.status
+                    email: usuario.data().email,
+                    uidServ: doc.id,
+                    estado: doc.data().status
                   };
 
                   arr2.push(solicitud);
                 });
-
-              }
-
+              });
 
             });
 
@@ -262,12 +258,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const arr = [];
 
-    this.afs.collection('practice', ref => 
-      ref.where('relatedEquipments.'+item,'==',true)).ref.get().then(data =>{
+    this.servicioMod2.getPracticesForIdEquipo(item).then(data =>{
         data.forEach(doc => {
           const practica =  doc.data();
-            this.afs.doc('practice/' + doc.id ).collection('programmingData').ref.get()
-                .then(data2 => {
+            this.servicioMod2.buscarProgramacion(doc.id).then(data2 => {
 
              data2.forEach(progdoc => {
 
@@ -309,7 +303,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfEquip/' + clave).ref.get().then(doc => {
+           this.servicioMod2.buscarEquipo(item).then(doc => {
             const equip =  doc.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
@@ -401,12 +395,12 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   estructurarComponents(item) {
     const arr = [];
 
-    this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
+    this.servicioMod2.buscarComponente(item).then(data => {
+      data.forEach(doc => {
+        const element = doc.data();
 
           const componente = {
-            id: data[i].payload.doc.id,
+            id: doc.id,
             nombre: element.cfName,
             descripcion: element.cfDescription,
             precio: element.cfPrice,
@@ -416,35 +410,24 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
           };
 
           arr.push(componente);
-
-
-
-      }
+      });
 
      });
 
      return arr;
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).snapshotChanges();
 
-  }
-
-  getPersonId(userid) {
-    return this.afs.doc('user/' + userid).snapshotChanges();
-  }
 
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
   variations(clave){
     const variaciones = [];
-    this.afs.doc('cfSrv/' + clave).collection('variations').snapshotChanges().subscribe(data => {
+    this.servicioMod2.getVariaciones(clave).then(data => {
       if(data){
-        for (let i = 0; i < data.length; i++) {
-          const element = data[i].payload.doc.data();
-          variaciones.push(element);
-        }
+        data.forEach(doc => {
+          variaciones.push(doc.data());
+        });
+
       } else {
         return variaciones;
       }
@@ -497,7 +480,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         swal.showLoading();
       }
     });
-    this.afs.doc('cfEquip/'+this.equiposel.id).update(this.modelEquipoSel).then(()=>{
+    this.servicioMod2.updateEquip(this.equiposel.id,this.modelEquipoSel).then(()=>{
       swal.close();
       swal({
         type: 'success',
@@ -583,91 +566,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-
-
-  // subir() {
-  //   const equipos = {
-
-  //     cfAcro: '',
-  //     cfUri: '',
-  //     cfName: '',
-  //     cfDescr: '',
-  //     cfKey: '',
-  //     cfClass: '',
-  //     cfClassScheme: '',
-  //     cfFacil: '',
-  //     cfPers: '',
-  //     relatedSrv:  {} ,
-  //     realatedPract: {},
-  //     relatedMeas: {},
-  //     qr: '',
-  //     space: '',
-  //     brand: '',
-  //     model: '',
-  //     price : 0,
-  //     timeUnit: 'minutes',
-  //     workingHours: '',
-  //     timeBeforeBooking: '',
-  //     cfConditions: [],
-  //     active: true,
-  //     createdAt: '',
-  //     updatedAt: ''
-
-  //   };
-
-
-
-
-  //       // METODO QUE AGREGA UNA NUEVA SOLICITUD DE SERVICIO
-
-  //       this.afs.collection('cfEquipment').add(equipos).then(data => {
-  //         console.log(data);
-  //         this.subirComp();
-  //       });
-
-
-  // }
-
-  // subirComp() {
-
-  //   const fecha = new Date();
-  //   const components = {
-
-  //     cfName: 'bola de iones',
-  //     cfClass : '',
-  //     cfClassScheme: '',
-  //     cfConditions: [],
-  //     cfDescription: 'elemento que se usa para contener la implosion',
-  //     cfPrice: 12300000,
-  //     brand: 'SAMSUNG',
-  //     model: '2018',
-  //     active: true,
-  //     createdAt: fecha.toISOString(),
-  //     updatedAt: fecha.toISOString()
-
-
-  //   };
-  //   this.afs.collection('cfEquip/YrqiRtkF6RGBg7Gvz5iG/components').add(components).then(dta => {
-  //     console.log('se hizo menar');
-  //   });
-  // }
-
-  // subirVar() {
-  //   const fecha = new Date();
-  //   const va = {
-  //     cfName: 'servicio banda ancha',
-  //     cfConditions: ['debe traer cedula', 'debe traer recibo'],
-  //     cfDescription: 'para utilizar la sala de computo',
-  //     cfPrice: '1200',
-  //     active: true,
-  //     createdAt: fecha.toISOString(),
-  //     updateAt: fecha.toISOString()
-  //   };
-
-  //   this.afs.collection('cfSrv/IkDMCt1fpuP8xg2iIXwA/variations').add(va).then(dta => {
-  //     console.log('se hizo menar');
-  //   });
-  // }
 
   cambiarIcono(box){
     if(!this.iconos[box]){

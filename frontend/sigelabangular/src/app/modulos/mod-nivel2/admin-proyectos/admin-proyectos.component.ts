@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
+import { Modulo2Service } from '../services/modulo2.service';
 
 declare var $: any;
 @Component({
@@ -85,14 +86,15 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   role:any;
   moduloNivel2 = false;
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore) { }
+  constructor(private obs: ObservablesService,
+              private servicioMod2:Modulo2Service) { }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-    this.getRoles();
+   
     this.sus = this.obs.currentObjectProy.subscribe(data => {
       console.log(data);
-
+      this.getRoles(data.roles);
       this.proyestructurados = undefined;
 
       if (data.length !== 0) {
@@ -167,12 +169,11 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   }
 
    // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-   getRoles() {
-
-    this.role = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.role);
-    for (const clave in this.role) {
-      if (this.role[clave]) {
+   getRoles(rol) {
+    this.moduloNivel2 = false;
+    console.log(rol);
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -188,7 +189,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   estructurarLab(key) {
     this.proyestructurados = {};
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).then(labo => {
+      this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
         //   console.log(laboratorio);
         if (laboratorio) {
@@ -212,12 +213,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-    return this.afs.doc('cfFacil/' + idlab).ref.get();
-
-  }
-
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
@@ -231,8 +226,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('project/' + clave).snapshotChanges().subscribe(data => {
-            const project = data.payload.data();
+          this.servicioMod2.buscarProyectos(clave).then(data => {
+            const project = data.data();
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const proyecto = {
@@ -240,7 +235,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
               descripcion: project.projectDesc,
               ci: project.ciNumber,
               personal: this.estructurarPersonas(project.relatedPers),
-              id_proj: data.payload.id,
+              id_proj: data.id,
               active: project.active
             };
             if (project.active) {
@@ -273,19 +268,19 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
+          this.servicioMod2.buscarPersona(clave).then(data => {
+            const pers = data.data();
             let persona = {};
             if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+              this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if (dataper.payload.data()) {
+                if (dataper.data()) {
 
                   persona = {
                     id: clave,
                     nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
                     activo: pers.active,
-                    email: dataper.payload.data().email,
+                    email: dataper.data().email,
                     idpers: clave,
                     iduser: pers.user
                   };
@@ -422,13 +417,13 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       console.log(proyect);
 
 
-      this.afs.collection('project').add(proyect)
+      this.servicioMod2.addProyecto(proyect)
         .then((ok) => {
 
           const lab = { relatedProjects: {} };
           lab.relatedProjects[ok.id] = true;
 
-          this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
+          this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
 
           swal({
             type: 'success',
@@ -462,7 +457,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
     });
 
-    this.afs.doc('project/' + this.id_proj).set(proyect, { merge: true })
+    this.servicioMod2.setProyecto(this.id_proj, proyect)
       .then(() => {
         swal({
           type: 'success',
@@ -484,7 +479,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     } else {
       const persona = this.person;
 
-      this.afs.collection('cfPers').add(persona).then((ok) => {
+      this.servicioMod2.addPersona(persona).then((ok) => {
         const pro = {
           projectName: this.proyecto.nombre,
           ciNumber: this.proyecto.ci,
@@ -495,8 +490,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
         };
         pro.relatedPers[ok.id] = true;
-        this.afs.doc('project/' + this.id_proj).set(pro, { merge: true }).then(() => {
-
+        this.servicioMod2.setProyecto(this.id_proj, pro).then(() => {
 
           swal({
             type: 'success',
@@ -520,7 +514,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     } else {
       const persona = this.person;
 
-      this.afs.collection('cfPers').add(persona).then((ok) => {
+     this.servicioMod2.addPersona(persona).then((ok) => {
 
         const per = {
           activo: persona.active,
@@ -536,34 +530,13 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         const lab = { relatedPers: {} };
 
         lab.relatedPers[ok.id] = true;
-        this.afs.doc('cfFacil/' + this.id_lab).set(lab, { merge: true });
+       this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
 
         swal({
           type: 'success',
           title: ' Personal agregado correctamente',
           showConfirmButton: true
         });
-
-
-        /*         const pro = {
-                  projectName: this.proyecto.nombre,
-                  ciNumber: this.proyecto.ci,
-                  projectDesc: this.proyecto.descripcion,
-                  active: this.proyecto.estado,
-                  relatedPers: {},
-                  updatedAt: this.fecha.toISOString()
-
-                };
-                pro.relatedPers[ok.id] = true;
-                this.afs.collection('project/').add (pro) .then ( () => {
-
-
-                  swal({
-                    type: 'success',
-                    title: ' Proyecto agregado correctamente',
-                    showConfirmButton: true
-                  });
-                } ); */
       });
     }
   }
@@ -604,9 +577,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
-      const collref = this.afs.collection('project').ref;
-      const queryref = collref.where('ciNumber', '==', q);
-      queryref.get().then((snapShot) => {
+  
+      this.servicioMod2.getProyectForCi(q).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'CI disponible';
           this.dispo = true;

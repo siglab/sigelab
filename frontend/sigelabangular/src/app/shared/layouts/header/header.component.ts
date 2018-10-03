@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit {
       this.itemNotificacion = true;
 
       this.obs.consultarNotificaciones(this.usuario.uid).subscribe(datos => {
+        this.notifications = [];
         for (let index = 0; index < datos.length; index++) {
           const element = datos[index].payload.doc;
           this.notifications.push({

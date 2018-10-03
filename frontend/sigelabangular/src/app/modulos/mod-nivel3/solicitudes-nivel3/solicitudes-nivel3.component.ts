@@ -119,6 +119,8 @@ export class SolicitudesNivel3Component implements OnInit {
   montoSolicitudes = 0;
 
   infosabs:any;
+  viewsabs = false;
+
   response:any;
 
   comentario = '';
@@ -174,7 +176,7 @@ export class SolicitudesNivel3Component implements OnInit {
 
     if(this.moduloNivel25){
       this.getFaculty().then(retor => {
-        let cont = 0;
+        let cont = 1;
         let array = [];
         for (const key in this.faculty) {
           if (this.faculty.hasOwnProperty(key)) {
@@ -182,8 +184,8 @@ export class SolicitudesNivel3Component implements OnInit {
               data1.forEach(doc => {
                 array.push(doc);
               });
-              cont++;
-    
+              
+              console.log(retor['size'], cont)
               if(retor['size'] == cont){
                 this.itemsel = array;
                 if(array.length != 0){
@@ -203,6 +205,8 @@ export class SolicitudesNivel3Component implements OnInit {
                   this.alertaError('No se han generado solicitudes de mantenimiento aun');
                 }
             
+              }else{
+                cont++;
               }
               
                          
@@ -368,70 +372,72 @@ export class SolicitudesNivel3Component implements OnInit {
 
   estructurarSolicitudesActivas(data) {
     this.datos = [];
+    let size = data.size;
+    if(data.length){
+      size = data.length
+    }
     let promise = new Promise((resolve, reject)=>{
       const activo = [];
 
       const historial = [];
+    
+      data.forEach(element => {
 
-     for (let index = 0; index < data.length; index++) {
-       const doc = data[index];
-       const elemento = doc.data();
-       this.getLaboratorio(elemento.cfFacil).then(lab => {
-         this.getEmailUser(elemento.createdBy).then(email => {
-           const Solicitud = {
-             uidsol:doc.id,
-             uidlab: elemento.cfFacil,
-             uidespacio: elemento.headquarter,
-             nombrelab: lab.data().cfName,
-             status: elemento.status,
-             tipo: elemento.maintenanceType,
-             descripcion: elemento.requestDesc,
-             usuario: email.data().email,
-             activo: elemento.active,
-             idEquipo: elemento.relatedEquipments,
-             componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
-             fecha: elemento.createdAt.split('T')[0],
-             editado: elemento.updatedAt.split('T')[0],
-             proveedores: elemento.providersInfo,
-             path: elemento.path,
-             costo:elemento.costo,
-             acepto: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
-           };
-           if(elemento.comment){
-             Solicitud['comment'] = elemento.comment;
-           }
-           if(elemento.relatedEquipments != ''){
-             this.getEquipo(elemento.relatedEquipments).then(equipo => {
-               Solicitud['equipo'] = equipo.data();
-               Solicitud['nombreEquip'] = equipo.data().cfName;
-             });
-           }else{
-             Solicitud['equipo'] = {};
-             Solicitud['nombreEquip'] = 'no especificado';  
-             Solicitud['panicoequipo'] =  elemento.panicoequipo;
-             Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
- 
-           }
-           if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
-             activo.push(Solicitud);
-           } else {
-             historial.push(Solicitud);
-           }
+        const elemento = element.data();
+        console.log(elemento);
+        this.getLaboratorio(elemento.cfFacil).then(lab => {
+          this.getEmailUser(elemento.createdBy).then(email => {
+            const Solicitud = {
+              uidsol:element.id,
+              uidlab: elemento.cfFacil,
+              uidespacio: elemento.headquarter,
+              nombrelab: lab.data().cfName,
+              status: elemento.status,
+              tipo: elemento.maintenanceType,
+              descripcion: elemento.requestDesc,
+              usuario: email.data().email,
+              activo: elemento.active,
+              idEquipo: elemento.relatedEquipments,
+              componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
+              fecha: elemento.createdAt.split('T')[0],
+              editado: elemento.updatedAt.split('T')[0],
+              proveedores: elemento.providersInfo,
+              path: elemento.path,
+              costo:elemento.costo,
+              acepto: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
+            };
+            if(elemento.comment){
+              Solicitud['comment'] = elemento.comment;
+            }
+            if(elemento.relatedEquipments != ''){
+              this.getEquipo(elemento.relatedEquipments).then(equipo => {
+                Solicitud['equipo'] = equipo.data();
+                Solicitud['nombreEquip'] = equipo.data().cfName;
+              });
+            }else{
+              Solicitud['equipo'] = {};
+              Solicitud['nombreEquip'] = 'no especificado';  
+              Solicitud['panicoequipo'] =  elemento.panicoequipo;
+              Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
+  
+            }
+            if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
+              activo.push(Solicitud);
+            } else {
+              historial.push(Solicitud);
+            }
+           
+            this.datos.push(Solicitud);
+            
+            console.log(size, activo.length+historial.length);
+            if(size == (activo.length+historial.length)){
+              resolve({data:activo, data2: historial});
+            }
+    
+          });
+        });
+      });
 
-           this.datos.push(Solicitud);
- 
- 
-           if(data.length == (activo.length+historial.length)){
-             resolve({data:activo, data2: historial});
-           }
- 
- 
-   
-         });
-       });
-       
-       
-     }
   
     });
 
@@ -558,24 +564,22 @@ export class SolicitudesNivel3Component implements OnInit {
 
 
     this.infosabs = undefined;
-
-
+    this.viewsabs = false;
     if(item.idEquipo){
-      console.log('paso');
+
       this.consultaEquipo(item.idEquipo).then(data => {
-        this.alertaCargando();
+  
         this.consultarSabs(data.data().inventory).then(() => {
-          this.infosabs = this.response;
-          swal.close();
+          console.log('hecho');
+          this.infosabs = this.response;  
         }).catch((error)=>{
        
-            swal.close();
             swal({
               type: 'error',
               title: 'No se pudo conectar con SABS',
               showConfirmButton: true
             });
-
+            this.viewsabs = true;
             this.infosabs = undefined;
           
         });
@@ -589,7 +593,6 @@ export class SolicitudesNivel3Component implements OnInit {
   // METODO QUE TRAE LOS DATOS EXISTENTES EN SABS
   consultarSabs(item) {
 
-    this.infosabs = {};
     const promise = new Promise((resolve, reject) => {
 
       const url =  URLAPI;
@@ -602,7 +605,7 @@ export class SolicitudesNivel3Component implements OnInit {
         espacio: 'fghgf'
       };
 
-      this.http.post(url, body). subscribe((res) => {
+      this.http.post(url, body).subscribe((res) => {
         console.log(res.json());
         if (res.status === 200) {
           console.log('funco');

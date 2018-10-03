@@ -253,25 +253,18 @@
                                         </li>
                                     </ul>
 
-                                    <div id="home" class="tab-pane fade in active" style="margin-top: 10px; height: 100%;">
+                                    <div class="box-body" style="margin-top: 10px; height: 100%;">
 
+                                        <p>El cuadro ubicado debajo del grafico, se utiliza para ver a mas detalle el eje x (ver en meses), aumentelo o disminuyalo a su criterio</p>
                                         <ngx-charts-line-chart [view]="viewLine" [scheme]="colorSchemeLine" [results]="multiLine" [gradient]="gradientLine" [xAxis]="showXAxis"
-                                            [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" [xAxisTickFormatting]="xAxisTickFormatting"
-                                            [timeline]="timeline" (select)="onSelectLine($event)">
+                                        [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                                        [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" [xAxisTickFormatting]="xAxisTickFormatting"
+                                        [timeline]="timeline" (select)="onSelectLine($event)">
 
                                         </ngx-charts-line-chart>
-                                        <button *ngIf="cont && serv" (click)="monto()" style="margin-top:10px;">Monto</button>
-                                        <button *ngIf="!cont && serv" (click)="monto()" style="margin-top:10px;">Servicios</button>
+                                    <button *ngIf="cont && serv" (click)="monto()" style="margin-top:10px;">Monto</button>
+                                    <button *ngIf="!cont && serv" (click)="monto()" style="margin-top:10px;">Servicios</button>
 
-                                    </div>
-
-                                    <div id="menu1" class="tab-pane fade">
-                                        <h1>PRACTICAS</h1>
-                                    </div>
-
-                                    <div id="menu2" class="tab-pane fade">
-                                        <h1>OTROS</h1>
                                     </div>
 
 

@@ -50,7 +50,7 @@ export class AdminLaboratorios3Component implements OnInit {
   size = 0;
 
   // INICIALIZACION DATATABLE lABORATORIOS
-  displayedColumns = ['nombre', 'correolab', 'ultima', 'director', 'correodir','estado'];
+  displayedColumns = ['nombre', 'correolab', 'ultima', 'director', 'estado', 'correodir'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;

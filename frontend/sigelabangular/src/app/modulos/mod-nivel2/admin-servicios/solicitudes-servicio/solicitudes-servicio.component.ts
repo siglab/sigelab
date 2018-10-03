@@ -16,6 +16,7 @@ declare var $: any;
 import * as _ from "lodash";
 import * as firebase from 'firebase/app';
 import { URLCORREO } from '../../../../config';
+import { Modulo2Service } from '../../services/modulo2.service';
 
 @Component({
   selector: 'app-solicitudes-servicio',
@@ -95,14 +96,14 @@ comentario = '';
 
    valorParametro = [];
 
-  constructor(private obs: ObservablesService, private afs: AngularFirestore, 
+  constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service,
               private http: Http, private storage: AngularFireStorage) {
   //this.obs.changeSolServ(this.servicioso);
   }
 
   ngOnInit() {
 
-    this.getRoles();
+
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     if (localStorage.getItem('usuario')) {
@@ -110,11 +111,11 @@ comentario = '';
     }
 
     this.sus = this.obs.currentObjectSolSer.subscribe(data => {
-
+      this.getRoles(data.roles);
       if(data.length != 0){
         this.alertaCargando();
 
-        this.getCollectionReserv(data.uid).then(data1 => {
+        this.servicioMod2.getCollectionReservasServicios(data.uid).then(data1 => {
           if(data1.size != 0){
             this.estructurarServiciosActivos(data1, data).then(datos=>{
               this.dataSource.data = datos['data'];
@@ -157,12 +158,11 @@ comentario = '';
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.rol = JSON.parse(localStorage.getItem('rol'));
-
-    for (const clave in this.rol) {
-      if (this.rol[clave]) {
+  getRoles(rol) {
+    this.moduloNivel2 = false;
+    this.moduloServicios = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -174,12 +174,7 @@ comentario = '';
     }
   }
 
-  getCollectionReserv(labid) {
-    const col =  this.afs.collection('cfSrvReserv');
-    const refer = col.ref.where('cfFacil', '==', labid);
 
-    return refer.get();
-  }
 
   estructurarServiciosActivos(data, lab) {
 
@@ -189,7 +184,7 @@ comentario = '';
       
       data.forEach(doc => {
         const elemento = doc.data();
-        this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
+        this.servicioMod2.buscarServicio(elemento.cfSrv).then(data2 => {
           const servicio =  data2.data();   
           const Reserv = {
             uidlab: elemento.cfFacil,
@@ -322,7 +317,7 @@ comentario = '';
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + idser + '/variations/' + clave).ref.get().then(data => {
+         this.servicioMod2.buscarVariacion(idser, clave).then(data => {
            const variacion =  data.data();
 
             const vari = {
@@ -379,9 +374,9 @@ comentario = '';
         const ref = this.storage.ref(this.servicioActivoSel.path[index]);
         ref.delete().subscribe(()=>{
 
-          this.afs.doc('cfSrvReserv/'+this.servicioActivoSel.uidreserv).update({
-            path:nuevopath
-          }).then(()=> {
+          this.servicioMod2.updateReservasServicios(
+            this.servicioActivoSel.uidreserv, {path:nuevopath})
+          .then(()=> {
 
             
             swal({
@@ -413,18 +408,6 @@ comentario = '';
     }); ;
   }
 
-
-  getEmailUser(userid){
-    return this.afs.doc('user/' + userid).snapshotChanges();
-  }
-
-  getLab(labid){
-    return this.afs.doc('cfFacil/' + labid).snapshotChanges();
-  }
-
-  getPersona(persid){
-    return this.afs.doc('cfPers/' + persid).snapshotChanges();
-  }
 
 
   applyFilter(filterValue: string) {
@@ -555,11 +538,12 @@ comentario = '';
           autor: 'lab'
         });
 
-        this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update( cfSrvReserv).then(()=>{
-          if(this.servicioActivoSel.status != 'pendiente'){
-            this.alertaExito('Comentario enviado');
-            this.enviarNotificacionEmails();
-          }
+        this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, cfSrvReserv)
+          .then(()=>{
+            if(this.servicioActivoSel.status != 'pendiente'){
+              this.alertaExito('Comentario enviado');
+              this.enviarNotificacionEmails();
+            }
         });
 
       } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -592,8 +576,8 @@ comentario = '';
                     this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
                     ' por el usuario con el correo ' + emailSolicitante;
 
-    this.getPersona(this.servicioActivoSel.infolab.facilityAdmin).subscribe(persona => {
-      emailEncargado = persona.payload.data().email;
+    this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
+      emailEncargado = persona.data().email;
       destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
       this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
         if(res.status == 200){
@@ -658,7 +642,8 @@ comentario = '';
 
         this.servicioActivoSel.status = estado;     
 
-        this.afs.doc('cfSrvReserv/' + this.servicioActivoSel.uidreserv).update(reserva).then(()=>{
+        this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, reserva)
+        .then(()=>{
           if(estado == 'procesada'){
             swal({
               type: 'success',
@@ -675,8 +660,8 @@ comentario = '';
           }
          
         });
-        this.getPersona(this.servicioActivoSel.infolab.facilityAdmin).subscribe(persona => {
-          this.enviarEmails(estado, persona.payload.data().email);
+        this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
+          this.enviarEmails(estado, persona.data().email);
     
         });
    

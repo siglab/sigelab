@@ -13,6 +13,7 @@ import 'fullcalendar-scheduler';
 import { Subscription } from 'rxjs';
 import { EspaciosService } from '../services/espacios.service';
 import * as moment from 'moment';
+import { Modulo2Service } from '../services/modulo2.service';
 declare var $: any;
 
 @Component({
@@ -70,7 +71,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   moduloNivel2 = false;
 
   constructor(private obs: ObservablesService,
-    private afs: AngularFirestore,
+    private servicioMod2:Modulo2Service,
     private storage: AngularFireStorage,
     private register: LoginService,
     private spServ: EspaciosService) {
@@ -84,9 +85,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     const now = moment().format();
     console.log(now);
-    this.getRoles();
+  
     this.sus = this.obs.currentObjectEsp.subscribe(data => {
-
+      this.getRoles(data.roles);
       if (data.length !== 0) {
 
         this.estructuraEspacio(data.uid).then(() => {
@@ -154,11 +155,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.role = JSON.parse(localStorage.getItem('rol'));
-    for (const clave in this.role) {
-      if (this.role[clave]) {
+  getRoles(rol) {
+    this.moduloNivel2 = false;
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -168,7 +168,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   estructuraEspacio(key) {
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).then(labo => {
+      this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
 
         let estadoLab;
@@ -205,42 +205,44 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('practice/' + clave).snapshotChanges().subscribe(data => {
-            const practica = data.payload.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').valueChanges().subscribe(data2 => {
+          this.servicioMod2.buscarPractica(clave).then(data => {
+            const practica = data.data();
+            this.servicioMod2.buscarProgramacion(clave).then(data2 => {
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              const prog = data2[0];
-
-              if (prog) {
-                const pract = {
-                  nombre: practica.practiceName,
-                  programacion: {
-                    estudiantes: prog['noStudents'],
-                    diahora: prog['schedule'],
-                    semestre: prog['semester'],
-                    spaceid: prog['space']
-                  },
-                  activo: practica.active
-                };
-                // construye los eventos para el calendario de cada laboratorio
-                const evento = {
-
-                  title: this.ajustarTexto(practica.practiceName).nom1,
-                  start: prog['schedule'],
-                  color: 'green',
-                };
-
-
-                arr2.push(evento);
-
-                if (practica.active) {
-
-                  arr.push(pract);
-                } else {
-                  arr3.push(pract);
+             
+              data2.forEach(doc => {
+                const prog = doc.data();
+                if (prog) {
+                  const pract = {
+                    nombre: practica.practiceName,
+                    programacion: {
+                      estudiantes: prog['noStudents'],
+                      diahora: prog['schedule'],
+                      semestre: prog['semester'],
+                      spaceid: prog['space']
+                    },
+                    activo: practica.active
+                  };
+                  // construye los eventos para el calendario de cada laboratorio
+                  const evento = {
+  
+                    title: this.ajustarTexto(practica.practiceName).nom1,
+                    start: prog['schedule'],
+                    color: 'green',
+                  };
+  
+  
+                  arr2.push(evento);
+  
+                  if (practica.active) {
+  
+                    arr.push(pract);
+                  } else {
+                    arr3.push(pract);
+                  }
                 }
-              }
+              });
+
 
 
             });
@@ -262,14 +264,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-        this.afs.doc('space/' + clave).snapshotChanges().subscribe(data => {
-          const espacio = data.payload.data();
+        this.servicioMod2.buscarEspacio(clave).then(data => {
+          const espacio = data.data();
 
           // funciona con una programacion, cuando hayan mas toca crear otro metodo
           if (espacio) {
             console.log('espacioo', espacio);
             const space = {
-              id_space: data.payload.id,
+              id_space: data.id,
               capacity: espacio.capacity,
               createdAt: espacio.createdAt,
               freeArea: espacio.freeArea,
@@ -298,12 +300,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     return arr;
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
-
-    return this.afs.doc('cfFacil/' + idlab).ref.get();
-
-  }
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
@@ -403,13 +399,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     const nuevoespacio = this.space;
 
     nuevoespacio.subHq = this.idsh;
-    this.afs.collection('space').add(nuevoespacio).then((data) => {
+    this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
       // agrega el nuevo espacio al laboratorio actual
       this.updateFaciliti(data.id);
     });
-    console.log(nuevoespacio);
-
-
 
   }
 
@@ -438,10 +431,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     // asigna el estado editado al espacio dentro del lab
     nuevoEstado.relatedSpaces[this.idsp] = this.space.active;
 
-    this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
+    this.servicioMod2.setEspacio(this.idsp, nuevoespacio).then(() => {
 
       // actualiza el estado del espacio dentro del laboratorio
-      this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+      this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
 
       swal({
         type: 'success',
@@ -529,7 +522,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
       console.log('revisar este lab', this.idlab);
-      this.afs.collection('cfFacil').doc(this.idlab).set({ relatedSpaces }, { merge: true })
+      this.servicioMod2.setDocLaboratorio(this.idlab, { relatedSpaces })
         .then(() => {
 
           swal({
@@ -558,9 +551,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     // traer array con todas las referencias de practicas con el espacio relacionado
     return new Promise((resolve, reject) => {
       const pathPrograming = [];
-      const pracRef = this.afs.collection('practice').ref;
-      const query = pracRef.where('relatedSpaces.' + idSpace, '==', true);
-      query.get().then(ok => {
+     
+      this.servicioMod2.getPracticesForIdEspacio(idSpace).then(ok => {
 
         ok.forEach(doc => {
           pathPrograming.push(doc.id);
@@ -580,8 +572,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     console.log('id de la practica', id);
     this.horarios = [];
     this.noEsPrac = [];
-    return this.afs.collection('practice/' + id + '/programmingData')
-      .ref.get()
+    return this.servicioMod2.buscarProgramacion(id)
       .then(data => {
         data.forEach(onSnapshop => {
 
@@ -629,9 +620,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       // this.dispo = false;
     } else {
       this.status = 'Buscando espacio ...';
-      const collref = this.afs.collection('space').ref;
-      const queryref = collref.where('spaceData.building', '==', ed).where('spaceData.place', '==', sp);
-      queryref.get().then((snapShot) => {
+      this.servicioMod2.getEspaceForBuildAndPlace(ed, sp).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'Espacio no encontrado, ingrese los datos de forma manual';
           this.dispo = true;
@@ -676,8 +665,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       let pers;
       let cont = 0;
       let personalLab;
-      this.afs.doc('cfFacil/' + this.idlab)
-        .ref.get()
+      this.servicioMod2.buscarLab(this.idlab)
         .then((res) => {
           pers = res.data().relatedPers;
 
@@ -779,20 +767,5 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     });
 
 
-    // console.log( 'arreglo de practicas act', this.activitySpaces);
-
-    /*
-    this.afs.doc('practice/' + prog.id)
-      .valueChanges()
-      .subscribe(ok => {
-
-        console.log('llego este id', prog.id);
-
-        this.actividadAct.push(ok['practiceName']);
-        console.log('resultado consulta', ok);
-
-      });
-
-      */
   }
 }

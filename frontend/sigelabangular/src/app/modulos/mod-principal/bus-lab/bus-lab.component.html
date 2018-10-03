@@ -751,10 +751,10 @@
               <div *ngFor="let item of servsel.equipos; let i = index;" class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}">{{item.nombre}}</a>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseEquipos{{i}}">{{item.nombre}}</a>
                   </h4>
                 </div>
-                <div id="collapse{{i}}" class="panel-collapse collapse">
+                <div id="collapseEquipos{{i}}" class="panel-collapse collapse">
                   <div class="panel-body">{{item.descripcion}}</div>
                 </div>
               </div>

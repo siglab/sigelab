@@ -11,6 +11,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Modulo2Service } from '../services/modulo2.service';
 declare var $: any;
 @Component({
   selector: 'app-admin-personal',
@@ -102,9 +103,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   niveles = [];
 
   constructor(private obs: ObservablesService,
-    private afs: AngularFirestore,
     private toastr: ToastrService,
-    private register: LoginService) { }
+    private register: LoginService,
+    private servicioMod2:Modulo2Service ) { }
 
   ngOnInit() {
 
@@ -112,11 +113,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.getRolesNivel2();
 
-    this.getRoles();
+  
 
     this.sus = this.obs.currentObjectPer.subscribe(data => {
       console.log(data);
-
+      this.getRoles(data.roles);
       if (data.length !== 0) {
         this.estructuraIdPers(data.uid).then(() => {
 
@@ -192,12 +193,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-  getRoles() {
-
-    this.role = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.role);
-    for (const clave in this.role) {
-      if (this.role[clave]) {
+  getRoles(rol) {
+    this.moduloNivel2 = false;
+    console.log(rol);
+    for (const clave in rol) {
+      if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
@@ -207,18 +207,15 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // METODO QUE CONSULTA TODOS LOS ROLES NIVEL 2
   getRolesNivel2() {
-    this.afs.collection('appRoles').snapshotChanges().subscribe(datos => {
-      for (let i = 0; i < datos.length; i++) {
-        const element = datos[i].payload.doc.data();
-        if (element.lvl === 'perfiles2') {
+    this.servicioMod2.getAppRoles().then(datos => {
+      datos.forEach(doc => {
+        if (doc.data().lvl === 'perfiles2') {
 
-          this.niveles.push({ id: datos[i].payload.doc.id, nombre: element.roleName });
+          this.niveles.push({ id: doc.id, nombre: doc.data().roleName });
           console.log(this.niveles);
 
         }
-
-
-      }
+      });
     });
   }
 
@@ -226,7 +223,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   estructuraIdPers(key) {
 
     const promise = new Promise((resolve, reject) => {
-      this.buscarLab(key).then(labo => {
+      this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
 
 
@@ -255,14 +252,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       if (item.hasOwnProperty(clave)) {
         if (item[clave]) {
             console.log(item[clave]);
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
+          this.servicioMod2.buscarPersona(clave).then(data => {
+            const pers = data.data();
 
 
             let persona = {};
             if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
-                const user = dataper.payload.data();
+             this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
+                const user = dataper.data();
                 persona = {
                   roles: user.appRoles,
                   nombre: pers.cfFirstNames,
@@ -311,11 +308,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
         if (!item[clave]) {
-          this.afs.doc('cfPers/' + clave).snapshotChanges().subscribe(data => {
-            const pers = data.payload.data();
+          this.servicioMod2.buscarPersona(clave).then(data => {
+            const pers = data.data();
             let persona = {};
             if (pers.user) {
-              this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
+             this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 persona = {
                   nombre: pers.cfFirstNames,
@@ -323,8 +320,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                   activo: item[clave],
                   cc: pers.cc ? pers.cc : 'ninguno' ,
                   tipo: pers.type ? pers.type : 'ninguno' ,
-                  email: dataper.payload.data().email ?  dataper.payload.data().email : 'ninguno asociado',
-                  roles: dataper.payload.data().appRoles,
+                  email: dataper.data().email ?  dataper.data().email : 'ninguno asociado',
+                  roles: dataper.data().appRoles,
                   idpers: clave,
                   iduser: pers.user,
                 };
@@ -358,24 +355,21 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     return arr1;
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
-  buscarLab(idlab) {
 
-    return this.afs.doc('cfFacil/' + idlab).ref.get();
-
-  }
 
 
   consultarRol() {
 
     return new Promise((resolve, reject) => {
-      this.afs.collection<any>('appRoles',
-        ref => ref.where('roleName', '==', this.rolc))
-        .snapshotChanges().subscribe(data => {
-          const idnuevo = data[0].payload.doc.id;
+        this.servicioMod2.getAppRoleForName(this.rolc)
+        .then(data => {
+          data.forEach(doc => {
+            const idnuevo = doc.id;
 
-          console.log(idnuevo);
-          resolve(idnuevo);
+            console.log(idnuevo);
+            resolve(idnuevo);
+          })
+   
         });
     });
   }
@@ -440,15 +434,15 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     /* metodo firebase para subir un usuario actualizado */
 
     if (this.idu) {
-      this.afs.collection('user').doc(this.idu).set(user, { merge: true })
+      this.servicioMod2.setUser(this.idu, user)
         .then(() => {
         });
 
     }
-    this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
+    this.servicioMod2.setPersona(this.idp, pers).then(
       () => {
 
-        this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+       this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
         swal({
           type: 'success',
           title: 'usuario actualizado correctamente',
@@ -473,12 +467,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       const pers = this.person;
       pers.cfFacil[this.idlab] = true;
 
-      const collref = this.afs.collection('user').ref;
-      const queryref = collref.where('email', '==', pers.email);
-      queryref.get().then((snapShot) => {
+      this.servicioMod2.getUserForEmail(pers.email).then((snapShot) => {
         if (snapShot.empty) {
 
-          this.afs.collection('cfPers').add(pers)
+          this.servicioMod2.addPersona(pers)
             .then(ok => {
 
               this.updateFaciliti(ok.id);
@@ -494,7 +486,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           pers.user = snapShot.docs[0].id;
 
-          this.afs.collection('cfPers').add(pers)
+          this.servicioMod2.addPersona(pers)
             .then(ok => {
 
               this.updateFaciliti(ok.id);
@@ -532,17 +524,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     // asigna como boolean el id del rol al usuario
     newUser.appRoles[this.person.roleId] = true;
     console.log(newUser);
-    this.afs.doc('user/' + path).set(newUser, { merge: true });
+    this.servicioMod2.setUser(path, newUser);
 
   }
 
-  /* actualizar la coleccion cfPers con el nuevo id del usuario */
-
-  updatePers(idU, pathP) {
-
-    this.afs.collection('cfPers').doc(pathP).update({ user: idU });
-
-  }
 
   /* actualizar el laboratorio con el nuevo id del document pers */
 
@@ -556,7 +541,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
     console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
+    this.servicioMod2.setDocLaboratorio(this.idlab, facil);
 
   }
 
@@ -568,9 +553,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
-      const collref = this.afs.collection('cfPers').ref;
-      const queryref = collref.where('email', '==', q);
-      queryref.get().then((snapShot) => {
+     
+      this.servicioMod2.getPersForEmail(q).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'Email disponible';
           this.dispo = true;
@@ -601,7 +585,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
       lab.relatedPers[id] = true;
 
-      this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
+      this.servicioMod2.setDocLaboratorio(this.idlab, lab)
         .then(() => {
 
           $('#modal1').modal('hide');

@@ -289,6 +289,8 @@ export class ComunicacionMasivaComponent implements OnInit {
 
     let coincidencias = [];
 
+    let seleccion = false;
+
     const arr = {
             sede:'headquarter',
             subsede:'subHq',
@@ -314,6 +316,8 @@ export class ComunicacionMasivaComponent implements OnInit {
         if(element2.value && key != 'universidad'){
 
           if(this.formSelect[key].value.length != 0){
+            seleccion = true;
+
             ifquery += '(';
 
             for (let i = 0; i < this.formSelect[key].value.length; i++) {
@@ -386,14 +390,17 @@ export class ComunicacionMasivaComponent implements OnInit {
 
         } else {
 
-         eval(ifquery);
+          if(seleccion){
+            eval(ifquery);
+          }else{
+            swal({
+              type: 'error',
+              title:  'Por favor ingrese algun filtro primero',
+              showConfirmButton: true
+            });
+          }
 
-          // setTimeout(()=>{
-          //   const dupli = this.removeDuplicates(coincidencias,'id');
-          //   console.log(coincidencias);
-          //   console.log(dupli);
-
-          // }, 4000);
+      
 
 
         }
@@ -423,10 +430,20 @@ export class ComunicacionMasivaComponent implements OnInit {
         setTimeout(()=>{
         if(item == 'correo'){
           console.log(correos);
-          this.servicioCorreo(correos);
+          if(correos.length != 0){
+            this.servicioCorreo(correos);
+          }
+          
         } else {
           console.log(notificaciones);
-          this.servicioNotificacion(notificaciones);
+          if(notificaciones.length != 0){
+            this.servicioNotificacion(notificaciones);
+          }
+         
+        }
+
+        if(correos.length != 0 || notificaciones.length != 0){
+          this.servicioalmacenarHistorial(item);
         }
 
       }, 2000);
@@ -435,8 +452,8 @@ export class ComunicacionMasivaComponent implements OnInit {
 
     });
 
-
-    this.servicioalmacenarHistorial(item);
+  
+   
   }
 
   servicioCorreo(correos){
@@ -465,7 +482,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     const obj = {
       asunto:'Correo masivo difusion',
       mensaje:this.notificacion,
-      fecha: new Date().toISOString(),
+      fecha: new Date().toISOString().split('T')[0],
       estado: 'sinver'
     };
 
@@ -475,10 +492,12 @@ export class ComunicacionMasivaComponent implements OnInit {
       const element = notificaciones[i];
 
       this.enviarNotificacion(element, obj).then(()=>{
-        cont++;
+       
         if(cont == notificaciones.length-1){
           this.limpiarDatos();
 
+        }else{
+          cont++;
         }
 
       });
@@ -508,7 +527,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     }
     console.log(obj);
     this.agregarHistorial(obj).then(()=>{
-      this.alertaHecho(tipo+' enviado');
+      this.alertaHecho('Exito al enviar');
     });
 
   }
@@ -654,13 +673,28 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
   limpiarDatos(){
+
     this.listSelect.sede = [];
     this.listSelect.subsede = [];
     this.listSelect.facultad = [];
     this.listSelect.departamento = [];
     this.listSelect.escuela = [];
     this.estructurarSedes();
+    this.estructurarTodasSubSedes();
     this.estructurarFacultades();
+
+    this.formSelect.sede.setValue([]);
+    this.formSelect.subsede.setValue([]);
+    this.formSelect.facultad.setValue([]);
+    this.formSelect.departamento.setValue([]);
+    this.formSelect.escuela.setValue([]);
+
+    this.formCheckBox.sede.setValue(false);
+    this.formCheckBox.subsede.setValue(false);
+    this.formCheckBox.facultad.setValue(false);
+    this.formCheckBox.departamento.setValue(false);
+    this.formCheckBox.escuela.setValue(false);
+    
 
 
     this.correo = {

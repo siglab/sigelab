@@ -33,6 +33,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
     moduloinfo = false;
     layer = null;
 
+    llaveci:any;
+
     DefaultIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
       shadowUrl: 'assets/leaflet/images/marker-shadow.png'
@@ -275,7 +277,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         comments:[],
         typeuser:'externo',
         path:[],
-        datauser:{type:'', ci:''},
+        datauser:{type:'', ci:'', llaveci:''},
         emailuser: this.user.email,
         acceptedBy:'',
         parametrosSrv:[],
@@ -335,8 +337,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
             }
             if(this.usuariounivalle){
               cfSrvReserv.typeuser = 'interno'
-             // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+              //cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
               cfSrvReserv.datauser.ci = this.valorci;
+              cfSrvReserv.datauser.llaveci = this.llaveci;
             }
 
             cfSrvReserv.comments.push({
@@ -538,7 +541,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
           console.log(snapShot.docs[0].id);
           this.nameProject = snapShot.docs[0].data().projectName;
           this.status = 'Nombre del proyecto: ' + this.nameProject;
-          this.valorci = snapShot.docs[0].id;
+          this.llaveci = snapShot.docs[0].id;
         }
       });
     }
