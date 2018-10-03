@@ -386,14 +386,14 @@ export class AdminUsuariosComponent implements OnInit {
 
     // metodo firebase para subir un usuario actualizado
     if (this.idu) {
-      this.afs.collection('user').doc(this.idu).set(this.usuario, { merge: true })
+      this.serviceMod3.setUser(this.idu, this.usuario)
         .then(() => {
         });
 
     }
      // actualizar la persona
     if (this.idp) {
-      this.afs.collection('cfPers/').doc(this.idp).set(this.person, { merge: true }).then(
+      this.serviceMod3.setPersona(this.idp, this.person).then(
         () => {
 
 
