@@ -73,7 +73,6 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 
           querySnapshot.forEach(doc => {
 
-            role = doc.data().roleId;
             personas.push(doc.id);
 
           });
@@ -83,7 +82,9 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
           const usr = {
             cfOrgId: "i9dzCErPCO4n9WUfjxR9",
             cfPers: persona,
-            appRoles: {},
+            appRoles: {
+              npKRYaA0u9l4C43YSruA : true
+            },
             createdAt: fecha.toISOString(),
             email: event.email,
             active: true
@@ -91,7 +92,7 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
           };
 
           // para el nivel 3 es necesario pasar el campo tipo string a un objeto
-          usr.appRoles[role] = true;
+
 
           const pers = {
             user: event.uid
@@ -157,17 +158,18 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
       if (querySnapshot.empty) {
 
         const fecha = new Date();
-        const role = 'npKRYaA0u9l4C43YSruA';
+
 
         const usr = {
           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
           cfPers: '',
-          appRoles: {},
+          appRoles: {
+            npKRYaA0u9l4C43YSruA : true
+          },
           createdAt: fecha.toISOString(),
           email: event.email
         };
 
-        usr.appRoles[role] = true;
 
         return ref.doc(`/user/${event.uid}`).set(usr)
           .then(() => console.log('se creo un nuevo usuario'))
@@ -183,7 +185,6 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
         querySnapshot.forEach(doc => {
 
-          role = doc.data().roleId;
           personas.push(doc.id);
 
         });
@@ -193,14 +194,15 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
         const usr = {
           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
           cfPers: persona,
-          appRoles: {},
+          appRoles: {
+            npKRYaA0u9l4C43YSruA : true
+          },
           createdAt: fecha.toISOString(),
           email: event.email
 
         };
 
         // para el nivel 3 es necesario pasar el campo tipo string a un objeto
-        usr.appRoles[role] = true;
 
         const pers = {
           user: event.uid

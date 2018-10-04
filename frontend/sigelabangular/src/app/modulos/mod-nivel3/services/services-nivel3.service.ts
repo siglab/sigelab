@@ -152,20 +152,34 @@ export class ServicesNivel3Service {
   // METODOS DE MODIFICACION
 
   setPersona(id, doc) {
+
     return this.afs.doc('cfPers/' + id).set(doc, { merge: true });
+
   }
 
   setLaboratorio(id, doc) {
+
     return this.afs.collection('cfFacil').doc(id).set(doc, { merge: true });
+
   }
 
   setUser(id, doc) {
 
-    console.log(id, 'id que llego'  );
-
     return this.afs.doc('user/' + id).set(doc, { merge: true });
+
   }
 
+  updatedUser(id, doc) {
+
+    return this.afs.doc('user/' + id).update(doc);
+
+  }
+
+  updatedPersona(id, doc) {
+
+    return this.afs.doc('cfPers/' + id).update(doc);
+
+  }
 
   // METODOS DE CREACION
 

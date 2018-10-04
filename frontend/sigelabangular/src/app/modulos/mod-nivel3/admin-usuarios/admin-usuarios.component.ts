@@ -297,8 +297,6 @@ export class AdminUsuariosComponent implements OnInit {
 
                 nameroles += doc.data().roleName + ',';
 
-
-
               } if (sixe === 1) {
 
                 nameroles = doc.data().roleName;
@@ -386,14 +384,14 @@ export class AdminUsuariosComponent implements OnInit {
 
     // metodo firebase para subir un usuario actualizado
     if (this.idu) {
-      this.serviceMod3.setUser(this.idu, this.usuario)
+      this.serviceMod3.updatedUser(this.idu, this.usuario)
         .then(() => {
         });
 
     }
      // actualizar la persona
     if (this.idp) {
-      this.serviceMod3.setPersona(this.idp, this.person).then(
+      this.serviceMod3.updatedPersona(this.idp, this.person).then(
         () => {
 
 

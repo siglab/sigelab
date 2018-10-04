@@ -51,8 +51,8 @@
               <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav ml-auto" style="margin-right:5%;font-size:13px;">
                   <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;"><a class="nav-link"
-                      href="#">Acerca de SIGELab</a></li>
-                  <li class="nav-item" role="presentation" id="navContact"><a class="nav-link" href="#">Contacto</a></li>
+                    (click)="downAcerca()" >Acerca de SIGELab</a></li>
+                  <li class="nav-item" role="presentation" id="navContact"><a  (click)="down()" class="nav-link">Contacto</a></li>
                 </ul><button [routerLink]="'/login'" class="btn btn-primary btn-sm homeBtn" type="button"><i class="icon ion-log-in"></i>&nbsp;Ingresar
                   &nbsp;</button>
               </div>
@@ -79,7 +79,7 @@
           <div data-aos="fade-up" data-aos-delay="200" data-aos-once="true" id="mainSecUvLogo"></div>
         </div>
         <div class="col-12 justify-content-end align-items-end align-content-end align-self-end" style="max-height:55px;"><button
-          (click)="down()"    class="btn btn-link btn-block arrowBtn" type="button" id="nextBtn"><i class="material-icons"
+          (click)="downAcerca()"    class="btn btn-link btn-block arrowBtn" type="button" id="nextBtn"><i class="material-icons"
               data-bs-hover-animate="bounce" style="font-size:45px;">keyboard_arrow_down</i></button></div>
       </div>
     </div>
