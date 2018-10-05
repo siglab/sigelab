@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 
+const publicIp = require('public-ip');
+
 @Injectable()
 export class Modulo2Service {
 
@@ -218,12 +220,13 @@ export class Modulo2Service {
 
   // METODOS DE MODIFICACION
 
-  updateDocLaboratorio(idlab, doc){
-    return this.afs.doc('cfFacil/' + idlab).update(doc)
+  updateDocLaboratorio(idlab, doc){  
+    return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
 
   setDocLaboratorio(idlab, doc){
-    return  this.afs.doc('cfFacil/' + idlab).set(doc,{merge:true})
+    
+    return  this.afs.doc('cfFacil/' + idlab).set(doc,{merge:true});
   }
 
   updateEquip(idEquip, doc){
@@ -325,6 +328,141 @@ export class Modulo2Service {
     return  this.afs.doc('cfFacil/'+idlab).collection('cfEAddr')
                 .doc(idAddr).delete();
   }
+
+
+
+
+  // METODO TRAZABILIDAD DE CAMBIOS
+
+  Trazability(user, type, collection, id, docIn){
+    console.log('ejecuto');
+    let size = 0;
+    let cont = 1;
+    for (const key in docIn) {
+      size++;
+    }
+    let promise = new Promise((resolve, reject)=>{
+      let docAfter = {};
+      this.afs.collection(collection).doc(id).ref.get().then(doc => {
+        const documento = doc.data();
+        docAfter = doc.data();
+  
+        for (const key in docIn) {
+          if (docIn.hasOwnProperty(key)) {
+             docAfter[key] = docIn[key]; 
+             console.log(cont, size);
+             if(cont == size){
+  
+              console.log(documento, docAfter);
+
+              this.addTrazability(user, type, collection, id, documento, docAfter).then(()=>{
+                resolve();
+              });
+             
+             }else{
+              cont++;  
+             }
+               
+          }
+        }
+  
+        
+      });
+    });
+
+    return promise;
+
+  }
+
+
+  TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn){
+    console.log('ejecuto');
+    let size = 0;
+    let cont = 1;
+    for (const key in docIn) {
+      size++;
+    }
+    let promise = new Promise((resolve, reject)=>{
+      if(type != 'create'){
+        let docAfter = {};
+        this.afs.collection(collection).doc(idColl).collection(subColl).doc(idSub)
+          .ref.get().then(doc => {
+          const documento = doc.data();
+          docAfter = doc.data();
+            
+          if(type != 'delete'){
+            for (const key in docIn) {
+              if (docIn.hasOwnProperty(key)) {
+                 docAfter[key] = docIn[key]; 
+                 console.log(cont, size);
+                 if(cont == size){
+      
+                  console.log(documento, docAfter);
+    
+                  this.addTrazability(
+                    user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+                    documento, docAfter).then(()=>{
+                    resolve();
+                  });
+                 
+                 }else{
+                  cont++;  
+                 }
+                   
+              }
+            }
+          } else {
+            this.addTrazability(
+              user, type, collection+'/'+idColl+'/'+subColl, idSub, {}, documento).then(()=>{
+              resolve();
+            });
+          }
+        
+            
+        });
+      } else {
+        this.addTrazability(
+          user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+          {}, docIn).then(()=>{
+          resolve();
+        });
+        
+      }
+
+    });
+
+    return promise;
+  }
+
+
+addTrazability(user, type, collection, iddoc, docAnt, docDes){
+  let promise = new Promise((resolve, reject) => {
+    publicIp.v4().then(ip => {
+      const logger = {
+        user:user,
+        type:type,
+        ip: ip,
+        relatedDoc: iddoc,
+        collectionName:collection,
+        currentVer: docDes,
+        previousVer:docAnt,
+        createdAt: new Date().toISOString()
+      };
+   
+     console.log(logger);
+  
+     this.afs.collection('logger').add(logger).then(()=>{
+       resolve();
+     });
+    });
+  
+  });
+
+  return promise;
+
+
+}
+
 
 
 }

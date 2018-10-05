@@ -936,19 +936,24 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             this.infolab['active'] = true;
           }
     
-          this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
-              .then(data=>{
-    
-            swal.close();
-            swal({
-              type: 'success',
-              title: 'Cambios Realizados',
-              showConfirmButton: true
-            }).then(() => {
-              this.obs.changeObjectLab({ nombre: this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid })
-            });
+          this.servicioMod2.Trazability(
+            this.user.uid, 'update','cfFacil', this.labestructurado.uid, this.infolab)
+            .then(()=>{
+              this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
+                  .then(data=>{
+        
+                swal.close();
+                swal({
+                  type: 'success',
+                  title: 'Cambios Realizados',
+                  showConfirmButton: true
+                }).then(() => {
+                
+                });
 
-          });
+              });
+            });
+  
 
         } else if (result.dismiss === swal.DismissReason.cancel) {
           swal(
@@ -1001,14 +1006,18 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                 estado: 'pendiente'
               });
 
-             this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, aux).then(()=>{
-                swal.close();
-                swal({
-                  type: 'success',
-                  title: 'Sugerencia de cambios ingresada',
-                  showConfirmButton: true
+            this.servicioMod2.Trazability(
+              this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, aux).then(()=>{
+                this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, aux).then(()=>{
+                  swal.close();
+                  swal({
+                    type: 'success',
+                    title: 'Sugerencia de cambios ingresada',
+                    showConfirmButton: true
+                  });
                 });
-              });
+              })
+            
             });
 
 
@@ -1074,7 +1083,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                     cambio[aux[0]] = {};
-                    this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, obj);
+                    this.servicioMod2.Trazability(
+                      this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, obj ).then(()=>{
+                        this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, obj);
+                      });
+                    
                   }else{
                     cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                   }
@@ -1093,8 +1106,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   if (this.sugerencia.data[cont].quitar) {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
-                                    
-                    this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, obj);
+                    
+                    this.servicioMod2.Trazability(
+                      this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, obj).then(()=>{
+
+                      this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, obj);
+                    });
+                   
                   }else{
                     cambio[aux[0]] = {};
 
@@ -1114,17 +1132,21 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         }
         cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
 
-        this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, cambio).then(data=>{
-          swal(
-            'Cambios Aprobados',
-            '',
-            'success'
-          );
-          this.sugerencia = undefined;
-          this.limpiarData();
-          this.obs.changeObject({ nombre: this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid })
+        this.servicioMod2.Trazability(
+          this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, cambio).then(()=>{
+            this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, cambio).then(data=>{
+              swal(
+                'Cambios Aprobados',
+                '',
+                'success'
+              );
+              this.sugerencia = undefined;
+              this.limpiarData();
+              this.obs.changeObject({ nombre: this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid })
 
-        });
+            });
+
+          });
 
 
       } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -1180,10 +1202,22 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   EnviarcfEAddr(data, accion) {
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
-      if(accion){
-        this.servicioMod2.addAddrLaboratorio(this.labestructurado.uid,element.nombre);
+      if(accion){   
+        this.servicioMod2.addAddrLaboratorio(this.labestructurado.uid,element.nombre).then(data=>{
+          data.get().then(doc => {
+
+            this.servicioMod2.TrazabilitySubCollection(        
+              this.user.uid, 'create', 'cfFacil', this.labestructurado.uid, 'cfEAddr', data.id, doc.data());
+          });
+           
+        });
       }else{
-        this.servicioMod2.deleteAddrLaboratorio(this.labestructurado.uid, element.id);
+        this.servicioMod2.TrazabilitySubCollection(        
+          this.user.uid, 'delete', 'cfFacil', this.labestructurado.uid, 'cfEAddr', element.id, {})
+          .then(()=>{
+            this.servicioMod2.deleteAddrLaboratorio(this.labestructurado.uid, element.id);
+          });
+
       }
 
     }
@@ -1231,15 +1265,19 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     const cambio = {};
     cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
 
-    this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, cambio).then(data=>{
-      swal({
-        type: 'success',
-        title: 'Cambios Desaprobados',
-        showConfirmButton: true
-      });
-      this.sugerencia = undefined;
-      this.obs.changeObject({ nombre: this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid })
-    });
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, cambio).then(()=>{
+        this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, cambio).then(data=>{
+          swal({
+            type: 'success',
+            title: 'Cambios Desaprobados',
+            showConfirmButton: true
+          });
+          this.sugerencia = undefined;
+          this.obs.changeObject({ nombre: this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid })
+        });
+      })
+
   }
 
   estructurarDataCambios() {

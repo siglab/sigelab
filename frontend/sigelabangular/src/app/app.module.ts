@@ -96,6 +96,7 @@ import { ActivePipe } from './shared/services/active.pipe';
 
 import { NgxEditorModule } from 'ngx-editor';
 import { HttpClientModule } from '@angular/common/http';
+import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
 
 // libreria date time-picker
 
@@ -183,7 +184,9 @@ import { HttpClientModule } from '@angular/common/http';
     AuthGuard,
     Nivel2Guard,
     Nivel25Guard,
-    Nivel3Guard
+    Nivel3Guard,
+    Modulo2Service,
+    ServicesNivel3Service
   ],
   bootstrap: [AppComponent]
 })

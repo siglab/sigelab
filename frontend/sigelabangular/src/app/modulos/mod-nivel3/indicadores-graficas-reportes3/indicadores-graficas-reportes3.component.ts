@@ -855,22 +855,6 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
-  // prueba(){
-  //   for (let i = 1; i <= 12; i++) {
-  //     let auxmes = ''+i;
-  //     if(i<10){auxmes = '0'+i;}
-  //     const obj = {
-  //       updatedAt: '2015-'+auxmes+'-18T17:05:16.532Z',
-  //       status: 'terminada',
-  //       cfSrv:'wzg6bgxqDmNbYynKcqxr',
-  //       cfPrice:'400'
-  //     }
-  
-  //     this.afs.collection('cfSrvReserv').add(obj);
-      
-  //   }
-
-  // }
 
 
   inicializarGraficoLineaPracticas(array) {
