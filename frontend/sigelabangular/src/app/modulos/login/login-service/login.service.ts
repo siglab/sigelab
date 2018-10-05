@@ -41,6 +41,8 @@ export class LoginService {
   
   
           this.consultarTipoUsuario(this.usuario.uid).then(() => {
+
+            console.log('termino consultar el tipo de usuario');
             resolve();
 
           }).catch( err => {
@@ -170,28 +172,24 @@ export class LoginService {
 
 
   consultarTipoUsuario(id) {
-    const role = ['UlcSFw3BLPAdLa533QKP','lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75', 
-                  'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
+   
     let promise = new Promise((resolve, reject) => {
 
-      this.getUser(id).subscribe(data => {
+      this.getUser(id).then(doc => {
+        const data = doc.data();
 
         if (data) {
 
           localStorage.setItem('persona', JSON.stringify(data));
           const rol = data['appRoles'];
           let roleAdmin = false;
+   
+            roleAdmin = this.buscarRole(rol);
 
-          for (const key in rol) {
-            if (rol.hasOwnProperty(key)) {
-              if(rol[key]){
-                roleAdmin = role.includes(key)         
-              }           
-            }
-          }
-          console.log(roleAdmin);
           if(data['cfPers'] == '' || roleAdmin){
             this.estructurarPermisos(rol).then(ok => {
+
+              console.log('termino el metodo estructura permiso');
               localStorage.setItem('rol', JSON.stringify(ok['permisos']));
               resolve();
             });
@@ -221,7 +219,7 @@ export class LoginService {
                       arrlab[key] = ok['permisos'];
                     
                       if(sizeLabs == cont){
-       
+                        console.log('termino el metodo estructura permiso');
                         localStorage.setItem('laboratorios', JSON.stringify(arr));
                         localStorage.setItem('permisos', JSON.stringify(arrlab));
                         resolve();
@@ -250,6 +248,22 @@ export class LoginService {
 
     return promise;
 
+  }
+
+  buscarRole(rol){
+    const role = ['UlcSFw3BLPAdLa533QKP','lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75', 
+                  'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
+    for (const key in rol) {
+      if (rol.hasOwnProperty(key)) {
+        if(rol[key]){
+          if(role.includes(key)){
+           return true;
+          }        
+        }           
+      }
+    }
+
+    return false;
   }
 
   estructurarPermisos(roles){
@@ -281,11 +295,13 @@ export class LoginService {
                 controle++;
   
                 if (controle === rollength) {
+
+                  console.log('termino recorrer permisos');
                   cont++;
   
                   console.log(rolelength, cont);
                   if (rolelength === cont) {
-  
+                    console.log('termino de recorrer los roles');
                     if (permisos) {
                       console.log(permisos);
                   
@@ -317,7 +333,7 @@ export class LoginService {
   }
 
   getUser(iduser) {
-    return this.afs.doc('user/' + iduser).valueChanges();
+    return this.afs.doc('user/' + iduser).ref.get();
   }
 
   getPersona(idPers){

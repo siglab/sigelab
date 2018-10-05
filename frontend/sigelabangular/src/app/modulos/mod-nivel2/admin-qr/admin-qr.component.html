@@ -78,7 +78,7 @@
 
                           <div class="example-container mat-elevation-z8">
                             <div class="example-header">
-                                <button (click)="downloadAllTableCsv()" mat-raised-button  color="primary" style="float: right;" >csv</button>
+                                <button *ngIf="moduloNivel3" (click)="downloadAllTableCsv()" mat-raised-button  color="primary" style="float: right;" >csv</button>
                               <mat-form-field>
                                 <input style="outline: none;" matInput (keyup)="cambiardataInac($event.target.value)"
                                   placeholder="Buscar referencia">

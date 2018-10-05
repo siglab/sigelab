@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit {
         showConfirmButton: true
       });
 
+      console.log('enrutameitno');
+
       this.ruta.navigate(['principal']);
          
 
