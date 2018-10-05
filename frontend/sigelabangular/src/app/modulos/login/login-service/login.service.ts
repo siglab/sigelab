@@ -38,8 +38,8 @@ export class LoginService {
           console.log('entro a login');
           this.usuario = response.user;
           localStorage.setItem('usuario', JSON.stringify(this.usuario));
-  
-  
+
+
           this.consultarTipoUsuario(this.usuario.uid).then(() => {
             resolve();
 
@@ -101,7 +101,7 @@ export class LoginService {
 
           if(this.usuario){
             this.consultarTipoUsuario(this.usuario.uid).then(() => {
-              resolve(data); 
+              resolve(data);
             }).catch( err => {
               reject();
             });
@@ -170,7 +170,7 @@ export class LoginService {
 
 
   consultarTipoUsuario(id) {
-    const role = ['UlcSFw3BLPAdLa533QKP','lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75', 
+    const role = ['UlcSFw3BLPAdLa533QKP', 'lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75',
                   'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
     let promise = new Promise((resolve, reject) => {
 
@@ -184,18 +184,20 @@ export class LoginService {
 
           for (const key in rol) {
             if (rol.hasOwnProperty(key)) {
-              if(rol[key]){
-                roleAdmin = role.includes(key)         
-              }           
+              if (rol[key]) {
+                console.log(key);
+                roleAdmin = role.includes(key);
+              }
             }
           }
           console.log(roleAdmin);
-          if(data['cfPers'] == '' || roleAdmin){
+          if (data['cfPers'] === '' || roleAdmin) {
             this.estructurarPermisos(rol).then(ok => {
               localStorage.setItem('rol', JSON.stringify(ok['permisos']));
               resolve();
             });
           } else {
+            console.log('if');
             const arr = {};
             const arrlab = {};
             this.getPersona(data['cfPers']).then(doc => {
@@ -205,7 +207,7 @@ export class LoginService {
               let cont = 1;
               for (const key in labs) {
                 if (labs.hasOwnProperty(key)) {
-                  sizeLabs++;                  
+                  sizeLabs++;
                 }
               }
 
@@ -214,26 +216,26 @@ export class LoginService {
                  if(labs[key]){
 
                   arr[key] = true;
-                 
+
                   for (const llave in clientRole[key]) {
                     if (clientRole[key].hasOwnProperty(llave)) {
                      this.estructurarPermisos(clientRole[key]).then(ok => {
                       arrlab[key] = ok['permisos'];
-                    
-                      if(sizeLabs == cont){
-       
+
+                      if (sizeLabs === cont){
+
                         localStorage.setItem('laboratorios', JSON.stringify(arr));
                         localStorage.setItem('permisos', JSON.stringify(arrlab));
                         resolve();
-                      }else{
+                      } else {
                         cont++;
                       }
-                     
+
                      });
-                      
+
                     }
                   }
-                 }                
+                 }
                 }
               }
 
@@ -241,7 +243,7 @@ export class LoginService {
           }
 
 
-         
+
 
         }
 
@@ -252,7 +254,21 @@ export class LoginService {
 
   }
 
-  estructurarPermisos(roles){
+
+  metodo(key , array) {
+    let enc = false;
+    for (let i = 0; i < array.length; i++) {
+      const element = array[i];
+      if(key == element){
+        enc = true;
+      }
+
+    }
+
+    return enc;
+  }
+
+  estructurarPermisos(roles) {
 
     let promise = new Promise((resolve, reject) => {
       let rolelength = 0;
@@ -260,7 +276,7 @@ export class LoginService {
       for (const key in roles) {
         rolelength++;
       }
-  
+
       const permisos = {};
       let cont = 0;
       for (const clave in roles) {
@@ -273,38 +289,38 @@ export class LoginService {
             for (const key in permission) {
               rollength++;
             }
-  
+
             if (permission) {
               // tslint:disable-next-line:forin
               for (const llave in permission) {
                 permisos[llave] = permission[llave];
                 controle++;
-  
+
                 if (controle === rollength) {
                   cont++;
-  
+
                   console.log(rolelength, cont);
                   if (rolelength === cont) {
-  
+
                     if (permisos) {
                       console.log(permisos);
-                  
+
                       resolve({permisos : permisos});
                     } else {
-  
+
                        reject( 'error'  );
                     }
-  
+
                   }
                 }
               }
             }
-  
-  
+
+
           }).catch(err => console.log('error consultando el rol', err));
         }
-  
-  
+
+
       }
     });
 

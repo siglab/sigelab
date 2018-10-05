@@ -20,13 +20,7 @@ declare var $: any;
   styleUrls: ['./admin-usuarios.component.css'],
 })
 export class AdminUsuariosComponent implements OnInit {
-  permisions = {
-    clientRoles: {}
-  };
 
-  permisions2 = {
-    appRoles: {}
-  };
 
   idfacultad;
   rolSelect;
@@ -52,7 +46,7 @@ export class AdminUsuariosComponent implements OnInit {
   person = {
 
     cfFamilyNames: '',
-    faculties: {},
+    faculty: {},
     cfFirstNames: '',
     cfOrgUnit: 'i9dzCErPCO4n9WUfjxR9',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
@@ -376,6 +370,17 @@ export class AdminUsuariosComponent implements OnInit {
       // objeto para usuario
     this.usuario.active = this.estado_u;
 
+
+    if (this.arrayPract.length > 0) {
+
+      this.arrayPract.forEach( obj => {
+        this.usuario.appRoles[obj.id] = true;
+      });
+
+    }
+
+
+
     console.log(this.idp);
 
 
@@ -413,10 +418,7 @@ export class AdminUsuariosComponent implements OnInit {
             showConfirmButton: true
           });
 
-
-
         });
-
 
     }
 
@@ -472,13 +474,7 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
 
-  alertAddLab() {
-    swal({
-      type: 'info',
-      title: 'Ahora seleccione un laboratorio al cual asociar el rol del boton +.',
-      showConfirmButton: true
-    });
-  }
+
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
 
 
@@ -548,6 +544,12 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.arrayPract.splice(i, 1);
 
+    swal({
+      type: 'success',
+      title: 'Fue eliminado con exito',
+      showConfirmButton: true
+    });
+
     console.log(this.arrayPract);
 
   }
@@ -582,7 +584,6 @@ export class AdminUsuariosComponent implements OnInit {
 
       // usuario administrador asigna permisos dentro de  client-roles pero tiene ese unico rol
       if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
-
 
         this.niveles.forEach(elemen => {
 
@@ -635,76 +636,14 @@ export class AdminUsuariosComponent implements OnInit {
 
         // usuario de acceso nivel 2.5 -> agrega facultad
       } if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
-
-
-        this.niveles.forEach(elemen => {
-
-          if (elemen.id === this.rolSelect) {
-
-            this.arrayPract = [];
-
-            this.arrayPract.push(elemen);
-
-            swal({
-              type: 'success',
-              title: 'Rol agregado con exito, ya puede actualizar.',
-              showConfirmButton: true
-            });
-          }
-
-        });
-
-        this.usuario.appRoles[this.rolSelect] = true;
-        this.person.faculties[this.idfacultad] = true;
+        this.person.faculty[this.idfacultad] = true;
         console.log(this.person);
 
-
-        // usuario para administracion QR
-      } if (this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql') {
-
-
-        this.niveles.forEach(elemen => {
-
-          if (elemen.id === this.rolSelect) {
-
-            this.arrayPract = [];
-
-            this.arrayPract.push(elemen);
-          }
-
+        swal({
+          type: 'success',
+          title: 'Facultad asignada, ya puede actualizar.',
+          showConfirmButton: true
         });
-
-        this.usuario.appRoles[this.rolSelect] = true;
-
-
-        console.log(this.usuario);
-
-        // usuario comunicacion masiva
-      } if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
-
-
-        this.niveles.forEach((elemen: any) => {
-
-          if (elemen.id === this.rolSelect) {
-
-            this.arrayPract = [];
-
-             elemen.idlaboratorio = '222222';
-            this.arrayPract.push(elemen);
-
-            swal({
-              type: 'success',
-              title: 'Rol agregado con exito, ya puede actualizar.',
-              showConfirmButton: true
-            });
-          }
-
-        });
-
-        this.usuario.appRoles[this.rolSelect] = true;
-
-
-        console.log(this.usuario);
 
       }
 
@@ -730,6 +669,7 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   updatedAdminFacil() {
+
    // obtner referencia del director actual y borrarlo
    this.serviceMod3.getSingleLaboratorios(this.idlab).subscribe( (data: any) => {
 
@@ -757,12 +697,154 @@ export class AdminUsuariosComponent implements OnInit {
 
         this.serviceMod3.updatedLab(  this.idlab , { facilityAdmin : this.idp } );
 
+   });
+
+  }
+
+
+
+  rolSelectQrCm() {
+
+    let encontrado = false;
+
+    this.niveles.forEach((elemen: any) => {
+
+      if (elemen.id === this.rolSelect) {
+
+        this.arrayPract.forEach( el => {
+
+          if ( el.id === this.rolSelect ) {
+
+            encontrado = true;
+
+          }
+       });
+
+
+         if (!encontrado) {
+          this.arrayPract.push(elemen);
+         }
+
+
+      }
+
+    });
+
+  }
+
+
+
+  rolSelectTresCinco() {
+
+     let encontrado = false;
+
+    this.niveles.forEach((elemen: any) => {
+
+      if (elemen.id === this.rolSelect) {
+
+
+       this.arrayPract.forEach( el => {
+
+          if ( el.id === 'PFhLR4X2n9ybaZU3CR75' ||  el.id === this.rolSelect  ) {
+
+            encontrado = true;
+
+          }
+       });
+
+         if (!encontrado) {
+          this.arrayPract.push(elemen);
+         }
+
+      }
+    });
+
+  }
+
+
+  rolSelectDosCinco() {
+
+    let encontrado = false;
+
+   this.niveles.forEach((elemen: any) => {
+
+     if (elemen.id === this.rolSelect) {
+
+
+      this.arrayPract.forEach( el => {
+
+         if ( el.id === 'UlcSFw3BLPAdLa533QKP' ||  el.id === this.rolSelect  ) {
+
+           encontrado = true;
+
+         }
+      });
+
+
+        if (!encontrado) {
+         this.arrayPract.push(elemen);
+        }
+
+     }
 
    });
 
+ }
 
 
-  }
+  alertAddLab() {
+
+    // Usuario seleccionado modulo Qr
+    if ( this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql' ) {
+
+         this.rolSelectQrCm();
+
+         swal({
+          type: 'success',
+          title: 'Nuevo rol agregado Correctamente.',
+          showConfirmButton: true
+        });
+
+        // usuario Comunicacion masiva
+    } if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
+
+         this.rolSelectQrCm();
+
+         swal({
+          type: 'success',
+          title: 'Nuevo rol agregado Correctamente.',
+          showConfirmButton: true
+        });
+
+
+      // usuario Nivel 3.5 o Administrativo
+    } if (this.rolSelect === 'UlcSFw3BLPAdLa533QKP') {
+
+          this.rolSelectTresCinco();
+
+         swal({
+          type: 'success',
+          title: 'Nuevo rol agregado Correctamente.',
+          showConfirmButton: true
+        });
+
+
+      // usuario 2.5 o usuario por facultad
+    } if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
+
+         this.rolSelectDosCinco();
+
+          swal({
+            type: 'success',
+            title: 'Rol 2.5 seleccione el boton "+" para seleccionar la facultad ',
+            showConfirmButton: true
+          });
+
+    }
+
+
+
+   }
 
 
 }
