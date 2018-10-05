@@ -20,6 +20,13 @@ export class ServicesNivel3Service {
     return this.labsCollection.snapshotChanges();
   }
 
+  getSingleLaboratorios(id) {
+
+   return  this.afs.doc('cfFacil/' + id).valueChanges();
+
+  }
+
+
   getAppRoles() {
     return this.afs.collection('appRoles').ref.get();
   }

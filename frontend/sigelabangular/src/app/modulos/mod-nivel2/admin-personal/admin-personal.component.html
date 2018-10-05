@@ -429,7 +429,7 @@
                       <label class="control-label" for="estadoserv">
                         <strong> Perfil:</strong>
                       </label>
-                      <select class="form-control" [(ngModel)]="this.person.roleId" name="role">
+                      <select class="form-control" (change)="setClientRol()" [(ngModel)]="this.rolSelect" name="role">
                         <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
 
                       </select>

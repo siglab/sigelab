@@ -20,6 +20,7 @@ declare var $: any;
 })
 export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy {
   rolc = '';
+  rolSelect;
   itemsel: Observable<Array<any>>;
   tablesel = '';
   nombre;
@@ -43,6 +44,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     cfUri: '',
     cfFamilyNames: '',
     cfFirstNames: '',
+    clientRole : {},
     cfOtherNames: '',
     cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
@@ -50,7 +52,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     cfFacil: {},
     active: true,
     user: '',
-    roleId: '',
     email: '',
     cc: '',
     type: '',
@@ -105,7 +106,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(private obs: ObservablesService,
     private toastr: ToastrService,
     private register: LoginService,
-    private servicioMod2:Modulo2Service ) { }
+    private servicioMod2: Modulo2Service ) { }
 
   ngOnInit() {
 
@@ -113,7 +114,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.getRolesNivel2();
 
-  
+
 
     this.sus = this.obs.currentObjectPer.subscribe(data => {
       console.log(data);
@@ -262,6 +263,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 const user = dataper.data();
                 persona = {
                   roles: user.appRoles,
+                  rolesClient : pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   cc: pers.cc ? pers.cc : 'ninguno',
@@ -368,8 +370,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
             console.log(idnuevo);
             resolve(idnuevo);
-          })
-   
+          });
+
         });
     });
   }
@@ -389,11 +391,15 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.type = item.tipo;
 
     this.apellido = item.apellidos;
-    for (const key in item.roles) {
+    for (const key in item.rolesClient[this.idlab]  ) {
       if (item.roles.hasOwnProperty(key)) {
         this.rol = key;
+        console.log(this.rol);
+
       }
     }
+
+    console.log( 'array', item.rolesClient[this.idlab] );
 
     this.idp = item.idpers;
     this.idu = item.iduser;
@@ -415,9 +421,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       updatedAt: new Date().toISOString()
     };
     /* objeto para usuario */
-    const user = {
-      appRoles: {}
-    };
+
 
     const nuevoEstado = {
       relatedPers: {},
@@ -425,20 +429,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     };
 
-    console.log('usuario con el rol', user);
     console.log(' se va actualizar esta persona', pers);
 
-    user.appRoles[this.rol] = true;
     nuevoEstado.relatedPers[this.idp] = this.estado;
 
     /* metodo firebase para subir un usuario actualizado */
 
-    if (this.idu) {
-      this.servicioMod2.setUser(this.idu, user)
-        .then(() => {
-        });
-
-    }
     this.servicioMod2.setPersona(this.idp, pers).then(
       () => {
 
@@ -522,7 +518,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       appRoles: {}
     };
     // asigna como boolean el id del rol al usuario
-    newUser.appRoles[this.person.roleId] = true;
     console.log(newUser);
     this.servicioMod2.setUser(path, newUser);
 
@@ -553,7 +548,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
-     
+
       this.servicioMod2.getPersForEmail(q).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'Email disponible';
@@ -565,7 +560,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.addP = snapShot.docs[0].id;
           this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;
           this.person.cfFirstNames = snapShot.docs[0].data().cfFirstNames;
-          this.person.roleId = snapShot.docs[0].data().roleId;
           this.person.type = snapShot.docs[0].data().type;
           console.log(this.person.type);
           this.person.cfGender = snapShot.docs[0].data().cfGender;
@@ -600,6 +594,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+  setClientRol() {
+    this.person.clientRole = {};
+    this.person.clientRole[this.rolSelect] = true;
+    console.log(this.person);
+
+  }
 
   cerrarModal(modal) {
     $('#' + modal).modal('hide');

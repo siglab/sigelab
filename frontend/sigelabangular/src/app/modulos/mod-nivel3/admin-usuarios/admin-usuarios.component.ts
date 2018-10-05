@@ -10,6 +10,7 @@ import { Observable } from '@firebase/util';
 import { element } from 'protractor';
 import { QrService } from '../../mod-nivel2/services/qr.service';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 declare var $: any;
 
@@ -58,7 +59,7 @@ export class AdminUsuariosComponent implements OnInit {
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
     cfFacil: {},
     active: true,
-    clientRoles: {},
+    clientRole: {},
     type: '',
     relatedEquipments: {},
     createdAt: this.fecha.toISOString(),
@@ -137,7 +138,10 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.estructuraIdPers().then((data: any) => {
 
+      console.log('entrooooooooooo al metodo');
+
       // validators email
+     console.log('trae data', data);
 
       console.log('data de admin usuarios', data.user);
 
@@ -216,6 +220,7 @@ export class AdminUsuariosComponent implements OnInit {
 
 
   estructuraIdPers() {
+
     const usuarios = [];
     const promise = new Promise((resolve, reject) => {
       this.serviceMod3.buscarUsuarios().then(user => {
@@ -244,9 +249,15 @@ export class AdminUsuariosComponent implements OnInit {
                 roles: rol['role'],
                 llave: rol['llave']
               };
+                console.log( 'usuario', usuario);
+                 usuarios.push(usuario);
 
-              usuarios.push(usuario);
+                 console.log('array de usuarios', usuarios);
+
+                 console.log('tam', user.size);
               if (user.size === usuarios.length) {
+
+                console.log( 'array final', usuarios);
                 resolve({ user: usuarios });
               }
             });
@@ -584,8 +595,8 @@ export class AdminUsuariosComponent implements OnInit {
 
         });
 
-        this.person.clientRoles[this.idlab] = {};
-        this.person.clientRoles[this.idlab][this.rolSelect] = true;
+        this.person.clientRole[this.idlab] = {};
+        this.person.clientRole[this.idlab][this.rolSelect] = true;
         this.person.cfFacil[this.idlab] = true;
 
         console.log('mostrar usuario', this.usuario);
@@ -610,14 +621,14 @@ export class AdminUsuariosComponent implements OnInit {
 
         });
 
-        if (this.person.clientRoles[this.idlab]) {
-          this.person.clientRoles[this.idlab][this.rolSelect] = true;
+        if (this.person.clientRole[this.idlab]) {
+          this.person.clientRole[this.idlab][this.rolSelect] = true;
 
 
         } else {
 
-          this.person.clientRoles[this.idlab] = {};
-          this.person.clientRoles[this.idlab][this.rolSelect] = true;
+          this.person.clientRole[this.idlab] = {};
+          this.person.clientRole[this.idlab][this.rolSelect] = true;
         }
 
         console.log(this.person);
@@ -678,6 +689,7 @@ export class AdminUsuariosComponent implements OnInit {
 
             this.arrayPract = [];
 
+             elemen.idlaboratorio = '222222';
             this.arrayPract.push(elemen);
 
             swal({
@@ -714,6 +726,41 @@ export class AdminUsuariosComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceFacil.filter = filterValue;
+
+  }
+
+  updatedAdminFacil() {
+   // obtner referencia del director actual y borrarlo
+   this.serviceMod3.getSingleLaboratorios(this.idlab).subscribe( (data: any) => {
+
+        // const idPer = data.facilityAdmin;
+        console.log(data);
+
+
+        this.serviceMod3.getPersona( data.facilityAdmin  ).then((result) => {
+
+          console.log(result.data());
+          const admiUser = result.data() ;
+          admiUser.clientRole = {};
+
+          console.log(admiUser);
+
+          this.serviceMod3.updatedPersona( data.facilityAdmin, admiUser );
+
+        }).catch((err) => {
+
+            console.log(err);
+
+        });
+
+        // agregar la referencia actual del director
+
+        this.serviceMod3.updatedLab(  this.idlab , { facilityAdmin : this.idp } );
+
+
+   });
+
+
 
   }
 
