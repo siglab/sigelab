@@ -753,7 +753,7 @@ export class AdminUsuariosComponent implements OnInit {
 
         });
 
-        // agregar la referencia actual del director
+        // agregar la referencia actual del director al laboratorio
 
         this.serviceMod3.updatedLab(  this.idlab , { facilityAdmin : this.idp } );
 
