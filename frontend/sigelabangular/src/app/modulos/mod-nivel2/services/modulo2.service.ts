@@ -412,6 +412,7 @@ export class Modulo2Service {
               }
             }
           } else {
+            console.log(documento);
             this.addTrazability(
               user, type, collection+'/'+idColl+'/'+subColl, idSub, {}, documento).then(()=>{
               resolve();

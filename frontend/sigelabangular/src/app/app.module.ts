@@ -177,6 +177,8 @@ import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
     QuerysPrincipalService,
     QuerysAutenticadoService,
     ObserverAutenticadoService,
+    ServicesNivel3Service,
+    Modulo2Service,
     LoginService,
     AngularFireAuth,
     QrService,

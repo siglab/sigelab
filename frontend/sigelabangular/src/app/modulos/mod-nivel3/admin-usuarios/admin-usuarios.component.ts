@@ -3,7 +3,6 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { ToastrService } from 'ngx-toastr';
 import { LoginService } from '../../login/login-service/login.service';
 
 import swal from 'sweetalert2';
@@ -17,7 +16,7 @@ declare var $: any;
 @Component({
   selector: 'app-admin-usuarios',
   templateUrl: './admin-usuarios.component.html',
-  styleUrls: ['./admin-usuarios.component.css']
+  styleUrls: ['./admin-usuarios.component.css'],
 })
 export class AdminUsuariosComponent implements OnInit {
   permisions = {
@@ -27,7 +26,6 @@ export class AdminUsuariosComponent implements OnInit {
   permisions2 = {
     appRoles: {}
   };
-
 
   idfacultad;
   rolSelect;
@@ -212,7 +210,7 @@ export class AdminUsuariosComponent implements OnInit {
         }
 
      });
- 
+
     });
   }
 
@@ -299,8 +297,6 @@ export class AdminUsuariosComponent implements OnInit {
 
                 nameroles += doc.data().roleName + ',';
 
-
-
               } if (sixe === 1) {
 
                 nameroles = doc.data().roleName;
@@ -369,6 +365,8 @@ export class AdminUsuariosComponent implements OnInit {
       // objeto para usuario
     this.usuario.active = this.estado_u;
 
+    console.log(this.idp);
+
 
     console.log('usuario para subir al sistema', this.usuario);
     console.log(' se va actualizar esta persona', this.person);
@@ -386,14 +384,14 @@ export class AdminUsuariosComponent implements OnInit {
 
     // metodo firebase para subir un usuario actualizado
     if (this.idu) {
-      this.serviceMod3.setUser(this.idu, this.usuario)
+      this.serviceMod3.updatedUser(this.idu, this.usuario)
         .then(() => {
         });
 
     }
      // actualizar la persona
     if (this.idp) {
-      this.serviceMod3.setPersona(this.idp, this.person).then(
+      this.serviceMod3.updatedPersona(this.idp, this.person).then(
         () => {
 
 

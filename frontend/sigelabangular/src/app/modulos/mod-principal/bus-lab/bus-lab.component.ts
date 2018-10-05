@@ -108,7 +108,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] === 'gmail.com'){
+      if (this.user.email.split('@')[1] === 'gmail.com') {
         this.usuariounivalle = true;
       }
     }
@@ -323,7 +323,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               this.enviarNotificacionesCorreo();
 
               this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email, this.itemsel.personal);
-             
+
               this.limpiarDatos();
 
               this.cerrarModal('myModalLabs');
@@ -373,7 +373,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.query.buscarDirector(this.itemsel.iddirecto).then(doc => {
       this.query.enviarNotificaciones([doc.data().user], this.servsel.nombre, this.user.email);
     });
- 
+
     let cont = 0;
     for (let i = 0; i < this.itemsel.personal.length; i++) {
       this.query.buscarUsuarioWithEmail(this.itemsel.personal).then(docs => {
@@ -385,11 +385,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
           }else{
             cont++;
           }
-        })   
+        })
       })
-      
+
     }
-   
+
   }
 
 

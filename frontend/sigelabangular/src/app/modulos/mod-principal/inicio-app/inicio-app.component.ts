@@ -13,7 +13,7 @@ export class InicioAppComponent implements OnInit {
 
   ngOnInit() {
 
-
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
   }
 
 
@@ -21,8 +21,14 @@ export class InicioAppComponent implements OnInit {
 
       $('html, body').animate({ scrollTop: '400px' }, 'slow');
 
-      console.log('sii');
 
     }
 
+
+
+    downAcerca() {
+
+      $('html, body').animate({ scrollTop: '800px' }, 'slow');
+
+    }
 }
