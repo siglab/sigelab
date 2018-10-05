@@ -154,6 +154,43 @@ export class ServicesNivel3Service {
     return refer.get();
   }
 
+  getCollectionSolicitudes() {
+    const col = this.afs.collection('request');
+    const refer = col.ref.where('requestType', '==', 'mantenimiento');
+    return refer.get();
+  }
+
+  getCollectionSolicitudesFacultad(id) {
+    const col = this.afs.collection('request');
+    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('faculties.'+id, '==', true);
+ 
+    return refer.get();
+  }
+
+  getUser(userid){
+    return this.afs.doc('user/' + userid).ref.get();
+  }
+
+  getEquipo(equipid){
+    return this.afs.doc('cfEquip/' + equipid).ref.get();
+  }
+
+  getLaboratorio(labid){
+    return this.afs.doc('cfFacil/' + labid).ref.get();
+  }
+
+  getcomponents(id){
+    return this.afs.collection('cfEquip/' + id + '/components').ref.get();
+  } 
+
+  getComponenteForId(idequip, idcomp){
+    return  this.afs.collection('cfEquip/' + idequip + '/components').doc(idcomp).ref.get();
+  }
+
+
+ 
+
+
 
 
   // METODOS DE MODIFICACION
@@ -174,6 +211,10 @@ export class ServicesNivel3Service {
 
     return this.afs.doc('user/' + id).set(doc, { merge: true });
 
+  }
+
+  updateSolicitudMantenimiento(id, doc){
+    return  this.afs.collection('request').doc(id).update(doc);
   }
 
   updatedUser(id, doc) {

@@ -53,6 +53,7 @@
     "ngx-bootstrap": "^2.0.3",
     "ngx-editor": "^3.3.0",
     "ngx-toastr": "^8.8.0",
+    "public-ip": "^2.4.0",
     "qrcode": "^1.2.0",
     "qtip2": "^3.0.3",
     "rxjs": "^5.5.6",

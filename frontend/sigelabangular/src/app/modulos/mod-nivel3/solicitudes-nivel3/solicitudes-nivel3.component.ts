@@ -12,6 +12,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 
 import { URLAPI } from '../../../config';
 import { Http } from '@angular/http';
+import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
 declare var $: any;
 @Component({
@@ -133,7 +134,7 @@ export class SolicitudesNivel3Component implements OnInit {
   persona:any;
   faculty:any;
 
-  constructor(private afs: AngularFirestore, private storage:AngularFireStorage, private http:Http) {
+  constructor( private serviceMod3: ServicesNivel3Service, private storage:AngularFireStorage, private http:Http) {
   }
 
    ngOnInit() {
@@ -151,7 +152,7 @@ export class SolicitudesNivel3Component implements OnInit {
     this.alertaCargando();
     
     if(this.moduloNivel3){
-      this.getCollectionSolicitudes().then(data1 => {
+      this.serviceMod3.getCollectionSolicitudes().then(data1 => {
         if(data1.size != 0){
           this.itemsel = data1;
           this.estructurarSolicitudesActivas(data1).then(datos => {
@@ -180,7 +181,7 @@ export class SolicitudesNivel3Component implements OnInit {
         let array = [];
         for (const key in this.faculty) {
           if (this.faculty.hasOwnProperty(key)) {
-            this.getCollectionSolicitudesFacultad(key).then(data1 => {
+            this.serviceMod3.getCollectionSolicitudesFacultad(key).then(data1 => {
               data1.forEach(doc => {
                 array.push(doc);
               });
@@ -238,14 +239,14 @@ export class SolicitudesNivel3Component implements OnInit {
       obj['comment'] = this.comentario;
       obj.status = 'rechazada';
 
-      this.afs.collection('request').doc(this.solsel.uidsol).update(obj).then(()=>{
+      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
         this.alertaExito('Solicitud Rechazada');
         this.solsel.status = 'rechazada';
       });
     }else if(estado == 'aceptada'){
       obj.status = 'aceptada';
       obj['dateAccepted'] =  new Date().toISOString();
-      this.afs.collection('request').doc(this.solsel.uidsol).update(obj).then(()=>{
+      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
         this.alertaExito('Solicitud Aceptada');
         this.solsel.status = 'aceptada';
       });
@@ -257,7 +258,7 @@ export class SolicitudesNivel3Component implements OnInit {
         obj.path.push(upload[i]);      
       }
       
-      this.afs.collection('request').doc(this.solsel.uidsol).update(obj).then(()=>{
+      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
         this.alertaExito('Solicitud Concluida');
         this.solsel.status = 'realizada';
       });
@@ -357,18 +358,7 @@ export class SolicitudesNivel3Component implements OnInit {
   }
 
 
-  getCollectionSolicitudes() {
-    const col = this.afs.collection('request');
-    const refer = col.ref.where('requestType', '==', 'mantenimiento');
-    return refer.get();
-  }
 
-  getCollectionSolicitudesFacultad(id) {
-    const col = this.afs.collection('request');
-    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('faculties.'+id, '==', true);
- 
-    return refer.get();
-  }
 
   estructurarSolicitudesActivas(data) {
     this.datos = [];
@@ -385,8 +375,8 @@ export class SolicitudesNivel3Component implements OnInit {
 
         const elemento = element.data();
         console.log(elemento);
-        this.getLaboratorio(elemento.cfFacil).then(lab => {
-          this.getEmailUser(elemento.createdBy).then(email => {
+        this.serviceMod3.getLaboratorio(elemento.cfFacil).then(lab => {
+          this.serviceMod3.buscarDirector(elemento.createdBy).then(email => {
             const Solicitud = {
               uidsol:element.id,
               uidlab: elemento.cfFacil,
@@ -410,7 +400,7 @@ export class SolicitudesNivel3Component implements OnInit {
               Solicitud['comment'] = elemento.comment;
             }
             if(elemento.relatedEquipments != ''){
-              this.getEquipo(elemento.relatedEquipments).then(equipo => {
+              this.serviceMod3.getEquipo(elemento.relatedEquipments).then(equipo => {
                 Solicitud['equipo'] = equipo.data();
                 Solicitud['nombreEquip'] = equipo.data().cfName;
               });
@@ -445,18 +435,6 @@ export class SolicitudesNivel3Component implements OnInit {
     return promise;
   }
 
-   getEmailUser(userid){
-    return this.afs.doc('user/' + userid).ref.get();
-  }
-
-  getEquipo(equipid){
-    return this.afs.doc('cfEquip/' + equipid).ref.get();
-  }
-
-  getLaboratorio(labid){
-    return this.afs.doc('cfFacil/' + labid).ref.get();
-  }
-
 
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -470,7 +448,7 @@ export class SolicitudesNivel3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.afs.doc('cfEquip/' + clave).ref.get().then(data => {
+           this.serviceMod3.getEquipo(clave).then(data => {
            const equip =  data.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
@@ -497,23 +475,23 @@ export class SolicitudesNivel3Component implements OnInit {
   estructurarComponents(item){
     const arr = [];
 
-    this.afs.collection('cfEquip/' + item + '/components').snapshotChanges().subscribe(data => {
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data();
+    this.serviceMod3.getcomponents(item).then(data => {
 
-          const componente = {
-            id: data[i].payload.doc.id,
-            nombre: element.cfName,
-            descripcion: element.cfDescription,
-            precio: element.cfPrice,
-            marca: element.brand,
-            modelo: element.model,
-            estado: element.active
-          };
-  
-          arr.push(componente);
-          
-      }
+      data.forEach(doc => {
+        const element = doc.data();
+
+        const componente = {
+          id: doc.id,
+          nombre: element.cfName,
+          descripcion: element.cfDescription,
+          precio: element.cfPrice,
+          marca: element.brand,
+          modelo: element.model,
+          estado: element.active
+        };
+
+        arr.push(componente);
+      });
 
      });
 
@@ -530,11 +508,11 @@ export class SolicitudesNivel3Component implements OnInit {
        if (componente.hasOwnProperty(clave)) {
  
          if (componente[clave]) {
-            this.afs.collection('cfEquip/' + item + '/components').doc(clave).snapshotChanges().subscribe(data => {
-              const element =  data.payload.data();
+            this.serviceMod3.getComponenteForId(item, clave).then(data => {
+              const element =  data.data();
 
             const comp = {
-              id: data.payload.id,
+              id: data.id,
               nombre: element.cfName,
               descripcion: element.cfDescription,
               precio: element.cfPrice,
@@ -567,7 +545,7 @@ export class SolicitudesNivel3Component implements OnInit {
     this.viewsabs = false;
     if(item.idEquipo){
 
-      this.consultaEquipo(item.idEquipo).then(data => {
+      this.serviceMod3.getEquipo(item.idEquipo).then(data => {
   
         this.consultarSabs(data.data().inventory).then(() => {
           console.log('hecho');
@@ -647,7 +625,7 @@ export class SolicitudesNivel3Component implements OnInit {
   getFaculty(){
    let size = 0;
     let promise = new Promise((resolve, reject) => {
-      this.getPersona(this.persona.cfPers).then(doc => {
+      this.serviceMod3.buscarDirector(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
         for (const key in this.faculty) {
           if (this.faculty.hasOwnProperty(key)) {
@@ -660,9 +638,7 @@ export class SolicitudesNivel3Component implements OnInit {
     });
     return promise;
   }
-  getPersona(persid) {
-    return this.afs.doc('cfPers/' + persid).ref.get();
-  }
+
   
 
   buscarCoincidenciasSolicitudes(item){
@@ -690,9 +666,6 @@ export class SolicitudesNivel3Component implements OnInit {
     return {coin:coincidencias, mane:manejecutados, monto:montosol};
   }
 
-  consultaEquipo(id){
-    return this.afs.collection('cfEquip').doc(id).ref.get();
-  }
 
   cambiarDataComponentes(item){
    this.dataSourceComp = new MatTableDataSource(item.componentes);
@@ -794,32 +767,7 @@ export class SolicitudesNivel3Component implements OnInit {
     swal.close();
   }
 
-  subir(){
-    const fecha = new Date();
-    const reser = {
-      cfOrgUnit:'',
-      headquarter:'',
-      cfFacil:'jf2M1PRazsokIxoJpiJs',
-      createdBy:'bZXTVtCUyXN2pqU9PUf4r4jEy1j2',
-      requestDesc:'el equipo no enciende',
-      requestType:'mentenimiento',
-      maintenanceType:'preventivo',
-      providersInfo:[{name:'samsungrepuestos',contactNumbers:['4534534','3344444'],attachments:{}},
-                     {name:'lgrepuestos',contactNumbers:['242542','674353486787'],attachments:{}}],
-      relatedEquipments:{
-        CiRKr35nQQx0287yp7DN: true
-      },
-      relatedComponents:{
-        m9hgyQKVt9XCgbHPl9gX:true
-      },
-      status:'pendiente',
-      active:true,
-      createdAt:fecha.toISOString(),
-      updatedAt:fecha.toISOString()
-    }
 
-    this.afs.collection('request').add(reser);
-  }
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
