@@ -358,10 +358,22 @@ export class AdminUsuariosComponent implements OnInit {
       // objeto para usuario
       (this.usuario.active = this.estado_u);
 
+
     if (this.arrayPract.length > 0) {
-      this.arrayPract.forEach(obj => {
-        this.usuario.appRoles[obj.id] = true;
-      });
+          // valida si el array contiene la llave de adminstrador
+          const adm = this.includeAdmin();
+       if ( adm ) {
+             console.log('rol de administrador lab');
+             // crea la llave del lab como objeto y agrega el rol dentro
+            this.setKeyAdmin();
+       } else {
+           // otros roles
+          this.arrayPract.forEach(obj => {
+          this.usuario.appRoles[obj.id] = true;
+        });
+       }
+
+
     }
 
     console.log(this.idp);
@@ -633,6 +645,10 @@ export class AdminUsuariosComponent implements OnInit {
 
         if (!encontrado) {
           this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+          this.alertInfo();
         }
       }
     });
@@ -640,7 +656,6 @@ export class AdminUsuariosComponent implements OnInit {
 
   rolSelectTresCinco() {
     let encontrado = false;
-
     this.niveles.forEach((elemen: any) => {
       if (elemen.id === this.rolSelect) {
         this.arrayPract.forEach(el => {
@@ -648,9 +663,13 @@ export class AdminUsuariosComponent implements OnInit {
             encontrado = true;
           }
         });
-
         if (!encontrado) {
           this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+           this.alertInfo();
+
         }
       }
     });
@@ -658,7 +677,6 @@ export class AdminUsuariosComponent implements OnInit {
 
   rolSelectDosCinco() {
     let encontrado = false;
-
     this.niveles.forEach((elemen: any) => {
       if (elemen.id === this.rolSelect) {
         this.arrayPract.forEach(el => {
@@ -669,9 +687,43 @@ export class AdminUsuariosComponent implements OnInit {
 
         if (!encontrado) {
           this.arrayPract.push(elemen);
+          this.alertSuccess();
+        } else {
+           this.alertInfo();
         }
       }
     });
+  }
+
+  rolSelectAdminLab() {
+    let encontrado = false;
+    this.niveles.forEach(elemen => {
+      if (elemen.id === this.rolSelect) {
+        this.arrayPract = [];
+
+        this.arrayPract.forEach(el => {
+          if (el.id === 'UlcSFw3BLPAdLa533QKP'  || el.id === this.rolSelect
+            || el.id === 'W6ihltvrx8Gc7jVucH8M' || el.id === '6ITqecW7XrgTLaW6fpn6'
+            || el.id === 'yoVd80ZvcdgUf1a44ORB' || el.id === 'FH5dgAP3EjI8rGKrX0mP'
+            || el.id ===  'k7uRIEzj99l7EjZ3Ppql') {
+            encontrado = true;
+          }
+        });
+
+        if (!encontrado) {
+          this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+
+           this.alertInfo();
+        }
+
+      }
+    });
+
+
+
   }
 
   alertAddLab() {
@@ -679,44 +731,28 @@ export class AdminUsuariosComponent implements OnInit {
     if (this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql') {
       this.rolSelectQrCm();
 
-      swal({
-        type: 'success',
-        title: 'Nuevo rol agregado Correctamente.',
-        showConfirmButton: true
-      });
 
       // usuario Comunicacion masiva
     }
     if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
       this.rolSelectQrCm();
 
-      swal({
-        type: 'success',
-        title: 'Nuevo rol agregado Correctamente.',
-        showConfirmButton: true
-      });
 
       // usuario Nivel 3.5 o Administrativo
     }
     if (this.rolSelect === 'UlcSFw3BLPAdLa533QKP') {
       this.rolSelectTresCinco();
 
-      swal({
-        type: 'success',
-        title: 'Nuevo rol agregado Correctamente.',
-        showConfirmButton: true
-      });
 
       // usuario 2.5 o usuario por facultad
     }
     if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
       this.rolSelectDosCinco();
 
-      swal({
-        type: 'success',
-        title: 'Rol 2.5 seleccione el boton "+" para seleccionar la facultad ',
-        showConfirmButton: true
-      });
+      // usuario administrador de laboratorio
+    } if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
+      this.rolSelectAdminLab();
+
     }
   }
 
@@ -733,5 +769,47 @@ export class AdminUsuariosComponent implements OnInit {
     }
 
     return false;
+  }
+
+  setKeyAdmin() {
+
+    this.person.clientRole[this.idlab] = {};
+    this.arrayPract.forEach( elemen => {
+    this.person.clientRole[this.idlab][elemen.id] = true;
+    });
+    this.person.cfFacil[this.idlab] = true;
+
+    this.updatedAdminFacil();
+  }
+
+
+  includeAdmin() {
+
+    let includ = false;
+     this.arrayPract.forEach(elemen => {
+
+      if ( elemen.id === 'S9wr9uK5BBF4yQZ7CwqX') {
+
+        includ =  true;
+      }
+    });
+     return includ;
+  }
+
+
+  alertSuccess() {
+    swal({
+      type: 'success',
+      title: 'Nuevo rol agregado Correctamente.',
+      showConfirmButton: true
+    });
+  }
+
+  alertInfo() {
+    swal({
+      type: 'info',
+      title: 'No se puede agregar el rol a la persona seleccionada.',
+      showConfirmButton: true
+    });
   }
 }
