@@ -220,7 +220,7 @@ export class AdminUsuariosComponent implements OnInit {
                   ? element.appRoles
                   : this.clientRole(persona['clientRole'])
               ).then(rol => {
-                console.log(rol['role']);
+                console.log(rol['llave']);
                 const usuario = {
                   id: doc.id,
                   nombre: persona['cfFirstNames']

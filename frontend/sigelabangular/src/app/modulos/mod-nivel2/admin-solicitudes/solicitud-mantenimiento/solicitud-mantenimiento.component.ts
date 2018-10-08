@@ -705,7 +705,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
    
 
     const url = URLCORREO;
-    const asunto = 'NUEVA SOLICITTUD DE SERVICIO';
+    const asunto = 'NUEVA SOLICITUD DE MANTENIMIENTO';
     let destino = '';
     if(analistas){
       for (let i = 0; i < analistas.length; i++) {
