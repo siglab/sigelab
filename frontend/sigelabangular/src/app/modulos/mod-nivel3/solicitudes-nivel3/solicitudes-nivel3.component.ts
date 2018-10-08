@@ -50,11 +50,11 @@ export class SolicitudesNivel3Component implements OnInit {
   dataSourceComp = new MatTableDataSource([]);
   @ViewChild('paginatorComp') paginatorComp: MatPaginator;
   @ViewChild('sortComp') sortComp: MatSort;
-  
+
   selection = new SelectionModel(true, []);
   selection2 = new SelectionModel(true, []);
 
-  
+
   solsel:any;
 
   reserMan = {
@@ -142,36 +142,36 @@ export class SolicitudesNivel3Component implements OnInit {
     this.getRoles();
 
     if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));   
+      this.user = JSON.parse(localStorage.getItem('usuario'));
     }
 
     if (localStorage.getItem('persona')) {
-      this.persona = JSON.parse(localStorage.getItem('persona'));   
+      this.persona = JSON.parse(localStorage.getItem('persona'));
     }
-    
+
     this.alertaCargando();
-    
+
     if(this.moduloNivel3){
       this.serviceMod3.getCollectionSolicitudes().then(data1 => {
         if(data1.size != 0){
           this.itemsel = data1;
           this.estructurarSolicitudesActivas(data1).then(datos => {
-    
+
             this.dataSource.data = datos['data'];
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
-    
+
             this.dataSource2.data = datos['data2'];
             this.dataSource2.sort = this.sort2;
             this.dataSource2.paginator = this.paginator2;
-    
+
             this.cerrarAlerta();
           });
         }else{
           this.alertaError('No se han generado solicitudes de mantenimiento aun');
         }
 
-                   
+
       });
     }
 
@@ -185,42 +185,42 @@ export class SolicitudesNivel3Component implements OnInit {
               data1.forEach(doc => {
                 array.push(doc);
               });
-              
+
               console.log(retor['size'], cont)
               if(retor['size'] == cont){
                 this.itemsel = array;
                 if(array.length != 0){
                   this.estructurarSolicitudesActivas(array).then(datos => {
-          
+
                     this.dataSource.data = datos['data'];
                     this.dataSource.sort = this.sort;
                     this.dataSource.paginator = this.paginator;
-            
+
                     this.dataSource2.data = datos['data2'];
                     this.dataSource2.sort = this.sort2;
                     this.dataSource2.paginator = this.paginator2;
-            
+
                     this.cerrarAlerta();
                   });
                 }else{
                   this.alertaError('No se han generado solicitudes de mantenimiento aun');
                 }
-            
+
               }else{
                 cont++;
               }
-              
-                         
+
+
             });
-            
+
           }
         }
-      
+
       })
-      
+
     }
 
-  
+
 
   }
 
@@ -255,9 +255,9 @@ export class SolicitudesNivel3Component implements OnInit {
       obj['costo'] = this.costo;
       const upload = this.uploadMulti();
       for (let i = 0; i < upload.length; i++) {
-        obj.path.push(upload[i]);      
+        obj.path.push(upload[i]);
       }
-      
+
       this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
         this.alertaExito('Solicitud Concluida');
         this.solsel.status = 'realizada';
@@ -272,12 +272,12 @@ export class SolicitudesNivel3Component implements OnInit {
 
   }
 
-   
+
   alistarVariables(event){
-  
+
     let tamano = false;
     for (let i = 0; i < event.target.files.length; i++) {
-      
+
       if(event.target.files[i].size >= 33554432){
         tamano = true;
         break;
@@ -294,9 +294,9 @@ export class SolicitudesNivel3Component implements OnInit {
       for (let i = 0; i < event.target.files.length; i++) {
         this.listaArchivos.push(event.target.files[i]);
       }
-      
+
     }
-   
+
   }
 
 
@@ -341,7 +341,7 @@ export class SolicitudesNivel3Component implements OnInit {
     const numSelected = this.selection.selected.length;
     const numRows = this.displayedColumnsEquip.length;
     return numSelected === numRows;
-    
+
   }
   masterToggle() {
     this.isAllSelected() ?
@@ -354,7 +354,7 @@ export class SolicitudesNivel3Component implements OnInit {
     const numSelected = this.selection2.selected.length;
     const numRows = this.displayedColumnsComp.length;
     return numSelected === numRows;
-    
+
   }
   masterToggle2() {
     this.isAllSelected() ?
@@ -375,13 +375,13 @@ export class SolicitudesNivel3Component implements OnInit {
       const activo = [];
 
       const historial = [];
-    
+
       data.forEach(element => {
 
         const elemento = element.data();
         console.log(elemento);
         this.serviceMod3.getLaboratorio(elemento.cfFacil).then(lab => {
-          this.serviceMod3.buscarDirector(elemento.createdBy).then(email => {
+          this.serviceMod3.consultarNotificaciones(elemento.createdBy).then(email => {
             const Solicitud = {
               uidsol:element.id,
               uidlab: elemento.cfFacil,
@@ -411,29 +411,29 @@ export class SolicitudesNivel3Component implements OnInit {
               });
             }else{
               Solicitud['equipo'] = {};
-              Solicitud['nombreEquip'] = 'no especificado';  
+              Solicitud['nombreEquip'] = 'no especificado';
               Solicitud['panicoequipo'] =  elemento.panicoequipo;
               Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
-  
+
             }
             if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
               activo.push(Solicitud);
             } else {
               historial.push(Solicitud);
             }
-           
+
             this.datos.push(Solicitud);
-            
+
             console.log(size, activo.length+historial.length);
             if(size == (activo.length+historial.length)){
               resolve({data:activo, data2: historial});
             }
-    
+
           });
         });
       });
 
-  
+
     });
 
 
@@ -464,7 +464,7 @@ export class SolicitudesNivel3Component implements OnInit {
                   precio: equip.price,
                   componentes:this.estructurarComponents(clave),
                 };
-                
+
                 arr.push(equipo);
            });
         }
@@ -511,7 +511,7 @@ export class SolicitudesNivel3Component implements OnInit {
      for (const clave in componente) {
        // Controlando que json realmente tenga esa propiedad
        if (componente.hasOwnProperty(clave)) {
- 
+
          if (componente[clave]) {
             this.serviceMod3.getComponenteForId(item, clave).then(data => {
               const element =  data.data();
@@ -525,14 +525,14 @@ export class SolicitudesNivel3Component implements OnInit {
               modelo: element.model,
               estado: element.active
             };
-    
+
             arr.push(comp);
             });
          }
- 
+
        }
      }
- 
+
      return arr;
   }
 
@@ -551,12 +551,12 @@ export class SolicitudesNivel3Component implements OnInit {
     if(item.idEquipo){
 
       this.serviceMod3.getEquipo(item.idEquipo).then(data => {
-  
+
         this.consultarSabs(data.data().inventory).then(() => {
           console.log('hecho');
-          this.infosabs = this.response;  
+          this.infosabs = this.response;
         }).catch((error)=>{
-       
+
             swal({
               type: 'error',
               title: 'No se pudo conectar con SABS',
@@ -564,7 +564,7 @@ export class SolicitudesNivel3Component implements OnInit {
             });
             this.viewsabs = true;
             this.infosabs = undefined;
-          
+
         });
       });
     }
@@ -634,17 +634,17 @@ export class SolicitudesNivel3Component implements OnInit {
         this.faculty = doc.data().faculty;
         for (const key in this.faculty) {
           if (this.faculty.hasOwnProperty(key)) {
-            
+
             size++;
           }
         }
         resolve({size:size});
-      });   
+      });
     });
     return promise;
   }
 
-  
+
 
   buscarCoincidenciasSolicitudes(item){
     const coincidencias = [];
@@ -654,17 +654,17 @@ export class SolicitudesNivel3Component implements OnInit {
 
     for (let i = 0; i < this.datos.length; i++) {
 
-        
+
       if((this.datos[i].idEquipo == item.idEquipo)){
         coincidencias.push(this.datos[i]);
         if(this.datos[i].status == 'realizada'){
           const fecha = parseInt(this.datos[i].editado.split('-')[0]);
-         
+
           if(fechaActual <= fecha){
             manejecutados++;
             montosol += parseInt(this.datos[i].costo);
           }
-        } 
+        }
       }
     }
 
@@ -714,7 +714,7 @@ export class SolicitudesNivel3Component implements OnInit {
       contactNumbers:[],
       attachments:{}
     };
-  
+
     this.telproov = {
       tel1:'',
       tel2:''
@@ -722,7 +722,7 @@ export class SolicitudesNivel3Component implements OnInit {
   }
 
   inicializarSolicitud(){
-    
+
     this.reserMan = {
       cfOrgUnit:'',
       headquarter:'',
@@ -821,7 +821,7 @@ export class SolicitudesNivel3Component implements OnInit {
       path:[]
     };
   }
-  
+
 }
 
 

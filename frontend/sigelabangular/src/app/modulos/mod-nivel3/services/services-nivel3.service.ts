@@ -29,6 +29,13 @@ export class ServicesNivel3Service {
     return this.labsCollection.snapshotChanges();
   }
 
+  getSingleLaboratorios(id) {
+
+   return  this.afs.doc('cfFacil/' + id).valueChanges();
+
+  }
+
+
   getAppRoles() {
     return this.afs.collection('appRoles').ref.get();
   }
@@ -165,7 +172,7 @@ export class ServicesNivel3Service {
   getCollectionSolicitudesFacultad(id) {
     const col = this.afs.collection('request');
     const refer = col.ref.where('requestType', '==', 'mantenimiento').where('faculties.'+id, '==', true);
- 
+
     return refer.get();
   }
 
@@ -183,14 +190,14 @@ export class ServicesNivel3Service {
 
   getcomponents(id){
     return this.afs.collection('cfEquip/' + id + '/components').ref.get();
-  } 
+  }
 
   getComponenteForId(idequip, idcomp){
     return  this.afs.collection('cfEquip/' + idequip + '/components').doc(idcomp).ref.get();
   }
 
 
- 
+
 
 
 
@@ -222,6 +229,12 @@ export class ServicesNivel3Service {
   updatedUser(id, doc) {
 
     return this.afs.doc('user/' + id).update(doc);
+
+  }
+
+  updatedLab(id, doc) {
+
+    return this.afs.doc('cfFacil/' + id).update(doc);
 
   }
 

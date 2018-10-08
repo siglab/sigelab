@@ -10,23 +10,17 @@ import { Observable } from '@firebase/util';
 import { element } from 'protractor';
 import { QrService } from '../../mod-nivel2/services/qr.service';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
+import { ROLESARRAY } from '../../../config';
 
 declare var $: any;
 
 @Component({
   selector: 'app-admin-usuarios',
   templateUrl: './admin-usuarios.component.html',
-  styleUrls: ['./admin-usuarios.component.css'],
+  styleUrls: ['./admin-usuarios.component.css']
 })
 export class AdminUsuariosComponent implements OnInit {
-  permisions = {
-    clientRoles: {}
-  };
-
-  permisions2 = {
-    appRoles: {}
-  };
-
   idfacultad;
   rolSelect;
   arrayPract = [];
@@ -49,21 +43,19 @@ export class AdminUsuariosComponent implements OnInit {
   addP;
   // objeto persona:
   person = {
-
     cfFamilyNames: '',
-    faculties: {},
+    faculty: {},
     cfFirstNames: '',
     cfOrgUnit: 'i9dzCErPCO4n9WUfjxR9',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
     cfFacil: {},
     active: true,
-    clientRoles: {},
+    clientRole: {},
     type: '',
     relatedEquipments: {},
     createdAt: this.fecha.toISOString(),
     updatedAt: this.fecha.toISOString()
-
   };
   // objeto usuario
 
@@ -73,9 +65,7 @@ export class AdminUsuariosComponent implements OnInit {
     active: true,
     createdAt: this.fecha.toISOString(),
     updatedAt: this.fecha.toISOString()
-
   };
-
 
   persestructurado: any;
 
@@ -83,23 +73,26 @@ export class AdminUsuariosComponent implements OnInit {
   displayedColumnsPers = ['nombre', 'email', 'perfiles'];
   dataSourcePers = new MatTableDataSource([]);
 
-  @ViewChild('paginatorPers') paginatorPers: MatPaginator;
-  @ViewChild('sortPers') sortPers: MatSort;
+  @ViewChild('paginatorPers')
+  paginatorPers: MatPaginator;
+  @ViewChild('sortPers')
+  sortPers: MatSort;
 
   // atributos tabla  laboratorios
   displayedColumnsFacil = ['nombre'];
   dataSourceFacil = new MatTableDataSource();
-  @ViewChild('paginatorFacil') paginatorFacil: MatPaginator;
-  @ViewChild('sortFacil') sortFacil: MatSort;
-
+  @ViewChild('paginatorFacil')
+  paginatorFacil: MatPaginator;
+  @ViewChild('sortFacil')
+  sortFacil: MatSort;
 
   // atributos tabla  facultades
   displayedColumnsFacul = ['nombre'];
   dataSourceFacul = new MatTableDataSource();
-  @ViewChild('paginatorFacul') paginatorFacul: MatPaginator;
-  @ViewChild('sortFacul') sortFacul: MatSort;
-
-
+  @ViewChild('paginatorFacul')
+  paginatorFacul: MatPaginator;
+  @ViewChild('sortFacul')
+  sortFacul: MatSort;
 
   status = '';
   dispo;
@@ -116,7 +109,8 @@ export class AdminUsuariosComponent implements OnInit {
   constructor(private obs: ObservablesService,
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
-    private userService: QrService) { }
+    private userService: QrService
+  ) {}
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
@@ -126,20 +120,20 @@ export class AdminUsuariosComponent implements OnInit {
     this.getRoles();
 
     this.userService.listCfFacil().subscribe(data => {
-
       console.log('data labs', data);
       this.dataSourceFacil.data = data;
     });
 
     this.userService.listCfFaculties().subscribe(data => {
-
       console.log('data labs', data);
       this.dataSourceFacul.data = data;
     });
 
     this.estructuraIdPers().then((data: any) => {
+      console.log('entrooooooooooo al metodo');
 
       // validators email
+      console.log('trae data', data);
 
       console.log('data de admin usuarios', data.user);
 
@@ -147,7 +141,6 @@ export class AdminUsuariosComponent implements OnInit {
       // this.dataSourcePers.sort = this.sortPers;
       // this.dataSourcePers.paginator = this.paginatorPers;
       console.log('variable talb', this.dataSourcePers.data);
-
 
       swal({
         title: 'Cargando un momento...',
@@ -157,16 +150,12 @@ export class AdminUsuariosComponent implements OnInit {
         }
       });
 
-
       setTimeout(() => {
         if (data.user.length !== 0) {
-
           this.dataSourcePers.sort = this.sortPers;
           this.dataSourcePers.paginator = this.paginatorPers;
 
-
           swal.close();
-
         } else {
           swal({
             type: 'error',
@@ -174,24 +163,17 @@ export class AdminUsuariosComponent implements OnInit {
             showConfirmButton: true
           });
         }
-
-
-
       }, 2000);
-
     });
-
   }
-
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
-
     this.role = JSON.parse(localStorage.getItem('rol'));
     console.log(this.role);
     for (const clave in this.role) {
       if (this.role[clave]) {
-        if ((clave === 'moduloNivel2')) {
+        if (clave === 'moduloNivel2') {
           this.moduloNivel2 = true;
         }
       }
@@ -200,73 +182,99 @@ export class AdminUsuariosComponent implements OnInit {
 
   // METODO QUE CONSULTA TODOS LOS ROLES NIVEL 2
   getRolesNivel2() {
-   this.serviceMod3.getAppRoles().then(datos => {
-     datos.forEach(doc => {
-      const element = doc.data();
+    this.serviceMod3.getAppRoles().then(datos => {
+      datos.forEach(doc => {
+        const element = doc.data();
 
         if (element.lvl !== 'nivel1' && element.lvl !== 'nivel3') {
-
           this.niveles.push({ id: doc.id, nombre: element.roleName });
           console.log(this.niveles);
-
         }
-
-     });
-
+      });
     });
   }
-
 
   estructuraIdPers() {
     const usuarios = [];
     const promise = new Promise((resolve, reject) => {
       this.serviceMod3.buscarUsuarios().then(user => {
-
         user.forEach(doc => {
           // tslint:disable-next-line:no-shadowed-variable
+
           const element = doc.data();
+
+          let nodoUser = this.buscarRole(element.appRoles);
+
+          if (element.cfPers === '') {
+            nodoUser = true;
+          }
 
           console.log(element.cfPers);
 
-
-          this.serviceMod3.getPersona(element.cfPers ? element.cfPers : '123').then(data => {
-            this.nombresRoles(element.appRoles).then(rol => {
+          this.serviceMod3
+            .getPersona(element.cfPers ? element.cfPers : '123')
+            .then(data => {
               const persona = data.data() ? data.data() : ' ninguno';
 
-              console.log(rol['role']);
-              const usuario = {
-                id: doc.id,
-                nombre: persona['cfFirstNames'] ? persona['cfFirstNames'] : 'Ninguno',
-                apellido: persona['cfFamilyNames'] ? persona['cfFamilyNames'] : 'Ninguno',
-                idPers: element.cfPers,
-                email: element.email,
-                estado_p: persona['active'],
-                estado_u: element.active,
-                type: persona['type'],
-                roles: rol['role'],
-                llave: rol['llave']
-              };
+              this.nombresRoles(
+                nodoUser
+                  ? element.appRoles
+                  : this.clientRole(persona['clientRole'])
+              ).then(rol => {
+                console.log(rol['role']);
+                const usuario = {
+                  id: doc.id,
+                  nombre: persona['cfFirstNames']
+                    ? persona['cfFirstNames']
+                    : 'Ninguno',
+                  apellido: persona['cfFamilyNames']
+                    ? persona['cfFamilyNames']
+                    : 'Ninguno',
+                  idPers: element.cfPers,
+                  email: element.email,
+                  estado_p: persona['active'],
+                  estado_u: element.active,
+                  type: persona['type'],
+                  roles: rol['role'],
+                  llave: rol['llave']
+                };
+                console.log('usuario', usuario);
+                usuarios.push(usuario);
 
-              usuarios.push(usuario);
-              if (user.size === usuarios.length) {
-                resolve({ user: usuarios });
-              }
+                console.log('array de usuarios', usuarios);
+
+                console.log('tam', user.size);
+                if (user.size === usuarios.length) {
+                  console.log('array final', usuarios);
+                  resolve({ user: usuarios });
+                }
+              });
             });
-
-
-
-          });
         });
-
-
-
       });
     });
 
     return promise;
-
   }
 
+  clientRole(arrlab) {
+    const roles = {};
+    for (const key in arrlab) {
+      if (arrlab.hasOwnProperty(key)) {
+        const element = arrlab[key];
+
+        for (const clave in element) {
+          if (element.hasOwnProperty(clave)) {
+            const element2 = element[clave];
+            // tslint:disable-next-line:no-unused-expression
+            roles[clave] = true;
+          }
+        }
+      }
+    }
+
+    return roles;
+  }
 
   nombresRoles(roles) {
     let nameroles = '';
@@ -284,25 +292,17 @@ export class AdminUsuariosComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       for (const key in roles) {
         if (roles.hasOwnProperty(key)) {
-
           if (roles[key]) {
-
             this.serviceMod3.consultarNombreRol(key).then(doc => {
-
               if (doc.data().roleName !== 'nivel1') {
-
                 llaves.push({ id: doc.id, nombre: doc.data().roleName });
               }
 
-
               if (sixe > 1) {
-
                 nameroles += doc.data().roleName + ',';
-
-              } if (sixe === 1) {
-
+              }
+              if (sixe === 1) {
                 nameroles = doc.data().roleName;
-
               }
 
               contador++;
@@ -312,16 +312,12 @@ export class AdminUsuariosComponent implements OnInit {
               }
             });
           }
-
         }
-
       }
-
     });
 
     return promise;
   }
-
 
   applyFilterPers(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -330,7 +326,6 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   cambiardata(item, table) {
-
     this.arrayPract = item.llave;
     this.tablesel = table;
     console.log(item);
@@ -351,24 +346,38 @@ export class AdminUsuariosComponent implements OnInit {
 
     console.log(this.idp);
     this.idu = item.id;
-
   }
 
   actualizarPers() {
-
     // $('#modal').modal('hide');
 
     //  objeto para persona
     this.person.cfFirstNames = this.nombre;
-    this.person.cfFamilyNames = this.apellido,
-    this.person.type = this.type,
-    this.person.active = this.estado_p,
-
+    (this.person.cfFamilyNames = this.apellido),
+      (this.person.type = this.type),
+      (this.person.active = this.estado_p),
       // objeto para usuario
-    this.usuario.active = this.estado_u;
+      (this.usuario.active = this.estado_u);
+
+
+    if (this.arrayPract.length > 0) {
+          // valida si el array contiene la llave de adminstrador
+          const adm = this.includeAdmin();
+       if ( adm ) {
+             console.log('rol de administrador lab');
+             // crea la llave del lab como objeto y agrega el rol dentro
+            this.setKeyAdmin();
+       } else {
+           // otros roles
+          this.arrayPract.forEach(obj => {
+          this.usuario.appRoles[obj.id] = true;
+        });
+       }
+
+
+    }
 
     console.log(this.idp);
-
 
     console.log('usuario para subir al sistema', this.usuario);
     console.log(' se va actualizar esta persona', this.person);
@@ -379,8 +388,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.updateAllFacil();
     }
 
-    if (! this.usuario.active) {
-
+    if (!this.usuario.active) {
       this.disabledUserAuht();
     }
 
@@ -395,7 +403,7 @@ export class AdminUsuariosComponent implements OnInit {
       });
 
     }
-     // actualizar la persona
+    // actualizar la persona
     if (this.idp) {
       this.serviceMod3.Trazability(
         this.user.uid, 'update', 'cfPers', this.idp, this.person
@@ -419,9 +427,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   // Inactiva la persona de todos los laboratorios
   updateAllFacil() {
-
     this.serviceMod3.getLabsForIdPersona(this.idp).then(result => {
-
       const nuevoEstado = { relatedPers: {} };
 
       nuevoEstado.relatedPers[this.idp] = false;
@@ -462,44 +468,32 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   alertDisabled(a) {
-    if (a === 'p' && this.person.active ) {
+    if (a === 'p' && this.person.active) {
       swal({
         type: 'info',
         title: 'La persona sera desactivada de cada uno de los laboratorios.',
         showConfirmButton: true
       });
-    } if (a === 'u'   && this.usuario.active ) {
+    }
+    if (a === 'u' && this.usuario.active) {
       swal({
         type: 'info',
         title: 'El usuario una vez desactivado no podra acceder al sistema.',
         showConfirmButton: true
       });
-
     }
   }
 
-
-  alertAddLab() {
-    swal({
-      type: 'info',
-      title: 'Ahora seleccione un laboratorio al cual asociar el rol del boton +.',
-      showConfirmButton: true
-    });
-  }
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
-
-
 
   /* actualizar el laboratorio con el nuevo id del document pers */
 
   updateFaciliti(idP) {
-
     console.log('entrooooooo');
     const facil = {
       relatedPers: {}
     };
     facil.relatedPers[idP] = true;
-
 
     console.log('revisar este lab', this.idlab);
     this.serviceMod3.Trazability(
@@ -511,15 +505,11 @@ export class AdminUsuariosComponent implements OnInit {
 
   }
 
-
-
   addLabPers(id: string) {
-
     if (id) {
       const lab = {
         relatedPers: {}
       };
-
 
       lab.relatedPers[id] = true;
 
@@ -538,94 +528,76 @@ export class AdminUsuariosComponent implements OnInit {
         });
       });
     } else {
-
       swal({
         type: 'error',
         title: 'Intente ingresar el email denuevo',
         showConfirmButton: true
       });
-
     }
-
-
   }
-
 
   cerrarModal(modal) {
     $('#' + modal).modal('hide');
   }
 
   setValue() {
-
     this.email = '';
   }
 
   quitarelemento(i) {
-
     this.arrayPract.splice(i, 1);
 
-    console.log(this.arrayPract);
+    swal({
+      type: 'success',
+      title: 'Fue eliminado con exito',
+      showConfirmButton: true
+    });
 
+    console.log(this.arrayPract);
   }
   applyFilterLab(filterValue: string) {
-
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceFacil.filter = filterValue;
-
   }
 
   cambiardataLab(row) {
-
     console.log(row.id);
     this.idlab = row.id;
-
-
   }
 
   cambiarDataFacultad(row) {
-
     console.log(row.id);
     this.idfacultad = row.id;
-
   }
 
   asignarRolaLaboratorio() {
-
-
     // valida si un rol fue seleccionado
     if (this.rolSelect) {
-
       // usuario administrador asigna permisos dentro de  client-roles pero tiene ese unico rol
       if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
-
-
         this.niveles.forEach(elemen => {
-
           if (elemen.id === this.rolSelect) {
-
             this.arrayPract = [];
 
             this.arrayPract.push(elemen);
           }
-
         });
 
-        this.person.clientRoles[this.idlab] = {};
-        this.person.clientRoles[this.idlab][this.rolSelect] = true;
+        this.person.clientRole[this.idlab] = {};
+        this.person.clientRole[this.idlab][this.rolSelect] = true;
         this.person.cfFacil[this.idlab] = true;
 
         console.log('mostrar usuario', this.usuario);
-
       }
       //  asigna roles al usuario nivel 2
-      if (this.rolSelect === '6ITqecW7XrgTLaW6fpn6' ||
-          this.rolSelect === 'FH5dgAP3EjI8rGKrX0mP' || this.rolSelect === 'yoVd80ZvcdgUf1a44ORB' ) {
-
+      if (
+        this.rolSelect === '6ITqecW7XrgTLaW6fpn6' ||
+        this.rolSelect === 'FH5dgAP3EjI8rGKrX0mP' ||
+        this.rolSelect === 'yoVd80ZvcdgUf1a44ORB'
+      ) {
         this.niveles.forEach(elemen => {
-
           if (elemen.id === this.rolSelect) {
-
             this.arrayPract.push(elemen);
 
             swal({
@@ -634,115 +606,251 @@ export class AdminUsuariosComponent implements OnInit {
               showConfirmButton: true
             });
           }
-
         });
 
-        if (this.person.clientRoles[this.idlab]) {
-          this.person.clientRoles[this.idlab][this.rolSelect] = true;
-
-
+        if (this.person.clientRole[this.idlab]) {
+          this.person.clientRole[this.idlab][this.rolSelect] = true;
         } else {
-
-          this.person.clientRoles[this.idlab] = {};
-          this.person.clientRoles[this.idlab][this.rolSelect] = true;
+          this.person.clientRole[this.idlab] = {};
+          this.person.clientRole[this.idlab][this.rolSelect] = true;
         }
 
         console.log(this.person);
 
         // usuario de acceso nivel 2.5 -> agrega facultad
-      } if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
-
-
-        this.niveles.forEach(elemen => {
-
-          if (elemen.id === this.rolSelect) {
-
-            this.arrayPract = [];
-
-            this.arrayPract.push(elemen);
-
-            swal({
-              type: 'success',
-              title: 'Rol agregado con exito, ya puede actualizar.',
-              showConfirmButton: true
-            });
-          }
-
-        });
-
-        this.usuario.appRoles[this.rolSelect] = true;
-        this.person.faculties[this.idfacultad] = true;
+      }
+      if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
+        this.person.faculty[this.idfacultad] = true;
         console.log(this.person);
 
-
-        // usuario para administracion QR
-      } if (this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql') {
-
-
-        this.niveles.forEach(elemen => {
-
-          if (elemen.id === this.rolSelect) {
-
-            this.arrayPract = [];
-
-            this.arrayPract.push(elemen);
-          }
-
+        swal({
+          type: 'success',
+          title: 'Facultad asignada, ya puede actualizar.',
+          showConfirmButton: true
         });
-
-        this.usuario.appRoles[this.rolSelect] = true;
-
-
-        console.log(this.usuario);
-
-        // usuario comunicacion masiva
-      } if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
-
-
-        this.niveles.forEach((elemen: any) => {
-
-          if (elemen.id === this.rolSelect) {
-
-            this.arrayPract = [];
-
-            this.arrayPract.push(elemen);
-
-            swal({
-              type: 'success',
-              title: 'Rol agregado con exito, ya puede actualizar.',
-              showConfirmButton: true
-            });
-          }
-
-        });
-
-        this.usuario.appRoles[this.rolSelect] = true;
-
-
-        console.log(this.usuario);
-
       }
-
     } else {
-
       swal({
         type: 'info',
         title: 'Debe seleccionar el nuevo rol primero',
         showConfirmButton: true
       });
-
     }
-
   }
 
-
   applyFilterFac(filterValue: string) {
-
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceFacil.filter = filterValue;
+  }
+
+  updatedAdminFacil() {
+    // obtner referencia del director actual y borrarlo
+    this.serviceMod3
+      .getSingleLaboratorios(this.idlab)
+      .subscribe((data: any) => {
+        // const idPer = data.facilityAdmin;
+        console.log(data);
+
+        this.serviceMod3
+          .getPersona(data.facilityAdmin)
+          .then(result => {
+            console.log(result.data());
+            const admiUser = result.data();
+            admiUser.clientRole = {};
+
+            console.log(admiUser);
+
+            this.serviceMod3.updatedPersona(data.facilityAdmin, admiUser);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+        // agregar la referencia actual del director al laboratorio
+
+        this.serviceMod3.updatedLab(this.idlab, { facilityAdmin: this.idp });
+      });
+  }
+
+  rolSelectQrCm() {
+    let encontrado = false;
+
+    this.niveles.forEach((elemen: any) => {
+      if (elemen.id === this.rolSelect) {
+        this.arrayPract.forEach(el => {
+          if (el.id === this.rolSelect) {
+            encontrado = true;
+          }
+        });
+
+        if (!encontrado) {
+          this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+          this.alertInfo();
+        }
+      }
+    });
+  }
+
+  rolSelectTresCinco() {
+    let encontrado = false;
+    this.niveles.forEach((elemen: any) => {
+      if (elemen.id === this.rolSelect) {
+        this.arrayPract.forEach(el => {
+          if (el.id === 'PFhLR4X2n9ybaZU3CR75' || el.id === this.rolSelect) {
+            encontrado = true;
+          }
+        });
+        if (!encontrado) {
+          this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+           this.alertInfo();
+
+        }
+      }
+    });
+  }
+
+  rolSelectDosCinco() {
+    let encontrado = false;
+    this.niveles.forEach((elemen: any) => {
+      if (elemen.id === this.rolSelect) {
+        this.arrayPract.forEach(el => {
+          if (el.id === 'UlcSFw3BLPAdLa533QKP' || el.id === this.rolSelect) {
+            encontrado = true;
+          }
+        });
+
+        if (!encontrado) {
+          this.arrayPract.push(elemen);
+          this.alertSuccess();
+        } else {
+           this.alertInfo();
+        }
+      }
+    });
+  }
+
+  rolSelectAdminLab() {
+    let encontrado = false;
+    this.niveles.forEach(elemen => {
+      if (elemen.id === this.rolSelect) {
+        this.arrayPract = [];
+
+        this.arrayPract.forEach(el => {
+          if (el.id === 'UlcSFw3BLPAdLa533QKP'  || el.id === this.rolSelect
+            || el.id === 'W6ihltvrx8Gc7jVucH8M' || el.id === '6ITqecW7XrgTLaW6fpn6'
+            || el.id === 'yoVd80ZvcdgUf1a44ORB' || el.id === 'FH5dgAP3EjI8rGKrX0mP'
+            || el.id ===  'k7uRIEzj99l7EjZ3Ppql') {
+            encontrado = true;
+          }
+        });
+
+        if (!encontrado) {
+          this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+
+           this.alertInfo();
+        }
+
+      }
+    });
+
+
 
   }
 
+  alertAddLab() {
+    // Usuario seleccionado modulo Qr
+    if (this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql') {
+      this.rolSelectQrCm();
 
+
+      // usuario Comunicacion masiva
+    }
+    if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
+      this.rolSelectQrCm();
+
+
+      // usuario Nivel 3.5 o Administrativo
+    }
+    if (this.rolSelect === 'UlcSFw3BLPAdLa533QKP') {
+      this.rolSelectTresCinco();
+
+
+      // usuario 2.5 o usuario por facultad
+    }
+    if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
+      this.rolSelectDosCinco();
+
+      // usuario administrador de laboratorio
+    } if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
+      this.rolSelectAdminLab();
+
+    }
+  }
+
+  buscarRole(rol) {
+    const role = ROLESARRAY;
+    for (const key in rol) {
+      if (rol.hasOwnProperty(key)) {
+        if (rol[key]) {
+          if (role.includes(key)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  setKeyAdmin() {
+
+    this.person.clientRole[this.idlab] = {};
+    this.arrayPract.forEach( elemen => {
+    this.person.clientRole[this.idlab][elemen.id] = true;
+    });
+    this.person.cfFacil[this.idlab] = true;
+
+    this.updatedAdminFacil();
+  }
+
+
+  includeAdmin() {
+
+    let includ = false;
+     this.arrayPract.forEach(elemen => {
+
+      if ( elemen.id === 'S9wr9uK5BBF4yQZ7CwqX') {
+
+        includ =  true;
+      }
+    });
+     return includ;
+  }
+
+
+  alertSuccess() {
+    swal({
+      type: 'success',
+      title: 'Nuevo rol agregado Correctamente.',
+      showConfirmButton: true
+    });
+  }
+
+  alertInfo() {
+    swal({
+      type: 'info',
+      title: 'No se puede agregar el rol a la persona seleccionada.',
+      showConfirmButton: true
+    });
+  }
 }

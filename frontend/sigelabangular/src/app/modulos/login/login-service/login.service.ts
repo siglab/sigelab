@@ -10,7 +10,7 @@ import { Http, Response } from '@angular/http';
 
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
-import { URLDISABLED } from '../../../config';
+import { URLDISABLED, ROLESARRAY } from '../../../config';
 
 @Injectable()
 export class LoginService {
@@ -38,8 +38,8 @@ export class LoginService {
           console.log('entro a login');
           this.usuario = response.user;
           localStorage.setItem('usuario', JSON.stringify(this.usuario));
-  
-  
+
+
           this.consultarTipoUsuario(this.usuario.uid).then(() => {
 
             console.log('termino consultar el tipo de usuario');
@@ -103,7 +103,7 @@ export class LoginService {
 
           if(this.usuario){
             this.consultarTipoUsuario(this.usuario.uid).then(() => {
-              resolve(data); 
+              resolve(data);
             }).catch( err => {
               reject();
             });
@@ -172,8 +172,8 @@ export class LoginService {
 
 
   consultarTipoUsuario(id) {
-   
-    let promise = new Promise((resolve, reject) => {
+
+    const promise = new Promise((resolve, reject) => {
 
       this.getUser(id).then(doc => {
         const data = doc.data();
@@ -183,7 +183,7 @@ export class LoginService {
           localStorage.setItem('persona', JSON.stringify(data));
           const rol = data['appRoles'];
           let roleAdmin = false;
-   
+
             roleAdmin = this.buscarRole(rol);
 
           if(data['cfPers'] == '' || roleAdmin){
@@ -194,6 +194,7 @@ export class LoginService {
               resolve();
             });
           } else {
+            console.log('if');
             const arr = {};
             const arrlab = {};
             this.getPersona(data['cfPers']).then(doc => {
@@ -203,7 +204,7 @@ export class LoginService {
               let cont = 1;
               for (const key in labs) {
                 if (labs.hasOwnProperty(key)) {
-                  sizeLabs++;                  
+                  sizeLabs++;
                 }
               }
 
@@ -212,26 +213,26 @@ export class LoginService {
                  if(labs[key]){
 
                   arr[key] = true;
-                 
+
                   for (const llave in clientRole[key]) {
                     if (clientRole[key].hasOwnProperty(llave)) {
                      this.estructurarPermisos(clientRole[key]).then(ok => {
                       arrlab[key] = ok['permisos'];
-                    
+
                       if(sizeLabs == cont){
                         console.log('termino el metodo estructura permiso');
                         localStorage.setItem('laboratorios', JSON.stringify(arr));
                         localStorage.setItem('permisos', JSON.stringify(arrlab));
                         resolve();
-                      }else{
+                      } else {
                         cont++;
                       }
-                     
+
                      });
-                      
+
                     }
                   }
-                 }                
+                 }
                 }
               }
 
@@ -239,7 +240,7 @@ export class LoginService {
           }
 
 
-         
+
 
         }
 
@@ -250,16 +251,15 @@ export class LoginService {
 
   }
 
-  buscarRole(rol){
-    const role = ['UlcSFw3BLPAdLa533QKP','lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75', 
-                  'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
+  buscarRole(rol) {
+    const role = ROLESARRAY;
     for (const key in rol) {
       if (rol.hasOwnProperty(key)) {
-        if(rol[key]){
-          if(role.includes(key)){
+        if (rol[key]) {
+          if (role.includes(key)) {
            return true;
-          }        
-        }           
+          }
+        }
       }
     }
 
@@ -268,13 +268,13 @@ export class LoginService {
 
   estructurarPermisos(roles){
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       let rolelength = 0;
       // tslint:disable-next-line:forin
       for (const key in roles) {
         rolelength++;
       }
-  
+
       const permisos = {};
       let cont = 0;
       for (const clave in roles) {
@@ -287,40 +287,40 @@ export class LoginService {
             for (const key in permission) {
               rollength++;
             }
-  
+
             if (permission) {
               // tslint:disable-next-line:forin
               for (const llave in permission) {
                 permisos[llave] = permission[llave];
                 controle++;
-  
+
                 if (controle === rollength) {
 
                   console.log('termino recorrer permisos');
                   cont++;
-  
+
                   console.log(rolelength, cont);
                   if (rolelength === cont) {
                     console.log('termino de recorrer los roles');
                     if (permisos) {
                       console.log(permisos);
-                  
+
                       resolve({permisos : permisos});
                     } else {
-  
+
                        reject( 'error'  );
                     }
-  
+
                   }
                 }
               }
             }
-  
-  
+
+
           }).catch(err => console.log('error consultando el rol', err));
         }
-  
-  
+
+
       }
     });
 
@@ -336,7 +336,7 @@ export class LoginService {
     return this.afs.doc('user/' + iduser).ref.get();
   }
 
-  getPersona(idPers){
+  getPersona(idPers) {
     return this.afs.doc('cfPers/' + idPers).ref.get();
   }
 

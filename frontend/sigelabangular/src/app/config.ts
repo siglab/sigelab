@@ -16,3 +16,5 @@ export const URLCORREO = 'https://us-central1-sigelab-univalle.cloudfunctions.ne
 export const URLDISABLED = 'https://us-central1-sigelab-univalle.cloudfunctions.net/disablePractices';
 
 
+export const ROLESARRAY = ['UlcSFw3BLPAdLa533QKP', 'lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75',
+'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
