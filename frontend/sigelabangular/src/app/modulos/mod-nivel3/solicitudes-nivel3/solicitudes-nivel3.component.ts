@@ -139,6 +139,8 @@ export class SolicitudesNivel3Component implements OnInit {
 
    ngOnInit() {
 
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
     this.getRoles();
 
     if (localStorage.getItem('usuario')) {

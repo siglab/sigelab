@@ -186,54 +186,69 @@ export class LoginService {
 
             roleAdmin = this.buscarRole(rol);
 
-          if(data['cfPers'] == '' || roleAdmin){
+          if(data['cfPers'] == ''){
             this.estructurarPermisos(rol).then(ok => {
 
               console.log('termino el metodo estructura permiso');
               localStorage.setItem('rol', JSON.stringify(ok['permisos']));
               resolve();
             });
-          } else {
-            console.log('if');
+          }
+
+          if(roleAdmin){
+            this.estructurarPermisos(rol).then(ok => {
+              console.log('termino el metodo estructura permiso administrador');
+              localStorage.setItem('rol', JSON.stringify(ok['permisos']));
+            });
+          }
+
+          if(data['cfPers'] != ''){
             const arr = {};
             const arrlab = {};
             this.getPersona(data['cfPers']).then(doc => {
               const clientRole = doc.data().clientRole;
-              const labs = doc.data().cfFacil;
-              let sizeLabs = 0;
-              let cont = 1;
-              for (const key in labs) {
-                if (labs.hasOwnProperty(key)) {
-                  sizeLabs++;
-                }
-              }
-
-              for (const key in labs) {
-                if (labs.hasOwnProperty(key)) {
-                 if(labs[key]){
-
-                  arr[key] = true;
-
-                  for (const llave in clientRole[key]) {
-                    if (clientRole[key].hasOwnProperty(llave)) {
-                     this.estructurarPermisos(clientRole[key]).then(ok => {
-                      arrlab[key] = ok['permisos'];
-
-                      if(sizeLabs == cont){
-                        console.log('termino el metodo estructura permiso');
-                        localStorage.setItem('laboratorios', JSON.stringify(arr));
-                        localStorage.setItem('permisos', JSON.stringify(arrlab));
-                        resolve();
-                      } else {
-                        cont++;
-                      }
-
-                     });
-
-                    }
+              console.log(clientRole);
+              if(Object.keys(clientRole).length != 0){
+                const labs = doc.data().cfFacil;
+                let sizeLabs = 0;
+                let cont = 1;
+                for (const key in labs) {
+                  if (labs.hasOwnProperty(key)) {
+                    sizeLabs++;
                   }
-                 }
                 }
+  
+                for (const key in labs) {
+                  if (labs.hasOwnProperty(key)) {
+                   if(labs[key]){
+  
+                    arr[key] = true;
+  
+                    for (const llave in clientRole[key]) {
+                      if (clientRole[key].hasOwnProperty(llave)) {
+                       this.estructurarPermisos(clientRole[key]).then(ok => {
+                        arrlab[key] = ok['permisos'];
+                        
+                        console.log(sizeLabs, cont);
+                        if(sizeLabs == cont){
+                          console.log('termino el metodo estructura permiso');
+                          localStorage.setItem('laboratorios', JSON.stringify(arr));
+                          localStorage.setItem('permisos', JSON.stringify(arrlab));
+                          resolve();
+                        } else {
+                          cont++;
+                        }
+  
+                       });
+  
+                      }
+                    }
+                   }
+                  }
+                }
+              } else {
+   
+                resolve();
               }
 
             });
