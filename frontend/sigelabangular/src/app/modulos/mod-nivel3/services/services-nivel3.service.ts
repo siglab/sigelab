@@ -2,6 +2,9 @@ import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from '@firebase/util';
 
+
+const publicIp = require('public-ip');
+
 @Injectable()
 export class ServicesNivel3Service {
 
@@ -15,6 +18,12 @@ export class ServicesNivel3Service {
 
 
   // METODOS DE CONSULTA
+
+  getLocalStorageUser(){
+    return JSON.parse(localStorage.getItem('usuario'));
+  }
+
+  
   getLaboratorios() {
     this.labsCollection = this.afs.collection<any>('cfFacil');
     return this.labsCollection.snapshotChanges();
@@ -242,6 +251,137 @@ export class ServicesNivel3Service {
   }
 
 
+   // METODO TRAZABILIDAD DE CAMBIOS
+
+   Trazability(user, type, collection, id, docIn){
+    console.log('ejecuto');
+    let size = 0;
+    let cont = 1;
+    for (const key in docIn) {
+      size++;
+    }
+    let promise = new Promise((resolve, reject)=>{
+      let docAfter = {};
+      this.afs.collection(collection).doc(id).ref.get().then(doc => {
+        const documento = doc.data();
+        docAfter = doc.data();
+  
+        for (const key in docIn) {
+          if (docIn.hasOwnProperty(key)) {
+             docAfter[key] = docIn[key]; 
+             console.log(cont, size);
+             if(cont == size){
+  
+              console.log(documento, docAfter);
+
+              this.addTrazability(user, type, collection, id, documento, docAfter).then(()=>{
+                resolve();
+              });
+             
+             }else{
+              cont++;  
+             }
+               
+          }
+        }
+  
+        
+      });
+    });
+
+    return promise;
+
+  }
+
+
+  TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn){
+    console.log('ejecuto');
+    let size = 0;
+    let cont = 1;
+    for (const key in docIn) {
+      size++;
+    }
+    let promise = new Promise((resolve, reject)=>{
+      if(type != 'create'){
+        let docAfter = {};
+        this.afs.collection(collection).doc(idColl).collection(subColl).doc(idSub)
+          .ref.get().then(doc => {
+          const documento = doc.data();
+          docAfter = doc.data();
+            
+          if(type != 'delete'){
+            for (const key in docIn) {
+              if (docIn.hasOwnProperty(key)) {
+                 docAfter[key] = docIn[key]; 
+                 console.log(cont, size);
+                 if(cont == size){
+      
+                  console.log(documento, docAfter);
+    
+                  this.addTrazability(
+                    user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+                    documento, docAfter).then(()=>{
+                    resolve();
+                  });
+                 
+                 }else{
+                  cont++;  
+                 }
+                   
+              }
+            }
+          } else {
+            console.log(documento);
+            this.addTrazability(
+              user, type, collection+'/'+idColl+'/'+subColl, idSub, documento, {}).then(()=>{
+              resolve();
+            });
+          }
+        
+            
+        });
+      } else {
+        this.addTrazability(
+          user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+          {}, docIn).then(()=>{
+          resolve();
+        });
+        
+      }
+
+    });
+
+    return promise;
+  }
+
+
+  addTrazability(user, type, collection, iddoc, docAnt, docDes){
+    let promise = new Promise((resolve, reject) => {
+      publicIp.v4().then(ip => {
+        const logger = {
+          user:user,
+          type:type,
+          ip: ip,
+          relatedDoc: iddoc,
+          collectionName:collection,
+          currentVer: docDes,
+          previousVer:docAnt,
+          createdAt: new Date().toISOString()
+        };
+    
+      console.log(logger);
+    
+      this.afs.collection('logger').add(logger).then(()=>{
+        resolve();
+      });
+      });
+    
+    });
+
+    return promise;
+
+
+  }
 
 }
 

@@ -103,6 +103,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   niveles = [];
 
+  user = this.servicioMod2.getLocalStorageUser();
+
   constructor(private obs: ObservablesService,
     private toastr: ToastrService,
     private register: LoginService,
@@ -435,17 +437,26 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     /* metodo firebase para subir un usuario actualizado */
 
-    this.servicioMod2.setPersona(this.idp, pers).then(
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'cfPers', this.idp, pers
+    ).then(()=>{
+      this.servicioMod2.setPersona(this.idp, pers).then(
+        () => {
 
-      () => {
-       this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
-        swal({
-          type: 'success',
-          title: 'usuario actualizado correctamente',
-          showConfirmButton: true
+        this.servicioMod2.Trazability(
+          this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
+        ).then(() => {
+         this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
+          swal({
+            type: 'success',
+            title: 'usuario actualizado correctamente',
+            showConfirmButton: true
+          });
         });
 
       });
+    });
+
 
     /* metodo firebase para subir una persona actualizada */
 
@@ -468,14 +479,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           this.servicioMod2.addPersona(pers)
             .then(ok => {
+              this.servicioMod2.Trazability(
+                this.user.uid, 'create', 'cfPers', ok.id, pers
+              ).then(()=>{
+                this.updateFaciliti(ok.id);
 
-              this.updateFaciliti(ok.id);
-
-              swal({
-                type: 'success',
-                title: 'persona creada correctamente',
-                showConfirmButton: true
+                swal({
+                  type: 'success',
+                  title: 'persona creada correctamente',
+                  showConfirmButton: true
+                });
               });
+
 
             });
         } else {
@@ -519,7 +534,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     };
     // asigna como boolean el id del rol al usuario
     console.log(newUser);
-    this.servicioMod2.setUser(path, newUser);
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'cfFacil', path, newUser
+    ).then(()=>{
+      this.servicioMod2.setUser(path, newUser);
+    });
+
 
   }
 
@@ -536,7 +556,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
     console.log('revisar este lab', this.idlab);
-    this.servicioMod2.setDocLaboratorio(this.idlab, facil);
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'cfFacil', this.idlab, facil
+    ).then(()=>{
+      this.servicioMod2.setDocLaboratorio(this.idlab, facil);
+    });
+
 
   }
 
@@ -579,12 +604,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
       lab.relatedPers[id] = true;
 
-      this.servicioMod2.setDocLaboratorio(this.idlab, lab)
+      this.servicioMod2.Trazability(
+        this.user.uid, 'update', 'cfFacil', this.idlab, lab
+      ).then(()=>{
+        this.servicioMod2.setDocLaboratorio(this.idlab, lab)
         .then(() => {
 
           $('#modal1').modal('hide');
           this.toastr.success('Almacenado correctamente.', 'exito!');
-        });
+      });
+      });
+
+
     } else {
 
       this.toastr.warning('Ocurrio un error, intente ingresar el email otra vez.');
