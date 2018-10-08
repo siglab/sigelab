@@ -23,7 +23,7 @@ export class ServicesNivel3Service {
     return JSON.parse(localStorage.getItem('usuario'));
   }
 
-  
+
   getLaboratorios() {
     this.labsCollection = this.afs.collection<any>('cfFacil');
     return this.labsCollection.snapshotChanges();
@@ -265,27 +265,27 @@ export class ServicesNivel3Service {
       this.afs.collection(collection).doc(id).ref.get().then(doc => {
         const documento = doc.data();
         docAfter = doc.data();
-  
+
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
-             docAfter[key] = docIn[key]; 
+             docAfter[key] = docIn[key];
              console.log(cont, size);
              if(cont == size){
-  
+
               console.log(documento, docAfter);
 
               this.addTrazability(user, type, collection, id, documento, docAfter).then(()=>{
                 resolve();
               });
-             
+
              }else{
-              cont++;  
+              cont++;
              }
-               
+
           }
         }
-  
-        
+
+
       });
     });
 
@@ -308,26 +308,26 @@ export class ServicesNivel3Service {
           .ref.get().then(doc => {
           const documento = doc.data();
           docAfter = doc.data();
-            
+
           if(type != 'delete'){
             for (const key in docIn) {
               if (docIn.hasOwnProperty(key)) {
-                 docAfter[key] = docIn[key]; 
+                 docAfter[key] = docIn[key];
                  console.log(cont, size);
                  if(cont == size){
-      
+
                   console.log(documento, docAfter);
-    
+
                   this.addTrazability(
-                    user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+                    user, type, collection+'/'+idColl+'/'+subColl, idSub,
                     documento, docAfter).then(()=>{
                     resolve();
                   });
-                 
+
                  }else{
-                  cont++;  
+                  cont++;
                  }
-                   
+
               }
             }
           } else {
@@ -337,16 +337,16 @@ export class ServicesNivel3Service {
               resolve();
             });
           }
-        
-            
+
+
         });
       } else {
         this.addTrazability(
-          user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+          user, type, collection+'/'+idColl+'/'+subColl, idSub,
           {}, docIn).then(()=>{
           resolve();
         });
-        
+
       }
 
     });
@@ -356,7 +356,7 @@ export class ServicesNivel3Service {
 
 
   addTrazability(user, type, collection, iddoc, docAnt, docDes){
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       publicIp.v4().then(ip => {
         const logger = {
           user:user,
@@ -368,14 +368,14 @@ export class ServicesNivel3Service {
           previousVer:docAnt,
           createdAt: new Date().toISOString()
         };
-    
+
       console.log(logger);
-    
+
       this.afs.collection('logger').add(logger).then(()=>{
         resolve();
       });
       });
-    
+
     });
 
     return promise;
