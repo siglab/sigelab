@@ -40,7 +40,7 @@ export class AdminLaboratorios3Component implements OnInit {
     email: ''
   };
 
-  
+
   idlab: any;
 
   persona: any;
@@ -214,8 +214,9 @@ export class AdminLaboratorios3Component implements OnInit {
   subsedesEsp = [];
   noEsPrac = [];
   idsp;
-  //tablesel = '';
+
   horarios = [];
+
   space = {
     capacity: 0,
     createdAt: '',
@@ -227,13 +228,14 @@ export class AdminLaboratorios3Component implements OnInit {
     minArea: '',
     ocupedArea: '',
     totalArea: '',
+    geoRep: { latitud : 0 , longitud : 0   },
     spaceData: { building: '', place: '', floor: '' },
     active: false
   };
 
   horariopractica;
   formtrue = false;
-  //sus: Subscription;
+  // sus: Subscription;
 
   // INICIALIZACION DATATABLE espacios
   displayedColumnsSpace = ['capacidad', 'arealibre', 'active', 'totalarea', 'spaceData.building', 'spaceData.place'];
@@ -522,7 +524,7 @@ export class AdminLaboratorios3Component implements OnInit {
         this.getFaculty().then(() => {
           for (const key in this.faculty) {
             if (this.faculty.hasOwnProperty(key)) {
- 
+
               this.getLaboratoriosFaculty(key).then(labo => {
 
                 contlabo += labo.size;
@@ -539,7 +541,7 @@ export class AdminLaboratorios3Component implements OnInit {
                             this.buscarSubSede(laboratorio.subHq).then(sub => {
                               const subsede = sub.data();
                               // convertir boolean a cadena de caracteres para estado del laboratorio
-               
+
 
                               laboratorioObject = {
                                 uid: doc.id,
@@ -588,9 +590,9 @@ export class AdminLaboratorios3Component implements OnInit {
                               this.laboratoriosEstructurados.push(laboratorioObject);
 
                               console.log(this.laboratoriosEstructurados.length, contlabo);
-                              if (this.laboratoriosEstructurados.length == contlabo) {                         
+                              if (this.laboratoriosEstructurados.length == contlabo) {
                                 resolve();
-                              }                           
+                              }
 
                             });
                           }

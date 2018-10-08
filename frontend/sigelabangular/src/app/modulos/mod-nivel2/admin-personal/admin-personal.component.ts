@@ -436,8 +436,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     /* metodo firebase para subir un usuario actualizado */
 
     this.servicioMod2.setPersona(this.idp, pers).then(
-      () => {
 
+      () => {
        this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
         swal({
           type: 'success',

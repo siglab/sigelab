@@ -1060,7 +1060,7 @@
                                           </label>
                                         </div>
                                       </div>
-                  
+
                                     </div>
                                   </div>
 
@@ -1186,7 +1186,7 @@
                                   <div class="box box-danger">
                                     <div class="box-header">
                                       <i class="fa fa-map"></i>
-                  
+
                                       <h3 class="box-title">Espacios vinculados</h3>
                                     </div>
                                     <div class="box-body">
@@ -1200,62 +1200,62 @@
                                               placeholder="Buscar Espacio">
                                           </mat-form-field>
                                         </div>
-                  
+
                                         <mat-table #tableSpace #sortSpace="matSort" [dataSource]="dataSourceSpace" matSort>
-                  
-                  
+
+
                                           <ng-container matColumnDef="capacidad">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Capacidad </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.capacity}} </mat-cell>
                                           </ng-container>
-                  
+
                                           <ng-container matColumnDef="arealibre">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Area libre </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.freeArea}} </mat-cell>
                                           </ng-container>
-                  
+
                                           <ng-container matColumnDef="totalarea">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Total Area </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.totalArea}} </mat-cell>
                                           </ng-container>
-                  
-                  
-                  
+
+
+
                                           <ng-container matColumnDef="spaceData.building">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Edificio </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.spaceData.building}} </mat-cell>
                                           </ng-container>
-                  
+
                                           <ng-container matColumnDef="spaceData.place">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Espacio </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.spaceData.place}} </mat-cell>
                                           </ng-container>
-                  
-                  
+
+
                                           <ng-container matColumnDef="active">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                                             <mat-cell *matCellDef="let element"> {{element.active | activo }} </mat-cell>
                                           </ng-container>
-                  
-                  
+
+
                                           <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
                                           <mat-row *matRowDef="let row; columns: displayedColumnsSpace;" style="cursor: pointer;" (click)="cambiardataEspace(row)"></mat-row>
                                         </mat-table>
-                  
+
                                         <mat-paginator #paginatorSpace="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                                           [showFirstLastButtons]="true">
                                         </mat-paginator>
                                       </div>
-                  
+
                                     </div>
                                   </div>
                                 </div>
-                  
+
                                 <div class="col-md-12" *ngIf="this.formtrue">
                                   <div class="box box-danger">
                                     <div class="box-header">
                                       <i class="fa fa-address-card-o"></i>
-                  
+
                                       <h3 class="box-title">Ficha tecnica de espacio seleccionado</h3>
                                       <div class="form-group" style="float: right">
                                         <div class="col-md-12">
@@ -1263,7 +1263,7 @@
                                             <i class="fa fa-calendar"></i> Programacion Espacio</button>
                                           <button data-toggle="modal" data-target="#myModal" type="button">
                                             <i class="fa fa-picture-o"></i> Ver plano </button>
-                  
+
                                         </div>
                                       </div>
                                     </div>
@@ -1272,39 +1272,39 @@
                                       <form id="form-work" class="" name="form-work" action="#">
                                         <fieldset>
                                           <div class="form-group">
-                  
-                  
+
+
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                                                 <div class="col-sm-2">
                                                   <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value=""
-                                                    class="form-control" id="edificio" disabled>
+                                                    class="form-control" id="edificio">
                                                 </div>
                                                 <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                                                 <div class="col-sm-2">
                                                   <input name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value=""
-                                                    class="form-control" id="edificio" disabled>
+                                                    class="form-control" id="edificio">
                                                 </div>
                                                 <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                                                 <div class="col-sm-2">
                                                   <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value=""
-                                                    class="form-control" id="espac" disabled>
+                                                    class="form-control" id="espac">
                                                 </div>
                                               </div>
-                  
+
                                             </div>
-                  
+
                                           </div>
-                  
-                  
+
+
                                           <div class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
                                                 <div class="col-sm-10">
                                                   <input name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control"
-                                                    id="area" placeholder="Area total" disabled>
+                                                    id="area" placeholder="Area total">
                                                 </div>
                                               </div>
                                             </div>
@@ -1315,12 +1315,12 @@
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
                                                 <div class="col-sm-10">
                                                   <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Area ocupada" disabled>
+                                                    id="arealibre" placeholder="Area ocupada">
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
-                  
+
                                           <div class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
@@ -1332,14 +1332,14 @@
                                               </div>
                                             </div>
                                           </div>
-                  
+
                                           <div class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
                                                 <div class="col-sm-10">
                                                   <input name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Area libre" disabled>
+                                                    id="arealibre" placeholder="Area libre">
                                                 </div>
                                               </div>
                                             </div>
@@ -1350,35 +1350,61 @@
                                                 <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
                                                 <div class="col-sm-10">
                                                   <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Capacidad" disabled>
+                                                    id="arealibre" placeholder="Capacidad">
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
+
+                                          <div class="form-group">
+                                            <div class="col-md-12">
+                                              <div class="form-group row">
+                                                <label for="capacidad" class="col-sm-2 col-form-label">Longitud:</label>
+                                                <div class="col-sm-10">
+                                                  <input name="longitude" [(ngModel)]="this.space.geoRep.longitud" type="text" value="" class="form-control"
+                                                    id="arealibre" placeholder="Capacidad">
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="form-group">
+                                            <div class="col-md-12">
+                                              <div class="form-group row">
+                                                <label for="capacidad" class="col-sm-2 col-form-label">Latitud:</label>
+                                                <div class="col-sm-10">
+                                                  <input name="latitude" [(ngModel)]="this.space.geoRep.latitud" type="text" value="" class="form-control"
+                                                    id="arealibre" placeholder="Capacidad">
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+
+
                                           <div class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
                                                 <div class="col-sm-10">
                                                   <input name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Area min" disabled>
+                                                    id="arealibre" placeholder="Area min">
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
-                  
+
                                           <div class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
                                                 <div class="col-sm-7">
                                                   <input name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control"
-                                                    id="indice" placeholder="Indice sat" disabled>
+                                                    id="indice" placeholder="Indice saturacion"  disabled >
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
-                  
+
                                           <div *ngIf="moduloNivel3 || moduloNivel25" class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
@@ -1391,49 +1417,49 @@
                                                   </label>
                                                 </div>
                                               </div>
-                  
+
                                             </div>
                                           </div>
-                  
-                  
+
+
                                           <div class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label  class="col-sm-2 col-form-label" for="indice" >Actividad actual:</label>
                                                 <ul *ngIf="this.actividadAct.length > 0" class="col-sm-5 col-form-label">
-                  
+
                                                   <li *ngFor="let item of this.actividadAct"> {{item}} </li>
-                  
+
                                                 </ul>
                                                 <!-- <label for="indice" >Actividad actual:</label> -->
                                                 <div class="col-sm-7">
-                  
+
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
-                  
-                  
-                  
+
+
+
                                           <div *ngIf="moduloNivel3 || moduloNivel25" class="form-group">
                                             <div class="col-md-12">
                                               <button (click)="actualizarEspacio()" style="float: right;" class="btn btn-success" type="button">
                                                 <i class="fa fa-refresh"> </i> Actualizar</button>
                                             </div>
                                           </div>
-                  
+
                                         </fieldset>
                                       </form>
                                     </div>
-                  
+
                                   </div>
                                 </div>
-                  
-                  
+
+
                               </div>
-                  
-                  
-                  
+
+
+
                             </div>
                           </div>
                         </div>
@@ -1454,22 +1480,22 @@
                             <div class="box-header">
                               <div class="form-group">
                                 <div class="col-md-12">
-                  
+
                                   <button *ngIf="moduloNivel3 || moduloNivel25" data-toggle="modal" (click)= "setValue()"   data-target="#modal1Prac" style="float: right;" class="btn btn-danger" type="button">Agregar
                                     Personal</button>
                                 </div>
                               </div>
                             </div>
-                  
+
                             <div class="box-body">
-                  
+
                               <div class="col-md-12">
                                 <div>
-                  
-                  
+
+
                                   <div class="box-body">
                                     <div class="box-body">
-                  
+
                                       <ul class="nav nav-tabs">
                                         <li>
                                           <a class="tablas" data-toggle="tab" href="#menuHomePersonal">
@@ -1480,19 +1506,19 @@
                                             Inactivos</a>
                                         </li>
                                       </ul>
-                  
+
                                       <div class="row" style="margin-top:20px;">
                                         <div class="col-md-12">
                                           <div class="box box-danger">
                                             <div class="tab-content">
                                               <div id="menuHomePersonal" class="tab-pane fade in active">
-                  
+
                                                 <div class="box-body" *ngIf="this.itemsel">
-                  
+
                                                   <div>
                                                     <div class="box-header">
                                                       <i class="fa fa-users"></i>
-                  
+
                                                       <h3 class="box-title">Personal Vinculado</h3>
                                                       <!--       <h3   class="box-title" style="float: right;">{{this.itemsel.personal.length}} PERSONAS</h3> -->
                                                     </div>
@@ -1500,72 +1526,72 @@
                                                     <div *ngIf="dataSourcePers.data.length == 0">
                                                       <h3>El laboratorio no cuenta con personal activo</h3>
                                                     </div>
-                  
+
                                                     <div class="box-body" *ngIf="dataSourcePers.data">
-                  
+
                                                       <div class="example-container mat-elevation-z8" *ngIf="dataSourcePers.data.length != 0">
                                                         <div class="example-header">
                                                           <mat-form-field>
                                                             <input style="outline: none;" matInput (keyup)="applyFilterPersona($event.target.value)" placeholder="Buscar Personal">
                                                           </mat-form-field>
                                                         </div>
-                  
+
                                                         <mat-table #tablePers #sortPers="matSort" [dataSource]="dataSourcePers" matSort>
-                  
-                  
+
+
                                                           <ng-container matColumnDef="nombre">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                                             <mat-cell   *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="codigo">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
                                                             <mat-cell   *matCellDef="let element"> {{element.cc}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="estado">
                                                               <mat-header-cell  [ngClass]="'small'"  *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                                                               <mat-cell [ngClass]="'small'"    *matCellDef="let element"> {{element.activo  | activo }} </mat-cell>
                                                             </ng-container>
-                  
+
                                                           <ng-container matColumnDef="email">
                                                             <mat-header-cell [ngClass]="'large'"  *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
                                                             <mat-cell [ngClass]="'large'"  *matCellDef="let element"> {{element.email}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="tipo">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
                                                             <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
                                                           </ng-container>
-                  
-                  
-                  
-                  
+
+
+
+
                                                           <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
                                                           <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardataPersona(row, 'activos')"
                                                             data-toggle="modal" data-target="#modalPrac"></mat-row>
                                                         </mat-table>
-                  
+
                                                         <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                                                         </mat-paginator>
                                                       </div>
                                                     </div>
                                                     <!-- /.box-body -->
                                                   </div>
-                  
+
                                                 </div>
                                               </div>
-                  
+
                                               <div id="menu1Personal" class="tab-pane fade">
-                  
+
                                                 <div class="box-body">
-                  
+
                                                   <div>
-                  
+
                                                     <div class="box-header">
-                  
+
                                                       <i class="fa fa-users"></i>
-                  
+
                                                       <h3 class="box-title">Personal Vinculado</h3>
                                                     </div>
                                                     <!-- /.box-header -->
@@ -1573,79 +1599,79 @@
                                                       <h3>El laboratorio no cuenta con personal inactivo</h3>
                                                     </div>
                                                     <div class="box-body" *ngIf="dataSourcePersIn.data">
-                  
-                  
-                  
+
+
+
                                                       <div class="example-container mat-elevation-z8" *ngIf="dataSourcePersIn.data.length > 0">
                                                         <div class="example-header">
                                                           <mat-form-field>
                                                             <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
                                                           </mat-form-field>
                                                         </div>
-                  
+
                                                         <mat-table #tablePersIn #sortPers="matSort" [dataSource]="dataSourcePersIn" matSort>
-                  
+
                                                           <ng-container matColumnDef="estado">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                                                             <mat-cell *matCellDef="let element"> {{element.activo | activo }} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="codigo">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
                                                             <mat-cell   *matCellDef="let element"> {{element.cc}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="nombre">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                                             <mat-cell  [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="email">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
                                                             <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <ng-container matColumnDef="tipo">
                                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
                                                             <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
                                                           </ng-container>
-                  
+
                                                           <mat-header-row *matHeaderRowDef="displayedColumnsPersIn"></mat-header-row>
                                                           <mat-row *matRowDef="let row; columns: displayedColumnsPersIn;" style="cursor: pointer;" (click)="cambiardataPersona(row, 'inactivos')"
                                                             data-toggle="modal" data-target="#modal"></mat-row>
                                                         </mat-table>
-                  
+
                                                         <mat-paginator #paginatorPersIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                                                         </mat-paginator>
                                                       </div>
                                                     </div>
                                                     <!-- /.box-body -->
                                                   </div>
-                  
+
                                                 </div>
                                               </div>
                                             </div>
-                  
-                  
+
+
                                           </div>
                                         </div>
                                       </div>
-                  
-                  
+
+
                                     </div>
                                   </div>
                                   <!-- /.box-body -->
                                 </div>
-                  
+
                               </div>
-                  
-                  
-                  
-                  
+
+
+
+
                             </div>
-                  
-                  
-                  
+
+
+
                           </div>
                         </div>
                       </div>
@@ -1672,17 +1698,17 @@
 <!-- MODAL QUE MUESTRA INFORMACION DEL ITEM SELECCIONADO -->
 <div class="modal fade" id="modal1" role="dialog" *ngIf="seleccionado">
     <div class="modal-dialog modal-md">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <i class="fa fa-address-card-o"></i>
-  
+
               <h3 class="box-title">Informacion de {{tablesel}}</h3>
-  
+
               <i style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></i>
             </div>
             <!-- /.box-header -->
@@ -1693,7 +1719,7 @@
                     <div class="col-md-12">
                       <label class="control-label" for="nombreprub">
                         <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-  
+
                     </div>
                   </div>
                   <div class="form-group">
@@ -1705,14 +1731,14 @@
 
                 </fieldset>
               </form>
-  
+
               <form *ngIf="tablesel == 'servicios'" id="form-dash2serv" class="" name="form-dash2serv" action="#">
                 <fieldset>
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="nombreprub">
                         <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-  
+
                     </div>
                   </div>
                   <div class="form-group">
@@ -1735,14 +1761,14 @@
                   </div>
                 </fieldset>
               </form>
-  
+
               <form *ngIf="tablesel == 'personal'" id="form-dash2epers" class="" name="form-dash2epers" action="#">
                 <fieldset>
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="nombrePers">
                         <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-  
+
                     </div>
                   </div>
                   <div class="form-group">
@@ -1754,14 +1780,14 @@
 
                 </fieldset>
               </form>
-  
+
               <form *ngIf="tablesel == 'proyectos'" id="form-dash2proy" class="" name="form-dash2proy" action="#">
                 <fieldset>
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="idProy">
                         <strong>ID :</strong> {{seleccionado.id}}</label>
-  
+
                     </div>
                   </div>
                   <div class="form-group">
@@ -1778,18 +1804,18 @@
                   </div>
                 </fieldset>
               </form>
-  
-  
+
+
               <form *ngIf="tablesel == 'practicas'" id="form-workprub" class="" name="form-workprub" action="#">
                 <fieldset>
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="nombreprub">
                         <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-  
+
                     </div>
                   </div>
-  
+
                   <div class="form-group">
                     <div class="col-md-12" style="margin-top: 20px;">
                         <button class="btn btn-danger" style="float: right;"  data-toggle="modal" data-target="#practicaprog"  type="button">Ver Programacion</button>
@@ -1797,7 +1823,7 @@
                   </div>
                 </fieldset>
               </form>
-  
+
               <form *ngIf="tablesel == 'solicitudes'" id="form-dash2sol" class="" name="form-dash2sol" action="#">
                 <fieldset>
                   <div class="form-group">
@@ -1857,38 +1883,38 @@
                         <strong>Estado de la solicitud:</strong> {{seleccionado.estado}}</label>
                     </div>
                   </div>
-  
+
                 </fieldset>
               </form>
             </div>
-  
+
           </div>
         </div>
       </div>
-  
-  
+
+
     </div>
   </div>
-  
-  
+
+
   <!-- MODAL QUE MUESTRA LOS DATOS DE LOS ESPACIOS DE LOS DATOS DEL LABORATORIO -->
   <div class="modal fade" id="modal3" role="dialog">
       <div class="modal-dialog modal-md">
-  
+
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-body">
               <div class="box box-danger">
                   <div class="box-header text-center">
                     <i class="fa fa-address-card-o"></i>
-  
+
                     <h3 class="box-title">Informacion de espacio</h3>
-  
+
                     <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal3')"></span>
                   </div>
-  
+
                   <div class="box-body" *ngIf="this.labestructurado">
-  
+
                     <form id="form-work" class="" name="form-work" action="#">
                       <fieldset *ngIf="espaciosel">
                         <div class="form-group">
@@ -1897,7 +1923,7 @@
                               <strong>Edificio: </strong>
                               {{this.espaciosel.spaceData.building}}
                             </label>
-  
+
                           </div>
                         </div>
                         <div class="form-group">
@@ -1964,56 +1990,56 @@
                             </label>
                           </div>
                         </div>
-  
+
                       </fieldset>
                     </form>
-  
+
                     <div *ngIf="espaciosel" class="box box-danger">
                       <div class="box-header">
                         <i class="fa fa-address-card-o"></i>
-  
+
                         <h3 class="box-title">Plano Espacio</h3>
                       </div>
-  
+
                       <div class="box-body">
                         <h3 *ngIf=" this.espaciosel.map == ''"> El laboratorio seleccionado no cuenta con ningun plano </h3>
                         <img *ngIf="this.espaciosel.map != ''"  style=" float: center; width: 100%;height: 100%;" [src]="this.plano | async" alt="">
-  
+
                       </div>
-  
+
                     </div>
-  
+
                   </div>
               </div>
-  
-  
-  
+
+
+
           </div>
         </div>
       </div>
     </div>
-  
+
     <!-- modal de horario de practica -->
   <div class="modal fade" id="practicaprog" role="dialog" >
     <div class="modal-dialog modal-lg">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <i class="fa fa-calendar"></i>
-  
+
               <h1 class="box-title">Programacion de la Practica</h1>
-  
+
               <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('practicaprog')"></span>
-  
+
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div *ngIf="this.seleccionado && tablesel == 'practicas'">
-  
+
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="semestre"><strong>Semestre:</strong> {{seleccionado.programacion.semestre}}</label>
@@ -2029,16 +2055,16 @@
                     <div class= "cal" id="calendar2">
                     </div>
                 </div>
-  
+
             </div>
-  
+
           </div>
         </div>
       </div>
-  
+
     </div>
   </div>
-  
+
 
 <!-- ******************************************************+ -->
 
@@ -2048,23 +2074,23 @@
 <!-- MODAL PARA CREAR UN NUEVO LABORATORIO -->
 <div class="modal fade" id="modalNuevoLab" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <i class="fa fa-address-card-o"></i>
-  
+
               <h1 class="box-title">Nuevo Laboratorio</h1>
-  
+
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <form id="form-work" class="" name="form-work" action="#">
                 <fieldset>
-                  
+
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="nombreprub">
@@ -2073,8 +2099,8 @@
                       <input  id="nombreprub" [(ngModel)]="this.labo.nombre" name="nombreprub" class="form-control" type="text">
                     </div>
                   </div>
-  
-  
+
+
                   <div class="form-group">
                     <div class="col-md-12">
                       <label class="control-label" for="email">
@@ -2085,22 +2111,22 @@
                     </div>
                   </div>
 
-  
-  
+
+
                   <div *ngIf="this.disponible" class="form-group">
                     <div class="col-md-12 text-center">
                       <button style="margin-top: 20px;" (click)="nuevoLaboratorio()" class="btn btn-danger" type="button">Crear Laboratorio</button>
                     </div>
                   </div>
-  
+
                 </fieldset>
               </form>
             </div>
-  
+
           </div>
         </div>
       </div>
-  
+
     </div>
   </div>
 
@@ -2111,47 +2137,47 @@
 
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <i class="fa fa-address-card-o"></i>
-  
+
               <h1 class="box-title">Editar Espacio</h1>
               <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModal')"></span>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <h3 *ngIf=" this.mensaje"> El laboratorio seleccionado no cuenta con ningun plano </h3>
-  
+
               <div *ngIf="!this.plano" style="width: 100%; height:100%;" class="spinner"> </div>
               <img *ngIf="this.plano" style="width: 100%; height:100%;" [src]="this.plano" alt="">
-  
+
             </div>
-  
+
           </div>
         </div>
       </div>
-  
+
     </div>
   </div>
-  
-  
+
+
   <!--  modal para agregar un nuevo espacio al laboratorio-->
   <div class="modal fade" id="modal" role="dialog">
     <div class="modal-dialog">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <i class="fa fa-address-card-o"></i>
-  
+
               <h1 class="box-title">Nuevo Espacio</h1>
               <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal')"></span>
             </div>
@@ -2159,31 +2185,31 @@
             <div class="box-body">
               <form id="form-work" class="" name="form-work" action="#">
                 <fieldset>
-  
+
                   <div class="form-group">
-  
+
                     <div class="col-md-12">
                       <div class="form-group has-info row">
                         <label for="edificio" class="col-md-2 col-form-label">Edificio:</label>
                         <div class="col-sm-4">
                           <input name="edificio" #ed [(ngModel)]="this.space.spaceData.building " type="text" value=""
                             class="form-control" id="edificio">
-  
+
                         </div>
                         <label for="espac" class="col-md-2 col-form-label">Espacio:</label>
                         <div class="col-sm-4">
                           <input name="espacio" #sp (focusout)="spaceCheck( ed.value, sp.value )" [disabled]='!this.space.spaceData.building '
                             [(ngModel)]="this.space.spaceData.place " type="text" value="" class="form-control" id="espac">
                         </div>
-  
-  
-  
-  
+
+
+
+
                         <span class="help-block text-center"> {{this.status}} </span>
                       </div>
                     </div>
                   </div>
-  
+
                   <!-- ocultar form -->
                   <div *ngIf="dispo">
                     <div class="col-md-12">
@@ -2193,13 +2219,13 @@
                           <select class="form-control" (change)="listSubHq($event.target.value)" name="sede">
                             <option value="san fernando">Seleccione una sede</option>
                             <option *ngFor="let item of sedesEsp" value="{{item.id}}"> {{item.cfName}} </option>
-  
+
                           </select>
                         </div>
                       </div>
                     </div>
-  
-  
+
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <div class="form-group row">
@@ -2208,14 +2234,14 @@
                             <select class="form-control" (change)="getIdSubHq($event.target.value)" name="selectsubsede">
                               <option value="san fernando"> Selecciona subSede </option>
                               <option *ngFor="let item of subsedesEsp" value="{{item.id}}">{{item.cfAddrline1}}</option>
-  
+
                             </select>
                           </div>
                         </div>
                       </div>
                     </div>
-  
-  
+
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <div class="form-group row">
@@ -2227,8 +2253,33 @@
                         </div>
                       </div>
                     </div>
-  
-  
+
+
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="facultad" class="col-sm-2 col-form-label">Longitud:</label>
+                          <div class="col-sm-10">
+                            <input name="longitud" [(ngModel)]="this.space.geoRep.longitud " type="text" value="" class="form-control col-md-6"
+                              id="edificio">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="facultad" class="col-sm-2 col-form-label">Latitud:</label>
+                          <div class="col-sm-10">
+                            <input name="latitud" [(ngModel)]="this.space.geoRep.latitud " type="text" value="" class="form-control col-md-6"
+                              id="edificio">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label for="Activo" class="col-sm-3 col-form-label">Activo:</label>
@@ -2238,12 +2289,12 @@
                             <span class="slider round"></span>
                           </label>
                         </div>
-  
+
                       </div>
                     </div>
                   </div>
-  
-  
+
+
                   <div class="form-group">
                     <div class="col-md-12">
                       <button *ngIf="!this.idnewSp" (click)="setSpace()" style="float: right;" class="btn btn-success  "
@@ -2258,44 +2309,44 @@
                       </button>
                     </div>
                   </div>
-  
+
                 </fieldset>
               </form>
             </div>
-  
+
           </div>
         </div>
       </div>
-  
+
     </div>
   </div>
-  
+
   <!-- modal de horario de laboratorio -->
   <div class="modal fade" id="modal2" role="dialog">
     <div class="modal-dialog modal-lg">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <i class="fa fa-calendar"></i>
-  
+
               <h1 class="box-title">Programacion de Espacio</h1>
               <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal2')"></span>
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">
-  
+
               <div class="cal" id="cal">
               </div>
             </div>
-  
+
           </div>
         </div>
       </div>
-  
+
     </div>
   </div>
 
@@ -2306,10 +2357,10 @@
   <!--  modal editar informacion del personal -->
 <div class="modal fade" id="modalPrac" role="dialog">
     <div class="modal-dialog modal-md">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
@@ -2322,7 +2373,7 @@
               <form id="form-dash2equip" class="" name="form-dash2equip">
                 <fieldset>
                   <div class="form-group row">
-  
+
                     <div class="col-md-12">
                       <label class="col-md-2 control-label" for="nombreprub">
                         <strong>Nombre:</strong>
@@ -2332,11 +2383,11 @@
                           type="text">
                       </div>
                     </div>
-  
+
                   </div>
-  
-  
-  
+
+
+
                   <div class="form-group row">
                     <div class="col-md-12">
                       <label class="control-label col-sm-2" for="nombreprub">
@@ -2346,57 +2397,57 @@
                         <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control"
                           type="text">
                       </div>
-  
+
                     </div>
                   </div>
-  
+
                   <div class="form-group row">
                     <div class="col-md-12">
                       <label class="control-label col-sm-2" for="nombreprub">
                         <strong>tipo:</strong>
                       </label>
                       <div class="col-md-10">
-  
+
                         <select class="form-control" [(ngModel)]="this.type" name="estado">
-  
+
                           <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
-  
+
                         </select>
                       </div>
                     </div>
                   </div>
-  
-  
-  
+
+
+
                   <div class="form-group row">
                     <div class="col-md-12">
                       <label class="control-label col-sm-2" for="estadoserv">
                         <strong>Email:</strong>
                       </label>
-  
+
                       <div class="col-md-10">
                         <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control"
                           type="email">
                       </div>
                     </div>
                   </div>
-  
-  
+
+
                   <div class="form-group row">
                     <div class="col-md-12">
                       <label class="control-label col-sm-2" for="estadoserv">
                         <strong>Rol:</strong>
                       </label>
                       <div class="col-md-10">
-  
+
                         <select class="form-control" [(ngModel)]="this.rol" name="estado">
                           <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
-  
+
                         </select>
                       </div>
                     </div>
-  
-  
+
+
                   </div>
                   <div *ngIf="moduloNivel3 || moduloNivel25" class="form-group row">
                     <div class="col-md-12">
@@ -2408,43 +2459,43 @@
                           </label>
                         </div>
                       </div>
-  
+
                     </div>
                   </div>
-  
-  
-  
+
+
+
                 </fieldset>
-  
-  
+
+
               </form>
-  
-  
-  
-  
+
+
+
+
             </div>
             <div *ngIf="moduloNivel3 || moduloNivel25" class="modal-footer">
               <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar <i class="fa fa-refresh"></i>
                 </button>
-  
+
             </div>
           </div>
         </div>
       </div>
-  
-  
+
+
     </div>
   </div>
-  
-  
+
+
   <!-- modal agregar nuevo personal al laboratorio -->
-  
+
   <div class="modal fade" id="modal1Prac" role="dialog">
     <div class="modal-dialog modal-lg">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
@@ -2456,7 +2507,7 @@
             <div class="box-body">
               <form id="form-dash2equip" class="" name="form-dash2equip">
                 <fieldset>
-  
+
                   <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }">
                     <div class="col-md-12">
                       <label class="control-label" for="estadoserv">
@@ -2466,11 +2517,11 @@
                       <span class="help-block"> {{status}}</span>
                     </div>
                   </div>
-  
-  
+
+
                   <!-- ocultar form  para validar si ya existe -->
                   <div *ngIf="dispo">
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="nombreprub">
@@ -2479,7 +2530,7 @@
                         <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
                       </div>
                     </div>
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="nombreprub">
@@ -2488,7 +2539,7 @@
                         <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
                       </div>
                     </div>
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="nombreprub">
@@ -2497,7 +2548,7 @@
                         <input [(ngModel)]="this.person.cc" id="escuelaedit" name="codigo" class="form-control" type="text">
                       </div>
                     </div>
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="nombreprub">
@@ -2506,7 +2557,7 @@
                         <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
                       </div>
                     </div>
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="estadoserv">
@@ -2514,11 +2565,11 @@
                         </label>
                         <select class="form-control" [(ngModel)]="this.person.roleId" name="role">
                           <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
-  
+
                         </select>
                       </div>
                     </div>
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="estadoserv">
@@ -2529,7 +2580,7 @@
                         </select>
                       </div>
                     </div>
-  
+
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="estadoserv">
@@ -2538,25 +2589,25 @@
                         <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
                           <option value="Hombre">Hombre </option>
                           <option value="Mujer">Mujer</option>
-  
+
                         </select>
                       </div>
-  
-  
+
+
                     </div>
-  
+
                   </div>
-  
-  
-  
+
+
+
                 </fieldset>
-  
-  
+
+
               </form>
-  
-  
-  
-  
+
+
+
+
             </div>
             <div class="modal-footer">
               <button *ngIf="!addP" type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
@@ -2565,9 +2616,8 @@
           </div>
         </div>
       </div>
-  
-  
+
+
     </div>
   </div>
-  
-  
+
