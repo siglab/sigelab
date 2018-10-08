@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Http } from '@angular/http';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { correoUnivalle } from '../../../config';
 
 declare var $: any;
 @Component({
@@ -80,7 +81,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
               private ruta: Router, private http: Http) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] == 'gmail.com'){
+      if(this.user.email.split('@')[1] == correoUnivalle){
         this.usuariounivalle = true;
       }
     }

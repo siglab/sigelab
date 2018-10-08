@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
+import { correoUnivalle } from '../../../config';
 
 declare var $: any;
 
@@ -108,7 +109,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
               private ruta: Router) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if (this.user.email.split('@')[1] === 'gmail.com') {
+      if (this.user.email.split('@')[1] === correoUnivalle) {
         this.usuariounivalle = true;
       }
     }
@@ -417,9 +418,19 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
      } else {
-
       this.removerMarker();
-      this.agregarMarker(item);
+
+      if(item.coord.lat != '' && item.coord.lon != ''){
+        this.agregarMarker(item);
+      }else{
+        swal({
+          type: 'warning',
+          title: 'el laboratorio seleccionado aun no tiene registrada la ubicacion',
+          showConfirmButton: true
+        });
+      }
+     
+     
      }
 
      setTimeout(function() {
