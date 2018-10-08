@@ -480,16 +480,22 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         swal.showLoading();
       }
     });
-    this.servicioMod2.updateEquip(this.equiposel.id,this.modelEquipoSel).then(()=>{
-      swal.close();
-      swal({
-        type: 'success',
-        title: 'Exito',
-        showConfirmButton: true
-      }).then(()=>{
-        this.cerrarModal('modal2');
+    const user = this.servicioMod2.getLocalStorageUser();
+    this.servicioMod2.Trazability(
+      user.uid, 'update', 'cfEquip',this.equiposel.id,this.modelEquipoSel).then(()=>{
+        
+      this.servicioMod2.updateEquip(this.equiposel.id,this.modelEquipoSel).then(()=>{
+        swal.close();
+        swal({
+          type: 'success',
+          title: 'Exito',
+          showConfirmButton: true
+        }).then(()=>{
+          this.cerrarModal('modal2');
+        });
       });
-    });
+    })
+   
   }
 
   iniciliazarTablas() {

@@ -71,6 +71,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   role: any;
   moduloNivel2 = false;
 
+  user = this.servicioMod2.getLocalStorageUser();
+
   constructor(private obs: ObservablesService,
     private servicioMod2:Modulo2Service,
     private storage: AngularFireStorage,
@@ -383,9 +385,15 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     const nuevoespacio = this.space;
 
     nuevoespacio.subHq = this.idsh;
+
+   
     this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
       // agrega el nuevo espacio al laboratorio actual
-      this.updateFaciliti(data.id);
+      this.servicioMod2.Trazability(
+        this.user.uid, 'create', 'space', data.id, nuevoespacio).then(()=>{
+          this.updateFaciliti(data.id);
+        });
+     
     });
 
   }
@@ -415,18 +423,28 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     // asigna el estado editado al espacio dentro del lab
     nuevoEstado.relatedSpaces[this.idsp] = this.space.active;
 
-    this.servicioMod2.setEspacio(this.idsp, nuevoespacio).then(() => {
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'space', this.idsp, nuevoespacio).then(()=>{
+        this.servicioMod2.setEspacio(this.idsp, nuevoespacio).then(() => {
 
-      // actualiza el estado del espacio dentro del laboratorio
-      this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
+          // actualiza el estado del espacio dentro del laboratorio
+          this.servicioMod2.Trazability(
+            this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
+          ).then(()=>{
 
-      swal({
-        type: 'success',
-        title: 'Actualizado Correctamente',
-        showConfirmButton: true
-      });
+            this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
+    
+            swal({
+              type: 'success',
+              title: 'Actualizado Correctamente',
+              showConfirmButton: true
+            });
+          });
 
+    
+        });
     });
+
 
     console.log(nuevoespacio);
   }
@@ -497,8 +515,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       relatedSpaces[idSp] = true;
 
 
-      console.log('revisar este lab', this.idlab);
-      this.servicioMod2.setDocLaboratorio(this.idlab, { relatedSpaces })
+      this.servicioMod2.Trazability(
+        this.user.uid, 'update', 'cfFacil', this.idlab, {relatedSpaces}
+      ).then(()=>{
+        this.servicioMod2.setDocLaboratorio(this.idlab, { relatedSpaces })
         .then(() => {
 
           swal({
@@ -506,7 +526,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             title: 'Creado Correctamente',
             showConfirmButton: true
           });
-        });
+      });
+      });
+
 
     } else {
 

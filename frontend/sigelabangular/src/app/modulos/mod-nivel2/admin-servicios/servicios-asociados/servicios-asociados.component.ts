@@ -125,6 +125,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   listaParametrosVariacion = [];
 
   seleccion = false;
+
+  user = this.servicioMod2.getLocalStorageUser();
+
   constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service) { }
 
   ngOnInit() {
@@ -466,49 +469,63 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
 
     this.servicioMod2.addServicio(this.srv).then(data =>{
-      console.log(data);
-      const objeto = {relatedServices:{}};
-      objeto.relatedServices[data.id] = true;
-      this.servicioMod2.setDocLaboratorio(this.lab_id, objeto);
-      if(this.variaciones.length != 0){
-        for (let i = 0; i < this.variaciones.length; i++) {
-          const element = this.variaciones[i];
-          this.servicioMod2.addVariaciones(data.id, element).then(()=>{
-            //swal.close();
-
-            if(i == this.variaciones.length-1){
-              swal({
-                type: 'success',
-                title: 'creado correctamente',
-                showConfirmButton: true
-              }).then(()=>{
-                this.cerrarModal('modal2');
-              });;
+      this.servicioMod2.Trazability(
+        this.user.uid, 'create', 'cfSrv', data.id, this.srv
+      ).then(()=>{
+        console.log(data);
+        const objeto = {relatedServices:{}};
+        objeto.relatedServices[data.id] = true;
+        this.servicioMod2.Trazability(
+          this.user.uid, 'update', 'cfFacil', this.lab_id, objeto
+        ).then(()=>{
+          this.servicioMod2.setDocLaboratorio(this.lab_id, objeto);
+          if(this.variaciones.length != 0){
+            for (let i = 0; i < this.variaciones.length; i++) {
+              const element = this.variaciones[i];
+              this.servicioMod2.addVariaciones(data.id, element).then(doc=>{
+                //swal.close();
+                this.servicioMod2.TrazabilitySubCollection(
+                  this.user.uid, 'create', 'cfFacil', data.id, 'variations', doc.id, element
+                ).then(()=>{
+                  if(i == this.variaciones.length-1){
+                    swal({
+                      type: 'success',
+                      title: 'creado correctamente',
+                      showConfirmButton: true
+                    }).then(()=>{
+                      this.cerrarModal('modal2');
+                    });;
+                  }
+                });
+              });
             }
-
+          } else {
+            swal({
+              type: 'success',
+              title: 'creado correctamente',
+              showConfirmButton: true
+            }).then(()=>{
+              this.cerrarModal('modal2');
+            });
+          }
+  
+          this.selection.selected.forEach((element) => {
+            let srvEquip = {
+              relatedSrv:{}
+            };
+            if (element.id) {
+              srvEquip.relatedSrv[data.id] = true;
+              this.servicioMod2.Trazability(
+                this.user.uid, 'update', 'cfEquip', element.id, srvEquip
+              ).then(()=>{
+                this.servicioMod2.setEquipo(element.id, srvEquip);
+              });          
+            }
           });
-        }
-      } else {
-        swal({
-          type: 'success',
-          title: 'creado correctamente',
-          showConfirmButton: true
-        }).then(()=>{
-          this.cerrarModal('modal2');
         });
-      }
 
-      this.selection.selected.forEach((element) => {
-        let srvEquip = {
-          relatedSrv:{}
-        };
-        if (element.id) {
-          srvEquip.relatedSrv[data.id] = true;
-          this.servicioMod2.setEquipo(element.id, srvEquip);
-        }
       });
-     
-
+ 
     });
 
   }
@@ -524,7 +541,12 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       };
 
       srvequip.relatedSrv[this.itemsel.infoServ.uid] = true;
-      this.servicioMod2.setEquipo(equipo.id, srvequip);
+      this.servicioMod2.Trazability(
+        this.user.uid, 'update', 'cfEquip', equipo.id, srvequip
+      ).then(()=>{
+        this.servicioMod2.setEquipo(equipo.id, srvequip);
+      });  
+     
     }
     this.srv.cfFacil = this.lab_id;
     this.srv.updatedAt = fecha.toISOString();
@@ -538,13 +560,41 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(()=>{
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, this.srv
+    ).then(()=>{
+      this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(()=>{
 
 
-      for (let j = 0; j < this.variaciones.length; j++) {
-        const variacion = this.variaciones[j];
-        if(variacion.id == 'nuevo'){
-          this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(()=>{
+        for (let j = 0; j < this.variaciones.length; j++) {
+          const variacion = this.variaciones[j];
+          if(variacion.id == 'nuevo'){
+            this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(doc=>{
+              this.servicioMod2.TrazabilitySubCollection(
+                this.user.uid, 'create', 'cfSrv', this.itemsel.infoServ.uid, 'variations', doc.id, variacion.data
+              ).then(()=>{
+                swal({
+                  type: 'success',
+                  title: 'Editado correctamente',
+                  showConfirmButton: true
+                }).then(()=>{
+                  this.variaciones = [];
+                  this.cerrarModal('modal1');
+                });
+              });
+
+            });
+          } else {
+            this.servicioMod2.TrazabilitySubCollection(
+              this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations', variacion.id, variacion.data
+            ).then(()=>{
+              this.servicioMod2.updateVariciones(this.itemsel.infoServ.uid , variacion.id, variacion.data);
+            });
+          }
+  
+  
+          if(j == this.variaciones.length-1){
+            swal.close();
             swal({
               type: 'success',
               title: 'Editado correctamente',
@@ -553,43 +603,33 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
               this.variaciones = [];
               this.cerrarModal('modal1');
             });
-          });
-        } else {
-          this.servicioMod2.
-              updateVariciones(this.itemsel.infoServ.uid , variacion.id, variacion.data).then(()=>{
-
-              });
-        }
-
-
-        if(j == this.variaciones.length-1){
-          swal.close();
-          swal({
-            type: 'success',
-            title: 'Editado correctamente',
-            showConfirmButton: true
-          }).then(()=>{
-            this.variaciones = [];
-            this.cerrarModal('modal1');
-          });
-         
-        }
-
-      }
-
-      for (let i = 0; i < this.variacionesCambiadas.length; i++) {
-        this.servicioMod2.setVariaciones(
-          this.itemsel.infoServ.uid, 
-          this.variacionesCambiadas[i].id, 
-          {active:this.variacionesCambiadas[i].active});
-
-          if(i == this.variacionesCambiadas.length-1){
-            this.variacionesCambiadas = [];
+           
           }
-      }
+  
+        }
+  
+        for (let i = 0; i < this.variacionesCambiadas.length; i++) {
+          this.servicioMod2.TrazabilitySubCollection(
+            this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations',  
+            this.variacionesCambiadas[i].id, 
+            {active:this.variacionesCambiadas[i].active}
+          ).then(()=>{
+            this.servicioMod2.setVariaciones(
+              this.itemsel.infoServ.uid, 
+              this.variacionesCambiadas[i].id, 
+              {active:this.variacionesCambiadas[i].active});
+    
+              if(i == this.variacionesCambiadas.length-1){
+                this.variacionesCambiadas = [];
+              }
+          });
 
-
+        }
+  
+  
+      });
     });
+
 
 
 

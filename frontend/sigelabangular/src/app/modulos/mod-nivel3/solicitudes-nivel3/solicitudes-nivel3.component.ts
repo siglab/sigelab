@@ -265,6 +265,11 @@ export class SolicitudesNivel3Component implements OnInit {
     }
 
 
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'request', this.solsel.uidsol, obj
+    );
+
+
   }
 
    

@@ -98,6 +98,8 @@ export class AdminPracticasComponent implements OnInit {
   role: any;
   moduloNivel2 = false;
 
+  user = this.servicioMod2.getLocalStorageUser();
+
   constructor(private obs: ObservablesService,
     private servicioMod2:Modulo2Service,
     private toastr: ToastrService) {
@@ -594,24 +596,38 @@ export class AdminPracticasComponent implements OnInit {
     console.log(practica, 'programing', programming);
     console.log(this.mainSpace);
     if (practica) {
+    
+    
+        this.servicioMod2.addPractica(practica).then(ok => {
+          this.servicioMod2.Trazability(
+            this.user.uid, 'create', 'practice', ok.id, practica
+          ).then(()=>{
+            facil.relatedPractices[ok.id] = true;
+            this.servicioMod2.Trazability(
+              this.user.uid, 'update', 'cfFacil', this.id_lab, facil
+            ).then(()=>{
+              this.servicioMod2.setDocLaboratorio(this.id_lab,facil);
+            });
 
-     this.servicioMod2.addPractica(practica).then(ok => {
-        facil.relatedPractices[ok.id] = true;
-        this.servicioMod2.setDocLaboratorio(this.id_lab,facil);
-        this.servicioMod2.addProgramacion(ok.id, programming).then(() => {
-        
-          swal({
-            type: 'success',
-            title: 'Almacenado correctamente',
-            showConfirmButton: true
-          });
-
-          this.clearObj();
-          stepper.reset();
+            this.servicioMod2.addProgramacion(ok.id, programming).then(doc => {
+              this.servicioMod2.TrazabilitySubCollection(
+                this.user.uid, 'create', 'practice', ok.id, 'programmingData', doc.id, programming
+              ).then(()=>{
+                swal({
+                  type: 'success',
+                  title: 'Almacenado correctamente',
+                  showConfirmButton: true
+                });
+      
+                this.clearObj();
+                stepper.reset();
+              });
+            });
+  
+  
         });
-
-
       });
+    
 
     }
 
@@ -723,24 +739,25 @@ export class AdminPracticasComponent implements OnInit {
 
     };
 
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'practice', this.id_prc, practica
+    ).then(()=>{
+      this.servicioMod2.setPractica(this.id_prc, practica).then(ok => {
 
-    this.servicioMod2.setPractica(this.id_prc, practica).then(ok => {
-
-      this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog).then(() => {
-        this.obs.changeObjectPra({ nombre: this.pracestructurado.nombre, uid: this.pracestructurado.id_lab });
+      this.servicioMod2.TrazabilitySubCollection(
+        this.user.uid, 'update', 'practice', this.id_prc, 'programmingData', this.id_pro, prog
+      ).then(()=>{
+        this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog);
+  
+          swal({
+            type: 'success',
+            title: 'Actualizado Correctamente',
+            showConfirmButton: true
+          });
+        });
+ 
       });
-
-      swal({
-        type: 'success',
-        title: 'Actualizado Correctamente',
-        showConfirmButton: true
-      });
-
     });
-    
-
-
-
 
   }
 

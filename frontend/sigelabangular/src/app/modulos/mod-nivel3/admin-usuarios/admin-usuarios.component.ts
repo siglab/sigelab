@@ -111,6 +111,8 @@ export class AdminUsuariosComponent implements OnInit {
 
   niveles = [];
 
+  user = this.serviceMod3.getLocalStorageUser();
+
   constructor(private obs: ObservablesService,
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
@@ -384,27 +386,30 @@ export class AdminUsuariosComponent implements OnInit {
 
     // metodo firebase para subir un usuario actualizado
     if (this.idu) {
-      this.serviceMod3.updatedUser(this.idu, this.usuario)
-        .then(() => {
-        });
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'user', this.idu, this.usuario
+      ).then(()=>{
+        this.serviceMod3.updatedUser(this.idu, this.usuario)
+          .then(() => {
+          });
+      });
 
     }
      // actualizar la persona
     if (this.idp) {
-      this.serviceMod3.updatedPersona(this.idp, this.person).then(
-        () => {
-
-
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'cfPers', this.idp, this.person
+      ).then(()=>{
+        this.serviceMod3.updatedPersona(this.idp, this.person).then(
+          () => {
           // toca resetear en todos los laboratorios si el estado cambia
-          swal({
-            type: 'success',
-            title: 'usuario actualizado correctamente',
-            showConfirmButton: true
-          });
-
-
-
+            swal({
+              type: 'success',
+              title: 'usuario actualizado correctamente',
+              showConfirmButton: true
+            });
         });
+      });
 
 
     }
@@ -420,12 +425,20 @@ export class AdminUsuariosComponent implements OnInit {
       const nuevoEstado = { relatedPers: {} };
 
       nuevoEstado.relatedPers[this.idp] = false;
-      // inactiva el usuario dentro de la coleccion persona
-      this.serviceMod3.setPersona(this.idlab, { active: false });
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'cfPers', this.idlab, { active: false }
+      ).then(()=>{
+        // inactiva el usuario dentro de la coleccion persona
+        this.serviceMod3.setPersona(this.idlab, { active: false });
+      });
 
       // inactiva al usuario dentro de cada laboratorio
       result.forEach(doc => {
-       this.serviceMod3.setLaboratorio(doc.id, nuevoEstado);
+        this.serviceMod3.Trazability(
+          this.user.uid, 'update', 'cfFacil', doc.id, nuevoEstado
+        ).then(()=>{
+          this.serviceMod3.setLaboratorio(doc.id, nuevoEstado);
+        });
       });
     });
   }
@@ -433,13 +446,18 @@ export class AdminUsuariosComponent implements OnInit {
   // inactiva un usuario y lo elimina de la auth
   disabledUserAuht() {
 
-    this.serviceMod3.setUser(this.idu, { active: true });
-    this._disabledU.disabledAuth(  this.idu ).subscribe( data =>   {
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'user', this.idu, { active: true }
+    ).then(()=>{
+      this.serviceMod3.setUser(this.idu, { active: true });
+      this._disabledU.disabledAuth(  this.idu ).subscribe( data =>   {
 
-      console.log('exito al deshabilitar el usuario de auth');
-       console.log(data.res);
+        console.log('exito al deshabilitar el usuario de auth');
+        console.log(data.res);
 
-    }, err => console.log('ocurrio un error al desact el usuario', err));
+      }, err => console.log('ocurrio un error al desact el usuario', err));
+
+    });
 
   }
 
@@ -484,7 +502,12 @@ export class AdminUsuariosComponent implements OnInit {
 
 
     console.log('revisar este lab', this.idlab);
-   this.serviceMod3.setLaboratorio(this.idlab, facil);
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'cfFacil', this.idlab, facil
+    ).then(()=>{
+      this.serviceMod3.setLaboratorio(this.idlab, facil);
+    });
+  
 
   }
 
@@ -500,6 +523,9 @@ export class AdminUsuariosComponent implements OnInit {
 
       lab.relatedPers[id] = true;
 
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'cfFacil', this.idlab, lab
+      ).then(()=>{
       this.serviceMod3.setLaboratorio(this.idlab, lab)
         .then(() => {
 
@@ -510,6 +536,7 @@ export class AdminUsuariosComponent implements OnInit {
             showConfirmButton: true
           });
         });
+      });
     } else {
 
       swal({

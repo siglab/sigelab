@@ -482,27 +482,31 @@ export class SolicitudMantenimientoComponent implements OnInit {
     }
 
     this.servicioMod2.addSolicitudMantenimiento(this.reserMan).then(data => {
-      this.enviarNotificacionesCorreo();
+      this.servicioMod2.Trazability(
+        this.user.uid, 'create', 'request', data.id, this.reserMan
+      ).then(()=>{
+        this.enviarNotificacionesCorreo();
 
-      swal({
-        type: 'success',
-        title: 'Se ha agregado la solicitud, el ID de la solicitud es: '+data.id,
-        showCancelButton: true,
-        confirmButtonText: 'OK',
-        timer: 5000,
-
-
-      }).then((result) => {
-
-        if (result.value) {
-          result.dismiss === swal.DismissReason.cancel
-          this.cerrarModal('modal2');
-          this.listaArchivos = [];
-          this.inicializarMante();
-        }
-
+        swal({
+          type: 'success',
+          title: 'Se ha agregado la solicitud, el ID de la solicitud es: '+data.id,
+          showCancelButton: true,
+          confirmButtonText: 'OK',
+          timer: 5000,
+  
+  
+        }).then((result) => {
+  
+          if (result.value) {
+            result.dismiss === swal.DismissReason.cancel
+            this.cerrarModal('modal2');
+            this.listaArchivos = [];
+            this.inicializarMante();
+          }
+  
+        });
       });
-         
+             
     });
    
   }
@@ -610,33 +614,6 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   cerrarAlerta(){
     swal.close();
-  }
-
-  subir(){
-    const fecha = new Date();
-    const reser = {
-      cfOrgUnit:'',
-      headquarter:'',
-      cfFacil:'jf2M1PRazsokIxoJpiJs',
-      createdBy:'bZXTVtCUyXN2pqU9PUf4r4jEy1j2',
-      requestDesc:'el equipo no enciende',
-      requestType:'mentenimiento',
-      maintenanceType:'preventivo',
-      providersInfo:[{name:'samsungrepuestos',contactNumbers:['4534534','3344444'],attachments:{}},
-                     {name:'lgrepuestos',contactNumbers:['242542','674353486787'],attachments:{}}],
-      relatedEquipments:{
-        CiRKr35nQQx0287yp7DN: true
-      },
-      relatedComponents:{
-        m9hgyQKVt9XCgbHPl9gX:true
-      },
-      status:'pendiente',
-      active:true,
-      createdAt:fecha.toISOString(),
-      updatedAt:fecha.toISOString()
-    }
-
-    this.servicioMod2.addSolicitudMantenimiento(reser);
   }
 
 

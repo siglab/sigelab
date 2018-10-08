@@ -1077,7 +1077,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             if (element) {
               const aux = this.sugerencia.data[cont].llave.split('.');
 
-              if (aux.length != 2) {
+              if (aux.length != 2) { 
                 if (aux == 'faculties' || aux == 'departments') {
                   if (this.sugerencia.data[cont].quitar) {
                     const obj = {};

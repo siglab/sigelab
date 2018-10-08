@@ -9,6 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { Modulo2Service } from '../services/modulo2.service';
+import { ok } from 'assert';
 
 declare var $: any;
 @Component({
@@ -85,6 +86,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
   role:any;
   moduloNivel2 = false;
+
+  user = this.servicioMod2.getLocalStorageUser();
 
   constructor(private obs: ObservablesService,
               private servicioMod2:Modulo2Service) { }
@@ -417,21 +420,28 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       console.log(proyect);
 
 
-      this.servicioMod2.addProyecto(proyect)
-        .then((ok) => {
-
+      this.servicioMod2.addProyecto(proyect).then((ok) => {
+        this.servicioMod2.Trazability(
+          this.user.uid, 'create', 'project', ok.id, proyect
+        ).then(()=>{
           const lab = { relatedProjects: {} };
           lab.relatedProjects[ok.id] = true;
 
-          this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
+          this.servicioMod2.Trazability(
+            this.user.uid, 'update', 'cfFacil', this.id_lab, lab
+          ).then(()=>{
+            this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
 
-          swal({
-            type: 'success',
-            title: 'Usuario ya vinculado',
-            showConfirmButton: true
+            swal({
+              type: 'success',
+              title: 'Usuario ya vinculado',
+              showConfirmButton: true
+            });
           });
 
-        });
+      });
+    });
+
 
     }
 
@@ -457,15 +467,21 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
     });
 
-    this.servicioMod2.setProyecto(this.id_proj, proyect)
-      .then(() => {
-        swal({
-          type: 'success',
-          title: 'Actualizado correctamente',
-          showConfirmButton: true
-        });
+    this.servicioMod2.Trazability(
+      this.user.uid, 'update', 'project', this.id_proj, proyect
+    ).then(()=>{
+
+      this.servicioMod2.setProyecto(this.id_proj, proyect)
+        .then(() => {
+          swal({
+            type: 'success',
+            title: 'Actualizado correctamente',
+            showConfirmButton: true
+          });
       });
 
+    });
+   
   }
 
   updatedSingleProject() {
@@ -480,24 +496,33 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       const persona = this.person;
 
       this.servicioMod2.addPersona(persona).then((ok) => {
-        const pro = {
-          projectName: this.proyecto.nombre,
-          ciNumber: this.proyecto.ci,
-          projectDesc: this.proyecto.descripcion,
-          active: this.proyecto.estado,
-          relatedPers: {},
-          updatedAt: this.fecha.toISOString()
-
-        };
-        pro.relatedPers[ok.id] = true;
-        this.servicioMod2.setProyecto(this.id_proj, pro).then(() => {
-
-          swal({
-            type: 'success',
-            title: ' Proyecto agregado correctamente',
-            showConfirmButton: true
+        this.servicioMod2.Trazability(
+          this.user.uid, 'create', 'cfPers', ok.id, persona
+        ).then(()=>{
+          const pro = {
+            projectName: this.proyecto.nombre,
+            ciNumber: this.proyecto.ci,
+            projectDesc: this.proyecto.descripcion,
+            active: this.proyecto.estado,
+            relatedPers: {},
+            updatedAt: this.fecha.toISOString()
+  
+          };
+          pro.relatedPers[ok.id] = true;
+          this.servicioMod2.Trazability(
+            this.user.uid, 'update', 'project', this.id_proj, pro
+          ).then(()=>{
+            this.servicioMod2.setProyecto(this.id_proj, pro).then(() => {
+    
+              swal({
+                type: 'success',
+                title: ' Proyecto agregado correctamente',
+                showConfirmButton: true
+              });
+            });
           });
         });
+
       });
     }
   }
@@ -516,6 +541,9 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
      this.servicioMod2.addPersona(persona).then((ok) => {
 
+      this.servicioMod2.Trazability(
+        this.user.uid, 'create', 'cfPers', ok.id, persona
+      ).then(()=>{
         const per = {
           activo: persona.active,
           idpers: ok.id,
@@ -526,18 +554,25 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
         this.proyecto.personal.push(per);
 
-
         const lab = { relatedPers: {} };
 
         lab.relatedPers[ok.id] = true;
-       this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
 
-        swal({
-          type: 'success',
-          title: ' Personal agregado correctamente',
-          showConfirmButton: true
+        this.servicioMod2.Trazability(
+          this.user.uid, 'update', 'project', this.id_proj, lab
+        ).then(()=>{
+          this.servicioMod2.setDocLaboratorio(this.id_lab, lab);         
+          swal({
+            type: 'success',
+            title: ' Personal agregado correctamente',
+            showConfirmButton: true
+          });
         });
       });
+        
+     });
+
+ 
     }
   }
   applyFilter(filterValue: string) {
