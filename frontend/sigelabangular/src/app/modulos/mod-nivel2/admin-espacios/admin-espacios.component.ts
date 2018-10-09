@@ -88,7 +88,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     const now = moment().format();
     console.log(now);
-  
+
     this.sus = this.obs.currentObjectEsp.subscribe(data => {
       this.getRoles(data.roles);
       if (data.length !== 0) {
@@ -213,7 +213,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             const practica = data.data();
             this.servicioMod2.buscarProgramacion(clave).then(data2 => {
 
-             
+
               data2.forEach(doc => {
                 const prog = doc.data();
                 if (prog) {
@@ -229,7 +229,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
                   };
 
                   if (practica.active) {
-  
+
                     arr.push(pract);
                   } else {
                     arr3.push(pract);
@@ -335,6 +335,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     console.log('capacidad a', item.capacity);
     // optener datos un espacio especifico
 
+     console.log('id del espacio', this.idsp);
     this.cargarImagen(this.space.map);
     this.listPracticeforSpace(this.idsp).then((ok: any) => {
 
@@ -386,14 +387,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     nuevoespacio.subHq = this.idsh;
 
-   
+
     this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
       // agrega el nuevo espacio al laboratorio actual
       this.servicioMod2.Trazability(
         this.user.uid, 'create', 'space', data.id, nuevoespacio).then(()=>{
           this.updateFaciliti(data.id);
         });
-     
+
     });
 
   }
@@ -433,7 +434,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           ).then(()=>{
 
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
-    
+
             swal({
               type: 'success',
               title: 'Actualizado Correctamente',
@@ -441,7 +442,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             });
           });
 
-    
+
         });
     });
 
@@ -550,10 +551,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     // traer array con todas las referencias de practicas con el espacio relacionado
     return new Promise((resolve, reject) => {
       this.espaestructurado.practicas.forEach(element => {
-        if (element.idEspacio[idSpace]) {
+        console.log('element array', element);
+        if (element.programacion.spaceid === idSpace) {
           array.push(element);
         }
-        console.log(cont, this.espaestructurado.practicas.length)
+        console.log(cont, this.espaestructurado.practicas.length);
         if (cont === this.espaestructurado.practicas.length) {
           resolve({ data: array });
         } else {
@@ -737,7 +739,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         prog.programacion.diahora.forEach(fecha => {
 
           const now = moment().format();
-          if (moment(now).isBetween('2018-09-27T09:11', '2018-09-27T18:11')) {
+          if (moment(now).isBetween(fecha.start, fecha.end)) {
 
             console.log('entro a la condicion actual');
             encontrado = true;

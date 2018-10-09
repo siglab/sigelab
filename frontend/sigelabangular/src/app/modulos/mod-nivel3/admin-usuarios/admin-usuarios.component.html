@@ -322,20 +322,31 @@
 
                   <mat-table #tableFacil = "matSort" [dataSource]="dataSourceFacil" matSort>
 
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                      <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+
+                    <!-- nombre Column -->
                     <ng-container matColumnDef="nombre">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                      <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.cfName}} </mat-cell>
                     </ng-container>
 
 
-
                     <mat-header-row *matHeaderRowDef="displayedColumnsFacil"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" style="cursor: pointer;" (click)="cambiardataLab(row)"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" (click)="selection.toggle(row)">
+                    </mat-row>
                   </mat-table>
-
-                  <mat-paginator #paginatorFacil="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                    [showFirstLastButtons]="true">
-                  </mat-paginator>
                 </div>
 
                          <!-- muestra lista de facultades -->

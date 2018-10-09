@@ -19,7 +19,10 @@ export class InicioAppComponent implements OnInit {
 
     down() {
 
-      $('html, body').animate({ scrollTop: '400px' }, 'slow');
+      const alto = $(window).height();
+
+
+      $('html, body').animate({ scrollTop: alto }, 'slow');
 
 
     }
@@ -27,8 +30,9 @@ export class InicioAppComponent implements OnInit {
 
 
     downAcerca() {
-
-      $('html, body').animate({ scrollTop: '800px' }, 'slow');
+      const alto = $(window).height();
+      const mitad = alto / 2;
+      $('html, body').animate({ scrollTop: mitad }, 'slow');
 
     }
 }

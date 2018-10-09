@@ -29,4 +29,7 @@ divScroll::-webkit-scrollbar-track
     color: #4b646f;
     background: #1a2226;
     overflow: hidden;
-    text-overflow: clip; }
+    text-overflow: clip;
+    flex: 0 0 50px;
+
+  }

@@ -95,7 +95,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     // abre loading mientras se cargan los datos
     this.ventana = true;
-   
+
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.sus = this.obs.currentObjectequip.subscribe(data => {
@@ -116,7 +116,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         if(!this.equiestructurado){
           this.estructurarEquip(data.uid, data.labo).then(() => {
             this.itemsel = Observable.of(this.equiestructurado.equipos);
-        
+
             this.dataSourceEquip.data = this.equiestructurado.equipos;
 
 
@@ -282,7 +282,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                  arr.push(pract);
               }
              });
-    
+
             });
         });
       })
@@ -303,7 +303,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.servicioMod2.buscarEquipo(item).then(doc => {
+           this.servicioMod2.buscarEquipo(clave).then(doc => {
             const equip =  doc.data();
 
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
@@ -483,7 +483,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     const user = this.servicioMod2.getLocalStorageUser();
     this.servicioMod2.Trazability(
       user.uid, 'update', 'cfEquip',this.equiposel.id,this.modelEquipoSel).then(()=>{
-        
+
       this.servicioMod2.updateEquip(this.equiposel.id,this.modelEquipoSel).then(()=>{
         swal.close();
         swal({
@@ -495,7 +495,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
     })
-   
+
   }
 
   iniciliazarTablas() {

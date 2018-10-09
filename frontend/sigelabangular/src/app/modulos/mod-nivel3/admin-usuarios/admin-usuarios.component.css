@@ -23,6 +23,9 @@ max-height: 500px;
 color: black;
 }
 
+.customWidthClass{
+  flex: 0 0 50px;
+}
 .alt {
 
   height: 28px;

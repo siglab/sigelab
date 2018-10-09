@@ -12,6 +12,7 @@ import { QrService } from '../../mod-nivel2/services/qr.service';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
 import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { ROLESARRAY } from '../../../config';
+import { SelectionModel } from '@angular/cdk/collections';
 
 declare var $: any;
 
@@ -78,7 +79,9 @@ export class AdminUsuariosComponent implements OnInit {
   sortPers: MatSort;
 
   // atributos tabla  laboratorios
-  displayedColumnsFacil = ['nombre'];
+  displayedColumnsFacil = [ 'select',  'nombre'];
+  selection = new SelectionModel(true, []);
+
   dataSourceFacil = new MatTableDataSource();
   @ViewChild('paginatorFacil')
   paginatorFacil: MatPaginator;
@@ -351,8 +354,8 @@ export class AdminUsuariosComponent implements OnInit {
        // valida la seleccion de un laboratorio o una facultad antes de ejecutar
 
         //  objeto para persona
-    this.person.cfFirstNames = this.nombre;
-    (this.person.cfFamilyNames = this.apellido),
+      this.person.cfFirstNames = this.nombre;
+     (this.person.cfFamilyNames = this.apellido),
       (this.person.type = this.type),
       (this.person.active = this.estado_p),
       // objeto para usuario
@@ -367,7 +370,7 @@ export class AdminUsuariosComponent implements OnInit {
              // crea la llave del lab como objeto y agrega el rol dentro
             this.setKeyAdmin();
        } else {
-           // otros roles
+           // otros approles
           this.arrayPract.forEach(obj => {
           this.usuario.appRoles[obj.id] = true;
         });
@@ -861,12 +864,13 @@ export class AdminUsuariosComponent implements OnInit {
 
   includeAdmin() {
 
+    const rolesNivel2 = [ 'yoVd80ZvcdgUf1a44ORB',  '6ITqecW7XrgTLaW6fpn6',  'FH5dgAP3EjI8rGKrX0mP',  'S9wr9uK5BBF4yQZ7CwqX' ];
+
     let includ = false;
      this.arrayPract.forEach(elemen => {
 
-      if ( elemen.id === 'S9wr9uK5BBF4yQZ7CwqX') {
-        includ =  true;
-      }
+      includ =  rolesNivel2.includes( elemen.id );
+
     });
      return includ;
   }
@@ -886,5 +890,16 @@ export class AdminUsuariosComponent implements OnInit {
       title: 'No se puede agregar el rol a la persona seleccionada.',
       showConfirmButton: true
     });
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.displayedColumnsFacil.length;
+    return numSelected === numRows;
+  }
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSourceFacil.data.forEach(row => this.selection.select(row));
   }
 }
