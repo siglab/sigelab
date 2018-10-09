@@ -109,7 +109,7 @@ export class AdminPracticasComponent implements OnInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-  
+
     this.metodoInicio();
   }
 
@@ -258,7 +258,7 @@ export class AdminPracticasComponent implements OnInit {
         if(this.pracestructurado){
           resolve();
         }
-       
+
 
       });
     });
@@ -278,17 +278,17 @@ export class AdminPracticasComponent implements OnInit {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-   
+
         this.servicioMod2.buscarPractica(clave).then(data => {
           const practica = data.data();
           this.servicioMod2.buscarProgramacion(clave).then(data2 => {
 
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
-            
+
             data2.forEach(prog => {
               if (prog) {
                 console.log('id que ingreso del espacio', prog['space']);
-  
+
                 const pract = {
                   id_pract: data.id,
                   nombre: practica.practiceName,
@@ -306,15 +306,15 @@ export class AdminPracticasComponent implements OnInit {
                 };
                 // construye los eventos para el calendario de cada laboratorio
 
-  
+
                 if (practica.active) {
-  
+
                   arr.push(pract);
                 } else {
                   arr3.push(pract);
                 }
               }
-  
+
             });
 
 
@@ -322,7 +322,7 @@ export class AdminPracticasComponent implements OnInit {
           });
 
         });
-        
+
 
       }
     }
@@ -513,7 +513,7 @@ export class AdminPracticasComponent implements OnInit {
     this.id_pro = row.programacion.id_pro;
     this.initCalendarModal(row.programacion.horario);
     console.log(row.programacion.horario);
-  
+
   }
 
   activarData(row){
@@ -538,11 +538,11 @@ export class AdminPracticasComponent implements OnInit {
         this.selection.select(element2)
         console.log(this.selection.selected);
         }
-        
+
       }
-  
+
     }
-    
+
   }
 
   addPractice(stepper) {
@@ -596,8 +596,8 @@ export class AdminPracticasComponent implements OnInit {
     console.log(practica, 'programing', programming);
     console.log(this.mainSpace);
     if (practica) {
-    
-    
+
+
         this.servicioMod2.addPractica(practica).then(ok => {
           this.servicioMod2.Trazability(
             this.user.uid, 'create', 'practice', ok.id, practica
@@ -612,22 +612,22 @@ export class AdminPracticasComponent implements OnInit {
             this.servicioMod2.addProgramacion(ok.id, programming).then(doc => {
               this.servicioMod2.TrazabilitySubCollection(
                 this.user.uid, 'create', 'practice', ok.id, 'programmingData', doc.id, programming
-              ).then(()=>{
+              ).then(() => {
                 swal({
                   type: 'success',
                   title: 'Almacenado correctamente',
                   showConfirmButton: true
                 });
-      
+
                 this.clearObj();
                 stepper.reset();
               });
             });
-  
-  
+
+
         });
       });
-    
+
 
     }
 
@@ -748,14 +748,14 @@ export class AdminPracticasComponent implements OnInit {
         this.user.uid, 'update', 'practice', this.id_prc, 'programmingData', this.id_pro, prog
       ).then(()=>{
         this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog);
-  
+
           swal({
             type: 'success',
             title: 'Actualizado Correctamente',
             showConfirmButton: true
           });
         });
- 
+
       });
     });
 

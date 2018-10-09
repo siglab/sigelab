@@ -12,6 +12,7 @@ import { QrService } from '../../mod-nivel2/services/qr.service';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
 import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { ROLESARRAY } from '../../../config';
+import { SelectionModel } from '@angular/cdk/collections';
 
 declare var $: any;
 
@@ -54,7 +55,6 @@ export class AdminUsuariosComponent implements OnInit {
     clientRole: {},
     type: '',
     relatedEquipments: {},
-    createdAt: this.fecha.toISOString(),
     updatedAt: this.fecha.toISOString()
   };
   // objeto usuario
@@ -79,7 +79,9 @@ export class AdminUsuariosComponent implements OnInit {
   sortPers: MatSort;
 
   // atributos tabla  laboratorios
-  displayedColumnsFacil = ['nombre'];
+  displayedColumnsFacil = [ 'select',  'nombre'];
+  selection = new SelectionModel(true, []);
+
   dataSourceFacil = new MatTableDataSource();
   @ViewChild('paginatorFacil')
   paginatorFacil: MatPaginator;
@@ -419,11 +421,11 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   actualizarPers() {
-    // $('#modal').modal('hide');
+       // valida la seleccion de un laboratorio o una facultad antes de ejecutar
 
-    //  objeto para persona
-    this.person.cfFirstNames = this.nombre;
-    (this.person.cfFamilyNames = this.apellido),
+        //  objeto para persona
+      this.person.cfFirstNames = this.nombre;
+     (this.person.cfFamilyNames = this.apellido),
       (this.person.type = this.type),
       (this.person.active = this.estado_p),
       // objeto para usuario
@@ -438,7 +440,7 @@ export class AdminUsuariosComponent implements OnInit {
              // crea la llave del lab como objeto y agrega el rol dentro
             this.setKeyAdmin();
        } else {
-           // otros roles
+           // otros approles
           this.arrayPract.forEach(obj => {
           this.usuario.appRoles[obj.id] = true;
         });
@@ -458,15 +460,12 @@ export class AdminUsuariosComponent implements OnInit {
       this.updateAllFacil();
     }
 
-    if (!this.usuario.active) {
-      this.disabledUserAuht();
-    }
 
     // metodo firebase para subir un usuario actualizado
     if (this.idu) {
       this.serviceMod3.Trazability(
         this.user.uid, 'update', 'user', this.idu, this.usuario
-      ).then(()=>{
+      ).then(() => {
         this.serviceMod3.updatedUser(this.idu, this.usuario)
           .then(() => {
           });
@@ -477,7 +476,7 @@ export class AdminUsuariosComponent implements OnInit {
     if (this.idp) {
       this.serviceMod3.Trazability(
         this.user.uid, 'update', 'cfPers', this.idp, this.person
-      ).then(()=>{
+      ).then(() => {
         this.serviceMod3.updatedPersona(this.idp, this.person).then(
           () => {
           // toca resetear en todos los laboratorios si el estado cambia
@@ -492,6 +491,8 @@ export class AdminUsuariosComponent implements OnInit {
 
     }
 
+
+
     // metodo firebase para subir una persona actualizada
   }
 
@@ -503,7 +504,7 @@ export class AdminUsuariosComponent implements OnInit {
       nuevoEstado.relatedPers[this.idp] = false;
       this.serviceMod3.Trazability(
         this.user.uid, 'update', 'cfPers', this.idlab, { active: false }
-      ).then(()=>{
+      ).then(() => {
         // inactiva el usuario dentro de la coleccion persona
         this.serviceMod3.setPersona(this.idlab, { active: false });
       });
@@ -512,7 +513,7 @@ export class AdminUsuariosComponent implements OnInit {
       result.forEach(doc => {
         this.serviceMod3.Trazability(
           this.user.uid, 'update', 'cfFacil', doc.id, nuevoEstado
-        ).then(()=>{
+        ).then(( ) => {
           this.serviceMod3.setLaboratorio(doc.id, nuevoEstado);
         });
       });
@@ -524,7 +525,7 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'user', this.idu, { active: true }
-    ).then(()=>{
+    ).then(() => {
       this.serviceMod3.setUser(this.idu, { active: true });
       this._disabledU.disabledAuth(  this.idu ).subscribe( data =>   {
 
@@ -568,10 +569,10 @@ export class AdminUsuariosComponent implements OnInit {
     console.log('revisar este lab', this.idlab);
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'cfFacil', this.idlab, facil
-    ).then(()=>{
+    ).then(() => {
       this.serviceMod3.setLaboratorio(this.idlab, facil);
     });
-  
+
 
   }
 
@@ -585,7 +586,7 @@ export class AdminUsuariosComponent implements OnInit {
 
       this.serviceMod3.Trazability(
         this.user.uid, 'update', 'cfFacil', this.idlab, lab
-      ).then(()=>{
+      ).then(() => {
       this.serviceMod3.setLaboratorio(this.idlab, lab)
         .then(() => {
 
@@ -810,13 +811,10 @@ export class AdminUsuariosComponent implements OnInit {
     let encontrado = false;
     this.niveles.forEach(elemen => {
       if (elemen.id === this.rolSelect) {
-        this.arrayPract = [];
 
         this.arrayPract.forEach(el => {
-          if (el.id === 'UlcSFw3BLPAdLa533QKP'  || el.id === this.rolSelect
-            || el.id === 'W6ihltvrx8Gc7jVucH8M' || el.id === '6ITqecW7XrgTLaW6fpn6'
-            || el.id === 'yoVd80ZvcdgUf1a44ORB' || el.id === 'FH5dgAP3EjI8rGKrX0mP'
-            || el.id ===  'k7uRIEzj99l7EjZ3Ppql') {
+          if (  el.id === this.rolSelect || el.id === '6ITqecW7XrgTLaW6fpn6'
+                || el.id === 'yoVd80ZvcdgUf1a44ORB'  || el.id === 'FH5dgAP3EjI8rGKrX0mP') {
             encontrado = true;
           }
         });
@@ -833,7 +831,34 @@ export class AdminUsuariosComponent implements OnInit {
       }
     });
 
+  }
 
+  rolSelectAnalistaAuxiliarAdmin() {
+
+
+    let encontrado = false;
+    this.niveles.forEach(elemen => {
+      if (elemen.id === this.rolSelect) {
+
+        this.arrayPract.forEach(el => {
+          if (  el.id === this.rolSelect || el.id === 'S9wr9uK5BBF4yQZ7CwqX') {
+
+            encontrado = true;
+
+          }
+        });
+
+        if (!encontrado) {
+          this.arrayPract.push(elemen);
+          this.alertSuccess();
+
+        } else {
+
+           this.alertInfo();
+        }
+
+      }
+    });
 
   }
 
@@ -842,18 +867,15 @@ export class AdminUsuariosComponent implements OnInit {
     if (this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql') {
       this.rolSelectQrCm();
 
-
       // usuario Comunicacion masiva
     }
     if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
       this.rolSelectQrCm();
 
-
       // usuario Nivel 3.5 o Administrativo
     }
     if (this.rolSelect === 'UlcSFw3BLPAdLa533QKP') {
       this.rolSelectTresCinco();
-
 
       // usuario 2.5 o usuario por facultad
     }
@@ -862,9 +884,25 @@ export class AdminUsuariosComponent implements OnInit {
 
       // usuario administrador de laboratorio
     } if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
-      this.rolSelectAdminLab();
 
-    }
+       this.rolSelectAdminLab();
+
+      // usuario analista nivel2
+    } if (this.rolSelect === '6ITqecW7XrgTLaW6fpn6') {
+
+        this. rolSelectAnalistaAuxiliarAdmin();
+
+        // usuario auxiliar nivel 2
+   } if (this.rolSelect === 'FH5dgAP3EjI8rGKrX0mP') {
+
+    this. rolSelectAnalistaAuxiliarAdmin();
+      // usuario administrativo nivel 2
+  } if (this.rolSelect === 'yoVd80ZvcdgUf1a44ORB') {
+
+    this. rolSelectAnalistaAuxiliarAdmin();
+
+  }
+
   }
 
   buscarRole(rol) {
@@ -896,13 +934,13 @@ export class AdminUsuariosComponent implements OnInit {
 
   includeAdmin() {
 
+    const rolesNivel2 = [ 'yoVd80ZvcdgUf1a44ORB',  '6ITqecW7XrgTLaW6fpn6',  'FH5dgAP3EjI8rGKrX0mP',  'S9wr9uK5BBF4yQZ7CwqX' ];
+
     let includ = false;
      this.arrayPract.forEach(elemen => {
 
-      if ( elemen.id === 'S9wr9uK5BBF4yQZ7CwqX') {
+      includ =  rolesNivel2.includes( elemen.id );
 
-        includ =  true;
-      }
     });
      return includ;
   }
@@ -922,5 +960,16 @@ export class AdminUsuariosComponent implements OnInit {
       title: 'No se puede agregar el rol a la persona seleccionada.',
       showConfirmButton: true
     });
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.displayedColumnsFacil.length;
+    return numSelected === numRows;
+  }
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSourceFacil.data.forEach(row => this.selection.select(row));
   }
 }

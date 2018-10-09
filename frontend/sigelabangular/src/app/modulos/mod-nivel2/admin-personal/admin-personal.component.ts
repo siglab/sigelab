@@ -442,10 +442,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     ).then(()=>{
       this.servicioMod2.setPersona(this.idp, pers).then(
         () => {
-        
+
         this.servicioMod2.Trazability(
           this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
-        ).then(()=>{
+        ).then(() => {
          this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
           swal({
             type: 'success',
@@ -453,7 +453,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             showConfirmButton: true
           });
         });
-  
+
       });
     });
 
@@ -539,7 +539,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     ).then(()=>{
       this.servicioMod2.setUser(path, newUser);
     });
-   
+
 
   }
 
@@ -561,7 +561,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     ).then(()=>{
       this.servicioMod2.setDocLaboratorio(this.idlab, facil);
     });
-   
+
 
   }
 

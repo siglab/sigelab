@@ -107,6 +107,11 @@ strong {
   color: #333;
 }
 
+.customWidthClass{
+  flex: 0 0 50px;
+}
+
+
 #wrapper {
   width: 100%;
   max-width: 800px;

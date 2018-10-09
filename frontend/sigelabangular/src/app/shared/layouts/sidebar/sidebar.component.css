@@ -24,3 +24,12 @@ divScroll::-webkit-scrollbar-track
   background-color: #222d32;;
   cursor: pointer;
 }
+
+  .header {
+    color: #4b646f;
+    background: #1a2226;
+    overflow: hidden;
+    text-overflow: clip;
+    flex: 0 0 50px;
+
+  }
