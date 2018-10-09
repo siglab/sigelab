@@ -130,17 +130,11 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     this.estructuraIdPers().then((data: any) => {
-      console.log('entrooooooooooo al metodo');
-
-      // validators email
-      console.log('trae data', data);
 
       console.log('data de admin usuarios', data.user);
 
       this.dataSourcePers.data = data.user;
-      // this.dataSourcePers.sort = this.sortPers;
-      // this.dataSourcePers.paginator = this.paginatorPers;
-      console.log('variable talb', this.dataSourcePers.data);
+
 
       swal({
         title: 'Cargando un momento...',
@@ -170,7 +164,7 @@ export class AdminUsuariosComponent implements OnInit {
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
     this.role = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.role);
+
     for (const clave in this.role) {
       if (this.role[clave]) {
         if (clave === 'moduloNivel2') {
@@ -188,7 +182,6 @@ export class AdminUsuariosComponent implements OnInit {
 
         if (element.lvl !== 'nivel1' && element.lvl !== 'nivel3') {
           this.niveles.push({ id: doc.id, nombre: element.roleName });
-          console.log(this.niveles);
         }
       });
     });
@@ -203,51 +196,50 @@ export class AdminUsuariosComponent implements OnInit {
 
           const element = doc.data();
 
-          let nodoUser = this.buscarRole(element.appRoles);
-
-          if (element.cfPers === '') {
-            nodoUser = true;
-          }
-
-          console.log(element.cfPers);
-
           this.serviceMod3
             .getPersona(element.cfPers ? element.cfPers : '123')
             .then(data => {
               const persona = data.data() ? data.data() : ' ninguno';
 
-              this.nombresRoles(
-                nodoUser
-                  ? element.appRoles
-                  : this.clientRole(persona['clientRole'])
-              ).then(rol => {
-                console.log(rol['llave']);
-                const usuario = {
-                  id: doc.id,
-                  nombre: persona['cfFirstNames']
-                    ? persona['cfFirstNames']
-                    : 'Ninguno',
-                  apellido: persona['cfFamilyNames']
-                    ? persona['cfFamilyNames']
-                    : 'Ninguno',
-                  idPers: element.cfPers,
-                  email: element.email,
-                  estado_p: persona['active'],
-                  estado_u: element.active,
-                  type: persona['type'],
-                  roles: rol['role'],
-                  llave: rol['llave']
-                };
-                console.log('usuario', usuario);
-                usuarios.push(usuario);
+              let varconsulta;
+              if(element.cfPers === ''){
+                varconsulta = undefined;
+              }else{              
+                varconsulta = this.clientRole(persona['clientRole']);
+              }
 
-                console.log('array de usuarios', usuarios);
 
-                console.log('tam', user.size);
-                if (user.size === usuarios.length) {
-                  console.log('array final', usuarios);
-                  resolve({ user: usuarios });
-                }
+
+              this.nombresRoles(element.appRoles).then(rol => {
+            ;
+                this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
+                  
+                  const usuario = {
+                    id: doc.id,
+                    nombre: persona['cfFirstNames']
+                      ? persona['cfFirstNames']
+                      : 'Ninguno',
+                    apellido: persona['cfFamilyNames']
+                      ? persona['cfFamilyNames']
+                      : 'Ninguno',
+                    idPers: element.cfPers,
+                    email: element.email,
+                    estado_p: persona['active'],
+                    estado_u: element.active,
+                    type: persona['type'],
+                    roles: finalrol['role'],
+                    llave: finalrol['llave']
+                  };
+                  console.log(usuarios);
+                  usuarios.push(usuario);
+  
+                  console.log('tam', user.size, usuarios.length);
+                  if (user.size === usuarios.length) {
+                    console.log('array final', usuarios);
+                    resolve({ user: usuarios });
+                  }
+                });
+
               });
             });
         });
@@ -259,6 +251,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   clientRole(arrlab) {
     const roles = {};
+    const roleslabs = {};
     for (const key in arrlab) {
       if (arrlab.hasOwnProperty(key)) {
         const element = arrlab[key];
@@ -268,34 +261,40 @@ export class AdminUsuariosComponent implements OnInit {
             const element2 = element[clave];
             // tslint:disable-next-line:no-unused-expression
             roles[clave] = true;
+            if(!roleslabs[clave]){
+              roleslabs[clave] = [key];
+            }else{
+              roleslabs[clave].push(key);
+            }
+            
           }
         }
       }
     }
 
-    return roles;
+    return {roles, roleslabs};
   }
 
-  nombresRoles(roles) {
+  nombresRoles(appRoles) {
     let nameroles = '';
     const llaves = [];
 
     let sixe = 0;
-    for (const key in roles) {
-      if (roles.hasOwnProperty(key)) {
-        if (roles[key]) {
+    for (const key in appRoles) {
+      if (appRoles.hasOwnProperty(key)) {
+        if (appRoles[key]) {
           sixe++;
         }
       }
     }
     let contador = 0;
     const promise = new Promise((resolve, reject) => {
-      for (const key in roles) {
-        if (roles.hasOwnProperty(key)) {
-          if (roles[key]) {
+      for (const key in appRoles) {
+        if (appRoles.hasOwnProperty(key)) {
+          if (appRoles[key]) {
             this.serviceMod3.consultarNombreRol(key).then(doc => {
               if (doc.data().roleName !== 'nivel1') {
-                llaves.push({ id: doc.id, nombre: doc.data().roleName });
+                llaves.push({ id: doc.id, nombre: doc.data().roleName, tipo:'appRoles' });
               }
 
               if (sixe > 1) {
@@ -317,6 +316,77 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     return promise;
+  }
+
+  nombresClientRoles(varconsulta, nameroles, llaves){
+
+    const promise = new Promise((resolve, reject) => {
+      if(varconsulta ? Object.keys(varconsulta.roles).length != 0 : false ){
+        const appRoles = varconsulta.roles;
+
+        let sixe = 0;
+        for (const key in appRoles) {
+          if (appRoles.hasOwnProperty(key)) {
+            if (appRoles[key]) {
+              sixe++;
+            }
+          }
+        }
+        let contador = 0;
+        
+        for (const key in appRoles) {
+          if (appRoles.hasOwnProperty(key)) {
+            if (appRoles[key]) {
+              this.serviceMod3.consultarNombreRol(key).then(doc => {
+                if (doc.data().roleName !== 'nivel1') {
+  
+                  llaves.push({ id: doc.id, nombre: doc.data().roleName, 
+                                labs: varconsulta.roleslabs[doc.id] ,tipo:'clientRole' });
+  
+                }
+  
+                if (sixe > 1) {
+                  nameroles += doc.data().roleName + ',';
+                }
+                if (sixe === 1) {
+                  nameroles = doc.data().roleName;
+                }
+  
+                contador++;
+  
+                if (sixe === contador) {
+                  resolve({ role: nameroles, llave: llaves });
+                }
+              });
+            }
+          }
+        }
+      }else{
+        resolve({ role: nameroles, llave: llaves });
+      }
+
+    });
+
+    return promise;
+  }
+
+  agregarRol(){
+    let bool = false;
+    this.arrayPract.forEach(doc => {
+      if(doc.id == this.rolSelect){
+        bool = true;
+      }
+    });
+
+    if(bool){
+      swal({
+        type: 'error',
+        title: 'El rol ya se encuentra agregado, de click sobre el para mas informacion',
+        showConfirmButton: true
+      });
+    }else{
+      $('#modal').modal('show');
+    }
   }
 
   applyFilterPers(filterValue: string) {

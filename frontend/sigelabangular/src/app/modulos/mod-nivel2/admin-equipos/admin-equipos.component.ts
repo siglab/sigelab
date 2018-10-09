@@ -303,9 +303,9 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.servicioMod2.buscarEquipo(item).then(doc => {
+           this.servicioMod2.buscarEquipo(clave).then(doc => {
             const equip =  doc.data();
-
+            console.log(equip);
              // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 const equipo = {
                   id: doc.id,

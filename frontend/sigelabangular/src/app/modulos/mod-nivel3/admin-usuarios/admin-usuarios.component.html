@@ -218,7 +218,7 @@
                     </mat-select>
                   </mat-form-field>
                   <span   class="input-group-btn">
-                    <button *ngIf="this.rolSelect" class="btn btn-success" type="button" data-toggle="modal" data-target="#modal" tabindex="-1"><i
+                    <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button" ><i
                         class="fa fa-plus"></i></button>
                   </span>
                 </div>
