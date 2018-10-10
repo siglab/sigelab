@@ -315,6 +315,11 @@ export class AdminQrComponent implements OnInit {
     save.click();
   }
 
+  addAll() {
+
+    this.qrserv.addOldQrs();
+  }
+
   // descarga todos los qrs de la tabla
   downloadAllTableCsv() {
 
