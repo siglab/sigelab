@@ -21,13 +21,19 @@
     <li class="header text-center" *ngIf="moduloNivel2"> NIVEL DOS  </li>
     <app-bar-admin-laboratorios  *ngIf="moduloNivel2"></app-bar-admin-laboratorios>
     <li *ngIf="moduloNivel3"  class="header text-center"> NIVEL TRES  </li>
-    <app-bard-admin-qr  *ngIf="moduloQr || moduloNivel3"    ></app-bard-admin-qr>
-    <app-bar-admin-laboratorio-superior *ngIf="moduloNivel3 || moduloNivel25"></app-bar-admin-laboratorio-superior>
     <app-bar-admin-usuarios *ngIf="moduloNivel3"></app-bar-admin-usuarios>
+    <app-bard-admin-qr  *ngIf="moduloQr || moduloNivel3"    ></app-bard-admin-qr>
+    <app-bar-comunicacion-masiva *ngIf="moduloComMasiva"></app-bar-comunicacion-masiva>
+
+    <li *ngIf="moduloNivel25"  class="header text-center"> NIVEL 2.5  </li>
+    <app-bar-admin-laboratorio-superior *ngIf="moduloNivel3 || moduloNivel25"></app-bar-admin-laboratorio-superior>
+    <app-bar-solicitudes-nivel3 *ngIf="moduloNivel3 || moduloNivel25"></app-bar-solicitudes-nivel3>
+
+    <li *ngIf="moduloNivel35"  class="header text-center"> NIVEL 3.5  </li>
     <app-bar-indicadores *ngIf="moduloNivel3 || moduloNivel25 || moduloNivel35"></app-bar-indicadores>
    <!--  <li style="color: #FFFFFF;">nivel 3</li> -->
-    <app-bar-solicitudes-nivel3 *ngIf="moduloNivel3 || moduloNivel25"></app-bar-solicitudes-nivel3>
-    <app-bar-comunicacion-masiva *ngIf="moduloComMasiva"></app-bar-comunicacion-masiva>
+
+
   </section>
   <!-- /.sidebar -->
 </aside>

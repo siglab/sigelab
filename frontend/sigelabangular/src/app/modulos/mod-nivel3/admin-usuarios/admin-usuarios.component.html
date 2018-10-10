@@ -211,7 +211,7 @@
                 <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
                 <div class="input-group">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="this.rolSelect"  (change)="alertAddLab()" class="alt" name="rolesSelect" id="facul">
+                    <mat-select [(ngModel)]="this.rolSelect" class="alt" name="rolesSelect" id="facul">
                       <mat-option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </mat-option>
 
 
@@ -228,7 +228,7 @@
                 <div class="col-md-12">
                   <label class="control-label" for="listfacul"><strong>Roles actuales :</strong></label>
                   <ul class="nav nav-stacked" *ngIf="this.arrayPract.length > 0">
-                    <li *ngFor="let item of this.arrayPract; let i= index;"><a> <strong> {{item.nombre}} </strong>
+                    <li *ngFor="let item of this.arrayPract; let i= index;" (click) = "verLaboratoriosDelRol(item)"><a> <strong> {{item.nombre}} </strong>
                         <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span></a></li>
                   </ul>
                   <h5 *ngIf="this.arrayPract.length === 0"> El usuario tiene un rol de acceso básico.</h5>
@@ -360,6 +360,19 @@
 
                   <mat-table #tableFacul [dataSource]="dataSourceFacul" matSort>
 
+                    <ng-container matColumnDef="select">
+                      <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+
                     <ng-container matColumnDef="nombre">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.facultyName}} </mat-cell>
@@ -380,13 +393,13 @@
 
 
               </div>
-              <div class="modal-footer">
-                <button type="button" (click)="asignarRolaLaboratorio()" class="btn btn-success">Asignar <i class="fa fa-plus"></i>
+              <div *ngIf="!editar" class="modal-footer">
+                <button type="button" (click)="agregarClienteRol()" class="btn btn-success">Asignar <i class="fa fa-plus"></i>
                 </button>
-                <button type="button" (click)="rolSelectAdminLab()" class="btn btn-success">Asignar Admin <i class="fa fa-plus"></i>
+              </div>
+              <div *ngIf="editar" class="modal-footer">
+                <button type="button" (click)="editarAsignarLaboratorio()" class="btn btn-success">Editar<i class="fa fa-plus"></i>
                 </button>
-
-
               </div>
             </div>
           </div>
