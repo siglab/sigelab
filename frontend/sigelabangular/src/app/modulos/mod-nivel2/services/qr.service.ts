@@ -295,21 +295,42 @@ export class QrService {
    }
 
 
-  getEquipForInventory(inventory){
+  getEquipForInventory(inventory) {
     const col = this.afs.collection('cfEquip');
     const refer = col.ref.where('inventory', '==', inventory);
 
     return refer.get();
   }
 
-  addQr(doc){
-    return   this.afs.collection('qr').add(doc);   
+  addQr(doc) {
+    return   this.afs.collection('qr').add(doc);
   }
 
-  setQr(idqr, doc){
+  setQr(idqr, doc) {
     return this.afs.doc('qr/' + idqr).set(doc, { merge: true });
   }
 
+  addOldQrs() {
+
+    const qr = {
+
+      active : false,
+      cfEquip : '',
+      secQr : '',
+      updatedAt : '',
+      createdAt : new Date().toISOString(),
+    };
+
+    for (let index = 1; index <= 500 ; index++) {
+       const i = index.toString();
+       qr.secQr = i;
+      this.afs.collection('qr').doc(i).set(qr);
+    }
+
+
+
+
+  }
 
 
 

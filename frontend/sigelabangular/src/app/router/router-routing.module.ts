@@ -33,10 +33,12 @@ import { Nivel25Guard } from '../shared/services/guards/nivel2-5.guard';
 import { Nivel3Guard } from '../shared/services/guards/nivel3.guard';
 import { InicioAppComponent } from '../modulos/mod-principal/inicio-app/inicio-app.component';
 import { AdminUsuariosComponent } from '../modulos/mod-nivel3/admin-usuarios/admin-usuarios.component';
+import { QrRedirectComponent } from '../modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
 
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
+  { path: 'inventario', component: QrRedirectComponent},
   { path: 'inicio', component: InicioAppComponent},
   { path: 'registro', component: RegistroComponent},
   { path: 'principal', component: PrincipalComponent,
