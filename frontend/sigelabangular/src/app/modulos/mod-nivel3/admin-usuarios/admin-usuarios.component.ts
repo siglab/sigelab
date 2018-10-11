@@ -89,7 +89,7 @@ export class AdminUsuariosComponent implements OnInit {
   sortFacil: MatSort;
 
   // atributos tabla  facultades
-  displayedColumnsFacul = ['nombre'];
+  displayedColumnsFacul = ['select', 'nombre'];
   dataSourceFacul = new MatTableDataSource();
   @ViewChild('paginatorFacul')
   paginatorFacul: MatPaginator;
@@ -108,6 +108,14 @@ export class AdminUsuariosComponent implements OnInit {
 
   user = this.serviceMod3.getLocalStorageUser();
 
+  laboraorios: any;
+  facultades: any;
+
+
+  editar = false;
+
+  selectionList:any;
+
   constructor(private obs: ObservablesService,
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
@@ -124,25 +132,23 @@ export class AdminUsuariosComponent implements OnInit {
     this.userService.listCfFacil().subscribe(data => {
       console.log('data labs', data);
       this.dataSourceFacil.data = data;
+
+      this.laboraorios = data;
     });
 
     this.userService.listCfFaculties().subscribe(data => {
       console.log('data labs', data);
       this.dataSourceFacul.data = data;
+
+      this.facultades = data;
     });
 
     this.estructuraIdPers().then((data: any) => {
-      console.log('entrooooooooooo al metodo');
-
-      // validators email
-      console.log('trae data', data);
 
       console.log('data de admin usuarios', data.user);
 
       this.dataSourcePers.data = data.user;
-      // this.dataSourcePers.sort = this.sortPers;
-      // this.dataSourcePers.paginator = this.paginatorPers;
-      console.log('variable talb', this.dataSourcePers.data);
+
 
       swal({
         title: 'Cargando un momento...',
@@ -172,7 +178,7 @@ export class AdminUsuariosComponent implements OnInit {
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
     this.role = JSON.parse(localStorage.getItem('rol'));
-    console.log(this.role);
+
     for (const clave in this.role) {
       if (this.role[clave]) {
         if (clave === 'moduloNivel2') {
@@ -188,9 +194,8 @@ export class AdminUsuariosComponent implements OnInit {
       datos.forEach(doc => {
         const element = doc.data();
 
-        if (element.lvl !== 'nivel1' && element.lvl !== 'nivel3') {
+        if (element.lvl !== 'nivel1') {
           this.niveles.push({ id: doc.id, nombre: element.roleName });
-          console.log(this.niveles);
         }
       });
     });
@@ -205,51 +210,50 @@ export class AdminUsuariosComponent implements OnInit {
 
           const element = doc.data();
 
-          let nodoUser = this.buscarRole(element.appRoles);
-
-          if (element.cfPers === '') {
-            nodoUser = true;
-          }
-
-          console.log(element.cfPers);
-
           this.serviceMod3
             .getPersona(element.cfPers ? element.cfPers : '123')
             .then(data => {
               const persona = data.data() ? data.data() : ' ninguno';
 
-              this.nombresRoles(
-                nodoUser
-                  ? element.appRoles
-                  : this.clientRole(persona['clientRole'])
-              ).then(rol => {
-                console.log(rol['llave']);
-                const usuario = {
-                  id: doc.id,
-                  nombre: persona['cfFirstNames']
-                    ? persona['cfFirstNames']
-                    : 'Ninguno',
-                  apellido: persona['cfFamilyNames']
-                    ? persona['cfFamilyNames']
-                    : 'Ninguno',
-                  idPers: element.cfPers,
-                  email: element.email,
-                  estado_p: persona['active'],
-                  estado_u: element.active,
-                  type: persona['type'],
-                  roles: rol['role'],
-                  llave: rol['llave']
-                };
-                console.log('usuario', usuario);
-                usuarios.push(usuario);
+              let varconsulta;
+              if(element.cfPers === ''){
+                varconsulta = undefined;
+              }else{              
+                varconsulta = this.clientRole(persona['clientRole']);
+              }
 
-                console.log('array de usuarios', usuarios);
 
-                console.log('tam', user.size);
-                if (user.size === usuarios.length) {
-                  console.log('array final', usuarios);
-                  resolve({ user: usuarios });
-                }
+              this.nombresRoles(element.appRoles, 
+                 varconsulta ? data.data().faculty : '').then(rol => {
+            
+                this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
+                  
+                  const usuario = {
+                    id: doc.id,
+                    nombre: persona['cfFirstNames']
+                      ? persona['cfFirstNames']
+                      : 'Ninguno',
+                    apellido: persona['cfFamilyNames']
+                      ? persona['cfFamilyNames']
+                      : 'Ninguno',
+                    idPers: element.cfPers,
+                    email: element.email,
+                    estado_p: persona['active'],
+                    estado_u: element.active,
+                    type: persona['type'],
+                    roles: finalrol['role'],
+                    llave: finalrol['llave']
+                  };
+                  console.log(usuarios);
+                  usuarios.push(usuario);
+  
+                  console.log('tam', user.size, usuarios.length);
+                  if (user.size === usuarios.length) {
+                    console.log('array final', usuarios);
+                    resolve({ user: usuarios });
+                  }
+                });
+
               });
             });
         });
@@ -261,6 +265,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   clientRole(arrlab) {
     const roles = {};
+    const roleslabs = {};
     for (const key in arrlab) {
       if (arrlab.hasOwnProperty(key)) {
         const element = arrlab[key];
@@ -270,41 +275,66 @@ export class AdminUsuariosComponent implements OnInit {
             const element2 = element[clave];
             // tslint:disable-next-line:no-unused-expression
             roles[clave] = true;
+            if(!roleslabs[clave]){
+              roleslabs[clave] = [key];
+            }else{
+              roleslabs[clave].push(key);
+            }
+            
           }
         }
       }
     }
 
-    return roles;
+    return {roles, roleslabs};
   }
 
-  nombresRoles(roles) {
+  appRole(facul){
+    const arr = [];
+    for (const clave in facul) {
+      if (facul.hasOwnProperty(clave)) {
+
+        arr.push(clave);       
+      }
+    }
+
+    return arr;
+  }
+
+  nombresRoles(appRoles, faculty) {
     let nameroles = '';
     const llaves = [];
 
     let sixe = 0;
-    for (const key in roles) {
-      if (roles.hasOwnProperty(key)) {
-        if (roles[key]) {
+    for (const key in appRoles) {
+      if (appRoles.hasOwnProperty(key)) {
+        if (appRoles[key]) {
           sixe++;
         }
       }
     }
     let contador = 0;
     const promise = new Promise((resolve, reject) => {
-      for (const key in roles) {
-        if (roles.hasOwnProperty(key)) {
-          if (roles[key]) {
+      for (const key in appRoles) {
+        if (appRoles.hasOwnProperty(key)) {
+          if (appRoles[key]) {
             this.serviceMod3.consultarNombreRol(key).then(doc => {
               if (doc.data().roleName !== 'nivel1') {
-                llaves.push({ id: doc.id, nombre: doc.data().roleName });
+                if(doc.id == 'PFhLR4X2n9ybaZU3CR75'){
+
+                  llaves.push({ id: doc.id, fac: this.appRole(faculty), 
+                                nombre: doc.data().roleName, tipo:'appRoles' });
+                }else{
+                  llaves.push({ id: doc.id, nombre: doc.data().roleName, tipo:'appRoles' });
+                }
+
               }
 
               if (sixe > 1) {
                 nameroles += doc.data().roleName + ',';
               }
               if (sixe === 1) {
-                nameroles = doc.data().roleName;
+                nameroles += doc.data().roleName;
               }
 
               contador++;
@@ -321,6 +351,246 @@ export class AdminUsuariosComponent implements OnInit {
     return promise;
   }
 
+  nombresClientRoles(varconsulta, nameroles, llaves){
+
+    const promise = new Promise((resolve, reject) => {
+      if(varconsulta ? Object.keys(varconsulta.roles).length != 0 : false ){
+        const appRoles = varconsulta.roles;
+
+        let sixe = 0;
+        for (const key in appRoles) {
+          if (appRoles.hasOwnProperty(key)) {
+            if (appRoles[key]) {
+              sixe++;
+            }
+          }
+        }
+        let contador = 0;
+        
+        for (const key in appRoles) {
+          if (appRoles.hasOwnProperty(key)) {
+            if (appRoles[key]) {
+              this.serviceMod3.consultarNombreRol(key).then(doc => {
+                if (doc.data().roleName !== 'nivel1') {
+  
+                  llaves.push({ id: doc.id, nombre: doc.data().roleName, 
+                                labs: varconsulta.roleslabs[doc.id] ,tipo:'clientRole' });
+  
+                }
+  
+                if (sixe > 1) {
+                  nameroles += doc.data().roleName + ',';
+                }
+                if (sixe === 1) {
+                  nameroles += doc.data().roleName;
+                }
+  
+                contador++;
+  
+                if (sixe === contador) {
+                  resolve({ role: nameroles, llave: llaves });
+                }
+              });
+            }
+          }
+        }
+      }else{
+        resolve({ role: nameroles, llave: llaves });
+      }
+
+    });
+
+    return promise;
+  }
+
+
+  agregarRol(){
+
+    this.editar = false;
+    this.selection.clear();
+
+    const appRoles = ['k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M', 
+                      'UlcSFw3BLPAdLa533QKP', 'lCpNW2BmPgMSHCD1EBpT'];
+
+    const roleSup = ['UlcSFw3BLPAdLa533QKP','PFhLR4X2n9ybaZU3CR75', 'lCpNW2BmPgMSHCD1EBpT'];
+
+
+    let bool = false;
+    let boolroleSup =  false;
+    let indexroleSupe = 0;
+
+    this.arrayPract.forEach((doc, index) => {
+      if(doc.id == this.rolSelect){
+        bool = true;
+      }
+
+      if(roleSup.includes(doc.id)){
+        boolroleSup = true;
+        indexroleSupe = index;
+      }
+
+    });
+
+    if(bool){
+      swal({
+        type: 'error',
+        title: 'El rol ya se encuentra agregado, de click sobre el para mas informacion',
+        showConfirmButton: true
+      });
+    }else{
+
+      if(appRoles.includes(this.rolSelect)){
+        if(boolroleSup){
+          if(roleSup.includes(this.rolSelect)){
+            swal({
+              type: 'warning',
+              title: 'Se agrego el rol seleccionado y se elimino el rol que opera sobre el mismo nivel.',
+              showConfirmButton: true
+            });
+            this.arrayPract.splice(indexroleSupe, 1);
+          }
+
+        }
+          
+        this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), tipo:'appRoles' });
+            
+      }else{
+      
+        $('#modal').modal('show');
+      }
+     
+    }
+  }
+
+  //metodo que me agrega el rol desde el modal
+
+  agregarClienteRol(){
+
+    const roleSup = ['UlcSFw3BLPAdLa533QKP','PFhLR4X2n9ybaZU3CR75', 'lCpNW2BmPgMSHCD1EBpT'];
+
+    const arr = [];
+
+    this.selection.selected.forEach(element => {
+      arr.push(element.id);
+    });
+
+    if(this.rolSelect == 'PFhLR4X2n9ybaZU3CR75'){
+      let bool = false;
+      let indexbool = 0; 
+      this.arrayPract.forEach((doc, index) => {
+  
+        if(roleSup.includes(doc.id)){
+          bool = true;
+          indexbool = index;
+        }
+  
+      });
+  
+      if(bool){
+        this.arrayPract.splice(indexbool, 1);
+      }
+
+      this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), 
+        fac: arr, tipo:'appRoles' });
+    }else{
+      this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), 
+        labs: arr, tipo:'clientRole' });
+    }
+   
+
+    console.log(this.arrayPract);
+
+    $('#modal').modal('hide');
+  }
+
+
+  //metodo que edita los laboratorios de los roles seleccionados
+  editarAsignarLaboratorio(){
+    const arr = [];
+    this.selection.selected.forEach(element => {
+      arr.push(element.id);
+    });
+    console.log(this.selectionList);
+    if(this.selectionList == 'PFhLR4X2n9ybaZU3CR75'){
+      this.arrayPract.find(o => o.id == this.selectionList).fac = arr;
+    }else{
+      this.arrayPract.find(o => o.id == this.selectionList).labs = arr;
+    }
+   
+
+    console.log(this.arrayPract);
+
+    $('#modal').modal('hide');
+  }
+
+  // metodo que dispara el modal para editar roles
+  verLaboratoriosDelRol(item){
+    console.log(item);
+    this.selection.clear();
+    const arra = [];
+    this.rolSelect = '';
+    this.editar = true;
+
+    if(item.tipo == 'clientRole'){
+   
+      for (let i = 0; i < item.labs.length; i++) {
+        const element = item.labs[i];
+        for (let j = 0; j < this.laboraorios.length; j++) {
+          const element2 = this.laboraorios[j]; 
+          if(element == element2.id){
+
+            this.selection.select(element2);
+            console.log(this.selection.selected);
+          }
+  
+        }
+  
+      }
+
+      $('#modal').modal('show');
+
+      this.selectionList = item.id;
+
+    } else {
+
+      if(item.id == 'PFhLR4X2n9ybaZU3CR75'){
+        this.rolSelect = 'PFhLR4X2n9ybaZU3CR75';
+
+        for (let i = 0; i < item.fac.length; i++) {
+          const element = item.fac[i];
+          for (let j = 0; j < this.facultades.length; j++) {
+            const element2 = this.facultades[j]; 
+            if(element == element2.id){
+  
+              this.selection.select(element2);
+              console.log(this.selection.selected);
+            }
+    
+          }
+    
+        }
+        $('#modal').modal('show');
+
+        this.selectionList = item.id;
+
+      }else{
+        swal({
+          type: 'success',
+          title: 'Rol '+item.nombre + ' es uno de los roles generales del sistema. '+
+                'por eso no requiere especificacion de laboratorios al cual aplicarlo.',
+          showConfirmButton: true
+        });
+      }
+
+
+    }
+   
+  }
+
+  searchName(){
+   return this.niveles.find(o => o.id == this.rolSelect).nombre ;
+  }
+
   applyFilterPers(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
@@ -328,6 +598,9 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   cambiardata(item, table) {
+    this.editar = false;
+    this.selection.clear();
+
     this.arrayPract = item.llave;
     this.tablesel = table;
     console.log(item);
@@ -351,7 +624,32 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   actualizarPers() {
-       // valida la seleccion de un laboratorio o una facultad antes de ejecutar
+
+    const clientRole = ['6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB'];
+
+    const coor = 'S9wr9uK5BBF4yQZ7CwqX';
+
+    let adm = false;
+
+    this.arrayPract.forEach((doc, index) => {
+      if(doc.id == coor){
+        adm = true;
+        this.arrayPract.forEach((doc2, index2) => {
+          if(clientRole.includes(doc2.id)){
+
+            doc.labs.forEach(element => {
+              doc2.labs.forEach((element2, index3 )=> {
+                if(element == element2){
+                  this.arrayPract[index2].labs.splice(index3, 1);
+                }
+              });
+            });
+          }
+        });
+
+        this.setKeyAdmin(doc.labs);
+      }
+    });
 
         //  objeto para persona
       this.person.cfFirstNames = this.nombre;
@@ -362,24 +660,53 @@ export class AdminUsuariosComponent implements OnInit {
       (this.usuario.active = this.estado_u);
 
 
-    if (this.arrayPract.length > 0) {
-          // valida si el array contiene la llave de adminstrador
-          const adm = this.includeAdmin();
-       if ( adm ) {
-             console.log('rol de administrador lab');
-             // crea la llave del lab como objeto y agrega el rol dentro
-            this.setKeyAdmin();
-       } else {
-           // otros approles
-          this.arrayPract.forEach(obj => {
-          this.usuario.appRoles[obj.id] = true;
-        });
-       }
+    const rolesUsuario = {'npKRYaA0u9l4C43YSruA': true};
+    const rolesPersona = {};
+    const cfFacil = {};
 
+    let boolfac = false;
+    let facultades = {};
+
+    if (this.arrayPract.length > 0) {
+      // valida si el array contiene la llave de adminstrador
+      this.arrayPract.forEach(doc => {
+        if(doc.tipo == 'appRoles'){
+          rolesUsuario[doc.id] = true;
+          if(doc.id == 'PFhLR4X2n9ybaZU3CR75'){
+            boolfac = true;
+            doc.fac.forEach(element => {
+              facultades[element] = true;
+            });        
+          }
+        }else{
+          doc.labs.forEach(lab => {
+            cfFacil[lab] = true;
+
+            if(rolesPersona[lab]){
+              rolesPersona[lab][doc.id] = true;             
+            }else{
+              rolesPersona[lab] = {};
+              rolesPersona[lab][doc.id] = true;
+            }       
+          });  
+        }
+      });
+
+
+      console.log(rolesUsuario, rolesPersona, facultades, cfFacil);
+
+      this.person.clientRole = rolesPersona;
+      this.person.cfFacil = cfFacil;
+
+      if(boolfac){
+        this.person.faculty = facultades;
+      }
+
+      this.usuario.appRoles = rolesUsuario;
+       
 
     }
 
-    console.log(this.idp);
 
     console.log('usuario para subir al sistema', this.usuario);
     console.log(' se va actualizar esta persona', this.person);
@@ -392,38 +719,32 @@ export class AdminUsuariosComponent implements OnInit {
 
 
     // metodo firebase para subir un usuario actualizado
-    if (this.idu) {
-      this.serviceMod3.Trazability(
-        this.user.uid, 'update', 'user', this.idu, this.usuario
-      ).then(() => {
-        this.serviceMod3.updatedUser(this.idu, this.usuario)
-          .then(() => {
+
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'user', this.idu, this.usuario
+    ).then(() => {
+      this.serviceMod3.updatedUser(this.idu, this.usuario)
+        .then(() => {
+        });
+    });
+
+    
+    // actualizar la persona
+   
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'cfPers', this.idp, this.person
+    ).then(() => {
+      this.serviceMod3.updatedPersona(this.idp, this.person).then(
+        () => {
+        // toca resetear en todos los laboratorios si el estado cambia
+          swal({
+            type: 'success',
+            title: 'usuario actualizado correctamente',
+            showConfirmButton: true
           });
       });
+    });
 
-    }
-    // actualizar la persona
-    if (this.idp) {
-      this.serviceMod3.Trazability(
-        this.user.uid, 'update', 'cfPers', this.idp, this.person
-      ).then(() => {
-        this.serviceMod3.updatedPersona(this.idp, this.person).then(
-          () => {
-          // toca resetear en todos los laboratorios si el estado cambia
-            swal({
-              type: 'success',
-              title: 'usuario actualizado correctamente',
-              showConfirmButton: true
-            });
-        });
-      });
-
-
-    }
-
-
-
-    // metodo firebase para subir una persona actualizada
   }
 
   // Inactiva la persona de todos los laboratorios
@@ -572,72 +893,6 @@ export class AdminUsuariosComponent implements OnInit {
     this.idfacultad = row.id;
   }
 
-  asignarRolaLaboratorio() {
-    // valida si un rol fue seleccionado
-    if (this.rolSelect) {
-      // usuario administrador asigna permisos dentro de  client-roles pero tiene ese unico rol
-      if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
-        this.niveles.forEach(elemen => {
-          if (elemen.id === this.rolSelect) {
-            this.arrayPract = [];
-
-            this.arrayPract.push(elemen);
-          }
-        });
-
-        this.person.clientRole[this.idlab] = {};
-        this.person.clientRole[this.idlab][this.rolSelect] = true;
-        this.person.cfFacil[this.idlab] = true;
-
-        console.log('mostrar usuario', this.usuario);
-      }
-      //  asigna roles al usuario nivel 2
-      if (
-        this.rolSelect === '6ITqecW7XrgTLaW6fpn6' ||
-        this.rolSelect === 'FH5dgAP3EjI8rGKrX0mP' ||
-        this.rolSelect === 'yoVd80ZvcdgUf1a44ORB'
-      ) {
-        this.niveles.forEach(elemen => {
-          if (elemen.id === this.rolSelect) {
-            this.arrayPract.push(elemen);
-
-            swal({
-              type: 'success',
-              title: 'Rol agregado con exito, ya puede actualizar.',
-              showConfirmButton: true
-            });
-          }
-        });
-
-        if (this.person.clientRole[this.idlab]) {
-          this.person.clientRole[this.idlab][this.rolSelect] = true;
-        } else {
-          this.person.clientRole[this.idlab] = {};
-          this.person.clientRole[this.idlab][this.rolSelect] = true;
-        }
-
-        console.log(this.person);
-
-        // usuario de acceso nivel 2.5 -> agrega facultad
-      }
-      if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
-        this.person.faculty[this.idfacultad] = true;
-        console.log(this.person);
-
-        swal({
-          type: 'success',
-          title: 'Facultad asignada, ya puede actualizar.',
-          showConfirmButton: true
-        });
-      }
-    } else {
-      swal({
-        type: 'info',
-        title: 'Debe seleccionar el nuevo rol primero',
-        showConfirmButton: true
-      });
-    }
-  }
 
   applyFilterFac(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -645,24 +900,47 @@ export class AdminUsuariosComponent implements OnInit {
     this.dataSourceFacil.filter = filterValue;
   }
 
-  updatedAdminFacil() {
+  updatedAdminFacil(idlab) {
     // obtner referencia del director actual y borrarlo
     this.serviceMod3
-      .getSingleLaboratorios(this.idlab)
+      .getSingleLaboratorios(idlab)
       .subscribe((data: any) => {
-        // const idPer = data.facilityAdmin;
-        console.log(data);
 
         this.serviceMod3
           .getPersona(data.facilityAdmin)
           .then(result => {
-            console.log(result.data());
-            const admiUser = result.data();
-            admiUser.clientRole = {};
+            let aux = {};
+            let aux2 = {};
+            const admiUser = result.data().clientRole;
 
-            console.log(admiUser);
+            const cfFacil = result.data().cfFacil;
+   
+            for (const key in admiUser) {
+              if (admiUser.hasOwnProperty(key)) {
+                if(key != idlab){
+                  aux[key] = admiUser[key];
+                }                
+              }
+            }
 
-            this.serviceMod3.updatedPersona(data.facilityAdmin, admiUser);
+            for (const key in cfFacil) {
+              if (cfFacil.hasOwnProperty(key)) {
+                if(key != idlab){
+                  aux2[key] = true;
+                }                
+              }
+            }
+
+            const persona = {
+              clientRole: aux,
+              cfFacil: aux2
+            }
+
+            console.log(persona);
+            this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
+
+            this.serviceMod3.updatedLab(idlab, { facilityAdmin:  this.idp});
+
           })
           .catch(err => {
             console.log(err);
@@ -670,210 +948,20 @@ export class AdminUsuariosComponent implements OnInit {
 
         // agregar la referencia actual del director al laboratorio
 
-        this.serviceMod3.updatedLab(this.idlab, { facilityAdmin: this.idp });
+
       });
   }
 
-  rolSelectQrCm() {
-    let encontrado = false;
 
-    this.niveles.forEach((elemen: any) => {
-      if (elemen.id === this.rolSelect) {
-        this.arrayPract.forEach(el => {
-          if (el.id === this.rolSelect) {
-            encontrado = true;
-          }
-        });
+  setKeyAdmin(labs) {
 
-        if (!encontrado) {
-          this.arrayPract.push(elemen);
-          this.alertSuccess();
-
-        } else {
-          this.alertInfo();
-        }
-      }
-    });
-  }
-
-  rolSelectTresCinco() {
-    let encontrado = false;
-    this.niveles.forEach((elemen: any) => {
-      if (elemen.id === this.rolSelect) {
-        this.arrayPract.forEach(el => {
-          if (el.id === 'PFhLR4X2n9ybaZU3CR75' || el.id === this.rolSelect) {
-            encontrado = true;
-          }
-        });
-        if (!encontrado) {
-          this.arrayPract.push(elemen);
-          this.alertSuccess();
-
-        } else {
-           this.alertInfo();
-
-        }
-      }
-    });
-  }
-
-  rolSelectDosCinco() {
-    let encontrado = false;
-    this.niveles.forEach((elemen: any) => {
-      if (elemen.id === this.rolSelect) {
-        this.arrayPract.forEach(el => {
-          if (el.id === 'UlcSFw3BLPAdLa533QKP' || el.id === this.rolSelect) {
-            encontrado = true;
-          }
-        });
-
-        if (!encontrado) {
-          this.arrayPract.push(elemen);
-          this.alertSuccess();
-        } else {
-           this.alertInfo();
-        }
-      }
-    });
-  }
-
-  rolSelectAdminLab() {
-    let encontrado = false;
-    this.niveles.forEach(elemen => {
-      if (elemen.id === this.rolSelect) {
-
-        this.arrayPract.forEach(el => {
-          if (  el.id === this.rolSelect || el.id === '6ITqecW7XrgTLaW6fpn6'
-                || el.id === 'yoVd80ZvcdgUf1a44ORB'  || el.id === 'FH5dgAP3EjI8rGKrX0mP') {
-            encontrado = true;
-          }
-        });
-
-        if (!encontrado) {
-          this.arrayPract.push(elemen);
-          this.alertSuccess();
-
-        } else {
-
-           this.alertInfo();
-        }
-
-      }
+    labs.forEach(element => {
+      this.updatedAdminFacil(element);
     });
 
+    
   }
 
-  rolSelectAnalistaAuxiliarAdmin() {
-
-
-    let encontrado = false;
-    this.niveles.forEach(elemen => {
-      if (elemen.id === this.rolSelect) {
-
-        this.arrayPract.forEach(el => {
-          if (  el.id === this.rolSelect || el.id === 'S9wr9uK5BBF4yQZ7CwqX') {
-
-            encontrado = true;
-
-          }
-        });
-
-        if (!encontrado) {
-          this.arrayPract.push(elemen);
-          this.alertSuccess();
-
-        } else {
-
-           this.alertInfo();
-        }
-
-      }
-    });
-
-  }
-
-  alertAddLab() {
-    // Usuario seleccionado modulo Qr
-    if (this.rolSelect === 'k7uRIEzj99l7EjZ3Ppql') {
-      this.rolSelectQrCm();
-
-      // usuario Comunicacion masiva
-    }
-    if (this.rolSelect === 'W6ihltvrx8Gc7jVucH8M') {
-      this.rolSelectQrCm();
-
-      // usuario Nivel 3.5 o Administrativo
-    }
-    if (this.rolSelect === 'UlcSFw3BLPAdLa533QKP') {
-      this.rolSelectTresCinco();
-
-      // usuario 2.5 o usuario por facultad
-    }
-    if (this.rolSelect === 'PFhLR4X2n9ybaZU3CR75') {
-      this.rolSelectDosCinco();
-
-      // usuario administrador de laboratorio
-    } if (this.rolSelect === 'S9wr9uK5BBF4yQZ7CwqX') {
-
-       this.rolSelectAdminLab();
-
-      // usuario analista nivel2
-    } if (this.rolSelect === '6ITqecW7XrgTLaW6fpn6') {
-
-        this. rolSelectAnalistaAuxiliarAdmin();
-
-        // usuario auxiliar nivel 2
-   } if (this.rolSelect === 'FH5dgAP3EjI8rGKrX0mP') {
-
-    this. rolSelectAnalistaAuxiliarAdmin();
-      // usuario administrativo nivel 2
-  } if (this.rolSelect === 'yoVd80ZvcdgUf1a44ORB') {
-
-    this. rolSelectAnalistaAuxiliarAdmin();
-
-  }
-
-  }
-
-  buscarRole(rol) {
-    const role = ROLESARRAY;
-    for (const key in rol) {
-      if (rol.hasOwnProperty(key)) {
-        if (rol[key]) {
-          if (role.includes(key)) {
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  }
-
-  setKeyAdmin() {
-
-    this.person.clientRole[this.idlab] = {};
-    this.arrayPract.forEach( elemen => {
-    this.person.clientRole[this.idlab][elemen.id] = true;
-    });
-    this.person.cfFacil[this.idlab] = true;
-
-    this.updatedAdminFacil();
-  }
-
-
-  includeAdmin() {
-
-    const rolesNivel2 = [ 'yoVd80ZvcdgUf1a44ORB',  '6ITqecW7XrgTLaW6fpn6',  'FH5dgAP3EjI8rGKrX0mP',  'S9wr9uK5BBF4yQZ7CwqX' ];
-
-    let includ = false;
-     this.arrayPract.forEach(elemen => {
-
-      includ =  rolesNivel2.includes( elemen.id );
-
-    });
-     return includ;
-  }
 
 
   alertSuccess() {
