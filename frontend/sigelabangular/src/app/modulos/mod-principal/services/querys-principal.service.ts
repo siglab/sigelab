@@ -508,17 +508,23 @@ export class QuerysPrincipalService {
 
         if(personas[key]){
           this.buscarDirector(key).then(doc => {
-            this.buscarUsuario(doc.data().user).then(user => {
-              for (const key in user.data().appRoles) {
-                if (user.data().appRoles.hasOwnProperty(key)) {
-                  if(user.data().appRoles[key]){
-                    if(key == '6ITqecW7XrgTLaW6fpn6'){
-                      arra.push(doc.data().email);
+            if(doc.data().user != ''){
+              this.buscarUsuario(doc.data().user).then(user => {
+                if(user){
+                  for (const key in user.data().appRoles) {
+                    if (user.data().appRoles.hasOwnProperty(key)) {
+                      if(user.data().appRoles[key]){
+                        if(key == '6ITqecW7XrgTLaW6fpn6'){
+                          arra.push(doc.data().email);
+                        }
+                      }
                     }
                   }
                 }
-              }
-            });
+  
+              });
+            }
+
           });
         }
 

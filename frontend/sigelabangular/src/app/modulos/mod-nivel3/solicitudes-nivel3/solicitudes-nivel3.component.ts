@@ -244,6 +244,7 @@ export class SolicitudesNivel3Component implements OnInit {
       this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
         this.alertaExito('Solicitud Rechazada');
         this.solsel.status = 'rechazada';
+        $('#modal1').modal('hide');
       });
     }else if(estado == 'aceptada'){
       obj.status = 'aceptada';
@@ -263,6 +264,8 @@ export class SolicitudesNivel3Component implements OnInit {
       this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
         this.alertaExito('Solicitud Concluida');
         this.solsel.status = 'realizada';
+
+        $('#modal1').modal('hide');
       });
     }
 

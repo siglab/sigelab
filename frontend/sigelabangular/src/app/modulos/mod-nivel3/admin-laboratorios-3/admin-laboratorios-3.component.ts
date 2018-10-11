@@ -22,6 +22,7 @@ import { map, take, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { EspaciosService } from '../../mod-nivel2/services/espacios.service';
+import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
 @Component({
   selector: 'app-admin-laboratorios-3',
@@ -325,7 +326,8 @@ export class AdminLaboratorios3Component implements OnInit {
   niveles = [];
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
-    private service: EspaciosService, private toastr: ToastrService) {
+    private service: EspaciosService, private toastr: ToastrService, 
+    private serviceMod3: ServicesNivel3Service) {
   }
 
   ngOnInit() {
@@ -765,11 +767,16 @@ export class AdminLaboratorios3Component implements OnInit {
           objFacil.facilityAdmin = keyDirector;
 
           this.afs.collection('cfFacil').add(objFacil).then(dato => {
-            swal({
-              type: 'success',
-              title: 'Laboratorio creado',
-              showConfirmButton: true
+            this.serviceMod3.Trazability(
+              this.user.uid, 'create', 'cfFacil', dato.id, objFacil
+            ).then(() => {
+              swal({
+                type: 'success',
+                title: 'Laboratorio creado',
+                showConfirmButton: true
+              });
             });
+
           });
         });
 
@@ -1342,18 +1349,21 @@ export class AdminLaboratorios3Component implements OnInit {
           }
 
 
+          this.serviceMod3.Trazability(
+            this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, this.infolab
+          ).then(() => {
+            this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data => {
 
-          this.afs.doc('cfFacil/' + this.labestructurado.uid).update(this.infolab).then(data => {
+              swal.close();
+              swal({
+                type: 'success',
+                title: 'Cambios Realizados',
+                showConfirmButton: true
+              }).then(() => {
+                // this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+              });
 
-            swal.close();
-            swal({
-              type: 'success',
-              title: 'Cambios Realizados',
-              showConfirmButton: true
-            }).then(() => {
-              // this.obs.changeObjectLab({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
             });
-
           });
 
         } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -1406,12 +1416,16 @@ export class AdminLaboratorios3Component implements OnInit {
                 estado: 'pendiente'
               });
 
-              this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux, { merge: true }).then(() => {
-                swal.close();
-                swal({
-                  type: 'success',
-                  title: 'Sugerencia de cambios ingresada',
-                  showConfirmButton: true
+              this.serviceMod3.Trazability(
+                this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, aux
+              ).then(() => {
+                this.afs.doc('cfFacil/' + this.labestructurado.uid).set(aux, { merge: true }).then(() => {
+                  swal.close();
+                  swal({
+                    type: 'success',
+                    title: 'Sugerencia de cambios ingresada',
+                    showConfirmButton: true
+                  });
                 });
               });
             });
@@ -1499,7 +1513,11 @@ export class AdminLaboratorios3Component implements OnInit {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
 
-                    this.servicioEditarActividad(obj);
+                    this.serviceMod3.Trazability(
+                      this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, obj
+                    ).then(() => {
+                      this.servicioEditarActividad(obj);
+                    });
                   } else {
                     cambio[aux[0]] = {};
 
@@ -1519,16 +1537,20 @@ export class AdminLaboratorios3Component implements OnInit {
         }
         cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'aprobado');
 
-        this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio, { merge: true }).then(data => {
-          swal(
-            'Cambios Aprobados',
-            '',
-            'success'
-          );
-          this.sugerencia = undefined;
-          this.limpiarData();
-          // this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
+        this.serviceMod3.Trazability(
+          this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, cambio
+        ).then(() => {
+          this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio, { merge: true }).then(data => {
+            swal(
+              'Cambios Aprobados',
+              '',
+              'success'
+            );
+            this.sugerencia = undefined;
+            this.limpiarData();
+            // this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
 
+          });
         });
 
 
@@ -1587,10 +1609,20 @@ export class AdminLaboratorios3Component implements OnInit {
       const element = data[i];
       if (accion) {
         this.afs.doc('cfFacil/' + this.labestructurado.uid).collection('cfEAddr')
-          .add({ cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre })
+          .add({ cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre }).then(dato => {
+            this.serviceMod3.TrazabilitySubCollection(
+              this.user.uid, 'create', 'cfFacil', this.labestructurado.uid,
+                'cfEAddr',dato.id, { cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre }
+            );
+          });
       } else {
         this.afs.doc('cfFacil/' + this.labestructurado.uid).collection('cfEAddr')
-          .doc(element.id).delete();
+          .doc(element.id).delete().then(() => {
+            this.serviceMod3.TrazabilitySubCollection(
+              this.user.uid, 'delete', 'cfFacil', this.labestructurado.uid,
+                'cfEAddr', element.id, {}
+            );
+          });
       }
 
     }
@@ -1645,14 +1677,18 @@ export class AdminLaboratorios3Component implements OnInit {
     const cambio = {};
     cambio['suggestedChanges'] = this.cambiarEstadoSugerencia(this.sugerencia.pos, 'desaprobado');
 
-    this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data => {
-      swal({
-        type: 'success',
-        title: 'Cambios Desaprobados',
-        showConfirmButton: true
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, cambio
+    ).then(() => {
+      this.afs.doc('cfFacil/' + this.labestructurado.uid).update(cambio).then(data => {
+        swal({
+          type: 'success',
+          title: 'Cambios Desaprobados',
+          showConfirmButton: true
+        });
+        this.sugerencia = undefined;
+        //this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
       });
-      this.sugerencia = undefined;
-      //this.obs.changeObject({nombre:this.labestructurado.nombre.nom1 + this.labestructurado.nombre.nom2, uid: this.labestructurado.uid})
     });
   }
 
@@ -2212,6 +2248,7 @@ export class AdminLaboratorios3Component implements OnInit {
           estadoLab = 'Inactivo';
         }
 
+
         this.espaestructurado = {
           practicas: this.estructurarPracticas(laboratorio.relatedPractices).arr,
           espacios: this.estructurarSpaceVista(laboratorio.relatedSpaces),
@@ -2435,6 +2472,11 @@ export class AdminLaboratorios3Component implements OnInit {
     this.afs.collection('space').add(nuevoespacio).then((data) => {
       // agrega el nuevo espacio al laboratorio actual
       this.updateFaciliti(data.id);
+
+      this.serviceMod3.Trazability(
+        this.user.uid, 'create', 'space', data.id, nuevoespacio
+      );
+      
     });
     console.log(nuevoespacio);
 
@@ -2467,15 +2509,25 @@ export class AdminLaboratorios3Component implements OnInit {
     // asigna el estado editado al espacio dentro del lab
     nuevoEstado.relatedSpaces[this.idsp] = this.space.active;
 
-    this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'space', this.idsp, nuevoespacio
+    ).then(() => {
 
-      // actualiza el estado del espacio dentro del laboratorio
-      this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+      this.afs.doc('space/' + this.idsp).set(nuevoespacio, { merge: true }).then(() => {
 
-      swal({
-        type: 'success',
-        title: 'Actualizado Correctamente',
-        showConfirmButton: true
+        this.serviceMod3.Trazability(
+          this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
+        ).then(() => {
+          // actualiza el estado del espacio dentro del laboratorio
+          this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+
+          swal({
+            type: 'success',
+            title: 'Actualizado Correctamente',
+            showConfirmButton: true
+          });
+        });
+
       });
 
     });
@@ -2558,15 +2610,19 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
       console.log('revisar este lab', this.idlab);
-      this.afs.collection('cfFacil').doc(this.idlab).set({ relatedSpaces }, { merge: true })
-        .then(() => {
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'cfFacil', this.idlab, {relatedSpaces}
+      ).then(() => {
+        this.afs.collection('cfFacil').doc(this.idlab).set({ relatedSpaces }, { merge: true })
+          .then(() => {
 
-          swal({
-            type: 'success',
-            title: 'Creado Correctamente',
-            showConfirmButton: true
+            swal({
+              type: 'success',
+              title: 'Creado Correctamente',
+              showConfirmButton: true
+            });
           });
-        });
+      });
 
     } else {
 
@@ -2759,8 +2815,8 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   totalOcupacion(estudiantesPract) {
-    console.log(estudiantesPract, this.espaestructurado.personal);
-    const personalLab = this.espaestructurado.personal;
+    console.log(estudiantesPract, this.labestructurado.personal);
+    const personalLab = this.labestructurado.personal.length;
     this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
     // tslint:disable-next-line:radix
 
@@ -3057,21 +3113,32 @@ export class AdminLaboratorios3Component implements OnInit {
     /* metodo firebase para subir un usuario actualizado */
 
     if (this.idu) {
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'user', this.idu, user
+      ).then(() => {
       this.afs.collection('user').doc(this.idu).set(user, { merge: true })
         .then(() => {
         });
+      });
 
     }
-    this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
-      () => {
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'cfPers', this.idp, pers
+    ).then(() => {
+      this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
+        () => {
+          this.serviceMod3.Trazability(
+            this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
+          ).then(() => {
+            this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
+            swal({
+              type: 'success',
+              title: 'usuario actualizado correctamente',
+              showConfirmButton: true
+            });
+          });
 
-        this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
-        swal({
-          type: 'success',
-          title: 'usuario actualizado correctamente',
-          showConfirmButton: true
         });
-
       });
 
     /* metodo firebase para subir una persona actualizada */
@@ -3098,6 +3165,10 @@ export class AdminLaboratorios3Component implements OnInit {
           this.afs.collection('cfPers').add(pers)
             .then(ok => {
 
+              this.serviceMod3.Trazability(
+                this.user.uid, 'create', 'cfPers', ok.id, pers
+              );
+
               this.updateFacilitiPers(ok.id);
 
               swal({
@@ -3113,6 +3184,10 @@ export class AdminLaboratorios3Component implements OnInit {
 
           this.afs.collection('cfPers').add(pers)
             .then(ok => {
+
+              this.serviceMod3.Trazability(
+                this.user.uid, 'create', 'cfPers', ok.id, pers
+              );
 
               this.updateFacilitiPers(ok.id);
               this.updatedUser(pers.user, ok.id);
@@ -3149,16 +3224,23 @@ export class AdminLaboratorios3Component implements OnInit {
     // asigna como boolean el id del rol al usuario
     newUser.appRoles[this.person.roleId] = true;
     console.log(newUser);
-    this.afs.doc('user/' + path).set(newUser, { merge: true });
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'user', path, newUser
+    ).then(() => {
+      this.afs.doc('user/' + path).set(newUser, { merge: true });
+    });
 
   }
 
   /* actualizar la coleccion cfPers con el nuevo id del usuario */
 
   updatePers(idU, pathP) {
-
-    this.afs.collection('cfPers').doc(pathP).update({ user: idU });
-
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'cfPers', pathP, { user: idU }
+    ).then(() => {
+      this.afs.collection('cfPers').doc(pathP).update({ user: idU });
+    });
+   
   }
 
   /* actualizar el laboratorio con el nuevo id del document pers */
@@ -3173,7 +3255,11 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
     console.log('revisar este lab', this.idlab);
-    this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
+    this.serviceMod3.Trazability(
+      this.user.uid, 'update', 'cfFacil', this.idlab, facil
+    ).then(() => {
+      this.afs.collection('cfFacil').doc(this.idlab).set(facil, { merge: true });
+    });
 
   }
 
@@ -3218,12 +3304,16 @@ export class AdminLaboratorios3Component implements OnInit {
 
       lab.relatedPers[id] = true;
 
-      this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
-        .then(() => {
+      this.serviceMod3.Trazability(
+        this.user.uid, 'update', 'cfFacil', this.idlab, lab
+      ).then(() => {
+        this.afs.doc('cfFacil/' + this.idlab).set(lab, { merge: true })
+          .then(() => {
 
-          $('#modal1').modal('hide');
-          this.toastr.success('Almacenado correctamente.', 'exito!');
-        });
+            $('#modal1').modal('hide');
+            this.toastr.success('Almacenado correctamente.', 'exito!');
+          });
+      });
     } else {
 
       this.toastr.warning('Ocurrio un error, intente ingresar el email otra vez.');

@@ -937,9 +937,17 @@ export class AdminUsuariosComponent implements OnInit {
             }
 
             console.log(persona);
-            this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
+            this.serviceMod3.Trazability(
+              this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
+            ).then(() => {
+              this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
+            });
 
-            this.serviceMod3.updatedLab(idlab, { facilityAdmin:  this.idp});
+            this.serviceMod3.Trazability(
+              this.user.uid, 'update', 'user', idlab, { facilityAdmin:  this.idp}
+            ).then(() => {
+              this.serviceMod3.updatedLab(idlab, { facilityAdmin:  this.idp});
+            });
 
           })
           .catch(err => {
