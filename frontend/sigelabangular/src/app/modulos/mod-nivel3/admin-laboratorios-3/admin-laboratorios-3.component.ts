@@ -49,6 +49,8 @@ export class AdminLaboratorios3Component implements OnInit {
 
   size = 0;
 
+  actSpaces;
+
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'correolab', 'ultima', 'director', 'estado', 'correodir'];
   dataSource = new MatTableDataSource([]);
@@ -2383,19 +2385,14 @@ export class AdminLaboratorios3Component implements OnInit {
     this.cargarImagenEspace(this.space.map);
     this.listPracticeforSpace(this.idsp).then((ok: any) => {
 
-      console.log(ok);
-      setTimeout(() => {
-        ok.forEach(element => {
+      console.log(ok['data']);
+      this.getActividadAct(ok['data']).then((datos: any) => {
 
-          this.getPrgramming(element).then(() => {
+        this.actividadAct = datos['data'];
 
-            this.totalOcupacion();
-            this.getActividadAct();
+        this.totalOcupacion(datos['data2']);
+      });
 
-          });
-
-        });
-      }, 2000);
     });
 
   }
@@ -2585,21 +2582,23 @@ export class AdminLaboratorios3Component implements OnInit {
   /* listar horario por espacio  */
 
   listPracticeforSpace(idSpace) {
-
-
+    const array = [];
+    let cont = 1;
+    console.log(idSpace, this.espaestructurado.practicas);
     // traer array con todas las referencias de practicas con el espacio relacionado
     return new Promise((resolve, reject) => {
-      const pathPrograming = [];
-      const pracRef = this.afs.collection('practice').ref;
-      const query = pracRef.where('relatedSpaces.' + idSpace, '==', true);
-      query.get().then(ok => {
-
-        ok.forEach(doc => {
-          pathPrograming.push(doc.id);
-        });
+      this.espaestructurado.practicas.forEach(element => {
+        console.log('element array', element);
+        if (element.programacion.spaceid === idSpace) {
+          array.push(element);
+        }
+        console.log(cont, this.espaestructurado.practicas.length);
+        if (cont === this.espaestructurado.practicas.length) {
+          resolve({ data: array });
+        } else {
+          cont++;
+        }
       });
-
-      resolve(pathPrograming);
 
     });
 
@@ -2759,58 +2758,73 @@ export class AdminLaboratorios3Component implements OnInit {
     });
   }
 
-  totalOcupacion() {
+  totalOcupacion(estudiantesPract) {
+    console.log(estudiantesPract, this.espaestructurado.personal);
+    const personalLab = this.espaestructurado.personal;
+    this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
+    // tslint:disable-next-line:radix
 
-    this.getTotalLab().then((personalLab: number) => {
+    if ( this.space.capacity === 0) {
 
-      this.getTotalEstPrac().then((estudiantesPract: number) => {
+      console.log(' capacidad igual a cero');
 
-        this.ocupacionAct = personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0;
-        // tslint:disable-next-line:radix
-        this.space.indxSa = (this.space.capacity) / (personalLab ? personalLab : 0 + estudiantesPract ? estudiantesPract : 0);
+      this.space.indxSa = 0;
 
-      });
-    });
+    } if (this.space.capacity > 0 ) {
+
+      console.log(' capacidad mayor a cero');
+      this.space.indxSa = (this.ocupacionAct / this.space.capacity);
+
+    }
   }
 
-  getActividadAct() {
 
-    this.actividadAct = [];
-    let encontrado = false;
-    console.log('array para la consulta', this.noEsPrac);
+  getActividadAct(arreglo) {
 
-    this.noEsPrac.forEach(prog => {
+    console.log('si entro al metodo act actual');
+    return new Promise((resolve, reject) => {
 
-      prog.horario.forEach(fecha => {
+      this.actSpaces = [];
+      let estudiantes = 0;
+      let cont = 1;
+      let encontrado = false;
+      console.log('array para la consulta', arreglo);
 
-        const now = moment().format();
+      arreglo.forEach(prog => {
 
-        if (moment('2018-09-14T16:56:46-05:00').isBetween('2018-09-14T13:56', '2018-09-14T18:56')) {
+        encontrado = false;
 
-          encontrado = true;
+        prog.programacion.diahora.forEach(fecha => {
+
+          const now = moment().format();
+          if (moment(now).isBetween(fecha.start, fecha.end)) {
+
+            console.log('entro a la condicion actual');
+            encontrado = true;
+
+          }
+        });
+
+        if (encontrado) {
+          this.actSpaces.push(prog.nombre);
+
+          estudiantes += parseInt(prog.programacion.estudiantes, 10);
+        }
+
+        if (cont === arreglo.length) {
+          console.log(this.actSpaces);
+          resolve({ data: this.actSpaces, data2: estudiantes });
+        } else {
+          cont++;
         }
 
 
       });
 
-
-      if (encontrado) {
-
-        this.afs.doc('practice/' + prog.id)
-          .valueChanges()
-          .subscribe(ok => {
-
-            console.log('llego este id', prog.id);
-
-            this.actividadAct.push(ok['practiceName']);
-            console.log('resultado consulta', ok);
-
-          });
-      }
-
     });
-  }
 
+
+  }
 
   // METODOS DE LA VISTA PERSONAL 2
 

@@ -36,7 +36,7 @@ export class AdminPracticasComponent implements OnInit {
     estado: false,
     equipos: [],
     space: [],
-    activo:false
+    activo: false
   };
 
   evento = {
