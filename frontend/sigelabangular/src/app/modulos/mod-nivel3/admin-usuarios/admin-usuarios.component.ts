@@ -218,16 +218,16 @@ export class AdminUsuariosComponent implements OnInit {
               let varconsulta;
               if(element.cfPers === ''){
                 varconsulta = undefined;
-              }else{              
+              }else{
                 varconsulta = this.clientRole(persona['clientRole']);
               }
 
 
-              this.nombresRoles(element.appRoles, 
+              this.nombresRoles(element.appRoles,
                  varconsulta ? data.data().faculty : '').then(rol => {
-            
+
                 this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
-                  
+
                   const usuario = {
                     id: doc.id,
                     nombre: persona['cfFirstNames']
@@ -246,7 +246,7 @@ export class AdminUsuariosComponent implements OnInit {
                   };
                   console.log(usuarios);
                   usuarios.push(usuario);
-  
+
                   console.log('tam', user.size, usuarios.length);
                   if (user.size === usuarios.length) {
                     console.log('array final', usuarios);
@@ -280,7 +280,7 @@ export class AdminUsuariosComponent implements OnInit {
             }else{
               roleslabs[clave].push(key);
             }
-            
+
           }
         }
       }
@@ -294,7 +294,7 @@ export class AdminUsuariosComponent implements OnInit {
     for (const clave in facul) {
       if (facul.hasOwnProperty(clave)) {
 
-        arr.push(clave);       
+        arr.push(clave);
       }
     }
 
@@ -322,7 +322,7 @@ export class AdminUsuariosComponent implements OnInit {
               if (doc.data().roleName !== 'nivel1') {
                 if(doc.id == 'PFhLR4X2n9ybaZU3CR75'){
 
-                  llaves.push({ id: doc.id, fac: this.appRole(faculty), 
+                  llaves.push({ id: doc.id, fac: this.appRole(faculty),
                                 nombre: doc.data().roleName, tipo:'appRoles' });
                 }else{
                   llaves.push({ id: doc.id, nombre: doc.data().roleName, tipo:'appRoles' });
@@ -366,27 +366,27 @@ export class AdminUsuariosComponent implements OnInit {
           }
         }
         let contador = 0;
-        
+
         for (const key in appRoles) {
           if (appRoles.hasOwnProperty(key)) {
             if (appRoles[key]) {
               this.serviceMod3.consultarNombreRol(key).then(doc => {
                 if (doc.data().roleName !== 'nivel1') {
-  
-                  llaves.push({ id: doc.id, nombre: doc.data().roleName, 
+
+                  llaves.push({ id: doc.id, nombre: doc.data().roleName,
                                 labs: varconsulta.roleslabs[doc.id] ,tipo:'clientRole' });
-  
+
                 }
-  
+
                 if (sixe > 1) {
                   nameroles += doc.data().roleName + ',';
                 }
                 if (sixe === 1) {
                   nameroles += doc.data().roleName;
                 }
-  
+
                 contador++;
-  
+
                 if (sixe === contador) {
                   resolve({ role: nameroles, llave: llaves });
                 }
@@ -409,10 +409,10 @@ export class AdminUsuariosComponent implements OnInit {
     this.editar = false;
     this.selection.clear();
 
-    const appRoles = ['k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M', 
+    const appRoles = ['k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M',
                       'UlcSFw3BLPAdLa533QKP', 'lCpNW2BmPgMSHCD1EBpT'];
 
-    const roleSup = ['UlcSFw3BLPAdLa533QKP','PFhLR4X2n9ybaZU3CR75', 'lCpNW2BmPgMSHCD1EBpT'];
+    const roleSup = ['UlcSFw3BLPAdLa533QKP', 'PFhLR4X2n9ybaZU3CR75', 'lCpNW2BmPgMSHCD1EBpT'];
 
 
     let bool = false;
@@ -437,7 +437,7 @@ export class AdminUsuariosComponent implements OnInit {
         title: 'El rol ya se encuentra agregado, de click sobre el para mas informacion',
         showConfirmButton: true
       });
-    }else{
+    } else {
 
       if(appRoles.includes(this.rolSelect)){
         if(boolroleSup){
@@ -451,22 +451,22 @@ export class AdminUsuariosComponent implements OnInit {
           }
 
         }
-          
+
         this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), tipo:'appRoles' });
-            
+
       }else{
-      
+
         $('#modal').modal('show');
       }
-     
+
     }
   }
 
-  //metodo que me agrega el rol desde el modal
+  // metodo que me agrega el rol desde el modal
 
   agregarClienteRol(){
 
-    const roleSup = ['UlcSFw3BLPAdLa533QKP','PFhLR4X2n9ybaZU3CR75', 'lCpNW2BmPgMSHCD1EBpT'];
+    const roleSup = ['UlcSFw3BLPAdLa533QKP', 'PFhLR4X2n9ybaZU3CR75', 'lCpNW2BmPgMSHCD1EBpT'];
 
     const arr = [];
 
@@ -476,27 +476,27 @@ export class AdminUsuariosComponent implements OnInit {
 
     if(this.rolSelect == 'PFhLR4X2n9ybaZU3CR75'){
       let bool = false;
-      let indexbool = 0; 
+      let indexbool = 0;
       this.arrayPract.forEach((doc, index) => {
-  
+
         if(roleSup.includes(doc.id)){
           bool = true;
           indexbool = index;
         }
-  
+
       });
-  
-      if(bool){
+
+      if (bool) {
         this.arrayPract.splice(indexbool, 1);
       }
 
-      this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), 
-        fac: arr, tipo:'appRoles' });
-    }else{
-      this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), 
+      this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(),
+        fac: arr, tipo: 'appRoles' });
+    } else {
+      this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(),
         labs: arr, tipo:'clientRole' });
     }
-   
+
 
     console.log(this.arrayPract);
 
@@ -516,7 +516,7 @@ export class AdminUsuariosComponent implements OnInit {
     }else{
       this.arrayPract.find(o => o.id == this.selectionList).labs = arr;
     }
-   
+
 
     console.log(this.arrayPract);
 
@@ -532,19 +532,19 @@ export class AdminUsuariosComponent implements OnInit {
     this.editar = true;
 
     if(item.tipo == 'clientRole'){
-   
+
       for (let i = 0; i < item.labs.length; i++) {
         const element = item.labs[i];
         for (let j = 0; j < this.laboraorios.length; j++) {
-          const element2 = this.laboraorios[j]; 
+          const element2 = this.laboraorios[j];
           if(element == element2.id){
 
             this.selection.select(element2);
             console.log(this.selection.selected);
           }
-  
+
         }
-  
+
       }
 
       $('#modal').modal('show');
@@ -559,15 +559,15 @@ export class AdminUsuariosComponent implements OnInit {
         for (let i = 0; i < item.fac.length; i++) {
           const element = item.fac[i];
           for (let j = 0; j < this.facultades.length; j++) {
-            const element2 = this.facultades[j]; 
+            const element2 = this.facultades[j];
             if(element == element2.id){
-  
+
               this.selection.select(element2);
               console.log(this.selection.selected);
             }
-    
+
           }
-    
+
         }
         $('#modal').modal('show');
 
@@ -584,7 +584,7 @@ export class AdminUsuariosComponent implements OnInit {
 
 
     }
-   
+
   }
 
   searchName(){
@@ -676,19 +676,19 @@ export class AdminUsuariosComponent implements OnInit {
             boolfac = true;
             doc.fac.forEach(element => {
               facultades[element] = true;
-            });        
+            });
           }
         }else{
           doc.labs.forEach(lab => {
             cfFacil[lab] = true;
 
             if(rolesPersona[lab]){
-              rolesPersona[lab][doc.id] = true;             
+              rolesPersona[lab][doc.id] = true;
             }else{
               rolesPersona[lab] = {};
               rolesPersona[lab][doc.id] = true;
-            }       
-          });  
+            }
+          });
         }
       });
 
@@ -703,7 +703,7 @@ export class AdminUsuariosComponent implements OnInit {
       }
 
       this.usuario.appRoles = rolesUsuario;
-       
+
 
     }
 
@@ -717,6 +717,11 @@ export class AdminUsuariosComponent implements OnInit {
       this.updateAllFacil();
     }
 
+    if ( !this.usuario.active  ) {
+
+      this.disabledUserAuht();
+    }
+
 
     // metodo firebase para subir un usuario actualizado
 
@@ -728,9 +733,9 @@ export class AdminUsuariosComponent implements OnInit {
         });
     });
 
-    
+
     // actualizar la persona
-   
+
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'cfPers', this.idp, this.person
     ).then(() => {
@@ -777,13 +782,7 @@ export class AdminUsuariosComponent implements OnInit {
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'user', this.idu, { active: true }
     ).then(() => {
-      this.serviceMod3.setUser(this.idu, { active: true });
-      this._disabledU.disabledAuth(  this.idu ).subscribe( data =>   {
-
-        console.log('exito al deshabilitar el usuario de auth');
-        console.log(data.res);
-
-      }, err => console.log('ocurrio un error al desact el usuario', err));
+      this.serviceMod3.setUser(this.idu, { active: this.estado_u });
 
     });
 
@@ -914,12 +913,12 @@ export class AdminUsuariosComponent implements OnInit {
             const admiUser = result.data().clientRole;
 
             const cfFacil = result.data().cfFacil;
-   
+
             for (const key in admiUser) {
               if (admiUser.hasOwnProperty(key)) {
                 if(key != idlab){
                   aux[key] = admiUser[key];
-                }                
+                }
               }
             }
 
@@ -927,7 +926,7 @@ export class AdminUsuariosComponent implements OnInit {
               if (cfFacil.hasOwnProperty(key)) {
                 if(key != idlab){
                   aux2[key] = true;
-                }                
+                }
               }
             }
 
@@ -967,7 +966,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.updatedAdminFacil(element);
     });
 
-    
+
   }
 
 
