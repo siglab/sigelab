@@ -31,7 +31,7 @@ export class ServicesNivel3Service {
 
   getSingleLaboratorios(id) {
 
-   return  this.afs.doc('cfFacil/' + id).valueChanges();
+   return  this.afs.doc('cfFacil/' + id).ref.get();
 
   }
 

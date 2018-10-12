@@ -286,6 +286,8 @@ export class AdminUsuariosComponent implements OnInit {
       }
     }
 
+    console.log(roles, roleslabs);
+
     return {roles, roleslabs};
   }
 
@@ -693,8 +695,6 @@ export class AdminUsuariosComponent implements OnInit {
       });
 
 
-      console.log(rolesUsuario, rolesPersona, facultades, cfFacil);
-
       this.person.clientRole = rolesPersona;
       this.person.cfFacil = cfFacil;
 
@@ -716,12 +716,6 @@ export class AdminUsuariosComponent implements OnInit {
     if (!this.person.active) {
       this.updateAllFacil();
     }
-
-    if ( !this.usuario.active  ) {
-
-      this.disabledUserAuht();
-    }
-
 
     // metodo firebase para subir un usuario actualizado
 
@@ -758,12 +752,6 @@ export class AdminUsuariosComponent implements OnInit {
       const nuevoEstado = { relatedPers: {} };
 
       nuevoEstado.relatedPers[this.idp] = false;
-      this.serviceMod3.Trazability(
-        this.user.uid, 'update', 'cfPers', this.idlab, { active: false }
-      ).then(() => {
-        // inactiva el usuario dentro de la coleccion persona
-        this.serviceMod3.setPersona(this.idlab, { active: false });
-      });
 
       // inactiva al usuario dentro de cada laboratorio
       result.forEach(doc => {
@@ -776,17 +764,7 @@ export class AdminUsuariosComponent implements OnInit {
     });
   }
 
-  // inactiva un usuario y lo elimina de la auth
-  disabledUserAuht() {
 
-    this.serviceMod3.Trazability(
-      this.user.uid, 'update', 'user', this.idu, { active: true }
-    ).then(() => {
-      this.serviceMod3.setUser(this.idu, { active: this.estado_u });
-
-    });
-
-  }
 
   alertDisabled(a) {
     if (a === 'p' && this.person.active) {
@@ -903,8 +881,8 @@ export class AdminUsuariosComponent implements OnInit {
     // obtner referencia del director actual y borrarlo
     this.serviceMod3
       .getSingleLaboratorios(idlab)
-      .subscribe((data: any) => {
-
+      .then((doc: any) => {
+        const data = doc.data();
         this.serviceMod3
           .getPersona(data.facilityAdmin)
           .then(result => {
@@ -919,6 +897,7 @@ export class AdminUsuariosComponent implements OnInit {
                 if(key != idlab){
                   aux[key] = admiUser[key];
                 }
+
               }
             }
 
@@ -935,17 +914,22 @@ export class AdminUsuariosComponent implements OnInit {
               cfFacil: aux2
             }
 
-            console.log(persona);
-            this.serviceMod3.Trazability(
-              this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
-            ).then(() => {
-              this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
-            });
+            console.log(data.facilityAdmin,this.idp);
+
+            if(data.facilityAdmin != this.idp){
+              this.serviceMod3.Trazability(
+                this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
+              ).then(() => {
+                this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
+              });
+              
+            }
+
 
             this.serviceMod3.Trazability(
-              this.user.uid, 'update', 'user', idlab, { facilityAdmin:  this.idp}
+              this.user.uid, 'update', 'cfFacil', idlab, {facilityAdmin: this.idp}
             ).then(() => {
-              this.serviceMod3.updatedLab(idlab, { facilityAdmin:  this.idp});
+              this.serviceMod3.updatedLab(idlab, {facilityAdmin: this.idp});
             });
 
           })
@@ -965,7 +949,6 @@ export class AdminUsuariosComponent implements OnInit {
     labs.forEach(element => {
       this.updatedAdminFacil(element);
     });
-
 
   }
 
