@@ -178,7 +178,7 @@ export class LoginService {
       this.getUser(id).then(doc => {
         const data = doc.data();
 
-        if (data) {
+        if (data.active) {
 
           localStorage.setItem('persona', JSON.stringify(data));
           const rol = data['appRoles'];
@@ -257,6 +257,8 @@ export class LoginService {
 
 
 
+        } else {
+          reject();
         }
 
       });

@@ -53,7 +53,8 @@ export class LoginComponent implements OnInit {
 
         swal({
           type: 'error',
-          title: 'Ocurrio un error al intentar ingresar, intente de nuevo',
+          title: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
+                +'(si el error persiste es posible que su usuario haya sido desactivado)',
           showConfirmButton: true
         });
      });
