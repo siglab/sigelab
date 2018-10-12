@@ -4,7 +4,7 @@
     <h1>
       Proyectos
     </h1>
- 
+
   </section>
 
   <!-- Main content -->
@@ -43,7 +43,7 @@
 
                       <h3 class="box-title">PROYECTOS ACTIVOS SEMESTRE</h3>
                     </div>
-                   
+
                     <div *ngIf="dataSourceProy.data.length === 0">
                       <h3>El laboratorio no cuenta con proyectos activos </h3>
                     </div>
@@ -474,6 +474,15 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="nombreprub">
+                      <strong>Codigo o Cc :</strong>
+                    </label>
+                    <input [(ngModel)]="this.person.cc" id="escuelaedit" name="codigo-cc" class="form-control" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
                       <strong>Apellidos :</strong>
                     </label>
                     <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
@@ -494,12 +503,11 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
-                      <strong> Nivel:</strong>
+                      <strong> Perfil:</strong>
                     </label>
-                    <select class="form-control" [(ngModel)]="this.person.lvl" name="estado">
-                      <option value="auxiliar">Auxiliar </option>
-                      <option value="analista">Analista</option>
-                      <option value="analista">Administrativo</option>
+                    <select class="form-control" (change)="setClientRol()" [(ngModel)]="this.rolSelect" name="role">
+                      <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
+
                     </select>
                   </div>
                 </div>

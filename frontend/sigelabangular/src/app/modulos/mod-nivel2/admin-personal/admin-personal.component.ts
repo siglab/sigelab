@@ -439,7 +439,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfPers', this.idp, pers
-    ).then(()=>{
+    ).then(() => {
       this.servicioMod2.setPersona(this.idp, pers).then(
         () => {
 
@@ -452,6 +452,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             title: 'usuario actualizado correctamente',
             showConfirmButton: true
           });
+          this.clearValues();
+          $('#modal1').modal('hide');
         });
 
       });
@@ -489,6 +491,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                   title: 'persona creada correctamente',
                   showConfirmButton: true
                 });
+                this.clearValues();
+                $('#modal1').modal('hide');
               });
 
 
@@ -507,6 +511,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 title: 'persona creada correctamente',
                 showConfirmButton: true
               });
+              this.clearValues();
+              $('#modal1').modal('hide');
 
             });
         }
@@ -610,6 +616,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         this.servicioMod2.setDocLaboratorio(this.idlab, lab)
         .then(() => {
 
+          this.clearValues();
           $('#modal1').modal('hide');
           this.toastr.success('Almacenado correctamente.', 'exito!');
       });
@@ -626,8 +633,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   setClientRol() {
-    this.person.clientRole = {};
-    this.person.clientRole[this.rolSelect] = true;
+
+    this.person.clientRole [this.idlab] = {};
+    this.person.clientRole [this.idlab] [this.rolSelect] = true;
     console.log(this.person);
 
   }
@@ -639,6 +647,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   setValue() {
 
     this.email = '';
+  }
+
+
+  clearValues() {
+
+    this.email = '';
+    this.person.cfBirthdate = '';
+    this.person.cfFirstNames = '';
+    this.person.cc = '';
+    this.person.cfFamilyNames = '';
+    this.person.type = '';
+    this.person.cfGender = '';
   }
 
 }

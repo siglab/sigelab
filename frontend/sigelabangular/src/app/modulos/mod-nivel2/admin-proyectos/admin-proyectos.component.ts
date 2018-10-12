@@ -22,6 +22,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   button = true;
   fecha = new Date();
   semester;
+  rolSelect;
   // objeto persona:
   person = {
     cfBirthdate: '',
@@ -29,21 +30,24 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     cfUri: '',
     cfFamilyNames: '',
     cfFirstNames: '',
+    clientRole : {},
     cfOtherNames: '',
     cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
     cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
-    cfFacil: '',
+    cfFacil: {},
     active: true,
     user: '',
-    lvl: '',
-    type: '',
     email: '',
+    cc: '',
+    type: '',
     relatedEquipments: {},
     createdAt: this.fecha.toISOString(),
     updatedAt: this.fecha.toISOString()
 
   };
+
+  niveles = [];
 
   // proyectos activos
   newp = true;
@@ -94,7 +98,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-   
+    this.getRolesNivel2();
     this.sus = this.obs.currentObjectProy.subscribe(data => {
       console.log(data);
       this.getRoles(data.roles);
@@ -481,7 +485,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       });
 
     });
-   
+
   }
 
   updatedSingleProject() {
@@ -506,14 +510,14 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
             active: this.proyecto.estado,
             relatedPers: {},
             updatedAt: this.fecha.toISOString()
-  
+
           };
           pro.relatedPers[ok.id] = true;
           this.servicioMod2.Trazability(
             this.user.uid, 'update', 'project', this.id_proj, pro
           ).then(()=>{
             this.servicioMod2.setProyecto(this.id_proj, pro).then(() => {
-    
+
               swal({
                 type: 'success',
                 title: ' Proyecto agregado correctamente',
@@ -561,7 +565,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         this.servicioMod2.Trazability(
           this.user.uid, 'update', 'project', this.id_proj, lab
         ).then(()=>{
-          this.servicioMod2.setDocLaboratorio(this.id_lab, lab);         
+          this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
           swal({
             type: 'success',
             title: ' Personal agregado correctamente',
@@ -569,10 +573,10 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
           });
         });
       });
-        
+
      });
 
- 
+
     }
   }
   applyFilter(filterValue: string) {
@@ -612,7 +616,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
-  
+
       this.servicioMod2.getProyectForCi(q).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'CI disponible';
@@ -627,8 +631,29 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     }
   }
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
+  }
+
+  getRolesNivel2() {
+    this.servicioMod2.getAppRoles().then(datos => {
+      datos.forEach(doc => {
+        if (doc.data().lvl === 'perfiles2') {
+
+          this.niveles.push({ id: doc.id, nombre: doc.data().roleName });
+          console.log(this.niveles);
+
+        }
+      });
+    });
+  }
+
+  setClientRol() {
+
+    this.person.clientRole [this.id_lab] = {};
+    this.person.clientRole [this.id_lab] [this.rolSelect] = true;
+    console.log(this.person);
+
   }
 
 }
