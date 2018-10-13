@@ -103,7 +103,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   niveles = [];
 
+  rolesAgregados = [];
+
   user = this.servicioMod2.getLocalStorageUser();
+
 
   constructor(private obs: ObservablesService,
     private toastr: ToastrService,
@@ -282,6 +285,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             } else {
               persona = {
                 roles: '',
+                rolesClient : pers.clientRole,
                 cc: pers.cc ? pers.cc : 'ninguno',
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
@@ -319,6 +323,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
              this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 persona = {
+                  rolesClient : pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   activo: item[clave],
@@ -336,6 +341,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               });
             } else {
               persona = {
+                rolesClient : pers.clientRole,
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
@@ -359,6 +365,16 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     return arr1;
   }
 
+
+  nombreRoles(item){
+    this.rolesAgregados = [];
+    for (const key in item[this.idlab]  ) {
+      if (item[this.idlab].hasOwnProperty(key)) {
+        this.rolesAgregados.push({ id: key, 
+          nombre: this.niveles.find(o => o.id == key).nombre});
+      }
+    }
+  }
 
 
 
@@ -393,13 +409,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.type = item.tipo;
 
     this.apellido = item.apellidos;
-    for (const key in item.rolesClient[this.idlab]  ) {
-      if (item.roles.hasOwnProperty(key)) {
-        this.rol = key;
-        console.log(this.rol);
 
-      }
-    }
+    this.nombreRoles(item.rolesClient);
 
     console.log( 'array', item.rolesClient[this.idlab] );
 
@@ -411,6 +422,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+  quitarelemento(i){
+    this.rolesAgregados.splice(i, 1);
+  }
+
   actualizarPers() {
 
     // $('#modal').modal('hide');
@@ -420,6 +435,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
       type: this.type,
+      clientRole: {},
       updatedAt: new Date().toISOString()
     };
     /* objeto para usuario */
@@ -428,8 +444,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     const nuevoEstado = {
       relatedPers: {},
       updatedAt: new Date().toISOString()
-
     };
+
+    pers.clientRole[this.idlab] = {};
+
+    this.rolesAgregados.forEach(doc => {
+      pers.clientRole[this.idlab][doc.id] = true;
+    });
 
     console.log(' se va actualizar esta persona', pers);
 
@@ -440,7 +461,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfPers', this.idp, pers
     ).then(() => {
-      this.servicioMod2.setPersona(this.idp, pers).then(
+      this.servicioMod2.updatePersona(this.idp, pers).then(
         () => {
 
         this.servicioMod2.Trazability(
@@ -629,6 +650,30 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     }
 
+
+  }
+
+  agregarRol(){
+    console.log(this.rolSelect);
+
+    let bool = false;
+
+    this.rolesAgregados.forEach((doc, index) => {
+      if(doc.id == this.rolSelect){
+        bool = true;
+      }
+    });
+
+    if(bool){
+      swal({
+        type: 'error',
+        title: 'El rol ya se encuentra agregado.',
+        showConfirmButton: true
+      });
+    } else {
+      this.rolesAgregados.push({id:this.rolSelect, 
+        nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
+    }
 
   }
 

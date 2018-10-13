@@ -91,6 +91,9 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   role:any;
   moduloNivel2 = false;
 
+  rolesAgregados = [];
+
+
   user = this.servicioMod2.getLocalStorageUser();
 
   constructor(private obs: ObservablesService,
@@ -184,6 +187,44 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
+      }
+    }
+  }
+
+  agregarRol(){
+    console.log(this.rolSelect);
+
+    let bool = false;
+
+    this.rolesAgregados.forEach((doc, index) => {
+      if(doc.id == this.rolSelect){
+        bool = true;
+      }
+    });
+
+    if(bool){
+      swal({
+        type: 'error',
+        title: 'El rol ya se encuentra agregado.',
+        showConfirmButton: true
+      });
+    } else {
+      this.rolesAgregados.push({id:this.rolSelect, 
+        nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
+    }
+
+  }
+
+  quitarelemento(i){
+    this.rolesAgregados.splice(i, 1);
+  }
+
+  nombreRoles(item){
+    this.rolesAgregados = [];
+    for (const key in item[this.id_lab]  ) {
+      if (item[this.id_lab].hasOwnProperty(key)) {
+        this.rolesAgregados.push({ id: key, 
+          nombre: this.niveles.find(o => o.id == key).nombre});
       }
     }
   }
@@ -344,7 +385,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     this.proyecto.estado = item.active;
     this.proyecto.personal = item.personal;
     this.id_proj = item.id_proj;
-    console.log(item);
+
 
   }
 
@@ -542,6 +583,12 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
       });
     } else {
       const persona = this.person;
+
+      persona.clientRole[this.id_lab] = {};
+
+      this.rolesAgregados.forEach(doc => {
+        persona.clientRole[this.id_lab][doc.id] = true;
+      });
 
      this.servicioMod2.addPersona(persona).then((ok) => {
 

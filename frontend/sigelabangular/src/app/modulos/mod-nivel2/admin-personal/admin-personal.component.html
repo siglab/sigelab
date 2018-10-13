@@ -299,31 +299,41 @@
                 </div>
 
 
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="estadoserv">
-                      <strong>Rol:</strong>
-                    </label>
-                    <div class="col-md-10">
+                <div class="col-md-12" >
+                  <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
 
-                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rol" name="estado">
-                        <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
+                  <div class="input-group">
 
+                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers" id="facul" >
+                          <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
                       </select>
+                      <span class="input-group-btn">
+                          <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button" >
+                              <i class="fa fa-plus"></i></button>
+                      </span>
+                    </div><!-- /input-group -->
+                </div>
+                
+                <div class="col-md-12" >
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label class="control-label" for="listfacul"><strong>Roles actuales :</strong></label>
+                      <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
+                        <li *ngFor="let item of this.rolesAgregados; let i= index;"><a> <strong> {{item.nombre}} </strong>
+                            <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span></a></li>
+                      </ul>
                     </div>
                   </div>
-
-
                 </div>
-                <div *ngIf="moduloNivel2" class="form-group row">
-                  <div class="col-md-12">
+
+                <div *ngIf="moduloNivel2" class="row">
+                  
+                  <div class="col-md-12" style="margin-top: 20px;">
                     <div class="form-group">
-                      <div class="col-sm-12">
                         <label class="switch">
-                          <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" >
+                          <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" style="float: right;">
                           <span class="slider round"></span>
                         </label>
-                      </div>
                     </div>
 
                   </div>

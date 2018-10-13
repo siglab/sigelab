@@ -164,7 +164,7 @@
 </div>
 
 <!--  modal editar informacion del proyecto -->
-<div class="modal fade" id="modal" role="dialog">
+<div class="modal fade divScroll" id="modal" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
@@ -500,17 +500,32 @@
                 </div>
 
 
-                <div class="form-group">
-                  <div class="col-md-12">
-                    <label class="control-label" for="estadoserv">
-                      <strong> Perfil:</strong>
-                    </label>
-                    <select class="form-control" (change)="setClientRol()" [(ngModel)]="this.rolSelect" name="role">
-                      <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
-
-                    </select>
+                <div class="col-md-12" >
+                    <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
+  
+                    <div class="input-group">
+  
+                        <select class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers" id="roles" >
+                            <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button" >
+                                <i class="fa fa-plus"></i></button>
+                        </span>
+                      </div><!-- /input-group -->
                   </div>
-                </div>
+                  
+                  <div class="col-md-12" >
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="listfacul"><strong>Roles actuales :</strong></label>
+                        <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
+                          <li *ngFor="let item of this.rolesAgregados; let i= index;"><a> <strong> {{item.nombre}} </strong>
+                              <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span></a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
 
                 <div class="form-group">
                   <div class="col-md-12">

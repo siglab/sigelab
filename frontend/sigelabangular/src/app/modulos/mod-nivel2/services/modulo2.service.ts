@@ -249,6 +249,10 @@ export class Modulo2Service {
     return this.afs.collection('cfPers/').doc(idPers).set(doc, { merge: true });
   }
 
+  updatePersona(idPers, doc){
+    return this.afs.collection('cfPers/').doc(idPers).update(doc);
+  }
+
   setPractica(idprac, doc){
     return this.afs.doc('practice/' + idprac).set(doc, { merge: true });
   }

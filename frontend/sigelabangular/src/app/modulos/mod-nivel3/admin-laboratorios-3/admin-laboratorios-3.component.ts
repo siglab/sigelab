@@ -325,6 +325,9 @@ export class AdminLaboratorios3Component implements OnInit {
 
   niveles = [];
 
+  rolSelect:any;
+  rolesAgregados = [];
+
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
     private service: EspaciosService, private toastr: ToastrService, 
     private serviceMod3: ServicesNivel3Service) {
@@ -2944,6 +2947,7 @@ export class AdminLaboratorios3Component implements OnInit {
                 const user = dataper.payload.data();
                 persona = {
                   roles: user.appRoles,
+                  rolesClient : pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   cc: pers.cc ? pers.cc : 'ninguno',
@@ -2960,6 +2964,7 @@ export class AdminLaboratorios3Component implements OnInit {
             } else {
               persona = {
                 roles: '',
+                rolesClient : pers.clientRole,
                 cc: pers.cc ? pers.cc : 'ninguno',
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
@@ -2997,6 +3002,7 @@ export class AdminLaboratorios3Component implements OnInit {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 persona = {
+                  rolesClient : pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   activo: item[clave],
@@ -3014,6 +3020,7 @@ export class AdminLaboratorios3Component implements OnInit {
               });
             } else {
               persona = {
+                rolesClient : pers.clientRole,
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
@@ -3091,6 +3098,7 @@ export class AdminLaboratorios3Component implements OnInit {
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
       type: this.type,
+      clientRole:{},
       updatedAt: new Date().toISOString()
     };
     /* objeto para usuario */
@@ -3103,6 +3111,13 @@ export class AdminLaboratorios3Component implements OnInit {
       updatedAt: new Date().toISOString()
 
     };
+
+
+    pers.clientRole[this.idlab] = {};
+
+    this.rolesAgregados.forEach(doc => {
+      pers.clientRole[this.idlab][doc.id] = true;
+    });
 
     console.log('usuario con el rol', user);
     console.log(' se va actualizar esta persona', pers);
@@ -3125,7 +3140,7 @@ export class AdminLaboratorios3Component implements OnInit {
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'cfPers', this.idp, pers
     ).then(() => {
-      this.afs.collection('cfPers/').doc(this.idp).set(pers, { merge: true }).then(
+      this.afs.collection('cfPers/').doc(this.idp).update(pers).then(
         () => {
           this.serviceMod3.Trazability(
             this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
@@ -3213,6 +3228,35 @@ export class AdminLaboratorios3Component implements OnInit {
 
     }
 
+  }
+
+
+  agregarRol(){
+    console.log(this.rolSelect);
+
+    let bool = false;
+
+    this.rolesAgregados.forEach((doc, index) => {
+      if(doc.id == this.rolSelect){
+        bool = true;
+      }
+    });
+
+    if(bool){
+      swal({
+        type: 'error',
+        title: 'El rol ya se encuentra agregado.',
+        showConfirmButton: true
+      });
+    } else {
+      this.rolesAgregados.push({id:this.rolSelect, 
+        nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
+    }
+
+  }
+
+  quitarelementoRol(i){
+    this.rolesAgregados.splice(i, 1);
   }
 
   updatedUser(path, cfPers) {

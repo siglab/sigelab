@@ -224,17 +224,17 @@
 
                         <div *ngIf="moduloNivel2" class="form-group">
                           <div class="col-md-12">
-                            <div class="form-group row">
+                            <div class="form-group">
                               <label for="Activo" class="col-form-label">Activo:</label>
-                              <div class="col-sm-9">
-                                <label class="switch">
-                                  <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox"
-                                    checked>
-                                  <span class="slider round"></span>
-                                </label>
-                              </div>
                             </div>
-
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <label class="switch">
+                                <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
                           </div>
                         </div>
 
