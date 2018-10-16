@@ -56,6 +56,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
     this.query.getPruebas().then(data => {
 
       this.query.estructurarDataPruebas(data).then(datos => {
+       
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

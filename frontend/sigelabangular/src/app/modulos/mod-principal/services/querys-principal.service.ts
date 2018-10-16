@@ -48,9 +48,10 @@ export class QuerysPrincipalService {
   private racesCollection: AngularFirestoreCollection<any>;
   // METODO QUE TRAE LA COLECCION DE TODOS LAS PRUEBAS
   getPruebas() {
-    this.racesCollection = this.afs.collection<any>('practice', ref => ref.where('active','==',true));
+    const coll = this.afs.collection('practice');
+    const ref = coll.ref.where('active','==',true);
 
-    return this.racesCollection.ref.get();
+    return ref.get();
 
   }
 
@@ -544,7 +545,7 @@ export class QuerysPrincipalService {
                       ' por el usuario con el correo: ' + emailSolicitante +'.';
 
     const obj = {
-      asunto: 'Solciitud de servicio',
+      asunto: 'Solicitud de servicio',
       mensaje:mensaje,
       fecha: new Date().toISOString().split('T')[0],
       estado: 'sinver'

@@ -68,7 +68,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
      // abre loading mientras se cargan los datos
-     
+     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     if (localStorage.getItem('usuario')) {
       this.alertaCargando();

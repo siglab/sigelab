@@ -532,11 +532,11 @@
                                                 <div *ngFor="let item of solicitudesCoin; let i = index;" class="panel panel-default">
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title">
-                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSol">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSol{{i}}">
                                                                 <strong>No Solicitud: </strong>{{item.uidsol}}</a>
                                                         </h4>
                                                     </div>
-                                                    <div id="collapseSol" class="panel-collapse collapse">
+                                                    <div id="collapseSol{{i}}" class="panel-collapse collapse">
                                                         <div class="panel-body">
                                                             <form action="">
                                                                 <fieldset>

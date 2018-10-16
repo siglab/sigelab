@@ -132,7 +132,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
       this.user = JSON.parse(localStorage.getItem('usuario'));   
     }
     this.obs.currentObjectSolMan.subscribe(data => {
-
+ 
       this.getRoles(data.roles);
       if(data.length != 0){
 
@@ -627,7 +627,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
         email.push(doc.data().email);
         if(docs.size == cont){
           this.enviarNotificaciones(ids, this.user.email);
-          this.enviarEmails(email, this.user.email);
+          this.enviarEmails(this.user.email, email);
         }else{
           cont++;
         }
@@ -697,7 +697,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   }
 
-  enviarEmails(emailSolicitante,analistas){
+  enviarEmails(emailSolicitante, analistas){
 
 
     const fecha = new Date();
@@ -712,10 +712,12 @@ export class SolicitudMantenimientoComponent implements OnInit {
         destino += analistas[i] + ','     
       }
     }
- 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento: ' + 
-                       ', esta fue solicitada en la fecha ' + fechaes +
-                      ' por el usuario con el correo: ' + emailSolicitante +'.';
+    
+    const nombrelab = this.itemsel.nombre.nom1 + ' ' +this.itemsel.nombre.nom2;
+
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento en el laboratorio: ' + 
+                    nombrelab + ', esta fue solicitada en la fecha ' + fechaes +
+                    ' por el usuario con el correo: ' + emailSolicitante +'.';
 
     destino += emailSolicitante;
 
