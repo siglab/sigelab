@@ -62,6 +62,12 @@ export class BusPruComponent implements OnInit, AfterViewInit {
         this.dataSource.paginator = this.paginator;
        // cierra loading luego de cargados los datos
        swal.close();
+      }).catch(()=>{
+        swal({
+          type: 'error',
+          title: 'No existen practicas registradas a la fecha',
+          showConfirmButton: true
+        }); 
       });
 
     });
