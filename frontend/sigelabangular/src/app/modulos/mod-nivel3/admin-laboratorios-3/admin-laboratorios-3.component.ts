@@ -3083,10 +3083,22 @@ export class AdminLaboratorios3Component implements OnInit {
 
     this.idp = item.idpers;
     this.idu = item.iduser;
-
-
+    console.log(item.rolesClient);
+    this.nombreRoles(item.rolesClient);
     // this.seleccionado = item;
 
+  }
+
+  nombreRoles(item){
+    this.rolesAgregados = [];
+    console.log(this.idlab, this.niveles);
+    for (const key in item[this.idlab]  ) {
+      if (item[this.idlab].hasOwnProperty(key)) {
+        const name = this.niveles.find(o => o.id == key);
+        this.rolesAgregados.push({ id: key, 
+          nombre: name ? name.nombre : 'coordinador nivel 2'});
+      }
+    }
   }
 
   actualizarPers() {

@@ -167,7 +167,8 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
             npKRYaA0u9l4C43YSruA : true
           },
           createdAt: fecha.toISOString(),
-          email: event.email
+          email: event.email,
+          active:true
         };
 
 
@@ -179,27 +180,28 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
       } else {
 
-        const personas = [];
+        let persona;
         let role;
         const fecha = new Date();
+        let personaid = '';
 
         querySnapshot.forEach(doc => {
 
-          personas.push(doc.id);
+          persona = doc.data();
+          personaid = doc.id;
 
         });
 
-        const persona = personas[0];
 
         const usr = {
           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
-          cfPers: persona,
+          cfPers: personaid,
           appRoles: {
             npKRYaA0u9l4C43YSruA : true
           },
           createdAt: fecha.toISOString(),
-          email: event.email
-
+          email: event.email,
+          active:true
         };
 
         // para el nivel 3 es necesario pasar el campo tipo string a un objeto
@@ -207,6 +209,12 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
         const pers = {
           user: event.uid
         };
+
+
+        if(persona.nouser){
+          usr.appRoles = persona.appRoles;
+        }
+
         ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
           merge: true
         })

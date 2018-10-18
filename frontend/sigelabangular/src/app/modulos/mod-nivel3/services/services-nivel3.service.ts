@@ -250,6 +250,11 @@ export class ServicesNivel3Service {
     return this.afs.collection('cfMailNotification').add(obj);
   }
 
+  agregarPersona(obj) {
+    return this.afs.collection('cfPers').add(obj);
+  }
+
+
 
    // METODO TRAZABILIDAD DE CAMBIOS
 
