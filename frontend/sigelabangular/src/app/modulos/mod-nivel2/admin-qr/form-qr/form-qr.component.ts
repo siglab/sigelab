@@ -68,7 +68,7 @@ export class FormQrComponent implements OnInit {
 
   rol: any;
   moduloQr = false;
-  moduloNivel2 = false;
+
 
   constructor(
     private _Activatedroute: ActivatedRoute,
@@ -137,9 +137,6 @@ export class FormQrComponent implements OnInit {
       if (this.rol[clave]) {
         if ((clave === 'moduloQr')) {
           this.moduloQr = true;
-        }
-        if ((clave === 'moduloNivel2')) {
-          this.moduloNivel2 = true;
         }
 
       }
