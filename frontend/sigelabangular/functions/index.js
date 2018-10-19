@@ -127,25 +127,10 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 });
 
 
-const mailTrasport = nodemailer.createTransport({
+const gmailEmail = encodeURIComponent(functions.config().gmail.email);
+const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 
-  service: 'Gmail',
-
-  auth: {
-
-    type: mod.CREDENTIALS.TYPE,
-
-    user: mod.CREDENTIALS.AUTHUSER,
-
-    clientId: mod.CREDENTIALS.AUTHTCLIENTID,
-
-    clientSecret: mod.CREDENTIALS.AUTHTCLIENTESECRET,
-
-    refreshToken: mod.CREDENTIALS.AUTHREFRESHTOKEN
-
-  }
-
-});
+const mailTrasport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
 
 
 exports.CreateUser = functions.auth.user().onCreate(event => {
@@ -162,6 +147,7 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
 
         const usr = {
           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+          active:  true,
           cfPers: '',
           appRoles: {
             npKRYaA0u9l4C43YSruA : true
@@ -194,6 +180,7 @@ exports.CreateUser = functions.auth.user().onCreate(event => {
         const usr = {
           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
           cfPers: persona,
+          active: true,
           appRoles: {
             npKRYaA0u9l4C43YSruA : true
           },
@@ -243,34 +230,15 @@ let sendMail = (req, res) => {
       res.status(200).send("Exito al enviar Email desde Firebase Functions.");
 
 
-
-    } else {
-
-      console.log("exito al enviar correo");
-
-      const fecha = new Date();
-
-      const uid = event.uid;
-
-      const email = event.email;
-
-
-
-
-
     }
 
   }).catch(error => {
 
     if (res) {
 
-      res.status(200).send("Exito al enviar Email desde Firebase Functions.");
+      res.status(500).send("Exito al enviar Email desde Firebase Functions.");
 
 
-
-    } else {
-
-      console.log("exito al enviar correo");
 
     }
 

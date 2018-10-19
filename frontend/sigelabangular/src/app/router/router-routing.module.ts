@@ -38,7 +38,7 @@ import { QrRedirectComponent } from '../modulos/mod-nivel2/admin-qr/qr-redirect/
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
-  { path: 'inventario', component: QrRedirectComponent},
+  { path: 'inventario', component: QrRedirectComponent },
   { path: 'inicio', component: InicioAppComponent},
   { path: 'registro', component: RegistroComponent},
   { path: 'principal', component: PrincipalComponent,
