@@ -63,19 +63,20 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   };
 
   srv = {
-    active:true,
-    cfAcro:'',
-    cfClass:'',
-    cfCondition:[],
-    cfCurrCode:'CO',
-    cfDesc:'',
-    cfFacil:'',
-    cfName:'',
-    cfPrice:'',
-    cfScheme:'',
-    cfUri:'',
-    createdAt:'',
-    relatedEquipments:{},
+    active: true,
+    cfAcro: '',
+    cfClass: 'cf7799e9-3477-11e1-b86c-0800200c9a66',
+    cfClassScheme: '39f413d8-e5ee-409a-95f1-d204b78508b9',
+    cfCondition: [],
+    cfCurrCode: 'CO',
+    cfDesc: '',
+    cfFacil: '',
+    cfName: '',
+    cfPrice: '',
+    cfScheme: '',
+    cfUri: '',
+    createdAt: '',
+    relatedEquipments: {},
     relatedMeasurement:{},
     relatedServices:{},
     updatedAt:'',
@@ -131,7 +132,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service) { }
 
   ngOnInit() {
-  
+
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
@@ -155,7 +156,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             this.servasocestructurados = this.estructurarDataServ(servicios);
             this.servicioMod2.buscarLab(this.lab_id).then(labo => {
               this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
-            
+
               if(this.servasocestructurados ){
                 this.dataSource.data = this.servasocestructurados;
                 this.dataSourceEquip = new MatTableDataSource(this.equipos);
@@ -236,7 +237,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
 
- 
+
 
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
   estructurarDataServ(data: any) {
@@ -270,7 +271,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           active: elemento.active,
           residuos:elemento.residuos,
           descuento:elemento.descuento,
-          parametros: elemento.parametros 
+          parametros: elemento.parametros
         }
       };
 
@@ -451,7 +452,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.srv.createdAt = fecha.toISOString();
     this.srv.updatedAt = fecha.toISOString();
     this.srv.cfFacil = this.lab_id;
-  
+
     this.srv.parametros = this.listaParametrosServicio;
     this.selection.selected.forEach((element) => {
 
@@ -508,7 +509,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
               this.cerrarModal('modal2');
             });
           }
-  
+
           this.selection.selected.forEach((element) => {
             let srvEquip = {
               relatedSrv:{}
@@ -519,13 +520,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                 this.user.uid, 'update', 'cfEquip', element.id, srvEquip
               ).then(()=>{
                 this.servicioMod2.setEquipo(element.id, srvEquip);
-              });          
+              });
             }
           });
         });
 
       });
- 
+
     });
 
   }
@@ -545,8 +546,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         this.user.uid, 'update', 'cfEquip', equipo.id, srvequip
       ).then(()=>{
         this.servicioMod2.setEquipo(equipo.id, srvequip);
-      });  
-     
+      });
+
     }
     this.srv.cfFacil = this.lab_id;
     this.srv.updatedAt = fecha.toISOString();
@@ -591,8 +592,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
               this.servicioMod2.updateVariciones(this.itemsel.infoServ.uid , variacion.id, variacion.data);
             });
           }
-  
-  
+
+
           if(j == this.variaciones.length-1){
             swal.close();
             swal({
@@ -603,30 +604,30 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
               this.variaciones = [];
               this.cerrarModal('modal1');
             });
-           
+
           }
-  
+
         }
-  
+
         for (let i = 0; i < this.variacionesCambiadas.length; i++) {
           this.servicioMod2.TrazabilitySubCollection(
-            this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations',  
-            this.variacionesCambiadas[i].id, 
+            this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations',
+            this.variacionesCambiadas[i].id,
             {active:this.variacionesCambiadas[i].active}
           ).then(()=>{
             this.servicioMod2.setVariaciones(
-              this.itemsel.infoServ.uid, 
-              this.variacionesCambiadas[i].id, 
+              this.itemsel.infoServ.uid,
+              this.variacionesCambiadas[i].id,
               {active:this.variacionesCambiadas[i].active});
-    
+
               if(i == this.variacionesCambiadas.length-1){
                 this.variacionesCambiadas = [];
               }
           });
 
         }
-  
-  
+
+
       });
     });
 

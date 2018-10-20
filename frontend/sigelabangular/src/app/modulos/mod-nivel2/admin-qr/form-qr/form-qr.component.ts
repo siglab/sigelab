@@ -68,7 +68,7 @@ export class FormQrComponent implements OnInit {
 
   rol: any;
   moduloQr = false;
-  moduloNivel2 = false;
+
 
   constructor(
     private _Activatedroute: ActivatedRoute,
@@ -137,9 +137,6 @@ export class FormQrComponent implements OnInit {
       if (this.rol[clave]) {
         if ((clave === 'moduloQr')) {
           this.moduloQr = true;
-        }
-        if ((clave === 'moduloNivel2')) {
-          this.moduloNivel2 = true;
         }
 
       }
@@ -283,8 +280,8 @@ export class FormQrComponent implements OnInit {
         cfName: this.inventario.marca,
         cfDescr: '',
         cfFacil: this.idlab,
-        cfClass: '',
-        cfClassScheme: '',
+        cfClass: 'cf7799e8-3477-11e1-b86c-0800200c9a66',
+        cfClassScheme: '623d2471-8d16-40c9-915a-df496da086be',
         cfPers: '',   // cual persona le asigno eto
         relatedSrv: {},
         relatedMeas: {},

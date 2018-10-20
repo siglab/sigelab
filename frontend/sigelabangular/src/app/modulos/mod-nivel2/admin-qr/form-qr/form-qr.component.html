@@ -22,12 +22,12 @@
 
   </section>
 
-  <section class="content">
+  <section  class="content">
 
 
 
     <!-- mostrar una vez para cargar espacios -->
-    <div class="col-md-12" style="margin-top: 20px;" *ngIf="seleccionLab">
+    <div class="col-md-12" style="margin-top: 20px;" *ngIf="seleccionLab && moduloQr">
 
       <div class=" box box-danger">
 
@@ -78,7 +78,7 @@
 
 
 
-    <div class="col-md-12" style="margin-top: 20px;" *ngIf="!this.seleccionLab">
+    <div class="col-md-12" style="margin-top: 20px;">
 
       <div class="box box-danger">
 
@@ -255,7 +255,7 @@
 
               <!-- campo de consulta sabs -->
 
-              <div *ngIf="!this.formFirebase" class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
+              <div *ngIf="!this.formFirebase && moduloQr && !this.seleccionLab" class="form-group has-info" [ngClass]="{'has-success': this.formulario }">
 
                 <div class="col-md-12">
 
@@ -272,6 +272,11 @@
 
                 </div>
 
+              </div>
+
+
+              <div *ngIf="!this.formFirebase && !moduloQr">
+                <h3>ACCESO DENEGADO NO TIENE EL PERMISO PARA HACER ALGUNA ACCION</h3>
               </div>
 
 
@@ -384,7 +389,7 @@
 
 
 
-                <div *ngIf="moduloQr || moduloNivel2" class="form-group">
+                <div *ngIf="moduloQr" class="form-group">
 
                   <div class="col-md-6">
 
@@ -459,7 +464,7 @@
 
 
 
-          <div *ngIf="this.formulario && (moduloQr || moduloNivel2)" class="modal-footer">
+          <div *ngIf="this.formulario && moduloQr" class="modal-footer">
 
             <button (click)="addEquipFirebase()" type="button" class="btn btn-danger">
               <i class="fa fa-check"></i> Guardar</button>

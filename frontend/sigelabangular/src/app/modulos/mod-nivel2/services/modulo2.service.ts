@@ -128,7 +128,7 @@ export class Modulo2Service {
     const col = this.afs.collection('cfFacil');
     const ref = col.ref.where('facilityAdmin', '==', persid);
 
-    return ref.get();  
+    return ref.get();
 
   }
 
@@ -208,7 +208,7 @@ export class Modulo2Service {
   getCollectionSolicitudesMantenimiento(labid) {
     const col = this.afs.collection('request');
     const refer = col.ref.where('requestType', '==', 'mantenimiento').where('cfFacil','==',labid)
-    return refer.get();   
+    return refer.get();
   }
 
   getComponentForId(idequip, idcomp){
@@ -220,12 +220,12 @@ export class Modulo2Service {
 
   // METODOS DE MODIFICACION
 
-  updateDocLaboratorio(idlab, doc){  
+  updateDocLaboratorio(idlab, doc){
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
 
   setDocLaboratorio(idlab, doc){
-    
+
     return  this.afs.doc('cfFacil/' + idlab).set(doc,{merge:true});
   }
 
@@ -283,10 +283,12 @@ export class Modulo2Service {
 
 
   // METODOS DE CREACION O ADICION
-  addAddrLaboratorio(idlab, doc){
-    return  this.afs.doc('cfFacil/'+idlab).collection('cfEAddr')
-                .add({cfClass:'', cfClassScheme:'', cfEAddrValue:doc});
+  addAddrLaboratorio(idlab, doc) {
+    return  this.afs.doc('cfFacil/' + idlab).collection('cfEAddr')
+                .add({cfClass: '68aa07f2-34c9-11e1-b86c-0800200c9a66',
+                      cfClassScheme: '1227a225-db7a-444d-a74b-3dd4b438b420', cfEAddrValue: doc});
   }
+
 
   addESpacio(doc){
     return  this.afs.collection('space').add(doc);
@@ -350,27 +352,27 @@ export class Modulo2Service {
       this.afs.collection(collection).doc(id).ref.get().then(doc => {
         const documento = doc.data();
         docAfter = doc.data();
-  
+
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
-             docAfter[key] = docIn[key]; 
+             docAfter[key] = docIn[key];
              console.log(cont, size);
              if(cont == size){
-  
+
               console.log(documento, docAfter);
 
               this.addTrazability(user, type, collection, id, documento, docAfter).then(()=>{
                 resolve();
               });
-             
+
              }else{
-              cont++;  
+              cont++;
              }
-               
+
           }
         }
-  
-        
+
+
       });
     });
 
@@ -393,26 +395,26 @@ export class Modulo2Service {
           .ref.get().then(doc => {
           const documento = doc.data();
           docAfter = doc.data();
-            
+
           if(type != 'delete'){
             for (const key in docIn) {
               if (docIn.hasOwnProperty(key)) {
-                 docAfter[key] = docIn[key]; 
+                 docAfter[key] = docIn[key];
                  console.log(cont, size);
                  if(cont == size){
-      
+
                   console.log(documento, docAfter);
-    
+
                   this.addTrazability(
-                    user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+                    user, type, collection+'/'+idColl+'/'+subColl, idSub,
                     documento, docAfter).then(()=>{
                     resolve();
                   });
-                 
+
                  }else{
-                  cont++;  
+                  cont++;
                  }
-                   
+
               }
             }
           } else {
@@ -422,16 +424,16 @@ export class Modulo2Service {
               resolve();
             });
           }
-        
-            
+
+
         });
       } else {
         this.addTrazability(
-          user, type, collection+'/'+idColl+'/'+subColl, idSub, 
+          user, type, collection+'/'+idColl+'/'+subColl, idSub,
           {}, docIn).then(()=>{
           resolve();
         });
-        
+
       }
 
     });
@@ -453,14 +455,14 @@ addTrazability(user, type, collection, iddoc, docAnt, docDes){
         previousVer:docAnt,
         createdAt: new Date().toISOString()
       };
-   
+
      console.log(logger);
-  
+
      this.afs.collection('logger').add(logger).then(()=>{
        resolve();
      });
     });
-  
+
   });
 
   return promise;

@@ -57,6 +57,12 @@ export class AdminUsuariosComponent implements OnInit {
     relatedEquipments: {},
     updatedAt: this.fecha.toISOString()
   };
+
+  genero:any;
+  cedula:any;
+  cumple:any;
+ 
+
   // objeto usuario
 
   usuario = {
@@ -116,6 +122,8 @@ export class AdminUsuariosComponent implements OnInit {
 
   selectionList:any;
 
+  nuevo = false;
+
   constructor(private obs: ObservablesService,
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
@@ -137,15 +145,13 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     this.userService.listCfFaculties().subscribe(data => {
-      console.log('data labs', data);
+
       this.dataSourceFacul.data = data;
 
       this.facultades = data;
     });
 
     this.estructuraIdPers().then((data: any) => {
-
-      console.log('data de admin usuarios', data.user);
 
       this.dataSourcePers.data = data.user;
 
@@ -244,12 +250,12 @@ export class AdminUsuariosComponent implements OnInit {
                     roles: finalrol['role'],
                     llave: finalrol['llave']
                   };
-                  console.log(usuarios);
+     
                   usuarios.push(usuario);
 
-                  console.log('tam', user.size, usuarios.length);
+   
                   if (user.size === usuarios.length) {
-                    console.log('array final', usuarios);
+   
                     resolve({ user: usuarios });
                   }
                 });
@@ -286,7 +292,6 @@ export class AdminUsuariosComponent implements OnInit {
       }
     }
 
-    console.log(roles, roleslabs);
 
     return {roles, roleslabs};
   }
@@ -500,8 +505,6 @@ export class AdminUsuariosComponent implements OnInit {
     }
 
 
-    console.log(this.arrayPract);
-
     $('#modal').modal('hide');
   }
 
@@ -512,7 +515,7 @@ export class AdminUsuariosComponent implements OnInit {
     this.selection.selected.forEach(element => {
       arr.push(element.id);
     });
-    console.log(this.selectionList);
+
     if(this.selectionList == 'PFhLR4X2n9ybaZU3CR75'){
       this.arrayPract.find(o => o.id == this.selectionList).fac = arr;
     }else{
@@ -520,14 +523,12 @@ export class AdminUsuariosComponent implements OnInit {
     }
 
 
-    console.log(this.arrayPract);
-
     $('#modal').modal('hide');
   }
 
   // metodo que dispara el modal para editar roles
   verLaboratoriosDelRol(item){
-    console.log(item);
+
     this.selection.clear();
     const arra = [];
     this.rolSelect = '';
@@ -542,7 +543,6 @@ export class AdminUsuariosComponent implements OnInit {
           if(element == element2.id){
 
             this.selection.select(element2);
-            console.log(this.selection.selected);
           }
 
         }
@@ -565,7 +565,7 @@ export class AdminUsuariosComponent implements OnInit {
             if(element == element2.id){
 
               this.selection.select(element2);
-              console.log(this.selection.selected);
+       
             }
 
           }
@@ -600,6 +600,7 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   cambiardata(item, table) {
+    this.nuevo = false;
     this.editar = false;
     this.selection.clear();
 
@@ -620,7 +621,6 @@ export class AdminUsuariosComponent implements OnInit {
     }
 
     this.idp = item.idPers;
-
     console.log(this.idp);
     this.idu = item.id;
   }
@@ -708,9 +708,6 @@ export class AdminUsuariosComponent implements OnInit {
     }
 
 
-    console.log('usuario para subir al sistema', this.usuario);
-    console.log(' se va actualizar esta persona', this.person);
-
     // inactiva la persona y los laboratorios que tiene asociados
 
     if (!this.person.active) {
@@ -781,6 +778,175 @@ export class AdminUsuariosComponent implements OnInit {
         showConfirmButton: true
       });
     }
+  }
+
+  alistarPersona(){
+    this.arrayPract = [];
+    this.cumple = undefined;
+    this.genero = undefined;
+    this.nombre = undefined;
+    this.apellido = undefined;
+    this.email = 'ejemplo@ejemplo.com';
+    this.cedula = undefined;
+    this.type = undefined;
+    this.idu = '';
+
+    this.nuevo = true;
+
+    $('html, body').animate({ scrollTop: '400px' }, 'slow');
+  }
+
+  crearPersona(){
+    const person = {
+      cfBirthdate: this.cumple,
+      cfGender: this.genero,
+      cfUri: '',
+      cfFamilyNames: this.nombre,
+      cfFirstNames: this.apellido,
+      clientRole : {},
+      cfOtherNames: '',
+      cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
+      cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
+      cfClassScheme: '6b2b7d24-3491-11e1-b86c-0800200c9a66',
+      cfFacil: {},
+      active: true,
+      user: this.idu,
+      email: this.email,
+      cc: this.cedula,
+      type: this.type,
+      relatedEquipments: {},
+      createdAt: this.fecha.toISOString(),
+      updatedAt: this.fecha.toISOString(),
+      faculty:{},
+  
+    };
+
+
+    const rolesUsuario = {'npKRYaA0u9l4C43YSruA': true};
+    const rolesPersona = {};
+    const cfFacil = {};
+
+    let boolfac = false;
+    let facultades = {};
+
+    const clientRole = ['6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB'];
+    
+    const coor = 'S9wr9uK5BBF4yQZ7CwqX';
+
+    let adm = false;
+
+    this.arrayPract.forEach((doc, index) => {
+      if(doc.id == coor){
+        adm = true;
+        this.arrayPract.forEach((doc2, index2) => {
+          if(clientRole.includes(doc2.id)){
+
+            doc.labs.forEach(element => {
+              doc2.labs.forEach((element2, index3 )=> {
+                if(element == element2){
+                  this.arrayPract[index2].labs.splice(index3, 1);
+                }
+              });
+            });
+          }
+        });
+
+        this.setKeyAdmin(doc.labs);
+      }
+    });
+
+    if (this.arrayPract.length > 0) {
+      // valida si el array contiene la llave de adminstrador
+      this.arrayPract.forEach(doc => {
+        if(doc.tipo == 'appRoles'){
+          rolesUsuario[doc.id] = true;
+          if(doc.id == 'PFhLR4X2n9ybaZU3CR75'){
+            boolfac = true;
+            doc.fac.forEach(element => {
+              facultades[element] = true;
+            });
+          }
+        }else{
+          doc.labs.forEach(lab => {
+            cfFacil[lab] = true;
+
+            if(rolesPersona[lab]){
+              rolesPersona[lab][doc.id] = true;
+            }else{
+              rolesPersona[lab] = {};
+              rolesPersona[lab][doc.id] = true;
+            }
+          });
+        }
+      });
+
+
+      person.clientRole = rolesPersona;
+      person.cfFacil = cfFacil;
+
+      if(boolfac){
+        person.faculty = facultades;
+      }
+
+      if(this.nuevo){
+        person['appRoles'] = rolesUsuario;
+        person['nouser'] = true;
+      }
+     
+    } else {
+      if(this.nuevo){
+        person['nouser'] = true;
+        person['appRoles'] = {};
+      }
+    }
+
+    let bool = false;
+    for (const key in person) {
+      if (person.hasOwnProperty(key) && person[key] == undefined) {
+        bool = true; 
+      }
+    }
+
+    console.log(person);
+
+    if(!bool){
+      this.serviceMod3.agregarPersona(person).then(ok => {
+        this.serviceMod3.Trazability(
+          this.user.uid, 'create', 'cfPers', ok.id, person
+        );  
+
+        if(!this.nuevo){
+          this.serviceMod3.Trazability(
+            this.user.uid, 'update', 'user', this.idu, {cfPers: ok.id, appRoles:rolesUsuario}
+          ).then(()=>{
+            this.serviceMod3.setUser(this.idu, {cfPers: ok.id, appRoles:rolesUsuario});
+          });
+        }
+
+        this.arrayPract.forEach((doc, index) => {
+          if(doc.id == coor){
+            this.idp = ok.id;
+            this.setKeyAdmin(doc.labs);
+          }
+        });
+        console.log(ok.id);
+
+        swal({
+          type: 'success',
+          title: 'Exito al crear la persona',
+          showConfirmButton: true
+        });
+      });
+
+    }else{
+      swal({
+        type: 'error',
+        title: 'debe llenar todos los datos de la persona',
+        showConfirmButton: true
+      });
+    }
+   
+   
   }
 
   /* actualizar la coleccion cfPers con el nuevo id del usuario */

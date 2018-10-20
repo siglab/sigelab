@@ -168,7 +168,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.getUserId();
-   
+
     this.cargarSedes();
     this.cargarSubsedes();
     this.cargarFacultades();
@@ -304,10 +304,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     let promise = new Promise((resolve,reject)=>{
       this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
-    
+
           this.servicioMod2.buscarSede(laboratorio.headquarter ? laboratorio.headquarter : 'tygd').then(se=>{
             const sede = se.data();
-      
+
               this.servicioMod2.buscarSubSede(laboratorio.subHq ? laboratorio.subHq : 'mfij').then(sub=>{
                 const subsede = sub.data();
                 this.servicioMod2.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
@@ -331,14 +331,14 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                         director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                         iddueno: laboratorio.facilityAdmin,
                         sede: {id:laboratorio.headquarter, nombre:sede ? sede.cfName : ''},
-                        subsede: {id:laboratorio.subHq, 
+                        subsede: {id:laboratorio.subHq,
                                   nombre:subsede ? subsede.cfAddrline1 : ''},
                         espacioPrin: this.buscarEspacio(laboratorio.mainSpace),
                         espacioPrincipal: laboratorio.mainSpace,
                         telefonos: this.estructuraTelefonos(labo.id),
                         info:{email: laboratorio.otros.email},
                         equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                        personal: this.estructurarPersonas(laboratorio.relatedPers),   
+                        personal: this.estructurarPersonas(laboratorio.relatedPers),
                         facultades: this.estructurarFacultades(laboratorio.faculties),
                         departamentos: this.estructurarDepartamentos(laboratorio.departments),
                         espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
@@ -359,7 +359,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       if(laboratorio.facilActivity.teaching){
                         this.labestructurado['practicas'] = this.estructurarPracticas(laboratorio.relatedPractices);
                       }
-                  
+
                       this.cambios = this.pendientes(laboratorio.suggestedChanges);
 
 
@@ -407,7 +407,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     for (let i = 0; i < 1; i++) {
       if(idespacio){
        this.servicioMod2.buscarEspacio(idespacio).then(data=>{
-       
+
          arr.push(data.data());
         });
       }
@@ -445,7 +445,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             arr.push(serv);
 
             this.servicioMod2.getSolicitudesServiciosForId(clave).then(dataSol => {
-   
+
               dataSol.forEach(doc => {
                 const element = doc.data();
 
@@ -935,25 +935,25 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           if (this.infolab.mainSpace) {
             this.infolab['active'] = true;
           }
-    
+
           this.servicioMod2.Trazability(
             this.user.uid, 'update','cfFacil', this.labestructurado.uid, this.infolab)
             .then(()=>{
               this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
                   .then(data=>{
-        
+
                 swal.close();
                 swal({
                   type: 'success',
                   title: 'Cambios Realizados',
                   showConfirmButton: true
                 }).then(() => {
-                
+
                 });
 
               });
             });
-  
+
 
         } else if (result.dismiss === swal.DismissReason.cancel) {
           swal(
@@ -1017,7 +1017,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   });
                 });
               })
-            
+
             });
 
 
@@ -1077,7 +1077,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             if (element) {
               const aux = this.sugerencia.data[cont].llave.split('.');
 
-              if (aux.length != 2) { 
+              if (aux.length != 2) {
                 if (aux == 'faculties' || aux == 'departments') {
                   if (this.sugerencia.data[cont].quitar) {
                     const obj = {};
@@ -1087,7 +1087,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                       this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, obj ).then(()=>{
                         this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, obj);
                       });
-                    
+
                   }else{
                     cambio[aux[0]] = this.estructurarEnvioSugerenciaFacDep(this.sugerencia.data[cont].info, aux);
                   }
@@ -1106,13 +1106,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   if (this.sugerencia.data[cont].quitar) {
                     const obj = {};
                     obj[aux] = this.estructurarEnvioSugerenciaActividad(this.sugerencia.data[cont].infoaux, false);
-                    
+
                     this.servicioMod2.Trazability(
                       this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, obj).then(()=>{
 
                       this.servicioMod2.setDocLaboratorio(this.labestructurado.uid, obj);
                     });
-                   
+
                   }else{
                     cambio[aux[0]] = {};
 
@@ -1202,17 +1202,17 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   EnviarcfEAddr(data, accion) {
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
-      if(accion){   
-        this.servicioMod2.addAddrLaboratorio(this.labestructurado.uid,element.nombre).then(data=>{
+      if (accion) {
+        this.servicioMod2.addAddrLaboratorio(this.labestructurado.uid,element.nombre).then( data => {
           data.get().then(doc => {
 
-            this.servicioMod2.TrazabilitySubCollection(        
+            this.servicioMod2.TrazabilitySubCollection(
               this.user.uid, 'create', 'cfFacil', this.labestructurado.uid, 'cfEAddr', data.id, doc.data());
           });
-           
+
         });
-      }else{
-        this.servicioMod2.TrazabilitySubCollection(        
+      } else {
+        this.servicioMod2.TrazabilitySubCollection(
           this.user.uid, 'delete', 'cfFacil', this.labestructurado.uid, 'cfEAddr', element.id, {})
           .then(()=>{
             this.servicioMod2.deleteAddrLaboratorio(this.labestructurado.uid, element.id);

@@ -113,6 +113,8 @@ export class AdminLaboratorios3Component implements OnInit {
     headquarter: '',
     subHq: '',
     cfDescr: '',
+    cfClass: 'cf7799e7-3477-11e1-b86c-0800200c9a66',
+    cfClassScheme: 'da0e5a01-c73e-4489-8cf7-917e9efcdad4',
     faculties: {},
     departments: {},
     mainSpace: '',
@@ -329,7 +331,7 @@ export class AdminLaboratorios3Component implements OnInit {
   rolesAgregados = [];
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
-    private service: EspaciosService, private toastr: ToastrService, 
+    private service: EspaciosService, private toastr: ToastrService,
     private serviceMod3: ServicesNivel3Service) {
   }
 
@@ -2479,7 +2481,7 @@ export class AdminLaboratorios3Component implements OnInit {
       this.serviceMod3.Trazability(
         this.user.uid, 'create', 'space', data.id, nuevoespacio
       );
-      
+
     });
     console.log(nuevoespacio);
 
@@ -3083,10 +3085,22 @@ export class AdminLaboratorios3Component implements OnInit {
 
     this.idp = item.idpers;
     this.idu = item.iduser;
-
-
+    console.log(item.rolesClient);
+    this.nombreRoles(item.rolesClient);
     // this.seleccionado = item;
 
+  }
+
+  nombreRoles(item){
+    this.rolesAgregados = [];
+    console.log(this.idlab, this.niveles);
+    for (const key in item[this.idlab]  ) {
+      if (item[this.idlab].hasOwnProperty(key)) {
+        const name = this.niveles.find(o => o.id == key);
+        this.rolesAgregados.push({ id: key,
+          nombre: name ? name.nombre : 'coordinador nivel 2'});
+      }
+    }
   }
 
   actualizarPers() {
@@ -3249,7 +3263,7 @@ export class AdminLaboratorios3Component implements OnInit {
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect, 
+      this.rolesAgregados.push({id:this.rolSelect,
         nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
     }
 
@@ -3284,7 +3298,7 @@ export class AdminLaboratorios3Component implements OnInit {
     ).then(() => {
       this.afs.collection('cfPers').doc(pathP).update({ user: idU });
     });
-   
+
   }
 
   /* actualizar el laboratorio con el nuevo id del document pers */

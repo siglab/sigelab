@@ -1172,7 +1172,7 @@
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                           <div class="box box-danger">
-                            <div *ngIf="moduloNivel3 || moduloNivel25" class="box-header">
+                            <div *ngIf="moduloNivel3" class="box-header">
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <button data-toggle="modal" (click)="clearObj()" data-target="#modal" style="float: right;" class="btn btn-danger"
@@ -1278,17 +1278,17 @@
                                               <div class="form-group row">
                                                 <label for="edificio" class="col-sm-2 col-form-label">Edificio:</label>
                                                 <div class="col-sm-2">
-                                                  <input name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value=""
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="edificio" [(ngModel)]="this.space.spaceData.building " type="text" value=""
                                                     class="form-control" id="edificio">
                                                 </div>
                                                 <label for="edificio" class="col-sm-2 col-form-label">Planta:</label>
                                                 <div class="col-sm-2">
-                                                  <input name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value=""
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="planta" [(ngModel)]="this.space.spaceData.floor " type="text" value=""
                                                     class="form-control" id="edificio">
                                                 </div>
                                                 <label for="espac" class="col-sm-2 col-form-label">Espacio:</label>
                                                 <div class="col-sm-2">
-                                                  <input name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value=""
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="espacio" [(ngModel)]="this.space.spaceData.place " type="text" value=""
                                                     class="form-control" id="espac">
                                                 </div>
                                               </div>
@@ -1303,7 +1303,7 @@
                                               <div class="form-group row">
                                                 <label for="area" class="col-sm-2 col-form-label">Area Total:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control"
                                                     id="area" placeholder="Area total">
                                                 </div>
                                               </div>
@@ -1314,7 +1314,7 @@
                                               <div class="form-group row">
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Area Ocupada:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control"
                                                     id="arealibre" placeholder="Area ocupada">
                                                 </div>
                                               </div>
@@ -1326,7 +1326,7 @@
                                               <div class="form-group row">
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Ocupacion actual:</label>
                                                 <div class="col-sm-9">
-                                                  <input name="ocupacionactual" [(ngModel)]="this.ocupacionAct" type="text" value=""
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="ocupacionactual" [(ngModel)]="this.ocupacionAct" type="text" value=""
                                                     class="form-control" id="ocupact" placeholder="Ocupacion actual" disabled>
                                                 </div>
                                               </div>
@@ -1338,7 +1338,7 @@
                                               <div class="form-group row">
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Area Libre:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control"
                                                     id="arealibre" placeholder="Area libre">
                                                 </div>
                                               </div>
@@ -1349,7 +1349,7 @@
                                               <div class="form-group row">
                                                 <label for="capacidad" class="col-sm-2 col-form-label">Capacidad:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="capacidad" [(ngModel)]="this.space.capacity" type="text" value="" class="form-control"
                                                     id="arealibre" placeholder="Capacidad">
                                                 </div>
                                               </div>
@@ -1361,7 +1361,7 @@
                                               <div class="form-group row">
                                                 <label for="capacidad" class="col-sm-2 col-form-label">Longitud:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="longitude" [(ngModel)]="this.space.geoRep.longitud" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="longitude" [(ngModel)]="this.space.geoRep.longitud" type="text" value="" class="form-control"
                                                     id="arealibre" placeholder="Capacidad">
                                                 </div>
                                               </div>
@@ -1372,7 +1372,7 @@
                                               <div class="form-group row">
                                                 <label for="capacidad" class="col-sm-2 col-form-label">Latitud:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="latitude" [(ngModel)]="this.space.geoRep.latitud" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="latitude" [(ngModel)]="this.space.geoRep.latitud" type="text" value="" class="form-control"
                                                     id="arealibre" placeholder="Capacidad">
                                                 </div>
                                               </div>
@@ -1386,7 +1386,7 @@
                                               <div class="form-group row">
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Area Min:</label>
                                                 <div class="col-sm-10">
-                                                  <input name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control"
                                                     id="arealibre" placeholder="Area min">
                                                 </div>
                                               </div>
@@ -1398,18 +1398,18 @@
                                               <div class="form-group row">
                                                 <label for="indice" class="col-sm-5 col-form-label">Indice de saturacion:</label>
                                                 <div class="col-sm-7">
-                                                  <input name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control"
+                                                  <input [attr.disabled]="!moduloNivel3 ? false : null" name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control"
                                                     id="indice" placeholder="Indice saturacion"  disabled >
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
 
-                                          <div *ngIf="moduloNivel3 || moduloNivel25" class="form-group">
+                                          <div *ngIf="moduloNivel3" class="form-group">
                                             <div class="col-md-12">
                                               <div class="form-group row">
                                                 <label for="Activo" class="col-form-label">Activo:</label>
-                                                <div class="col-sm-9">
+                                                <div class="col-md-12">
                                                   <label class="switch">
                                                     <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox"
                                                       checked>
@@ -1441,7 +1441,7 @@
 
 
 
-                                          <div *ngIf="moduloNivel3 || moduloNivel25" class="form-group">
+                                          <div *ngIf="moduloNivel3" class="form-group">
                                             <div class="col-md-12">
                                               <button (click)="actualizarEspacio()" style="float: right;" class="btn btn-success" type="button">
                                                 <i class="fa fa-refresh"> </i> Actualizar</button>
@@ -1481,7 +1481,7 @@
                               <div class="form-group">
                                 <div class="col-md-12">
 
-                                  <button *ngIf="moduloNivel3 || moduloNivel25" data-toggle="modal" (click)= "setValue()"   data-target="#modal1Prac" style="float: right;" class="btn btn-danger" type="button">Agregar
+                                  <button *ngIf="moduloNivel3" data-toggle="modal" (click)= "setValue()"   data-target="#modal1Prac" style="float: right;" class="btn btn-danger" type="button">Agregar
                                     Personal</button>
                                 </div>
                               </div>
@@ -2379,7 +2379,7 @@
                         <strong>Nombre:</strong>
                       </label>
                       <div class="col-md-10">
-                        <input  [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control"
+                        <input [attr.disabled]="!moduloNivel3 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control"
                           type="text">
                       </div>
                     </div>
@@ -2394,7 +2394,7 @@
                         <strong>Apellidos:</strong>
                       </label>
                       <div class="col-md-10">
-                        <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control"
+                        <input [attr.disabled]="!moduloNivel3 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control"
                           type="text">
                       </div>
 
@@ -2408,7 +2408,7 @@
                       </label>
                       <div class="col-md-10">
 
-                        <select class="form-control" [(ngModel)]="this.type" name="estado">
+                        <select [attr.disabled]="!moduloNivel3 ? false : null" class="form-control" [(ngModel)]="this.type" name="estado">
 
                           <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
 
@@ -2426,7 +2426,7 @@
                       </label>
 
                       <div class="col-md-10">
-                        <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control"
+                        <input [attr.disabled]="!moduloNivel3 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control"
                           type="email">
                       </div>
                     </div>
@@ -2438,7 +2438,7 @@
     
                       <div class="input-group">
     
-                          <select class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers" id="facul" >
+                          <select [attr.disabled]="!moduloNivel3 ? false : null" class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers" id="facul" >
                               <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
                           </select>
                           <span class="input-group-btn">
@@ -2460,7 +2460,7 @@
                       </div>
                     </div>
 
-                  <div *ngIf="moduloNivel3 || moduloNivel25" class="form-group row">
+                  <div *ngIf="moduloNivel3" class="form-group row">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class="col-sm-12">
@@ -2485,7 +2485,7 @@
 
 
             </div>
-            <div *ngIf="moduloNivel3 || moduloNivel25" class="modal-footer">
+            <div *ngIf="moduloNivel3" class="modal-footer">
               <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar <i class="fa fa-refresh"></i>
                 </button>
 
