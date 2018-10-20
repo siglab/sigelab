@@ -220,7 +220,7 @@ let sendMail = (req, res) => {
 
   var mailsolicitante = {
 
-    from: 'SIGELAB <francisco.hurtado@geoprocess.com.co>',
+    from: 'SIGELAB <noREply>',
 
     bcc: `${req.para}`,
 
