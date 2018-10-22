@@ -804,9 +804,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   inicializarServicio(){
     this.srv = {
-      active:true,
-      cfAcro:'',
-      cfClass:'',
+      active: true,
+      cfAcro: '',
+      cfClass: 'cf7799e9-3477-11e1-b86c-0800200c9a66',
+       cfClassScheme: '39f413d8-e5ee-409a-95f1-d204b78508b9',
       cfCondition:[],
       cfCurrCode:'CO',
       cfDesc:'',
