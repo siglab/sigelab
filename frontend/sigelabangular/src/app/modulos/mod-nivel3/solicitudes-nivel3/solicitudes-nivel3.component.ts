@@ -170,7 +170,7 @@ export class SolicitudesNivel3Component implements OnInit {
             this.cerrarAlerta();
           });
         }else{
-          this.alertaError('No se han generado solicitudes de mantenimiento aun');
+          this.alertaError('No se han generado solicitudes de mantenimiento aún');
         }
 
 
@@ -205,7 +205,7 @@ export class SolicitudesNivel3Component implements OnInit {
                     this.cerrarAlerta();
                   });
                 }else{
-                  this.alertaError('No se han generado solicitudes de mantenimiento aun');
+                  this.alertaError('No se han generado solicitudes de mantenimiento aún');
                 }
 
               }else{
@@ -291,7 +291,7 @@ export class SolicitudesNivel3Component implements OnInit {
 
     if(tamano){
       swal(
-        'Uno o mas archivos tienen mas peso del limite permitido (32 Mgb)',
+        'Uno o mÁs archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );
@@ -750,7 +750,7 @@ export class SolicitudesNivel3Component implements OnInit {
   alertaCargando(){
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }

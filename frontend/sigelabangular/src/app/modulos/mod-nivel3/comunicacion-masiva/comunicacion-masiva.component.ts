@@ -327,44 +327,44 @@ export class ComunicacionMasivaComponent implements OnInit {
               if(i == this.formSelect[key].value.length-1){
 
                 if(key == 'facultad'){
-                  ifquery += 'element["'+arr[key]+'"].'+element3+' == true)';
-                }else if(key=='departamento'){
-                  if(this.formSelect['escuela'].value.length != 0){
-                    ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true';
+                  ifquery += 'element["' + arr[key]+'"].'+element3 + ' == true)';
+                } else if(key === 'departamento') {
+                  if(this.formSelect['escuela'].value.length !== 0) {
+                    ifquery += '(element["' +arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true';
                   } else {
-                    ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true)';
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                   }
 
-                }else if(key =="escuela"){
-                  if(this.formSelect['departamento'].value.length != 0){
-                    ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true))';
-                  }else{
-                    ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true)';
+                } else if (key === 'escuela') {
+                  if (this.formSelect['departamento'].value.length !== 0) {
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true))';
+                  } else {
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                   }
 
-                }else{
-                  ifquery += 'element["'+arr[key]+'"] == "'+element3+'")';
+                } else {
+                  ifquery += 'element["' + arr[key] + '"] == "' + element3 + '")';
                 }
 
-              }else{
-                if(key == 'facultad'){
-                  ifquery += 'element["'+arr[key]+'"].'+element3+' == true || ';
+              } else {
+                if (key === 'facultad') {
+                  ifquery += 'element["' + arr[key] + '"].' + element3 + ' == true || ';
 
-                }else if(key=='departamento' || key =="escuela"){
+                } else if (key === 'departamento' || key === 'escuela') {
 
-                  ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true || ';
-                }else{
-                  ifquery += 'element["'+arr[key]+'"] == "'+element3+'" || ';
+                  ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true || ';
+                } else {
+                  ifquery += 'element["' + arr[key] + '"] == "' + element3 + '" || ';
                 }
 
               }
             }
 
 
-            if(key != 'departamento'){
+            if (key !== 'departamento') {
               ifquery += ' && ';
             } else {
-              ifquery += ' || '
+              ifquery += ' || ';
             }
 
             }
@@ -375,33 +375,33 @@ export class ComunicacionMasivaComponent implements OnInit {
 
       }
 
-      ifquery = ifquery.substr(0,ifquery.length-4);
+      ifquery = ifquery.substr(0, ifquery.length - 4);
 
-      ifquery = inicio+ifquery+fin;
+      ifquery = inicio + ifquery + fin;
       console.log(ifquery);
 
 
-    this.serviceMod3.buscaLaboratorios().then(datos=>{
+    this.serviceMod3.buscaLaboratorios().then(datos => {
 
       datos.forEach(doc => {
         const element = doc.data();
 
-        if(this.formCheckBox.universidad.value){
+        if (this.formCheckBox.universidad.value) {
           coincidencias.push({id: element['facilityAdmin']});
 
         } else {
 
-          if(seleccion){
+          if (seleccion) {
             eval(ifquery);
-          }else{
+          } else {
             swal({
               type: 'error',
-              title:  'Por favor ingrese algun filtro primero',
+              title:  'Por favor ingrese algún filtro primero',
               showConfirmButton: true
             });
           }
 
-      
+
 
 
         }
@@ -417,10 +417,10 @@ export class ComunicacionMasivaComponent implements OnInit {
 
 
 
-          if(cont != coincidencias.length-1){
-            correos += email + ','
+          if (cont !== coincidencias.length - 1) {
+            correos += email + ',';
           } else {
-            correos += email
+            correos += email;
           }
 
           cont++;
@@ -428,22 +428,22 @@ export class ComunicacionMasivaComponent implements OnInit {
         });
       });
 
-        setTimeout(()=>{
-        if(item == 'correo'){
+        setTimeout(() => {
+        if (item === 'correo') {
           console.log(correos);
-          if(correos.length != 0){
+          if (correos.length !== 0) {
             this.servicioCorreo(correos);
           }
-          
+
         } else {
           console.log(notificaciones);
-          if(notificaciones.length != 0){
+          if (notificaciones.length !== 0) {
             this.servicioNotificacion(notificaciones);
           }
-         
+
         }
 
-        if(correos.length != 0 || notificaciones.length != 0){
+        if (correos.length !== 0 || notificaciones.length !== 0) {
           this.servicioalmacenarHistorial(item);
         }
 
@@ -453,11 +453,11 @@ export class ComunicacionMasivaComponent implements OnInit {
 
     });
 
-  
-   
+
+
   }
 
-  servicioCorreo(correos){
+  servicioCorreo(correos) {
 
       const url = URLCORREO;
 
@@ -478,11 +478,11 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   }
 
-  servicioNotificacion(notificaciones){
+  servicioNotificacion(notificaciones) {
 
     const obj = {
-      asunto:'Correo masivo difusion',
-      mensaje:this.notificacion,
+      asunto: 'Correo masivo difusión',
+      mensaje: this.notificacion,
       fecha: new Date().toISOString().split('T')[0],
       estado: 'sinver'
     };
@@ -492,12 +492,12 @@ export class ComunicacionMasivaComponent implements OnInit {
     for (let i = 0; i < notificaciones.length; i++) {
       const element = notificaciones[i];
 
-      this.serviceMod3.enviarNotificacion(element, obj).then(()=>{
-       
-        if(cont == notificaciones.length-1){
+      this.serviceMod3.enviarNotificacion(element, obj).then(() => {
+
+        if (cont === notificaciones.length - 1) {
           this.limpiarDatos();
 
-        }else{
+        } else {
           cont++;
         }
 
@@ -507,61 +507,61 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   }
 
-  servicioalmacenarHistorial(tipo){
+  servicioalmacenarHistorial(tipo) {
     const obj = {
       asunto: '',
       mensaje: '',
       type: tipo,
       fecha : new Date().toISOString(),
       email: this.persona.email,
-      filtro:this.valoresCheckbox(),
-      valores:this.valoresSelect(),
+      filtro: this.valoresCheckbox(),
+      valores: this.valoresSelect(),
       texto: this.buscaObjectos()
     };
 
-    if(tipo == 'correo'){
+    if (tipo === 'correo') {
       obj.asunto = this.correo.asunto;
       obj.mensaje = this.correo.mensaje;
     } else {
-      obj.asunto = 'notificacion'
+      obj.asunto = 'notificacion';
       obj.mensaje = this.notificacion;
     }
     console.log(obj);
-    this.serviceMod3.agregarHistorial(obj).then(()=>{
-      this.alertaHecho('Exito al enviar');
+    this.serviceMod3.agregarHistorial(obj).then(() => {
+      this.alertaHecho('Éxito al envíar');
     });
 
   }
 
 
 
-  editarFiltros(item){
+  editarFiltros(item) {
     for (let i = 0; i < this.historialsel.filtro.length; i++) {
       const key = this.historialsel.filtro[i];
       this.formCheckBox[key].setValue(true);
 
-      if(key != 'universidad'){
+      if (key !== 'universidad') {
         this.formSelect[key].enable();
         this.formCheckBox['universidad'].setValue(false);
-        if((key == 'escuela') || (key == 'departamento')){
-          let valoresform = [];
+        if ((key === 'escuela') || (key === 'departamento')) {
+          const valoresform = [];
 
           this.historialsel.valores[key].forEach(element => {
 
-            const objenc = this.listSelect[key].find(o => o.id == element.id);
+            const objenc = this.listSelect[key].find(o => o.id === element.id);
 
             valoresform.push(objenc);
           });
 
           this.formSelect[key].setValue(valoresform);
 
-        }else{
+        } else {
           this.formSelect[key].setValue(this.historialsel.valores[key]);
         }
       }
     }
 
-    if(item == 'reenviar'){
+    if (item === 'reenviar') {
       this.notificacion = this.historialsel.mensaje;
       this.correo.asunto = this.historialsel.asunto;
       this.correo.mensaje = this.historialsel.mensaje;
@@ -569,7 +569,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     } else {
       $('#modal1').modal('hide');
       $('select').prop('disabled', false);
-      if(this.historialsel.type == 'correo'){
+      if (this.historialsel.type === 'correo') {
         this.correo.asunto = this.historialsel.asunto;
         this.correo.mensaje = this.historialsel.mensaje;
         console.log(this.correo);
@@ -581,17 +581,17 @@ export class ComunicacionMasivaComponent implements OnInit {
     }
   }
 
-  buscaObjectos(){
-    let texto = {};
+  buscaObjectos() {
+    const texto = {};
     for (const clave in this.formCheckBox) {
 
       const auxiliar = [];
       if (this.formCheckBox.hasOwnProperty(clave)) {
         const element = this.formCheckBox[clave].value;
 
-        if(element){
+        if (element) {
 
-          if(clave == 'universidad'){
+          if (clave === 'universidad') {
             texto[clave] = 'Toda la universidad';
           } else {
             const array = this.listSelect[clave];
@@ -599,11 +599,11 @@ export class ComunicacionMasivaComponent implements OnInit {
 
             for (let i = 0; i < array2.length; i++) {
               let element = array2[i];
-              if((clave == 'departamento')||(clave == 'escuela')){
+              if ((clave === 'departamento') || (clave === 'escuela')) {
                 element = array2[i].id;
               }
-              const enc = array.find(o => o.id == element);
-              if(enc){
+              const enc = array.find(o => o.id === element);
+              if (enc) {
                 auxiliar.push(enc.nombre);
               }
 
@@ -619,16 +619,16 @@ export class ComunicacionMasivaComponent implements OnInit {
     return texto;
   }
 
-  valoresSelect(){
+  valoresSelect() {
     const valores = {};
     for (const clave in this.formCheckBox) {
       if (this.formCheckBox.hasOwnProperty(clave)) {
         const element = this.formCheckBox[clave].value;
 
-        if(element){
-          if(clave == 'universidad'){
+        if (element) {
+          if (clave === 'universidad') {
             valores[clave] = 'universidad';
-          }else{
+          } else {
 
             valores[clave] = this.formSelect[clave].value;
 
@@ -641,13 +641,13 @@ export class ComunicacionMasivaComponent implements OnInit {
     return valores;
   }
 
-  valoresCheckbox(){
+  valoresCheckbox() {
     const valores = [];
     for (const clave in this.formCheckBox) {
       if (this.formCheckBox.hasOwnProperty(clave)) {
         const element = this.formCheckBox[clave].value;
 
-        if(element){
+        if (element) {
           valores.push(clave);
         }
       }
@@ -656,12 +656,12 @@ export class ComunicacionMasivaComponent implements OnInit {
     return valores;
   }
 
-  cambiarDataHistorial(item){
+  cambiarDataHistorial(item) {
     console.log(item);
     this.historialsel = item;
 
-    setTimeout(()=>{
-      $("#mensajeHtml").html(this.historialsel.mensaje);
+    setTimeout(() => {
+      $('#mensajeHtml').html(this.historialsel.mensaje);
     }, 1000);
 
 
@@ -673,7 +673,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  limpiarDatos(){
+  limpiarDatos() {
 
     this.listSelect.sede = [];
     this.listSelect.subsede = [];
@@ -695,29 +695,29 @@ export class ComunicacionMasivaComponent implements OnInit {
     this.formCheckBox.facultad.setValue(false);
     this.formCheckBox.departamento.setValue(false);
     this.formCheckBox.escuela.setValue(false);
-    
+
 
 
     this.correo = {
-      asunto:'',
-      mensaje:''
+      asunto: '',
+      mensaje: ''
     };
 
     this.notificacion = '';
 
   }
 
-  alertaCargando(){
+  alertaCargando() {
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se procesa la transaccion',
+      text: 'Espere mientras se procesa la transacción',
       onOpen: () => {
         swal.showLoading();
       }
     });
   }
 
-  alertaHecho(mensaje){
+  alertaHecho(mensaje) {
     swal({
       type: 'success',
       title:  mensaje,
@@ -729,14 +729,14 @@ export class ComunicacionMasivaComponent implements OnInit {
 
 
   removeDuplicates(originalArray, prop) {
-    var newArray = [];
-    var lookupObject  = {};
+    const newArray = [];
+    const lookupObject  = {};
 
-    for(var i in originalArray) {
+    for (const i in originalArray) {
        lookupObject[originalArray[i][prop]] = originalArray[i];
     }
 
-    for(i in lookupObject) {
+    for (i in lookupObject) {
         newArray.push(lookupObject[i]);
     }
      return newArray;

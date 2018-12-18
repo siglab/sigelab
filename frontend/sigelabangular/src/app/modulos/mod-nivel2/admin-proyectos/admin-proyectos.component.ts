@@ -127,7 +127,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
             swal({
               title: 'Cargando un momento...',
-              text: 'espere mientras se cargan los datos',
+              text: 'Espere mientras se cargan los datos',
               onOpen: () => {
                 swal.showLoading();
               }
@@ -162,7 +162,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
 
@@ -670,7 +670,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe un proyecto en el sistema con el CI ingresado, si desea vincularlo presione el boton vincular.';
+          this.status = 'Ya existe un proyecto en el sistema con el CI ingresado, si desea vincularlo presione el botón vincular.';
           this.dispo = false;
           this.addP = snapShot.docs[0].id;
         }

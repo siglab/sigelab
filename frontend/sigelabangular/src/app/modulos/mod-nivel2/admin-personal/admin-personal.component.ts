@@ -177,7 +177,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       } else {
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -470,7 +470,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
          this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
           swal({
             type: 'success',
-            title: 'usuario actualizado correctamente',
+            title: 'Usuario actualizado correctamente',
             showConfirmButton: true
           });
           this.clearValues();
@@ -509,7 +509,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 swal({
                   type: 'success',
-                  title: 'persona creada correctamente',
+                  title: 'Persona creada correctamente',
                   showConfirmButton: true
                 });
                 this.clearValues();
@@ -529,7 +529,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               this.updatedUser(pers.user, ok.id);
               swal({
                 type: 'success',
-                title: 'persona creada correctamente',
+                title: 'Persona creada correctamente',
                 showConfirmButton: true
               });
               this.clearValues();
@@ -607,7 +607,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
+          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el botón vincular.';
           this.dispo = true;
           this.addP = snapShot.docs[0].id;
           this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;
@@ -639,7 +639,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           this.clearValues();
           $('#modal1').modal('hide');
-          this.toastr.success('Almacenado correctamente.', 'exito!');
+          this.toastr.success('Almacenado correctamente.', 'éxito!');
       });
       });
 

@@ -117,7 +117,7 @@ comentario = '';
 
         this.servicioMod2.getCollectionReservasServicios(data.uid).then(data1 => {
           if(data1.size != 0){
-            this.estructurarServiciosActivos(data1, data).then(datos=>{
+            this.estructurarServiciosActivos(data1, data).then(datos => {
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
               this.dataSource.paginator = this.paginator;
@@ -129,7 +129,7 @@ comentario = '';
               this.cerrarAlerta();
             });
           } else {
-            this.alertaError('No tiene solicitudes de servicio registradas aun')
+            this.alertaError('No tiene solicitudes de servicio registradas aún')
           }
               
                           
@@ -137,7 +137,7 @@ comentario = '';
       } else{
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -225,7 +225,7 @@ comentario = '';
               historial.push(Reserv);
             } 
   
-            if(data.size == (activo.length+historial.length)){
+            if(data.size == (activo.length + historial.length)){
               resolve({data:activo, data2:historial});
             }
   
@@ -253,7 +253,7 @@ comentario = '';
 
     if(tamano){
       swal(
-        'Uno o mas archivos tienen mas peso del limite permitido (32 Mgb)',
+        'Uno o más archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );
@@ -280,7 +280,7 @@ comentario = '';
       this.currentUpload = new Upload(files[idx]);
       this.uploadFile(this.currentUpload);
 
-      filespath.push('archivos/'+ this.currentUpload.file.name);
+      filespath.push('archivos/' + this.currentUpload.file.name);
     });
 
     return filespath;
@@ -356,9 +356,9 @@ comentario = '';
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea eliminar este archivo de la solicitud',
+      title: '¿Está seguro que desea eliminar este archivo de la solicitud?',
       showCancelButton: true,
-      confirmButtonText: 'Si, eliminar',
+      confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -372,18 +372,18 @@ comentario = '';
         });
         
         const ref = this.storage.ref(this.servicioActivoSel.path[index]);
-        ref.delete().subscribe(()=>{
+        ref.delete().subscribe(() => {
 
           this.servicioMod2.updateReservasServicios(
             this.servicioActivoSel.uidreserv, {path:nuevopath})
-          .then(()=> {
+          .then(() => {
 
             
             swal({
               type: 'success',
-              title: 'archivo eliminado',
+              title: 'Archivo eliminado',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               this.servicioActivoSel.path.splice(index,1);
             });
           });
@@ -499,7 +499,7 @@ comentario = '';
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
       //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
+      this.condicionesobjeto["checkbox" + i] = condiciones[i].aceptada;
     }
   }
 
@@ -507,7 +507,7 @@ comentario = '';
    estructurarCondicionesSrv(condiciones){
     this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
+      this.condicionesobjetoSrv["checkboxSrv" + i] = condiciones[i].aceptada;
  
     }
   }
@@ -518,9 +518,9 @@ comentario = '';
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea enviar este comentario',
+      title: '¿Está seguro que desea envíar este comentario?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Solicitar',
+      confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -534,12 +534,12 @@ comentario = '';
 
         cfSrvReserv.comments.push({
           commentText: this.comentario,
-          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
+          fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
           autor: 'lab'
         });
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, cfSrvReserv)
-          .then(()=>{
+          .then(() => {
             if(this.servicioActivoSel.status != 'pendiente'){
               this.alertaExito('Comentario enviado');
               this.enviarNotificacionEmails();
@@ -583,7 +583,7 @@ comentario = '';
         if(res.status == 200){
           //this.cerrarAlerta();
         } else {
-          this.alertaError('fallo al enviar correos');
+          this.alertaError('Fallo al enviar correos');
         }
       });
 
@@ -602,15 +602,15 @@ comentario = '';
 
     const mensaje = 'Se le notifica que se ha cambiado el estado de la solicitud del servicio '  +
                     this.servicioActivoSel.nombre + ', solicitada la fecha ' + this.servicioActivoSel.fecha +
-                    ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' +estado ;
+                    ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' + estado ;
 
     
-    destino = emailSolicitante + ',' +emaildirector;
+    destino = emailSolicitante + ',' + emaildirector;
     this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
       if(res.status == 200){
         //this.cerrarAlerta();
       } else {
-        this.alertaError('fallo al enviar correos');
+        this.alertaError('Fallo al enviar correos');
       }
     });
   }
@@ -618,9 +618,9 @@ comentario = '';
   cambiarEstadoSolicitud(estado){
     swal({
       type: 'warning',
-      title: '¿Esta seguro de cambiar el estado de la solicitud?',
+      title: '¿Está seguro de cambiar el estado de la solicitud?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Cambiar',
+      confirmButtonText: 'Sí, Cambiar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -643,20 +643,20 @@ comentario = '';
         this.servicioActivoSel.status = estado;     
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, reserva)
-        .then(()=>{
+        .then(() => {
           if(estado == 'procesada'){
             swal({
               type: 'success',
               title: 'Solicitud procesada',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               this.cerrarModal('modalProcesar');
               this.listaArchivos = [];
             });
            
           }else{
             this.cerrarAlerta();
-            this.alertaExito('Reserva '+estado);
+            this.alertaExito('Reserva ' + estado);
           }
          
         });
@@ -685,7 +685,7 @@ comentario = '';
   alertaCargando(){
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }
@@ -715,7 +715,7 @@ comentario = '';
 
 
   cerrarModal(modal){
-    $('#'+modal).modal('hide');
+    $('#' + modal).modal('hide');
   }
 
   resetIconos(){
@@ -731,13 +731,13 @@ comentario = '';
 export class Upload {
 
   $key: string;
-  file:File;
-  name:string;
-  url:string;
-  progress:number;
+  file: File;
+  name: string;
+  url: string;
+  progress: number;
   createdAt: Date = new Date();
 
-  constructor(file:File) {
+  constructor(file: File) {
     this.file = file;
   }
 };

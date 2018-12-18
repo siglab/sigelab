@@ -182,13 +182,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       }
       swal({
         type: 'success',
-        title: 'Variacion agregada',
+        title: 'Variación agregada',
         showConfirmButton: true
       });
     }else{
       swal({
         type: 'error',
-        title: 'Esta variacion ya se encuentra agregada',
+        title: 'Esta variación ya se encuentra agregada',
         showConfirmButton: true
       });
     }
@@ -210,7 +210,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     if(encontrado){
       swal({
         type: 'success',
-        title: 'Variacion Eliminada',
+        title: 'Variación Eliminada',
         showConfirmButton: true
       });
     }
@@ -257,9 +257,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         swal({
 
           type: 'warning',
-          title: 'Esta seguro que desea solicitar este servicio',
+          title: '¿Está seguro que desea solicitar este servicio?',
           showCancelButton: true,
-          confirmButtonText: 'Si, Solicitar',
+          confirmButtonText: 'Sí, Solicitar',
           cancelButtonText: 'No, Cancelar'
 
         }).then((result) => {
@@ -425,7 +425,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       }else{
         swal({
           type: 'warning',
-          title: 'el laboratorio seleccionado aun no tiene registrada la ubicacion',
+          title: 'El laboratorio seleccionado aún no tiene registrada la ubicación',
           showConfirmButton: true
         });
       }
@@ -637,7 +637,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       const queryref = collref.where('ciNumber', '==', q);
       queryref.get().then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'El CI ingresado no se encuentra asociado a ningun proyecto actual';
+          this.status = 'El CI ingresado no se encuentra asociado a ningún proyecto actual';
           this.disponible = true;
         } else {
           console.log(snapShot.docs[0].id);
