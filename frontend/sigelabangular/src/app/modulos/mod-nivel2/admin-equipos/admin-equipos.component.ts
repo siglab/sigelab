@@ -59,36 +59,36 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     seleccionado: any;
     itemsel: Observable<Array<any>>;
 
-    equiestructurado:any;
+    equiestructurado: any;
     infosabs = [];
-    infosabsel:any;
-    response:any;
+    infosabsel: any;
+    response: any;
 
     iconos = {
-      info:false,
-      componente:false,
-      practica:false,
-      servicio:false,
-      sabs:false
+      info: false,
+      componente: false,
+      practica: false,
+      servicio: false,
+      sabs: false
 
     };
 
     modelEquipoSel = {
       cfName: '',
       price: '',
-      cfDescr:'',
-      model:'',
+      cfDescr: '',
+      model: '',
       updatedAt: new Date().toISOString()
     };
 
     ventana = false;
 
-    sus : Subscription;
+    sus: Subscription;
 
-    rol:any;
+    rol: any;
     moduloNivel2 = false;
 
-  constructor(private obs: ObservablesService, private http: Http, private servicioMod2:Modulo2Service ) {
+  constructor(private obs: ObservablesService, private http: Http, private servicioMod2: Modulo2Service ) {
 
   }
 
@@ -105,7 +105,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       this.equiestructurado = undefined;
       this.iniciliazarTablas();
 
-      if(data.length != 0){
+      if (data.length !== 0) {
         swal({
           title: 'Cargando un momento...',
           text: 'espere mientras se cargan los datos',
@@ -113,7 +113,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
             swal.showLoading();
           }
         });
-        if(!this.equiestructurado){
+        if (!this.equiestructurado) {
           this.estructurarEquip(data.uid, data.labo).then(() => {
             this.itemsel = Observable.of(this.equiestructurado.equipos);
 
@@ -121,7 +121,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
              setTimeout(() => {
-               if (this.equiestructurado.equipos != 0) {
+               if (this.equiestructurado.equipos !== 0) {
                   this.dataSourceEquip.sort = this.sortEquip;
                   this.dataSourceEquip.paginator = this.paginatorEquip;
                   // cierra loading luego de cargados los datos
@@ -143,7 +143,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         swal.close();
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -155,7 +155,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sus.unsubscribe();
   }
 
@@ -164,17 +164,17 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.moduloNivel2 = false;
     for (const clave in rol) {
       if (rol[clave]) {
-        if ((clave == 'moduloNivel2')) {
+        if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }
     }
   }
 
-  estructurarEquip(key, objeto){
+  estructurarEquip(key, objeto) {
 
     this.equiestructurado = {};
-    let promise = new Promise((resolve,reject)=>{
+    const promise = new Promise((resolve, reject) => {
 
        let estadoLab;
        if (objeto.active === true) {
@@ -258,7 +258,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const arr = [];
 
-    this.servicioMod2.getPracticesForIdEquipo(item).then(data =>{
+    this.servicioMod2.getPracticesForIdEquipo(item).then(data => {
         data.forEach(doc => {
           const practica =  doc.data();
             this.servicioMod2.buscarProgramacion(doc.id).then(data2 => {
@@ -267,7 +267,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
               const prog = progdoc.data();
 
-              if(prog){
+              if (prog) {
                 const pract = {
                   nombre: practica.practiceName,
                   programacion: {
@@ -285,7 +285,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
             });
         });
-      })
+      });
 
     return arr;
   }
@@ -326,9 +326,9 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.consultarSabs(equip.inventory).then(() => {
                   this.infosabs.push(this.response);
                   swal.close();
-                }).catch((error)=>{
+                }).catch((error) => {
                   console.log(cont, Object.keys(item).length);
-                  if(cont == Object.keys(item).length){
+                  if (cont === Object.keys(item).length) {
                     swal.close();
                     swal({
                       type: 'error',
@@ -420,10 +420,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
-  variations(clave){
+  variations(clave) {
     const variaciones = [];
     this.servicioMod2.getVariaciones(clave).then(data => {
-      if(data){
+      if (data) {
         data.forEach(doc => {
           variaciones.push(doc.data());
         });
@@ -472,7 +472,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  editarEquipo(){
+  editarEquipo() {
     swal({
       title: 'Cargando un momento...',
       text: 'espere por favor',
@@ -482,19 +482,19 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     const user = this.servicioMod2.getLocalStorageUser();
     this.servicioMod2.Trazability(
-      user.uid, 'update', 'cfEquip',this.equiposel.id,this.modelEquipoSel).then(()=>{
+      user.uid, 'update', 'cfEquip', this.equiposel.id, this.modelEquipoSel).then(() => {
 
-      this.servicioMod2.updateEquip(this.equiposel.id,this.modelEquipoSel).then(()=>{
+      this.servicioMod2.updateEquip(this.equiposel.id, this.modelEquipoSel).then(() => {
         swal.close();
         swal({
           type: 'success',
-          title: 'Exito',
+          title: 'Éxito',
           showConfirmButton: true
-        }).then(()=>{
+        }).then(() => {
           this.cerrarModal('modal2');
         });
       });
-    })
+    });
 
   }
 
@@ -514,7 +514,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   cambiarInfoModal(row, table) {
     this.tablesel = table;
     this.seleccionado = row;
-    if(table == 'practicas'){
+    if (table === 'practicas') {
       this.initCalendarModal(this.seleccionado.programacion.horario);
     }
 
@@ -549,7 +549,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const containerEl: JQuery = $AB('#calendar2');
 
-    if(containerEl.children().length > 0){
+    if (containerEl.children().length > 0) {
 
       containerEl.fullCalendar('destroy');
     }
@@ -573,8 +573,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
@@ -582,8 +582,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
 

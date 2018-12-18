@@ -142,7 +142,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       } else {
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -378,7 +378,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
       swal({
         type: 'info',
-        title: 'Hay campos vacios importantes.',
+        title: 'Hay campos vacíos importantes.',
         showConfirmButton: true
       });
 
@@ -635,7 +635,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el boton vincular.';
+          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
           this.dispo = false;
           this.idnewSp = snapShot.docs[0].id;
         }

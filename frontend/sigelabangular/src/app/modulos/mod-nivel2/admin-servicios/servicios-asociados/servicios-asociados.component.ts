@@ -5,6 +5,7 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { Modulo2Service } from '../../services/modulo2.service';
 
@@ -17,11 +18,11 @@ declare var $: any;
 })
 export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
-  itemsel:any;
+  itemsel: any;
 
   private collectionReserv: AngularFirestoreCollection<any>;
 
-  servasocestructurados:any;
+  servasocestructurados: any;
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombreserv'];
@@ -45,21 +46,21 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   campoCondicion = '';
   condicionesobjeto = {};
-  variation:any;
-  variacionSel = "";
+  variation: any;
+  variacionSel = '';
 
   moduloinfo = false;
 
   iconos = {
-    info:false,
-    sabs:false
+    info: false,
+    sabs: false
   };
 
   iconosModal = {
-    servicio:false,
-    variacion:false,
-    equipos:false,
-    equipos2:false
+    servicio: false,
+    variacion: false,
+    equipos: false,
+    equipos2: false
   };
 
   srv = {
@@ -77,24 +78,24 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     cfUri: '',
     createdAt: '',
     relatedEquipments: {},
-    relatedMeasurement:{},
-    relatedServices:{},
-    updatedAt:'',
-    residuos:false,
-    descuento:'0',
-    parametros:[]
+    relatedMeasurement: {},
+    relatedServices: {},
+    updatedAt: '',
+    residuos: false,
+    descuento: '0',
+    parametros: []
   };
 
   objectvariation = {
-    active:true,
-    cfConditions:[],
-    cfDescription:'',
-    cfName:'',
-    cfPrice:'',
-    createdAt:'',
-    updateAt:'',
-    residuos:false,
-    parametros:[]
+    active: true,
+    cfConditions: [],
+    cfDescription: '',
+    cfName: '',
+    cfPrice: '',
+    createdAt: '',
+    updateAt: '',
+    residuos: false,
+    parametros: []
   };
 
   variaciones = [];
@@ -108,7 +109,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   selection = new SelectionModel(true, []);
   selection2 = new SelectionModel(true, []);
 
-  equipos:any;
+  equipos: any;
 
   editar = false;
   botonEditar = false;
@@ -116,7 +117,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   sus: Subscription;
 
-  role:any;
+  role: any;
   moduloNivel2 = false;
 
   parametro = '';
@@ -129,7 +130,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   user = this.servicioMod2.getLocalStorageUser();
 
-  constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service) { }
+  constructor(private obs: ObservablesService, private servicioMod2: Modulo2Service) { }
 
   ngOnInit() {
 
@@ -142,22 +143,22 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       this.resetIconos();
       swal({
         title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
+        text: 'Espere mientras se cargan los datos',
         onOpen: () => {
           swal.showLoading();
         }
       });
 
-        if(data.length != 0){
+        if (data.length !== 0) {
 
           this.lab_id = data.uid;
-          this.servicioMod2.getCollectionServicios(data.uid).then(servicios =>{
+          this.servicioMod2.getCollectionServicios(data.uid).then(servicios => {
 
             this.servasocestructurados = this.estructurarDataServ(servicios);
             this.servicioMod2.buscarLab(this.lab_id).then(labo => {
               this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
 
-              if(this.servasocestructurados ){
+              if (this.servasocestructurados ) {
                 this.dataSource.data = this.servasocestructurados;
                 this.dataSourceEquip = new MatTableDataSource(this.equipos);
 
@@ -169,9 +170,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
                   this.dataSourceEquip.sort = this.sortEquip;
                   this.dataSourceEquip.paginator = this.paginatorEquip;
-                  if(this.servasocestructurados.length != 0){
+                  if (this.servasocestructurados.length !== 0) {
                     swal.close();
-                  }else {
+                  } else {
                     swal({
                       type: 'error',
                       title: 'No existen servicios asociados al laboratorio',
@@ -185,10 +186,10 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             });
 
           });
-        } else{
+        } else {
           swal({
             type: 'error',
-            title: 'No se ha seleccionado ningun laboratorio',
+            title: 'No se ha seleccionado ningún laboratorio',
             showConfirmButton: true
           });
         }
@@ -196,7 +197,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sus.unsubscribe();
   }
 
@@ -205,7 +206,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.moduloNivel2 = false;
     for (const clave in rol) {
       if (rol[clave]) {
-        if ((clave == 'moduloNivel2')) {
+        if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
       }
@@ -244,15 +245,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     this.servasocestructurados = [];
 
-    data.forEach( doc =>{
+    data.forEach( doc => {
       // convertir boolean a cadena de caracteres para estado del laboratorio
 
       const elemento = doc.data();
 
       let estadoServ;
-      if(elemento.active == true) {
+      if (elemento.active === true) {
         estadoServ = 'Activo';
-      } else if( elemento.active == false ) {
+      } else if ( elemento.active === false ) {
         estadoServ = 'Inactivo';
       }
 
@@ -269,8 +270,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           creado: elemento.createdAt,
           editado: elemento.updatedAt,
           active: elemento.active,
-          residuos:elemento.residuos,
-          descuento:elemento.descuento,
+          residuos: elemento.residuos,
+          descuento: elemento.descuento,
           parametros: elemento.parametros
         }
       };
@@ -282,15 +283,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
-  variations(clave){
+  variations(clave) {
 
     const variaciones = [];
     this.servicioMod2.getVariaciones(clave).then(data => {
-      if(data){
-        data.forEach(doc=>{
+      if (data) {
+        data.forEach(doc => {
           const element = doc.data();
 
-            variaciones.push({cfName:element.cfName, data: element, id: doc.id, active:element.active});
+            variaciones.push({cfName: element.cfName, data: element, id: doc.id, active: element.active});
 
         });
 
@@ -303,18 +304,18 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-  buscarVariacion(item){
+  buscarVariacion(item) {
     for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
       const element = this.itemsel.infoServ.variaciones[i];
-      if(element.id == item){
+      if (element.id === item) {
         return element;
       }
     }
   }
 
-  cambiarVariacion(item){
+  cambiarVariacion(item) {
 
-    if(item != 'inicial'){
+    if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
       console.log(this.variation);
       this.estructurarVariaciones(this.variation.data.cfConditions);
@@ -325,27 +326,27 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   }
 
-  //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
-  estructuraCondiciones(variations){
+  // METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
+  estructuraCondiciones(variations) {
     const arr = [];
     for (let i = 0; i < variations.length; i++) {
       const element = variations[i];
 
       const vari = {
         conditionText: variations[i],
-        aceptada: this.condicionesobjeto["checkbox"+i]
-      }
+        aceptada: this.condicionesobjeto['checkbox' + i]
+      };
       arr.push(vari);
     }
     return arr;
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariaciones(condiciones){
+  estructurarVariaciones(condiciones) {
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = true;
+      // const element = condiciones[i];
+      this.condicionesobjeto['checkbox' + i] = true;
     }
   }
 
@@ -392,8 +393,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
     this.itemsel = item;
 
-    if(item.infoServ.variaciones.length == 0){
-      if(item.infoServ.condiciones.length !== 0){
+    if (item.infoServ.variaciones.length === 0) {
+      if (item.infoServ.condiciones.length !== 0) {
         this.estructurarVariaciones(item.infoServ.condiciones);
       }
 
@@ -403,16 +404,16 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
     }
   }
 
-  cambiarIconoModal(box){
-    if(!this.iconosModal[box]){
+  cambiarIconoModal(box) {
+    if (!this.iconosModal[box]) {
       this.iconosModal[box] = true;
     } else {
       this.iconosModal[box] = false;
@@ -420,7 +421,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
 
-  cambiarDatosEditar(){
+  cambiarDatosEditar() {
     this.editar = true;
     this.botonEditar = true;
     this.srv.cfName = this.itemsel.nombreserv;
@@ -440,14 +441,14 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   }
 
-  cambiarDataEditarVariacion(item){
+  cambiarDataEditarVariacion(item) {
 
     this.nuevaVar = false;
     this.objectvariation = item.data;
 
   }
 
-  agregarServicio(){
+  agregarServicio() {
     const fecha = new Date();
     this.srv.createdAt = fecha.toISOString();
     this.srv.updatedAt = fecha.toISOString();
@@ -462,40 +463,40 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     });
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }
     });
 
 
-    this.servicioMod2.addServicio(this.srv).then(data =>{
+    this.servicioMod2.addServicio(this.srv).then(data => {
       this.servicioMod2.Trazability(
         this.user.uid, 'create', 'cfSrv', data.id, this.srv
-      ).then(()=>{
+      ).then(() => {
         console.log(data);
-        const objeto = {relatedServices:{}};
+        const objeto = {relatedServices: {}};
         objeto.relatedServices[data.id] = true;
         this.servicioMod2.Trazability(
           this.user.uid, 'update', 'cfFacil', this.lab_id, objeto
-        ).then(()=>{
+        ).then(() => {
           this.servicioMod2.setDocLaboratorio(this.lab_id, objeto);
-          if(this.variaciones.length != 0){
+          if (this.variaciones.length !== 0) {
             for (let i = 0; i < this.variaciones.length; i++) {
               const element = this.variaciones[i];
-              this.servicioMod2.addVariaciones(data.id, element).then(doc=>{
-                //swal.close();
+              this.servicioMod2.addVariaciones(data.id, element).then(doc => {
+                // swal.close();
                 this.servicioMod2.TrazabilitySubCollection(
                   this.user.uid, 'create', 'cfFacil', data.id, 'variations', doc.id, element
-                ).then(()=>{
-                  if(i == this.variaciones.length-1){
+                ).then(() => {
+                  if (i === this.variaciones.length - 1) {
                     swal({
                       type: 'success',
-                      title: 'creado correctamente',
+                      title: 'Creado correctamente',
                       showConfirmButton: true
-                    }).then(()=>{
+                    }).then(() => {
                       this.cerrarModal('modal2');
-                    });;
+                    });
                   }
                 });
               });
@@ -503,22 +504,22 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           } else {
             swal({
               type: 'success',
-              title: 'creado correctamente',
+              title: 'Creado correctamente',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               this.cerrarModal('modal2');
             });
           }
 
           this.selection.selected.forEach((element) => {
-            let srvEquip = {
-              relatedSrv:{}
+            const srvEquip = {
+              relatedSrv: {}
             };
             if (element.id) {
               srvEquip.relatedSrv[data.id] = true;
               this.servicioMod2.Trazability(
                 this.user.uid, 'update', 'cfEquip', element.id, srvEquip
-              ).then(()=>{
+              ).then(() => {
                 this.servicioMod2.setEquipo(element.id, srvEquip);
               });
             }
@@ -531,20 +532,20 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   }
 
-  editarServicio(){
+  editarServicio() {
     const fecha = new Date();
     for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
       const equipo = this.itemsel.infoServ.equipos[i];
       this.srv.relatedEquipments[equipo.id] = true;
 
-      let srvequip = {
-        relatedSrv:{}
+      const srvequip = {
+        relatedSrv: {}
       };
 
       srvequip.relatedSrv[this.itemsel.infoServ.uid] = true;
       this.servicioMod2.Trazability(
         this.user.uid, 'update', 'cfEquip', equipo.id, srvequip
-      ).then(()=>{
+      ).then(() => {
         this.servicioMod2.setEquipo(equipo.id, srvequip);
       });
 
@@ -555,7 +556,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }
@@ -563,22 +564,22 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, this.srv
-    ).then(()=>{
-      this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(()=>{
+    ).then(() => {
+      this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(() => {
 
 
         for (let j = 0; j < this.variaciones.length; j++) {
           const variacion = this.variaciones[j];
-          if(variacion.id == 'nuevo'){
-            this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(doc=>{
+          if (variacion.id === 'nuevo') {
+            this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(doc => {
               this.servicioMod2.TrazabilitySubCollection(
                 this.user.uid, 'create', 'cfSrv', this.itemsel.infoServ.uid, 'variations', doc.id, variacion.data
-              ).then(()=>{
+              ).then(() => {
                 swal({
                   type: 'success',
                   title: 'Editado correctamente',
                   showConfirmButton: true
-                }).then(()=>{
+                }).then(() => {
                   this.variaciones = [];
                   this.cerrarModal('modal1');
                 });
@@ -588,19 +589,19 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           } else {
             this.servicioMod2.TrazabilitySubCollection(
               this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations', variacion.id, variacion.data
-            ).then(()=>{
+            ).then(() => {
               this.servicioMod2.updateVariciones(this.itemsel.infoServ.uid , variacion.id, variacion.data);
             });
           }
 
 
-          if(j == this.variaciones.length-1){
+          if (j === this.variaciones.length - 1) {
             swal.close();
             swal({
               type: 'success',
               title: 'Editado correctamente',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               this.variaciones = [];
               this.cerrarModal('modal1');
             });
@@ -613,14 +614,14 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           this.servicioMod2.TrazabilitySubCollection(
             this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations',
             this.variacionesCambiadas[i].id,
-            {active:this.variacionesCambiadas[i].active}
-          ).then(()=>{
+            {active: this.variacionesCambiadas[i].active}
+          ).then(() => {
             this.servicioMod2.setVariaciones(
               this.itemsel.infoServ.uid,
               this.variacionesCambiadas[i].id,
-              {active:this.variacionesCambiadas[i].active});
+              {active: this.variacionesCambiadas[i].active});
 
-              if(i == this.variacionesCambiadas.length-1){
+              if (i === this.variacionesCambiadas.length - 1) {
                 this.variacionesCambiadas = [];
               }
           });
@@ -637,17 +638,17 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
 
-  agregarCondicion(){
+  agregarCondicion() {
     this.srv.cfCondition.push(this.condicion);
     this.condicion = '';
   }
 
-  quitarCondicion(index){
+  quitarCondicion(index) {
     this.srv.cfCondition.splice(index, 1);
   }
 
-  agregarParametro(servar){
-    if(servar == 'servicio'){
+  agregarParametro(servar) {
+    if (servar === 'servicio') {
       this.listaParametrosServicio.push(this.parametro);
       this.parametro = '';
     } else {
@@ -656,16 +657,16 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     }
   }
 
-  quitarParametro(index, servar){
-    if(servar == 'servicio'){
-      this.listaParametrosServicio.splice(index,1);
+  quitarParametro(index, servar) {
+    if (servar === 'servicio') {
+      this.listaParametrosServicio.splice(index, 1);
     } else {
-      this.listaParametrosVariacion.splice(index,1);
+      this.listaParametrosVariacion.splice(index, 1);
     }
   }
 
-  agregarParametroEdit(servar){
-    if(servar == 'servicio'){
+  agregarParametroEdit(servar) {
+    if (servar === 'servicio') {
       this.srv.parametros.push(this.parametro);
       this.parametro = '';
     } else {
@@ -674,69 +675,69 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     }
   }
 
-  quitarParametroEdit(index, servar){
-    if(servar == 'servicio'){
-      this.srv.parametros.splice(index,1);
+  quitarParametroEdit(index, servar) {
+    if (servar === 'servicio') {
+      this.srv.parametros.splice(index, 1);
     } else {
-      this.objectvariation.parametros.splice(index,1);
+      this.objectvariation.parametros.splice(index, 1);
     }
   }
 
-  agregarCondicionVariacion(){
+  agregarCondicionVariacion() {
     this.objectvariation.cfConditions.push(this.condicionvar);
     this.condicionvar = '';
   }
 
-  quitarCondicionVariacion(index){
+  quitarCondicionVariacion(index) {
     this.objectvariation.cfConditions.splice(index, 1);
   }
 
 
 
-  nuevaVariacion(){
+  nuevaVariacion() {
     this.nuevaVar = true;
     this.inicializarVariacion();
   }
 
-  agregarVariacion(){
+  agregarVariacion() {
     const fecha = new Date();
     this.objectvariation.createdAt = fecha.toISOString();
     this.objectvariation.updateAt = fecha.toISOString();
     this.objectvariation.parametros = this.listaParametrosVariacion;
-    if(!this.editar){
+    if (!this.editar) {
       this.variaciones.push(this.objectvariation);
     } else {
-      this.variaciones.push({cfName: this.objectvariation.cfName, data:this.objectvariation, id:'nuevo'});
+      this.variaciones.push({cfName: this.objectvariation.cfName, data: this.objectvariation, id: 'nuevo'});
     }
 
     this.inicializarVariacion();
 
     swal({
       type: 'success',
-      title: 'variacion agregada',
+      title: 'Variación agregada',
       showConfirmButton: true
     });
 
 
   }
 
-  quitarVariacion(index){
+  quitarVariacion(index) {
     this.variaciones.splice(index, 1);
   }
 
-  cambiarEstadoVariacion(pos, active){
+  cambiarEstadoVariacion(pos, active) {
     let encontrado = false;
     let indice = 0;
-    this.variacionesCambiadas.forEach((doc, index)=>{
-      if(doc.id == this.variaciones[pos].id){
+    this.variacionesCambiadas.forEach((doc, index) => {
+      if (doc.id === this.variaciones[pos].id) {
        encontrado = true;
        indice = index;
       }
     });
 
-    if(!encontrado){
-      this.variacionesCambiadas.push({id:this.variaciones[pos].id, active: !active});
-    }else{
+    if (!encontrado) {
+      this.variacionesCambiadas.push({id: this.variaciones[pos].id, active: !active});
+    } else {
       this.variacionesCambiadas[indice].active = !active;
     }
 
@@ -744,14 +745,14 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     swal({
       type: 'success',
-      title: 'cambio de estado de variacion hecho',
+      title: 'Cambio de estado de variación hecho',
       showConfirmButton: true
     });
 
 
   }
 
-  agregarEquipo(){
+  agregarEquipo() {
     this.selection.selected.forEach((element) => {
 
       this.itemsel.infoServ.equipos.push(element);
@@ -760,23 +761,23 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     swal({
       type: 'success',
-      title: 'equipo agregado',
+      title: 'Equipo agregado',
       showConfirmButton: true
     });
 
   }
 
-  quitarEquipo(){
+  quitarEquipo() {
     this.selection2.selected.forEach((element) => {
       for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
         const equipo = this.itemsel.infoServ.equipos[i];
 
-        if(element.id == equipo.id){
+        if (element.id === equipo.id) {
           this.itemsel.infoServ.equipos.splice(i, 1);
           this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
           swal({
             type: 'error',
-            title: 'equipo retirado',
+            title: 'Equipo retirado',
             showConfirmButton: true
           });
         }
@@ -786,49 +787,50 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     });
   }
 
-  inicializarVariacion(){
+  inicializarVariacion() {
     this.objectvariation = {
-      active:true,
-      cfConditions:[],
-      cfDescription:'',
-      cfName:'',
-      cfPrice:'',
-      createdAt:'',
-      updateAt:'',
-      residuos:false,
+      active: true,
+      cfConditions: [],
+      cfDescription: '',
+      cfName: '',
+      cfPrice: '',
+      createdAt: '',
+      updateAt: '',
+      residuos: false,
       parametros: []
     };
 
     this.listaParametrosVariacion = [];
   }
 
-  inicializarServicio(){
+  inicializarServicio() {
     this.srv = {
-      active:true,
-      cfAcro:'',
-      cfClass:'',
-      cfCondition:[],
-      cfCurrCode:'CO',
-      cfDesc:'',
-      cfFacil:'',
-      cfName:'',
-      cfPrice:'',
-      cfScheme:'',
-      cfUri:'',
-      createdAt:'',
-      relatedEquipments:{},
-      relatedMeasurement:{},
-      relatedServices:{},
-      updatedAt:'',
-      residuos:false,
-      descuento:'0',
-      parametros:[]
+      active: true,
+      cfAcro: '',
+      cfClass: '',
+      cfClassScheme: '',
+      cfCondition: [],
+      cfCurrCode: 'CO',
+      cfDesc: '',
+      cfFacil: '',
+      cfName: '',
+      cfPrice: '',
+      cfScheme: '',
+      cfUri: '',
+      createdAt: '',
+      relatedEquipments: {},
+      relatedMeasurement: {},
+      relatedServices: {},
+      updatedAt: '',
+      residuos: false,
+      descuento: '0',
+      parametros: []
     };
 
     this.listaParametrosServicio = [];
   }
 
-  nuevoEspacio(){
+  nuevoEspacio() {
     this.editar = false;
     this.variaciones = [];
 
@@ -844,11 +846,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.dataSourceEquip.filter = filterValue;
   }
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  resetIconos(){
+  resetIconos() {
     this.iconos.info = false;
     this.iconos.sabs = false;
   }

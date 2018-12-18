@@ -170,7 +170,7 @@ export class AdminQrComponent implements OnInit {
     } else {
       swal({
         type: 'info',
-        title: 'No existe el codigo QR ',
+        title: 'No existe el código QR ',
         showConfirmButton: true
       });
 
@@ -184,17 +184,17 @@ export class AdminQrComponent implements OnInit {
     this.cod_qr = '';
     const q = $event.target.value;
     if (q.trim() === '') {
-      this.status = 'Ingrese un numero de inventario valido.';
+      this.status = 'Ingrese un número de inventario válido.';
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
       this.qrserv.getEquipForInventory(q).then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'El codigo de Inventario no fue encontrado';
+          this.status = 'El código de Inventario no fue encontrado';
           this.dispo = false;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Codigo de inventario encontrado puede Generar el codigo asociado';
+          this.status = 'Código de inventario encontrado puede Generar el código asociado';
           this.dispo = true;
           this.cod_qr = snapShot.docs[0].data().qr;
           this.marca_equip = snapShot.docs[0].data().brand;
@@ -247,7 +247,7 @@ export class AdminQrComponent implements OnInit {
     } else {
       swal({
         type: 'info',
-        title: 'Ingrese la cantidad de codigos que desea generar',
+        title: 'Ingrese la cantidad de códigos que desea generar',
         showConfirmButton: true
       });
     }

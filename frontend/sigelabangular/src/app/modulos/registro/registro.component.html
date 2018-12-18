@@ -19,7 +19,7 @@
         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         <div style="color:red;" *ngIf="(email2['errors']?.required) && (email2.touched)"> Este campo es obigatorio.</div>
-        <div style="color:red;" *ngIf="(email2['errors']?.pattern)"> Este campo no contiene un formato de correo valido.</div>
+        <div style="color:red;" *ngIf="(email2['errors']?.pattern)"> Este campo no contiene un formato de correo válido.</div>
         <div> {{ status}} </div>
 
       </div>

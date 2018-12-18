@@ -400,7 +400,7 @@ export class AdminLaboratorios3Component implements OnInit {
   cambiarLaboratorio(item) {
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }
@@ -716,7 +716,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se crea el Laboratorio',
+      text: 'Espere mientras se crea el Laboratorio',
       onOpen: () => {
         swal.showLoading();
       }
@@ -788,7 +788,7 @@ export class AdminLaboratorios3Component implements OnInit {
       } else {
         swal({
           type: 'error',
-          title: 'el correo ingresado no se encuentra en los registros',
+          title: 'El correo ingresado no se encuentra en los registros',
           showConfirmButton: true
         });
       }
@@ -1325,9 +1325,9 @@ export class AdminLaboratorios3Component implements OnInit {
       swal({
 
         type: 'warning',
-        title: 'Esta seguro que desea enviar los cambios realizados',
+        title: '¿Está seguro que desea envíar los cambios realizados?',
         showCancelButton: true,
-        confirmButtonText: 'Si, enviar',
+        confirmButtonText: 'Sí, envíar',
         cancelButtonText: 'No, Cancelar'
 
       }).then((result) => {
@@ -1394,9 +1394,9 @@ export class AdminLaboratorios3Component implements OnInit {
         swal({
 
           type: 'warning',
-          title: 'Esta seguro que desea enviar la sugerencia de cambios',
+          title: '¿Está seguro que desea envíar la sugerencia de cambios?',
           showCancelButton: true,
-          confirmButtonText: 'Si, Solicitar',
+          confirmButtonText: 'Sí, Solicitar',
           cancelButtonText: 'No, Cancelar'
 
         }).then((result) => {
@@ -1404,7 +1404,7 @@ export class AdminLaboratorios3Component implements OnInit {
           if (result.value) {
             swal({
               title: 'Cargando un momento...',
-              text: 'espere mientras se ejecuta la solicitud',
+              text: 'Espere mientras se ejecuta la solicitud',
               onOpen: () => {
                 swal.showLoading();
               }
@@ -1450,7 +1450,7 @@ export class AdminLaboratorios3Component implements OnInit {
       } else {
         swal({
           type: 'error',
-          title: 'No ha sugerido ningun cambio',
+          title: 'No ha sugerido ningún cambio',
           showConfirmButton: true
         });
       }
@@ -1465,9 +1465,9 @@ export class AdminLaboratorios3Component implements OnInit {
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea editar los datos actuales con la sugerencia seleccionada',
+      title: '¿Está seguro que desea editar los datos actuales con la sugerencia seleccionada?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Solicitar',
+      confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -1476,7 +1476,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
         swal({
           title: 'Cargando un momento...',
-          text: 'espere mientras se ejecuta la solicitud',
+          text: 'Espere mientras se ejecuta la solicitud',
           onOpen: () => {
             swal.showLoading();
           }
@@ -1673,7 +1673,7 @@ export class AdminLaboratorios3Component implements OnInit {
   desaprobarSugerencia() {
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se ejecuta la solicitud',
+      text: 'Espere mientras se ejecuta la solicitud',
       onOpen: () => {
         swal.showLoading();
       }
@@ -1939,7 +1939,7 @@ export class AdminLaboratorios3Component implements OnInit {
     if (this.espaciosel.map) {
       swal({
         title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
+        text: 'Espere mientras se cargan los datos',
         onOpen: () => {
           swal.showLoading();
         }
@@ -2108,7 +2108,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     swal({
       type: 'success',
-      title: 'disponibilidad agregada',
+      title: 'Disponibilidad agregada',
       showConfirmButton: true
     });
 
@@ -2141,7 +2141,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     swal({
       type: 'success',
-      title: 'telefono agregado',
+      title: 'teléfono agregado',
       showConfirmButton: true
     });
     this.telefono = '';
@@ -2162,7 +2162,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     swal({
       type: 'success',
-      title: 'Telefono Eliminado',
+      title: 'Teléfono Eliminado',
       showConfirmButton: true
     });
   }
@@ -2466,7 +2466,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
       swal({
         type: 'info',
-        title: 'Hay campos vacios importantes.',
+        title: 'Hay campos vacíos importantes.',
         showConfirmButton: true
       });
 
@@ -2729,7 +2729,7 @@ export class AdminLaboratorios3Component implements OnInit {
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el boton vincular.';
+          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
           this.dispo = false;
           this.idnewSp = snapShot.docs[0].id;
         }
@@ -3202,7 +3202,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
               swal({
                 type: 'success',
-                title: 'persona creada correctamente',
+                title: 'Persona creada correctamente',
                 showConfirmButton: true
               });
 
@@ -3222,7 +3222,7 @@ export class AdminLaboratorios3Component implements OnInit {
               this.updatedUser(pers.user, ok.id);
               swal({
                 type: 'success',
-                title: 'persona creada correctamente',
+                title: 'Persona creada correctamente',
                 showConfirmButton: true
               });
 
@@ -3236,7 +3236,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
       swal({
         type: 'error',
-        title: 'Campos importantes vacios',
+        title: 'Campos importantes vacíos',
         showConfirmButton: true
       });
 
@@ -3337,7 +3337,7 @@ export class AdminLaboratorios3Component implements OnInit {
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
+          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el botón vincular.';
           this.dispo = true;
           this.addP = snapShot.docs[0].id;
           this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;

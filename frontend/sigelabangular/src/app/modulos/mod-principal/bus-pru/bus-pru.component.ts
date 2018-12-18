@@ -65,7 +65,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       }).catch(()=>{
         swal({
           type: 'error',
-          title: 'No existen practicas registradas a la fecha',
+          title: 'No existen prácticas registradas a la fecha',
           showConfirmButton: true
         }); 
       });
