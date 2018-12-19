@@ -859,13 +859,13 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   inicializarGraficoLineaPracticas(array) {
     this.multiLine = [];
-    this.yAxisLabel = 'Practicas Realizadas Semestre';
+    this.yAxisLabel = 'Prácticas Realizadas Semestre';
     this.practicas = array;
     this.getDatosGraficoPracticas(array).then(datos => {
       console.log(datos['data'], datos['estu']);
       this.multiLine = [
         {
-          'name': 'Practicas Realizadas',
+          'name': 'Prácticas Realizadas',
           'series': datos['data']
         },
         {
@@ -1363,7 +1363,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         const printWindow = window.open('', '', 'height=400,width=800');
         printWindow.document.write('<html><head><title>REPORTE</title>');
         printWindow.document.write('</head><body style="height:100%; width:100%;">');
-        printWindow.document.write('<strong> Hora de Generacion: '+cad+' </strong>');
+        printWindow.document.write('<strong> Hora de Generación: '+cad+' </strong>');
         printWindow.document.body.appendChild(img);
         printWindow.document.write('<br><strong> Correo del generador: : '+ambiente.persona.email+' </strong>');
         printWindow.document.write('<h1>FILTROS USADOS</h1>');

@@ -131,7 +131,7 @@ export class AdminPracticasComponent implements OnInit {
 
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }
@@ -179,7 +179,7 @@ export class AdminPracticasComponent implements OnInit {
             } else {
               swal({
                 type: 'error',
-                title: 'No existen practicas asociadas al laboratorio',
+                title: 'No existen prácticas asociadas al laboratorio',
                 showConfirmButton: true
               });
             }
@@ -220,7 +220,7 @@ export class AdminPracticasComponent implements OnInit {
       } else {
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -692,7 +692,7 @@ export class AdminPracticasComponent implements OnInit {
     if (!this.evento.title || !this.evento.start || !this.evento.start) {
       swal({
         type: 'error',
-        title: 'Hay un campo importante vacio.',
+        title: 'Hay un campo importante vacío.',
         showConfirmButton: true
       });
     } else {

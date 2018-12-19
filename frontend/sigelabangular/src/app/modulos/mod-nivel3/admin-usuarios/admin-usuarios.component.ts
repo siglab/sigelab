@@ -158,7 +158,7 @@ export class AdminUsuariosComponent implements OnInit {
 
       swal({
         title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
+        text: 'Espere mientras se cargan los datos',
         onOpen: () => {
           swal.showLoading();
         }
@@ -431,7 +431,7 @@ export class AdminUsuariosComponent implements OnInit {
         bool = true;
       }
 
-      if(roleSup.includes(doc.id)){
+      if (roleSup.includes(doc.id)) {
         boolroleSup = true;
         indexroleSupe = index;
       }
@@ -441,7 +441,7 @@ export class AdminUsuariosComponent implements OnInit {
     if (bool) {
       swal({
         type: 'error',
-        title: 'El rol ya se encuentra agregado, de click sobre el para mas informacion',
+        title: 'El rol ya se encuentra agregado, de clic sobre el para mas información',
         showConfirmButton: true
       });
     } else {
@@ -459,7 +459,7 @@ export class AdminUsuariosComponent implements OnInit {
 
         }
 
-        this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), tipo:'appRoles' });
+        this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(), tipo: 'appRoles' });
 
       } else {
 
@@ -486,7 +486,7 @@ export class AdminUsuariosComponent implements OnInit {
       let indexbool = 0;
       this.arrayPract.forEach((doc, index) => {
 
-        if(roleSup.includes(doc.id)){
+        if (roleSup.includes(doc.id)) {
           bool = true;
           indexbool = index;
         }
@@ -501,7 +501,7 @@ export class AdminUsuariosComponent implements OnInit {
         fac: arr, tipo: 'appRoles' });
     } else {
       this.arrayPract.push({ id: this.rolSelect, nombre: this.searchName(),
-        labs: arr, tipo:'clientRole' });
+        labs: arr, tipo: 'clientRole' });
     }
 
 
@@ -527,7 +527,7 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   // metodo que dispara el modal para editar roles
-  verLaboratoriosDelRol(item){
+  verLaboratoriosDelRol(item) {
 
     this.selection.clear();
     const arra = [];
@@ -578,8 +578,8 @@ export class AdminUsuariosComponent implements OnInit {
       } else {
         swal({
           type: 'success',
-          title: 'Rol '+item.nombre + ' es uno de los roles generales del sistema. '+
-                'por eso no requiere especificacion de laboratorios al cual aplicarlo.',
+          title: 'Rol ' + item.nombre + ' es uno de los roles generales del sistema. ' +
+                'por eso no requiere especificación de laboratorios al cual aplicarlo.',
           showConfirmButton: true
         });
       }
@@ -640,7 +640,7 @@ export class AdminUsuariosComponent implements OnInit {
       if(doc.id === coor){
         adm = true;
         this.arrayPract.forEach((doc2, index2) => {
-          if(clientRole.includes(doc2.id)){
+          if (clientRole.includes(doc2.id)) {
 
             doc.labs.forEach(element => {
               doc2.labs.forEach((element2, index3 )=> {
@@ -670,7 +670,7 @@ export class AdminUsuariosComponent implements OnInit {
     const cfFacil = {};
 
     let boolfac = false;
-    let facultades = {};
+    const facultades = {};
 
     if (this.arrayPract.length > 0) {
       // valida si el array contiene la llave de adminstrador
@@ -687,7 +687,7 @@ export class AdminUsuariosComponent implements OnInit {
           doc.labs.forEach(lab => {
             cfFacil[lab] = true;
 
-            if(rolesPersona[lab]){
+            if (rolesPersona[lab]) {
               rolesPersona[lab][doc.id] = true;
             } else {
               rolesPersona[lab] = {};
@@ -701,7 +701,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.person.clientRole = rolesPersona;
       this.person.cfFacil = cfFacil;
 
-      if(boolfac){
+      if (boolfac) {
         this.person.faculty = facultades;
       }
 
@@ -738,7 +738,7 @@ export class AdminUsuariosComponent implements OnInit {
         // toca resetear en todos los laboratorios si el estado cambia
           swal({
             type: 'success',
-            title: 'usuario actualizado correctamente',
+            title: 'Usuario actualizado correctamente',
             showConfirmButton: true
           });
       });
@@ -783,7 +783,7 @@ export class AdminUsuariosComponent implements OnInit {
     }
   }
 
-  alistarPersona(){
+  alistarPersona() {
     this.arrayPract = [];
     this.cumple = undefined;
     this.genero = undefined;
@@ -830,7 +830,7 @@ export class AdminUsuariosComponent implements OnInit {
     const cfFacil = {};
 
     let boolfac = false;
-    let facultades = {};
+    const facultades = {};
 
     const clientRole = ['6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB'];
 
@@ -842,7 +842,7 @@ export class AdminUsuariosComponent implements OnInit {
       if (doc.id === coor) {
         adm = true;
         this.arrayPract.forEach((doc2, index2) => {
-          if(clientRole.includes(doc2.id)){
+          if (clientRole.includes(doc2.id)) {
 
             doc.labs.forEach( element => {
               doc2.labs.forEach((element2, index3 ) => {
@@ -912,17 +912,17 @@ export class AdminUsuariosComponent implements OnInit {
 
     console.log(person);
 
-    if(!bool){
+    if (!bool) {
       this.serviceMod3.agregarPersona(person).then(ok => {
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
 
-        if(!this.nuevo){
+        if (!this.nuevo) {
           this.serviceMod3.Trazability(
-            this.user.uid, 'update', 'user', this.idu, {cfPers: ok.id, appRoles:rolesUsuario}
-          ).then(()=>{
-            this.serviceMod3.setUser(this.idu, {cfPers: ok.id, appRoles:rolesUsuario});
+            this.user.uid, 'update', 'user', this.idu, {cfPers: ok.id, appRoles: rolesUsuario}
+          ).then(() => {
+            this.serviceMod3.setUser(this.idu, {cfPers: ok.id, appRoles: rolesUsuario});
           });
         }
 
@@ -936,7 +936,7 @@ export class AdminUsuariosComponent implements OnInit {
 
         swal({
           type: 'success',
-          title: 'Exito al crear la persona',
+          title: 'Éxito al crear la persona',
           showConfirmButton: true
         });
       });
@@ -944,7 +944,7 @@ export class AdminUsuariosComponent implements OnInit {
     } else {
       swal({
         type: 'error',
-        title: 'debe llenar todos los datos de la persona',
+        title: 'Debe llenar todos los datos de la persona',
         showConfirmButton: true
       });
     }
@@ -998,7 +998,7 @@ export class AdminUsuariosComponent implements OnInit {
     } else {
       swal({
         type: 'error',
-        title: 'Intente ingresar el email denuevo',
+        title: 'Intente ingresar el email de nuevo',
         showConfirmButton: true
       });
     }
@@ -1017,7 +1017,7 @@ export class AdminUsuariosComponent implements OnInit {
 
     swal({
       type: 'success',
-      title: 'Fue eliminado con exito',
+      title: 'Fue eliminado con éxito',
       showConfirmButton: true
     });
 
@@ -1055,8 +1055,8 @@ export class AdminUsuariosComponent implements OnInit {
         this.serviceMod3
           .getPersona(data.facilityAdmin)
           .then(result => {
-            let aux = {};
-            let aux2 = {};
+            const aux = {};
+            const aux2 = {};
             const admiUser = result.data().clientRole;
 
             const cfFacil = result.data().cfFacil;
@@ -1081,9 +1081,9 @@ export class AdminUsuariosComponent implements OnInit {
             const persona = {
               clientRole: aux,
               cfFacil: aux2
-            }
+            };
 
-            console.log(data.facilityAdmin,this.idp);
+            console.log(data.facilityAdmin, this.idp);
 
             if(data.facilityAdmin !== this.idp){
               this.serviceMod3.Trazability(

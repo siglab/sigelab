@@ -57,7 +57,7 @@ export class RegistroComponent implements OnInit {
     if (!this.email || !this.pass || this.addU) {
       swal({
         type: 'error',
-        title: 'Hay campos importantes vacios.',
+        title: 'Hay campos importantes vacíos.',
         showConfirmButton: true
       });
     } if ( this.pass === this.pass2 ) {
