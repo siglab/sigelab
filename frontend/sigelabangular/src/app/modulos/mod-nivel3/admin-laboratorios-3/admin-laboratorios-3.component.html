@@ -34,7 +34,7 @@
                 <div class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
-                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por laboratorio, correo laboratorio, director, correo directos, estado laboratorio, fecha de ultima actualizacion">
+                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por: laboratorio, correo laboratorio, director, correo directos, estado laboratorio, fecha de última actualización">
                     </mat-form-field>
                   </div>
 
@@ -416,7 +416,7 @@
                                   <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
                                     <div class="example-header">
                                       <mat-form-field>
-                                        <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Practicas">
+                                        <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Prácticas">
                                       </mat-form-field>
                                     </div>
 
@@ -1304,7 +1304,7 @@
                                                 <label for="area" class="col-sm-2 col-form-label">Área Total:</label>
                                                 <div class="col-sm-10">
                                                   <input [attr.disabled]="!moduloNivel3 ? false : null" name="areatotal" [(ngModel)]="this.space.totalArea" type="text" value="" class="form-control"
-                                                    id="area" placeholder="Area total">
+                                                    id="area" placeholder="Área total">
                                                 </div>
                                               </div>
                                             </div>
@@ -1315,7 +1315,7 @@
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Área Ocupada:</label>
                                                 <div class="col-sm-10">
                                                   <input [attr.disabled]="!moduloNivel3 ? false : null" name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Area ocupada">
+                                                    id="arealibre" placeholder="Área ocupada">
                                                 </div>
                                               </div>
                                             </div>
@@ -1339,7 +1339,7 @@
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Área Libre:</label>
                                                 <div class="col-sm-10">
                                                   <input [attr.disabled]="!moduloNivel3 ? false : null" name="arealibre" [(ngModel)]="this.space.freeArea" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Area libre">
+                                                    id="arealibre" placeholder="Área libre">
                                                 </div>
                                               </div>
                                             </div>
@@ -1387,7 +1387,7 @@
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Área Mín:</label>
                                                 <div class="col-sm-10">
                                                   <input [attr.disabled]="!moduloNivel3 ? false : null" name="areamin" [(ngModel)]="this.space.minArea" type="text" value="" class="form-control"
-                                                    id="arealibre" placeholder="Area min">
+                                                    id="arealibre" placeholder="Área mín">
                                                 </div>
                                               </div>
                                             </div>
@@ -1399,7 +1399,7 @@
                                                 <label for="indice" class="col-sm-5 col-form-label">Índice de saturación:</label>
                                                 <div class="col-sm-7">
                                                   <input [attr.disabled]="!moduloNivel3 ? false : null" name="indxsa" [(ngModel)]="this.space.indxSa" type="text" value="" class="form-control"
-                                                    id="indice" placeholder="Indice saturacion"  disabled >
+                                                    id="indice" placeholder="Índice saturación"  disabled >
                                                 </div>
                                               </div>
                                             </div>
