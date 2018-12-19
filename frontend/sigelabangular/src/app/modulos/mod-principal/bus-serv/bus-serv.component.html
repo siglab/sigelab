@@ -87,7 +87,7 @@
                         <div class="box-header">
                             <h4 (click)="cambiarIcono('info')" class="box-title">
                             <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                                INFORMACION DE SERVICIO
+                                INFORMACIÓN DE SERVICIO
                             </a>
                             </h4>
                     
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{itemsel.infoServ.descripcion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{itemsel.infoServ.descripcion}}</label>
                                     </div>
                                 </div>
                                 <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
@@ -172,7 +172,7 @@
                                   
                                   <div *ngIf="(itemsel.infoServ.variaciones.length == 0) && habilitarci" class="form-group" style="margin-top: 20px;">
                                     <div class="col-md-12">
-                                      <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
+                                      <p>como seleccionó proyecto de investigación, por favor diligencie el respectivo CI </p>
                                       <input id="univ" (focusout)="ciCheck($event)" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
                                       <p> {{status}} </p>
                                     </div>
@@ -206,7 +206,7 @@
                           <div class="box-header">
                           <h4 (click)="cambiarIcono('var')" class="box-title">
                               <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                              INFORMACION DE VARIACIONES DE SERVICIO
+                              INFORMACIÓN DE VARIACIONES DE SERVICIO
                               </a>
                           </h4>
                           <a (click)="cambiarIcono('var')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
@@ -222,7 +222,7 @@
                                             <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
 
                                           <mat-form-field>
-                                            <mat-select name="sel" id="sel" [(value)]="variacionSel" placeholder="Seleccione una variacion"  (change)="cambiarVariacion(variacionSel)">
+                                            <mat-select name="sel" id="sel" [(value)]="variacionSel" placeholder="Seleccione una variación"  (change)="cambiarVariacion(variacionSel)">
                     
                                               <mat-option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}">{{item.data.cfName}}</mat-option>
                                              
@@ -240,7 +240,7 @@
                                       </div>
                                       <div class="form-group">
                                           <div class="col-md-12">
-                                            <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.data.cfDescription}}</label>
+                                            <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{variation.data.cfDescription}}</label>
                                           </div>
                                       </div>
                                       <div class="form-group">
@@ -274,7 +274,7 @@
                                     </div>
                                       <div class="form-group">
                                           <div class="col-md-12 text-center">
-                                              <button  class="btn btn-danger" type="button" (click)="agregarSolicitudServicio()" >Agregar variacion</button>
+                                              <button  class="btn btn-danger" type="button" (click)="agregarSolicitudServicio()" >Agregar variación</button>
                                           </div>
                                       </div>
                                     </fieldset>
@@ -329,7 +329,7 @@
                                 
                                 <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
                                   <div class="col-md-12">
-                                    <p>como selecciono proyecto de investigacion, por favor diligencie el respectivo CI </p>
+                                    <p>Como seleccionó proyecto de investigación, por favor diligencie el respectivo CI </p>
                                     <input id="univ" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
                                   </div>
                                 </div>      
@@ -373,13 +373,13 @@
                             </div>
                             <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="desc"><strong>Descripcion: </strong>{{itemsel.infoLab.desc}}</label>
+                                <label class="control-label" for="desc"><strong>Descripción: </strong>{{itemsel.infoLab.desc}}</label>
 
                               </div>
                           </div>
                           <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="dir"><strong>Direccion: </strong>{{itemsel.infoLab.direspacio.dir}}</label>
+                                <label class="control-label" for="dir"><strong>Dirección: </strong>{{itemsel.infoLab.direspacio.dir}}</label>
 
                               </div>
                           </div>
@@ -413,7 +413,7 @@
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="subsede">
-                                <strong>Terminos y condiciones:</strong> {{itemsel.infoLab.condiciones}}</label>
+                                <strong>Términos y condiciones:</strong> {{itemsel.infoLab.condiciones}}</label>
                             </div>
                           </div>
 
@@ -453,7 +453,7 @@
                 <div class="box-header">
                   <i class="fa fa-map"></i>
 
-                  <h3 class="box-title">Informacion Equipos Relacionados</h3>
+                  <h3 class="box-title">Información Equipos Relacionados</h3>
                   <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalEquips')"></span>
                 </div>
                 

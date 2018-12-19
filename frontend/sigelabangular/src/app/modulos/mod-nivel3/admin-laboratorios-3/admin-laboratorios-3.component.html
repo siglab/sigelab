@@ -813,7 +813,7 @@
                             <div *ngIf="moduloNivel3" class="box-header text-center">
                               <i class="fa fa-address-card-o"></i>
 
-                              <h3 class="box-title">Editar Informacion Actual</h3>
+                              <h3 class="box-title">Editar Información Actual</h3>
                             </div>
 
                             <div class="box-body">
@@ -890,7 +890,7 @@
                                       </div>
                                       <div class="input-group">
                                         <mat-form-field>
-                                          <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un dia de la semana">
+                                          <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un día de la semana">
                                             <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
                                           </mat-select>
                                         </mat-form-field>
@@ -1327,7 +1327,7 @@
                                                 <label for="arealibre" class="col-sm-2 col-form-label">Ocupación actual:</label>
                                                 <div class="col-sm-9">
                                                   <input [attr.disabled]="!moduloNivel3 ? false : null" name="ocupacionactual" [(ngModel)]="this.ocupacionAct" type="text" value=""
-                                                    class="form-control" id="ocupact" placeholder="Ocupacion actual" disabled>
+                                                    class="form-control" id="ocupact" placeholder="Ocupación actual" disabled>
                                                 </div>
                                               </div>
                                             </div>
