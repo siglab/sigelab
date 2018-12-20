@@ -125,7 +125,7 @@ export class LoginService {
         .then(() => {
           swal({
             type: 'success',
-            title: 'Se envio un correo al nuevo usuario para establece su contraseña ',
+            title: 'Se envió un correo al nuevo usuario para establece su contraseña ',
             showConfirmButton: true
           });
         });

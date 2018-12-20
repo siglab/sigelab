@@ -238,9 +238,9 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea enviar este comentario',
+      title: '¿Está seguro que desea enviar este comentario?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Solicitar',
+      confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {

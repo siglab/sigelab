@@ -518,7 +518,7 @@ comentario = '';
     swal({
 
       type: 'warning',
-      title: '¿Está seguro que desea envíar este comentario?',
+      title: '¿Está seguro que desea enviar este comentario?',
       showCancelButton: true,
       confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'

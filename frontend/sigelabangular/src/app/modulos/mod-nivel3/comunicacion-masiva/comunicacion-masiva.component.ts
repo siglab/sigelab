@@ -25,27 +25,27 @@ export class ComunicacionMasivaComponent implements OnInit {
   arregloSinFiltros = [];
 
   objsel = {
-    sede:'inicial',
-    facultad:'inicial',
-    departamento:'inicial',
-    escuela:'inicial'
+    sede: 'inicial',
+    facultad: 'inicial',
+    departamento: 'inicial',
+    escuela: 'inicial'
   };
 
-  htmlContent:any;
+  htmlContent: any;
 
   correo = {
-    asunto:'',
-    mensaje:''
+    asunto: '',
+    mensaje: ''
   };
 
-  notificacion:'';
+  notificacion: '';
 
   caracteres = 140;
 
-  persona:any;
+  persona: any;
 
   historial = [];
-  historialsel:any;
+  historialsel: any;
 
   displayedColumns = ['asunto', 'tipo', 'email', 'fecha'];
   dataSource = new MatTableDataSource([]);
@@ -54,32 +54,32 @@ export class ComunicacionMasivaComponent implements OnInit {
 
 
   formCheckBox = {
-    universidad: new FormControl({value:false, disabled:false}),
-    sede: new FormControl({value:false, disabled:false}),
-    subsede: new FormControl({value:false, disabled:false}),
-    facultad: new FormControl({value:false, disabled:false}),
-    departamento: new FormControl({value:false, disabled:false}),
-    escuela: new FormControl({value:false, disabled:false})
+    universidad: new FormControl({value: false, disabled: false}),
+    sede: new FormControl({value: false, disabled: false}),
+    subsede: new FormControl({value: false, disabled: false}),
+    facultad: new FormControl({value: false, disabled: false}),
+    departamento: new FormControl({value: false, disabled: false}),
+    escuela: new FormControl({value: false, disabled: false})
   };
 
   formSelect = {
-    sede: new FormControl({value:'', disabled:true}),
-    subsede: new FormControl({value:'', disabled:true}),
-    facultad: new FormControl({value:'',disabled:true}),
-    departamento: new FormControl({value:'',disabled:true}),
-    escuela: new FormControl({value:'',disabled:true})
+    sede: new FormControl({value: '', disabled: true}),
+    subsede: new FormControl({value: '', disabled: true}),
+    facultad: new FormControl({value: '', disabled: true}),
+    departamento: new FormControl({value: '', disabled: true}),
+    escuela: new FormControl({value: '', disabled: true})
   };
 
   listSelect = {
-    sede:[],
-    subsede:[],
-    facultad:[],
-    departamento:[],
-    escuela:[]
+    sede: [],
+    subsede: [],
+    facultad: [],
+    departamento: [],
+    escuela: []
   };
 
 
-  constructor(private serviceMod3: ServicesNivel3Service, private http:Http) {
+  constructor(private serviceMod3: ServicesNivel3Service, private http: Http) {
 
 
 
@@ -100,22 +100,22 @@ export class ComunicacionMasivaComponent implements OnInit {
       this.historial = datos;
       this.dataSource.data = datos;
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-      },2000)
+      }, 2000);
     });
 
   }
 
 
-  estructurarSedes(){
+  estructurarSedes() {
 
-    this.serviceMod3.buscaSede().then(datos=>{
+    this.serviceMod3.buscaSede().then(datos => {
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.sede.push({
-          id:doc.id,
+          id: doc.id,
           nombre: sede.cfName
         });
       });
@@ -125,25 +125,25 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   }
 
-  estructurarTodasSubSedes(){
-    this.serviceMod3.buscaTodasSubSede().then(datos=>{
+  estructurarTodasSubSedes() {
+    this.serviceMod3.buscaTodasSubSede().then(datos => {
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.subsede.push({
-          id:doc.id,
+          id: doc.id,
           nombre: sede.cfAddrline2 ? sede.cfAddrline2 : sede.cfAddrline1
         });
       });
     });
   }
 
-  estructurarSubSedes(sedes){
+  estructurarSubSedes(sedes) {
     this.listSelect.subsede = [];
 
       for (let i = 0; i < this.listSelect.sede.length; i++) {
         const element = this.listSelect.sede[i];
 
-        this.serviceMod3.buscaSubSede(element.id).then(datos=>{
+        this.serviceMod3.buscaSubSede(element.id).then(datos => {
           datos.forEach(doc => {
             const sede = doc.data();
             this.listSelect.subsede.push({
@@ -164,14 +164,14 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-  estructurarFacultades(){
+  estructurarFacultades() {
     this.listSelect.facultad = [];
-    this.serviceMod3.buscaTodasFacultades().then(datos=>{
+    this.serviceMod3.buscaTodasFacultades().then(datos => {
 
       datos.forEach(doc => {
         const facultad = doc.data();
         this.listSelect.facultad.push({
-          id:doc.id,
+          id: doc.id,
           nombre: facultad.facultyName
         });
 
@@ -181,14 +181,14 @@ export class ComunicacionMasivaComponent implements OnInit {
     });
   }
 
-  estructurarFacultadesWitSede(keysede){
+  estructurarFacultadesWitSede(keysede) {
     this.listSelect.facultad = [];
-    this.serviceMod3.buscaFacultadWitSede(keysede).then(datos=>{
+    this.serviceMod3.buscaFacultadWitSede(keysede).then(datos => {
 
       datos.forEach(doc => {
         const facultad = doc.data();
         this.listSelect.facultad.push({
-          id:doc.id,
+          id: doc.id,
           nombre: facultad.facultyName
         });
 
@@ -199,7 +199,7 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-  estructurarDeparamentos(keyfacul){
+  estructurarDeparamentos(keyfacul) {
     this.listSelect.departamento = [];
     this.listSelect.escuela = [];
     this.serviceMod3.buscaDepartamento(keyfacul)
@@ -208,7 +208,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
         const element = doc.data();
 
-        if(element.type == 'department'){
+        if (element.type === 'department') {
 
           this.listSelect.departamento.push({
             id: doc.id,
@@ -234,7 +234,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
 
 
-  aplicarFiltro(filtro){
+  aplicarFiltro(filtro) {
 
    console.log(filtro);
    console.log(this.formSelect[filtro].value);
@@ -242,34 +242,34 @@ export class ComunicacionMasivaComponent implements OnInit {
    for (let i = 0; i < this.formSelect[filtro].value.length; i++) {
      const element = this.formSelect[filtro].value[i];
 
-     if(filtro == 'sede'){
+     if (filtro === 'sede') {
        this.estructurarSubSedes(element.id);
      }
    }
 
   }
 
-  controlChecks(item){
-    const arr = ['sede','subsede','facultad','departamento', 'escuela'];
-    if(item == 'universidad'){
-      if(this.formCheckBox[item].value){
-        arr.forEach(elemen=>{
+  controlChecks(item) {
+    const arr = ['sede', 'subsede', 'facultad', 'departamento', 'escuela'];
+    if (item === 'universidad') {
+      if (this.formCheckBox[item].value) {
+        arr.forEach(elemen => {
           this.formCheckBox[elemen].setValue(false);
           this.formSelect[elemen].setValue('');
           this.formSelect[elemen].disable();
           this.formCheckBox[elemen].disable();
         });
 
-      }else{
-        arr.forEach(elemen=>{
+      } else {
+        arr.forEach(elemen => {
           this.formCheckBox[elemen].enable();
         });
       }
-    }else{
-      if(this.formCheckBox[item].value){
+    } else {
+      if (this.formCheckBox[item].value) {
 
         this.formSelect[item].enable();
-      }else{
+      } else {
         this.formSelect[item].disable();
         this.formSelect[item].setValue('');
       }
@@ -278,34 +278,34 @@ export class ComunicacionMasivaComponent implements OnInit {
   }
 
 
-  cambiarNumeroCaracteres(value){
+  cambiarNumeroCaracteres(value) {
     this.caracteres = 140;
     this.caracteres -= value.length;
   }
 
 
-  enviarCorreoNotificacion(item){
+  enviarCorreoNotificacion(item) {
 
     this.alertaCargando();
 
-    let coincidencias = [];
+    const coincidencias = [];
 
     let seleccion = false;
 
     const arr = {
-            sede:'headquarter',
-            subsede:'subHq',
-            facultad:'faculties',
-            departamento:'departments',
-            escuela:'departments'
+            sede: 'headquarter',
+            subsede: 'subHq',
+            facultad: 'faculties',
+            departamento: 'departments',
+            escuela: 'departments'
           };
 
 
     let correos = '';
-    let notificaciones = [];
+    const notificaciones = [];
 
-    const inicio = 'if('
-    const fin = '){'+
+    const inicio = 'if(';
+    const fin = '){' +
           'coincidencias.push({id: element["facilityAdmin"]});}';
 
     let ifquery = '';
@@ -314,9 +314,9 @@ export class ComunicacionMasivaComponent implements OnInit {
     for (const key in this.formCheckBox) {
       if (this.formCheckBox.hasOwnProperty(key)) {
         const element2 = this.formCheckBox[key];
-        if(element2.value && key != 'universidad'){
+        if (element2.value && key !== 'universidad') {
 
-          if(this.formSelect[key].value.length != 0){
+          if (this.formSelect[key].value.length !== 0) {
             seleccion = true;
 
             ifquery += '(';
@@ -324,22 +324,26 @@ export class ComunicacionMasivaComponent implements OnInit {
             for (let i = 0; i < this.formSelect[key].value.length; i++) {
               const element3 = this.formSelect[key].value[i];
 
-              if(i == this.formSelect[key].value.length-1){
+              if (i === this.formSelect[key].value.length - 1) {
 
-                if(key == 'facultad'){
-                  ifquery += 'element["' + arr[key]+'"].'+element3 + ' == true)';
-                } else if(key === 'departamento') {
-                  if(this.formSelect['escuela'].value.length !== 0) {
-                    ifquery += '(element["' +arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true';
+                if (key === 'facultad') {
+                  ifquery += 'element["' + arr[key] + '"].' + element3 + ' == true)';
+                } else if (key === 'departamento') {
+                  if (this.formSelect['escuela'].value.length !== 0) {
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] +
+                    '"]["' + element3.facul + '"]["' + element3.id + '"]) == true';
                   } else {
-                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] +
+                    '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                   }
 
                 } else if (key === 'escuela') {
                   if (this.formSelect['departamento'].value.length !== 0) {
-                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true))';
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] +
+                    '"]["' + element3.facul + '"]["' + element3.id + '"]) == true))';
                   } else {
-                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] +
+                    '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                   }
 
                 } else {
@@ -352,7 +356,8 @@ export class ComunicacionMasivaComponent implements OnInit {
 
                 } else if (key === 'departamento' || key === 'escuela') {
 
-                  ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true || ';
+                  ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] +
+                  '"]["' + element3.facul + '"]["' + element3.id + '"]) == true || ';
                 } else {
                   ifquery += 'element["' + arr[key] + '"] == "' + element3 + '" || ';
                 }
@@ -392,6 +397,7 @@ export class ComunicacionMasivaComponent implements OnInit {
         } else {
 
           if (seleccion) {
+            // tslint:disable-next-line:no-eval
             eval(ifquery);
           } else {
             swal({
@@ -528,7 +534,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     }
     console.log(obj);
     this.serviceMod3.agregarHistorial(obj).then(() => {
-      this.alertaHecho('Éxito al envíar');
+      this.alertaHecho('Éxito al enviar');
     });
 
   }
@@ -583,6 +589,7 @@ export class ComunicacionMasivaComponent implements OnInit {
 
   buscaObjectos() {
     const texto = {};
+    // tslint:disable-next-line:forin
     for (const clave in this.formCheckBox) {
 
       const auxiliar = [];
@@ -598,6 +605,7 @@ export class ComunicacionMasivaComponent implements OnInit {
             const array2 = this.formSelect[clave].value;
 
             for (let i = 0; i < array2.length; i++) {
+              // tslint:disable-next-line:no-shadowed-variable
               let element = array2[i];
               if ((clave === 'departamento') || (clave === 'escuela')) {
                 element = array2[i].id;
@@ -663,8 +671,6 @@ export class ComunicacionMasivaComponent implements OnInit {
     setTimeout(() => {
       $('#mensajeHtml').html(this.historialsel.mensaje);
     }, 1000);
-
-
   }
 
   applyFilter(filterValue: string) {
@@ -725,13 +731,11 @@ export class ComunicacionMasivaComponent implements OnInit {
     });
   }
 
-
-
-
   removeDuplicates(originalArray, prop) {
     const newArray = [];
     const lookupObject  = {};
 
+    // tslint:disable-next-line:forin
     for (const i in originalArray) {
        lookupObject[originalArray[i][prop]] = originalArray[i];
     }
@@ -741,7 +745,4 @@ export class ComunicacionMasivaComponent implements OnInit {
     }
      return newArray;
   }
-
-
-
 }
