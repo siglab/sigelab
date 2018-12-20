@@ -53,7 +53,7 @@
                   <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;"><a class="nav-link"
                     (click)="downAcerca()" >Acerca de SIGELab</a></li>
                   <li class="nav-item" role="presentation" id="navContact"><a  (click)="down()" class="nav-link">Contacto</a></li>
-                </ul><button [routerLink]="'/login'" class="btn btn-primary btn-sm homeBtn" type="button"><i class="icon ion-log-in"></i>&nbsp;Ingresar
+                </ul><button (click)="prueba()" [routerLink]="['/login']" routerLinkActive="active" class="btn btn-primary btn-sm homeBtn" type="button"><i class="icon ion-log-in"></i>&nbsp;Ingresar
                   &nbsp;</button>
               </div>
             </div>
@@ -74,7 +74,7 @@
           [routerLink]="'/principal'"  type="button" style="border:2px solid white;border-radius:8px;">Búsqueda de información de laboratorios y
             servicios<br></button></div>
         <div class="col-10 offset-1" style="/*max-height:25%;*/">
-            <button [routerLink]="'/login'" class="btn btn-primary btn-block btn-sm homeBtn btn-sm" type="button" style="border:2px solid white;border-radius:8px;">Administración de laboratorios</button></div>
+            <button [routerLink]="['/login']" class="btn btn-primary btn-block btn-sm homeBtn btn-sm" type="button" style="border:2px solid white;border-radius:8px;">Administración de laboratorios</button></div>
         <div class="col-10 offset-1" style="height:30%;margin-top:5%;">
           <div data-aos="fade-up" data-aos-delay="200" data-aos-once="true" id="mainSecUvLogo"></div>
         </div>
