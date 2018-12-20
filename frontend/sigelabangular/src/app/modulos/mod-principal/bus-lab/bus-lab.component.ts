@@ -17,6 +17,7 @@ import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
 import { correoUnivalle } from '../../../config';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 
@@ -34,6 +35,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   corx = 3.42158;
   cory = -76.5205;
   map: any;
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
+
 
   // VARIABLES QUE SE UTILIZAN PARA LOS DATATABLES DE SERVICIOS Y PRACTICAS
   itemsel: any;
@@ -119,13 +122,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
+     this.alert.show();
     // trae los datos de los laboratorios
     this.query.getLaboratorios().then(data => {
 
@@ -135,7 +132,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
 
-         swal.close();
+        this.alert.hide();
       });
 
     });
@@ -429,8 +426,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
           showConfirmButton: true
         });
       }
-     
-     
+
+
      }
 
      setTimeout(function() {

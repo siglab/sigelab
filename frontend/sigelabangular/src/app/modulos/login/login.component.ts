@@ -46,15 +46,15 @@ export class LoginComponent implements OnInit {
       console.log('enrutameitno');
 
       this.ruta.navigate(['principal']);
-         
+
 
      }).catch(error => {
         // this.ingresar();
 
         swal({
           type: 'error',
-          title: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
-                +'(si el error persiste es posible que su usuario haya sido desactivado)',
+          text: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
+                + 'Si el error persiste es posible que su usuario haya sido desactivado.',
           showConfirmButton: true
         });
      });

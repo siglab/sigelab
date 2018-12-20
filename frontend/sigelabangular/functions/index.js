@@ -24,6 +24,7 @@ ref.settings({ timestampsInSnapshots: true });
 exports.helloWorld = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
 
+    // verifica si el usuario existe como persona
     ref.collection("cfPers").where("email", "==", req.email)
       .get()
       .then((querySnapshot) => {
@@ -91,11 +92,11 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 
           };
 
-          // para el nivel 3 es necesario pasar el campo tipo string a un objeto
 
 
           const pers = {
-            user: event.uid
+            user: event.uid,
+
           };
 
           ref.doc(`cfPers/${usr.cfPers}`).set(pers, {

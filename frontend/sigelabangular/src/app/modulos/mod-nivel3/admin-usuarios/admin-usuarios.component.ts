@@ -13,6 +13,7 @@ import { ServicesNivel3Service } from '../services/services-nivel3.service';
 import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { ROLESARRAY } from '../../../config';
 import { SelectionModel } from '@angular/cdk/collections';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 
@@ -22,6 +23,9 @@ declare var $: any;
   styleUrls: ['./admin-usuarios.component.css']
 })
 export class AdminUsuariosComponent implements OnInit {
+
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
+
   idfacultad;
   rolSelect;
   arrayPract = [];
@@ -155,21 +159,14 @@ export class AdminUsuariosComponent implements OnInit {
 
       this.dataSourcePers.data = data.user;
 
-
-      swal({
-        title: 'Cargando un momento...',
-        text: 'Espere mientras se cargan los datos',
-        onOpen: () => {
-          swal.showLoading();
-        }
-      });
+         this.alert.show();
 
       setTimeout(() => {
         if (data.user.length !== 0) {
           this.dataSourcePers.sort = this.sortPers;
           this.dataSourcePers.paginator = this.paginatorPers;
 
-          swal.close();
+          this.alert.hide();
         } else {
           swal({
             type: 'error',
@@ -385,12 +382,7 @@ export class AdminUsuariosComponent implements OnInit {
 
                 }
 
-                // if (size > 1) {
-                //   nameroles += doc.data().roleName + ',';
-                // }
-                // if (size === 1) {
-                //   nameroles += doc.data().roleName;
-                // }
+
                 nameRols.push(doc.data().roleName);
                 contador++;
 
@@ -605,7 +597,9 @@ export class AdminUsuariosComponent implements OnInit {
     this.selection.clear();
     this.idp = item.idPers;
     console.log(this.idp);
+
     this.idu = item.id;
+
     this.arrayPract = item.llave;
     this.tablesel = table;
     console.log(item);
@@ -729,13 +723,16 @@ export class AdminUsuariosComponent implements OnInit {
 
 
     // actualizar la persona
-
+    this.alert.show();
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'cfPers', this.idp, this.person
     ).then(() => {
       this.serviceMod3.updatedPersona(this.idp, this.person).then(
+
         () => {
         // toca resetear en todos los laboratorios si el estado cambia
+        this.alert.hide();
+
           swal({
             type: 'success',
             title: 'Usuario actualizado correctamente',
@@ -793,6 +790,7 @@ export class AdminUsuariosComponent implements OnInit {
     this.cedula = undefined;
     this.type = undefined;
     this.idu = '';
+    this.idp = '';
 
     this.nuevo = true;
 
@@ -804,8 +802,8 @@ export class AdminUsuariosComponent implements OnInit {
       cfBirthdate: this.cumple,
       cfGender: this.genero,
       cfUri: '',
-      cfFamilyNames: this.nombre,
-      cfFirstNames: this.apellido,
+      cfFamilyNames: this.apellido,
+      cfFirstNames: this.nombre,
       clientRole : {},
       cfOtherNames: '',
       cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
@@ -820,7 +818,7 @@ export class AdminUsuariosComponent implements OnInit {
       relatedEquipments: {},
       createdAt: this.fecha.toISOString(),
       updatedAt: this.fecha.toISOString(),
-      faculty:{},
+      faculty: {},
 
     };
 
@@ -863,7 +861,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.arrayPract.forEach(doc => {
         if (doc.tipo === 'appRoles') {
           rolesUsuario[doc.id] = true;
-          if(doc.id === 'PFhLR4X2n9ybaZU3CR75') {
+          if (doc.id === 'PFhLR4X2n9ybaZU3CR75') {
             boolfac = true;
             doc.fac.forEach( element => {
               facultades[element] = true;
@@ -873,7 +871,7 @@ export class AdminUsuariosComponent implements OnInit {
           doc.labs.forEach(lab => {
             cfFacil[lab] = true;
 
-            if (rolesPersona[lab]){
+            if (rolesPersona[lab]) {
               rolesPersona[lab][doc.id] = true;
             } else {
               rolesPersona[lab] = {};
@@ -912,19 +910,22 @@ export class AdminUsuariosComponent implements OnInit {
 
     console.log(person);
 
+
     if (!bool) {
+      console.log('valida ok');
+      this.alert.show();
       this.serviceMod3.agregarPersona(person).then(ok => {
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
 
-        if (!this.nuevo) {
           this.serviceMod3.Trazability(
             this.user.uid, 'update', 'user', this.idu, {cfPers: ok.id, appRoles: rolesUsuario}
           ).then(() => {
-            this.serviceMod3.setUser(this.idu, {cfPers: ok.id, appRoles: rolesUsuario});
+
           });
-        }
+
+        this.serviceMod3.setUser(this.idu, {cfPers: ok.id, appRoles: rolesUsuario});
 
         this.arrayPract.forEach((doc, index) => {
           if (doc.id === coor) {
@@ -934,14 +935,24 @@ export class AdminUsuariosComponent implements OnInit {
         });
         console.log(ok.id);
 
+        // ocultar loading
+        this.alert.hide();
+
+        // setear campos
+        this.alistarPersona();
+
         swal({
           type: 'success',
-          title: 'Éxito al crear la persona',
+          title : 'Almacenado correctamente',
+          text: 'Éxito al crear la persona. La persona solo se podrá editar una vez ingrese a la plataforma.',
           showConfirmButton: true
         });
-      });
+      }) ;
 
     } else {
+
+      this.alert.hide();
+
       swal({
         type: 'error',
         title: 'Debe llenar todos los datos de la persona',
@@ -993,6 +1004,7 @@ export class AdminUsuariosComponent implements OnInit {
             title: 'Almacenado correctamente',
             showConfirmButton: true
           });
+
         });
       });
     } else {
@@ -1063,7 +1075,7 @@ export class AdminUsuariosComponent implements OnInit {
 
             for (const key in admiUser) {
               if (admiUser.hasOwnProperty(key)) {
-                if(key !== idlab){
+                if (key !== idlab) {
                   aux[key] = admiUser[key];
                 }
 
@@ -1072,7 +1084,7 @@ export class AdminUsuariosComponent implements OnInit {
 
             for (const key in cfFacil) {
               if (cfFacil.hasOwnProperty(key)) {
-                if(key !== idlab){
+                if (key !== idlab) {
                   aux2[key] = true;
                 }
               }
@@ -1085,7 +1097,7 @@ export class AdminUsuariosComponent implements OnInit {
 
             console.log(data.facilityAdmin, this.idp);
 
-            if(data.facilityAdmin !== this.idp){
+            if (data.facilityAdmin !== this.idp) {
               this.serviceMod3.Trazability(
                 this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
               ).then(() => {
@@ -1115,6 +1127,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   setKeyAdmin(labs) {
 
+    // tslint:disable-next-line:no-shadowed-variable
     labs.forEach(element => {
       this.updatedAdminFacil(element);
     });
@@ -1148,5 +1161,22 @@ export class AdminUsuariosComponent implements OnInit {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSourceFacil.data.forEach(row => this.selection.select(row));
+  }
+
+
+  crearComoPersona() {
+
+    this.cumple = undefined;
+    this.genero = undefined;
+    this.nombre = undefined;
+    this.apellido = undefined;
+    this.cedula = undefined;
+    this.type = undefined;
+    this.idp = '';
+    console.log(this.idu);
+    this.nuevo = true;
+
+    $('html, body').animate({ scrollTop: '600px' }, 'slow');
+
   }
 }

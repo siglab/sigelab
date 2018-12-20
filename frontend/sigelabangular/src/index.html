@@ -6,16 +6,25 @@
   <title>SigeLab</title>
   <base href="/">
   <style>
-    *{
-      margin: 0px;
-      padding: 0px;
+      .contenedor {
+      background-color: #ffffff;
+      position: fixed;
+      width: 100%;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 9998;
     }
-    .cssload-thecube {
+      .cssload-thecube {
       width: 75px;
       height: 75px;
-      margin: 0 auto;
-      margin-top: 200px;
-      position: relative;
+      position: absolute;
+      margin: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       transform: rotateZ(45deg);
       -o-transform: rotateZ(45deg);
       -ms-transform: rotateZ(45deg);
@@ -223,13 +232,16 @@
 
 <body class="hold-transition skin-red sidebar-mini fixed">
   <app-root>
+    <div class="contenedor">
+
       <div class="cssload-thecube">
-          <div class="cssload-cube cssload-c1"></div>
-          <div class="cssload-cube cssload-c2"></div>
-          <div class="cssload-cube cssload-c4"></div>
-          <div class="cssload-cube cssload-c3"></div>
-        </div>
-</app-root>
+        <div class="cssload-cube cssload-c1"></div>
+        <div class="cssload-cube cssload-c2"></div>
+        <div class="cssload-cube cssload-c4"></div>
+        <div class="cssload-cube cssload-c3"></div>
+      </div>
+    </div>
+  </app-root>
 
 
 </body>
