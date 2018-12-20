@@ -29,7 +29,7 @@
                 <div class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
-                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por laboratorio, escuela, director e investigación">
+                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por: laboratorio, escuela, director e investigación">
                     </mat-form-field>
                   </div>
 
@@ -113,7 +113,7 @@
                         <div class="form-group">
                           <div class="col-md-12">
                             <label class="control-label" for="desc">
-                              <strong>Descripcion: </strong>{{itemsel.desc}}</label>
+                              <strong>Descripción: </strong>{{itemsel.desc}}</label>
 
                           </div>
                         </div>
@@ -254,7 +254,7 @@
                       <div class="example-container mat-elevation-z8" *ngIf="dataSource3.data.length != 0">
                         <div class="example-header">
                           <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar practica">
+                            <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar práctica">
                           </mat-form-field>
                         </div>
 

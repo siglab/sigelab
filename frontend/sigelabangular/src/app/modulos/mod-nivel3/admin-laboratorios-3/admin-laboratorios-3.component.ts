@@ -1325,9 +1325,9 @@ export class AdminLaboratorios3Component implements OnInit {
       swal({
 
         type: 'warning',
-        title: '¿Está seguro que desea envíar los cambios realizados?',
+        title: '¿Está seguro que desea enviar los cambios realizados?',
         showCancelButton: true,
-        confirmButtonText: 'Sí, envíar',
+        confirmButtonText: 'Sí, enviar',
         cancelButtonText: 'No, Cancelar'
 
       }).then((result) => {
@@ -1394,7 +1394,7 @@ export class AdminLaboratorios3Component implements OnInit {
         swal({
 
           type: 'warning',
-          title: '¿Está seguro que desea envíar la sugerencia de cambios?',
+          title: '¿Está seguro que desea enviar la sugerencia de cambios?',
           showCancelButton: true,
           confirmButtonText: 'Sí, Solicitar',
           cancelButtonText: 'No, Cancelar'

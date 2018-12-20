@@ -67,7 +67,7 @@
 
                                             <!-- Name Column -->
                                             <ng-container matColumnDef="edicion">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ultima Edicion </mat-header-cell>
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
                                               <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
                                             </ng-container>
 
@@ -79,7 +79,7 @@
 
                                             <!-- Name Column -->
                                             <ng-container matColumnDef="aceptacion">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptacion </mat-header-cell>
+                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
                                               <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
                                             </ng-container>
 
@@ -129,7 +129,7 @@
 
                                                 <!-- Name Column -->
                                                 <ng-container matColumnDef="edicion">
-                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ultima Edicion </mat-header-cell>
+                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
                                                 </ng-container>
 
@@ -141,7 +141,7 @@
 
                                                 <!-- Name Column -->
                                                 <ng-container matColumnDef="aceptacion">
-                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptacion </mat-header-cell>
+                                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
                                                 </ng-container>
 
@@ -195,7 +195,7 @@
                     <div class="box-header">
                         <h4 (click)="cambiarIcono('info')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                            INFORMACION DE SERVICIO
+                            INFORMACIÓN DE SERVICIO
                         </a>
                         </h4>
                         <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
@@ -218,12 +218,12 @@
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servsel.descripcion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{servsel.descripcion}}</label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Fecha Aceptacion:</strong> {{servsel.fechaAceptacion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Fecha Aceptación:</strong> {{servsel.fechaAceptacion}}</label>
                                     </div>
                                   </div>
                                   <div class="form-group">
@@ -233,12 +233,12 @@
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Ultima edicion:</strong> {{servsel.fechaEdicion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Última edición:</strong> {{servsel.fechaEdicion}}</label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{servsel.descripcion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{servsel.descripcion}}</label>
                                     </div>
                                   </div>
                                   <div *ngIf="servsel.condicionesSrv.length != 0" class="form-group">
@@ -270,7 +270,7 @@
                                     <div class="row">
                                         <div *ngIf="servsel.nombreParametros.length != 0" class="col-md-12">
                                             <label class="control-label" for="precioserv">
-                                                <strong>Parametros de variacion:</strong>
+                                                <strong>Parámetros de variación:</strong>
                                             </label>
                                             <div class="form-group">
                                               <div class="col-md-6" *ngFor="let item of servsel.nombreParametros; let i = index;">
@@ -302,7 +302,7 @@
                     <div class="box-header">
                     <h4 (click)="cambiarIcono('sabs')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                        INFORMACION DE VARIACIONES DE SERVICIO
+                        INFORMACIÓN DE VARIACIONES DE SERVICIO
                         </a>
                     </h4>
                     <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
@@ -317,7 +317,7 @@
                                 <div class="col-md-12">
                                     <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
                                   <select class="form-control" name="variatio" id="variato" (change)="cambiarVariacion($event.target.value)">
-                                    <option value="inicial">Seleccione una variacion</option>
+                                    <option value="inicial">Seleccione una variación</option>
                                     <option *ngFor="let item of servsel.variaciones" value="{{item.id}}" >{{item.nombre}}</option>
                                   </select>
                                 </div>
@@ -333,7 +333,7 @@
                               </div>
                               <div class="form-group">
                                   <div class="col-md-12">
-                                    <label class="control-label" for="descripserv"><strong>Descripcion:</strong> {{variation.descripcion}}</label>
+                                    <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{variation.descripcion}}</label>
                                   </div>
                               </div>
                               <div *ngIf="condicion" class="form-group">
@@ -354,7 +354,7 @@
                                 <div class="row">
                                     <div *ngIf="variation.parametros != 0" class="col-md-12">
                                         <label class="control-label" for="precioserv">
-                                            <strong>Parametros de variacion:</strong>
+                                            <strong>Parámetros de variación:</strong>
                                         </label>
                                         <div class="form-group">
                                           <div class="col-md-6" *ngFor="let item of variation.parametros; let i = index;">

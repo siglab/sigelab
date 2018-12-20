@@ -534,7 +534,7 @@ export class ComunicacionMasivaComponent implements OnInit {
     }
     console.log(obj);
     this.serviceMod3.agregarHistorial(obj).then(() => {
-      this.alertaHecho('Éxito al envíar');
+      this.alertaHecho('Éxito al enviar');
     });
 
   }

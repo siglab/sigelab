@@ -20,7 +20,7 @@
       <div class="text-center">
         <h4> Ingrese la cantidad para generar nuevos códigos QR </h4>
         <mat-form-field class="example-full-width">
-          <input [(ngModel)]="QrCantidad" matInput placeholder="Numero de codigos" type="number">
+          <input [(ngModel)]="QrCantidad" matInput placeholder="Número de códigos" type="number">
         </mat-form-field>
 
         <button class="btn btn-primary" (click)="addNewQr(QrCantidad)"> generar QR </button>
@@ -211,7 +211,7 @@
                     <strong>Numero:</strong>
                   </label>
 
-                  <input placeholder="Numero Inventario" (focusout)="searchInventory($event)" type="text" class="form-control"
+                  <input placeholder="Número Inventario" (focusout)="searchInventory($event)" type="text" class="form-control"
                     id="inputEmail3" placeholder="">
                   <span class="help-block">{{status}}</span>
                 </div>
@@ -226,7 +226,7 @@
                     </label>
 
                     <input type="text" [(ngModel)]="marca_equip" name="marca_equipo" class="form-control" id="inputPassword3"
-                      placeholder="nombre equipo">
+                      placeholder="Nombre equipo">
                   </div>
 
                   <div class="form-group">
@@ -235,7 +235,7 @@
                     </label>
 
                     <input type="text" [(ngModel)]="precio_equip" name="precio_equipo" class="form-control" id="inputPassword3"
-                      placeholder="nombre equipo">
+                      placeholder="Nombre equipo">
                   </div>
 
 
