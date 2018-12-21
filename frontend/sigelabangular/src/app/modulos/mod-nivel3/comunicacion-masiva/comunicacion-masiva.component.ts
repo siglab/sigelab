@@ -740,7 +740,6 @@ export class ComunicacionMasivaComponent implements OnInit {
        lookupObject[originalArray[i][prop]] = originalArray[i];
     }
 
-    // tslint:disable-next-line:forin
     for (const i in lookupObject) {
         newArray.push(lookupObject[i]);
     }
