@@ -53,8 +53,11 @@
                   <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;"><a class="nav-link"
                     (click)="downAcerca()" >Acerca de SIGELab</a></li>
                   <li class="nav-item" role="presentation" id="navContact"><a  (click)="down()" class="nav-link">Contacto</a></li>
-                </ul><button (click)="prueba()" [routerLink]="['/login']" routerLinkActive="active" class="btn btn-primary btn-sm homeBtn" type="button"><i class="icon ion-log-in"></i>&nbsp;Ingresar
-                  &nbsp;</button>
+                </ul>
+                <button class="btn btn-primary btn-sm homeBtn" type="button">
+                  <a (click)="prueba()" [routerLink]="['/login']" routerLinkActive="active"><i class="icon ion-log-in"></i>&nbsp;Ingresar
+                  &nbsp;></a>
+                </button>
               </div>
             </div>
           </nav>
