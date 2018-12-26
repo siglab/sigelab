@@ -136,6 +136,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
+    this.alert.show();
 
     this.getRolesNivel2();
 
@@ -159,7 +160,6 @@ export class AdminUsuariosComponent implements OnInit {
 
       this.dataSourcePers.data = data.user;
 
-         this.alert.show();
 
       setTimeout(() => {
         if (data.user.length !== 0) {
@@ -168,9 +168,11 @@ export class AdminUsuariosComponent implements OnInit {
 
           this.alert.hide();
         } else {
+          this.alert.hide();
+
           swal({
             type: 'error',
-            title: 'No existe personal asociado al laboratorio',
+            title: 'No existe personal ',
             showConfirmButton: true
           });
         }

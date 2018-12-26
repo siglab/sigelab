@@ -63,9 +63,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
 
-
     listaVariaciones = [];
-
     iconos = {
       info: true,
       var: false
@@ -75,7 +73,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
     univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
     habilitarci = false;
     valorci = '';
-
     usuariounivalle = false;
 
   constructor(private observer: ObserverPrincipalService,
@@ -106,7 +103,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
       }).catch(() => {
         this.alert.hide();
-
         swal({
           type: 'error',
           title: 'No existen servicios registrados a la fecha',
@@ -126,7 +122,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
    buscarVariacion(item){
     for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
       const element = this.itemsel.infoServ.variaciones[i];
-      if(element.id == item){
+      if(element.id === item) {
         return element;
       }
     }
