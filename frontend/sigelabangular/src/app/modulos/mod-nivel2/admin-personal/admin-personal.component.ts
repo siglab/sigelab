@@ -114,6 +114,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     private servicioMod2: Modulo2Service ) { }
 
   ngOnInit() {
+    console.log('Muestra usuario=>', this.user);
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
@@ -143,7 +144,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           swal({
             title: 'Cargando un momento...',
-            text: 'espere mientras se cargan los datos',
+            text: 'Espere mientras se cargan los datos',
             onOpen: () => {
               swal.showLoading();
             }
