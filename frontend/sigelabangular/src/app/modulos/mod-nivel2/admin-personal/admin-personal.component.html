@@ -75,11 +75,15 @@
 
                                       <mat-table #tablePers #sortPers="matSort" [dataSource]="dataSourcePers" matSort>
 
-
                                         <ng-container matColumnDef="nombre">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                           <mat-cell   *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
+
+                                        <ng-container matColumnDef="apellido">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
+                                            <mat-cell   *matCellDef="let element"> {{element.apellidos}} </mat-cell>
+                                          </ng-container>
 
                                         <ng-container matColumnDef="codigo">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
