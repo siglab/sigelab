@@ -891,14 +891,15 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   arregloEspacios() {
-    this.espacios = [];
-    this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data => {
+    // this.espacios = [];
+    // this.service.listSpaceWithSubHq(this.infolab.subHq).subscribe(data => {
+    //   for (let i = 0; i < data.length; i++) {
+    //     const element = data[i].payload.doc.data().spaceData;
+    //     this.espacios.push({ id: data[i].payload.doc.id, nombre: element.building + ' - ' + element.place });
+    //   }
+    // });
 
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i].payload.doc.data().spaceData;
-        this.espacios.push({ id: data[i].payload.doc.id, nombre: element.building + ' - ' + element.place });
-      }
-    });
+    this.espacios = this.labestructurado.espacios;
   }
 
 

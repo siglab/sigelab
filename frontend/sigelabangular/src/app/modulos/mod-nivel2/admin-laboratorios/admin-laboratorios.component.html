@@ -708,7 +708,7 @@
                                 <label class="control-label" for="espacio"><strong>Espacio principal :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="espacio" id="espacio" [(value)]="this.infolab.mainSpace" placeholder="Seleccione el espacio principal">
-                                    <mat-option *ngFor="let item of this.espacios" value="{{item.id}}">{{item.nombre}}</mat-option>
+                                    <mat-option *ngFor="let item of this.espacios" value="{{item.id_space}}">{{item.spaceData.building}} - {{item.spaceData.place}} </mat-option>
                                   </mat-select>
                                 </mat-form-field>
                               </div>

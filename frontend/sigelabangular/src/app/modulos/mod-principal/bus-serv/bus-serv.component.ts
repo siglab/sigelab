@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
 import { Http } from '@angular/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { correoUnivalle } from '../../../config';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 @Component({
@@ -17,6 +18,7 @@ declare var $: any;
   styleUrls: ['./bus-serv.component.css']
 })
 export class BusServComponent implements OnInit, AfterViewInit {
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   // variables ci check
   status;
@@ -61,27 +63,24 @@ export class BusServComponent implements OnInit, AfterViewInit {
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
 
-
     listaVariaciones = [];
-
     iconos = {
-      info:true,
-      var:false
+      info: true,
+      var: false
     };
 
     selecunivalle = new FormControl();
     univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
     habilitarci = false;
     valorci = '';
-
     usuariounivalle = false;
 
-  constructor(private observer: ObserverPrincipalService, 
+  constructor(private observer: ObserverPrincipalService,
               private query: QuerysPrincipalService,   private afs: AngularFirestore,
               private ruta: Router, private http: Http) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] == correoUnivalle){
+      if (this.user.email.split('@')[1] === correoUnivalle) {
         this.usuariounivalle = true;
       }
     }
@@ -90,13 +89,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
     // abrer loading mientras se cargan los datos
-    swal({
-      title: 'Cargando un momento...',
-      onOpen: () => {
-        swal.showLoading();
-      }
-
-    });
+      this.alert.show();
 
     this.query.getServicios().then(data => {
 
@@ -106,13 +99,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         // cierra loading luego de cargados los datos
-        swal.close();
-      }).catch(()=>{
+        this.alert.hide();
+
+      }).catch(() => {
+        this.alert.hide();
         swal({
           type: 'error',
           title: 'No existen servicios registrados a la fecha',
           showConfirmButton: true
-        }); 
+        });
       });
 
     });
@@ -127,9 +122,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
    buscarVariacion(item){
     for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
       const element = this.itemsel.infoServ.variaciones[i];
-      if(element.id == item){
+      if(element.id === item) {
         return element;
-      }   
+      }
     }
   }
 
@@ -198,14 +193,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
       if(element.data.id == this.variation.id){
         return true;
       }
-      return false;    
+      return false;
     });
-  
+
     if(!encontrado){
       const auxiliar = [];
       if(this.parametros){
         let cont = 0;
-      
+
         for (const key in this.parametros) {
           if (this.parametros.hasOwnProperty(key)) {
             auxiliar.push({id:cont, value:this.parametros[key]});
@@ -227,7 +222,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         type: 'success',
         title: 'Variación agregada',
         showConfirmButton: true
-      }); 
+      });
     }else{
       swal({
         type: 'error',
@@ -235,7 +230,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         showConfirmButton: true
       });
     }
-   
+
   }
 
   quitarVariacion(id){
@@ -243,7 +238,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
 
       if(element.data.id == id){
-        this.preciototal -= parseInt(element.data.data.cfPrice);        
+        this.preciototal -= parseInt(element.data.data.cfPrice);
         this.listaVariaciones.splice(index, 1);
         return true;
       }
@@ -309,12 +304,12 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
           if (result.value) {
             if(reserva == 'convariaciones'){
-          
+
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
-                cfSrvReserv.selectedVariations[element.data.id] = true; 
+                cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
-                
+
                 cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
 
@@ -324,10 +319,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.cfPrice = ''+this.preciocondescuento;
               }else{
                 cfSrvReserv.cfPrice = ''+this.preciototal;
-              
+
               }
-    
-            } 
+
+            }
 
             if(this.itemsel.infoServ.condiciones.length != 0){
               cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
@@ -350,12 +345,12 @@ export class BusServComponent implements OnInit, AfterViewInit {
             }
 
             cfSrvReserv.comments.push({
-              commentText: this.campoCondicion, 
+              commentText: this.campoCondicion,
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
               autor: 'usuario',
-              email: this.user.email, 
+              email: this.user.email,
               uid: this.user.uid});
-           
+
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
 
@@ -365,7 +360,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 showConfirmButton: true
               }).then(()=>{
                 this.enviarNotificacionesCorreo();
-                
+
                 this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
 
                 this.limpiarDatos();
@@ -376,13 +371,13 @@ export class BusServComponent implements OnInit, AfterViewInit {
               });
 
             }).catch(error => {
-  
+
               swal({
                 type: 'error',
                 title: error,
                 showConfirmButton: true
               });
-  
+
             });
           } else if (
             // Read more about handling dismissals
@@ -394,7 +389,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
               'error'
             );
           }
-  
+
         });
 
     } else {
@@ -414,7 +409,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.query.buscarDirector(this.itemsel.infoLab.iddirecto).then(doc => {
       this.query.enviarNotificaciones([doc.data().user], this.itemsel.nombreserv, this.user.email);
     });
- 
+
     let cont = 0;
     for (let i = 0; i < this.itemsel.infoLab.personal.length; i++) {
       this.query.buscarUsuarioWithEmail(this.itemsel.infoLab.personal).then(docs => {
@@ -426,11 +421,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
           }else{
             cont++;
           }
-        })   
+        })
       })
-      
+
     }
-   
+
   }
 
 
@@ -445,10 +440,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.agregarMarker(item);
   }
 
-  cambiardata(item) { 
+  cambiardata(item) {
     this.limpiarDatos();
     this.variation = undefined;
- 
+
      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
    $('html, body').animate({ scrollTop: '400px' }, 'slow');
     this.itemsel = item;
@@ -463,7 +458,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         this.preciocondescuento = this.itemsel.infoServ.precio - this.descuento;
       }
     }
-    
+
 
     if (!this.moduloinfo) {
       this.moduloinfo = true;
@@ -527,7 +522,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.campoCondicion = '';
     this.listaVariaciones = [];
     this.preciototal = 0;
-    this.descuento = 0; 
+    this.descuento = 0;
     this.preciocondescuento = 0;
   }
 

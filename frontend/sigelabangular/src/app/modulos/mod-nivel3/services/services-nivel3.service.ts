@@ -216,8 +216,8 @@ export class ServicesNivel3Service {
 
   }
 
-  setUser(id, doc) {
-
+  setUser( id, doc) {
+      console.log('llego el id', id);
     return this.afs.doc('user/' + id).set(doc, { merge: true });
 
   }

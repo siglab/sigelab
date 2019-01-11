@@ -95,17 +95,20 @@
 
       </h2>
 
-      <h4 class="text-center" *ngIf="!this.idp && this.email && !this.nuevo">
+      <div class="col-md-12">
+        <h4 class="text-center" *ngIf="!this.idp && this.email && !this.nuevo">
 
-        El usuario seleccionado no se encuentra registrado como personal de univalle.
-        a continuación puede hacer el registro del usuario como personal de univalle.
-      </h4>
+          El usuario seleccionado no se encuentra registrado como personal de univalle.
+          A continuación puede hacer el registro del usuario como personal de univalle.
+        </h4>
+      </div>
+
 
       <div class="col-md-12">
         <div class="box box-danger" *ngIf="this.email || this.nuevo">
           <div class="box-header text-center">
             <i class="fa fa-users"></i>
-            <h3 class="box-title">Informacion de Usuarios</h3>
+            <h3 class="box-title">Informacin de Usuarios</h3>
 
           </div>
           <!-- /.box-header -->
@@ -161,20 +164,7 @@
 
                 <div class="form-group row" style="margin-top:19px;">
                   <div class="col-md-12">
-
-                    <label class="control-label" for="listfacul">
-                      <strong>Inactivar usuario :</strong>
-                    </label>
-
-                    <div class="form-group">
-                      <div class="col-sm-12">
-                        <label class="switch">
-                          <input (click)="alertDisabled('u')" name="active" [(ngModel)]="this.estado_u" id="activo"
-                            type="checkbox">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
+                      <mat-slide-toggle name="estado_u" [(ngModel)]="estado_u">   <span *ngIf="estado_u"> Inactivar </span><span *ngIf="!estado_u" > Activar </span>  </mat-slide-toggle>
 
                   </div>
                 </div>
@@ -290,6 +280,13 @@
                   </span>
                 </div>
 
+                <div class="form-group row" style="margin-top:19px;">
+                    <div class="col-md-12">
+                        <mat-slide-toggle name="estado_u" [(ngModel)]="estado_u">   <span *ngIf="estado_u"> Inactivar </span><span *ngIf="!estado_u" > Activar </span>  </mat-slide-toggle>
+
+                    </div>
+                  </div>
+
 
               </fieldset>
 
@@ -302,7 +299,11 @@
             </button>
 
 
-            <button *ngIf="!this.idp" type="button" (click)="crearPersona()" class="btn btn-success">Crear Persona
+            <button *ngIf="!this.idp && !nuevo" type="button" (click)="crearComoPersona()" class="btn btn-success">Crear
+              Persona
+            </button>
+
+            <button *ngIf="nuevo" type="button" (click)="crearPersona()" class="btn btn-success">Guardar
             </button>
 
           </div>
@@ -438,3 +439,5 @@
 
   </div>
 </div>
+
+<app-spinner></app-spinner>
