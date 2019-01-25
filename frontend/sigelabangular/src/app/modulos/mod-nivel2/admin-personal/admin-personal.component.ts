@@ -77,7 +77,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'email', 'tipo', 'estado', 'codigo'];
+  displayedColumnsPers = ['nombre', 'apellido', 'email', 'tipo', 'estado', 'codigo'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
@@ -410,6 +410,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.type = item.tipo;
 
     this.apellido = item.apellidos;
+
 
     this.nombreRoles(item.rolesClient);
 
