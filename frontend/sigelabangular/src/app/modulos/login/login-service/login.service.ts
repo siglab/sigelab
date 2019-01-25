@@ -182,7 +182,7 @@ export class LoginService {
       this.getUser(id).then(doc => {
         const data = doc.data();
 
-        console.log(data);
+        console.log('185',data);
 
         if (data) {
           if (data.active) {

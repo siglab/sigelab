@@ -2216,8 +2216,11 @@
                       <div class="form-group row">
                         <label for="facultad" class="col-sm-2 col-form-label">Sede:</label>
                         <div class="col-sm-10">
-                          <select class="form-control" (change)="listSubHq($event.target.value)" name="sede">
-                            <option value="san fernando">Seleccione una sede</option>
+                          <select 
+                          [(ngModel)]="modelSede"
+
+                          class="form-control" (change)="listSubHq($event.target.value)" name="sede">
+                            <option >Seleccione una sede</option>
                             <option *ngFor="let item of sedesEsp" value="{{item.id}}"> {{item.cfName}} </option>
 
                           </select>
@@ -2231,8 +2234,10 @@
                         <div class="form-group row">
                           <label for="facultad" class="col-sm-2 col-form-label">Sub Sede:</label>
                           <div class="col-sm-10">
-                            <select class="form-control" (change)="getIdSubHq($event.target.value)" name="selectsubsede">
-                              <option value="san fernando"> Selecciona subSede </option>
+                            <select
+                            [(ngModel)]="modelSubsede"
+                            class="form-control" (change)="getIdSubHq($event.target.value)" name="selectsubsede">
+                              <option >Selecciona subSede</option>
                               <option *ngFor="let item of subsedesEsp" value="{{item.id}}">{{item.cfAddrline1}}</option>
 
                             </select>
