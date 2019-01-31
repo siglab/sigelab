@@ -169,6 +169,9 @@ export class AdminLaboratorios3Component implements OnInit {
   subsedes = [];
   facultades = [];
   departamentos = [];
+  modelSubsede = 'Selecciona subSede'
+  modelSede = 'Seleccione una sede'
+
 
   diassemana = [{ id: '1', nombre: 'LUNES' }, { id: '2', nombre: 'MARTES' }, { id: '3', nombre: 'MIERCOLES' },
   { id: '4', nombre: 'JUEVES' }, { id: '5', nombre: 'VIERNES' }, { id: '6', nombre: 'SABADO' },
@@ -233,7 +236,7 @@ export class AdminLaboratorios3Component implements OnInit {
     minArea: '',
     ocupedArea: '',
     totalArea: '',
-    geoRep: { latitud : 0 , longitud : 0   },
+    geoRep: { latitud: 0, longitud: 0 },
     spaceData: { building: '', place: '', floor: '' },
     active: false
   };
@@ -327,7 +330,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
   niveles = [];
 
-  rolSelect:any;
+  rolSelect: any;
   rolesAgregados = [];
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
@@ -527,7 +530,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
     let promise = new Promise((resolve, reject) => {
 
-    let contlabo = 0;
+      let contlabo = 0;
 
       if (this.moduloNivel25) {
         this.getFaculty().then(() => {
@@ -915,7 +918,7 @@ export class AdminLaboratorios3Component implements OnInit {
               precio: servicio.cfPrice,
               activo: servicio.active,
               variaciones: this.variations(clave),
-              residuos:servicio.residuos ? 'Si' : 'No',
+              residuos: servicio.residuos ? 'Si' : 'No',
               uid: data.id
             };
             arr.push(serv);
@@ -1617,7 +1620,7 @@ export class AdminLaboratorios3Component implements OnInit {
           .add({ cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre }).then(dato => {
             this.serviceMod3.TrazabilitySubCollection(
               this.user.uid, 'create', 'cfFacil', this.labestructurado.uid,
-                'cfEAddr',dato.id, { cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre }
+              'cfEAddr', dato.id, { cfClass: '', cfClassScheme: '', cfEAddrValue: element.nombre }
             );
           });
       } else {
@@ -1625,7 +1628,7 @@ export class AdminLaboratorios3Component implements OnInit {
           .doc(element.id).delete().then(() => {
             this.serviceMod3.TrazabilitySubCollection(
               this.user.uid, 'delete', 'cfFacil', this.labestructurado.uid,
-                'cfEAddr', element.id, {}
+              'cfEAddr', element.id, {}
             );
           });
       }
@@ -2462,28 +2465,38 @@ export class AdminLaboratorios3Component implements OnInit {
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
   setSpace() {
 
-    if (!this.space.spaceData.building && !this.space.spaceData.building) {
+    console.log('2465',
+      isNaN(parseInt(this.space.spaceData.building)),
+      !this.space.spaceData.building,
+      !this.space.spaceData.place,
+      isNaN(parseInt(this.space.spaceData.place)))
+    if ((!this.space.spaceData.building || !this.space.spaceData.place) ||
+      (isNaN(parseInt(this.space.spaceData.building)) || isNaN(parseInt(this.space.spaceData.place)))
+    ) {
 
       swal({
         type: 'info',
-        title: 'Hay campos vacíos importantes.',
+        title: 'Espacio y edificio son obligatorios  y deben ser números.',
         showConfirmButton: true
       });
 
+    } else {
+      const nuevoespacio = this.space;
+
+      nuevoespacio.subHq = this.idsh;
+      this.afs.collection('space').add(nuevoespacio).then((data) => {
+        // agrega el nuevo espacio al laboratorio actual
+        this.updateFaciliti(data.id);
+        // set a valores iniciales de la variable 'space'
+        this.setVarSpace();
+        this.serviceMod3.Trazability(
+          this.user.uid, 'create', 'space', data.id, nuevoespacio
+        );
+
+      });
+      console.log(nuevoespacio);
     }
-    const nuevoespacio = this.space;
 
-    nuevoespacio.subHq = this.idsh;
-    this.afs.collection('space').add(nuevoespacio).then((data) => {
-      // agrega el nuevo espacio al laboratorio actual
-      this.updateFaciliti(data.id);
-
-      this.serviceMod3.Trazability(
-        this.user.uid, 'create', 'space', data.id, nuevoespacio
-      );
-
-    });
-    console.log(nuevoespacio);
 
 
 
@@ -2616,7 +2629,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
       console.log('revisar este lab', this.idlab);
       this.serviceMod3.Trazability(
-        this.user.uid, 'update', 'cfFacil', this.idlab, {relatedSpaces}
+        this.user.uid, 'update', 'cfFacil', this.idlab, { relatedSpaces }
       ).then(() => {
         this.afs.collection('cfFacil').doc(this.idlab).set({ relatedSpaces }, { merge: true })
           .then(() => {
@@ -2825,13 +2838,13 @@ export class AdminLaboratorios3Component implements OnInit {
     this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
     // tslint:disable-next-line:radix
 
-    if ( this.space.capacity === 0) {
+    if (this.space.capacity === 0) {
 
       console.log(' capacidad igual a cero');
 
       this.space.indxSa = 0;
 
-    } if (this.space.capacity > 0 ) {
+    } if (this.space.capacity > 0) {
 
       console.log(' capacidad mayor a cero');
       this.space.indxSa = (this.ocupacionAct / this.space.capacity);
@@ -2949,7 +2962,7 @@ export class AdminLaboratorios3Component implements OnInit {
                 const user = dataper.payload.data();
                 persona = {
                   roles: user.appRoles,
-                  rolesClient : pers.clientRole,
+                  rolesClient: pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   cc: pers.cc ? pers.cc : 'ninguno',
@@ -2966,7 +2979,7 @@ export class AdminLaboratorios3Component implements OnInit {
             } else {
               persona = {
                 roles: '',
-                rolesClient : pers.clientRole,
+                rolesClient: pers.clientRole,
                 cc: pers.cc ? pers.cc : 'ninguno',
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
@@ -3004,7 +3017,7 @@ export class AdminLaboratorios3Component implements OnInit {
               this.afs.doc('user/' + pers.user).snapshotChanges().subscribe(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 persona = {
-                  rolesClient : pers.clientRole,
+                  rolesClient: pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   activo: item[clave],
@@ -3022,7 +3035,7 @@ export class AdminLaboratorios3Component implements OnInit {
               });
             } else {
               persona = {
-                rolesClient : pers.clientRole,
+                rolesClient: pers.clientRole,
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
@@ -3091,14 +3104,16 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
-  nombreRoles(item){
+  nombreRoles(item) {
     this.rolesAgregados = [];
     console.log(this.idlab, this.niveles);
-    for (const key in item[this.idlab]  ) {
+    for (const key in item[this.idlab]) {
       if (item[this.idlab].hasOwnProperty(key)) {
         const name = this.niveles.find(o => o.id == key);
-        this.rolesAgregados.push({ id: key,
-          nombre: name ? name.nombre : 'coordinador nivel 2'});
+        this.rolesAgregados.push({
+          id: key,
+          nombre: name ? name.nombre : 'coordinador nivel 2'
+        });
       }
     }
   }
@@ -3112,7 +3127,7 @@ export class AdminLaboratorios3Component implements OnInit {
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
       type: this.type,
-      clientRole:{},
+      clientRole: {},
       updatedAt: new Date().toISOString()
     };
     /* objeto para usuario */
@@ -3145,9 +3160,9 @@ export class AdminLaboratorios3Component implements OnInit {
       this.serviceMod3.Trazability(
         this.user.uid, 'update', 'user', this.idu, user
       ).then(() => {
-      this.afs.collection('user').doc(this.idu).set(user, { merge: true })
-        .then(() => {
-        });
+        this.afs.collection('user').doc(this.idu).set(user, { merge: true })
+          .then(() => {
+          });
       });
 
     }
@@ -3168,7 +3183,7 @@ export class AdminLaboratorios3Component implements OnInit {
           });
 
         });
-      });
+    });
 
     /* metodo firebase para subir una persona actualizada */
 
@@ -3245,31 +3260,33 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
 
-  agregarRol(){
+  agregarRol() {
     console.log(this.rolSelect);
 
     let bool = false;
 
     this.rolesAgregados.forEach((doc, index) => {
-      if(doc.id == this.rolSelect){
+      if (doc.id == this.rolSelect) {
         bool = true;
       }
     });
 
-    if(bool){
+    if (bool) {
       swal({
         type: 'error',
         title: 'El rol ya se encuentra agregado.',
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect,
-        nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
+      this.rolesAgregados.push({
+        id: this.rolSelect,
+        nombre: this.niveles.find(o => o.id == this.rolSelect).nombre
+      });
     }
 
   }
 
-  quitarelementoRol(i){
+  quitarelementoRol(i) {
     this.rolesAgregados.splice(i, 1);
   }
 
@@ -3385,5 +3402,27 @@ export class AdminLaboratorios3Component implements OnInit {
   setValue() {
 
     this.email = '';
+  }
+  setVarSpace() {
+    this.space = {
+      capacity: 0,
+      createdAt: '',
+      freeArea: '',
+      headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
+      subHq: '',
+      indxSa: 0,
+      map: '',
+      minArea: '',
+      ocupedArea: '',
+      totalArea: '',
+      geoRep: { latitud: 0, longitud: 0 },
+      spaceData: { building: '', place: '', floor: '' },
+      active: false
+    };
+    this.dispo = null;
+    this.status = null;
+    this.modelSubsede = 'Selecciona subSede'
+    this.modelSede = 'Seleccione una sede'
+
   }
 }
