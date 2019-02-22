@@ -19,7 +19,7 @@
 
             <h3 class="box-title">ADMINISTRADOR DE SOLICITUDES</h3>
 
-          </div> 
+          </div>
 
           <div class="box-body">
 
@@ -187,7 +187,7 @@
       </div>
     </div>
 
-    
+
     <div *ngIf="!moduloinfo" class="row">
       <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
@@ -201,7 +201,7 @@
 
   <div *ngIf="moduloinfo" class="row" style="margin-top:20px;">
 
-    
+
     <div class="col-md-12">
 
       <div class="col-md-6">
@@ -248,7 +248,7 @@
                                     <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
                                     <div class="form-group" *ngFor="let item of servicioActivoSel.condicionesSrv; let i = index">
                                         <label class="control-label" for="precioserv"><input disabled name="{{'checkboxSrv' + i}}" [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                    </div>            
+                                    </div>
                                   </div>
                                 </div>
                                 <div class="form-group">
@@ -261,7 +261,7 @@
                                     <label class="control-label" for="precioserv"><strong>Descuento: $</strong> {{servicioActivoSel.descuento}}</label>
                                   </div>
                               </div>
-                                
+
                                 <div class="form-group">
                                   <div class="col-md-12">
                                     <label class="control-label" for="precioserv"><strong>Precio Total con descuento: $</strong> {{servicioActivoSel.precio}}</label>
@@ -278,12 +278,12 @@
                                                 <label class="control-label" for="parvar">{{item}}
                                                     <input class="form-control" id="item" name="item" disabled value="{{this.servicioActivoSel.parametrosSrv[i].value}}" type="text"> </label>
                                             </div>
-                                            
+
                                           </div>
-                  
+
                                       </div>
                                   </div>
-                                    
+
                                 </div>
 
                             <div *ngIf="servicioActivoSel.status == 'aceptada'" class="form-group">
@@ -302,10 +302,10 @@
                                 </div>
                             </div>
 
-          
+
                             <div *ngIf="buttons" class="row" style="margin-top:20px;">
                               <div class="col-md-12 text-center form-group">
-  
+
                                 <div *ngIf="(servicioActivoSel.status == 'pendiente') && (moduloNivel2 || moduloServicios)" class="col-md-6" style="float: right;">
                                     <button class="btn btn-success" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
                                     <button class="btn btn-danger" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
@@ -319,10 +319,10 @@
                                 <div *ngIf="(servicioActivoSel.status == 'procesada') && (moduloNivel2)" class="col-md-12">
                                     <button class="btn btn-danger" style="margin-top: 20px; float:right;" type="button" (click)="cambiarEstadoSolicitud('terminada')">TERMINAR</button>
                                 </div>
-                                
+
                               </div>
                             </div>
-          
+
                             </fieldset>
                         </form>
                     </div>
@@ -338,7 +338,7 @@
                 </h4>
                 <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
                     <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
-                </a> 
+                </a>
                 </div>
                 <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                   <div class="box-body">
@@ -354,12 +354,12 @@
                               </div>
                             </div>
                           </fieldset>
-        
+
                           <fieldset *ngIf="variation">
                             <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
-        
+
                                 </div>
                             </div>
                             <div class="form-group">
@@ -377,7 +377,7 @@
                                   <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
                                   <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
                                       <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                  </div>            
+                                  </div>
                                 </div>
                               </div>
                             <div class="form-group">
@@ -396,21 +396,21 @@
                                               <label class="control-label" for="parvar">{{item}}
                                                   <input class="form-control" id="item" name="item" disabled value="{{this.valorParametro[i]}}" type="text"> </label>
                                           </div>
-                                         
+
                                         </div>
-                
+
                                     </div>
                                 </div>
-                                 
+
                               </div>
-                          
-        
-                          </fieldset> 
+
+
+                          </fieldset>
                       </form>
 
                   </div>
                 </div>
-            </div> 
+            </div>
 
             <div *ngIf="((servicioActivoSel.status == 'procesada') || (servicioActivoSel.status == 'terminada')) && (servicioActivoSel.path.length != 0)" class="box box-danger">
                 <div class="box-header">
@@ -421,7 +421,7 @@
                 </h4>
                 <a (click)="cambiarIcono('archivos')" data-toggle="collapse" data-parent="#accordion" href="#archivos" aria-expanded="false" class="collapsed">
                     <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.archivos, 'glyphicon-minus':iconos.archivos}"></span>
-                </a> 
+                </a>
                 </div>
                 <div id="archivos" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                   <div class="box-body">
@@ -436,18 +436,18 @@
                                             <span *ngIf="(moduloNivel2 || moduloServicios)" (click)="eliminarArchivo(i)" class="puntero pull-right badge bg-red">-</span></a></li>
                                       </ul>
                                   </div>
-                                  
+
                                 </div>
                           </fieldset>
-        
-                         
+
+
                       </form>
 
                   </div>
                 </div>
-            </div> 
-            
-  
+            </div>
+
+
           </div>
       </div>
 
@@ -462,7 +462,7 @@
               </div>
 
               <div class="box-body">
-                
+
                 <!-- Conversations are loaded here -->
                 <div class="direct-chat-messages">
                   <!-- Message. Default to the left -->
@@ -488,16 +488,16 @@
                         <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
                       </div>
                       <!-- /.direct-chat-info -->
-        
+
                       <div class="direct-chat-text">
                         {{item.commentText}}
                       </div>
                       <!-- /.direct-chat-text -->
                     </div>
-                  </div>   
+                  </div>
                 </div>
               </div>
-                <!-- /.box-body -->   
+                <!-- /.box-body -->
               <div *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'rechazada') && (moduloNivel2 || moduloServicios)" class="box-footer">
                   <form action="#" method="post">
                     <div class="input-group">
@@ -512,7 +512,7 @@
       </div>
     </div>
 
-        
+
 
 
   </div>
@@ -528,15 +528,15 @@
 <!-- modal de horario de practica -->
 <div class="modal fade" id="modalProcesar" role="dialog" >
     <div class="modal-dialog modal-md">
-  
+
       <!-- Modal content-->
       <div class="modal-content">
-  
+
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header text-center">
               <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalProcesar')"></span>
-              <h1 class="box-title">Procesar la solicitud de servicio</h1>         
+              <h1 class="box-title">Procesar la solicitud de servicio</h1>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -544,12 +544,12 @@
                     <fieldset>
 
                       <div class="form-group">
-                      
+
                           <div class="col-md-12">
                               <label class="control-label" for="teledit">
                                   <strong>Seleccione Archivo:</strong>
                                 </label>
-                              
+
                                 <div class="btn btn-default btn-file">
                                     <i class="fa fa-paperclip"></i> File
                                     <input class="form-control" type="file" name="attachment"  multiple="multiple" (change)="alistarVariables($event)">
@@ -559,11 +559,11 @@
                         </div>
                           <div class="form-group">
                             <div class="col-md-12">
-                              <div *ngIf="currentUpload"> 
-                                <div class="progress"> 
-                                  <div class="progress-bar progress-bar-animated" [ngStyle]="{'width': currentUpload?.progress + '%'} " > </div> 
+                              <div *ngIf="currentUpload">
+                                <div class="progress">
+                                  <div class="progress-bar progress-bar-animated" [ngStyle]="{'width': currentUpload?.progress + '%'} " > </div>
                                 </div>   Progreso: {{currentUpload?.name}} | {{currentUpload?.progress}}% Completo
-                              </div>              
+                              </div>
                             </div>
                           </div>
                           <div class="form-group">
@@ -573,13 +573,13 @@
                                   <li *ngFor="let item of this.listaArchivos; let i = index;"><a>{{item.name}} <span (click)="quitarArchivo(i)" class="puntero pull-right badge bg-red">-</span></a></li>
                                 </ul>
                             </div>
-                            
+
                           </div>
-                       
-                        
-                      
-             
-                    
+
+
+
+
+
                       <div *ngIf="this.listaArchivos.length != 0" class="form-group">
                         <div class="col-md-12 text-center">
                             <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('procesada')">PROCESAR SERVICIO</button>
@@ -587,12 +587,12 @@
                       </div>
                     </fieldset>
                 </form>
-             
+
             </div>
-  
+
           </div>
         </div>
       </div>
-  
+
     </div>
 </div>

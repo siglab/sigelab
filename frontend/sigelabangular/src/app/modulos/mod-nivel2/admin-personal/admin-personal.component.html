@@ -18,8 +18,8 @@
             <div class="form-group">
               <div class="col-md-12">
 
-                <button *ngIf="moduloNivel2" data-toggle="modal" (click)= "setValue()"   data-target="#modal1" style="float: right;" class="btn btn-danger" type="button">Agregar
-                  Personal</button>
+                <button *ngIf="moduloNivel2" data-toggle="modal" (click)= "setValue()"   data-target="#modal1" style="float: right;" class="btn btn-success" type="button">Agregar
+                  Personal <i class="fa fa-plus" aria-hidden="true"></i>  </button>
               </div>
             </div>
           </div>
@@ -315,7 +315,7 @@
                       </span>
                     </div><!-- /input-group -->
                 </div>
-                
+
                 <div class="col-md-12" >
                   <div class="form-group">
                     <div class="col-md-12">
@@ -329,7 +329,7 @@
                 </div>
 
                 <div *ngIf="moduloNivel2" class="row">
-                  
+
                   <div class="col-md-12" style="margin-top: 20px;">
                     <div class="form-group">
                         <label class="switch">
@@ -386,7 +386,7 @@
             <form id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
 
-                <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }">
+                <!-- <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
                       <strong>Email:</strong>
@@ -394,7 +394,19 @@
                     <input (focusout)="emailcheck($event)" [(ngModel)]="this.email" id="email" name="email" class="form-control" type="email">
                     <span class="help-block"> {{status}}</span>
                   </div>
-                </div>
+                </div> -->
+
+                <div class="col-md-12">
+
+                    <mat-form-field>
+                      <input (focusout)="emailcheck($event)"  placeholder="Email" matInput [(ngModel)]="this.email" id="email" name="email"  type="email" #check ="ngModel" >
+                      <mat-hint>
+                        <strong>{{status}}</strong>
+                       </mat-hint>
+                    </mat-form-field>
+
+
+                 </div>
 
 
                 <!-- ocultar form  para validar si ya existe -->
@@ -402,73 +414,95 @@
 
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Fecha nacimiento:</strong>
-                      </label>
-                      <input [(ngModel)]="this.person.cfBirthdate" id="escuelaedit" name="fecha" class="form-control" type="date">
+
+                       <mat-form-field>
+                         <input [(ngModel)]="this.person.cfBirthdate"  placeholder="Fecha nacimiento" matInput id="escuelaedit" name="fecha"  type="date">
+
+                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Nombre:</strong>
-                      </label>
-                      <input [(ngModel)]="this.person.cfFirstNames" id="escuelaedit" name="firstname" class="form-control" type="text">
+
+                      <mat-form-field>
+                        <input [(ngModel)]="this.person.cfFirstNames" placeholder="Nombre" matInput id="escuelaedit" name="firstname"  type="text">
+                      </mat-form-field>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Código o CC:</strong>
-                      </label>
-                      <input [(ngModel)]="this.person.cc" id="escuelaedit" name="codigo" class="form-control" type="text">
+
+                       <mat-form-field>
+                         <input [(ngModel)]="this.person.cc" placeholder="Código o CC" matInput id="escuelaedit" name="codigo"  type="text">
+                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="nombreprub">
-                        <strong>Apellidos:</strong>
-                      </label>
-                      <input [(ngModel)]="this.person.cfFamilyNames" id="escuelaedit" name="othersname" class="form-control" type="text">
+
+                       <mat-form-field>
+                         <input [(ngModel)]="this.person.cfFamilyNames" matInput placeholder="Apellidos" id="escuelaedit" name="othersname"  type="text">
+                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="estadoserv">
-                        <strong> Perfil:</strong>
-                      </label>
-                      <select class="form-control" (change)="setClientRol()" [(ngModel)]="this.rolSelect" name="role">
-                        <option *ngFor="let item of niveles" value="{{item.id}}"> {{item.nombre}} </option>
+                        <mat-form-field>
+                            <mat-select (selectionChange)="setClientRol()" [(ngModel)]="this.rolSelect" name ="selectniveles" placeholder="Perfil">
+                              <mat-option *ngFor="let item of niveles" [value]="item.id">
+                                {{item.nombre}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
 
-                      </select>
                     </div>
                   </div>
 
+
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="estadoserv">
+
+                        <mat-form-field>
+                            <mat-select [(ngModel)]="this.person.type" name ="persontype" placeholder="Tipo personal">
+                              <mat-option *ngFor="let item of tipo" [value]="item">
+                                {{item}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      <!-- <label class="control-label" for="estadoserv">
                         <strong> Tipo personal:</strong>
                       </label>
                       <select class="form-control" [(ngModel)]="this.person.type" name="tipo">
                         <option *ngFor="let item of tipo" value = "{{item}}"> {{item}} </option>
-                      </select>
+                      </select> -->
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="estadoserv">
+                      <!-- <label class="control-label" for="estadoserv">
                         <strong>Género:</strong>
                       </label>
                       <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
                         <option value="Hombre">Hombre </option>
                         <option value="Mujer">Mujer</option>
 
-                      </select>
+                      </select> -->
+
+                      <mat-form-field>
+                          <mat-select [(ngModel)]="this.person.cfGender" name ="genero" placeholder="Genero">
+                            <mat-option value="Hombre">
+                              Hombre
+                            </mat-option>
+                            <mat-option value="Mujer">
+                                Mujer
+                              </mat-option>
+                          </mat-select>
+                        </mat-form-field>
                     </div>
 
 
@@ -488,8 +522,13 @@
 
           </div>
           <div class="modal-footer">
-            <button *ngIf="!addP" type="button" (click)="setPers()" class="btn btn-danger">Guardar</button>
-            <button *ngIf="addP" type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular</button>
+            <button *ngIf="!addP"  type="button" (click)="setPers()" class="btn btn-success">Guardar
+              <i class="fa fa-check"></i>
+            </button>
+            <button *ngIf="addP" type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular
+              <i class="fa fa-plus"></i>
+
+            </button>
           </div>
         </div>
       </div>

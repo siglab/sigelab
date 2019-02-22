@@ -371,7 +371,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.rolesAgregados = [];
     for (const key in item[this.idlab]  ) {
       if (item[this.idlab].hasOwnProperty(key)) {
-        this.rolesAgregados.push({ id: key, 
+        this.rolesAgregados.push({ id: key,
           nombre: this.niveles.find(o => o.id == key).nombre});
       }
     }
@@ -595,6 +595,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   emailcheck($event) {
+
+    console.log($event);
     this.addP = '';
     const q = $event.target.value;
     if (q.trim() === '') {
@@ -673,7 +675,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect, 
+      this.rolesAgregados.push({id:this.rolSelect,
         nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
     }
 

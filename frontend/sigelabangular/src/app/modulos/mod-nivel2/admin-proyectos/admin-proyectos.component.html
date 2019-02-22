@@ -18,7 +18,11 @@
           <div *ngIf="moduloNivel2" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button (click)="clearModal()" data-toggle="modal" data-target="#modal" style="float: right;" class="btn btn-danger" type="button">Nuevo Proyecto</button>
+                <button (click)="clearModal()" data-toggle="modal" data-target="#modal" style="float: right;" class="btn btn-success" type="button">
+                  Nuevo Proyecto
+                  <i class="fa fa-plus"></i>
+
+                </button>
               </div>
             </div>
           </div>
@@ -266,7 +270,7 @@
                   <div *ngIf="moduloNivel2" class="form-group" style="margin-top: 30px;">
                     <div class="col-md-12">
 
-                      <button *ngIf="button" class="btn btn-danger" (click)="updateProject()" type="button">Actualizar
+                      <button *ngIf="button" class="btn btn-success" (click)="updateProject()" type="button">Actualizar
                         <i class="fa fa-share"></i>
                       </button>
                       <button *ngIf="!button" class="btn btn-success" (click)="addProject()" type="button">Guardar
@@ -502,9 +506,9 @@
 
                 <div class="col-md-12" >
                     <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
-  
+
                     <div class="input-group">
-  
+
                         <select class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers" id="roles" >
                             <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
                         </select>
@@ -514,7 +518,7 @@
                         </span>
                       </div><!-- /input-group -->
                   </div>
-                  
+
                   <div class="col-md-12" >
                     <div class="form-group">
                       <div class="col-md-12">
@@ -570,7 +574,10 @@
 
           </div>
           <div class="modal-footer">
-            <button  *ngIf="!addP" (click)="addSingleProject()" type="button" class="btn btn-danger">Guardar</button>
+            <button  *ngIf="!addP" (click)="addSingleProject()" type="button" class="btn btn-success">Guardar
+              <i class="fa fa-check"></i>
+
+            </button>
 
           </div>
         </div>

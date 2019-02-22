@@ -131,8 +131,8 @@ comentario = '';
           } else {
             this.alertaError('No tiene solicitudes de servicio registradas aún')
           }
-              
-                          
+
+
         });
       } else{
         swal({
@@ -178,14 +178,14 @@ comentario = '';
 
   estructurarServiciosActivos(data, lab) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       const activo = [];
       const historial = [];
-      
+
       data.forEach(doc => {
         const elemento = doc.data();
         this.servicioMod2.buscarServicio(elemento.cfSrv).then(data2 => {
-          const servicio =  data2.data();   
+          const servicio =  data2.data();
           const Reserv = {
             uidlab: elemento.cfFacil,
             nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
@@ -195,7 +195,6 @@ comentario = '';
             descripcion: servicio.cfDesc,
             precio: elemento.cfPrice,
             activo: servicio.active,
-            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
             condiciones: elemento.conditionsLog,
             condicionesSrv: elemento.conditionsLogServ,
             comentario: elemento.comments,
@@ -205,7 +204,7 @@ comentario = '';
             uidreserv: doc.id,
             path: elemento.path,
             residuos:servicio.residuos ? 'Si' : 'No',
-            acepto: elemento.acceptedBy != '' ? elemento.acceptedBy : 'sin aceptar',
+            acepto: elemento.acceptedBy !== '' ? elemento.acceptedBy : 'sin aceptar',
             fechaTermino: elemento.updatedAt.split('T')[0],
             parametrosVar:elemento.parametros,
             parametrosSrv: elemento.parametrosSrv,
@@ -215,31 +214,38 @@ comentario = '';
             fechaAceptacion: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
           };
 
+          if (elemento.selectedVariations) {
+
+            Reserv['variaciones'] = this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations);
+          } else {
+            Reserv['variaciones']  = [];
+          }
+
           if(elemento.dateAccepted){
             Reserv['fechaAcepto'] = elemento.dateAccepted.split('T')[0];
           }
-  
-            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){                 
-              activo.push(Reserv);        
+
+            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){
+              activo.push(Reserv);
             }else{
               historial.push(Reserv);
-            } 
-  
+            }
+
             if(data.size == (activo.length + historial.length)){
               resolve({data:activo, data2:historial});
             }
-  
-  
+
+
         });
       });
-     
+
     });
-   
+
 
     return promise;
   }
 
-  
+
   alistarVariables(event){
     console.log(event.target.files);
     let tamano = false;
@@ -261,7 +267,7 @@ comentario = '';
       for (let i = 0; i < event.target.files.length; i++) {
         this.listaArchivos.push(event.target.files[i]);
       }
-      
+
     }
 
   }
@@ -370,7 +376,7 @@ comentario = '';
             nuevopath.push(element);
           }
         });
-        
+
         const ref = this.storage.ref(this.servicioActivoSel.path[index]);
         ref.delete().subscribe(() => {
 
@@ -378,7 +384,7 @@ comentario = '';
             this.servicioActivoSel.uidreserv, {path:nuevopath})
           .then(() => {
 
-            
+
             swal({
               type: 'success',
               title: 'Archivo eliminado',
@@ -388,7 +394,7 @@ comentario = '';
             });
           });
         }); ;
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -398,7 +404,7 @@ comentario = '';
       }
 
     });
- 
+
   }
 
   descargarArchivo(index){
@@ -438,11 +444,31 @@ comentario = '';
 
 
   cambiarDataServicio(item, table) {
+
+    console.log(item);
     this.servicioActivoSel = item;
     this.variation = undefined;
     this.condicion = undefined;
-    this.estructurarCondiciones(item.condiciones);
-    this.estructurarCondicionesSrv(item.condicionesSrv);
+
+    if (item.condiciones) {
+      this.estructurarCondiciones(item.condiciones);
+
+    } else {
+
+      this.condicionesobjeto['condiciones'] = [];
+
+
+    }
+
+    if (item.condicionesSrv) {
+
+      this.estructurarCondicionesSrv(item.condicionesSrv);
+    } else {
+
+      this.servicioActivoSel.condicionesSrv = [];
+
+    }
+
     this.moduloinfo = true;
     console.log(item);
     if(table == 'activo'){
@@ -464,7 +490,7 @@ comentario = '';
         const element = this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
         this.valorParametro.push(element.value);
       }
-    
+
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
@@ -488,27 +514,27 @@ comentario = '';
   buscarCondicion(item){
     for (let i = 0; i < this.servicioActivoSel.condiciones.length; i++) {
       const element = this.servicioActivoSel.condiciones[i];
-      if(element.idvariacion == item){
+      if (element.idvariacion === item) {
         return element;
       }
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarCondiciones(condiciones){
+  estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox" + i] = condiciones[i].aceptada;
+      // const element = condiciones[i];
+      this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
     }
   }
 
    // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-   estructurarCondicionesSrv(condiciones){
+   estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjetoSrv["checkboxSrv" + i] = condiciones[i].aceptada;
- 
+      this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
+
     }
   }
 
@@ -604,10 +630,10 @@ comentario = '';
                     this.servicioActivoSel.nombre + ', solicitada la fecha ' + this.servicioActivoSel.fecha +
                     ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' + estado ;
 
-    
+
     destino = emailSolicitante + ',' + emaildirector;
-    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-      if(res.status == 200){
+    this.http.post(url, {para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+      if (res.status == 200){
         //this.cerrarAlerta();
       } else {
         this.alertaError('Fallo al enviar correos');
@@ -627,20 +653,19 @@ comentario = '';
 
       if (result.value) {
 
-        //this.alertaCargando();
         const reserva = {
           status: estado,
           updatedAt: new Date().toISOString()
         };
         if(estado == 'procesada'){
           const filespath = this.uploadMulti();
-          reserva['path'] = filespath;                        
+          reserva['path'] = filespath;
         } else if(estado == 'aceptada'){
           reserva['acceptedBy'] = this.user.email;
           reserva['dateAccepted'] = new Date().toISOString();
         }
 
-        this.servicioActivoSel.status = estado;     
+        this.servicioActivoSel.status = estado;
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, reserva)
         .then(() => {
@@ -653,21 +678,21 @@ comentario = '';
               this.cerrarModal('modalProcesar');
               this.listaArchivos = [];
             });
-           
+
           }else{
             this.cerrarAlerta();
             this.alertaExito('Reserva ' + estado);
           }
-         
+
         });
         this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
           this.enviarEmails(estado, persona.data().email);
-    
+
         });
-   
+
         this.moduloinfo = false;
         this.resetIconos();
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',

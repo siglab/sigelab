@@ -19,7 +19,10 @@
                         <i class="fa fa-search"></i>
 
                         <h3 class="box-title">Búsqueda</h3>
-                        <button (click)="nuevoEspacio()" style="float: right;" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal2">Nuevo Servicio</button>
+                        <button (click)="nuevoEspacio()" style="float: right;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modal2">Nuevo Servicio
+                          <i class="fa fa-plus"></i>
+
+                        </button>
                     </div>
 
                     <div class="box-body">
@@ -133,9 +136,9 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <div class="col-md-12 text-center">    
-                                                    <input id="residuosinfot" name="residuosinfo" [(ngModel)]="itemsel.infoServ.residuos" type="checkbox">  
-                                                    <label class="control-label" for="descripcion">                 
+                                                <div class="col-md-12 text-center">
+                                                    <input id="residuosinfot" name="residuosinfo" [(ngModel)]="itemsel.infoServ.residuos" type="checkbox">
+                                                    <label class="control-label" for="descripcion">
                                                         <strong>El servicio genera residuos</strong>
                                                     </label>
                                                 </div>
@@ -214,9 +217,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div class="col-md-12 text-center">    
-                                                    <input id="residuosinfovar" name="residuosinfovar" [(ngModel)]="variation.data.residuos" type="checkbox">  
-                                                    <label class="control-label" for="descripcion">                 
+                                                <div class="col-md-12 text-center">
+                                                    <input id="residuosinfovar" name="residuosinfovar" [(ngModel)]="variation.data.residuos" type="checkbox">
+                                                    <label class="control-label" for="descripcion">
                                                         <strong>La variación genera residuos</strong>
                                                     </label>
                                                 </div>
@@ -225,7 +228,7 @@
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="precioserv">
                                                         <strong>Condiciones:</strong>
-                                                    </label>         
+                                                    </label>
                                                     <ul>
                                                         <li *ngFor="let item of variation.data.cfConditions">{{item}}</li>
                                                     </ul>
@@ -306,9 +309,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuonuevoser" name="residuonuevoser" [(ngModel)]="this.srv.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuonuevoser" name="residuonuevoser" [(ngModel)]="this.srv.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>El Servicio genera residuos</strong>
                                                 </label>
                                             </div>
@@ -317,14 +320,14 @@
                                             <label class="control-label" for="par"><strong>Parámetros :</strong></label>
                                             <p>Por favor ingrese los parámetros del servicio con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
-                                                
+
                                             <input id="tel" [(ngModel)]="parametro" name="tel" type="text" class="form-control">
                                             <span class="input-group-btn">
                                                     <button class="btn btn-success" type="button" (click)="agregarParametro('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                             </span>
                                             </div>
                                         </div>
-                                          
+
                                         <div class="form-group" >
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
@@ -420,9 +423,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuonuevo" name="residuonuevo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuonuevo" name="residuonuevo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>La variación genera residuos</strong>
                                                 </label>
                                             </div>
@@ -431,14 +434,14 @@
                                             <label class="control-label" for="parv"><strong>Parámetros :</strong></label>
                                             <p>Por favor ingrese los parámetros de a variación con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
-                                                
+
                                             <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
                                             <span class="input-group-btn">
                                                     <button class="btn btn-success" type="button" (click)="agregarParametro('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                             </span>
                                             </div>
                                         </div>
-                                              
+
                                         <div class="form-group" >
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
@@ -642,9 +645,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuoservedit" name="residuoservedit" [(ngModel)]="this.srv.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuoservedit" name="residuoservedit" [(ngModel)]="this.srv.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>El servicio genera residuos</strong>
                                                 </label>
                                             </div>
@@ -653,14 +656,14 @@
                                             <label class="control-label" for="editparv"><strong>Parámetros :</strong></label>
                                             <p>Por favor ingrese los parámetros del servicio con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
-                                                
+
                                             <input id="parv" [(ngModel)]="parametro" name="parv" type="text" class="form-control">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-success" type="button" (click)="agregarParametroEdit('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                             </span>
                                             </div>
                                         </div>
-                                                  
+
                                         <div class="form-group" >
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
@@ -748,7 +751,7 @@
                                                         <a style="cursor: pointer;">
                                                             <button (click)="cambiarDataEditarVariacion(item)" type="button" class="btn btn-primary btn-sm">Editar</button>
                                                             {{item.cfName}}
-               
+
                                                             <span *ngIf="item.active" (click)="cambiarEstadoVariacion(i, item.active)" class="pull-right badge bg-red">inactivar</span>
                                                             <span *ngIf="!item.active" (click)="cambiarEstadoVariacion(i, item.active)" class="pull-right badge bg-green">activar</span>
                                                         </a>
@@ -785,9 +788,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuo" name="residuo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuo" name="residuo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>La variación genera residuos</strong>
                                                 </label>
                                             </div>
@@ -796,14 +799,14 @@
                                             <label class="control-label" for="editparv"><strong>Parámetros :</strong></label>
                                             <p>Por favor ingrese los parámetros de a variación con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
-                                                
+
                                             <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-success" type="button" (click)="agregarParametroEdit('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                             </span>
                                             </div>
                                         </div>
-                                              
+
                                         <div class="form-group" >
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>

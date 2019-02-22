@@ -197,7 +197,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
       if(element.data.id == id){
 
-        this.preciototal = parseInt(element.data.data.cfPrice);
+        this.preciototal = parseInt(element.data.data.cfPrice, 10);
         this.listaVariaciones.splice(index, 1);
         return true;
       }
@@ -398,6 +398,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
     this.itemsel  = item;
     this.dataSource2.data = item.servicios;
+
+    console.log(item.practicas);
     this.dataSource3.data = item.practicas;
 
     const ambiente = this;

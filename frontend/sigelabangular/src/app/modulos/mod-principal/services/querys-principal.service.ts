@@ -492,55 +492,66 @@ export class QuerysPrincipalService {
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPracticas(item) {
 
-    const arr = [];
 
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
+  const arr = [];
+   if (item) {
 
-        if (item[clave]) {
-          this.afs.doc('practice/' + clave).ref.get().then(data => {
+     for (const clave in item) {
+       // Controlando que json realmente tenga esa propiedad
+       if (item.hasOwnProperty(clave)) {
 
-            if (!data.exists) {
-              console.log(data.id);
-            }
-            const practica = data.data();
-            this.afs.doc('practice/' + clave).collection('programmingData').snapshotChanges().subscribe(data2 => {
+         if (item[clave]) {
+           this.afs.doc('practice/' + clave).ref.get().then(data => {
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
-              if (data2.length > 0) {
-                const prog = data2[0].payload.doc.data();
+             if (!data.exists) {
+               console.log(data.id);
+             }
+             const practica = data.data();
+             this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
 
-                const pract = {
-                  nombre: practica.practiceName,
-                  programacion: {
-                    id_pro: data2[0].payload.doc.id,
-                    estudiantes: prog.noStudents,
-                    horario: prog.schedule,
-                    semestre: prog.semester
-                  },
-                  activo: practica.active
-                };
+               // funciona con una programacion, cuando hayan mas toca crear otro metodo
+               if (data2.docs[0].exists) {
+                 const prog = data2.docs[0].data();
 
-                arr.push(pract);
+                 const pract = {
+                   nombre: practica.practiceName,
+                   id : data.id,
+                   programacion: {
 
-              } else {
-                const pract = {
-                  nombre: practica ? practica.practiceName : 'ninguno',
-                  activo: practica ? practica.active : 'none'
-                };
+                     id_pro: data2.docs[0].id,
+                     estudiantes: prog.noStudents,
+                     horario: prog.schedule,
+                     semestre: prog.semester
+                   },
+                   activo: practica.active
+                 };
 
-                arr.push(pract);
 
-              }
+                 if (practica.active) {
+                    arr.push(pract);
+                 }
 
-            });
+               } else {
 
-          });
-        }
+                 const pract = {
+                   nombre: practica ? practica.practiceName : 'ninguno',
+                   activo: practica ? practica.active : 'none'
+                 };
 
-      }
-    }
+                 if (practica.active) {
+                    arr.push(pract);
+                }
+
+               }
+
+             }).catch( err =>  console.log(err));
+
+           });
+         }
+
+       }
+     }
+   }
 
     return arr;
   }
