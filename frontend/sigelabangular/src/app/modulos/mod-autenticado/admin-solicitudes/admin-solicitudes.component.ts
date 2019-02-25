@@ -44,25 +44,25 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   buttoncancel = false;
 
-  variation:any;
+  variation: any;
   valorParametro = [];
 
-  condicion:any;
+  condicion: any;
   condicionesobjeto = {};
   condicionesobjetoSrv = {};
 
   comentario = '';
 
   iconos = {
-    info:false,
-    sabs:false
+    info: false,
+    sabs: false
   };
 
   fecha = new Date();
 
-  constructor(private querys: QuerysAutenticadoService, 
+  constructor(private querys: QuerysAutenticadoService,
               private observer: ObserverAutenticadoService,
-              private http:Http, private storage: AngularFireStorage) {
+              private http: Http, private storage: AngularFireStorage) {
 
    }
 
@@ -74,27 +74,27 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.alertaCargando();
       this.user = JSON.parse(localStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
-        if(data.length != 0){
+        if (data.length !== 0) {
           this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {
-          
+
             this.dataSource.data = datos['data'];
             this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator
-  
+            this.dataSource.paginator = this.paginator;
+
             this.dataSource2.data = datos['data2'];
             this.dataSource2.sort = this.sort2;
             this.dataSource2.paginator = this.paginator2;
-  
+
             this.cerrarAlerta();
            });
-        }else{
-          this.alertaError('No has solicitado servicios aun')
+        } else {
+          this.alertaError('No has solicitado servicios aun');
         }
 
-        
+
       });
 
-    
+
     }
 
 
@@ -117,37 +117,38 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.estructurarCondicionesSrv(item.condicionesSrv);
     this.buttoncancel = false;
     this.moduloinfo = true;
-   
+
     console.log(this.servsel);
   }
 
   mostrardata2(item) {
+    console.log(item);
     this.servsel = item;
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
     this.estructurarCondicionesSrv(item.condicionesSrv);
     this.moduloinfo = true;
-    if(this.servsel.status == 'pendiente'){
+    if (this.servsel.status === 'pendiente') {
       this.buttoncancel = true;
-    }else{
+    } else {
       this.buttoncancel = false;
     }
 
-    console.log(this.servsel);
+
   }
 
-  cambiarVariacion(item){
+  cambiarVariacion(item) {
 
-    if(item != 'inicial'){
+    if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
-      for (let i = 0; i < this.servsel.parametrosVar.find(o => o.id == this.variation.id).parametros.length; i++) {
-        const element = this.servsel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
+      for (let i = 0; i < this.servsel.parametrosVar.find(o => o.id === this.variation.id).parametros.length; i++) {
+        const element = this.servsel.parametrosVar.find(o => o.id === this.variation.id).parametros[i];
         this.valorParametro.push(element.value);
       }
-    
+
       this.condicion =  this.buscarCondicion(item);
-   
+
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
@@ -158,40 +159,40 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
 
    // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-  buscarVariacion(item){
+  buscarVariacion(item) {
     for (let i = 0; i < this.servsel.variaciones.length; i++) {
       const element = this.servsel.variaciones[i];
-      if(element.id == item){
+      if (element.id === item) {
         return element;
-      }   
+      }
     }
   }
 
-  buscarCondicion(item){
+  buscarCondicion(item) {
     for (let i = 0; i < this.servsel.condiciones.length; i++) {
       const element = this.servsel.condiciones[i];
-      if(element.idvariacion == item){
+      if (element.idvariacion === item) {
         return element;
-      }   
+      }
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarCondiciones(condiciones){
+  estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
- 
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
-     
+
+      this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
+
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarCondicionesSrv(condiciones){
+  estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
- 
+      this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
+
     }
   }
 
@@ -234,13 +235,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   }
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
-  enviarComentario(){
+  enviarComentario() {
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea enviar este comentario',
+      title: '¿Está seguro que desea enviar este comentario?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Solicitar',
+      confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -248,20 +249,20 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       if (result.value) {
 
         const fecha = new Date();
-        let cfSrvReserv = {
-          comments:this.servsel.comentario
+        const cfSrvReserv = {
+          comments: this.servsel.comentario
         };
-    
+
         cfSrvReserv.comments.push({
-          commentText: this.comentario, 
-          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(), 
+          commentText: this.comentario,
+          fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
           autor: 'usuario',
           email: this.user.email,
           uid: this.user.uid});
-    
-        this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(()=>{
-          if(this.servsel.status != 'pendiente'){
-            //this.enviarEmails();
+
+        this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(() => {
+          if (this.servsel.status !== 'pendiente') {
+            // this.enviarEmails();
             console.log('envio emails');
           }
         });
@@ -277,34 +278,34 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     });
 
 
-     
+
   }
 
-  enviarEmails(){
+  enviarEmails() {
     this.alertaCargando();
     let emailSolicitante = '';
     let emailAcepto = '';
     let emailEncargado = '';
     let emailLaboratorio = '';
     const url = URLCORREO;
-    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
+    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITUD DE SERVICIO';
     let destino = '';
     this.querys.getLab(this.servsel.uidlab).subscribe(lab => {
       emailSolicitante = this.servsel.usuario;
       emailLaboratorio = lab.payload.data().otros.email;
       emailAcepto = this.servsel.acepto;
-      const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' + 
+      const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
                       this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
-                      ' por el usuario con el correo ' + emailSolicitante +'. a continuacion vera el comentario: " '+
-                      this.comentario +' "';
+                      ' por el usuario con el correo ' + emailSolicitante + '. a continuacion vera el comentario: " ' +
+                      this.comentario + ' "';
 
       this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
         emailEncargado = persona.payload.data().email;
         destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
         console.log(destino);
-        this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-          if(res.status == 200){
-            //this.cerrarAlerta();
+        this.http.post(url, {para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+          if (res.status === 200) {
+            // this.cerrarAlerta();
             this.alertaExito('Comentario enviado');
             this.comentario = '';
           } else {
@@ -316,11 +317,11 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  descargarArchivo(index){
+  descargarArchivo(index) {
     const ref = this.storage.ref(this.servsel.path[index]);
     ref.getDownloadURL().subscribe(data => {
       window.open(data);
-    }); ;
+    });
   }
 
 
@@ -341,20 +342,20 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.incializarIconos();
   }
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
     }
   }
 
-  incializarIconos(){
+  incializarIconos() {
     this.iconos.info = false;
     this.iconos.sabs = false;
   }
 
-  alertaCargando(){
+  alertaCargando() {
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se cargan los datos',
@@ -364,7 +365,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  alertaExito(mensaje){
+  alertaExito(mensaje) {
     swal({
       type: 'success',
       title: mensaje,
@@ -372,7 +373,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  alertaError(mensaje){
+  alertaError(mensaje) {
     swal({
       type: 'error',
       title: mensaje,
@@ -380,7 +381,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  cerrarAlerta(){
+  cerrarAlerta() {
     swal.close();
   }
 }

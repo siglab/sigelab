@@ -18,7 +18,7 @@
             <i class="fa fa-users"></i>
 
             <h3 class="box-title">Usuarios Sigelab</h3>
-            
+
             <button style="float: right;" type="button" (click)="alistarPersona()" class="btn btn-danger">Nueva Persona
             </button>
           </div>
@@ -45,6 +45,13 @@
                 </ng-container>
 
 
+
+                <ng-container matColumnDef="apellido">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.apellido}} </mat-cell>
+                </ng-container>
+
+
                 <ng-container matColumnDef="email">
                   <mat-header-cell [ngClass]="'large'" *matHeaderCellDef mat-sort-header> Email
                   </mat-header-cell>
@@ -58,17 +65,18 @@
                   <mat-cell *matCellDef="let element"> {{element.roles}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="estado">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Perfiles
+                <!-- <ng-container matColumnDef="estado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Estados
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.roles}} </mat-cell>
-                </ng-container>
+                  <mat-cell *matCellDef="let element"> {{element.active | activo}} </mat-cell>
+                </ng-container> -->
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"></mat-row>
               </mat-table>
 
-              <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+              <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                [showFirstLastButtons]="true">
               </mat-paginator>
             </div>
           </div>
@@ -87,100 +95,38 @@
 
       </h2>
 
-      <h4 class="text-center" *ngIf="!this.idp && this.email && !this.nuevo">
+      <div class="col-md-12">
+        <h4 class="text-center" *ngIf="!this.idp && this.email && !this.nuevo">
 
-        El usuario seleccionado no se encuentra registrado como personal de univalle.
-        a continuacion puede hacer el registro del usuario como personal de univalle.
-      </h4>
+          El usuario seleccionado no se encuentra registrado como personal de univalle.
+          A continuación puede hacer el registro del usuario como personal de univalle.
+        </h4>
+      </div>
+
 
       <div class="col-md-12">
         <div class="box box-danger" *ngIf="this.email || this.nuevo">
           <div class="box-header text-center">
             <i class="fa fa-users"></i>
-            <h3 class="box-title">Informacion de Usuarios</h3>
-  
+            <h3 class="box-title">Informacin de Usuarios</h3>
+
           </div>
           <!-- /.box-header -->
           <div class="box-body">
-            <form *ngIf="this.idp" id="form-dash2equip" class="" name="form-dash2equip">
+            <form *ngIf="!idp && !nuevo " id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
-                <div class="form-group row" *ngIf="this.idp">
-  
-                  <div class="col-md-12">
-                    <label class="col-md-2 control-label" for="nombreprub">
-                      <strong>Nombre:</strong>
-                    </label>
-                    <div class="col-md-10">
-                      <input [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
-                    </div>
-                  </div>
-  
-                </div>
-  
-  
-                <div class="form-group row" *ngIf="this.idp">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>Apellidos:</strong>
-                    </label>
-                    <div class="col-md-10">
-                      <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
-                    </div>
-  
-                  </div>
-                </div>
-  
-                <div class="form-group row" *ngIf="this.idp">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>tipo:</strong>
-                    </label>
-                    <div class="col-md-10">
-  
-                      <select class="form-control" [(ngModel)]="this.type" name="tipo">
-  
-                        <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
-  
-                      </select>
-                    </div>
-                  </div>
-                </div>
-  
+
+                <!-- email del usuario -->
                 <div class="form-group row">
                   <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="estadoserv">
-                      <strong>Email:</strong>
-                    </label>
-  
-                    <div class="col-md-10">
-                      <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
-                    </div>
-                  </div>
-                </div>
-  
-  
-  
-                <div class="col-md-12">
-                  <label class="control-label" for="facul">
-                    <strong> Seleccione un rol :</strong>
-                  </label>
-                  <div class="input-group">
-                    <mat-form-field>
-                      <mat-select [(ngModel)]="this.rolSelect" class="alt" name="rolesSelect" id="facul">
-                        <mat-option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </mat-option>
-  
-  
-                      </mat-select>
+                    <mat-form-field class="example-full-width">
+                      <input [(ngModel)]="this.email" name="email" matInput placeholder="Email">
                     </mat-form-field>
-                    <span class="input-group-btn">
-                      <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </span>
+
                   </div>
                 </div>
-  
-                <div class="form-group">
+
+                <div class="form-group row">
                   <div class="col-md-12">
                     <label class="control-label" for="listfacul">
                       <strong>Roles actuales :</strong>
@@ -196,169 +142,110 @@
                     <h5 *ngIf="this.arrayPract.length === 0"> El usuario tiene un rol de acceso básico.</h5>
                   </div>
                 </div>
-  
+
+                <hr>
+
+                <div class="form-group row">
+                  <div class="col-md-10">
+                    <mat-form-field>
+                      <mat-select placeholder="Seleccioné nuevo rol" [(ngModel)]="this.rolSelect" class="alt" name="rolesSelect"
+                        id="facul">
+                        <mat-option *ngFor="let item of niveles" value="{{ item.id}}"> {{item.nombre}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <span class="input-group-btn">
+                    <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </span>
+                </div>
+
+
                 <div class="form-group row" style="margin-top:19px;">
                   <div class="col-md-12">
-  
-                    <label class="control-label" for="listfacul">
-                      <strong>Inactivar usuario :</strong>
-                    </label>
-  
-                    <div class="form-group">
-                      <div class="col-sm-12">
-                        <label class="switch">
-                          <input (click)="alertDisabled('u')" name="active" [(ngModel)]="this.estado_u" id="activo" type="checkbox">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-  
+                      <mat-slide-toggle name="estado_u" [(ngModel)]="estado_u">   <span *ngIf="estado_u"> Inactivar </span><span *ngIf="!estado_u" > Activar </span>  </mat-slide-toggle>
+
                   </div>
                 </div>
-  
-  
-  
-                <div *ngIf="this.idp" class="form-group row" style="margin-top:19px;">
-                  <div class="col-md-12">
-  
-                    <label class="control-label" for="listfacul">
-                      <strong>Inactivar Personal :</strong>
-                    </label>
-  
-                    <div class="form-group">
-                      <div class="col-sm-12">
-                        <label class="switch">
-                          <input (click)="alertDisabled('p')" name="active" [(ngModel)]="this.estado_p" id="activo" type="checkbox">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-  
-                  </div>
-                </div>
-  
-  
+
+
               </fieldset>
-  
-  
+
+
             </form>
 
-            <form *ngIf="!this.idp" id="form-dash2equip" class="" name="form-dash2equip">
+            <form *ngIf="idp || nuevo" id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
                 <div class="form-group row">
                   <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                        <strong>Fecha nacimiento:</strong>
-                    </label>
-                    <div class="col-md-10">
-                        <input [(ngModel)]="this.cumple" id="fechacumple" name="fechacumple" class="form-control" type="date">
-                    </div>
-  
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                        <strong>Codigo o CC:</strong>
-                    </label>
-                    <div class="col-md-10">
-                        <input [(ngModel)]="this.cedula" id="codigos" name="codigos" class="form-control" type="text">
-                    </div>
-  
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="col-md-2 control-label" for="nombreprub">
-                      <strong>Nombre:</strong>
-                    </label>
-                    <div class="col-md-10">
-                      <input [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control" type="text">
-                    </div>
-                  </div>
-  
-                </div>
-  
-  
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>Apellidos:</strong>
-                    </label>
-                    <div class="col-md-10">
-                      <input [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control" type="text">
-                    </div>
-  
-                  </div>
-                </div>
-  
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>tipo:</strong>
-                    </label>
-                    <div class="col-md-10">
-  
-                      <select class="form-control" [(ngModel)]="this.type" name="tipo">
-  
-                        <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
-  
-                      </select>
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="estadoserv">
-                      <strong>Email:</strong>
-                    </label>
-  
-                    <div class="col-md-10">
-                      <input [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control" type="email">
-                    </div>
+                    <mat-form-field>
+                      <input name="fechacumple" matInput [(ngModel)]="this.cumple" [matDatepicker]="picker" placeholder="Fecha de nacimiento">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
                   </div>
                 </div>
 
                 <div class="form-group row">
                   <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="estadoserv">
-                        <strong>Genero:</strong>
-                    </label>
-  
-                    <div class="col-md-10">
-                        <select class="form-control" [(ngModel)]="this.genero" name="genero">
-                          <option value="Hombre">Hombre </option>
-                          <option value="Mujer">Mujer</option>
-    
-                        </select>
-                    </div>
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="this.cedula" placeholder="Código o CC" type="text" name="codigocc">
+                    </mat-form-field>
                   </div>
                 </div>
-  
-  
-  
-                <div class="col-md-12">
-                  <label class="control-label" for="facul">
-                    <strong> Seleccione un rol :</strong>
-                  </label>
-                  <div class="input-group">
+
+                <div class="form-group row">
+                  <div class="col-md-12">
                     <mat-form-field>
-                      <mat-select [(ngModel)]="this.rolSelect" class="alt" name="rolesSelect" id="facul">
-                        <mat-option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </mat-option>
-  
-  
+                      <input matInput [(ngModel)]="this.nombre" placeholder="Nombre" type="text" name="name">
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <mat-form-field class="example-full-width">
+                      <input matInput [(ngModel)]="this.apellido" placeholder="Apellido" name="apellidopersona">
+                    </mat-form-field>
+
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <mat-form-field>
+                      <mat-select placeholder="Tipo" [(ngModel)]="type" class="alt" name="tipo" id="facul">
+                        <mat-option *ngFor="let item of tipo" value="{{item}}"> {{item}} </mat-option>
                       </mat-select>
                     </mat-form-field>
-                    <span class="input-group-btn">
-                      <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </span>
                   </div>
                 </div>
-  
-                <div class="form-group">
+
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <mat-form-field class="example-full-width">
+                      <input matInput [(ngModel)]="this.email" placeholder="Email" name="email">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <mat-form-field>
+                      <mat-select placeholder="Genero" [(ngModel)]="genero" class="alt" name="genero" id="facul">
+                        <mat-option value="Hombre"> Hombre </mat-option>
+                        <mat-option value="Mujer"> Mujer </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group row">
                   <div class="col-md-12">
                     <label class="control-label" for="listfacul">
                       <strong>Roles actuales :</strong>
@@ -366,7 +253,7 @@
                     <ul class="nav nav-stacked" *ngIf="this.arrayPract.length > 0">
                       <li *ngFor="let item of this.arrayPract; let i= index;" (click)="verLaboratoriosDelRol(item)">
                         <a>
-                          <strong> {{item.nombre}} </strong>
+                          {{item.nombre}}
                           <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span>
                         </a>
                       </li>
@@ -375,12 +262,35 @@
                   </div>
                 </div>
 
-  
-  
-  
+                <hr>
+
+                <div class="form-group row">
+                  <div class="col-md-10">
+                    <mat-form-field>
+                      <mat-select placeholder="Seleccioné nuevo rol" [(ngModel)]="this.rolSelect" class="alt" name="rolesSelect"
+                        id="facul">
+                        <mat-option *ngFor="let item of niveles" value="{{ item.id}}"> {{item.nombre}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <span class="input-group-btn">
+                    <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </span>
+                </div>
+
+                <div class="form-group row" style="margin-top:19px;">
+                    <div class="col-md-12">
+                        <mat-slide-toggle name="estado_u" [(ngModel)]="estado_u">   <span *ngIf="estado_u"> Inactivar </span><span *ngIf="!estado_u" > Activar </span>  </mat-slide-toggle>
+
+                    </div>
+                  </div>
+
+
               </fieldset>
-  
-  
+
+
             </form>
           </div>
           <div class="modal-footer">
@@ -389,13 +299,17 @@
             </button>
 
 
-            <button *ngIf="!this.idp" type="button" (click)="crearPersona()" class="btn btn-success">Crear Persona
+            <button *ngIf="!this.idp && !nuevo" type="button" (click)="crearComoPersona()" class="btn btn-success">Crear
+              Persona
             </button>
-  
+
+            <button *ngIf="nuevo" type="button" (click)="crearPersona()" class="btn btn-success">Guardar
+            </button>
+
           </div>
         </div>
       </div>
-   
+
 
 
 
@@ -418,8 +332,10 @@
         <div class="box box-danger">
           <div class="box-header text-center">
             <i class="fa fa-build"></i>
-            <h3 *ngIf="this.rolSelect !== 'PFhLR4X2n9ybaZU3CR75' " class="box-title">Seleccione el laboratorio al que desea asignar el rol.</h3>
-            <h3 *ngIf="this.rolSelect  == 'PFhLR4X2n9ybaZU3CR75' " class="box-title">Seleccione una facultad a la que desea asignar el rol.</h3>
+            <h3 *ngIf="this.rolSelect !== 'PFhLR4X2n9ybaZU3CR75' " class="box-title">Seleccione el laboratorio al que
+              desea asignar el rol.</h3>
+            <h3 *ngIf="this.rolSelect  == 'PFhLR4X2n9ybaZU3CR75' " class="box-title">Seleccione una facultad a la que
+              desea asignar el rol.</h3>
 
             <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal')"></span>
           </div>
@@ -438,11 +354,13 @@
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                   <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -473,11 +391,13 @@
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -493,7 +413,8 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsFacul;" style="cursor: pointer;" (click)="cambiarDataFacultad(row)"></mat-row>
               </mat-table>
 
-              <mat-paginator #paginatorFacul="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+              <mat-paginator #paginatorFacul="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                [showFirstLastButtons]="true">
               </mat-paginator>
             </div>
 
@@ -518,3 +439,5 @@
 
   </div>
 </div>
+
+<app-spinner></app-spinner>

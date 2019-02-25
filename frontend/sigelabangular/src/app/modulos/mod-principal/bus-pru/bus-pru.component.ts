@@ -7,6 +7,7 @@ import swal from 'sweetalert2';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 declare var $: any;
 
 
@@ -20,12 +21,10 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   corx = 3.42158;
   cory = -76.5205;
   map: any;
-
-   itemsel: any;
-
+    @ViewChild(SpinnerComponent) alert: SpinnerComponent;
+    itemsel: any;
     moduloinfo = false;
     layer = null;
-
     DefaultIcon = L.icon({
       iconUrl: 'assets/leaflet/images/marker-icon.png',
       shadowUrl: 'assets/leaflet/images/marker-shadow.png'
@@ -46,28 +45,27 @@ export class BusPruComponent implements OnInit, AfterViewInit {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
          // abre loading mientras se cargan los datos
-     swal({
-      title: 'Cargando un momento...',
-      onOpen: () => {
-        swal.showLoading();
-      }
 
-    }) ;
-    this.query.getPruebas().then(data => {
+       this.alert.show();
+       this.query.getPruebas().then(data => {
 
       this.query.estructurarDataPruebas(data).then(datos => {
-       
+
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.alert.hide();
+
        // cierra loading luego de cargados los datos
-       swal.close();
-      }).catch(()=>{
+
+      }).catch(() => {
+        this.alert.hide();
+
         swal({
           type: 'error',
-          title: 'No existen practicas registradas a la fecha',
+          title: 'No existen prácticas registradas a la fecha',
           showConfirmButton: true
-        }); 
+        });
       });
 
     });
@@ -92,7 +90,6 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   cambiardata(item) {
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-    $AB('html, body').animate({ scrollTop: '400px' }, 'slow');
 
     this.itemsel = item;
 
@@ -101,10 +98,11 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       this.moduloinfo = true;
       const ambiente = this;
       setTimeout(function() {
+        document.getElementById('detalle').scrollIntoView();
         ambiente.loadMap(item);
       }, 1000);
      } else {
-
+      document.getElementById('detalle').scrollIntoView();
       this.removerMarker();
       this.agregarMarker(item);
      }
@@ -114,7 +112,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
     const containerEl: JQuery = $AB('#cal2');
 
-    if(containerEl.children().length > 0){
+    if(containerEl.children().length > 0) {
 
       containerEl.fullCalendar('destroy');
     }
@@ -162,8 +160,8 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
 }

@@ -82,7 +82,7 @@
                       </span>
 
                       <div class="info-box-content">
-                        <span class="info-box-text">PRACTICAS
+                        <span class="info-box-text">PRÁCTICAS
                           <br>ACTIVAS</span>
                         <span class="info-box-number">{{itemsel.practicas.length}}</span>
                       </div>
@@ -112,7 +112,7 @@
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('info')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
-                          INFORMACION DE LABORATORIO
+                          INFORMACIÓN DE LABORATORIO
                         </a>
                       </h4>
                       <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
@@ -132,7 +132,7 @@
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="descrip">
-                                    <strong>Descripcion:</strong> {{this.itemsel.descripcion}}</label>
+                                    <strong>Descripción:</strong> {{this.itemsel.descripcion}}</label>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -193,7 +193,7 @@
                               </div>
                               <div class="form-group" style="margin-top: 20px;">
                                 <div class="col-md-12">
-                                  <label class="control-label" for="dispo"><strong>Telefonos:</strong></label>
+                                  <label class="control-label" for="dispo"><strong>Teléfonos:</strong></label>
                                   <ul>
                                     <li *ngFor="let tel of itemsel.telefonos;">{{tel.nombre}}</li>
                                   </ul>
@@ -202,7 +202,7 @@
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="subsede">
-                                    <strong>Terminos y condiciones:</strong> {{this.itemsel.condiciones}}</label>
+                                    <strong>Términos y condiciones:</strong> {{this.itemsel.condiciones}}</label>
                                 </div>
                               </div>
                               <div *ngIf="moduloNivel2 || moduloPermiso" class="form-group">
@@ -265,7 +265,7 @@
                       <div class="box-header">
                         <h4 (click)="cambiarIcono('practica')" class="box-title">
                           <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" class="collapsed" aria-expanded="false">
-                            PRACTICAS
+                            PRÁCTICAS
                           </a>
                         </h4>
                         <a (click)="cambiarIcono('practica')" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" aria-expanded="false" class="collapsed">
@@ -275,13 +275,13 @@
                       <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                         <div class="box-body">
                             <div *ngIf="dataSourcePracticas.data.length == 0">
-                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRACTICAS</h3>
+                              <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS</h3>
                             </div>
 
                             <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
                               <div class="example-header">
                                 <mat-form-field>
-                                  <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Practicas">
+                                  <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Prácticas">
                                 </mat-form-field>
                               </div>
 
@@ -363,7 +363,7 @@
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('espacio')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false" class="collapsed">
-                          INFORMACION DE ESPACIO PRINCIPAL
+                          INFORMACIÓN DE ESPACIO PRINCIPAL
                         </a>
                       </h4>
                       <a (click)="cambiarIcono('espacio')" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false" class="collapsed">
@@ -432,7 +432,7 @@
                     <div class="box-header">
                       <h4 (click)="cambiarIcono('espaciosaso')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false" class="collapsed">
-                          INFORMACION DE ESPACIOS ASOCIADOS
+                          INFORMACIÓN DE ESPACIOS ASOCIADOS
                         </a>
                       </h4>
                       <a (click)="cambiarIcono('espaciosaso')" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false" class="collapsed">
@@ -486,7 +486,7 @@
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <label class="control-label" for="area">
-                                    <strong>Area Total: </strong>
+                                    <strong>Área Total: </strong>
                                     {{this.espaciosel.totalArea}}
                                   </label>
                                 </div>
@@ -503,7 +503,7 @@
 
                               <div class="form-group">
                                 <div class="col-md-12" style="margin-left: 70%; max-width: 140px;">
-                                  <button (click)="cargarImagen()" class="btn2 btn-danger btn-lg btn-block danger" data-toggle="modal" data-target="#modal3" type="button">Ver mas</button>
+                                  <button (click)="cargarImagen()" class="btn2 btn-danger btn-lg btn-block danger" data-toggle="modal" data-target="#modal3" type="button">Ver más</button>
                                 </div>
                               </div>
 
@@ -659,7 +659,7 @@
                 <button class="btn btn-danger" style="float: left;" type="button"  data-toggle="tab" href="#home">Volver</button>
               <i class="fa fa-address-card-o"></i>
 
-              <h3 class="box-title">Panel para editar informacion</h3>
+              <h3 class="box-title">Panel para editar información</h3>
             </div>
 
             <div class="box-body">
@@ -669,7 +669,7 @@
                     <div *ngIf="moduloNivel2" class="box-header text-center">
                       <i class="fa fa-address-card-o"></i>
 
-                      <h3 class="box-title">Editar Informacion Actual</h3>
+                      <h3 class="box-title">Editar Información Actual</h3>
                     </div>
 
                     <div class="box-body">
@@ -678,7 +678,7 @@
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="teledit">
-                                  <strong>Descripcion:</strong>
+                                  <strong>Descripción:</strong>
                                 </label>
                                <textarea class="form-control" name="desc" id="desc" [(ngModel)]="this.infolab.cfDescr" rows="5"></textarea>
                               </div>
@@ -708,7 +708,7 @@
                                 <label class="control-label" for="espacio"><strong>Espacio principal :</strong></label>
                                 <mat-form-field>
                                   <mat-select name="espacio" id="espacio" [(value)]="this.infolab.mainSpace" placeholder="Seleccione el espacio principal">
-                                    <mat-option *ngFor="let item of this.espacios" value="{{item.id}}">{{item.nombre}}</mat-option>
+                                    <mat-option *ngFor="let item of this.espacios" value="{{item.id_space}}">{{item.spaceData.building}} - {{item.spaceData.place}} </mat-option>
                                   </mat-select>
                                 </mat-form-field>
                               </div>
@@ -726,7 +726,7 @@
                                       </div>
                                     <div class="input-group">
                                       <mat-form-field>
-                                          <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un dia de la semana" >
+                                          <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un día de la semana" >
                                             <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
                                           </mat-select>
                                         </mat-form-field>
@@ -813,7 +813,7 @@
 
 
                             <div class="col-md-12">
-                                <label class="control-label" for="tel"><strong>Telefonos :</strong></label>
+                                <label class="control-label" for="tel"><strong>Teléfonos :</strong></label>
                               <div class="input-group">
 
                                 <input id="tel" [(ngModel)]="telefono" name="tel" type="text" class="form-control">
@@ -827,7 +827,7 @@
 
                             <div class="form-group" >
                               <div class="col-md-12">
-                                <label class="control-label" for="listtel"><strong>telefonos Agregados :</strong></label>
+                                <label class="control-label" for="listtel"><strong>teléfonos Agregados :</strong></label>
                                   <ul class="nav nav-stacked">
                                     <li *ngFor="let item of this.listaTelefonos"><a>{{item.nombre}} <span (click)="quitarTelefonos(item.id)" class="puntero pull-right badge bg-red">-</span></a></li>
                                   </ul>
@@ -838,7 +838,7 @@
                             <div class="form-group">
                               <div class="col-md-12">
                                 <label class="control-label" for="condi">
-                                  <strong>Terminos y condiciones:</strong>
+                                  <strong>Términos y condiciones:</strong>
                                 </label>
                                 <textarea class="form-control" name="condi" id="condi" [(ngModel)]="this.infolab.cfConditions" rows="5"></textarea>
                               </div>
@@ -955,7 +955,7 @@
           <div class="box-header text-center">
             <i class="fa fa-address-card-o"></i>
 
-            <h3 class="box-title">Informacion de {{tablesel}}</h3>
+            <h3 class="box-title">Información de {{tablesel}}</h3>
 
             <i style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></i>
           </div>
@@ -992,7 +992,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
-                      <strong>Descripcion:</strong> {{seleccionado.descripcion}}</label>
+                      <strong>Descripción:</strong> {{seleccionado.descripcion}}</label>
                   </div>
                 </div>
                 <div class="form-group">
@@ -1048,7 +1048,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="descripProy">
-                      <strong>Descripcion:</strong> {{seleccionado.descripcion}}</label>
+                      <strong>Descripción:</strong> {{seleccionado.descripcion}}</label>
                   </div>
                 </div>
               </fieldset>
@@ -1078,7 +1078,7 @@
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <label class="control-label">
-                      <strong style="color: red;">INFORMACION SERVICIO</strong>
+                      <strong style="color: red;">INFORMACIÓN SERVICIO</strong>
                     </label>
                   </div>
                 </div>
@@ -1091,7 +1091,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadosol">
-                      <strong>Descripcion:</strong> {{seleccionado.descripcionServ}}</label>
+                      <strong>Descripción:</strong> {{seleccionado.descripcionServ}}</label>
                   </div>
                 </div>
                 <div class="form-group">
@@ -1103,7 +1103,7 @@
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <label class="control-label">
-                      <strong style="color: red;">INFORMACION DE QUIEN SOLICITA EL SERVICIO</strong>
+                      <strong style="color: red;">INFORMACIÓN DE QUIEN SOLICITA EL SERVICIO</strong>
                     </label>
                   </div>
                 </div>
@@ -1116,7 +1116,7 @@
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <label class="control-label">
-                      <strong style="color: red;">INFORMACION DE LA SOLICITUD</strong>
+                      <strong style="color: red;">INFORMACIÓN DE LA SOLICITUD</strong>
                     </label>
                   </div>
                 </div>
@@ -1157,7 +1157,7 @@
                 <div class="box-header text-center">
                   <i class="fa fa-address-card-o"></i>
 
-                  <h3 class="box-title">Informacion de espacio</h3>
+                  <h3 class="box-title">Información de espacio</h3>
 
                   <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal3')"></span>
                 </div>
@@ -1194,7 +1194,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="area">
-                            <strong>Area Total: </strong>
+                            <strong>Área Total: </strong>
                             {{this.espaciosel.totalArea}}
                           </label>
                         </div>
@@ -1210,7 +1210,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="areao">
-                            <strong>Area Ocupada: </strong>
+                            <strong>Área Ocupada: </strong>
                             {{this.espaciosel.ocupedArea}}
                           </label>
                         </div>
@@ -1218,7 +1218,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="areal">
-                            <strong>Area Libre: </strong>
+                            <strong>Área Libre: </strong>
                             {{this.espaciosel.freeArea}}
                           </label>
                         </div>
@@ -1226,7 +1226,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="aream">
-                            <strong>Area Minima: </strong>
+                            <strong>Área Mínima: </strong>
                             {{this.espaciosel.minArea}}
                           </label>
                         </div>
@@ -1234,7 +1234,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="indice">
-                            <strong>Indice Saturacion: </strong>
+                            <strong>Índice Saturación: </strong>
                             {{this.espaciosel.indxSa}}
                           </label>
                         </div>
@@ -1251,7 +1251,7 @@
                     </div>
 
                     <div class="box-body">
-                      <h3 *ngIf=" this.espaciosel.map == ''"> El laboratorio seleccionado no cuenta con ningun plano </h3>
+                      <h3 *ngIf=" this.espaciosel.map == ''"> El laboratorio seleccionado no cuenta con ningún plano </h3>
                       <img *ngIf="this.espaciosel.map != ''"  style=" float: center; width: 100%;height: 100%;" [src]="this.plano | async" alt="">
 
                     </div>
@@ -1280,7 +1280,7 @@
           <div class="box-header text-center">
             <i class="fa fa-calendar"></i>
 
-            <h1 class="box-title">Programacion de la Practica</h1>
+            <h1 class="box-title">Programación de la Práctica</h1>
 
             <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('practicaprog')"></span>
 
@@ -1296,7 +1296,7 @@
               </div>
               <div class="form-group">
                 <div class="col-md-12">
-                  <label class="control-label" for="numero"><strong>No estudiantes:</strong> {{seleccionado.programacion.estudiantes}}</label>
+                  <label class="control-label" for="numero"><strong>No. estudiantes:</strong> {{seleccionado.programacion.estudiantes}}</label>
                 </div>
               </div>
             </div>

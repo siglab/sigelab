@@ -27,28 +27,28 @@
                 </li>
                 <li  routerLinkActive="active" class="treeview" (click)="enviaritemEquip(item)">
                   <a [routerLink]="['adminequipos']" >
-                    <i class="fa fa-circle-o"></i>Administracion de Equipos
+                    <i class="fa fa-circle-o"></i>Administración de Equipos
                   </a>
                 </li>
                 <li routerLinkActive="active" class="treeview" (click)="enviaritemPer(item)">
                   <a [routerLink]="['adminpersonal']" >
-                    <i class="fa fa-circle-o"></i>Administracion de Personal
+                    <i class="fa fa-circle-o"></i>Administración de Personal
                   </a>
                 </li>
                 <li routerLinkActive="active" class="treeview" (click)="enviaritemEsp(item)">
                   <a [routerLink]="['adminespacios']" >
-                    <i class="fa fa-circle-o"></i>Administracion de Espacios
+                    <i class="fa fa-circle-o"></i>Administración de Espacios
                   </a>
                 </li>
                 <li *ngIf="item.labo.facilActivity.teaching" routerLinkActive="active" class="treeview" (click)="enviaritemPra(item)">
                   <a [routerLink]="['adminpracticas']" >
-                    <i class="fa fa-circle-o"></i>Administracion de Practicas
+                    <i class="fa fa-circle-o"></i>Administración de Prácticas
                   </a>
                 </li>
 
                 <li *ngIf="item.labo.facilActivity.extension" routerLinkActive="active" class="treeview">
                   <a>
-                    <i class="fa fa-link"></i> Administracion de Servicios
+                    <i class="fa fa-link"></i> Administración de Servicios
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -68,7 +68,7 @@
 
                 <li *ngIf="item.labo.facilActivity.research" routerLinkActive="active" class="treeview">
                   <a [routerLink]="['adminproyectos']" (click)="enviaritemProy(item)">
-                    <i class="fa fa-circle-o"></i>Administracion de Proyectos
+                    <i class="fa fa-circle-o"></i>Administración de Proyectos
                   </a>
                 </li>
                 <li class="treeview">
@@ -92,7 +92,7 @@
                     </li>
                     <li class="treeview">
                       <a (click)="abrirEnlaceQuiUv()">
-                        <i class="fa fa-circle-o"></i>Recoleccion de Residuos
+                        <i class="fa fa-circle-o"></i>Recolección de Residuos
                       </a>
                     </li>
 

@@ -2,7 +2,7 @@ import { Component, OnInit, style } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { FormControl } from '@angular/forms';
 
-var domtoimage = require('dom-to-image');
+const domtoimage = require('dom-to-image');
 import { saveAs } from 'file-saver/FileSaver';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
 
@@ -136,22 +136,22 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   proyectos = [];
 
   arregloBarra = {
-    docencia:{ac:0, in:0},
-    extension:{ac:0, in:0},
-    investigacion:{ac:0, in:0},
-    docext:{ac:0, in:0},
-    docinv:{ac:0, in:0},
-    extinv:{ac:0, in:0},
-    doexin:{ac:0, in:0}
+    docencia: {ac: 0, in: 0},
+    extension: {ac: 0, in: 0},
+    investigacion: {ac: 0, in: 0},
+    docext: {ac: 0, in: 0},
+    docinv: {ac: 0, in: 0},
+    extinv: {ac: 0, in: 0},
+    doexin: {ac: 0, in: 0}
   };
   graficoBarras = false;
 
-  role:any;
+  role: any;
   moduloNivel3 = false;
   moduloNivel25 = false;
 
-  persona:any;
-  faculty:any;
+  persona: any;
+  faculty: any;
   constructor(private serviceMod3: ServicesNivel3Service) {
 
   }
@@ -162,12 +162,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.getRoles();
     this.estructurarSedes();
     this.estructurarTodasSubSedes();
-    if(this.moduloNivel3){  
-      this.estructurarFacultades();     
+    if (this.moduloNivel3) {
+      this.estructurarFacultades();
     }
 
-    if(this.moduloNivel25){
-      this.getFaculty().then(()=>{
+    if (this.moduloNivel25) {
+      this.getFaculty().then(() => {
         const val = [];
         for (const key in this.faculty) {
           if (this.faculty.hasOwnProperty(key)) {
@@ -178,14 +178,14 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         this.formSelect.facultad.setValue(val);
         this.formCheckBox.facultad.setValue(true);
         this.formCheckBox.facultad.disable();
-       
+
         this.formSelect.facultad.disable();
 
         this.ejecutarGraficos();
       });
-      
+
     }
-   
+
   }
 
   getRoles() {
@@ -204,24 +204,24 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     }
   }
 
-  getFaculty(){
+  getFaculty() {
     const promise = new Promise((resolve, reject) => {
       this.serviceMod3.buscarDirector(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
         resolve();
-      });   
+      });
     });
     return promise;
   }
 
 
-  estructurarSedes(){
+  estructurarSedes() {
 
-    this.serviceMod3.buscaSede().then(datos=>{
+    this.serviceMod3.buscaSede().then(datos => {
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.sede.push({
-          id:doc.id,
+          id: doc.id,
           nombre: sede.cfName
         });
       });
@@ -231,12 +231,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
-  estructurarTodasSubSedes(){
-    this.serviceMod3.buscaTodasSubSede().then(datos=>{
+  estructurarTodasSubSedes() {
+    this.serviceMod3.buscaTodasSubSede().then(datos => {
       datos.forEach(doc => {
         const sede = doc.data();
         this.listSelect.subsede.push({
-          id:doc.id,
+          id: doc.id,
           nombre: sede.cfAddrline2 ? sede.cfAddrline2 : sede.cfAddrline1
         });
       });
@@ -244,14 +244,14 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
 
-  estructurarFacultades(){
+  estructurarFacultades() {
     this.listSelect.facultad = [];
-    this.serviceMod3.buscaTodasFacultades().then(datos=>{
+    this.serviceMod3.buscaTodasFacultades().then(datos => {
 
       datos.forEach(doc => {
         const facultad = doc.data();
         this.listSelect.facultad.push({
-          id:doc.id,
+          id: doc.id,
           nombre: facultad.facultyName
         });
 
@@ -261,34 +261,34 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     });
   }
 
-  estructurarFacultad(id){
-    //this.listSelect.facultad = [];
-    this.serviceMod3.buscaFacultad(id).then(doc=>{
+  estructurarFacultad(id) {
+    // this.listSelect.facultad = [];
+    this.serviceMod3.buscaFacultad(id).then(doc => {
 
       this.listSelect.facultad.push({
-        id:doc.id,
+        id: doc.id,
         nombre: doc.data().facultyName
       });
-       
+
       this.estructurarDeparamentos(doc.id);
-     
+
     });
   }
 
 
-  estructurarDeparamentos(keyfacul){
-    if(this.moduloNivel3){
+  estructurarDeparamentos(keyfacul) {
+    if (this.moduloNivel3) {
       this.listSelect.departamento = [];
       this.listSelect.escuela = [];
     }
- 
+
     this.serviceMod3.buscaDepartamento(keyfacul)
     .then(departamento => {
       departamento.forEach(doc => {
 
         const element = doc.data();
 
-        if(element.type === 'department'){
+        if (element.type === 'department') {
 
           this.listSelect.departamento.push({
             id: doc.id,
@@ -306,18 +306,18 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
         }
       });
-    
+
 
     });
 
   }
 
-  controlChecks(item){
-    const arr = ['sede','subsede','facultad','departamento', 'escuela'];
-    if(item === 'universidad'){
-      if(this.formCheckBox[item].value){
-        
-        arr.forEach(elemen=>{
+  controlChecks(item) {
+    const arr = ['sede', 'subsede', 'facultad', 'departamento', 'escuela'];
+    if (item === 'universidad') {
+      if (this.formCheckBox[item].value) {
+
+        arr.forEach(elemen => {
           this.formCheckBox[elemen].setValue(false);
           this.formSelect[elemen].setValue('');
           this.formSelect[elemen].disable();
@@ -326,16 +326,16 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
         this.ejecutarGraficos();
 
-      }else{
-        arr.forEach(elemen=>{
+      } else {
+        arr.forEach(elemen => {
           this.formCheckBox[elemen].enable();
         });
       }
-    }else{
-      if(this.formCheckBox[item].value){
+    } else {
+      if (this.formCheckBox[item].value) {
 
         this.formSelect[item].enable();
-      }else{
+      } else {
         this.formSelect[item].disable();
         this.formSelect[item].setValue('');
       }
@@ -373,14 +373,16 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         }
         for (const key in element.relatedPractices) {
           if (element.relatedPractices.hasOwnProperty(key)) {
-            if (element.relatedPractices[key])
+            if (element.relatedPractices[key]) {
               practicas.push({ id: key });
+            }
           }
         }
         for (const key in element.relatedProjects) {
           if (element.relatedProjects.hasOwnProperty(key)) {
-            if (element.relatedProjects[key])
+            if (element.relatedProjects[key]) {
               proyectos.push({ id: key });
+            }
           }
         }
       }
@@ -406,56 +408,56 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
 
-  ejecutarFiltros(){
+  ejecutarFiltros() {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       const coincidencias = [];
 
       const arr = {
-              sede:'headquarter',
-              subsede:'subHq',
-              facultad:'faculties',
-              departamento:'departments',
-              escuela:'departments'
+              sede: 'headquarter',
+              subsede: 'subHq',
+              facultad: 'faculties',
+              departamento: 'departments',
+              escuela: 'departments'
             };
-  
+
       const correos = '';
       const notificaciones = [];
-  
-      const inicio = 'if('
-      const fin = '){'+
+
+      const inicio = 'if(';
+      const fin = '){' +
             'coincidencias.push(element);}';
-  
+
       let ifquery = '';
-  
-  
+
+
       for (const key in this.formCheckBox) {
         if (this.formCheckBox.hasOwnProperty(key)) {
           const element2 = this.formCheckBox[key];
-          if(element2.value && key !== 'universidad'){
-  
-            if(this.formSelect[key].value.length !== 0){
+          if (element2.value && key !== 'universidad') {
+
+            if (this.formSelect[key].value.length !== 0) {
               ifquery += '(';
-  
+
               for (let i = 0; i < this.formSelect[key].value.length; i++) {
                 const element3 = this.formSelect[key].value[i];
-  
-                if(i === this.formSelect[key].value.length-1){
-  
-                  if(key === 'facultad'){
-                    ifquery += 'element["' +arr[key]+'"].'+element3+' == true)';
-                  } else if(key==='departamento') {
-                    if(this.formSelect['escuela'].value.length !== 0) {
-                      ifquery += '(element["' +arr[key]+'"]["'+element3.facul +'"] == null ? false: element["' +arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true';
+
+                if (i === this.formSelect[key].value.length - 1) {
+
+                  if (key === 'facultad') {
+                    ifquery += 'element["' + arr[key] + '"].' + element3 + ' == true)';
+                  } else if (key === 'departamento') {
+                    if (this.formSelect['escuela'].value.length !== 0) {
+                      ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true';
                     } else {
-                      ifquery += '(element["'+arr[key]+'"]["' +element3.facul + '"] == null ? false: element["'+arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
+                      ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                     }
 
-                  } else if(key === 'escuela') {
-                    if(this.formSelect['departamento'].value.length !== 0) {
-                      ifquery += '(element["'+arr[key]+'"]["' +element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true))';
+                  } else if (key === 'escuela') {
+                    if (this.formSelect['departamento'].value.length !== 0) {
+                      ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true))';
                     } else {
-                      ifquery += '(element["'+arr[key]+'"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
+                      ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                     }
 
                   } else {
@@ -509,6 +511,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
           } else {
 
+           // tslint:disable-next-line:no-eval
            eval(ifquery);
 
           }
@@ -535,11 +538,13 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     const newArray = [];
     const lookupObject = {};
 
+    // tslint:disable-next-line:forin
     for (const i in originalArray) {
       lookupObject[originalArray[i][prop]] = originalArray[i];
     }
 
-    for (i in lookupObject) {
+    // tslint:disable-next-line:forin
+    for (const i in lookupObject) {
       newArray.push(lookupObject[i]);
     }
     return newArray;
@@ -604,7 +609,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           datos.forEach(doc => {
             if (doc.data().updatedAt.split('-')[0] === ano) {
               this.indserv.prestados++;
-              this.indserv.monto += parseInt(doc.data().cfPrice);
+              this.indserv.monto += parseInt(doc.data().cfPrice, 10);
             }
           });
 
@@ -622,7 +627,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     const ano = new Date().toISOString().split('-');
 
     let semester = ano[0];
-    if (parseInt(ano[1]) <= 6) {
+    if (parseInt(ano[1], 10) <= 6) {
       semester += '-01';
     } else {
       semester += '-02';
@@ -636,8 +641,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     for (let i = 0; i < noduplicados.length; i++) {
       const element = noduplicados[i];
       this.serviceMod3.buscaPracticas(element.id, semester).then(programacion => {
-        programacion.forEach(element => {
-          this.indprac.estudiantes += parseInt(element.data().noStudents);
+        programacion.forEach(element2 => {
+          this.indprac.estudiantes += parseInt(element2.data().noStudents, 10);
         });
 
       });
@@ -695,8 +700,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
       array.forEach(servicio => {
         this.serviceMod3.getServicio(servicio.id).then(datos => {
-          const aux2 = parseInt(datos.data().createdAt.split('-')[0]);
-          let actual = parseInt(ano);
+          const aux2 = parseInt(datos.data().createdAt.split('-')[0], 10);
+          let actual = parseInt(ano, 10);
           for (let i = 0; i < 5; i++) {
             if (actual === aux2) {
               arrayServicios['anio' + i].push(servicio.id);
@@ -705,7 +710,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           }
 
           if (array.length === cont) {
-            actual = parseInt(ano);
+            actual = parseInt(ano, 10);
             servicios.push({
               'name' : new Date(anio.split('T')[0]),
               'value': arrayServicios['anio0'].length
@@ -768,10 +773,10 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       array.forEach(servicio => {
         this.serviceMod3.getServicioPrestado(servicio.id).then(datos => {
           datos.forEach(sol => {
-            const aux2 = parseInt(sol.data().updatedAt.split('-')[0]);
-            const auxmes = parseInt(sol.data().updatedAt.split('-')[1]);
+            const aux2 = parseInt(sol.data().updatedAt.split('-')[0], 10);
+            const auxmes = parseInt(sol.data().updatedAt.split('-')[1], 10);
 
-            let anioactual = parseInt(ano);
+            let anioactual = parseInt(ano, 10);
             for (let i = 0; i < 5; i++) {
               if (anioactual === aux2) {
 
@@ -791,7 +796,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
           if (array.length === cont) {
-            let anioactualaux = parseInt(ano);
+            let anioactualaux = parseInt(ano, 10);
 
             for (let i = 0; i < 5; i++) {
               anioactualaux--;
@@ -859,13 +864,13 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   inicializarGraficoLineaPracticas(array) {
     this.multiLine = [];
-    this.yAxisLabel = 'Practicas Realizadas Semestre';
+    this.yAxisLabel = 'Prácticas Realizadas Semestre';
     this.practicas = array;
     this.getDatosGraficoPracticas(array).then(datos => {
       console.log(datos['data'], datos['estu']);
       this.multiLine = [
         {
-          'name': 'Practicas Realizadas',
+          'name': 'Prácticas Realizadas',
           'series': datos['data']
         },
         {
@@ -902,11 +907,11 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     const anio = new Date().toISOString();
     const ano = anio.split('-')[0];
     const mes = anio.split('-')[1];
-    let actual = parseInt(ano);
+    let actual = parseInt(ano, 10);
 
     const arraySeme = [];
 
-      if (parseInt(mes) >= 6) {
+      if (parseInt(mes, 10) >= 6) {
 
         for (let i = 0; i < 3; i++) {
           if (i !== 2) {
@@ -963,7 +968,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           console.log(datos2);
             datos2.forEach(doc => {
               arrayPracticas[doc.data().semester]++;
-              arrayEstudiantes[doc.data().semester] += parseInt(doc.data().noStudents);
+              arrayEstudiantes[doc.data().semester] += parseInt(doc.data().noStudents, 10);
 
               if (array.length === cont) {
 
@@ -1036,6 +1041,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         this.serviceMod3.getProyecto(proyecto.id).then(doc => {
            let contador = 0;
 
+          // tslint:disable-next-line:forin
           for (const key in doc.data().relatedPers) {
             contador++;
           }
@@ -1276,6 +1282,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
+   // tslint:disable-next-line:member-ordering
    serv = true;
   cambiarGraficaLine(item) {
     if (item === 1) {
@@ -1298,6 +1305,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   buscaObjectos() {
     let texto = '';
+    // tslint:disable-next-line:forin
     for (const clave in this.formCheckBox) {
 
       const auxiliar = [];
@@ -1324,11 +1332,11 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             const array2 = this.formSelect[clave].value;
             texto += '<p>';
             for (let i = 0; i < array2.length; i++) {
-              let element = array2[i];
+              let element2 = array2[i];
               if ((clave === 'departamento') || (clave === 'escuela')) {
-                element = array2[i].id;
+                element2 = array2[i].id;
               }
-              const enc = array.find(o => o.id === element);
+              const enc = array.find(o => o.id === element2);
               if (enc) {
                 texto += enc.nombre + ', ';
               }
@@ -1363,7 +1371,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         const printWindow = window.open('', '', 'height=400,width=800');
         printWindow.document.write('<html><head><title>REPORTE</title>');
         printWindow.document.write('</head><body style="height:100%; width:100%;">');
-        printWindow.document.write('<strong> Hora de Generacion: ' + cad + ' </strong>');
+        printWindow.document.write('<strong> Hora de Generación: ' + cad + ' </strong>');
         printWindow.document.body.appendChild(img);
         printWindow.document.write('<br><strong> Correo del generador: : ' + ambiente.persona.email + ' </strong>');
         printWindow.document.write('<h1>FILTROS USADOS</h1>');

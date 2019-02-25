@@ -18,9 +18,9 @@
     <div *ngIf="moduloNivel3">
 
       <div class="text-center">
-        <h4> Ingrese la cantidad para generar nuevos codigos QR </h4>
+        <h4> Ingrese la cantidad para generar nuevos códigos QR </h4>
         <mat-form-field class="example-full-width">
-          <input [(ngModel)]="QrCantidad" matInput placeholder="Numero de codigos" type="number">
+          <input [(ngModel)]="QrCantidad" matInput placeholder="Número de códigos" type="number">
         </mat-form-field>
 
         <button class="btn btn-primary" (click)="addNewQr(QrCantidad)"> generar QR </button>
@@ -71,7 +71,7 @@
                         </div>
                         <!-- /.box-header -->
                         <div *ngIf="dataSourceQrIn.data.length == 0">
-                          <h3> Genere nuevos codigos</h3>
+                          <h3> Genere nuevos códigos</h3>
                         </div>
 
                         <div class="box-body" *ngIf="dataSourceQrIn.data">
@@ -91,7 +91,7 @@
 
 
                               <ng-container matColumnDef="SecuenciaQr">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Secuencia codigo </mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Secuencia código </mat-header-cell>
                                 <mat-cell *matCellDef="let element"> {{element.secQr}} </mat-cell>
                               </ng-container>
 
@@ -128,7 +128,7 @@
                         </div>
                         <!-- /.box-header -->
                         <div *ngIf="dataSourceQr.data.length == 0">
-                          <h3> No se han asociado codigos a ningun inventario</h3>
+                          <h3> No se han asociado códigos a ningún inventario</h3>
                         </div>
                         <div class="box-body" *ngIf="dataSourceQr.data.length > 0">
 
@@ -211,7 +211,7 @@
                     <strong>Numero:</strong>
                   </label>
 
-                  <input placeholder="Numero Inventario" (focusout)="searchInventory($event)" type="text" class="form-control"
+                  <input placeholder="Número Inventario" (focusout)="searchInventory($event)" type="text" class="form-control"
                     id="inputEmail3" placeholder="">
                   <span class="help-block">{{status}}</span>
                 </div>
@@ -226,7 +226,7 @@
                     </label>
 
                     <input type="text" [(ngModel)]="marca_equip" name="marca_equipo" class="form-control" id="inputPassword3"
-                      placeholder="nombre equipo">
+                      placeholder="Nombre equipo">
                   </div>
 
                   <div class="form-group">
@@ -235,7 +235,7 @@
                     </label>
 
                     <input type="text" [(ngModel)]="precio_equip" name="precio_equipo" class="form-control" id="inputPassword3"
-                      placeholder="nombre equipo">
+                      placeholder="Nombre equipo">
                   </div>
 
 

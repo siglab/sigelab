@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
 import { Http } from '@angular/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { correoUnivalle } from '../../../config';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 @Component({
@@ -17,6 +18,7 @@ declare var $: any;
   styleUrls: ['./bus-serv.component.css']
 })
 export class BusServComponent implements OnInit, AfterViewInit {
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   // variables ci check
   status;
@@ -61,27 +63,24 @@ export class BusServComponent implements OnInit, AfterViewInit {
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
 
-
     listaVariaciones = [];
-
     iconos = {
-      info:true,
-      var:false
+      info: true,
+      var: false
     };
 
     selecunivalle = new FormControl();
     univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
     habilitarci = false;
     valorci = '';
-
     usuariounivalle = false;
 
-  constructor(private observer: ObserverPrincipalService, 
+  constructor(private observer: ObserverPrincipalService,
               private query: QuerysPrincipalService,   private afs: AngularFirestore,
               private ruta: Router, private http: Http) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
-      if(this.user.email.split('@')[1] == correoUnivalle){
+      if (this.user.email.split('@')[1] === correoUnivalle) {
         this.usuariounivalle = true;
       }
     }
@@ -90,13 +89,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
     // abrer loading mientras se cargan los datos
-    swal({
-      title: 'Cargando un momento...',
-      onOpen: () => {
-        swal.showLoading();
-      }
-
-    });
+      this.alert.show();
 
     this.query.getServicios().then(data => {
 
@@ -106,13 +99,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         // cierra loading luego de cargados los datos
-        swal.close();
-      }).catch(()=>{
+        this.alert.hide();
+
+      }).catch(() => {
+        this.alert.hide();
         swal({
           type: 'error',
           title: 'No existen servicios registrados a la fecha',
           showConfirmButton: true
-        }); 
+        });
       });
 
     });
@@ -127,9 +122,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
    buscarVariacion(item){
     for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
       const element = this.itemsel.infoServ.variaciones[i];
-      if(element.id == item){
+      if(element.id === item) {
         return element;
-      }   
+      }
     }
   }
 
@@ -174,7 +169,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     }
 
     for (let i = 0; i < parametros.length; i++) {
-      this.parametros["input"+i] = '';
+      this.parametros["input" +i] = '';
     }
   }
 
@@ -198,14 +193,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
       if(element.data.id == this.variation.id){
         return true;
       }
-      return false;    
+      return false;
     });
-  
+
     if(!encontrado){
       const auxiliar = [];
       if(this.parametros){
         let cont = 0;
-      
+
         for (const key in this.parametros) {
           if (this.parametros.hasOwnProperty(key)) {
             auxiliar.push({id:cont, value:this.parametros[key]});
@@ -220,47 +215,47 @@ export class BusServComponent implements OnInit, AfterViewInit {
       });
       this.preciototal += parseInt(this.variation.data.cfPrice);
       if(this.usuariounivalle){
-        this.descuento = this.preciototal*(parseFloat(this.itemsel.infoServ.descuento)/100);
+        this.descuento = this.preciototal* (parseFloat(this.itemsel.infoServ.descuento)/100);
         this.preciocondescuento = this.preciototal - this.descuento;
       }
       swal({
         type: 'success',
-        title: 'Variacion agregada',
+        title: 'Variación agregada',
         showConfirmButton: true
-      }); 
-    }else{
+      });
+    } else {
       swal({
         type: 'error',
-        title: 'Esta variacion ya se encuentra agregada',
+        title: 'Esta variación ya se encuentra agregada',
         showConfirmButton: true
       });
     }
-   
+
   }
 
-  quitarVariacion(id){
+  quitarVariacion(id) {
     const encontrado = this.listaVariaciones.find((element, index) => {
 
 
-      if(element.data.id == id){
-        this.preciototal -= parseInt(element.data.data.cfPrice);        
+      if(element.data.id == id) {
+        this.preciototal -= parseInt(element.data.data.cfPrice);
         this.listaVariaciones.splice(index, 1);
         return true;
       }
       return false;
     });
 
-    if(encontrado){
+    if(encontrado) {
       swal({
         type: 'success',
-        title: 'Variacion Eliminada',
+        title: 'Variación Eliminada',
         showConfirmButton: true
       });
     }
 
   }
 
-  enviarSolicitudServicio(reserva){
+  enviarSolicitudServicio(reserva) {
 
     const fecha = new Date();
 
@@ -293,47 +288,47 @@ export class BusServComponent implements OnInit, AfterViewInit {
         precioTotal:this.itemsel.infoServ.precio
       };
 
-      if(this.usuariounivalle){
+      if(this.usuariounivalle) {
         cfSrvReserv.cfPrice = ''+this.preciocondescuento;
       }
 
         swal({
 
           type: 'warning',
-          title: 'Esta seguro que desea solicitar este servicio',
+          title: '¿Está seguro que desea solicitar este servicio?',
           showCancelButton: true,
-          confirmButtonText: 'Si, Solicitar',
+          confirmButtonText: 'Sí, Solicitar',
           cancelButtonText: 'No, Cancelar'
 
         }).then((result) => {
 
           if (result.value) {
-            if(reserva == 'convariaciones'){
-          
+            if(reserva == 'convariaciones') {
+
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
-                cfSrvReserv.selectedVariations[element.data.id] = true; 
+                cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
-                
+
                 cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
 
-              cfSrvReserv.precioTotal = ''+this.preciototal;
+              cfSrvReserv.precioTotal = ''+ this.preciototal;
 
-              if(this.usuariounivalle){
-                cfSrvReserv.cfPrice = ''+this.preciocondescuento;
-              }else{
+              if(this.usuariounivalle) {
+                cfSrvReserv.cfPrice = ''+ this.preciocondescuento;
+              } else {
                 cfSrvReserv.cfPrice = ''+this.preciototal;
-              
-              }
-    
-            } 
 
-            if(this.itemsel.infoServ.condiciones.length != 0){
+              }
+
+            }
+
+            if(this.itemsel.infoServ.condiciones.length !== 0) {
               cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
             }
 
-            if(this.parametrosServ){
+            if(this.parametrosServ) {
               let cont = 0;
               for (const key in this.parametrosServ) {
                 if (this.parametrosServ.hasOwnProperty(key)) {
@@ -342,20 +337,20 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 }
               }
             }
-            if(this.usuariounivalle){
-              cfSrvReserv.typeuser = 'interno'
-              //cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+            if(this.usuariounivalle) {
+              cfSrvReserv.typeuser = 'interno';
+              // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
               cfSrvReserv.datauser.ci = this.valorci;
               cfSrvReserv.datauser.llaveci = this.llaveci;
             }
 
             cfSrvReserv.comments.push({
-              commentText: this.campoCondicion, 
+              commentText: this.campoCondicion,
               fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
               autor: 'usuario',
-              email: this.user.email, 
+              email: this.user.email,
               uid: this.user.uid});
-           
+
 
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
 
@@ -363,9 +358,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
-              }).then(()=>{
+              }).then(()=> {
                 this.enviarNotificacionesCorreo();
-                
+
                 this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
 
                 this.limpiarDatos();
@@ -376,13 +371,13 @@ export class BusServComponent implements OnInit, AfterViewInit {
               });
 
             }).catch(error => {
-  
+
               swal({
                 type: 'error',
                 title: error,
                 showConfirmButton: true
               });
-  
+
             });
           } else if (
             // Read more about handling dismissals
@@ -394,7 +389,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
               'error'
             );
           }
-  
+
         });
 
     } else {
@@ -409,28 +404,28 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
-  enviarNotificacionesCorreo(){
+  enviarNotificacionesCorreo() {
     const ids = [];
     this.query.buscarDirector(this.itemsel.infoLab.iddirecto).then(doc => {
       this.query.enviarNotificaciones([doc.data().user], this.itemsel.nombreserv, this.user.email);
     });
- 
+
     let cont = 0;
     for (let i = 0; i < this.itemsel.infoLab.personal.length; i++) {
       this.query.buscarUsuarioWithEmail(this.itemsel.infoLab.personal).then(docs => {
         docs.forEach(doc => {
           ids.push(doc.id);
 
-          if(this.itemsel.personal.length == cont){
+          if(this.itemsel.personal.length === cont) {
             this.query.enviarNotificaciones(ids, this.itemsel.nombreserv, this.user.email);
-          }else{
+          } else {
             cont++;
           }
-        })   
-      })
-      
+        });
+      });
+
     }
-   
+
   }
 
 
@@ -445,43 +440,44 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.agregarMarker(item);
   }
 
-  cambiardata(item) { 
+  cambiardata(item) {
     this.limpiarDatos();
     this.variation = undefined;
- 
+
      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-   $('html, body').animate({ scrollTop: '400px' }, 'slow');
+
     this.itemsel = item;
 
-    if(item.infoServ.condiciones.length !== 0){
+    if (item.infoServ.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
     }
 
-    if(this.usuariounivalle){
-      if(item.infoServ.variaciones.length == 0){
-        this.descuento = this.itemsel.infoServ.precio*(parseFloat(this.itemsel.infoServ.descuento)/100);
+    if (this.usuariounivalle) {
+      if (item.infoServ.variaciones.length === 0) {
+        this.descuento = this.itemsel.infoServ.precio * (parseFloat(this.itemsel.infoServ.descuento) / 100);
         this.preciocondescuento = this.itemsel.infoServ.precio - this.descuento;
       }
     }
-    
+
 
     if (!this.moduloinfo) {
       this.moduloinfo = true;
       const ambiente = this;
       setTimeout(function() {
         ambiente.loadMap(item);
+        document.getElementById('detalle').scrollIntoView();
       }, 1000);
      } else {
-
+      document.getElementById('detalle').scrollIntoView();
       this.removerMarker();
       this.agregarMarker(item);
      }
   }
 
-  selectorunivalle(){
+  selectorunivalle() {
     this.habilitarci = false;
     this.selecunivalle.value.forEach(element => {
-      if(element == 3){
+      if (element === 3) {
         this.habilitarci = true;
       }
     });
@@ -489,8 +485,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
 
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
@@ -519,15 +515,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  limpiarDatos(){
+  limpiarDatos() {
     this.campoCondicion = '';
     this.listaVariaciones = [];
     this.preciototal = 0;
-    this.descuento = 0; 
+    this.descuento = 0;
     this.preciocondescuento = 0;
   }
 
@@ -542,7 +538,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
       const queryref = collref.where('ciNumber', '==', q);
       queryref.get().then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'El CI ingresado no se encuentra asociado a ningun proyecto actual';
+          this.status = 'El CI ingresado no se encuentra asociado a ningún proyecto actual';
           this.disponible = true;
         } else {
           console.log(snapShot.docs[0].id);

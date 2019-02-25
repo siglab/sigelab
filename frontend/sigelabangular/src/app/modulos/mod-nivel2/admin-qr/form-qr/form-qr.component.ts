@@ -151,11 +151,11 @@ export class FormQrComponent implements OnInit {
       console.log('se disparo invent');
       // this.dispo = false;
     } else {
-      this.status = 'Buscando codigo en SABS...';
+      this.status = 'Buscando código en SABS...';
       this.qrser.postSabs(q).subscribe(res => {
         console.log(res);
         if (res.inventario.encontrado === true) {
-          this.status = 'Codigo de inventario encontrado.';
+          this.status = 'Código de inventario encontrado.';
           this.formulario = true;
           this.formEdit = 'false';
           console.log(this.formEdit);
@@ -168,7 +168,7 @@ export class FormQrComponent implements OnInit {
         }
         if (res.inventario.encontrado === false) {
           this.status =
-            'Codigo de inventario no encontrado, revise y vuelva a intentar.';
+            'Código de inventario no encontrado, revise y vuelva a intentar.';
           this.formulario = true;
           this.formEdit = 'true';
           this.inventario.responsable = '';
@@ -194,11 +194,11 @@ export class FormQrComponent implements OnInit {
       console.log('se disparo invent');
       // this.dispo = false;
     } else {
-      this.statusComponent = 'Buscando codigo  componente  en SABS...';
+      this.statusComponent = 'Buscando código  componente  en SABS...';
       this.qrser.postSabs(q).subscribe(res => {
         console.log(res);
         if (res.inventario.encontrado === true) {
-          this.statusComponent = 'Codigo componente de inventario encontrado.';
+          this.statusComponent = 'Código componente de inventario encontrado.';
           this.formularioComp = true;
           console.log(this.formEdit);
           // asignar valores de la consulta a formulario
@@ -208,7 +208,7 @@ export class FormQrComponent implements OnInit {
           this.componente.estado_c = res.inventario.estado;
         }
         if (res.inventario.encontrado === false) {
-          this.statusComponent = 'Codigo componente de inventario no encontrado, revise y vuelva a intentar.';
+          this.statusComponent = 'Código componente de inventario no encontrado, revise y vuelva a intentar.';
           this.formularioComp = true;
 
           this.componente.responsable_c = '';

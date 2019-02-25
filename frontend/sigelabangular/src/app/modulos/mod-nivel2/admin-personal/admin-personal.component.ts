@@ -77,7 +77,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'email', 'tipo', 'estado', 'codigo'];
+  displayedColumnsPers = ['nombre', 'apellido', 'email', 'tipo', 'estado', 'codigo'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
@@ -114,6 +114,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     private servicioMod2: Modulo2Service ) { }
 
   ngOnInit() {
+    console.log('Muestra usuario=>', this.user);
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
@@ -143,7 +144,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           swal({
             title: 'Cargando un momento...',
-            text: 'espere mientras se cargan los datos',
+            text: 'Espere mientras se cargan los datos',
             onOpen: () => {
               swal.showLoading();
             }
@@ -177,7 +178,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       } else {
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -370,7 +371,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.rolesAgregados = [];
     for (const key in item[this.idlab]  ) {
       if (item[this.idlab].hasOwnProperty(key)) {
-        this.rolesAgregados.push({ id: key, 
+        this.rolesAgregados.push({ id: key,
           nombre: this.niveles.find(o => o.id == key).nombre});
       }
     }
@@ -409,6 +410,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.type = item.tipo;
 
     this.apellido = item.apellidos;
+
 
     this.nombreRoles(item.rolesClient);
 
@@ -470,7 +472,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
          this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
           swal({
             type: 'success',
-            title: 'usuario actualizado correctamente',
+            title: 'Usuario actualizado correctamente',
             showConfirmButton: true
           });
           this.clearValues();
@@ -509,7 +511,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 swal({
                   type: 'success',
-                  title: 'persona creada correctamente',
+                  title: 'Persona creada correctamente',
                   showConfirmButton: true
                 });
                 this.clearValues();
@@ -529,7 +531,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               this.updatedUser(pers.user, ok.id);
               swal({
                 type: 'success',
-                title: 'persona creada correctamente',
+                title: 'Persona creada correctamente',
                 showConfirmButton: true
               });
               this.clearValues();
@@ -593,6 +595,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   emailcheck($event) {
+
+    console.log($event);
     this.addP = '';
     const q = $event.target.value;
     if (q.trim() === '') {
@@ -607,7 +611,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el boton vincular.';
+          this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el botón vincular.';
           this.dispo = true;
           this.addP = snapShot.docs[0].id;
           this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;
@@ -639,7 +643,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           this.clearValues();
           $('#modal1').modal('hide');
-          this.toastr.success('Almacenado correctamente.', 'exito!');
+          this.toastr.success('Almacenado correctamente.', 'éxito!');
       });
       });
 
@@ -671,7 +675,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect, 
+      this.rolesAgregados.push({id:this.rolSelect,
         nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
     }
 

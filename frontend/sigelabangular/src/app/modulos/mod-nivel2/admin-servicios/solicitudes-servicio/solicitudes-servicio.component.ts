@@ -117,7 +117,7 @@ comentario = '';
 
         this.servicioMod2.getCollectionReservasServicios(data.uid).then(data1 => {
           if(data1.size != 0){
-            this.estructurarServiciosActivos(data1, data).then(datos=>{
+            this.estructurarServiciosActivos(data1, data).then(datos => {
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
               this.dataSource.paginator = this.paginator;
@@ -129,15 +129,15 @@ comentario = '';
               this.cerrarAlerta();
             });
           } else {
-            this.alertaError('No tiene solicitudes de servicio registradas aun')
+            this.alertaError('No tiene solicitudes de servicio registradas aún')
           }
-              
-                          
+
+
         });
       } else{
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -178,14 +178,14 @@ comentario = '';
 
   estructurarServiciosActivos(data, lab) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       const activo = [];
       const historial = [];
-      
+
       data.forEach(doc => {
         const elemento = doc.data();
         this.servicioMod2.buscarServicio(elemento.cfSrv).then(data2 => {
-          const servicio =  data2.data();   
+          const servicio =  data2.data();
           const Reserv = {
             uidlab: elemento.cfFacil,
             nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
@@ -195,7 +195,6 @@ comentario = '';
             descripcion: servicio.cfDesc,
             precio: elemento.cfPrice,
             activo: servicio.active,
-            variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
             condiciones: elemento.conditionsLog,
             condicionesSrv: elemento.conditionsLogServ,
             comentario: elemento.comments,
@@ -205,7 +204,7 @@ comentario = '';
             uidreserv: doc.id,
             path: elemento.path,
             residuos:servicio.residuos ? 'Si' : 'No',
-            acepto: elemento.acceptedBy != '' ? elemento.acceptedBy : 'sin aceptar',
+            acepto: elemento.acceptedBy !== '' ? elemento.acceptedBy : 'sin aceptar',
             fechaTermino: elemento.updatedAt.split('T')[0],
             parametrosVar:elemento.parametros,
             parametrosSrv: elemento.parametrosSrv,
@@ -215,31 +214,38 @@ comentario = '';
             fechaAceptacion: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
           };
 
+          if (elemento.selectedVariations) {
+
+            Reserv['variaciones'] = this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations);
+          } else {
+            Reserv['variaciones']  = [];
+          }
+
           if(elemento.dateAccepted){
             Reserv['fechaAcepto'] = elemento.dateAccepted.split('T')[0];
           }
-  
-            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){                 
-              activo.push(Reserv);        
+
+            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){
+              activo.push(Reserv);
             }else{
               historial.push(Reserv);
-            } 
-  
-            if(data.size == (activo.length+historial.length)){
+            }
+
+            if(data.size == (activo.length + historial.length)){
               resolve({data:activo, data2:historial});
             }
-  
-  
+
+
         });
       });
-     
+
     });
-   
+
 
     return promise;
   }
 
-  
+
   alistarVariables(event){
     console.log(event.target.files);
     let tamano = false;
@@ -253,7 +259,7 @@ comentario = '';
 
     if(tamano){
       swal(
-        'Uno o mas archivos tienen mas peso del limite permitido (32 Mgb)',
+        'Uno o más archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );
@@ -261,7 +267,7 @@ comentario = '';
       for (let i = 0; i < event.target.files.length; i++) {
         this.listaArchivos.push(event.target.files[i]);
       }
-      
+
     }
 
   }
@@ -280,7 +286,7 @@ comentario = '';
       this.currentUpload = new Upload(files[idx]);
       this.uploadFile(this.currentUpload);
 
-      filespath.push('archivos/'+ this.currentUpload.file.name);
+      filespath.push('archivos/' + this.currentUpload.file.name);
     });
 
     return filespath;
@@ -356,9 +362,9 @@ comentario = '';
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea eliminar este archivo de la solicitud',
+      title: '¿Está seguro que desea eliminar este archivo de la solicitud?',
       showCancelButton: true,
-      confirmButtonText: 'Si, eliminar',
+      confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -370,25 +376,25 @@ comentario = '';
             nuevopath.push(element);
           }
         });
-        
+
         const ref = this.storage.ref(this.servicioActivoSel.path[index]);
-        ref.delete().subscribe(()=>{
+        ref.delete().subscribe(() => {
 
           this.servicioMod2.updateReservasServicios(
             this.servicioActivoSel.uidreserv, {path:nuevopath})
-          .then(()=> {
+          .then(() => {
 
-            
+
             swal({
               type: 'success',
-              title: 'archivo eliminado',
+              title: 'Archivo eliminado',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               this.servicioActivoSel.path.splice(index,1);
             });
           });
         }); ;
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -398,7 +404,7 @@ comentario = '';
       }
 
     });
- 
+
   }
 
   descargarArchivo(index){
@@ -438,11 +444,31 @@ comentario = '';
 
 
   cambiarDataServicio(item, table) {
+
+    console.log(item);
     this.servicioActivoSel = item;
     this.variation = undefined;
     this.condicion = undefined;
-    this.estructurarCondiciones(item.condiciones);
-    this.estructurarCondicionesSrv(item.condicionesSrv);
+
+    if (item.condiciones) {
+      this.estructurarCondiciones(item.condiciones);
+
+    } else {
+
+      this.condicionesobjeto['condiciones'] = [];
+
+
+    }
+
+    if (item.condicionesSrv) {
+
+      this.estructurarCondicionesSrv(item.condicionesSrv);
+    } else {
+
+      this.servicioActivoSel.condicionesSrv = [];
+
+    }
+
     this.moduloinfo = true;
     console.log(item);
     if(table == 'activo'){
@@ -464,7 +490,7 @@ comentario = '';
         const element = this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
         this.valorParametro.push(element.value);
       }
-    
+
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
@@ -488,27 +514,27 @@ comentario = '';
   buscarCondicion(item){
     for (let i = 0; i < this.servicioActivoSel.condiciones.length; i++) {
       const element = this.servicioActivoSel.condiciones[i];
-      if(element.idvariacion == item){
+      if (element.idvariacion === item) {
         return element;
       }
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarCondiciones(condiciones){
+  estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
-      //const element = condiciones[i];
-      this.condicionesobjeto["checkbox"+i] = condiciones[i].aceptada;
+      // const element = condiciones[i];
+      this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
     }
   }
 
    // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-   estructurarCondicionesSrv(condiciones){
+   estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjetoSrv["checkboxSrv"+i] = condiciones[i].aceptada;
- 
+      this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
+
     }
   }
 
@@ -518,9 +544,9 @@ comentario = '';
     swal({
 
       type: 'warning',
-      title: 'Esta seguro que desea enviar este comentario',
+      title: '¿Está seguro que desea enviar este comentario?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Solicitar',
+      confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
@@ -534,12 +560,12 @@ comentario = '';
 
         cfSrvReserv.comments.push({
           commentText: this.comentario,
-          fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
+          fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
           autor: 'lab'
         });
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, cfSrvReserv)
-          .then(()=>{
+          .then(() => {
             if(this.servicioActivoSel.status != 'pendiente'){
               this.alertaExito('Comentario enviado');
               this.enviarNotificacionEmails();
@@ -566,7 +592,7 @@ comentario = '';
     let emailEncargado = '';
     let emailLaboratorio = '';
     const url = URLCORREO;
-    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
+    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITUD DE SERVICIO';
     let destino = '';
 
     emailSolicitante = this.servicioActivoSel.usuario;
@@ -583,7 +609,7 @@ comentario = '';
         if(res.status == 200){
           //this.cerrarAlerta();
         } else {
-          this.alertaError('fallo al enviar correos');
+          this.alertaError('Fallo al enviar correos');
         }
       });
 
@@ -595,22 +621,22 @@ comentario = '';
     let emailSolicitante = '';
 
     const url = URLCORREO;
-    const asunto = 'CAMBIO DE ESTADO DE LA SOLICITTUD DE SERVICIO';
+    const asunto = 'CAMBIO DE ESTADO DE LA SOLICITUD DE SERVICIO';
     let destino = '';
 
     emailSolicitante = this.servicioActivoSel.usuario;
 
     const mensaje = 'Se le notifica que se ha cambiado el estado de la solicitud del servicio '  +
                     this.servicioActivoSel.nombre + ', solicitada la fecha ' + this.servicioActivoSel.fecha +
-                    ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' +estado ;
+                    ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' + estado ;
 
-    
-    destino = emailSolicitante + ',' +emaildirector;
-    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-      if(res.status == 200){
+
+    destino = emailSolicitante + ',' + emaildirector;
+    this.http.post(url, {para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+      if (res.status == 200){
         //this.cerrarAlerta();
       } else {
-        this.alertaError('fallo al enviar correos');
+        this.alertaError('Fallo al enviar correos');
       }
     });
   }
@@ -618,16 +644,15 @@ comentario = '';
   cambiarEstadoSolicitud(estado){
     swal({
       type: 'warning',
-      title: '¿Esta seguro de cambiar el estado de la solicitud?',
+      title: '¿Está seguro de cambiar el estado de la solicitud?',
       showCancelButton: true,
-      confirmButtonText: 'Si, Cambiar',
+      confirmButtonText: 'Sí, Cambiar',
       cancelButtonText: 'No, Cancelar'
 
     }).then((result) => {
 
       if (result.value) {
 
-        //this.alertaCargando();
         const reserva = {
           status: estado,
           updatedAt: new Date().toISOString()
@@ -640,34 +665,34 @@ comentario = '';
           reserva['dateAccepted'] = new Date().toISOString();
         }
 
-        this.servicioActivoSel.status = estado;     
+        this.servicioActivoSel.status = estado;
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, reserva)
-        .then(()=>{
+        .then(() => {
           if(estado == 'procesada'){
             swal({
               type: 'success',
               title: 'Solicitud procesada',
               showConfirmButton: true
-            }).then(()=>{
+            }).then(() => {
               this.cerrarModal('modalProcesar');
               this.listaArchivos = [];
             });
-           
+
           }else{
             this.cerrarAlerta();
-            this.alertaExito('Reserva '+estado);
+            this.alertaExito('Reserva ' + estado);
           }
-         
+
         });
         this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
           this.enviarEmails(estado, persona.data().email);
-    
+
         });
-   
+
         this.moduloinfo = false;
         this.resetIconos();
-       
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -685,7 +710,7 @@ comentario = '';
   alertaCargando(){
     swal({
       title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      text: 'Espere mientras se cargan los datos',
       onOpen: () => {
         swal.showLoading();
       }
@@ -715,7 +740,7 @@ comentario = '';
 
 
   cerrarModal(modal){
-    $('#'+modal).modal('hide');
+    $('#' + modal).modal('hide');
   }
 
   resetIconos(){
@@ -731,13 +756,13 @@ comentario = '';
 export class Upload {
 
   $key: string;
-  file:File;
-  name:string;
-  url:string;
-  progress:number;
+  file: File;
+  name: string;
+  url: string;
+  progress: number;
   createdAt: Date = new Date();
 
-  constructor(file:File) {
+  constructor(file: File) {
     this.file = file;
   }
 };

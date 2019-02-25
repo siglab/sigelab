@@ -62,6 +62,7 @@ import { BarSolicitudesNivel3Component } from './shared/components/dashboard/lef
 
 // tslint:disable-next-line:max-line-length
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule } from '@angular/material';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
@@ -74,6 +75,8 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
 // librerias material
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+
   // alertas toast
 import { ToastrModule } from 'ngx-toastr';
 import { AdminLaboratorios3Component } from './modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
@@ -98,6 +101,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
 import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
+import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 
 // libreria date time-picker
 
@@ -144,7 +148,8 @@ import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/q
     InicioAppComponent,
     AdminUsuariosComponent,
     ActivePipe,
-    QrRedirectComponent
+    QrRedirectComponent,
+    SpinnerComponent
   ],
   imports: [
     AngularFireStorageModule,
@@ -162,7 +167,9 @@ import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/q
     MatTableModule,
     MatButtonModule,
     MatInputModule,
+    MatDatepickerModule,
     MatPaginatorModule,
+    MatSlideToggleModule,
     MatSortModule,
     MatCheckboxModule,
     MatStepperModule,

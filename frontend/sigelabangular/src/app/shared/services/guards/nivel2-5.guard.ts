@@ -10,13 +10,13 @@ export class Nivel25Guard implements CanActivate {
 
       const rol = JSON.parse(localStorage.getItem('rol'));
       console.log(rol);
-      if(rol){
-        if(rol.hasOwnProperty('moduloComMasiva')){
+      if (rol) {
+        if (rol.hasOwnProperty('moduloComMasiva')) {
           return true;
         } else {
           return false;
         }
-        
+
       } else {
         return false;
       }

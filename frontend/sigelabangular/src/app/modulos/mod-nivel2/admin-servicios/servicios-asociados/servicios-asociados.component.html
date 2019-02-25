@@ -18,8 +18,11 @@
                     <div *ngIf="moduloNivel2" class="box-header">
                         <i class="fa fa-search"></i>
 
-                        <h3 class="box-title">Busqueda</h3>
-                        <button (click)="nuevoEspacio()" style="float: right;" class="btn btn-danger" type="button" data-toggle="modal" data-target="#modal2">Nuevo Servicio</button>
+                        <h3 class="box-title">Búsqueda</h3>
+                        <button (click)="nuevoEspacio()" style="float: right;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modal2">Nuevo Servicio
+                          <i class="fa fa-plus"></i>
+
+                        </button>
                     </div>
 
                     <div class="box-body">
@@ -72,7 +75,7 @@
                             <div class="box-header">
                                 <h4 (click)="cambiarIcono('info')" class="box-title">
                                     <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                                        INFORMACION DE SERVICIO
+                                        INFORMACIÓN DE SERVICIO
                                     </a>
                                 </h4>
                                 <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false"
@@ -94,7 +97,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="descripserv">
-                                                        <strong>Descripcion:</strong> {{itemsel.infoServ.descripcion}}</label>
+                                                        <strong>Descripción:</strong> {{itemsel.infoServ.descripcion}}</label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -106,7 +109,7 @@
                                             <div class="form-group">
                                                 <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
                                                     <label class="control-label" for="precioserv">
-                                                        <strong>Parametros de servicio:</strong>
+                                                        <strong>Parámetros de servicio:</strong>
                                                     </label>
                                                     <ul>
                                                         <li *ngFor="let item of itemsel.infoServ.parametros;">{{item}}</li>
@@ -159,7 +162,7 @@
                             <div class="box-header">
                                 <h4 (click)="cambiarIcono('sabs')" class="box-title">
                                     <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                                        INFORMACION DE VARIACIONES DE SERVICIO
+                                        INFORMACIÓN DE VARIACIONES DE SERVICIO
                                     </a>
                                 </h4>
                                 <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false"
@@ -177,7 +180,7 @@
                                                         <strong>Variaciones :</strong>
                                                     </label>
                                                     <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
-                                                        <option value="inicial">Seleccione una variacion</option>
+                                                        <option value="inicial">Seleccione una variación</option>
                                                         <option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}">{{item.data.cfName}}</option>
                                                     </select>
                                                 </div>
@@ -193,13 +196,13 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="descripserv">
-                                                        <strong>Descripcion:</strong> {{variation.data.cfDescription}}</label>
+                                                        <strong>Descripción:</strong> {{variation.data.cfDescription}}</label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
                                                     <label class="control-label" for="precioserv">
-                                                        <strong>Parametros de variacion:</strong>
+                                                        <strong>Parámetros de variación:</strong>
                                                     </label>
                                                     <ul>
                                                         <li *ngFor="let item of variation.data.parametros;">{{item}}</li>
@@ -217,7 +220,7 @@
                                                 <div class="col-md-12 text-center">
                                                     <input id="residuosinfovar" name="residuosinfovar" [(ngModel)]="variation.data.residuos" type="checkbox">
                                                     <label class="control-label" for="descripcion">
-                                                        <strong>La variacion genera residuos</strong>
+                                                        <strong>La variación genera residuos</strong>
                                                     </label>
                                                 </div>
                                             </div>
@@ -269,7 +272,7 @@
                             <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
                                 <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false"
                                     class="collapsed">
-                                    INFORMACION DE SERVICIO
+                                    INFORMACIÓN DE SERVICIO
                                 </a>
                             </h4>
                             <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio"
@@ -300,7 +303,7 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label" for="descripcion">
-                                                    <strong>Descripcion:</strong>
+                                                    <strong>Descripción:</strong>
                                                 </label>
                                                 <textarea name="descripcion" rows="4" [(ngModel)]="this.srv.cfDesc" id="descripcion" style="width: 100%;"></textarea>
                                             </div>
@@ -314,27 +317,20 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="par">
-                                                <strong>Parametros :</strong>
-                                            </label>
-                                            <p>por favor ingrese los parametros del servicio con la primera letra mayuscula
-                                                y el resto minuscula</p>
+                                            <label class="control-label" for="par"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros del servicio con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
 
-                                                <input id="tel" [(ngModel)]="parametro" name="tel" type="text" class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('servicio')">
-                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                </span>
+                                            <input id="tel" [(ngModel)]="parametro" name="tel" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" >
                                             <div class="col-md-12">
-                                                <label class="control-label" for="listpar">
-                                                    <strong>Parametros Agregados :</strong>
-                                                </label>
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.listaParametrosServicio; let i = index;">
                                                         <a>{{item}}
@@ -350,9 +346,8 @@
                                                 <label class="control-label" for="descripcion">
                                                     <strong>% Descuento para usuario univalle:</strong>
                                                 </label>
-                                                <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando
-                                                    punto:
-                                                    <br> Ejemplo: 10, 5.9 , 25, 4.2 </p>
+                                                <p>Por favor ingrese el porcentaje en número enteros o decimales utilizando punto: <br>
+                                                   Ejemplo: 10, 5.9 , 25, 4.2 </p>
                                                 <input id="descuento" [(ngModel)]="this.srv.descuento" name="descuento" type="number" class="form-control">
                                             </div>
                                         </div>
@@ -367,7 +362,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarCondicion()" type="button" class="btn btn-success btn-sm">Agregar Condicion</button>
+                                                <button (click)="agregarCondicion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -426,7 +421,7 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label" for="descripcion">
-                                                    <strong>Descripcion:</strong>
+                                                    <strong>Descripción:</strong>
                                                 </label>
                                                 <textarea name="descripcion" rows="4" [(ngModel)]="this.objectvariation.cfDescription" id="descripcion" style="width: 100%;"></textarea>
                                             </div>
@@ -435,32 +430,25 @@
                                             <div class="col-md-12 text-center">
                                                 <input id="residuonuevo" name="residuonuevo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
                                                 <label class="control-label" for="descripcion">
-                                                    <strong>La variacion genera residuos</strong>
+                                                    <strong>La variación genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="parv">
-                                                <strong>Parametros :</strong>
-                                            </label>
-                                            <p>por favor ingrese los parametros de a variacion con la primera letra mayuscula
-                                                y el resto minuscula</p>
+                                            <label class="control-label" for="parv"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros de a variación con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
 
-                                                <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('var')">
-                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                </span>
+                                            <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" >
                                             <div class="col-md-12">
-                                                <label class="control-label" for="listpar">
-                                                    <strong>Parametros Agregados :</strong>
-                                                </label>
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.listaParametrosVariacion; let i = index;">
                                                         <a>{{item}}
@@ -482,7 +470,7 @@
 
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar Condicion</button>
+                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
                                             </div>
                                         </div>
 
@@ -503,7 +491,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar Variacion</button>
+                                                <button (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar Variación</button>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -628,7 +616,7 @@
                             <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
                                 <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false"
                                     class="collapsed">
-                                    INFORMACION DE SERVICIO
+                                    INFORMACIÓN DE SERVICIO
                                 </a>
                             </h4>
                             <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio"
@@ -659,7 +647,7 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label" for="descripcion">
-                                                    <strong>Descripcion:</strong>
+                                                    <strong>Descripción:</strong>
                                                 </label>
                                                 <textarea name="descripcion" rows="4" [(ngModel)]="this.srv.cfDesc" id="descripcion" style="width: 100%;"></textarea>
                                             </div>
@@ -673,27 +661,20 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="editparv">
-                                                <strong>Parametros :</strong>
-                                            </label>
-                                            <p>por favor ingrese los parametros del servicio con la primera letra mayuscula
-                                                y el resto minuscula</p>
+                                            <label class="control-label" for="editparv"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros del servicio con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
 
-                                                <input id="parv" [(ngModel)]="parametro" name="parv" type="text" class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button" (click)="agregarParametroEdit('servicio')">
-                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                </span>
+                                            <input id="parv" [(ngModel)]="parametro" name="parv" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button" (click)="agregarParametroEdit('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" >
                                             <div class="col-md-12">
-                                                <label class="control-label" for="listpar">
-                                                    <strong>Parametros Agregados :</strong>
-                                                </label>
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.srv.parametros; let i = index;">
                                                         <a>{{item}}
@@ -709,9 +690,8 @@
                                                 <label class="control-label" for="descripcion">
                                                     <strong>% Descuento para usuario univalle:</strong>
                                                 </label>
-                                                <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando
-                                                    punto:
-                                                    <br> Ejemplo: 10, 5.9 , 25, 4.2 </p>
+                                                <p>por favor ingrese el porcentaje en número: enteros o decimales; utilizando punto: <br>
+                                                    Ejemplo: 10, 5.9 , 25, 4.2 </p>
                                                 <input id="descuentoedit" [(ngModel)]="this.srv.descuento" name="descuentoedit" type="number" class="form-control">
                                             </div>
                                         </div>
@@ -725,7 +705,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarCondicion()" type="button" class="btn btn-success btn-sm">Agregar Condicion</button>
+                                                <button (click)="agregarCondicion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -823,32 +803,25 @@
                                             <div class="col-md-12 text-center">
                                                 <input id="residuo" name="residuo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
                                                 <label class="control-label" for="descripcion">
-                                                    <strong>La variacion genera residuos</strong>
+                                                    <strong>La variación genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="editparv">
-                                                <strong>Parametros :</strong>
-                                            </label>
-                                            <p>por favor ingrese los parametros de a variacion con la primera letra mayuscula
-                                                y el resto minuscula</p>
+                                            <label class="control-label" for="editparv"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros de a variación con la primera letra mayúscula y el resto minúscula</p>
                                             <div class="input-group">
 
-                                                <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button" (click)="agregarParametroEdit('var')">
-                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                </span>
+                                            <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button" (click)="agregarParametroEdit('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" >
                                             <div class="col-md-12">
-                                                <label class="control-label" for="listpar">
-                                                    <strong>Parametros Agregados :</strong>
-                                                </label>
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.objectvariation.parametros; let i = index;">
                                                         <a>{{item}}
@@ -868,7 +841,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar Condicion</button>
+                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -888,7 +861,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button *ngIf="nuevaVar" (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar Variacion</button>
+                                                <button *ngIf="nuevaVar" (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar Variación</button>
                                             </div>
                                         </div>
                                     </fieldset>

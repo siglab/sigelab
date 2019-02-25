@@ -205,7 +205,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     if(tamano){
       swal(
-        'Uno o mas archivos tienen mas peso del limite permitido (32 Mgb)',
+        'Uno o más archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );

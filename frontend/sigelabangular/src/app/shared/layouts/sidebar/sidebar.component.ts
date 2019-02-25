@@ -9,7 +9,7 @@ import { Subject } from 'rxjs/Subject';
 export class SidebarComponent implements OnInit {
 
   public static updateUserStatus: Subject<boolean> = new Subject();
-  photoDummie =  './assets/img/userdummie.png';
+  photoDummie = './assets/img/userdummie.png';
   usuario;
   imgUsr;
   moduloPrincipal = false;
@@ -20,12 +20,12 @@ export class SidebarComponent implements OnInit {
   moduloComMasiva = false;
   moduloQr = false;
   rolUser: any;
-  roleNivel2:any;
+  roleNivel2: any;
 
   constructor() {
 
-  // obtener usuario luego su rol
-    this.getUser().then(  () => this.getRol()  );
+    // obtener usuario luego su rol
+    this.getUser().then(() => this.getRol());
 
 
 
@@ -43,31 +43,31 @@ export class SidebarComponent implements OnInit {
 
   getRol() {
 
-    if(localStorage.getItem('rol')){
+    if (localStorage.getItem('rol')) {
       console.log(localStorage.getItem('rol'));
       this.rolUser = JSON.parse(localStorage.getItem('rol'));
     }
-    
-    if(localStorage.getItem('laboratorios')){
+
+    if (localStorage.getItem('laboratorios')) {
       localStorage.setItem('nivel2', JSON.stringify(true));
 
       this.roleNivel2 = JSON.parse(localStorage.getItem('laboratorios'));
       console.log(this.roleNivel2);
     }
-   
 
-    if(this.rolUser){
+
+    if (this.rolUser) {
       for (const clave in this.rolUser) {
         if (this.rolUser[clave]) {
           if ((clave === 'moduloPrincipal')) {
             this.moduloPrincipal = true;
           }
-  
+
           if ((clave === 'moduloNivel3')) {
             this.moduloNivel3 = true;
-  
+
           }
-  
+
           if ((clave === 'moduloNivel25')) {
             this.moduloNivel25 = true;
           }
@@ -88,16 +88,16 @@ export class SidebarComponent implements OnInit {
       }
     }
 
-    if(this.roleNivel2){
+    if (this.roleNivel2) {
       this.moduloNivel2 = true;
     }
-    
 
-  //  console.log(this.moduloPrincipal);
+
+    console.log(this.moduloNivel2);
 
   }
 
- async getUser() {
+  async getUser() {
 
     if (localStorage.getItem('usuario')) {
 

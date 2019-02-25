@@ -46,7 +46,7 @@
                                                         <div class="example-container mat-elevation-z8">
                                                             <div class="example-header">
                                                                 <mat-form-field>
-                                                                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por numero solicitud, nombre equipo, fecha y tipo de mantenimiento">
+                                                                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por número de: solicitud, nombre equipo, fecha y tipo de mantenimiento">
                                                                 </mat-form-field>
                                                             </div>
 
@@ -104,7 +104,7 @@
                                                         <div class="example-container mat-elevation-z8">
                                                             <div class="example-header">
                                                                 <mat-form-field>
-                                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar por numero solicitud, nombre equipo, fecha y tipo de mantenimiento">
+                                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar por: número solicitud, nombre equipo, fecha y tipo de mantenimiento">
                                                                 </mat-form-field>
                                                             </div>
 
@@ -164,7 +164,7 @@
                                 <div class="box-header">
                                     <i class="fa fa-map"></i>
 
-                                    <h3 class="box-title">INFORMACION DE SOLICITUD</h3>
+                                    <h3 class="box-title">INFORMACIÓN DE SOLICITUD</h3>
                                 </div>
 
                                 <!-- /.box-header -->
@@ -174,7 +174,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="ccpas">
-                                                        <strong>No Solicitud: </strong>
+                                                        <strong>No. Solicitud: </strong>
                                                         {{this.solsel.uidsol}}
                                                     </label>
 
@@ -199,7 +199,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="ciuor">
-                                                        <strong>Fecha Aceptacion: </strong>
+                                                        <strong>Fecha Aceptación: </strong>
                                                         {{this.solsel.acepto}}
                                                     </label>
                                                 </div>
@@ -207,7 +207,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="ciuor">
-                                                        <strong>Fecha ultima edicion: </strong>
+                                                        <strong>Fecha última edición: </strong>
                                                         {{this.solsel.editado}}
                                                     </label>
                                                 </div>
@@ -231,7 +231,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="ciudes">
-                                                        <strong>Descripcion: </strong>
+                                                        <strong>Descripción: </strong>
                                                         {{this.solsel.descripcion}}
                                                     </label>
                                                 </div>
@@ -246,7 +246,7 @@
                                                             <strong>Proovedor {{item.name}}:</strong>
                                                         </label>
                                                         <li>
-                                                            <strong>Telefono:</strong> {{item.contactNumbers}}</li>
+                                                            <strong>Teléfono:</strong> {{item.contactNumbers}}</li>
                                                         <li>
                                                             <strong>Correo:</strong> {{item.correo}}</li>
                                                         <li>
@@ -286,7 +286,7 @@
                                 <div class="box-header">
                                     <i class="fa fa-map"></i>
 
-                                    <h3 class="box-title">INFORMACION DE EQUIPO VINCULADO</h3>
+                                    <h3 class="box-title">INFORMACIÓN DE EQUIPO VINCULADO</h3>
                                 </div>
 
                                 <!-- /.box-header -->
@@ -296,7 +296,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="nac">
-                                                        <strong>No Invetario: </strong>
+                                                        <strong>No. Invetario: </strong>
                                                         {{this.solsel.equipo.inventory}}
                                                     </label>
                                                 </div>
@@ -336,7 +336,7 @@
                                                             <div class="form-group">
                                                                 <div class="col-md-12">
                                                                     <label class="control-label" for="ccpas">
-                                                                        <strong>Descripcion: </strong>
+                                                                        <strong>Descripción: </strong>
                                                                         {{item.descripcion}}
                                                                     </label>
                                                                 </div>
@@ -383,14 +383,14 @@
                                     </form>
 
                                     <div *ngIf="this.infosabs == undefined">
-                                        <h3 *ngIf="!viewsabs">Cargando informacion de Sabs...</h3>
+                                        <h3 *ngIf="!viewsabs">Cargando información de Sabs...</h3>
                                         <h3 *ngIf="viewsabs">No se pudo conectar con Sabs...</h3>
                                     </div>
                                     <div *ngIf="this.infosabs != undefined" class="box box-danger">
                                         <div class="box-header">
                                             <h4 (click)="cambiarIcono('sabs')" class="box-title">
                                                 <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                                                    INFORMACION DE SABS
+                                                    INFORMACIÓN DE SABS
                                                 </a>
                                             </h4>
 
@@ -402,7 +402,7 @@
                                                         <div class="form-group">
                                                             <div class="col-md-12">
                                                                 <label class="control-label" for="nac">
-                                                                    <strong>Codigo: </strong>
+                                                                    <strong>Código: </strong>
                                                                     {{this.infosabs.codInventario}}
                                                                 </label>
                                                             </div>
@@ -434,7 +434,7 @@
                                                         <div class="form-group">
                                                             <div class="col-md-12">
                                                                 <label class="control-label" for="ciuor">
-                                                                    <strong>Ubicacion: </strong>
+                                                                    <strong>Ubicación: </strong>
                                                                     {{this.infosabs.ubicacion}}
                                                                 </label>
                                                             </div>
@@ -442,7 +442,7 @@
                                                         <div class="form-group">
                                                             <div class="col-md-12">
                                                                 <label class="control-label" for="ciuor">
-                                                                    <strong>Fecha Aceptacion: </strong>
+                                                                    <strong>Fecha Aceptación: </strong>
                                                                     {{this.infosabs.fechaAceptacion}}
                                                                 </label>
                                                             </div>
@@ -481,7 +481,7 @@
                                 <div class="box-header">
                                     <i class="fa fa-map"></i>
 
-                                    <h3 class="box-title">INFORMACION DE SOLICITUD DE PANICO</h3>
+                                    <h3 class="box-title">INFORMACIÓN DE SOLICITUD DE PANICO</h3>
                                 </div>
 
                                 <!-- /.box-header -->
@@ -499,7 +499,7 @@
                                             <div class="form-group">
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="descripcion">
-                                                        <strong>Descripcion del problema:</strong>
+                                                        <strong>Descripción del problema:</strong>
                                                     </label>
                                                     {{solsel.panicodescripcion}}
                                                 </div>
@@ -582,7 +582,7 @@
                                                     </div>
 
                                                     <div class="box-body">
-                                                        <h5>NUMERO DE SOLICITUDES EJECUTADAS PARA EL MISMO EQUIPO</h5>
+                                                        <h5>NÚMERO DE SOLICITUDES EJECUTADAS PARA EL MISMO EQUIPO</h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -770,7 +770,7 @@
                             <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
                                 <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false"
                                     class="collapsed">
-                                    INFORMACION DE SOLICITUD
+                                    INFORMACIÓN DE SOLICITUD
                                 </a>
                             </h4>
                             <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio"
@@ -784,7 +784,7 @@
                                     <fieldset>
                                         <div class="form-group">
                                             <div class="col-md-6">
-                                                <p>por favor ingrese el costo en numero entero, es decir sin puntos o comas
+                                                <p>Por favor ingrese el costo en número entero, es decir sin puntos o comas
                                                     <br> Ejemplo: 120000000</p>
                                                 <input class="form-control" [(ngModel)]="this.costo" type="text" name="costo">
                                             </div>
@@ -798,7 +798,7 @@
                                                     <i class="fa fa-paperclip"></i> File
                                                     <input class="form-control" type="file" name="attachment" multiple="multiple" (change)="alistarVariables($event)">
                                                 </div>
-                                                <p class="help-block">Max. 32MB</p>
+                                                <p class="help-block">Máx. 32MB</p>
                                             </div>
                                         </div>
                                         <div class="form-group">

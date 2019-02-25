@@ -35,4 +35,7 @@ export class InicioAppComponent implements OnInit {
       $('html, body').animate({ scrollTop: mitad }, 'slow');
 
     }
+    prueba() {
+      console.log('botón');
+    }
 }

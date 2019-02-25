@@ -88,3 +88,7 @@ divScroll1::-webkit-scrollbar-track
 .small{
   flex: 0 0 50px;
 }
+::ng-deep .cdk-overlay-container {
+  position: fixed !important;
+  z-index: 100000 !important; /* set value you need */
+}

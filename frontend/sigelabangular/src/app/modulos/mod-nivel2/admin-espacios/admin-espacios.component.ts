@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { EspaciosService } from '../services/espacios.service';
 import * as moment from 'moment';
 import { Modulo2Service } from '../services/modulo2.service';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 declare var $: any;
 
 @Component({
@@ -23,6 +24,7 @@ declare var $: any;
 })
 export class AdminEspaciosComponent implements OnInit, OnDestroy {
   plano: Observable<any>;
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   actSpaces = [];
   actividadAct = [];
@@ -43,14 +45,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   space = {
     capacity: 0,
     createdAt: '',
-    freeArea: '',
+    freeArea: 0,
     headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
     subHq: '',
     indxSa: 0,
     map: '',
-    minArea: '',
-    ocupedArea: '',
-    totalArea: '',
+    minArea: 0,
+    ocupedArea: 0,
+    totalArea: 0,
     spaceData: { building: '', place: '', floor: '' },
     active: false
   };
@@ -142,7 +144,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       } else {
         swal({
           type: 'error',
-          title: 'No se ha seleccionado ningun laboratorio',
+          title: 'No se ha seleccionado ningún laboratorio',
           showConfirmButton: true
         });
       }
@@ -374,28 +376,60 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
   setSpace() {
 
-    if (!this.space.spaceData.building && !this.space.spaceData.building) {
+    if (!this.space.spaceData.building && !this.space.spaceData.place && !this.space.spaceData.floor  ) {
 
       swal({
         type: 'info',
-        title: 'Hay campos vacios importantes.',
+        title: 'Hay campos vacíos importantes.',
         showConfirmButton: true
       });
 
+    } else {
+
+      swal({
+        type: 'info',
+        title : 'Confirmar',
+        text: '¿Está seguro que desea guardar los cambios?',
+        showConfirmButton: true,
+        showCancelButton: true,
+
+      }) .then( val => {
+         if (val.value) {
+          $('#modalespace').modal('hide');
+           this.alert.show();
+           console.log('acepto guardar');
+          const nuevoespacio = this.space;
+          nuevoespacio.subHq = this.idsh;
+          this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
+
+            // agrega el nuevo espacio al laboratorio actual
+            this.servicioMod2.Trazability(
+              this.user.uid, 'create', 'space', data.id, nuevoespacio).then(() => {
+                this.updateFaciliti(data.id);
+              });
+              this.alert.hide();
+
+
+
+
+              swal({
+                type: 'success',
+                title : 'Almacenado correctamente',
+                text: 'Datos guardados correctamente.',
+                showConfirmButton: true
+              });
+          });
+
+         }
+
+
+      });
+
+
+
+
     }
-    const nuevoespacio = this.space;
 
-    nuevoespacio.subHq = this.idsh;
-
-
-    this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
-      // agrega el nuevo espacio al laboratorio actual
-      this.servicioMod2.Trazability(
-        this.user.uid, 'create', 'space', data.id, nuevoespacio).then(()=>{
-          this.updateFaciliti(data.id);
-        });
-
-    });
 
   }
 
@@ -452,13 +486,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
   listSubHq(sede) {
-
-    console.log('si llego la sede', sede);
+    this.alert.show();
     this.spServ.listSubHq(sede).subscribe(res => {
-
       this.subsedes = res;
-      console.log('subsedes', res);
-
+      this.alert.hide();
     });
 
   }
@@ -522,11 +553,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         this.servicioMod2.setDocLaboratorio(this.idlab, { relatedSpaces })
         .then(() => {
 
-          swal({
-            type: 'success',
-            title: 'Creado Correctamente',
-            showConfirmButton: true
-          });
+
       });
       });
 
@@ -635,7 +662,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el boton vincular.';
+          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
           this.dispo = false;
           this.idnewSp = snapShot.docs[0].id;
         }
@@ -650,12 +677,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   /* setea campos del objeto */
   clearObj() {
-    this.space.totalArea = '';
+    this.dispo = false;
+    this.space.totalArea = 0;
+    this.space.active = true;
     this.space.capacity = 0;
-    this.space.freeArea = '';
+    this.space.freeArea = 0;
     this.space.indxSa = 0;
-    this.space.minArea = '';
-    this.space.ocupedArea = '';
+    this.space.minArea = 0;
+    this.space.ocupedArea = 0;
     this.space.spaceData.building = '';
     this.space.spaceData.floor = '';
     this.space.spaceData.place = '';
