@@ -15,6 +15,7 @@ import { EspaciosService } from '../services/espacios.service';
 import * as moment from 'moment';
 import { Modulo2Service } from '../services/modulo2.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
+import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
@@ -76,9 +77,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   user = this.servicioMod2.getLocalStorageUser();
 
   constructor(private obs: ObservablesService,
-    private servicioMod2:Modulo2Service,
+    private servicioMod2: Modulo2Service,
     private storage: AngularFireStorage,
-    private register: LoginService,
+    private router: Router,
     private spServ: EspaciosService) {
   }
 
@@ -410,7 +411,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               this.alert.hide();
 
 
-
+              $('#modalespace').modal('hide');
 
               swal({
                 type: 'success',
@@ -469,10 +470,19 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
 
+
+
             swal({
               type: 'success',
               title: 'Actualizado Correctamente',
               showConfirmButton: true
+            }).then( result => {
+
+               if (result.value) {
+
+                 this.refreshContent();
+
+               }
             });
           });
 
@@ -812,6 +822,15 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     }
     return cont;
   }
+
+
+
+
+  refreshContent() {
+    this.router.navigateByUrl('/principal', {skipLocationChange: true})
+    .then(() => this.router.navigate(['/principal/adminespacios']));
+  }
+
 
 
 

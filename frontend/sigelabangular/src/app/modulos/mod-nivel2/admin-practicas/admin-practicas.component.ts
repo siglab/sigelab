@@ -101,7 +101,7 @@ export class AdminPracticasComponent implements OnInit {
   user = this.servicioMod2.getLocalStorageUser();
 
   constructor(private obs: ObservablesService,
-    private servicioMod2:Modulo2Service,
+    private servicioMod2: Modulo2Service,
     private toastr: ToastrService) {
   }
 
@@ -511,8 +511,11 @@ export class AdminPracticasComponent implements OnInit {
     this.practica.space = row.espacio;
     this.id_prc = row.id_pract;
     this.id_pro = row.programacion.id_pro;
-    this.initCalendarModal(row.programacion.horario);
     console.log(row.programacion.horario);
+    if (row.programacion.horario.length > 0) {
+      this.initCalendarModal(row.programacion.horario);
+
+    }
 
   }
 
@@ -748,6 +751,9 @@ export class AdminPracticasComponent implements OnInit {
         this.user.uid, 'update', 'practice', this.id_prc, 'programmingData', this.id_pro, prog
       ).then(()=>{
         this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog);
+
+
+        this.cerrarModal('myModal3');
 
           swal({
             type: 'success',
