@@ -332,7 +332,11 @@
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.listaParametrosServicio; let i = index;"><a>{{item}} <span (click)="quitarParametro(i, 'servicio')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.listaParametrosServicio; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametro(i, 'servicio')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -446,7 +450,11 @@
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.listaParametrosVariacion; let i = index;"><a>{{item}} <span (click)="quitarParametro(i, 'var')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.listaParametrosVariacion; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametro(i, 'var')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -668,7 +676,11 @@
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.srv.parametros; let i = index;"><a>{{item}} <span (click)="quitarParametroEdit(i, 'servicio')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.srv.parametros; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametroEdit(i, 'servicio')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -811,7 +823,11 @@
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.objectvariation.parametros; let i = index;"><a>{{item}} <span (click)="quitarParametroEdit(i, 'var')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.objectvariation.parametros; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametroEdit(i, 'var')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

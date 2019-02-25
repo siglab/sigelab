@@ -87,7 +87,7 @@ comentario = '';
 
   selectedFiles: FileList;
   currentUpload: Upload;
-  private basePath:string = '/archivos';
+  private basePath: string = '/archivos';
 
    rol:any;
    moduloNivel2 = false;
@@ -592,7 +592,7 @@ comentario = '';
     let emailEncargado = '';
     let emailLaboratorio = '';
     const url = URLCORREO;
-    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITTUD DE SERVICIO';
+    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITUD DE SERVICIO';
     let destino = '';
 
     emailSolicitante = this.servicioActivoSel.usuario;
@@ -621,7 +621,7 @@ comentario = '';
     let emailSolicitante = '';
 
     const url = URLCORREO;
-    const asunto = 'CAMBIO DE ESTADO DE LA SOLICITTUD DE SERVICIO';
+    const asunto = 'CAMBIO DE ESTADO DE LA SOLICITUD DE SERVICIO';
     let destino = '';
 
     emailSolicitante = this.servicioActivoSel.usuario;

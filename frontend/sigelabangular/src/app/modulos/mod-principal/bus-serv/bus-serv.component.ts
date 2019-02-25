@@ -169,7 +169,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     }
 
     for (let i = 0; i < parametros.length; i++) {
-      this.parametros["input"+i] = '';
+      this.parametros["input" +i] = '';
     }
   }
 
@@ -215,7 +215,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
       });
       this.preciototal += parseInt(this.variation.data.cfPrice);
       if(this.usuariounivalle){
-        this.descuento = this.preciototal*(parseFloat(this.itemsel.infoServ.descuento)/100);
+        this.descuento = this.preciototal* (parseFloat(this.itemsel.infoServ.descuento)/100);
         this.preciocondescuento = this.preciototal - this.descuento;
       }
       swal({
@@ -223,7 +223,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         title: 'Variación agregada',
         showConfirmButton: true
       });
-    }else{
+    } else {
       swal({
         type: 'error',
         title: 'Esta variación ya se encuentra agregada',
@@ -233,11 +233,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
-  quitarVariacion(id){
+  quitarVariacion(id) {
     const encontrado = this.listaVariaciones.find((element, index) => {
 
 
-      if(element.data.id == id){
+      if(element.data.id == id) {
         this.preciototal -= parseInt(element.data.data.cfPrice);
         this.listaVariaciones.splice(index, 1);
         return true;
@@ -245,7 +245,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
       return false;
     });
 
-    if(encontrado){
+    if(encontrado) {
       swal({
         type: 'success',
         title: 'Variación Eliminada',
@@ -255,7 +255,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
-  enviarSolicitudServicio(reserva){
+  enviarSolicitudServicio(reserva) {
 
     const fecha = new Date();
 
@@ -288,7 +288,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         precioTotal:this.itemsel.infoServ.precio
       };
 
-      if(this.usuariounivalle){
+      if(this.usuariounivalle) {
         cfSrvReserv.cfPrice = ''+this.preciocondescuento;
       }
 
@@ -303,7 +303,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         }).then((result) => {
 
           if (result.value) {
-            if(reserva == 'convariaciones'){
+            if(reserva == 'convariaciones') {
 
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
@@ -313,22 +313,22 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
               }
 
-              cfSrvReserv.precioTotal = ''+this.preciototal;
+              cfSrvReserv.precioTotal = ''+ this.preciototal;
 
-              if(this.usuariounivalle){
-                cfSrvReserv.cfPrice = ''+this.preciocondescuento;
-              }else{
+              if(this.usuariounivalle) {
+                cfSrvReserv.cfPrice = ''+ this.preciocondescuento;
+              } else {
                 cfSrvReserv.cfPrice = ''+this.preciototal;
 
               }
 
             }
 
-            if(this.itemsel.infoServ.condiciones.length != 0){
+            if(this.itemsel.infoServ.condiciones.length !== 0) {
               cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
             }
 
-            if(this.parametrosServ){
+            if(this.parametrosServ) {
               let cont = 0;
               for (const key in this.parametrosServ) {
                 if (this.parametrosServ.hasOwnProperty(key)) {
@@ -337,9 +337,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 }
               }
             }
-            if(this.usuariounivalle){
-              cfSrvReserv.typeuser = 'interno'
-              //cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+            if(this.usuariounivalle) {
+              cfSrvReserv.typeuser = 'interno';
+              // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
               cfSrvReserv.datauser.ci = this.valorci;
               cfSrvReserv.datauser.llaveci = this.llaveci;
             }
@@ -358,7 +358,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
-              }).then(()=>{
+              }).then(()=> {
                 this.enviarNotificacionesCorreo();
 
                 this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
@@ -404,7 +404,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
-  enviarNotificacionesCorreo(){
+  enviarNotificacionesCorreo() {
     const ids = [];
     this.query.buscarDirector(this.itemsel.infoLab.iddirecto).then(doc => {
       this.query.enviarNotificaciones([doc.data().user], this.itemsel.nombreserv, this.user.email);
@@ -416,13 +416,13 @@ export class BusServComponent implements OnInit, AfterViewInit {
         docs.forEach(doc => {
           ids.push(doc.id);
 
-          if(this.itemsel.personal.length == cont){
+          if(this.itemsel.personal.length === cont) {
             this.query.enviarNotificaciones(ids, this.itemsel.nombreserv, this.user.email);
-          }else{
+          } else {
             cont++;
           }
-        })
-      })
+        });
+      });
 
     }
 
@@ -445,16 +445,16 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
 
      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-   $('html, body').animate({ scrollTop: '400px' }, 'slow');
+
     this.itemsel = item;
 
-    if(item.infoServ.condiciones.length !== 0){
+    if (item.infoServ.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
     }
 
-    if(this.usuariounivalle){
-      if(item.infoServ.variaciones.length == 0){
-        this.descuento = this.itemsel.infoServ.precio*(parseFloat(this.itemsel.infoServ.descuento)/100);
+    if (this.usuariounivalle) {
+      if (item.infoServ.variaciones.length === 0) {
+        this.descuento = this.itemsel.infoServ.precio * (parseFloat(this.itemsel.infoServ.descuento) / 100);
         this.preciocondescuento = this.itemsel.infoServ.precio - this.descuento;
       }
     }
@@ -465,18 +465,19 @@ export class BusServComponent implements OnInit, AfterViewInit {
       const ambiente = this;
       setTimeout(function() {
         ambiente.loadMap(item);
+        document.getElementById('detalle').scrollIntoView();
       }, 1000);
      } else {
-
+      document.getElementById('detalle').scrollIntoView();
       this.removerMarker();
       this.agregarMarker(item);
      }
   }
 
-  selectorunivalle(){
+  selectorunivalle() {
     this.habilitarci = false;
     this.selecunivalle.value.forEach(element => {
-      if(element == 3){
+      if (element === 3) {
         this.habilitarci = true;
       }
     });
@@ -484,8 +485,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
 
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
@@ -514,11 +515,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  limpiarDatos(){
+  limpiarDatos() {
     this.campoCondicion = '';
     this.listaVariaciones = [];
     this.preciototal = 0;

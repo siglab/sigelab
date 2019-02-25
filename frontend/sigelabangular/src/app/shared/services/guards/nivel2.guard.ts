@@ -8,12 +8,12 @@ export class Nivel2Guard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      if(localStorage.getItem('nivel2')){
+      if (localStorage.getItem('nivel2')) {
        return JSON.parse(localStorage.getItem('nivel2'));
-      }else{
+      } else {
         return false;
       }
 
-    
+
   }
 }

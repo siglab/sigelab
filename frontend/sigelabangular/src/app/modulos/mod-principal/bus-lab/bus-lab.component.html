@@ -87,7 +87,7 @@
       </div>
     </div>
 
-    <div *ngIf="moduloinfo" class="row">
+    <div id="detalle" *ngIf="moduloinfo" class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
           <div class="box-body">
@@ -244,39 +244,32 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                  <div class="box-body">
+                  <div *ngIf="dataSource3.data.length == 0">
+                    <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS ACTIVAS</h3>
+                  </div>
 
-                    <div class="box-body">
-                      <div *ngIf="dataSource3.data.length == 0">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS ACTIVAS</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSource3.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar práctica">
-                          </mat-form-field>
-                        </div>
-
-                        <mat-table #tablepract #sort3="matSort" [dataSource]="dataSource3" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumns3;" style="cursor: pointer;" (click)="cambiarDataPrueba(row)" data-toggle="modal"
-                            data-target="#myModalLabs2"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginator3="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-
+                  <div class="example-container mat-elevation-z8" *ngIf="dataSource3.data.length != 0">
+                    <div class="example-header">
+                      <mat-form-field>
+                        <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar práctica">
+                      </mat-form-field>
                     </div>
 
+                    <mat-table #tablepract #sort3="matSort" [dataSource]="dataSource3" matSort>
+
+
+                      <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                      </ng-container>
+
+                      <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns3;" style="cursor: pointer;" (click)="cambiarDataPrueba(row)" data-toggle="modal"
+                        data-target="#myModalLabs2"></mat-row>
+                    </mat-table>
+
+                    <mat-paginator #paginator3="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                    </mat-paginator>
                   </div>
 
                 </div>

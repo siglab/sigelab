@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -17,7 +17,7 @@ import { ServicesNivel3Service } from '../services/services-nivel3.service';
 })
 
 
-export class ComunicacionMasivaComponent implements OnInit {
+export class ComunicacionMasivaComponent implements OnInit, AfterViewInit {
 
 
   itemsel: any;
@@ -106,6 +106,11 @@ export class ComunicacionMasivaComponent implements OnInit {
       }, 2000);
     });
 
+  }
+
+
+  ngAfterViewInit() {
+    $('.ngx-editor-textarea').css({ 'min-height': '400px' });
   }
 
 
@@ -740,6 +745,7 @@ export class ComunicacionMasivaComponent implements OnInit {
        lookupObject[originalArray[i][prop]] = originalArray[i];
     }
 
+    // tslint:disable-next-line:forin
     for (const i in lookupObject) {
         newArray.push(lookupObject[i]);
     }

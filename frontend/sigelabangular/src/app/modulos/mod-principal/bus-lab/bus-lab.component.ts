@@ -61,8 +61,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   parametros = {};
   parametrosServ = {};
 
-  variation:any;
-  variacionSel = "";
+  variation: any;
+  variacionSel = '';
 
   preciototal = 0;
   descuento = 0;
@@ -155,14 +155,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       return false;
     });
 
-    if(!encontrado){
+    if (!encontrado) {
       const auxiliar = [];
-      if(this.parametros){
+      if (this.parametros) {
         let cont = 0;
 
         for (const key in this.parametros) {
           if (this.parametros.hasOwnProperty(key)) {
-            auxiliar.push({id:cont, value:this.parametros[key]});
+            auxiliar.push({id: cont, value: this.parametros[key]});
             cont++;
           }
         }
@@ -172,9 +172,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         condiciones: this.estructuraCondiciones(this.variation.data.cfConditions, 'var'),
         parametros: auxiliar
       });
-      this.preciototal += parseInt(this.variation.data.cfPrice);
-      if(this.usuariounivalle){
-        this.descuento = this.preciototal*(parseFloat(this.servsel.descuento)/100);
+      this.preciototal += parseInt(this.variation.data.cfPrice, 10);
+      if (this.usuariounivalle) {
+        this.descuento = this.preciototal * (parseFloat(this.servsel.descuento) / 100);
         this.preciocondescuento = this.preciototal - this.descuento;
       }
       swal({
@@ -182,7 +182,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         title: 'Variación agregada',
         showConfirmButton: true
       });
-    }else{
+    } else {
       swal({
         type: 'error',
         title: 'Esta variación ya se encuentra agregada',
@@ -192,10 +192,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   }
 
-  quitarVariacion(id){
+  quitarVariacion(id) {
     const encontrado = this.listaVariaciones.find((element, index) => {
 
-      if(element.data.id == id){
+      if (element.data.id === id) {
 
         this.preciototal = parseInt(element.data.data.cfPrice, 10);
         this.listaVariaciones.splice(index, 1);
@@ -204,7 +204,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       return false;
     });
 
-    if(encontrado){
+    if (encontrado) {
       swal({
         type: 'success',
         title: 'Variación Eliminada',
@@ -214,7 +214,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   }
 
-  enviarSolicitudServicio(reserva){
+  enviarSolicitudServicio(reserva) {
 
     const fecha = new Date();
 
@@ -235,20 +235,20 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         createdAt: fecha.toISOString(),
         updatedAt:  fecha.toISOString(),
         conditionsLog: [],
-        comments:[],
-        path:[],
-        typeuser:'externo',
-        datauser:{type:'', ci:'', llaveci:''},
+        comments: [],
+        path: [],
+        typeuser: 'externo',
+        datauser: {type: '', ci: '', llaveci: ''},
         emailuser: this.user.email,
-        acceptedBy:'',
-        parametrosSrv:[],
-        parametros:[],
-        descuento:this.descuento,
-        precioTotal:this.servsel.precio
+        acceptedBy: '',
+        parametrosSrv: [],
+        parametros: [],
+        descuento: this.descuento,
+        precioTotal: this.servsel.precio
       };
 
-        if(this.usuariounivalle){
-          cfSrvReserv.cfPrice = ''+this.preciocondescuento;
+        if (this.usuariounivalle) {
+          cfSrvReserv.cfPrice = '' + this.preciocondescuento;
         }
 
         swal({
@@ -262,22 +262,23 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         }).then((result) => {
 
           if (result.value) {
-            if(reserva == 'convariaciones'){
+            if (reserva === 'convariaciones') {
 
               for (let j = 0; j < this.listaVariaciones.length; j++) {
+                // tslint:disable-next-line:no-shadowed-variable
                 const element = this.listaVariaciones[j];
                 cfSrvReserv.selectedVariations[element.data.id] = true;
-                cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
+                cfSrvReserv.conditionsLog.push({condicion: element.condiciones, idvariacion: element.data.id});
 
-                cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
+                cfSrvReserv.parametros.push({parametros: element.parametros, id: element.data.id});
               }
 
-              cfSrvReserv.precioTotal = ''+this.preciototal;
+              cfSrvReserv.precioTotal = '' + this.preciototal;
 
-              if(this.usuariounivalle){
-                cfSrvReserv.cfPrice = ''+this.preciocondescuento;
-              }else{
-                cfSrvReserv.cfPrice = ''+this.preciototal;
+              if (this.usuariounivalle) {
+                cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+              } else {
+                cfSrvReserv.cfPrice = '' + this.preciototal;
 
               }
 
@@ -285,22 +286,22 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
             }
 
-            if(this.servsel.condiciones.length != 0){
+            if (this.servsel.condiciones.length !== 0) {
               cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.servsel.condiciones, 'servicio');
             }
 
-            if(this.parametrosServ){
+            if (this.parametrosServ) {
               let cont = 0;
               for (const key in this.parametrosServ) {
                 if (this.parametrosServ.hasOwnProperty(key)) {
-                  cfSrvReserv.parametrosSrv.push({id:cont, value:this.parametrosServ[key]});
+                  cfSrvReserv.parametrosSrv.push({id: cont, value: this.parametrosServ[key]});
                   cont++;
                 }
               }
             }
 
-            if(this.usuariounivalle){
-              cfSrvReserv.typeuser = 'interno'
+            if (this.usuariounivalle) {
+              cfSrvReserv.typeuser = 'interno';
               cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
               cfSrvReserv.datauser.ci = this.valorci;
               cfSrvReserv.datauser.llaveci = this.llaveci;
@@ -309,7 +310,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
             cfSrvReserv.comments.push({
               commentText: this.campoCondicion,
-              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
+              fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
               autor: 'usuario',
               email: this.user.email,
               uid: this.user.uid});
@@ -320,7 +321,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
               this.enviarNotificacionesCorreo();
 
-              this.query.enviarEmails(this.servsel.nombre,this.user.email,this.itemsel.emaildir,this.itemsel.info.email, this.itemsel.personal);
+              // tslint:disable-next-line:max-line-length
+              this.query.enviarEmails(this.servsel.nombre, this.user.email, this.itemsel.emaildir, this.itemsel.info.email, this.itemsel.personal);
 
               this.limpiarDatos();
 
@@ -336,7 +338,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
               swal({
                 type: 'error',
-                title: ''+error,
+                title: '' + error,
                 showConfirmButton: true
               });
 
@@ -366,7 +368,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   }
 
-  enviarNotificacionesCorreo(){
+  enviarNotificacionesCorreo() {
     const ids = [];
     this.query.buscarDirector(this.itemsel.iddirecto).then(doc => {
       this.query.enviarNotificaciones([doc.data().user], this.servsel.nombre, this.user.email);
@@ -378,13 +380,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         docs.forEach(doc => {
           ids.push(doc.id);
 
-          if(this.itemsel.personal.length == cont){
+          if (this.itemsel.personal.length === cont) {
             this.query.enviarNotificaciones(ids, this.servsel.nombre, this.user.email);
-          }else{
+          } else {
             cont++;
           }
-        })
-      })
+        });
+      });
 
     }
 
@@ -394,7 +396,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   cambiardata(item) {
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-    $('html, body').animate({ scrollTop: '400px' }, 'slow');
+   // $('html, body').animate({ scrollTop: '400px' }, 'slow');
 
     this.itemsel  = item;
     this.dataSource2.data = item.servicios;
@@ -413,21 +415,24 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         // ambiente.dataSource2.paginator = ambiente.paginator2;
         // ambiente.dataSource3.sort = ambiente.sort3;
         // ambiente.dataSource3.paginator = ambiente.paginator3;
+        document.getElementById('detalle').scrollIntoView();
       }, 1000);
 
 
      } else {
       this.removerMarker();
 
-      if(item.coord.lat != '' && item.coord.lon != ''){
+      if (item.coord.lat !== '' && item.coord.lon !== '') {
         this.agregarMarker(item);
-      }else{
+      } else {
         swal({
           type: 'warning',
           title: 'El laboratorio seleccionado aún no tiene registrada la ubicación',
           showConfirmButton: true
         });
       }
+
+      document.getElementById('detalle').scrollIntoView();
 
 
      }
@@ -441,9 +446,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   }
 
-  cambiarVariacion(item){
+  cambiarVariacion(item) {
 
-    if(item != 'inicial'){
+    if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
       this.estructurarVariaciones(this.variation.data.cfConditions, this.variation.data.parametros);
     } else {
@@ -458,14 +463,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.servsel = item;
 
-    if(item.condiciones.length !== 0){
+    if (item.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.condiciones, item.parametros);
     }
 
 
-    if(this.usuariounivalle){
-      if(item.variaciones.length == 0){
-        this.descuento = this.servsel.precio*(parseFloat(this.servsel.descuento)/100);
+    if (this.usuariounivalle) {
+      if (item.variaciones.length === 0) {
+        this.descuento = this.servsel.precio * (parseFloat(this.servsel.descuento) / 100);
         this.preciocondescuento = this.servsel.precio - this.descuento;
       }
     }
@@ -481,7 +486,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
     const containerEl: JQuery = $AB('#calendar2');
 
-   if(containerEl.children().length > 0){
+   if (containerEl.children().length > 0) {
 
       containerEl.fullCalendar('destroy');
     }
@@ -504,69 +509,69 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
   }
 
-  selectorunivalle(key){
+  selectorunivalle(key) {
     this.habilitarci = false;
 
-    if(key == 3){
+    if (key === 3) {
       this.habilitarci = true;
     }
 
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-  buscarVariacion(item){
+  buscarVariacion(item) {
     for (let i = 0; i < this.servsel.variaciones.length; i++) {
       const element = this.servsel.variaciones[i];
-      if(element.id == item){
+      if (element.id === item) {
         return element;
       }
     }
   }
 
-  //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
-  estructuraCondiciones(condiciones, tipo){
+  // METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
+  estructuraCondiciones(condiciones, tipo) {
     const arr = [];
     for (let i = 0; i < condiciones.length; i++) {
 
       let aux;
-      if(tipo != 'servicio'){
-        aux = this.condicionesobjeto["checkbox"+i]
-      }else{
-        aux = this.condicionesobjetoServ["checkboxServ"+i]
+      if (tipo !== 'servicio') {
+        aux = this.condicionesobjeto['checkbox' + i];
+      } else {
+        aux = this.condicionesobjetoServ['checkboxServ' + i];
       }
       const vari = {
         conditionText: condiciones[i],
         aceptada: aux
-      }
+      };
       arr.push(vari);
     }
     return arr;
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariaciones(condiciones, parametros){
+  estructurarVariaciones(condiciones, parametros) {
     this.condicionesobjeto = {};
     this.parametros = {};
     for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjeto["checkbox"+i] = true;
+      this.condicionesobjeto['checkbox' + i] = true;
     }
 
     for (let i = 0; i < parametros.length; i++) {
-      this.parametros["input"+i] = '';
+      this.parametros['input' + i] = '';
     }
   }
 
-  estructurarCondicionesServicio(condiciones, parametros){
+  estructurarCondicionesServicio(condiciones, parametros) {
     this.condicionesobjetoServ = {};
     this.parametrosServ = {};
     for (let i = 0; i < condiciones.length; i++) {
 
-      this.condicionesobjetoServ["checkboxServ"+i] = true;
+      this.condicionesobjetoServ['checkboxServ' + i] = true;
     }
 
     for (let i = 0; i < parametros.length; i++) {
-      //const element = condiciones[i];
-      this.parametrosServ["inputServ"+i] = '';
+      // const element = condiciones[i];
+      this.parametrosServ['inputServ' + i] = '';
     }
   }
 
@@ -613,11 +618,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  limpiarDatos(){
+  limpiarDatos() {
     this.campoCondicion = '';
     this.listaVariaciones = [];
     this.descuento = 0;

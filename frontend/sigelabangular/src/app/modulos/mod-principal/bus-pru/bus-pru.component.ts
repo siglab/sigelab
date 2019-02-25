@@ -90,7 +90,6 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   cambiardata(item) {
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-    $AB('html, body').animate({ scrollTop: '400px' }, 'slow');
 
     this.itemsel = item;
 
@@ -99,10 +98,11 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       this.moduloinfo = true;
       const ambiente = this;
       setTimeout(function() {
+        document.getElementById('detalle').scrollIntoView();
         ambiente.loadMap(item);
       }, 1000);
      } else {
-
+      document.getElementById('detalle').scrollIntoView();
       this.removerMarker();
       this.agregarMarker(item);
      }
@@ -112,7 +112,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
     const containerEl: JQuery = $AB('#cal2');
 
-    if(containerEl.children().length > 0){
+    if(containerEl.children().length > 0) {
 
       containerEl.fullCalendar('destroy');
     }
@@ -160,8 +160,8 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   }
 
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
 }
