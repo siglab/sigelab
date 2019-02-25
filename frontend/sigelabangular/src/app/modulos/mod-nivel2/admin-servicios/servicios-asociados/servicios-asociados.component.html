@@ -133,9 +133,9 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <div class="col-md-12 text-center">    
-                                                    <input id="residuosinfot" name="residuosinfo" [(ngModel)]="itemsel.infoServ.residuos" type="checkbox">  
-                                                    <label class="control-label" for="descripcion">                 
+                                                <div class="col-md-12 text-center">
+                                                    <input id="residuosinfot" name="residuosinfo" [(ngModel)]="itemsel.infoServ.residuos" type="checkbox">
+                                                    <label class="control-label" for="descripcion">
                                                         <strong>El servicio genera residuos</strong>
                                                     </label>
                                                 </div>
@@ -214,9 +214,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div class="col-md-12 text-center">    
-                                                    <input id="residuosinfovar" name="residuosinfovar" [(ngModel)]="variation.data.residuos" type="checkbox">  
-                                                    <label class="control-label" for="descripcion">                 
+                                                <div class="col-md-12 text-center">
+                                                    <input id="residuosinfovar" name="residuosinfovar" [(ngModel)]="variation.data.residuos" type="checkbox">
+                                                    <label class="control-label" for="descripcion">
                                                         <strong>La variacion genera residuos</strong>
                                                     </label>
                                                 </div>
@@ -225,7 +225,7 @@
                                                 <div class="col-md-12">
                                                     <label class="control-label" for="precioserv">
                                                         <strong>Condiciones:</strong>
-                                                    </label>         
+                                                    </label>
                                                     <ul>
                                                         <li *ngFor="let item of variation.data.cfConditions">{{item}}</li>
                                                     </ul>
@@ -306,30 +306,41 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuonuevoser" name="residuonuevoser" [(ngModel)]="this.srv.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuonuevoser" name="residuonuevoser" [(ngModel)]="this.srv.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>El Servicio genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="par"><strong>Parametros :</strong></label>
-                                            <p>por favor ingrese los parametros del servicio con la primera letra mayuscula y el resto minuscula</p>
+                                            <label class="control-label" for="par">
+                                                <strong>Parametros :</strong>
+                                            </label>
+                                            <p>por favor ingrese los parametros del servicio con la primera letra mayuscula
+                                                y el resto minuscula</p>
                                             <div class="input-group">
-                                                
-                                            <input id="tel" [(ngModel)]="parametro" name="tel" type="text" class="form-control">
-                                            <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                            </span>
+
+                                                <input id="tel" [(ngModel)]="parametro" name="tel" type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('servicio')">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </span>
                                             </div>
                                         </div>
-                                          
-                                        <div class="form-group" >
+
+                                        <div class="form-group">
                                             <div class="col-md-12">
-                                            <label class="control-label" for="listpar"><strong>Parametros Agregados :</strong></label>
+                                                <label class="control-label" for="listpar">
+                                                    <strong>Parametros Agregados :</strong>
+                                                </label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.listaParametrosServicio; let i = index;"><a>{{item}} <span (click)="quitarParametro(i, 'servicio')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.listaParametrosServicio; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametro(i, 'servicio')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -339,8 +350,9 @@
                                                 <label class="control-label" for="descripcion">
                                                     <strong>% Descuento para usuario univalle:</strong>
                                                 </label>
-                                                <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando punto: <br>
-                                                   Ejemplo: 10, 5.9 , 25, 4.2 </p>
+                                                <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando
+                                                    punto:
+                                                    <br> Ejemplo: 10, 5.9 , 25, 4.2 </p>
                                                 <input id="descuento" [(ngModel)]="this.srv.descuento" name="descuento" type="number" class="form-control">
                                             </div>
                                         </div>
@@ -420,30 +432,41 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuonuevo" name="residuonuevo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuonuevo" name="residuonuevo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>La variacion genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="parv"><strong>Parametros :</strong></label>
-                                            <p>por favor ingrese los parametros de a variacion con la primera letra mayuscula y el resto minuscula</p>
+                                            <label class="control-label" for="parv">
+                                                <strong>Parametros :</strong>
+                                            </label>
+                                            <p>por favor ingrese los parametros de a variacion con la primera letra mayuscula
+                                                y el resto minuscula</p>
                                             <div class="input-group">
-                                                
-                                            <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
-                                            <span class="input-group-btn">
-                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                            </span>
+
+                                                <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('var')">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </span>
                                             </div>
                                         </div>
-                                              
-                                        <div class="form-group" >
+
+                                        <div class="form-group">
                                             <div class="col-md-12">
-                                            <label class="control-label" for="listpar"><strong>Parametros Agregados :</strong></label>
+                                                <label class="control-label" for="listpar">
+                                                    <strong>Parametros Agregados :</strong>
+                                                </label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.listaParametrosVariacion; let i = index;"><a>{{item}} <span (click)="quitarParametro(i, 'var')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.listaParametrosVariacion; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametro(i, 'var')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -642,30 +665,41 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuoservedit" name="residuoservedit" [(ngModel)]="this.srv.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuoservedit" name="residuoservedit" [(ngModel)]="this.srv.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>El servicio genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="editparv"><strong>Parametros :</strong></label>
-                                            <p>por favor ingrese los parametros del servicio con la primera letra mayuscula y el resto minuscula</p>
+                                            <label class="control-label" for="editparv">
+                                                <strong>Parametros :</strong>
+                                            </label>
+                                            <p>por favor ingrese los parametros del servicio con la primera letra mayuscula
+                                                y el resto minuscula</p>
                                             <div class="input-group">
-                                                
-                                            <input id="parv" [(ngModel)]="parametro" name="parv" type="text" class="form-control">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-success" type="button" (click)="agregarParametroEdit('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                            </span>
+
+                                                <input id="parv" [(ngModel)]="parametro" name="parv" type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametroEdit('servicio')">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </span>
                                             </div>
                                         </div>
-                                                  
-                                        <div class="form-group" >
+
+                                        <div class="form-group">
                                             <div class="col-md-12">
-                                            <label class="control-label" for="listpar"><strong>Parametros Agregados :</strong></label>
+                                                <label class="control-label" for="listpar">
+                                                    <strong>Parametros Agregados :</strong>
+                                                </label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.srv.parametros; let i = index;"><a>{{item}} <span (click)="quitarParametroEdit(i, 'servicio')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.srv.parametros; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametroEdit(i, 'servicio')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -675,8 +709,9 @@
                                                 <label class="control-label" for="descripcion">
                                                     <strong>% Descuento para usuario univalle:</strong>
                                                 </label>
-                                                <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando punto: <br>
-                                                    Ejemplo: 10, 5.9 , 25, 4.2 </p>
+                                                <p>por favor ingrese el porcentaje en numero enteros o decimales utilizando
+                                                    punto:
+                                                    <br> Ejemplo: 10, 5.9 , 25, 4.2 </p>
                                                 <input id="descuentoedit" [(ngModel)]="this.srv.descuento" name="descuentoedit" type="number" class="form-control">
                                             </div>
                                         </div>
@@ -748,7 +783,7 @@
                                                         <a style="cursor: pointer;">
                                                             <button (click)="cambiarDataEditarVariacion(item)" type="button" class="btn btn-primary btn-sm">Editar</button>
                                                             {{item.cfName}}
-               
+
                                                             <span *ngIf="item.active" (click)="cambiarEstadoVariacion(i, item.active)" class="pull-right badge bg-red">inactivar</span>
                                                             <span *ngIf="!item.active" (click)="cambiarEstadoVariacion(i, item.active)" class="pull-right badge bg-green">activar</span>
                                                         </a>
@@ -785,30 +820,41 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-12 text-center">    
-                                                <input id="residuo" name="residuo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">  
-                                                <label class="control-label" for="descripcion">                 
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuo" name="residuo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
                                                     <strong>La variacion genera residuos</strong>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <label class="control-label" for="editparv"><strong>Parametros :</strong></label>
-                                            <p>por favor ingrese los parametros de a variacion con la primera letra mayuscula y el resto minuscula</p>
+                                            <label class="control-label" for="editparv">
+                                                <strong>Parametros :</strong>
+                                            </label>
+                                            <p>por favor ingrese los parametros de a variacion con la primera letra mayuscula
+                                                y el resto minuscula</p>
                                             <div class="input-group">
-                                                
-                                            <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-success" type="button" (click)="agregarParametroEdit('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                            </span>
+
+                                                <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametroEdit('var')">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </span>
                                             </div>
                                         </div>
-                                              
-                                        <div class="form-group" >
+
+                                        <div class="form-group">
                                             <div class="col-md-12">
-                                            <label class="control-label" for="listpar"><strong>Parametros Agregados :</strong></label>
+                                                <label class="control-label" for="listpar">
+                                                    <strong>Parametros Agregados :</strong>
+                                                </label>
                                                 <ul class="nav nav-stacked divScroll">
-                                                <li *ngFor="let item of this.objectvariation.parametros; let i = index;"><a>{{item}} <span (click)="quitarParametroEdit(i, 'var')" class="puntero pull-right badge bg-red">-</span></a></li>
+                                                    <li *ngFor="let item of this.objectvariation.parametros; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametroEdit(i, 'var')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

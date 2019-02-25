@@ -205,7 +205,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
   getFaculty(){
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       this.serviceMod3.buscarDirector(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
         resolve();
@@ -288,7 +288,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
         const element = doc.data();
 
-        if(element.type == 'department'){
+        if(element.type === 'department'){
 
           this.listSelect.departamento.push({
             id: doc.id,
@@ -314,7 +314,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   controlChecks(item){
     const arr = ['sede','subsede','facultad','departamento', 'escuela'];
-    if(item == 'universidad'){
+    if(item === 'universidad'){
       if(this.formCheckBox[item].value){
         
         arr.forEach(elemen=>{
@@ -409,7 +409,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   ejecutarFiltros(){
 
     let promise = new Promise((resolve, reject) => {
-      let coincidencias = [];
+      const coincidencias = [];
 
       const arr = {
               sede:'headquarter',
@@ -419,8 +419,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
               escuela:'departments'
             };
   
-      let correos = '';
-      let notificaciones = [];
+      const correos = '';
+      const notificaciones = [];
   
       const inicio = 'if('
       const fin = '){'+
@@ -432,99 +432,99 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       for (const key in this.formCheckBox) {
         if (this.formCheckBox.hasOwnProperty(key)) {
           const element2 = this.formCheckBox[key];
-          if(element2.value && key != 'universidad'){
+          if(element2.value && key !== 'universidad'){
   
-            if(this.formSelect[key].value.length != 0){
+            if(this.formSelect[key].value.length !== 0){
               ifquery += '(';
   
               for (let i = 0; i < this.formSelect[key].value.length; i++) {
                 const element3 = this.formSelect[key].value[i];
   
-                if(i == this.formSelect[key].value.length-1){
+                if(i === this.formSelect[key].value.length-1){
   
-                  if(key == 'facultad'){
-                    ifquery += 'element["'+arr[key]+'"].'+element3+' == true)';
-                  }else if(key=='departamento'){
-                    if(this.formSelect['escuela'].value.length != 0){
-                      ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true';
+                  if(key === 'facultad'){
+                    ifquery += 'element["' +arr[key]+'"].'+element3+' == true)';
+                  } else if(key==='departamento') {
+                    if(this.formSelect['escuela'].value.length !== 0) {
+                      ifquery += '(element["' +arr[key]+'"]["'+element3.facul +'"] == null ? false: element["' +arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true';
                     } else {
-                      ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true)';
+                      ifquery += '(element["'+arr[key]+'"]["' +element3.facul + '"] == null ? false: element["'+arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                     }
-                   
-                  }else if(key =="escuela"){
-                    if(this.formSelect['departamento'].value.length != 0){
-                      ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true))';
-                    }else{
-                      ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true)';
+
+                  } else if(key === 'escuela') {
+                    if(this.formSelect['departamento'].value.length !== 0) {
+                      ifquery += '(element["'+arr[key]+'"]["' +element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true))';
+                    } else {
+                      ifquery += '(element["'+arr[key]+'"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true)';
                     }
-                  
-                  }else{
-                    ifquery += 'element["'+arr[key]+'"] == "'+element3+'")';
+
+                  } else {
+                    ifquery += 'element["' + arr[key] + '"] == "' + element3 + '")';
                   }
-  
-                }else{
-                  if(key == 'facultad'){
-                    ifquery += 'element["'+arr[key]+'"].'+element3+' == true || ';
-  
-                  }else if(key=='departamento' || key =="escuela"){
-  
-                    ifquery += '(element["'+arr[key]+'"]["'+element3.facul+'"] == null ? false: element["'+arr[key]+'"]["'+element3.facul+'"]["'+element3.id+'"]) == true || ';
-                  }else{
-                    ifquery += 'element["'+arr[key]+'"] == "'+element3+'" || ';
+
+                } else {
+                  if (key === 'facultad') {
+                    ifquery += 'element["' + arr[key] + '"].' + element3 + ' == true || ';
+
+                  } else if (key === 'departamento' || key === 'escuela') {
+
+                    ifquery += '(element["' + arr[key] + '"]["' + element3.facul + '"] == null ? false: element["' + arr[key] + '"]["' + element3.facul + '"]["' + element3.id + '"]) == true || ';
+                  } else {
+                    ifquery += 'element["' + arr[key] + '"] == "' + element3 + '" || ';
                   }
-  
+
                 }
               }
-             
-  
-              if(key != 'departamento'){
+
+
+              if (key !== 'departamento') {
                 ifquery += ' && ';
               } else {
-                ifquery += ' || '
+                ifquery += ' || ';
               }
-  
+
               }
             }
-  
-  
+
+
           }
-  
+
         }
-  
-        ifquery = ifquery.substr(0,ifquery.length-4);
-  
-        ifquery = inicio+ifquery+fin;
-  
-  
-      this.serviceMod3.buscaLaboratorios().then(datos=>{
-  
+
+        ifquery = ifquery.substr(0, ifquery.length - 4);
+
+        ifquery = inicio + ifquery + fin;
+
+
+      this.serviceMod3.buscaLaboratorios().then(datos => {
+
         let cont = 1;
-   
+
         datos.forEach(doc => {
           const element = doc.data();
-  
-          if(this.formCheckBox.universidad.value){
+
+          if (this.formCheckBox.universidad.value) {
 
             coincidencias.push(element);
-  
+
           } else {
-  
+
            eval(ifquery);
-  
+
           }
-   
-          if(datos.size != cont){
+
+          if (datos.size !== cont) {
             cont++;
           } else {
-            resolve({data:coincidencias});
+            resolve({data: coincidencias});
           }
-         
+
         });
-  
-  
+
+
       });
     });
-  
+
 
     return promise;
   }
@@ -532,10 +532,10 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
   removeDuplicates(originalArray, prop) {
-    var newArray = [];
-    var lookupObject = {};
+    const newArray = [];
+    const lookupObject = {};
 
-    for (var i in originalArray) {
+    for (const i in originalArray) {
       lookupObject[originalArray[i][prop]] = originalArray[i];
     }
 
@@ -589,7 +589,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   inicializarIndicadoresServicios(array) {
     const ano = new Date().toISOString().split('-')[0];
-    let sus = false;
+    const sus = false;
     let cont = 0;
     this.indserv.prestados = 0;
     this.indserv.monto = 0;
@@ -599,14 +599,14 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       const element = noduplicados[i];
       this.serviceMod3.buscaServicioPrestado(element.id).then(datos => {
         console.log(datos);
-        if (datos.size != 0) {
+        if (datos.size !== 0) {
 
           datos.forEach(doc => {
-            if (doc.data().updatedAt.split('-')[0] == ano) {
+            if (doc.data().updatedAt.split('-')[0] === ano) {
               this.indserv.prestados++;
               this.indserv.monto += parseInt(doc.data().cfPrice);
             }
-          })
+          });
 
         }
         cont++;
@@ -627,8 +627,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     } else {
       semester += '-02';
     }
-    let sus = false;
-    let cont = 0;
+    const sus = false;
+    const cont = 0;
 
     const noduplicados = this.removeDuplicates(array, 'id');
     console.log(noduplicados, semester);
@@ -650,8 +650,8 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     this.indproy.proyactivos = 0;
     const ano = new Date().toISOString().split('-');
 
-    let sus = false;
-    let cont = 0;
+    const sus = false;
+    const cont = 0;
 
     let personal = 0;
 
@@ -661,7 +661,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     for (let i = 0; i < noduplicados.length; i++) {
       const element = noduplicados[i];
       this.serviceMod3.buscaProyectos(element.id).then(proy => {
-        
+
         for (const key in proy.data().relatedPers) {
           if (proy.data().relatedPers.hasOwnProperty(key)) {
             personal++;
@@ -675,36 +675,36 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   }
 
   getDatosGraficoServicios(array) {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       const anio = new Date().toISOString();
       const ano = anio.split('-')[0];
-  
+
       this.yAxisLabel = 'Servicios Activos Año';
-  
+
       const servicios = [];
-  
+
       let cont = 1;
-  
+
       const arrayServicios = {
-        anio0:[],
-        anio1:[],
-        anio2:[],
-        anio3:[],
-        anio4:[]
+        anio0: [],
+        anio1: [],
+        anio2: [],
+        anio3: [],
+        anio4: []
       };
-     
+
       array.forEach(servicio => {
         this.serviceMod3.getServicio(servicio.id).then(datos => {
           const aux2 = parseInt(datos.data().createdAt.split('-')[0]);
           let actual = parseInt(ano);
           for (let i = 0; i < 5; i++) {
-            if(actual == aux2){
-              arrayServicios['anio'+i].push(servicio.id);
+            if (actual === aux2) {
+              arrayServicios['anio' + i].push(servicio.id);
             }
             actual--;
           }
-          
-          if(array.length == cont){
+
+          if (array.length === cont) {
             actual = parseInt(ano);
             servicios.push({
               'name' : new Date(anio.split('T')[0]),
@@ -712,128 +712,128 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             });
             for (let i = 1; i < 5; i++) {
               actual--;
-  
+
               servicios.push({
-                'name' : new Date(actual+'-12-31'),
-                'value': arrayServicios['anio'+i].length
+                'name' : new Date(actual + '-12-31'),
+                'value': arrayServicios['anio' + i].length
               });
-           
-             if(i == 4){
-             
-              resolve({data:servicios});
+
+             if (i === 4) {
+
+              resolve({data: servicios});
              }
-  
+
             }
-  
-          }else{
+
+          } else {
             cont++;
           }
-  
+
         });
       });
     });
- 
+
 
     return promise;
 
-   
+
   }
 
   getDatosGraficoServiciosPrestados(array) {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       const anio = new Date().toISOString();
       const ano = anio.split('-')[0];
 
       const servicios = [];
       const montos = [];
-  
+
       let cont = 1;
-  
+
       const arrayServicios = {
-        anio0:{1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[]},
-        anio1:{1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[]},
-        anio2:{1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[]},
-        anio3:{1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[]},
-        anio4:{1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[],10:[],11:[],12:[]}
+        anio0: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
+        anio1: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
+        anio2: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
+        anio3: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
+        anio4: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []}
       };
 
       const arrayMontos = {
-        anio0:0,
-        anio1:0,
-        anio2:0,
-        anio3:0,
-        anio4:0
+        anio0: 0,
+        anio1: 0,
+        anio2: 0,
+        anio3: 0,
+        anio4: 0
       };
-     
+
       array.forEach(servicio => {
         this.serviceMod3.getServicioPrestado(servicio.id).then(datos => {
           datos.forEach(sol => {
             const aux2 = parseInt(sol.data().updatedAt.split('-')[0]);
-            let auxmes = parseInt(sol.data().updatedAt.split('-')[1]);
+            const auxmes = parseInt(sol.data().updatedAt.split('-')[1]);
 
             let anioactual = parseInt(ano);
             for (let i = 0; i < 5; i++) {
-              if(anioactual == aux2){
-               
+              if (anioactual === aux2) {
+
                 for (let j = 12; j > 0; j--) {
-                  if(auxmes == j){
-                    arrayServicios['anio'+i][j].push(sol.id);
+                  if (auxmes === j) {
+                    arrayServicios['anio' + i][j].push(sol.id);
                   }
-                 
+
                 }
-                arrayMontos['anio'+i] += parseFloat(sol.data().cfPrice);
+                arrayMontos['anio' + i] += parseFloat(sol.data().cfPrice);
               }
-             
-              anioactual--;       
+
+              anioactual--;
             }
 
           });
-         
-                      
-          if(array.length == cont){
+
+
+          if (array.length === cont) {
             let anioactualaux = parseInt(ano);
 
             for (let i = 0; i < 5; i++) {
               anioactualaux--;
               for (let j = 12; j > 0; j--) {
-                let auxmes = ''+j;
-                if(j<10){auxmes = '0'+j;}
-                
+                let auxmes = '' + j;
+                if (j < 10) {auxmes = '0' + j; }
+
                 servicios.push({
-                  'name' : new Date(anioactualaux+'-'+auxmes+'-31'),
-                  'value': arrayServicios['anio'+i][j].length
+                  'name' : new Date(anioactualaux + '-' + auxmes + '-31'),
+                  'value': arrayServicios['anio' + i][j].length
                 });
-                
+
               }
 
               montos.push({
-                'name' : new Date(anioactualaux+'-12-31'),
-                'value': arrayMontos['anio'+i]
-              })
-  
-           
-             if(i == 4){
-             
-              resolve({data:servicios, monto:montos});
+                'name' : new Date(anioactualaux + '-12-31'),
+                'value': arrayMontos['anio' + i]
+              });
+
+
+             if (i === 4) {
+
+              resolve({data: servicios, monto: montos});
              }
-  
+
             }
-  
-          }else{
+
+          } else {
             cont++;
           }
-  
+
         });
       });
     });
- 
+
 
     return promise;
 
-   
+
   }
 
-  inicializarGraficoLineaServicios(array){
+  inicializarGraficoLineaServicios(array) {
     this.multiLine = [];
     this.servicios = array;
     this.yAxisLabel = 'Servicios';
@@ -849,7 +849,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             'series': datos2['data']
           }
         ];
-      })
+      });
 
     });
 
@@ -898,55 +898,55 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
-  estructuraSemestres(){
+  estructuraSemestres() {
     const anio = new Date().toISOString();
     const ano = anio.split('-')[0];
     const mes = anio.split('-')[1];
     let actual = parseInt(ano);
 
     const arraySeme = [];
-  
-      if(parseInt(mes) >= 6){
-       
+
+      if (parseInt(mes) >= 6) {
+
         for (let i = 0; i < 3; i++) {
-          if(i!=2){
-            arraySeme.push(actual+'-02');        
-            arraySeme.push(actual+'-01'); 
-          }else{
-            arraySeme.push(actual+'-02');  
+          if (i !== 2) {
+            arraySeme.push(actual + '-02');
+            arraySeme.push(actual + '-01');
+          } else {
+            arraySeme.push(actual + '-02');
           }
 
-            actual--;       
-    
+            actual--;
+
         }
-      }else{
+      } else {
         for (let i = 0; i < 3; i++) {
-          if(i==0){
-            arraySeme.push(actual+'-01'); 
-          }else{
-            arraySeme.push(actual+'-02');        
-            arraySeme.push(actual+'-01'); 
-          } 
-         
-          actual--;       
-    
+          if (i === 0) {
+            arraySeme.push(actual + '-01');
+          } else {
+            arraySeme.push(actual + '-02');
+            arraySeme.push(actual + '-01');
+          }
+
+          actual--;
+
         }
-       
-        
+
+
       }
 
       return arraySeme;
-     
+
   }
 
   getDatosGraficoPracticas(array) {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
 
       const practicas = [];
       const estudiantes = [];
-  
+
       let cont = 1;
-  
+
       const arrayPracticas = {};
       const arrayEstudiantes = {};
 
@@ -954,73 +954,73 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
       for (let i = 0; i < semestres.length; i++) {
         arrayPracticas[semestres[i]] = 0;
-        arrayEstudiantes[semestres[i]] = 0;           
+        arrayEstudiantes[semestres[i]] = 0;
       }
       console.log(array);
       array.forEach(practica => {
-      
-        this.serviceMod3.getPracticaProgramacion(practica.id).then(datos2 => {     
-          console.log(datos2);       
+
+        this.serviceMod3.getPracticaProgramacion(practica.id).then(datos2 => {
+          console.log(datos2);
             datos2.forEach(doc => {
               arrayPracticas[doc.data().semester]++;
               arrayEstudiantes[doc.data().semester] += parseInt(doc.data().noStudents);
 
-              if(array.length == cont){
+              if (array.length === cont) {
 
                 for (let i = 0; i < semestres.length; i++) {
                   const aux = semestres[i].split('-');
                   let aux2 = '';
-                  if(aux[1] == '01'){
-                    aux2 = '06'
-                  }else{
-                    aux2 = '12'
+                  if (aux[1] === '01') {
+                    aux2 = '06';
+                  } else {
+                    aux2 = '12';
                   }
-      
+
                   practicas.push({
-                    'name' : new Date(aux[0]+'-'+aux2+'-31'),
+                    'name' : new Date(aux[0] + '-' + aux2 + '-31'),
                     'value': arrayPracticas[semestres[i]]
                   });
-      
+
                   estudiantes.push({
-                    'name' : new Date(aux[0]+'-'+aux2+'-31'),
+                    'name' : new Date(aux[0] + '-' + aux2 + '-31'),
                     'value': arrayEstudiantes[semestres[i]]
                   });
 
-          
-                  if(i == 4){
+
+                  if (i === 4) {
                     console.log(practicas, estudiantes);
-                    resolve({data:practicas, estu:estudiantes});        
+                    resolve({data: practicas, estu: estudiantes});
                   }
-                 
+
                 }
-      
-              }else{
+
+              } else {
                 cont++;
               }
-            });  
-            
-          
+            });
+
+
         });
-        
-    
+
+
 
       });
     });
- 
+
 
     return promise;
 
-   
+
   }
 
   getDatosGraficoProyectos(array) {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
 
       const proyectos = [];
       const estudiantes = [];
-  
+
       let cont = 1;
-  
+
       const arrayProyectos = {};
       const arrayEstudiantes = {};
 
@@ -1028,64 +1028,64 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
       for (let i = 0; i < semestres.length; i++) {
         arrayProyectos[semestres[i]] = 0;
-        arrayEstudiantes[semestres[i]] = 0;           
+        arrayEstudiantes[semestres[i]] = 0;
       }
-  
+
       array.forEach(proyecto => {
 
-        this.serviceMod3.getProyecto(proyecto.id).then(doc => {            
+        this.serviceMod3.getProyecto(proyecto.id).then(doc => {
            let contador = 0;
-          
+
           for (const key in doc.data().relatedPers) {
             contador++;
           }
           arrayProyectos[doc.data().semester]++;
           arrayEstudiantes[doc.data().semester] += contador;
 
-          if(array.length == cont){
+          if (array.length === cont) {
 
             for (let i = 0; i < semestres.length; i++) {
               const aux = semestres[i].split('-');
               let aux2 = '';
-              if(aux[1] == '01'){
-                aux2 = '06'
-              }else{
-                aux2 = '12'
+              if (aux[1] === '01') {
+                aux2 = '06';
+              } else {
+                aux2 = '12';
               }
-  
+
               proyectos.push({
-                'name' : new Date(aux[0]+'-'+aux2+'-31'),
+                'name' : new Date(aux[0] + '-' + aux2 + '-31'),
                 'value': arrayProyectos[semestres[i]]
               });
-  
+
               estudiantes.push({
-                'name' : new Date(aux[0]+'-'+aux2+'-31'),
+                'name' : new Date(aux[0] + '-' + aux2 + '-31'),
                 'value': arrayEstudiantes[semestres[i]]
               });
-      
-              if(i == 4){
-                resolve({data:proyectos, estu:estudiantes});        
+
+              if (i === 4) {
+                resolve({data: proyectos, estu: estudiantes});
               }
-              
+
             }
-  
-          }else{
+
+          } else {
             cont++;
           }
-             
-            
-          
+
+
+
         });
-        
-    
+
+
 
       });
     });
- 
+
 
     return promise;
 
-   
+
   }
 
 
@@ -1094,93 +1094,93 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   inicializarGraficoBarra(data) {
     this.singleBar = [];
     this.arregloBarra = {
-      docencia:{ac:0, in:0},
-      extension:{ac:0, in:0},
-      investigacion:{ac:0, in:0},
-      docext:{ac:0, in:0},
-      docinv:{ac:0, in:0},
-      extinv:{ac:0, in:0},
-      doexin:{ac:0, in:0}
+      docencia: {ac: 0, in: 0},
+      extension: {ac: 0, in: 0},
+      investigacion: {ac: 0, in: 0},
+      docext: {ac: 0, in: 0},
+      docinv: {ac: 0, in: 0},
+      extinv: {ac: 0, in: 0},
+      doexin: {ac: 0, in: 0}
     };
     let cont  = 1;
     data.forEach(doc => {
       const axu = doc.facilActivity;
-      if((axu['teaching']) && !(axu['extension'] || axu['research'])){
-        if(doc.active){
+      if ((axu['teaching']) && !(axu['extension'] || axu['research'])) {
+        if (doc.active) {
           this.arregloBarra.docencia.ac++;
-        }else{
+        } else {
           this.arregloBarra.docencia.in++;
         }
-       
-      }else if((axu['extension']) && !(axu['teaching'] || axu['research'])){
-        if(doc.active){
+
+      } else if ((axu['extension']) && !(axu['teaching'] || axu['research'])) {
+        if (doc.active) {
           this.arregloBarra.extension.ac++;
-        }else{
+        } else {
           this.arregloBarra.extension.in++;
         }
-      }else if((axu['research']) && !(axu['extension'] || axu['teaching'])){
-        if(doc.active){
+      } else if ((axu['research']) && !(axu['extension'] || axu['teaching'])) {
+        if (doc.active) {
           this.arregloBarra.investigacion.ac++;
-        }else{
+        } else {
           this.arregloBarra.investigacion.in++;
         }
-      }else if((axu['teaching'] && (axu['extension']) && !axu['research'])){
-        if(doc.active){
+      } else if ((axu['teaching'] && (axu['extension']) && !axu['research'])) {
+        if (doc.active) {
           this.arregloBarra.docext.ac++;
-        }else{
+        } else {
           this.arregloBarra.docext.in++;
         }
-      }else if((axu['teaching'] && (axu['research']) && !axu['extension'])){
-        if(doc.active){
+      } else if ((axu['teaching'] && (axu['research']) && !axu['extension'])) {
+        if (doc.active) {
           this.arregloBarra.docinv.ac++;
-        }else{
+        } else {
           this.arregloBarra.docinv.in++;
         }
-      }else if((axu['research'] && (axu['extension']) && !axu['teaching'])){
-        if(doc.active){
+      } else if ((axu['research'] && (axu['extension']) && !axu['teaching'])) {
+        if (doc.active) {
           this.arregloBarra.extinv.ac++;
-        }else{
+        } else {
           this.arregloBarra.extinv.in++;
         }
-      }else if( axu['teaching'] && axu['extension'] && axu['research']){
-        if(doc.active){
+      } else if ( axu['teaching'] && axu['extension'] && axu['research']) {
+        if (doc.active) {
           this.arregloBarra.doexin.ac++;
-        }else{
+        } else {
           this.arregloBarra.doexin.in++;
         }
       }
 
 
-      if(data.length == cont){
+      if (data.length === cont) {
         this.singleBar = [
           {
             'name': 'Docencia',
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.docencia.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.docencia.in
             }]
           },
-    
+
           {
             'name': 'Extension',
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.extension.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.extension.in
             }]
           },
-    
+
           {
             'name': 'Investigacion',
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.investigacion.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.investigacion.in
             }]
@@ -1190,7 +1190,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.doexin.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.doexin.in
             }]
@@ -1200,7 +1200,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.docinv.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.docinv.in
             }]
@@ -1210,7 +1210,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.extinv.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.extinv.in
             }]
@@ -1220,7 +1220,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             'series': [{
               'name': 'Activas',
               'value': this.arregloBarra.docext.ac
-            },{
+            }, {
               'name': 'Inactivas',
               'value': this.arregloBarra.docext.in
             }]
@@ -1228,12 +1228,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         ];
 
         this.graficoBarras = true;
-      }else{
+      } else {
         cont++;
       }
     });
-  
-  
+
+
   }
 
   onSelectLabs(event) {
@@ -1296,7 +1296,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
 
-  buscaObjectos(){
+  buscaObjectos() {
     let texto = '';
     for (const clave in this.formCheckBox) {
 
@@ -1304,40 +1304,40 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       if (this.formCheckBox.hasOwnProperty(clave)) {
         const element = this.formCheckBox[clave].value;
 
-        if(element){
+        if (element) {
 
-          if(clave == 'universidad'){
+          if (clave === 'universidad') {
             texto += '<h3>Toda la universidad</h3>';
           } else {
             const array = this.listSelect[clave];
             let nombre = '';
-            if(clave == 'sede'){
+            if (clave === 'sede') {
               nombre = 'seccional';
-              texto += '<h3>'+nombre+'</h3>';
-            }else if(clave == 'subsede'){
+              texto += '<h3>' + nombre + '</h3>';
+            } else if (clave === 'subsede') {
               nombre = 'sede';
-              texto += '<h3>'+nombre+'</h3>';
-            }else{
-              texto += '<h3>'+clave+'</h3>';
+              texto += '<h3>' + nombre + '</h3>';
+            } else {
+              texto += '<h3>' + clave + '</h3>';
             }
-           
+
             const array2 = this.formSelect[clave].value;
-            texto += '<p>'
+            texto += '<p>';
             for (let i = 0; i < array2.length; i++) {
               let element = array2[i];
-              if((clave == 'departamento')||(clave == 'escuela')){
+              if ((clave === 'departamento') || (clave === 'escuela')) {
                 element = array2[i].id;
               }
-              const enc = array.find(o => o.id == element);
-              if(enc){
-                texto += enc.nombre +', ';
+              const enc = array.find(o => o.id === element);
+              if (enc) {
+                texto += enc.nombre + ', ';
               }
 
             }
 
             texto += '</p>';
 
-            
+
           }
 
 
@@ -1349,36 +1349,36 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
 
-   prueba(){
-    const f=new Date();
-    const cad=f.getHours()+":"+f.getMinutes()+":"+f.getSeconds(); 
+   prueba() {
+    const f = new Date();
+    const cad = f.getHours() + ':' + f.getMinutes() + ':' + f.getSeconds();
     const ambiente = this;
-    const scale = 'scale(0.85)'; 
+    const scale = 'scale(0.85)';
     const filtros = this.buscaObjectos();
     domtoimage.toPng(document.getElementById('grafica'))
     .then(function (dataUrl) {
-        var img = new Image();
+        const img = new Image();
         img.src = dataUrl;
-        
+
         const printWindow = window.open('', '', 'height=400,width=800');
         printWindow.document.write('<html><head><title>REPORTE</title>');
         printWindow.document.write('</head><body style="height:100%; width:100%;">');
-        printWindow.document.write('<strong> Hora de Generacion: '+cad+' </strong>');
+        printWindow.document.write('<strong> Hora de Generacion: ' + cad + ' </strong>');
         printWindow.document.body.appendChild(img);
-        printWindow.document.write('<br><strong> Correo del generador: : '+ambiente.persona.email+' </strong>');
+        printWindow.document.write('<br><strong> Correo del generador: : ' + ambiente.persona.email + ' </strong>');
         printWindow.document.write('<h1>FILTROS USADOS</h1>');
         printWindow.document.write(filtros);
         printWindow.document.write('</body></html>');
 
-        printWindow.document.head.style.transform = scale; 
-        printWindow.document.body.style.transform = scale;  
+        printWindow.document.head.style.transform = scale;
+        printWindow.document.body.style.transform = scale;
 
-        printWindow.document.close()
+        printWindow.document.close();
 
-        setTimeout(()=>{
+        setTimeout(() => {
           printWindow.print();
         }, 1000);
-        
+
 
     })
     .catch(function (error) {
@@ -1386,6 +1386,6 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     });
 
    }
-  
+
 
 }

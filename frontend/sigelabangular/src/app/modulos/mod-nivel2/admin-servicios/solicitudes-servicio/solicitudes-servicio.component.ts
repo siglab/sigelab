@@ -87,7 +87,7 @@ comentario = '';
 
   selectedFiles: FileList;
   currentUpload: Upload;
-  private basePath:string = '/archivos';
+  private basePath: string = '/archivos';
 
    rol:any;
    moduloNivel2 = false;
@@ -634,7 +634,7 @@ comentario = '';
         };
         if(estado == 'procesada'){
           const filespath = this.uploadMulti();
-          reserva['path'] = filespath;                        
+          reserva['path'] = filespath;
         } else if(estado == 'aceptada'){
           reserva['acceptedBy'] = this.user.email;
           reserva['dateAccepted'] = new Date().toISOString();

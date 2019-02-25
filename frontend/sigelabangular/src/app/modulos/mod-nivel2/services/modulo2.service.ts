@@ -442,33 +442,33 @@ export class Modulo2Service {
   }
 
 
-addTrazability(user, type, collection, iddoc, docAnt, docDes){
-  let promise = new Promise((resolve, reject) => {
-    publicIp.v4().then(ip => {
-      const logger = {
-        user:user,
-        type:type,
-        ip: ip,
-        relatedDoc: iddoc,
-        collectionName:collection,
-        currentVer: docDes,
-        previousVer:docAnt,
-        createdAt: new Date().toISOString()
-      };
+  addTrazability(user, type, collection, iddoc, docAnt, docDes){
+    let promise = new Promise((resolve, reject) => {
+      publicIp.v4().then(ip => {
+        const logger = {
+          user:user,
+          type:type,
+          ip: ip,
+          relatedDoc: iddoc,
+          collectionName:collection,
+          currentVer: docDes,
+          previousVer:docAnt,
+          createdAt: new Date().toISOString()
+        };
 
-     console.log(logger);
+      console.log(logger);
 
-     this.afs.collection('logger').add(logger).then(()=>{
-       resolve();
-     });
+      this.afs.collection('logger').add(logger).then(()=>{
+        resolve();
+      });
+      });
+
     });
 
-  });
-
-  return promise;
+    return promise;
 
 
-}
+  }
 
 
 
