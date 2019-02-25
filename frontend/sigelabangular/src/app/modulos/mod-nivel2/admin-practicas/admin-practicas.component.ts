@@ -5,14 +5,13 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import * as $AB from 'jquery';
 import 'fullcalendar';
-import 'fullcalendar-scheduler';
 import swal from 'sweetalert2';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { constrainPoint } from 'fullcalendar/src/util';
+
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { Modulo2Service } from '../services/modulo2.service';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 
@@ -24,6 +23,7 @@ declare var $: any;
 export class AdminPracticasComponent implements OnInit {
   events = [
   ];
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   year = new Date().getFullYear();
   id_prc;
@@ -97,6 +97,7 @@ export class AdminPracticasComponent implements OnInit {
 
   role: any;
   moduloNivel2 = false;
+  addPractica = false ;
 
   user = this.servicioMod2.getLocalStorageUser();
 
@@ -602,6 +603,8 @@ export class AdminPracticasComponent implements OnInit {
 
 
         this.servicioMod2.addPractica(practica).then(ok => {
+
+          this.alert.show();
           this.servicioMod2.Trazability(
             this.user.uid, 'create', 'practice', ok.id, practica
           ).then(()=>{
@@ -616,6 +619,8 @@ export class AdminPracticasComponent implements OnInit {
               this.servicioMod2.TrazabilitySubCollection(
                 this.user.uid, 'create', 'practice', ok.id, 'programmingData', doc.id, programming
               ).then(() => {
+
+                this.alert.hide();
                 swal({
                   type: 'success',
                   title: 'Almacenado correctamente',
@@ -682,7 +687,11 @@ export class AdminPracticasComponent implements OnInit {
       timeFormat: 'H(:mm)'
     });
 
-    containerEl.fullCalendar('gotoDate', horario[0].start  );
+     if (horario[0].start ) {
+
+       // containerEl.fullCalendar('gotoDate', horario[0].start  );
+     }
+
 
   }
   changeColor(value) {
@@ -743,18 +752,19 @@ export class AdminPracticasComponent implements OnInit {
     };
 
     this.servicioMod2.Trazability(
-      this.user.uid, 'update', 'practice', this.id_prc, practica
-    ).then(()=>{
-      this.servicioMod2.setPractica(this.id_prc, practica).then(ok => {
 
+      this.user.uid, 'update', 'practice', this.id_prc, practica
+    ).then(() => {
+      this.servicioMod2.setPractica(this.id_prc, practica).then(ok => {
+        this.alert.show();
       this.servicioMod2.TrazabilitySubCollection(
         this.user.uid, 'update', 'practice', this.id_prc, 'programmingData', this.id_pro, prog
-      ).then(()=>{
+      ).then(() => {
         this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog);
 
 
         this.cerrarModal('myModal3');
-
+        this.alert.hide();
           swal({
             type: 'success',
             title: 'Actualizado Correctamente',
@@ -768,7 +778,14 @@ export class AdminPracticasComponent implements OnInit {
   }
 
   down() {
-    $AB('html, body').animate({ scrollTop: '600px' }, 'slow');
+
+    this.addPractica = true;
+
+
+    setTimeout(() => {
+      document.getElementById('addpractica').scrollIntoView({block: 'end', behavior: 'smooth'});
+
+    }, 100);
   }
 
   cerrarModal(modal) {

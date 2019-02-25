@@ -63,6 +63,8 @@ import { BarSolicitudesNivel3Component } from './shared/components/dashboard/lef
 // tslint:disable-next-line:max-line-length
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule } from '@angular/material';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCardModule} from '@angular/material/card';
+
 
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
@@ -167,6 +169,7 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     MatTableModule,
     MatButtonModule,
     MatInputModule,
+    MatCardModule,
     MatDatepickerModule,
     MatPaginatorModule,
     MatSlideToggleModule,

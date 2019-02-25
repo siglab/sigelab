@@ -3,13 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { AngularFirestore } from 'angularfire2/firestore';
 import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { Modulo2Service } from '../services/modulo2.service';
-import { ok } from 'assert';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 @Component({
@@ -18,6 +17,8 @@ declare var $: any;
   styleUrls: ['./admin-proyectos.component.css']
 })
 export class AdminProyectosComponent implements OnInit, OnDestroy {
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
+
   itemsel: Observable<Array<any>>;
   button = true;
   fecha = new Date();
@@ -209,7 +210,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect, 
+      this.rolesAgregados.push({id:this.rolSelect,
         nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
     }
 
@@ -223,7 +224,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     this.rolesAgregados = [];
     for (const key in item[this.id_lab]  ) {
       if (item[this.id_lab].hasOwnProperty(key)) {
-        this.rolesAgregados.push({ id: key, 
+        this.rolesAgregados.push({ id: key,
           nombre: this.niveles.find(o => o.id == key).nombre});
       }
     }
@@ -466,20 +467,24 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
 
       this.servicioMod2.addProyecto(proyect).then((ok) => {
+
+        this.alert.show();
         this.servicioMod2.Trazability(
           this.user.uid, 'create', 'project', ok.id, proyect
-        ).then(()=>{
+        ).then(() => {
           const lab = { relatedProjects: {} };
           lab.relatedProjects[ok.id] = true;
 
           this.servicioMod2.Trazability(
             this.user.uid, 'update', 'cfFacil', this.id_lab, lab
-          ).then(()=>{
+          ).then(() => {
             this.servicioMod2.setDocLaboratorio(this.id_lab, lab);
+            this.alert.hide();
 
             swal({
               type: 'success',
-              title: 'Usuario ya vinculado',
+              title: ' ¡Éxito!',
+              text: 'Datos almacenados con éxito!',
               showConfirmButton: true
             });
           });
@@ -514,10 +519,14 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'project', this.id_proj, proyect
-    ).then(()=>{
+    ).then( () => {
+      this.alert.show();
 
       this.servicioMod2.setProyecto(this.id_proj, proyect)
         .then(() => {
+
+          this.alert.hide();
+
           swal({
             type: 'success',
             title: 'Actualizado correctamente',

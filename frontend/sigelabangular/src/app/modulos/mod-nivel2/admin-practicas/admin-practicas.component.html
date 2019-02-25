@@ -182,17 +182,12 @@
         </div>
       </div>
       <!-- prueba de stepp -->
-      <div *ngIf="moduloNivel2" class="col-md-12" style="margin-top:20px;">
-        <div class="box box-danger">
-          <div class="box-header">
-            <i class="fa fa-plus"></i>
+      <div *ngIf="moduloNivel2 && addPractica"  id="addpractica" class="col-md-12" style="margin-top:20px;">
+        <mat-card>
 
-            <h3 class="box-title">Agregar Nueva Práctica</h3>
-          </div>
-
-
+            <mat-card-title> <h3 class="text-center">Agregar nueva práctica</h3> 	</mat-card-title>
           <!-- /.box-header -->
-          <div class="box-body">
+        <mat-card-content>
             <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
               <mat-step>
                 <form>
@@ -228,7 +223,7 @@
 
 
                   <div>
-                    <button mat-button matStepperNext (click)="initCalendar(this.events)" class="btn btn-success">siguiente
+                    <button mat-button matStepperNext (click)="initCalendar(event)" class="materialbtn">siguiente
                       <i class="fa fa-arrow-right"></i> </button>
                   </div>
                 </form>
@@ -251,15 +246,15 @@
                     <!-- /.box-header -->
 
                     <div class="box-body no-padding">
-                      <div class="cal" id="cal"> </div>
+                      <div  id="cal"> </div>
                     </div>
 
                   </div>
                 </div>
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious>
+                  <button class="materialbtn" mat-button matStepperPrevious>
                     <i class="fa fa-arrow-left"></i> Anterior</button>
-                  <button class="btn btn-success" mat-button matStepperNext>Siguiente
+                  <button class="materialbtn" mat-button matStepperNext>Siguiente
                     <i class="fa fa-arrow-right"></i>
                   </button>
                 </div>
@@ -314,9 +309,11 @@
                 </div>
 
                 <div>
-                  <button class="btn btn-success" mat-button matStepperPrevious>
+                  <button class="materialbtn" mat-button matStepperPrevious>
                     <i class="fa fa-arrow-left"></i> Anterior</button>
-                  <button (click)="addPractice( stepper )" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
+                  <button (click)="addPractice( stepper )" class="materialbtn" mat-button matStepperNext>Guardar <i class="fa fa-check" aria-hidden="true"></i>
+
+                  </button>
                 </div>
               </mat-step>
 
@@ -374,8 +371,9 @@
             </mat-horizontal-stepper>
 
 
-          </div>
-        </div>
+          </mat-card-content>
+        </mat-card>
+
       </div>
       <!-- prueba de stepp -->
     </div>
@@ -857,3 +855,4 @@
 
   </div>
 </div>
+<app-spinner></app-spinner>
