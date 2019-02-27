@@ -217,6 +217,71 @@ const mailTrasport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPa
 
 // });
 
+
+
+const createUser = (req, res) => {
+
+  const fecha = new Date();
+  const usr = {
+  cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+  active:  true,
+  cfPers: '',
+  appRoles: {
+  npKRYaA0u9l4C43YSruA : true
+   },
+  createdAt: fecha.toISOString(),
+  email: req.email,
+   };
+
+   console.log('datos auth', req);
+   return ref.collection("cfPers").where("email", "==", req.email)
+    .get()
+    .then((querySnapshot) => {
+      // si la consulta retorna vacia se crea el usuario sin una persona asignada
+       if (querySnapshot.empty) {
+
+        return ref.doc(`/user/${req.uid}`).set(usr)
+         .then(() => {
+
+          console.log('se creo un nuevo usuario');
+          return res.status(200).send({ msj: "exito creando el usuario."});
+
+        }).catch(err => console.log('ocurrio un error al crear el nuevo usuario', err));
+
+       // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
+
+      } else {
+
+      const persona = querySnapshot.docs[0].data();
+       // asigna la persona al usario
+       usr.cfPers = querySnapshot.docs[0].id;
+
+       // asigna los roles almacenados en la persona al nodo usuario
+        if(persona.nouser){
+          usr.appRoles = persona.appRoles;
+       }
+      return  ref.doc(`cfPers/${usr.cfPers}`).set({user: req.uid}, { merge: true })
+        .then(() => {
+
+           console.log('se asocio correctamente el usuario');
+           return ref.doc(`/user/${event.uid}`).set(usr)
+             .then(() =>{ console.log('se asocio correctamente la persona');
+
+               return res.status(200).send({ msj: "exito creando el usuario"});
+
+            }).catch(err => console.log('no se pudo asociar correctamente la persona', err));
+
+         }).catch(err => console.log('no se pudo asociar correctamente el usuario', err));
+
+
+      }
+     }).catch(err => console.log('fallo la consulta', err));
+};
+
+
+
+
+
 let sendMail = (req, res) => {
 
   var mailsolicitante = {
@@ -262,20 +327,8 @@ let sendMail = (req, res) => {
 
 exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
-  //res.send('Inicia enviarCorreo');
-
-  //res.status(200).send('Para: ' + req.body.para + ' Asunto: ' + req.body.asunto + ' Mensaje: ' + req.body.mensaje);
-
-  // Enable CORS using the `cors` express middleware.
-
   cors(req, res, () => {
-
-
-
     sendMail(req.body, res);
-
-
-
   });
 
 });
@@ -283,21 +336,22 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
 
 exports.disabledUser = functions.https.onRequest((req, res) => {
-
-
   cors(req, res, () => {
-
-
-
     userDisabled(req.body, res);
-
-
 
   });
 
 });
 
 
+exports.createUser = functions.https.onRequest((req, res) => {
+
+  cors(req, res, () => {
+    createUser(req.body, res);
+
+  });
+
+});
 
 
 

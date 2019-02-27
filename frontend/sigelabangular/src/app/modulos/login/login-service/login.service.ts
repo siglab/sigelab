@@ -11,6 +11,8 @@ import { Http, Response } from '@angular/http';
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
 import { URLDISABLED, ROLESARRAY } from '../../../config';
+import { URLUSER } from '../../../config';
+
 
 @Injectable()
 export class LoginService {
@@ -18,7 +20,7 @@ export class LoginService {
   urlDisabled = URLDISABLED;
   usersid = [];
   contExec = 0;
-
+  URL = URLUSER;
   constructor(public afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private ruta: Router,
@@ -37,19 +39,23 @@ export class LoginService {
 
           console.log('entro a login');
           console.log(response.additionalUserInfo.isNewUser);
-          if (response.additionalUserInfo.isNewUser) {
 
+
+          if (response.additionalUserInfo.isNewUser) {
             console.log('usuario nuevo');
 
-            this.getPersonforId(  response.user.uid, response.user.email).then(() => {
+            this.postUserBackend(  response.user.uid, response.user.email).subscribe(( res ) => {
 
-              this.consultarTipoUsuario(response.user.uid).then(() => {
-                this.usuario = response.user;
-                localStorage.setItem('usuario', JSON.stringify(this.usuario));
-                console.log('termino consultar el tipo de usuario');
-                resolve();
+              if ( res.status === 200) {
 
-            });
+                this.consultarTipoUsuario(response.user.uid).then(() => {
+                  this.usuario = response.user;
+                  localStorage.setItem('usuario', JSON.stringify(this.usuario));
+                  console.log('termino consultar el tipo de usuario');
+                  resolve();
+
+              });
+              }
 
 
             });
@@ -469,6 +475,17 @@ export class LoginService {
     });
 
 
+  }
+
+
+  postUserBackend(email: string, uid: string) {
+
+    const peticion = {
+      email,
+      uid
+    };
+
+    return  this.http.post(this.URL, peticion);
   }
 
 }
