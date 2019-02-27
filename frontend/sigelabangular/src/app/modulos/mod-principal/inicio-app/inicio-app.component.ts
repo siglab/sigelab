@@ -5,37 +5,31 @@ import * as AOS from 'aos';
 @Component({
   selector: 'app-inicio-app',
   templateUrl: './inicio-app.component.html',
-  styleUrls: ['./inicio-app.component.css'],
+  styleUrls: ['./inicio-app.component.css']
 })
 export class InicioAppComponent implements OnInit {
-
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
   }
 
+  goContactSec(): void {
+    $('html, body').animate(
+      {
+        scrollTop: $('#contactInfoSec').offset().top - $('#topDiv').height() + 5
+      },
+      1000
+    );
+  }
 
-    down() {
+  goAboutSec() {
+    $('html, body').animate(
+      {
+        scrollTop: $('#aboutSec').offset().top - $('#topDiv').height() + 5
+      },
+      1000
+    );
+  }
 
-      const alto = $(window).height() + 350;
-       console.log(alto);
-
-      $('html, body').animate({ scrollTop: alto }, 'slow');
-
-
-    }
-
-
-
-    downAcerca() {
-      const alto = $(window).height() + 350;
-      const mitad = alto / 2;
-      $('html, body').animate({ scrollTop: mitad }, 'slow');
-
-    }
-    prueba() {
-      console.log('botón');
-    }
 }

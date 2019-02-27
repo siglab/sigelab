@@ -147,7 +147,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-
+  background-color: #D51B23;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;;
@@ -159,6 +159,8 @@ iframe {
   background: #fff;
   border-radius: 10px;
   position: relative;
+  margin: 1.5rem;
+  background-color: #D51B23;
 }
 
 
@@ -167,6 +169,15 @@ iframe {
 
 .login100-form {
   width: 100%;
+  padding: 15px;
+  box-shadow: 0px 0px 19px #82847c;
+  background-color:white;
+  border-radius: 10px;
+}
+
+.login100-form div > a {
+  opacity: 0.8;
+  color: #666666;
 }
 
 .login100-form-title {
@@ -176,12 +187,14 @@ iframe {
   line-height: 1.2;
   text-transform: uppercase;
   text-align: center;
-
   width: 100%;
   display: block;
 }
 
-
+.login100-form-logo {
+  width: 100%;
+  height: 100%;
+}
 
 /*------------------------------------------------------------------
 [ Input ]*/
@@ -272,7 +285,6 @@ iframe {
   font-size: 16px;
   color: #999999;
   line-height: 1.2;
-
   display: block;
   position: relative;
   padding-left: 26px;
@@ -284,7 +296,6 @@ iframe {
   font-family: FontAwesome;
   font-size: 13px;
   color: transparent;
-
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -297,7 +308,7 @@ iframe {
   height: 18px;
   border-radius: 3px;
   background: #fff;
-  border: 2px solid #827ffe;
+  border: 2px solid #999999;
   left: 0;
   top: 50%;
   -webkit-transform: translateY(-50%);
@@ -308,9 +319,9 @@ iframe {
 }
 
 .input-checkbox100:checked + .label-checkbox100::before {
-  color: #827ffe;
+  color: #f10d0d;
+  opacity: 0.8;
 }
-
 
 /*------------------------------------------------------------------
 [ Button ]*/
@@ -330,7 +341,6 @@ iframe {
   color: #fff;
   line-height: 1.2;
   text-transform: uppercase;
-
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -343,7 +353,6 @@ iframe {
   height: 42px;
   background-color: #f10d0d;;
   border-radius: 3px;
-
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -351,7 +360,7 @@ iframe {
 }
 
 .login100-form-btn:hover {
-  background-color: #403866;
+  background-color: #58595B;
 }
 
 

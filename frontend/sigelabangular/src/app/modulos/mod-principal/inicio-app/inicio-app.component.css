@@ -88,6 +88,10 @@
   max-width:100%;
 }
 
+#topDiv .navbar {
+  margin-bottom: 0;
+}
+
 #uvTopbar {
   /*max-height:55px;*/
   width:100%;
@@ -118,6 +122,11 @@
   border-radius:15px;
   background-color:#D51B23;
   font-size: 14px;
+}
+
+.homeBtn  a {
+  color: white;
+  text-decoration: none;
 }
 
 .btn.focus, .btn:focus {
@@ -158,6 +167,12 @@ ul li {
 .uvLink {
   margin:2px;
   font-size:13px;
+}
+
+#navcol-1 .nav-item,
+#navcol-1 .nav-item .nav-link {
+  background-color: white;
+  cursor: pointer;
 }
 
 @media (max-width: 599px) {
