@@ -12,6 +12,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Modulo2Service } from '../services/modulo2.service';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 declare var $: any;
 @Component({
   selector: 'app-admin-personal',
@@ -19,6 +20,8 @@ declare var $: any;
   styleUrls: ['./admin-personal.component.css']
 })
 export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
+
   rolc = '';
   rolSelect;
   itemsel: Observable<Array<any>>;
@@ -465,11 +468,15 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     ).then(() => {
       this.servicioMod2.updatePersona(this.idp, pers).then(
         () => {
+          this.alert.show();
 
         this.servicioMod2.Trazability(
           this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
         ).then(() => {
          this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
+
+         this.alert.hide();
+
           swal({
             type: 'success',
             title: 'Usuario actualizado correctamente',
@@ -499,15 +506,20 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       const pers = this.person;
       pers.cfFacil[this.idlab] = true;
 
+
       this.servicioMod2.getUserForEmail(pers.email).then((snapShot) => {
+
         if (snapShot.empty) {
+          this.alert.show();
 
           this.servicioMod2.addPersona(pers)
             .then(ok => {
+
               this.servicioMod2.Trazability(
                 this.user.uid, 'create', 'cfPers', ok.id, pers
               ).then(()=>{
                 this.updateFaciliti(ok.id);
+                this.alert.hide();
 
                 swal({
                   type: 'success',
@@ -526,9 +538,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           this.servicioMod2.addPersona(pers)
             .then(ok => {
+              this.alert.show();
 
               this.updateFaciliti(ok.id);
               this.updatedUser(pers.user, ok.id);
+              this.alert.hide();
+
               swal({
                 type: 'success',
                 title: 'Persona creada correctamente',
@@ -565,7 +580,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     console.log(newUser);
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfFacil', path, newUser
-    ).then(()=>{
+    ).then(() => {
       this.servicioMod2.setUser(path, newUser);
     });
 
@@ -626,6 +641,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   addLabPers(id: string) {
+    this.alert.show();
 
     if (id) {
       const lab = {
@@ -637,9 +653,11 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
       this.servicioMod2.Trazability(
         this.user.uid, 'update', 'cfFacil', this.idlab, lab
-      ).then(()=>{
+      ).then(() => {
+
         this.servicioMod2.setDocLaboratorio(this.idlab, lab)
         .then(() => {
+          this.alert.hide();
 
           this.clearValues();
           $('#modal1').modal('hide');
