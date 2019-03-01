@@ -11,6 +11,8 @@ import { Http, Response } from '@angular/http';
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
 import { URLDISABLED, ROLESARRAY } from '../../../config';
+import { URLUSER } from '../../../config';
+
 
 @Injectable()
 export class LoginService {
@@ -18,7 +20,7 @@ export class LoginService {
   urlDisabled = URLDISABLED;
   usersid = [];
   contExec = 0;
-
+  URL = URLUSER;
   constructor(public afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private ruta: Router,
@@ -32,31 +34,48 @@ export class LoginService {
 
   login() {
     const promise = new Promise((resolve, reject) => {
-      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(
-        response => {
+      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(response => {
 
           console.log('entro a login');
+          console.log(response.additionalUserInfo.isNewUser);
 
 
+          if (response.additionalUserInfo.isNewUser) {
+            console.log('usuario nuevo');
 
-          this.consultarTipoUsuario(response.user.uid).then(() => {
-            this.usuario = response.user;
-            localStorage.setItem('usuario', JSON.stringify(this.usuario));
-            console.log('termino consultar el tipo de usuario');
-            resolve();
+            this.postUserBackend(  response.user.uid, response.user.email).subscribe(( res ) => {
 
-          }).catch( err => {
+              if ( res.status === 200) {
 
-            console.log(err);
-            reject();
-          });
+                this.consultarTipoUsuario(response.user.uid).then(() => {
+                  this.usuario = response.user;
+                  localStorage.setItem('usuario', JSON.stringify(this.usuario));
+                  console.log('termino consultar el tipo de usuario');
+                  resolve();
+
+              });
+              }
 
 
-        }).catch(error => {
-          // alerta en caso de error
-         reject();
-          console.log(error);
-        });
+            });
+
+          } else {
+            console.log('usuario antiguo');
+
+            this.consultarTipoUsuario(response.user.uid).then(() => {
+             this.usuario = response.user;
+             localStorage.setItem('usuario', JSON.stringify(this.usuario));
+             console.log('termino consultar el tipo de usuario');
+             resolve();
+
+         });
+
+
+        }
+
+
+        }).catch(error => console.log(error));
     });
 
     return promise;
@@ -398,6 +417,75 @@ export class LoginService {
 
   handleErrorObservable(error: Response | any) {
     return Observable.throw(error.message || error);
+  }
+
+
+
+  getPersonforId(iduser: string, email: string) {
+    const fecha = new Date();
+    const usr = {
+      cfOrgId: 'i9dzCErPCO4n9WUfjxR9',
+      active:  true,
+      cfPers: '',
+      appRoles: {
+        npKRYaA0u9l4C43YSruA : true
+      },
+      createdAt: fecha.toISOString(),
+      email: email ,
+    };
+
+    console.log(email);
+
+    return new Promise((resolve, reject) => {
+
+      this.afs.collection('cfPers').ref.where('email', '==', email)
+           .get()
+           .then(respers => {
+
+            if (respers.empty) {
+
+              console.log('no tiene una persona asociada');
+
+              this.afs.doc('user/' + iduser).set(usr).then( () =>  {  console.log('usuario creado'); resolve(); });
+
+
+
+            } else {
+              console.log('tiene una persona asociada');
+
+              // asigna el id de la persona al usuario
+              usr.cfPers = respers.docs[0].id;
+              this.afs.doc('user/' + iduser).set(usr).then( () => {
+                console.log('usuario creado');
+
+                this.afs.doc('cfPers/' + usr.cfPers).set({ user: iduser}, { merge: true})
+                .then( () => {
+                  console.log('persona asociada');
+                  resolve();
+
+                });
+
+              });
+              // asigna el id del usuario a la persona
+
+            }
+
+          });
+
+    });
+
+
+  }
+
+
+  postUserBackend(email: string, uid: string) {
+
+    const peticion = {
+      email,
+      uid
+    };
+
+    return  this.http.post(this.URL, peticion);
   }
 
 }

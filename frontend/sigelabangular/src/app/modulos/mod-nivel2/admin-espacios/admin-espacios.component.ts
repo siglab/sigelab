@@ -18,6 +18,7 @@ import { SpinnerComponent } from '../../../shared/components/spinner/spinner.com
 import { Router } from '@angular/router';
 declare var $: any;
 
+
 @Component({
   selector: 'app-admin-espacios',
   templateUrl: './admin-espacios.component.html',
@@ -396,7 +397,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
       }) .then( val => {
          if (val.value) {
-          $('#modalespace').modal('hide');
+
+
            this.alert.show();
            console.log('acepto guardar');
           const nuevoespacio = this.space;
@@ -462,6 +464,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'space', this.idsp, nuevoespacio).then(()=>{
         this.servicioMod2.setEspacio(this.idsp, nuevoespacio).then(() => {
+          this.alert.show();
 
           // actualiza el estado del espacio dentro del laboratorio
           this.servicioMod2.Trazability(
@@ -471,6 +474,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
 
 
+            this.alert.hide();
 
             swal({
               type: 'success',

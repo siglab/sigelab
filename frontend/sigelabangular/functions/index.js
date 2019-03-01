@@ -21,111 +21,111 @@ ref.settings({ timestampsInSnapshots: true });
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-exports.helloWorld = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
+// exports.helloWorld = functions.https.onRequest((req, res) => {
+//   cors(req, res, () => {
 
-    // verifica si el usuario existe como persona
-    ref.collection("cfPers").where("email", "==", req.email)
-      .get()
-      .then((querySnapshot) => {
+//     // verifica si el usuario existe como persona
+//     ref.collection("cfPers").where("email", "==", req.email)
+//       .get()
+//       .then((querySnapshot) => {
 
-        if (querySnapshot.empty) {
+//         if (querySnapshot.empty) {
 
-          const fecha = new Date();
-          const role = 'npKRYaA0u9l4C43YSruA';
+//           const fecha = new Date();
+//           const role = 'npKRYaA0u9l4C43YSruA';
 
-          const usr = {
-            cfOrgId: "i9dzCErPCO4n9WUfjxR9",
-            cfPers: '',
-            appRoles: {},
-            createdAt: fecha.toISOString(),
-            email: req.email,
-            active: true
-          };
+//           const usr = {
+//             cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+//             cfPers: '',
+//             appRoles: {},
+//             createdAt: fecha.toISOString(),
+//             email: req.email,
+//             active: true
+//           };
 
-          usr.appRoles[role] = true;
+//           usr.appRoles[role] = true;
 
-          ref.doc(`/user/${event.uid}`).set(usr)
-            .then(() => {
+//           ref.doc(`/user/${event.uid}`).set(usr)
+//             .then(() => {
 
-              console.log('se creo un nuevo usuario');
+//               console.log('se creo un nuevo usuario');
 
-              res.status(200).send({
-                response: 'Usuario creado con exito!'
-              });
+//               res.status(200).send({
+//                 response: 'Usuario creado con exito!'
+//               });
 
-            })
-            .catch(err => {
+//             })
+//             .catch(err => {
 
-              res.status(500).send({
-                response: 'ocurrio un error al crear el nuevo usuario'
-              });
-              console.log('ocurrio un error al crear el nuevo usuario', err)
+//               res.status(500).send({
+//                 response: 'ocurrio un error al crear el nuevo usuario'
+//               });
+//               console.log('ocurrio un error al crear el nuevo usuario', err)
 
-            });
+//             });
 
-          // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
+//           // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
 
-        } else {
+//         } else {
 
-          const personas = [];
-          let role;
-          const fecha = new Date();
+//           const personas = [];
+//           let role;
+//           const fecha = new Date();
 
-          querySnapshot.forEach(doc => {
+//           querySnapshot.forEach(doc => {
 
-            personas.push(doc.id);
+//             personas.push(doc.id);
 
-          });
+//           });
 
-          const persona = personas[0];
+//           const persona = personas[0];
 
-          const usr = {
-            cfOrgId: "i9dzCErPCO4n9WUfjxR9",
-            cfPers: persona,
-            appRoles: {
-              npKRYaA0u9l4C43YSruA : true
-            },
-            createdAt: fecha.toISOString(),
-            email: event.email,
-            active: true
+//           const usr = {
+//             cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+//             cfPers: persona,
+//             appRoles: {
+//               npKRYaA0u9l4C43YSruA : true
+//             },
+//             createdAt: fecha.toISOString(),
+//             email: event.email,
+//             active: true
 
-          };
-
-
-
-          const pers = {
-            user: event.uid,
-
-          };
-
-          ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
-            merge: true
-          })
-            .then(() => {
-              console.log('se asocio correctamente el usuario')
-              res.status(200).send({
-                response: 'Se asocio correctamente el usuario!'
-              });
-            })
-            .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
-
-          return ref.doc(`/user/${event.uid}`).set(usr)
-            .then(() => console.log('se asocio correctamente la persona'))
-            .catch(err => console.log('no se pudo asociar correctamente la persona', err));
-
-
-        }
-
-      });
+//           };
 
 
 
+//           const pers = {
+//             user: event.uid,
 
-    res.status(200).send(req.body);
+//           };
 
-  });
-});
+//           ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
+//             merge: true
+//           })
+//             .then(() => {
+//               console.log('se asocio correctamente el usuario')
+//               res.status(200).send({
+//                 response: 'Se asocio correctamente el usuario!'
+//               });
+//             })
+//             .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
+
+//           return ref.doc(`/user/${event.uid}`).set(usr)
+//             .then(() => console.log('se asocio correctamente la persona'))
+//             .catch(err => console.log('no se pudo asociar correctamente la persona', err));
+
+
+//         }
+
+//       });
+
+
+
+
+//     res.status(200).send(req.body);
+
+//   });
+// });
 
 
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
@@ -134,88 +134,153 @@ const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const mailTrasport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
 
 
-exports.CreateUser = functions.auth.user().onCreate(event => {
+// exports.CreateUser = functions.auth.user().onCreate(event => {
+
+//   console.log('evento de auth', event);
+//   return ref.collection("cfPers").where("email", "==", event.email)
+//     .get()
+//     .then((querySnapshot) => {
+//       // si la consulta retorna vacia se crea el usuario sin una persona asignada
+//       if (querySnapshot.empty) {
+
+//         const fecha = new Date();
 
 
-  return ref.collection("cfPers").where("email", "==", event.email)
+//         const usr = {
+//           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+//           active:  true,
+//           cfPers: '',
+//           appRoles: {
+//             npKRYaA0u9l4C43YSruA : true
+//           },
+//           createdAt: fecha.toISOString(),
+//           email: event.email,
+//           active:true
+//         };
+
+
+//         return ref.doc(`/user/${event.uid}`).set(usr)
+//           .then(() => console.log('se creo un nuevo usuario'))
+//           .catch(err => console.log('ocurrio un error al crear el nuevo usuario', err));
+
+//         // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
+
+//       } else {
+
+//         let persona;
+//         let role;
+//         const fecha = new Date();
+//         let personaid = '';
+
+//         querySnapshot.forEach(doc => {
+
+//           persona = doc.data();
+//           personaid = doc.id;
+
+//         });
+
+
+//         const usr = {
+//           cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+//           cfPers: personaid,
+//           appRoles: {
+//             npKRYaA0u9l4C43YSruA : true
+//           },
+//           createdAt: fecha.toISOString(),
+//           email: event.email,
+//           active:true
+//         };
+
+//         // para el nivel 3 es necesario pasar el campo tipo string a un objeto
+
+//         const pers = {
+//           user: event.uid
+//         };
+
+
+//         if(persona.nouser){
+//           usr.appRoles = persona.appRoles;
+//         }
+
+//         ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
+//           merge: true
+//         })
+//           .then(() => console.log('se asocio correctamente el usuario'))
+//           .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
+
+//         return ref.doc(`/user/${event.uid}`).set(usr)
+//           .then(() => console.log('se asocio correctamente la persona'))
+//           .catch(err => console.log('no se pudo asociar correctamente la persona', err));
+
+//       }
+//     }).catch(err => console.log('fallo la consulta', err));
+
+// });
+
+
+
+const createUser = (req, res) => {
+
+  const fecha = new Date();
+  const usr = {
+  cfOrgId: "i9dzCErPCO4n9WUfjxR9",
+  active:  true,
+  cfPers: '',
+  appRoles: {
+  npKRYaA0u9l4C43YSruA : true
+   },
+  createdAt: fecha.toISOString(),
+  email: req.email,
+   };
+
+   console.log('datos auth', req);
+   return ref.collection("cfPers").where("email", "==", req.email)
     .get()
     .then((querySnapshot) => {
       // si la consulta retorna vacia se crea el usuario sin una persona asignada
-      if (querySnapshot.empty) {
+       if (querySnapshot.empty) {
 
-        const fecha = new Date();
+        return ref.doc(`/user/${req.uid}`).set(usr)
+         .then(() => {
 
+          console.log('se creo un nuevo usuario');
+          return res.status(200).send({ msj: "exito creando el usuario."});
 
-        const usr = {
-          cfOrgId: "i9dzCErPCO4n9WUfjxR9",
-          active:  true,
-          cfPers: '',
-          appRoles: {
-            npKRYaA0u9l4C43YSruA : true
-          },
-          createdAt: fecha.toISOString(),
-          email: event.email,
-          active:true
-        };
+        }).catch(err => console.log('ocurrio un error al crear el nuevo usuario', err));
 
-
-        return ref.doc(`/user/${event.uid}`).set(usr)
-          .then(() => console.log('se creo un nuevo usuario'))
-          .catch(err => console.log('ocurrio un error al crear el nuevo usuario', err));
-
-        // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
+       // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
 
       } else {
 
-        let persona;
-        let role;
-        const fecha = new Date();
-        let personaid = '';
+      const persona = querySnapshot.docs[0].data();
+       // asigna la persona al usario
+       usr.cfPers = querySnapshot.docs[0].id;
 
-        querySnapshot.forEach(doc => {
-
-          persona = doc.data();
-          personaid = doc.id;
-
-        });
-
-
-        const usr = {
-          cfOrgId: "i9dzCErPCO4n9WUfjxR9",
-          cfPers: personaid,
-          appRoles: {
-            npKRYaA0u9l4C43YSruA : true
-          },
-          createdAt: fecha.toISOString(),
-          email: event.email,
-          active:true
-        };
-
-        // para el nivel 3 es necesario pasar el campo tipo string a un objeto
-
-        const pers = {
-          user: event.uid
-        };
-
-
+       // asigna los roles almacenados en la persona al nodo usuario
         if(persona.nouser){
           usr.appRoles = persona.appRoles;
-        }
+       }
+      return  ref.doc(`cfPers/${usr.cfPers}`).set({user: req.uid}, { merge: true })
+        .then(() => {
 
-        ref.doc(`cfPers/${usr.cfPers}`).set(pers, {
-          merge: true
-        })
-          .then(() => console.log('se asocio correctamente el usuario'))
-          .catch(err => console.log('no se pudo asociar correctamente el usuario', err));
+           console.log('se asocio correctamente el usuario');
+           return ref.doc(`/user/${event.uid}`).set(usr)
+             .then(() =>{ console.log('se asocio correctamente la persona');
 
-        return ref.doc(`/user/${event.uid}`).set(usr)
-          .then(() => console.log('se asocio correctamente la persona'))
-          .catch(err => console.log('no se pudo asociar correctamente la persona', err));
+               return res.status(200).send({ msj: "exito creando el usuario"});
+
+            }).catch(err => console.log('no se pudo asociar correctamente la persona', err));
+
+         }).catch(err => console.log('no se pudo asociar correctamente el usuario', err));
+
 
       }
-    }).catch(err => console.log('fallo la consulta', err));
+     }).catch(err => console.log('fallo la consulta', err));
+};
 
-});
+
+
+
 
 let sendMail = (req, res) => {
 
@@ -262,20 +327,8 @@ let sendMail = (req, res) => {
 
 exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
-  //res.send('Inicia enviarCorreo');
-
-  //res.status(200).send('Para: ' + req.body.para + ' Asunto: ' + req.body.asunto + ' Mensaje: ' + req.body.mensaje);
-
-  // Enable CORS using the `cors` express middleware.
-
   cors(req, res, () => {
-
-
-
     sendMail(req.body, res);
-
-
-
   });
 
 });
@@ -283,21 +336,22 @@ exports.enviarCorreo = functions.https.onRequest((req, res) => {
 
 
 exports.disabledUser = functions.https.onRequest((req, res) => {
-
-
   cors(req, res, () => {
-
-
-
     userDisabled(req.body, res);
-
-
 
   });
 
 });
 
 
+exports.createUser = functions.https.onRequest((req, res) => {
+
+  cors(req, res, () => {
+    createUser(req.body, res);
+
+  });
+
+});
 
 
 
