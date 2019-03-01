@@ -45,7 +45,7 @@
       <div class="row">
         <div class="col-12">
           <nav class="navbar navbar-light navbar-expand-md">
-            <div class="container-fluid"><a class="navbar-brand" href="#" id="navbarLogo"></a><button
+            <div class="container-fluid"><a class="navbar-brand" href="#" (click)="false;" id="navbarLogo"></a><button
                 class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle
                   navigation</span><span class="navbar-toggler-icon"></span></button>
               <div class="collapse navbar-collapse" id="navcol-1">
@@ -54,8 +54,8 @@
                     (click)="goAboutSec()" >Acerca de SIGELab</a></li>
                   <li class="nav-item" role="presentation" id="navContact"><a href="#" (click)="goContactSec(); false;" class="nav-link">Contacto</a></li>
                 </ul>
-                <button class="btn btn-primary btn-sm homeBtn" type="button">
-                  <a [routerLink]="['/login']" routerLinkActive="active"><i class="icon ion-log-in"></i>&nbsp;Ingresar></a>
+                <button class="btn btn-primary btn-sm homeBtn" type="button" (click)="goToLogin()">
+                  <a href="#" (click)="false;"><i class="icon ion-log-in"></i>&nbsp;Ingresar</a>
                 </button>
               </div>
             </div>

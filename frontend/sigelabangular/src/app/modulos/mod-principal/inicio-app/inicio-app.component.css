@@ -118,7 +118,7 @@
   border:1px solid white;
   white-space:normal !important;
   min-width:150px;
-  height: 35px;
+  /* height: 35px; */
   border-radius:15px;
   background-color:#D51B23;
   font-size: 14px;

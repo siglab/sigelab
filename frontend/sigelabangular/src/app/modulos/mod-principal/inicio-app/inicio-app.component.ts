@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 declare var $: any;
 import * as AOS from 'aos';
 
@@ -8,7 +9,7 @@ import * as AOS from 'aos';
   styleUrls: ['./inicio-app.component.css']
 })
 export class InicioAppComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
@@ -23,13 +24,17 @@ export class InicioAppComponent implements OnInit {
     );
   }
 
-  goAboutSec() {
+  goAboutSec(): void {
     $('html, body').animate(
       {
         scrollTop: $('#aboutSec').offset().top - $('#topDiv').height() + 5
       },
       1000
     );
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/login']);
   }
 
 }
