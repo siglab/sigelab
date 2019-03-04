@@ -1,5 +1,5 @@
 ![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Propuesta_1_Sigelab-15.png)
-![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png | width=500)
+<img src="https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png" width="48%">
 
 # Sistema Integrado de Gestión Estratégica de Laboratorios
 
