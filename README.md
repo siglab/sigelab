@@ -1,7 +1,6 @@
 ![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Propuesta_1_Sigelab-15.png)
 <p align="center">
-  [<img width="460" height="300" src="http://www.fillmurray.com/460/300">](<img src="https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png" width="48%">
-  )
+  <img width="48%"src="https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png">
 </p>
 
 # Sistema Integrado de Gestión Estratégica de Laboratorios
