@@ -1,5 +1,5 @@
 ![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Propuesta_1_Sigelab-15.png)
-![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png)
+![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png | width=48%)
 
 # Sistema Integrado de Gestión Estratégica de Laboratorios
 
@@ -8,13 +8,13 @@ This application is still under development.
 
 ### Repository structure
 
-  sigelab/
-    backend/
-      README.md
-    documentacion/
-        README.md
-    frontend/
-        README.md
+    sigelab/
+        backend/
+            README.md
+        documentacion/
+            README.md
+        frontend/
+            README.md
     .gitignore
     LICENSE
     README.md
@@ -43,7 +43,7 @@ These instructions will get you a copy of the project up and running on your loc
 * **Jhon Diaz** - *Geoprocess S.A.S developer team member* - *Initial work* - [jhoncito10](https://github.com/jhoncito10)
 * **Ingrid Ruiz** - *Geoprocess S.A.S developer team member* - *Initial work* - [injuli](https://github.com/injuli)
 * **Julián Rodríguez** - *Web app architecture design - NoSQL database design*    - [felorodri](https://github.com/felorodri)
-* * **Julien Wist** - *Project master mind* - [jwist](https://github.com/jwist)
+* **Julien Wist** - *Project master mind* - [jwist](https://github.com/jwist)
 
 See also the list of [contributors](https://github.com/siglab/sigelab/graphs/contributors) who participated in this project.
 
