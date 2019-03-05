@@ -1,13 +1,14 @@
 <header class="main-header sombra">
   <!-- Logo -->
-  <a  href="#" class="logo">
+  <a href="#" class="logo white-bg" (click)="false;">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini" >
+    <span class="logo-mini red-font">
       <b>LAB</b>
     </span>
     <!-- logo for regular state and mobile devices -->
     <span class="logo-lg">
-      <b>SIGELAB</b>
+      <img src="../../../../assets/img/Propuesta_1_Sigelab-15.png" alt="Sigelab Logo" class="logo-img">
+      <!-- <b>SIGELAB</b> -->
     </span>
   </a>
   <!-- Header Navbar: style can be found in header.less -->
@@ -16,86 +17,165 @@
     <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
-
     </a>
-
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
-
-         <!-- OCULTAR MENU PARA NOTIFICACIONES -->
-        <li class="dropdown notifications-menu"  *ngIf="itemNotificacion">
-          <a class="dropdown-toggle" data-toggle="modal" data-target="#modalNotifications">
+        <!-- OCULTAR MENU PARA NOTIFICACIONES -->
+        <li class="dropdown notifications-menu" *ngIf="itemNotificacion">
+          <a
+            class="dropdown-toggle"
+            data-toggle="modal"
+            data-target="#modalNotifications"
+          >
             <i class="fa fa-bell-o"></i>
-            <span class="label label-warning">{{this.notifications.length}}</span>
+            <span class="label label-warning">{{
+              this.notifications.length
+            }}</span>
           </a>
         </li>
-   
+        <li class="dropdown messages-menu" *ngIf="!itemLogout">
+          <a
+            [routerLink]="['/login']"
+            class="btn "
+            title="Ingresar"
+            id="logout"
+            style="cursor:pointer;"
+          >
+            <i class="fa fa-sign-in" style="font-size: 14px;"></i> Ingresar</a
+          >
+        </li>
+        <!-- <li class="dropdown messages-menu" *ngIf="itemLogout">
+          <a
+            (click)="salir()"
+            class="btn "
+            title="Salir"
+            id="logout"
+            style="cursor:pointer; "
+          >
+            <i class="fa fa-sign-in" style="font-size: 14px;"></i> Salir</a
+          >
+        </li> -->
+        <!-- <li class="dropdown messages-menu">
+          <a href="https://www.univalle.edu.co" target="blank" class="btn">
+            <span>
+              <img src="../../../../assets/img/logo-univalle.png" alt="">
+            </span>
+          </a>
+        </li> -->
+        <!-- <li>
+          <a href="#">
+            <span>
+            hola mundo
 
-          <li class="dropdown messages-menu" *ngIf="!itemLogout"  >
-              <a  [routerLink]="['/login']"    class="btn " title="Ingresar" id="logout"  style="cursor:pointer;">
-                  <i class= "fa fa-sign-in" style="font-size: 14px;"></i> Ingresar</a>
+            </span>
+          </a>
+        </li> -->
 
-          </li>
 
-          <li class="dropdown messages-menu" *ngIf="itemLogout"  >
-              <a (click)= "salir()" class="btn " title="Salir" id="logout"  style="cursor:pointer; ">
-                  <i class= "fa fa-sign-in" style="font-size: 14px;"></i> Salir</a>
-
+        <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <img src="{{ this.usuario.photoURL? this.usuario.photoURL : this.photoDummie }}" class="user-image hidden-sm hidden-md hidden-lg" alt="User Image">
+              <span class="hidden-xs name">{{this.usuario.displayName.toLowerCase()}}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="{{ this.usuario.photoURL? this.usuario.photoURL : this.photoDummie }}" class="img-circle" alt="User Image">
+                <p>
+                  <span class="name">
+                    {{this.usuario.displayName.toLowerCase()}}
+                  </span>
+                  <small>Universidad del Valle</small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <!-- <li class="user-body"> -->
+                <!-- <div class="row">
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Followers</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Sales</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Friends</a>
+                  </div>
+                </div> -->
+                <!-- /.row -->
+              <!-- </li> -->
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <!-- <div class="pull-left">
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                </div> -->
+                <div class="pull-right">
+                  <a href="#" class="btn btn-default btn-flat" (click)="salir();false;">Salir</a>
+                </div>
+              </li>
+            </ul>
           </li>
 
 
 
 
       </ul>
-
     </div>
-
   </nav>
-
 </header>
-
 
 <!--MODAL PARA MOSTRAR EQUIPOS RELACIONADOS-->
 <div class="modal fade" id="modalNotifications" role="dialog" *ngIf="itemNotificacion">
-    <div class="modal-dialog modal-md">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-body">
-            <div class="box box-danger">
-                <div class="box-header">
-                  <i class="fa fa-map"></i>
-
-                  <h3 class="box-title">NOTIFICACIONES</h3>
-                  <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalNotifications')"></span>
+  <div class="modal-dialog modal-md">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header">
+            <i class="fa fa-map"></i>
+            <h3 class="box-title">NOTIFICACIONES</h3>
+            <span
+              style="color:#dd4b39; float:right; cursor: pointer;"
+              class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('modalNotifications')"
+            ></span>
+          </div>
+          <div class="box-body">
+            <div class="panel-group" id="accordion">
+              <div
+                *ngFor="let item of this.notifications; let i = index"
+                class="panel panel-default"
+              >
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a
+                      data-toggle="collapse"
+                      data-parent="#accordion"
+                      href="#collapse{{ i }}"
+                      >Notificacion {{ i }}: {{ item.asunto }}
+                      <strong style="float: right;"
+                        >Fecha: {{ item.fecha }}</strong
+                      ></a
+                    >
+                  </h4>
                 </div>
-                
-                <div class="box-body">               
-                    <div class="panel-group" id="accordion">
-                        
-                        <div *ngFor="let item of this.notifications; let i = index;" class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}">Notificacion {{i}}: {{item.asunto}} <strong style="float: right;">Fecha: {{item.fecha}}</strong></a>
-                            </h4>
-                          </div>
-                          <div id="collapse{{i}}" class="panel-collapse collapse">
-                            <div class="panel-body">
-                              {{item.mensaje}}
-                              <button class="btn2 btn-danger danger" style="float: right;" type="button" (click)="finalizar(item.id, i)">Finalizar notificacion</button>
-                            </div>
-                          </div>
-                        </div>
-
-                    </div> 
+                <div id="collapse{{ i }}" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    {{ item.mensaje }}
+                    <button
+                      class="btn2 btn-danger danger"
+                      style="float: right;"
+                      type="button"
+                      (click)="finalizar(item.id, i)"
+                    >
+                      Finalizar notificacion
+                    </button>
+                  </div>
                 </div>
-               
-
               </div>
-
-      
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
+  </div>
 </div>

@@ -1,4 +1,3 @@
-
 #cambio{
   background-color: black !important;
   width: 300px;
@@ -13,3 +12,32 @@
      src: url('../../../../assets/img/logo-mobile.png');
   }
 } */
+
+.white-bg {
+  background-color: white !important;
+}
+
+.logo-img {
+  max-width: 53%;
+}
+
+.red-font{
+  color: #e30613;
+}
+
+.user {
+  font-size: 1.4rem;
+}
+
+.user-header {
+  background-color: #cc0000 !important;
+}
+
+.user-header > p {
+  font-size: 1.6rem !important;
+  text-align: center;
+}
+
+.name {
+  text-transform: capitalize;
+}

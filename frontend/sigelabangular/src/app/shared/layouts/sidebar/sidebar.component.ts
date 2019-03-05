@@ -7,7 +7,6 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-
   public static updateUserStatus: Subject<boolean> = new Subject();
   photoDummie = './assets/img/userdummie.png';
   usuario;
@@ -23,14 +22,9 @@ export class SidebarComponent implements OnInit {
   roleNivel2: any;
 
   constructor() {
-
     // obtener usuario luego su rol
     this.getUser().then(() => this.getRol());
-
-
-
   }
-
 
   ngOnInit() {
     $(document).ready(() => {
@@ -39,85 +33,61 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-
-
   getRol() {
-
     if (localStorage.getItem('rol')) {
       console.log(localStorage.getItem('rol'));
       this.rolUser = JSON.parse(localStorage.getItem('rol'));
     }
-
     if (localStorage.getItem('laboratorios')) {
       localStorage.setItem('nivel2', JSON.stringify(true));
 
       this.roleNivel2 = JSON.parse(localStorage.getItem('laboratorios'));
       console.log(this.roleNivel2);
     }
-
-
     if (this.rolUser) {
       for (const clave in this.rolUser) {
         if (this.rolUser[clave]) {
-          if ((clave === 'moduloPrincipal')) {
+          if (clave === 'moduloPrincipal') {
             this.moduloPrincipal = true;
           }
 
-          if ((clave === 'moduloNivel3')) {
+          if (clave === 'moduloNivel3') {
             this.moduloNivel3 = true;
-
           }
 
-          if ((clave === 'moduloNivel25')) {
+          if (clave === 'moduloNivel25') {
             this.moduloNivel25 = true;
           }
 
-          if ((clave === 'moduloQr')) {
+          if (clave === 'moduloQr') {
             this.moduloQr = true;
           }
 
-
-          if ((clave === 'moduloComMasiva')) {
+          if (clave === 'moduloComMasiva') {
             this.moduloComMasiva = true;
           }
 
-          if ((clave === 'moduloNivel35')) {
+          if (clave === 'moduloNivel35') {
             this.moduloNivel35 = true;
           }
         }
       }
     }
-
     if (this.roleNivel2) {
       this.moduloNivel2 = true;
     }
-
-
     console.log(this.moduloNivel2);
-
   }
 
   async getUser() {
-
     if (localStorage.getItem('usuario')) {
-
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
-
-
       // se visualizan los elementos
-      return this.imgUsr = true;
-
+      return (this.imgUsr = true);
     } else {
-
       // no se visualizan los elementos
-      return this.imgUsr = false;
+      return (this.imgUsr = false);
       // console.log('no existe un usuario logueado');
     }
-
-
   }
-
-
-
-
 }

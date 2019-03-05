@@ -11,21 +11,24 @@ declare var $: any;
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
   usuario;
+  imgUsr;
   itemLogout: boolean;
   itemNotificacion: boolean;
+  photoDummie = './assets/img/userdummie.png';
 
   notifications = [];
 
-  constructor(private ruta: Router, private _loginService: LoginService, private obs:ObservablesService) { }
-
-
+  constructor(
+    private ruta: Router,
+    private _loginService: LoginService,
+    private obs: ObservablesService
+  ) {
+    this.getUser();
+  }
 
   ngOnInit() {
-
     if (localStorage.getItem('usuario')) {
-
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
       console.log(this.usuario);
@@ -38,43 +41,47 @@ export class HeaderComponent implements OnInit {
         for (let index = 0; index < datos.length; index++) {
           const element = datos[index].payload.doc;
           this.notifications.push({
-            id:element.id,
-            mensaje:element.data().mensaje,
-            asunto:element.data().asunto,
-            fecha:element.data().fecha
+            id: element.id,
+            mensaje: element.data().mensaje,
+            asunto: element.data().asunto,
+            fecha: element.data().fecha
           });
         }
       });
-      
-
     } else {
       // no se visualizan los elementos
       this.itemNotificacion = false;
       this.itemLogout = false;
-
     }
-
   }
 
   salir() {
-
     this._loginService.logout().then(() => {
       this.itemLogout = false;
       // navegar al dashboard
       this.ruta.navigate(['/login']);
-
-
     });
   }
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  finalizar(id, index){
+  finalizar(id, index) {
     this.obs.finalizarNotificacion(this.usuario.uid, id);
 
     this.notifications.splice(index, 1);
   }
 
+  async getUser() {
+    if (localStorage.getItem('usuario')) {
+      this.usuario = JSON.parse(localStorage.getItem('usuario'));
+      // se visualizan los elementos
+      return (this.imgUsr = true);
+    } else {
+      // no se visualizan los elementos
+      return (this.imgUsr = false);
+      // console.log('no existe un usuario logueado');
+    }
+  }
 }

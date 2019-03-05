@@ -1,5 +1,5 @@
 ![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Propuesta_1_Sigelab-15.png)
-<p align="center" style="margin-top:-20px">
+<p align="center">
   <img width="48%"src="https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png">
 </p>
 

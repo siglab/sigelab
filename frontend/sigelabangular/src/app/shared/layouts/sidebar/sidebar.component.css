@@ -25,11 +25,15 @@ divScroll::-webkit-scrollbar-track
   cursor: pointer;
 }
 
-  .header {
-    color: #4b646f;
-    background: #1a2226;
-    overflow: hidden;
-    text-overflow: clip;
-    flex: 0 0 50px;
+.header {
+  color: #4b646f;
+  background: #1a2226;
+  overflow: hidden;
+  text-overflow: clip;
+  flex: 0 0 50px;
+}
 
-  }
+.user-name {
+  font-size: 1.3rem;
+  text-transform: capitalize;
+}

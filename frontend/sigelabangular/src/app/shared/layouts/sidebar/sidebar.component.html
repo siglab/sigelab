@@ -7,8 +7,8 @@
       <div class="pull-left image">
         <img src="{{ this.usuario.photoURL? this.usuario.photoURL : this.photoDummie }}" class="img-circle" alt="User Image">
       </div>
-      <div class="pull-left info">
-        <p> {{this.usuario.displayName}} </p>
+      <div class="pull-left info user-name">
+        <p> {{this.usuario.displayName.toLowerCase()}} </p>
         <a href="#">
           <i class="fa fa-circle text-success"></i> Online</a>
       </div>

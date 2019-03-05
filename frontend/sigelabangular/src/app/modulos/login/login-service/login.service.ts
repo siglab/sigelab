@@ -13,7 +13,6 @@ import { Observable } from 'rxjs';
 import { URLDISABLED, ROLESARRAY } from '../../../config';
 import { URLUSER } from '../../../config';
 
-
 @Injectable()
 export class LoginService {
   usuario;
@@ -21,11 +20,12 @@ export class LoginService {
   usersid = [];
   contExec = 0;
   URL = URLUSER;
-  constructor(public afAuth: AngularFireAuth,
+  constructor(
+    public afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private ruta: Router,
-    private http: Http) {
-
+    private http: Http
+  ) {
     if (localStorage.getItem('usuario')) {
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
       // this.consultarPermisos(this.usuario.uid);
@@ -34,56 +34,46 @@ export class LoginService {
 
   login() {
     const promise = new Promise((resolve, reject) => {
-      this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then(response => {
-
+      this.afAuth.auth
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(response => {
           console.log('entro a login');
           console.log(response.additionalUserInfo.isNewUser);
-
 
           if (response.additionalUserInfo.isNewUser) {
             console.log('usuario nuevo');
 
-            this.postUserBackend(  response.user.uid, response.user.email).subscribe(( res ) => {
-
-              if ( res.status === 200) {
-
+            this.postUserBackend(
+              response.user.uid,
+              response.user.email
+            ).subscribe(res => {
+              if (res.status === 200) {
                 this.consultarTipoUsuario(response.user.uid).then(() => {
                   this.usuario = response.user;
                   localStorage.setItem('usuario', JSON.stringify(this.usuario));
                   console.log('termino consultar el tipo de usuario');
                   resolve();
-
-              });
+                });
               }
-
-
             });
-
           } else {
             console.log('usuario antiguo');
 
             this.consultarTipoUsuario(response.user.uid).then(() => {
-             this.usuario = response.user;
-             localStorage.setItem('usuario', JSON.stringify(this.usuario));
-             console.log('termino consultar el tipo de usuario');
-             resolve();
-
-         });
-
-
-        }
-
-
-        }).catch(error => console.log(error));
+              this.usuario = response.user;
+              localStorage.setItem('usuario', JSON.stringify(this.usuario));
+              console.log('termino consultar el tipo de usuario');
+              resolve();
+            });
+          }
+        })
+        .catch(error => console.log(error));
     });
 
     return promise;
-
   }
 
   async logout() {
-
     localStorage.removeItem('usuario');
     localStorage.removeItem('persona');
     localStorage.removeItem('rol');
@@ -91,13 +81,10 @@ export class LoginService {
     localStorage.removeItem('permisos');
     localStorage.removeItem('nivel2');
     return this.afAuth.auth.signOut();
-
   }
-
 
   recoverPassword(email) {
     return this.afAuth.auth.sendPasswordResetEmail(email);
-
   }
   sendVerificationemail() {
     const user = this.afAuth.auth.currentUser;
@@ -105,66 +92,56 @@ export class LoginService {
     return user.sendEmailVerification();
   }
 
-
-
-
-
   /* login usando email y password */
   loginEmail(email: string, pass: string) {
-
     const promise = new Promise((resolve, reject) => {
-
-      this.afAuth.auth.signInWithEmailAndPassword(email, pass)
+      this.afAuth.auth
+        .signInWithEmailAndPassword(email, pass)
         .then(data => {
           console.log('login email');
           this.usuario = data;
           localStorage.setItem('usuario', JSON.stringify(data));
 
           if (this.usuario) {
-            this.consultarTipoUsuario(this.usuario.uid).then(() => {
-              resolve(data);
-            }).catch( err => {
-              reject();
-            });
+            this.consultarTipoUsuario(this.usuario.uid)
+              .then(() => {
+                resolve(data);
+              })
+              .catch(err => {
+                reject();
+              });
           } else {
             reject();
           }
-        }).catch(err => {
-
-
+        })
+        .catch(err => {
           reject(err);
         });
     });
-
     return promise;
   }
 
   /* envia un email a un usuario para restablecer su pass*/
-
   sendEmail(email: string) {
-
     return new Promise((resolve, reject) => {
-      this.afAuth.auth.sendPasswordResetEmail(email)
-        .then(() => {
-          swal({
-            type: 'success',
-            title: 'Se envió un correo al nuevo usuario para establece su contraseña ',
-            showConfirmButton: true
-          });
+      this.afAuth.auth.sendPasswordResetEmail(email).then(() => {
+        swal({
+          type: 'success',
+          title:
+            'Se envió un correo al nuevo usuario para establece su contraseña ',
+          showConfirmButton: true
         });
-
+      });
     });
-
   }
 
   createUser(email: string, pass: string) {
-
-
     const promise = new Promise((resolve, reject) => {
-      this.afAuth.auth.createUserWithEmailAndPassword(email, pass).then(
-        (ok) => {
+      this.afAuth.auth
+        .createUserWithEmailAndPassword(email, pass)
+        .then(ok => {
           const user: any = firebase.auth().currentUser;
-          user.sendEmailVerification().then((success) => {
+          user.sendEmailVerification().then(success => {
             swal({
               type: 'info',
               title: 'Un mensaje de verificacion fue enviado a su correo',
@@ -172,32 +149,23 @@ export class LoginService {
             });
           });
           resolve(ok);
-        }).catch(function (error) {
+        })
+        .catch(function(error) {
           console.log(error.message);
         });
     });
     return promise;
   }
 
-
-
   /* convierte un id en un objeto id:true */
-
   setBoolean(campo) {
-
     const string = '{"' + campo + '":true}';
     return JSON.parse(string);
-
   }
 
   // disabled auth user
-
-
-
   consultarTipoUsuario(id) {
-
     const promise = new Promise((resolve, reject) => {
-
       this.getUser(id).then(doc => {
         const data = doc.data();
 
@@ -205,16 +173,14 @@ export class LoginService {
 
         if (data) {
           if (data.active) {
-
             localStorage.setItem('persona', JSON.stringify(data));
             const rol = data['appRoles'];
             let roleAdmin = false;
 
-              roleAdmin = this.buscarRole(rol);
+            roleAdmin = this.buscarRole(rol);
 
             if (data['cfPers'] === '') {
               this.estructurarPermisos(rol).then(ok => {
-
                 console.log('termino el metodo estructura permiso');
                 localStorage.setItem('rol', JSON.stringify(ok['permisos']));
                 resolve();
@@ -223,7 +189,9 @@ export class LoginService {
 
             if (roleAdmin) {
               this.estructurarPermisos(rol).then(ok => {
-                console.log('termino el metodo estructura permiso administrador');
+                console.log(
+                  'termino el metodo estructura permiso administrador'
+                );
                 localStorage.setItem('rol', JSON.stringify(ok['permisos']));
               });
             }
@@ -243,67 +211,64 @@ export class LoginService {
                       sizeLabs++;
                     }
                   }
-
                   console.log(sizeLabs, labs);
-
                   for (const key in labs) {
                     if (labs.hasOwnProperty(key)) {
-                     if (labs[key]) {
-
-                      arr[key] = true;
-
-                      console.log(clientRole, key);
-
-                      for (const llave in clientRole[key]) {
-                        if (clientRole[key].hasOwnProperty(llave)) {
-                         this.estructurarPermisos(clientRole[key]).then(ok => {
-                          arrlab[key] = ok['permisos'];
-
-                          console.log(sizeLabs, cont);
-                          if (sizeLabs === cont) {
-                            console.log('termino el metodo estructura permiso', arr, arrlab);
-                            localStorage.setItem('laboratorios', JSON.stringify(arr));
-                            localStorage.setItem('permisos', JSON.stringify(arrlab));
-                            resolve();
-                          } else {
-                            cont++;
+                      if (labs[key]) {
+                        arr[key] = true;
+                        console.log(clientRole, key);
+                        for (const llave in clientRole[key]) {
+                          if (clientRole[key].hasOwnProperty(llave)) {
+                            this.estructurarPermisos(clientRole[key]).then(
+                              ok => {
+                                arrlab[key] = ok['permisos'];
+                                console.log(sizeLabs, cont);
+                                if (sizeLabs === cont) {
+                                  console.log(
+                                    'termino el metodo estructura permiso',
+                                    arr,
+                                    arrlab
+                                  );
+                                  localStorage.setItem(
+                                    'laboratorios',
+                                    JSON.stringify(arr)
+                                  );
+                                  localStorage.setItem(
+                                    'permisos',
+                                    JSON.stringify(arrlab)
+                                  );
+                                  resolve();
+                                } else {
+                                  cont++;
+                                }
+                              }
+                            );
                           }
-
-                         });
-
                         }
                       }
-                     }
                     }
                   }
                 } else {
-
                   resolve();
                 }
-
               });
             }
-
-
-
-
           } else {
             reject();
           }
         } else {
-          this.consultarTipoUsuario(id).then(() => {
-            resolve();
-          }).catch(() => {
-            reject();
-          });
+          this.consultarTipoUsuario(id)
+            .then(() => {
+              resolve();
+            })
+            .catch(() => {
+              reject();
+            });
         }
-
-
       });
     });
 
     return promise;
-
   }
 
   buscarRole(rol) {
@@ -312,77 +277,64 @@ export class LoginService {
       if (rol.hasOwnProperty(key)) {
         if (rol[key]) {
           if (role.includes(key)) {
-           return true;
+            return true;
           }
         }
       }
     }
-
     return false;
   }
 
   estructurarPermisos(roles) {
-
     console.log(roles);
-
     const promise = new Promise((resolve, reject) => {
       let rolelength = 0;
       // tslint:disable-next-line:forin
       for (const key in roles) {
         rolelength++;
       }
-
       const permisos = {};
       let cont = 0;
       for (const clave in roles) {
         if (roles[clave]) {
-           this.getRol(clave).then(datarol => {
-            const permission = datarol.data().permissions;
-            let rollength = 0;
-            let controle = 0;
-            // tslint:disable-next-line:forin
-            for (const key in permission) {
-              rollength++;
-            }
-
-            if (permission) {
+          this.getRol(clave)
+            .then(datarol => {
+              const permission = datarol.data().permissions;
+              let rollength = 0;
+              let controle = 0;
               // tslint:disable-next-line:forin
-              for (const llave in permission) {
-                permisos[llave] = permission[llave];
-                controle++;
+              for (const key in permission) {
+                rollength++;
+              }
 
-                if (controle === rollength) {
-
-                  console.log('termino recorrer permisos');
-                  cont++;
-
-                  console.log(rolelength, cont);
-                  if (rolelength === cont) {
-                    console.log('termino de recorrer los roles');
-                    if (permisos) {
-                      console.log(permisos);
-
-                      resolve({permisos : permisos});
-                    } else {
-
-                       reject( 'error'  );
+              if (permission) {
+                // tslint:disable-next-line:forin
+                for (const llave in permission) {
+                  permisos[llave] = permission[llave];
+                  controle++;
+                  if (controle === rollength) {
+                    console.log('termino recorrer permisos');
+                    cont++;
+                    console.log(rolelength, cont);
+                    if (rolelength === cont) {
+                      console.log('termino de recorrer los roles');
+                      if (permisos) {
+                        console.log(permisos);
+                        resolve({ permisos: permisos });
+                      } else {
+                        reject('error');
+                      }
                     }
-
                   }
                 }
               }
-            }
-
-
-          }).catch(err => console.log('error consultando el rol', err));
+            })
+            .catch(err => console.log('error consultando el rol', err));
         }
-
-
       }
     });
 
     return promise;
-
   }
 
   getRol(idrol) {
@@ -401,13 +353,11 @@ export class LoginService {
     return this.afs.doc('permission/' + idPermiso).ref.get();
   }
 
-
-
-
   disabledAuth(id) {
-    return this.http.post(this.urlDisabled, {id})
-    .map(this.extractData)
-    .catch(this.handleErrorObservable);
+    return this.http
+      .post(this.urlDisabled, { id })
+      .map(this.extractData)
+      .catch(this.handleErrorObservable);
   }
 
   extractData(res: Response) {
@@ -419,73 +369,67 @@ export class LoginService {
     return Observable.throw(error.message || error);
   }
 
-
-
   getPersonforId(iduser: string, email: string) {
     const fecha = new Date();
     const usr = {
       cfOrgId: 'i9dzCErPCO4n9WUfjxR9',
-      active:  true,
+      active: true,
       cfPers: '',
       appRoles: {
-        npKRYaA0u9l4C43YSruA : true
+        npKRYaA0u9l4C43YSruA: true
       },
       createdAt: fecha.toISOString(),
-      email: email ,
+      email: email
     };
 
     console.log(email);
 
     return new Promise((resolve, reject) => {
+      this.afs
+        .collection('cfPers')
+        .ref.where('email', '==', email)
+        .get()
+        .then(respers => {
+          if (respers.empty) {
+            console.log('no tiene una persona asociada');
 
-      this.afs.collection('cfPers').ref.where('email', '==', email)
-           .get()
-           .then(respers => {
+            this.afs
+              .doc('user/' + iduser)
+              .set(usr)
+              .then(() => {
+                console.log('usuario creado');
+                resolve();
+              });
+          } else {
+            console.log('tiene una persona asociada');
 
-            if (respers.empty) {
-
-              console.log('no tiene una persona asociada');
-
-              this.afs.doc('user/' + iduser).set(usr).then( () =>  {  console.log('usuario creado'); resolve(); });
-
-
-
-            } else {
-              console.log('tiene una persona asociada');
-
-              // asigna el id de la persona al usuario
-              usr.cfPers = respers.docs[0].id;
-              this.afs.doc('user/' + iduser).set(usr).then( () => {
+            // asigna el id de la persona al usuario
+            usr.cfPers = respers.docs[0].id;
+            this.afs
+              .doc('user/' + iduser)
+              .set(usr)
+              .then(() => {
                 console.log('usuario creado');
 
-                this.afs.doc('cfPers/' + usr.cfPers).set({ user: iduser}, { merge: true})
-                .then( () => {
-                  console.log('persona asociada');
-                  resolve();
-
-                });
-
+                this.afs
+                  .doc('cfPers/' + usr.cfPers)
+                  .set({ user: iduser }, { merge: true })
+                  .then(() => {
+                    console.log('persona asociada');
+                    resolve();
+                  });
               });
-              // asigna el id del usuario a la persona
-
-            }
-
-          });
-
+            // asigna el id del usuario a la persona
+          }
+        });
     });
-
-
   }
 
-
   postUserBackend(email: string, uid: string) {
-
     const peticion = {
       email,
       uid
     };
-
-    return  this.http.post(this.URL, peticion);
+    return this.http.post(this.URL, peticion);
   }
-
 }
