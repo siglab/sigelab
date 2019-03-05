@@ -12,16 +12,27 @@
      src: url('../../../../assets/img/logo-mobile.png');
   }
 } */
+.sombra {
+  font-family: "Roboto", "Helvetica Neue",Helvetica,Arial,sans-serif;
+  box-shadow: 0px 0px 15px 0px #888888;
+}
 
 .white-bg {
   background-color: white !important;
 }
 
 .logo-img {
-  max-width: 53%;
+  /* max-width: 53%; */
+  height: 100%;
 }
 
-.red-font{
+.logo-container {
+  width: 100%;
+  height: 100%;
+}
+
+.red-font {
+  font-family: "Roboto", "Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #e30613;
 }
 
@@ -34,10 +45,38 @@
 }
 
 .user-header > p {
+  font-family: "Roboto", "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 1.6rem !important;
   text-align: center;
+  color: white !important;
 }
 
 .name {
   text-transform: capitalize;
+}
+
+.s {
+  color: #6b6b6b;
+}
+
+.uv-logo {
+  width: 200px;
+  margin: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.uv-logo-container {
+  min-width: 70px;
+  height: 50px;
+  float: right;
+  margin: auto;
+  display: flex;
+  background-color: white;
+}
+
+.uv-logo-mobile {
+  width: 38px;
+  margin: auto;
+  height: 50px;
 }
