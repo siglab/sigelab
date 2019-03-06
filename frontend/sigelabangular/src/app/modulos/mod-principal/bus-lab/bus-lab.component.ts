@@ -1,9 +1,22 @@
-
 import { element } from 'protractor';
-import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
-import { Component, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
+import {
+  MatTableDataSource,
+  MatPaginator,
+  MatSort,
+  MatDialog
+} from '@angular/material';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  TemplateRef
+} from '@angular/core';
 import * as L from 'leaflet';
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import {
+  AngularFirestoreCollection,
+  AngularFirestore
+} from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ObserverPrincipalService } from '../services/observer-principal.service';
@@ -26,17 +39,13 @@ declare var $: any;
   templateUrl: './bus-lab.component.html',
   styleUrls: ['./bus-lab.component.css']
 })
-
-
 export class BusLabComponent implements OnInit, AfterViewInit {
-
   user: any;
   selectedRowIndex = -1;
   corx = 3.42158;
   cory = -76.5205;
   map: any;
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
-
 
   // VARIABLES QUE SE UTILIZAN PARA LOS DATATABLES DE SERVICIOS Y PRACTICAS
   itemsel: any;
@@ -48,7 +57,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   status;
   disponible;
   nameProject;
-
 
   moduloinfo = false;
   layer = null;
@@ -67,8 +75,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   preciototal = 0;
   descuento = 0;
   preciocondescuento = 0;
-
-
 
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
@@ -96,20 +102,24 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   listaVariaciones = [];
 
   selecunivallelab = '';
-  univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
+  univalle = [
+    'Trabajo de grado',
+    'Maestria',
+    'Doctorado',
+    'Proyecto de investigacion'
+  ];
   habilitarci = false;
   valorci = '';
   llaveci = '';
 
   usuariounivalle = false;
 
-
-
-
-  constructor(private observer: ObserverPrincipalService,
-              private query: QuerysPrincipalService,
-              private afs: AngularFirestore,
-              private ruta: Router) {
+  constructor(
+    private observer: ObserverPrincipalService,
+    private query: QuerysPrincipalService,
+    private afs: AngularFirestore,
+    private ruta: Router
+  ) {
     if (localStorage.getItem('usuario')) {
       this.user = JSON.parse(localStorage.getItem('usuario'));
       if (this.user.email.split('@')[1] === correoUnivalle) {
@@ -118,33 +128,23 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
-     this.alert.show();
+    this.alert.show();
     // trae los datos de los laboratorios
     this.query.getLaboratorios().then(data => {
-
       this.query.estructurarDataLab(data).then(datos => {
-
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
 
         this.alert.hide();
       });
-
     });
-
+    // this.map = L.map('mapa').setView([this.corx, this.cory], 13);
   }
 
-
-
-  ngAfterViewInit(): void {
-
-  }
-
+  ngAfterViewInit(): void {}
 
   agregarSolicitudServicio() {
     // tslint:disable-next-line:no-shadowed-variable
@@ -162,19 +162,23 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
         for (const key in this.parametros) {
           if (this.parametros.hasOwnProperty(key)) {
-            auxiliar.push({id: cont, value: this.parametros[key]});
+            auxiliar.push({ id: cont, value: this.parametros[key] });
             cont++;
           }
         }
       }
       this.listaVariaciones.push({
         data: this.variation,
-        condiciones: this.estructuraCondiciones(this.variation.data.cfConditions, 'var'),
+        condiciones: this.estructuraCondiciones(
+          this.variation.data.cfConditions,
+          'var'
+        ),
         parametros: auxiliar
       });
       this.preciototal += parseInt(this.variation.data.cfPrice, 10);
       if (this.usuariounivalle) {
-        this.descuento = this.preciototal * (parseFloat(this.servsel.descuento) / 100);
+        this.descuento =
+          this.preciototal * (parseFloat(this.servsel.descuento) / 100);
         this.preciocondescuento = this.preciototal - this.descuento;
       }
       swal({
@@ -189,14 +193,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         showConfirmButton: true
       });
     }
-
   }
 
   quitarVariacion(id) {
     const encontrado = this.listaVariaciones.find((element, index) => {
-
       if (element.data.id === id) {
-
         this.preciototal = parseInt(element.data.data.cfPrice, 10);
         this.listaVariaciones.splice(index, 1);
         return true;
@@ -211,15 +212,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         showConfirmButton: true
       });
     }
-
   }
 
   enviarSolicitudServicio(reserva) {
-
     const fecha = new Date();
 
     if (this.user) {
-
       const cfSrvReserv = {
         cfFacil: this.itemsel.uid,
         namelab: this.itemsel.nombre,
@@ -233,12 +231,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         cfPrice: this.servsel.precio,
         status: 'pendiente',
         createdAt: fecha.toISOString(),
-        updatedAt:  fecha.toISOString(),
+        updatedAt: fecha.toISOString(),
         conditionsLog: [],
         comments: [],
         path: [],
         typeuser: 'externo',
-        datauser: {type: '', ci: '', llaveci: ''},
+        datauser: { type: '', ci: '', llaveci: '' },
         emailuser: this.user.email,
         acceptedBy: '',
         parametrosSrv: [],
@@ -247,82 +245,98 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         precioTotal: this.servsel.precio
       };
 
-        if (this.usuariounivalle) {
-          cfSrvReserv.cfPrice = '' + this.preciocondescuento;
-        }
+      if (this.usuariounivalle) {
+        cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+      }
 
-        swal({
+      swal({
+        type: 'warning',
+        title: '¿Está seguro que desea solicitar este servicio?',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, Solicitar',
+        cancelButtonText: 'No, Cancelar'
+      }).then(result => {
+        if (result.value) {
+          if (reserva === 'convariaciones') {
+            for (let j = 0; j < this.listaVariaciones.length; j++) {
+              // tslint:disable-next-line:no-shadowed-variable
+              const element = this.listaVariaciones[j];
+              cfSrvReserv.selectedVariations[element.data.id] = true;
+              cfSrvReserv.conditionsLog.push({
+                condicion: element.condiciones,
+                idvariacion: element.data.id
+              });
 
-          type: 'warning',
-          title: '¿Está seguro que desea solicitar este servicio?',
-          showCancelButton: true,
-          confirmButtonText: 'Sí, Solicitar',
-          cancelButtonText: 'No, Cancelar'
-
-        }).then((result) => {
-
-          if (result.value) {
-            if (reserva === 'convariaciones') {
-
-              for (let j = 0; j < this.listaVariaciones.length; j++) {
-                // tslint:disable-next-line:no-shadowed-variable
-                const element = this.listaVariaciones[j];
-                cfSrvReserv.selectedVariations[element.data.id] = true;
-                cfSrvReserv.conditionsLog.push({condicion: element.condiciones, idvariacion: element.data.id});
-
-                cfSrvReserv.parametros.push({parametros: element.parametros, id: element.data.id});
-              }
-
-              cfSrvReserv.precioTotal = '' + this.preciototal;
-
-              if (this.usuariounivalle) {
-                cfSrvReserv.cfPrice = '' + this.preciocondescuento;
-              } else {
-                cfSrvReserv.cfPrice = '' + this.preciototal;
-
-              }
-
-
-
+              cfSrvReserv.parametros.push({
+                parametros: element.parametros,
+                id: element.data.id
+              });
             }
 
-            if (this.servsel.condiciones.length !== 0) {
-              cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.servsel.condiciones, 'servicio');
-            }
-
-            if (this.parametrosServ) {
-              let cont = 0;
-              for (const key in this.parametrosServ) {
-                if (this.parametrosServ.hasOwnProperty(key)) {
-                  cfSrvReserv.parametrosSrv.push({id: cont, value: this.parametrosServ[key]});
-                  cont++;
-                }
-              }
-            }
+            cfSrvReserv.precioTotal = '' + this.preciototal;
 
             if (this.usuariounivalle) {
-              cfSrvReserv.typeuser = 'interno';
-              cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
-              cfSrvReserv.datauser.ci = this.valorci;
-              cfSrvReserv.datauser.llaveci = this.llaveci;
+              cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+            } else {
+              cfSrvReserv.cfPrice = '' + this.preciototal;
             }
+          }
 
+          if (this.servsel.condiciones.length !== 0) {
+            cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(
+              this.servsel.condiciones,
+              'servicio'
+            );
+          }
 
-            cfSrvReserv.comments.push({
-              commentText: this.campoCondicion,
-              fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
-              autor: 'usuario',
-              email: this.user.email,
-              uid: this.user.uid});
+          if (this.parametrosServ) {
+            let cont = 0;
+            for (const key in this.parametrosServ) {
+              if (this.parametrosServ.hasOwnProperty(key)) {
+                cfSrvReserv.parametrosSrv.push({
+                  id: cont,
+                  value: this.parametrosServ[key]
+                });
+                cont++;
+              }
+            }
+          }
 
-              console.log(cfSrvReserv);
+          if (this.usuariounivalle) {
+            cfSrvReserv.typeuser = 'interno';
+            cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
+            cfSrvReserv.datauser.ci = this.valorci;
+            cfSrvReserv.datauser.llaveci = this.llaveci;
+          }
 
+          cfSrvReserv.comments.push({
+            commentText: this.campoCondicion,
+            fecha:
+              fecha.getDate() +
+              '/' +
+              (fecha.getMonth() + 1) +
+              '/' +
+              fecha.getFullYear(),
+            autor: 'usuario',
+            email: this.user.email,
+            uid: this.user.uid
+          });
 
-            this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+          console.log(cfSrvReserv);
+
+          this.query
+            .addSolicitudServicio(cfSrvReserv)
+            .then(() => {
               this.enviarNotificacionesCorreo();
 
               // tslint:disable-next-line:max-line-length
-              this.query.enviarEmails(this.servsel.nombre, this.user.email, this.itemsel.emaildir, this.itemsel.info.email, this.itemsel.personal);
+              this.query.enviarEmails(
+                this.servsel.nombre,
+                this.user.email,
+                this.itemsel.emaildir,
+                this.itemsel.info.email,
+                this.itemsel.personal
+              );
 
               this.limpiarDatos();
 
@@ -333,45 +347,38 @@ export class BusLabComponent implements OnInit, AfterViewInit {
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
               });
-
-            }).catch(error => {
-
+            })
+            .catch(error => {
               swal({
                 type: 'error',
                 title: '' + error,
                 showConfirmButton: true
               });
-
             });
-          } else if (
-            // Read more about handling dismissals
-            result.dismiss === swal.DismissReason.cancel
-          ) {
-            swal(
-              'Solicitud Cancelada',
-              '',
-              'error'
-            );
-          }
-
-        });
-
+        } else if (
+          // Read more about handling dismissals
+          result.dismiss === swal.DismissReason.cancel
+        ) {
+          swal('Solicitud Cancelada', '', 'error');
+        }
+      });
     } else {
-
-        swal({
-          type: 'error',
-          title: 'Debe ingresar al sistema para poder solicitar este servicio',
-          showConfirmButton: true
-        });
-
+      swal({
+        type: 'error',
+        title: 'Debe ingresar al sistema para poder solicitar este servicio',
+        showConfirmButton: true
+      });
     }
-
   }
 
   enviarNotificacionesCorreo() {
     const ids = [];
     this.query.buscarDirector(this.itemsel.iddirecto).then(doc => {
-      this.query.enviarNotificaciones([doc.data().user], this.servsel.nombre, this.user.email);
+      this.query.enviarNotificaciones(
+        [doc.data().user],
+        this.servsel.nombre,
+        this.user.email
+      );
     });
 
     let cont = 0;
@@ -381,81 +388,83 @@ export class BusLabComponent implements OnInit, AfterViewInit {
           ids.push(doc.id);
 
           if (this.itemsel.personal.length === cont) {
-            this.query.enviarNotificaciones(ids, this.servsel.nombre, this.user.email);
+            this.query.enviarNotificaciones(
+              ids,
+              this.servsel.nombre,
+              this.user.email
+            );
           } else {
             cont++;
           }
         });
       });
-
     }
-
   }
 
-
   cambiardata(item) {
-
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-   // $('html, body').animate({ scrollTop: '400px' }, 'slow');
-
-    this.itemsel  = item;
+    // $('html, body').animate({ scrollTop: '400px' }, 'slow');
+    this.itemsel = item;
     this.dataSource2.data = item.servicios;
-
-    console.log(item.practicas);
     this.dataSource3.data = item.practicas;
-
     const ambiente = this;
-
     if (!this.moduloinfo) {
       this.moduloinfo = true;
 
+
+
       setTimeout(function() {
-        ambiente.loadMap(item);
         // ambiente.dataSource2.sort = ambiente.sort2;
         // ambiente.dataSource2.paginator = ambiente.paginator2;
         // ambiente.dataSource3.sort = ambiente.sort3;
         // ambiente.dataSource3.paginator = ambiente.paginator3;
-        document.getElementById('detalle').scrollIntoView();
-      }, 1000);
-
-
-     } else {
+        ambiente.loadMap(item);
+        $('html, body').animate(
+          {
+            scrollTop: $('#detalle').offset().top - 55
+          },
+          1000
+        );
+      }, 500);
+    } else {
       this.removerMarker();
-
       if (item.coord.lat !== '' && item.coord.lon !== '') {
         this.agregarMarker(item);
       } else {
         swal({
           type: 'warning',
-          title: 'El laboratorio seleccionado aún no tiene registrada la ubicación',
+          title:
+            'El laboratorio seleccionado aún no tiene registrada la ubicación',
           showConfirmButton: true
         });
       }
+      $('html, body').animate(
+        {
+          scrollTop: $('#detalle').offset().top - 55
+        },
+        1000
+      );
+      // document.getElementById('detalle').scrollIntoView();
+    }
 
-      document.getElementById('detalle').scrollIntoView();
-
-
-     }
-
-     setTimeout(function() {
+    setTimeout(function() {
       ambiente.dataSource2.sort = ambiente.sort2;
       ambiente.dataSource2.paginator = ambiente.paginator2;
       ambiente.dataSource3.sort = ambiente.sort3;
       ambiente.dataSource3.paginator = ambiente.paginator3;
     }, 1000);
-
   }
 
   cambiarVariacion(item) {
-
     if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
-      this.estructurarVariaciones(this.variation.data.cfConditions, this.variation.data.parametros);
+      this.estructurarVariaciones(
+        this.variation.data.cfConditions,
+        this.variation.data.parametros
+      );
     } else {
       this.variation = undefined;
     }
-
-
   }
 
   cambiarDataServicio(item) {
@@ -467,14 +476,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       this.estructurarCondicionesServicio(item.condiciones, item.parametros);
     }
 
-
     if (this.usuariounivalle) {
       if (item.variaciones.length === 0) {
-        this.descuento = this.servsel.precio * (parseFloat(this.servsel.descuento) / 100);
+        this.descuento =
+          this.servsel.precio * (parseFloat(this.servsel.descuento) / 100);
         this.preciocondescuento = this.servsel.precio - this.descuento;
       }
     }
-
   }
 
   cambiarDataPrueba(item) {
@@ -483,11 +491,9 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   initCalendarModal(horario) {
-
     const containerEl: JQuery = $AB('#calendar2');
 
-   if (containerEl.children().length > 0) {
-
+    if (containerEl.children().length > 0) {
       containerEl.fullCalendar('destroy');
     }
 
@@ -505,17 +511,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
       defaultView: 'month',
       timeFormat: 'H(:mm)'
-
     });
   }
 
   selectorunivalle(key) {
     this.habilitarci = false;
-
     if (key === 3) {
       this.habilitarci = true;
     }
-
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
@@ -532,7 +535,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   estructuraCondiciones(condiciones, tipo) {
     const arr = [];
     for (let i = 0; i < condiciones.length; i++) {
-
       let aux;
       if (tipo !== 'servicio') {
         aux = this.condicionesobjeto['checkbox' + i];
@@ -565,7 +567,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.condicionesobjetoServ = {};
     this.parametrosServ = {};
     for (let i = 0; i < condiciones.length; i++) {
-
       this.condicionesobjetoServ['checkboxServ' + i] = true;
     }
 
@@ -575,23 +576,23 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   loadMap(item) {
-    this.map = L.map('mapaa').setView([this.corx, this.cory], 13);
+    this.map = L.map('mapa').setView([this.corx, this.cory], 13);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
-
     this.agregarMarker(item);
   }
 
   agregarMarker(item) {
-
-    this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
-    this.layer.addTo(this.map)
-    .bindPopup(item.nombre)
-    .openPopup();
+    this.layer = L.marker([item.coord.lat, item.coord.lon], {
+      icon: this.DefaultIcon
+    });
+    this.layer
+      .addTo(this.map)
+      .bindPopup(item.nombre)
+      .openPopup();
     this.map.setView([item.coord.lat, item.coord.lon], 17);
   }
 
@@ -617,7 +618,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.dataSource3.filter = filterValue;
   }
 
-
   cerrarModal(modal) {
     $('#' + modal).modal('hide');
   }
@@ -639,9 +639,10 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       this.status = 'Confirmando disponibilidad';
       const collref = this.afs.collection('project').ref;
       const queryref = collref.where('ciNumber', '==', q);
-      queryref.get().then((snapShot) => {
+      queryref.get().then(snapShot => {
         if (snapShot.empty) {
-          this.status = 'El CI ingresado no se encuentra asociado a ningún proyecto actual';
+          this.status =
+            'El CI ingresado no se encuentra asociado a ningún proyecto actual';
           this.disponible = true;
         } else {
           console.log(snapShot.docs[0].id);
@@ -652,5 +653,4 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
 }

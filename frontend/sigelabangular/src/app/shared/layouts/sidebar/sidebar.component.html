@@ -1,7 +1,7 @@
 
 <aside class="main-sidebar divScroll">
   <!-- sidebar: style can be found in sidebar.less -->
-  <section class="sidebar">
+  <section class="sidebar m-t-5">
   <!-- Sidebar user panel  ocultar imagen de usuario -->
   <div class="user-panel" *ngIf="imgUsr" >
       <div class="pull-left image">
@@ -14,7 +14,6 @@
       </div>
     </div>
      <!-- Sidebar user panel  ocultar  comoduloPrincipalmponentes segun el nivel  -->
-
      <li class="header text-center"> MENÚ DE BÚSQUEDA </li>
      <app-bar-busqueda></app-bar-busqueda>
     <app-bar-admin-solicitudes    *ngIf="moduloPrincipal || moduloNivel2"></app-bar-admin-solicitudes>
@@ -24,16 +23,12 @@
     <app-bar-admin-usuarios *ngIf="moduloNivel3"></app-bar-admin-usuarios>
     <app-bard-admin-qr  *ngIf="moduloQr || moduloNivel3"    ></app-bard-admin-qr>
     <app-bar-comunicacion-masiva *ngIf="moduloComMasiva"></app-bar-comunicacion-masiva>
-
     <li *ngIf="moduloNivel25"  class="header text-center"> NIVEL 2.5  </li>
     <app-bar-admin-laboratorio-superior *ngIf="moduloNivel3 || moduloNivel25"></app-bar-admin-laboratorio-superior>
     <app-bar-solicitudes-nivel3 *ngIf="moduloNivel3 || moduloNivel25"></app-bar-solicitudes-nivel3>
-
     <li *ngIf="moduloNivel35"  class="header text-center"> NIVEL 3.5  </li>
     <app-bar-indicadores *ngIf="moduloNivel3 || moduloNivel25 || moduloNivel35"></app-bar-indicadores>
    <!--  <li style="color: #FFFFFF;">nivel 3</li> -->
-
-
   </section>
   <!-- /.sidebar -->
 </aside>
