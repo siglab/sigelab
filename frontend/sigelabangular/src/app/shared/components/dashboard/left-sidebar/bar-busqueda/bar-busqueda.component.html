@@ -1,70 +1,48 @@
-
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree" data-animation-speed="500" style="width: 100%;">
-
-      <li class="treeview" >
+      <li class="treeview pointer" routerLinkActive="active">
         <a>
-          <i class="fa fa-search"></i>
-          <span >Búsqueda laboratorios</span>
+          <i class="fa fa-info-circle"></i>
+          <span >Información de laboratorios</span>
           <span class="pull-right-container" style="width: 100%;">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
-          <li>
+          <li routerLinkActive="active">
             <a [routerLink]="['busquedalaboratorio']">
-              <i class="fa fa-circle-o"></i> Buscar</a>
-
-
+              <i class="fa fa-circle-o"></i> Buscar laboratorios</a>
           </li>
-          <!-- <li>
-            <a [routerLink]="['busquedalaboratorio']">
-              <i class="fa fa-circle-o"></i> Busqueda por escuela</a>
-          </li>
-          <li>
-            <a [routerLink]="['busquedalaboratorio']">
-              <i class="fa fa-circle-o"></i> Busqueda por <br> linea de Investigacion</a>
-
-
-          </li>
-          <li>
-            <a [routerLink]="['busquedalaboratorio']">
-              <i class="fa fa-circle-o"></i> Busqueda por director</a>
-          </li> -->
         </ul>
       </li>
-
-      <li class="treeview">
+      <li class="treeview pointer" routerLinkActive="active">
         <a>
-          <i class="fa fa-search"></i>
-          <span>Búsqueda Servicios</span>
+          <i class="fa fa-laptop"></i>
+          <span>Servicios</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
-          <li >
+          <li routerLinkActive="active">
             <a [routerLink]="['busquedaservicio']">
-              <i class="fa fa-circle-o"></i>Servicios</a>
+              <i class="fa fa-circle-o"></i>Buscar servicios</a>
           </li>
         </ul>
       </li>
-
-      <li class="treeview">
+      <li class="treeview pointer" routerLinkActive="active">
         <a>
           <i class="fa fa-search"></i>
-          <span>Búsqueda Prácticas</span>
+          <span>Prácticas</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
-          <li >
+          <li routerLinkActive="active">
             <a [routerLink]="['busquedaprueba']">
-              <i class="fa fa-circle-o"></i>Prácticas</a>
+              <i class="fa fa-circle-o"></i>Buscar prácticas de docencia</a>
           </li>
         </ul>
       </li>
-
-
     </ul>

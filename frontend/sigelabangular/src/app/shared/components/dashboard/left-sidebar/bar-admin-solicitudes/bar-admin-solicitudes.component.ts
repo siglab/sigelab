@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bar-admin-solicitudes',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BarAdminSolicitudesComponent implements OnInit {
 
-  constructor() { }
+  constructor(public router: Router) { }
 
   ngOnInit() {
   }
