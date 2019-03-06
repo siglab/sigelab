@@ -10,7 +10,6 @@ export class BarAdminSolicitudesComponent implements OnInit {
 
   constructor(public router: Router) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }

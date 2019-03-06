@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
+export let mainModule: any;
+export let l2Module: any;
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -24,6 +27,8 @@ export class SidebarComponent implements OnInit {
   constructor() {
     // obtener usuario luego su rol
     this.getUser().then(() => this.getRol());
+    mainModule = false;
+    l2Module = false;
   }
 
   ngOnInit() {
@@ -35,38 +40,31 @@ export class SidebarComponent implements OnInit {
 
   getRol() {
     if (localStorage.getItem('rol')) {
-      console.log(localStorage.getItem('rol'));
       this.rolUser = JSON.parse(localStorage.getItem('rol'));
     }
     if (localStorage.getItem('laboratorios')) {
       localStorage.setItem('nivel2', JSON.stringify(true));
-
       this.roleNivel2 = JSON.parse(localStorage.getItem('laboratorios'));
-      console.log(this.roleNivel2);
     }
     if (this.rolUser) {
       for (const clave in this.rolUser) {
         if (this.rolUser[clave]) {
           if (clave === 'moduloPrincipal') {
             this.moduloPrincipal = true;
+            mainModule = true;
           }
-
           if (clave === 'moduloNivel3') {
             this.moduloNivel3 = true;
           }
-
           if (clave === 'moduloNivel25') {
             this.moduloNivel25 = true;
           }
-
           if (clave === 'moduloQr') {
             this.moduloQr = true;
           }
-
           if (clave === 'moduloComMasiva') {
             this.moduloComMasiva = true;
           }
-
           if (clave === 'moduloNivel35') {
             this.moduloNivel35 = true;
           }
@@ -75,8 +73,8 @@ export class SidebarComponent implements OnInit {
     }
     if (this.roleNivel2) {
       this.moduloNivel2 = true;
+      l2Module = true;
     }
-    console.log(this.moduloNivel2);
   }
 
   async getUser() {
