@@ -1,19 +1,9 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu" data-widget="tree">
-
-  <li class="treeview">
-    <a>
+  <li routerLinkActive="active">
+    <a href="#" [routerLink]="['indicadores3']" (click)="enviaritem();false;">
       <i class="fa fa-bar-chart"></i>
-      <span>Indicadores, estadísticas, reportes</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <span>Indicadores, estadísticas y reportes</span>
     </a>
-    <ul class="treeview-menu">
-      <li style="width: 100%">
-        <a [routerLink]="['indicadores3']" (click)="enviaritem()">
-          <i class="fa fa-circle-o"></i>Ver</a>
-      </li>
-    </ul>
   </li>
 </ul>

@@ -1,19 +1,9 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu" data-widget="tree">
-
-  <li class="treeview">
-    <a>
+  <li routerLinkActive="active">
+    <a href="#" [routerLink]="['adminlaboratorios3']" (click)="false;">
       <i class="fa fa-audio-description"></i>
-      <span>Administrar Laboratorios</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <span>Administrar laboratorios</span>
     </a>
-    <ul class="treeview-menu">
-      <li style="width: 100%">
-        <a [routerLink]="['adminlaboratorios3']">
-          <i class="fa fa-circle-o"></i>Administrar</a>
-      </li>
-    </ul>
   </li>
 </ul>

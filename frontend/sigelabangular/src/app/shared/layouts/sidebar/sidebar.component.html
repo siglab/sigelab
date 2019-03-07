@@ -19,9 +19,7 @@
     </div>
     <!-- Sidebar user panel  ocultar  comoduloPrincipalmponentes segun el nivel  -->
     <li class="header text-center" *ngIf="moduloPrincipal || moduloNivel2; else loggedOut">BÚSQUEDAS Y SOLICITUDES</li>
-    <ng-template #loggedOut>
-      <li class="header text-center">BÚSQUEDAS</li>
-    </ng-template>
+    <ng-template #loggedOut><li class="header text-center">BÚSQUEDAS</li></ng-template>
     <app-bar-busqueda></app-bar-busqueda>
     <!-- <li class="header text-center" *ngIf="moduloPrincipal || moduloNivel2">SOLICITUDES DE SERVICIO</li>
     <app-bar-admin-solicitudes *ngIf="moduloPrincipal || moduloNivel2"></app-bar-admin-solicitudes> -->

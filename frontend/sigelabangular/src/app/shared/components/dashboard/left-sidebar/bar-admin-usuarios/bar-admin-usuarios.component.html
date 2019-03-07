@@ -1,19 +1,9 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu" data-widget="tree">
-
-  <li class="treeview">
-    <a>
+  <li routerLinkActive="active">
+    <a href="#" [routerLink]="['usuarios']" (click)="(false)">
       <i class="fa fa-address-card-o"></i>
-      <span>Administrar Usuarios</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <span>Administrar Usuarios de SIGELab</span>
     </a>
-    <ul class="treeview-menu">
-      <li style="width: 100%">
-        <a [routerLink]="['usuarios']">
-          <i class="fa fa-circle-o"></i>Administrar</a>
-      </li>
-    </ul>
   </li>
 </ul>

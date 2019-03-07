@@ -1,73 +1,28 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
-<ul
-  class="sidebar-menu"
-  data-widget="tree"
-  data-animation-speed="500"
-  style="width: 100%;"
->
-  <li class="treeview pointer" routerLinkActive="active">
-    <a>
+<ul class="sidebar-menu" data-widget="tree" data-animation-speed="500" style="width: 100%;">
+  <li class="pointer" routerLinkActive="active">
+    <a href="#" [routerLink]="['busquedalaboratorio']" (click)="false;">
       <i class="fa fa-info-circle"></i>
       <span>Información de laboratorios</span>
-      <span class="pull-right-container" style="width: 100%;">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
     </a>
-    <ul class="treeview-menu">
-      <li routerLinkActive="active">
-        <a [routerLink]="['busquedalaboratorio']">
-          <i class="fa fa-circle-o"></i> Buscar laboratorios</a
-        >
-      </li>
-    </ul>
   </li>
-  <li class="treeview pointer" routerLinkActive="active">
-    <a>
+  <li class="pointer" routerLinkActive="active">
+    <a href="#" [routerLink]="['busquedaservicio']" (click)="false;">
       <i class="fa fa-laptop"></i>
-      <span>Servicios</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <span>Búsqueda de servicios</span>
     </a>
-    <ul class="treeview-menu">
-      <li routerLinkActive="active">
-        <a [routerLink]="['busquedaservicio']">
-          <i class="fa fa-circle-o"></i>Buscar servicios</a
-        >
-      </li>
-    </ul>
   </li>
-  <li class="treeview pointer" routerLinkActive="active">
-    <a>
+  <li class="pointer" routerLinkActive="active">
+    <a href="#" [routerLink]="['busquedaprueba']" (click)="false;">
       <i class="fa fa-search"></i>
-      <span>Prácticas</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <span>Búsqueda de prácticas de docencia</span>
     </a>
-    <ul class="treeview-menu">
-      <li routerLinkActive="active">
-        <a [routerLink]="['busquedaprueba']">
-          <i class="fa fa-circle-o"></i>Buscar prácticas de docencia</a
-        >
-      </li>
-    </ul>
   </li>
   <!-- <app-bar-admin-solicitudes *ngIf="hasMainModule || hasLevel2Module"></app-bar-admin-solicitudes> -->
-  <li class="treeview pointer" routerLinkActive="active" *ngIf="hasMainModule || hasLevel2Module">
-    <a>
+  <li class="pointer" routerLinkActive="active" *ngIf="hasMainModule || hasLevel2Module">
+    <a href="#" [routerLink]="['adminsolicitudes']" (click)="false;">
       <i class="fa fa-audio-description"></i>
-      <span>Administrar mis solicitudes</span>
-      <span class="pull-right-container">
-        <i class="fa fa-angle-left pull-right"></i>
-      </span>
+      <span>Mis solicitudes de servicio</span>
     </a>
-    <ul class="treeview-menu">
-      <li routerLinkActive="active" style="width: 100%">
-        <a [routerLink]="['adminsolicitudes']">
-          <i class="fa fa-circle-o"></i>Solicitudes de servicios
-        </a>
-      </li>
-    </ul>
   </li>
 </ul>

@@ -1,19 +1,9 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu" data-widget="tree">
-
-    <li class="treeview">
-      <a>
-        <i class="fa fa-audio-description"></i>
-        <span>Administrar solicitudes</span>
-        <span class="pull-right-container">
-          <i class="fa fa-angle-left pull-right"></i>
-        </span>
-      </a>
-      <ul class="treeview-menu">
-        <li style="width: 100%">
-          <a [routerLink]="['solicitudes3']" (click)="enviaritem()">
-            <i class="fa fa-circle-o"></i>Solicitudes de mantenimiento</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
+  <li routerLinkActive="active">
+    <a href="#" [routerLink]="['solicitudes3']" (click)="enviaritem();false;">
+      <i class="fa fa-audio-description"></i>
+      <span>Solicitudes de mantenimiento</span>
+    </a>
+  </li>
+</ul>
