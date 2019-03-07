@@ -60,7 +60,7 @@
 
                         <ng-container matColumnDef="totalarea">
                           <mat-header-cell *matHeaderCellDef mat-sort-header> Total Area </mat-header-cell>
-                          <mat-cell *matCellDef="let element"> {{element.totalArea}} </mat-cell>
+                          <mat-cell *matCellDef="let element"> {{element.totalarea}} </mat-cell>
                         </ng-container>
 
 
@@ -95,7 +95,7 @@
                 </div>
               </div>
 
-              <div class="col-md-12" *ngIf="this.formtrue">
+              <div class="col-md-12" *ngIf="this.formtrue" id="spacebox" >
                 <div class="box box-danger">
                   <div class="box-header">
                     <i class="fa fa-address-card-o"></i>
@@ -330,7 +330,7 @@
           <div class="box-header text-center">
             <i class="fa fa-building-o"></i>
             <h1 class="box-title">Nuevo Espacio</h1>
-            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal')"></span>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close "></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">

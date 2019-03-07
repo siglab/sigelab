@@ -38,7 +38,7 @@ export class Modulo2Service {
   }
 
   buscarEspacio(idesp){
-    return this.afs.doc('space/' + idesp).ref.get();
+    return this.afs.doc('space/' + idesp).snapshotChanges();
   }
 
   buscarServicio(idser){
@@ -142,7 +142,7 @@ export class Modulo2Service {
 
   getPracticesForIdEquipo(idEquip){
     const col = this.afs.collection('practice');
-    const refer = col.ref.where('relatedEquipments.'+idEquip,'==',true);
+    const refer = col.ref.where('relatedEquipments.' + idEquip, '==', true);
     return  refer.get()
   }
 
@@ -152,10 +152,14 @@ export class Modulo2Service {
     return refer.get();
   }
 
-  getEspaceForBuildAndPlace(idbuild, idplace){
+  getEspaceForBuildAndPlace(edificio: string , espacio: string ){
+
+
+    const build = parseInt( edificio, 10 );
+    const place = parseInt( espacio, 10 );
     const col = this.afs.collection('space');
-    const refer = col.ref.where('spaceData.building', '==', idbuild)
-                          .where('spaceData.place', '==', idplace);
+    const refer = col.ref.where('spaceData.building', '==', build)
+                          .where('spaceData.place', '==', place);
     return refer.get();
   }
 
@@ -224,9 +228,9 @@ export class Modulo2Service {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
 
-  setDocLaboratorio(idlab, doc){
+  setDocLaboratorio(idlab, doc) {
 
-    return  this.afs.doc('cfFacil/' + idlab).set(doc,{merge:true});
+    return  this.afs.doc('cfFacil/' + idlab).set(doc, {merge: true});
   }
 
   updateEquip(idEquip, doc){
