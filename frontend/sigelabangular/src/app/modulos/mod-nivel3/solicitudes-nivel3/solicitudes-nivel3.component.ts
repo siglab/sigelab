@@ -5,7 +5,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import swal from 'sweetalert2';
 
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -24,11 +24,11 @@ export class SolicitudesNivel3Component implements OnInit {
 
   itemsel: any;
 
-  datos:any;
-  histodatos:any;
+  datos: any;
+  histodatos: any;
 
-  displayedColumns = ['id','nombre', 'fecha', 'tipo', 'estado'];
-  displayedColumns2 = ['id','nombre', 'fecha', 'laboratorio', 'estado'];
+  displayedColumns = ['id', 'nombre', 'fecha', 'tipo', 'estado'];
+  displayedColumns2 = ['id', 'nombre', 'fecha', 'laboratorio', 'estado'];
 
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource([]);
@@ -55,63 +55,63 @@ export class SolicitudesNivel3Component implements OnInit {
   selection2 = new SelectionModel(true, []);
 
 
-  solsel:any;
+  solsel: any;
 
   reserMan = {
-    cfOrgUnit:'',
-    headquarter:'',
-    cfFacil:'',
-    createdBy:'',
-    requestDesc:'',
-    requestType:'mantenimiento',
-    maintenanceType:'',
-    providersInfo:[],
-    relatedEquipments:'',
-    relatedComponents:{},
-    status:'pendiente',
-    active:true,
-    createdAt:'',
-    updatedAt:'',
-    path:[]
+    cfOrgUnit: '',
+    headquarter: '',
+    cfFacil: '',
+    createdBy: '',
+    requestDesc: '',
+    requestType: 'mantenimiento',
+    maintenanceType: '',
+    providersInfo: [],
+    relatedEquipments: '',
+    relatedComponents: {},
+    status: 'pendiente',
+    active: true,
+    createdAt: '',
+    updatedAt: '',
+    path: []
   };
 
   proovedor = {
-    name:'',
-    contactNumbers:[],
-    attachments:{}
+    name: '',
+    contactNumbers: [],
+    attachments: {}
   };
 
   telproov = {
-    tel1:'',
-    tel2:''
-  }
+    tel1: '',
+    tel2: ''
+  };
 
   iconosModal = {
-    servicio:false,
-    variacion:false,
-    equipos:false,
-    componentes:false,
-    panico:false
+    servicio: false,
+    variacion: false,
+    equipos: false,
+    componentes: false,
+    panico: false
   };
 
   panico = {
-    nombre:'',
-    descripcion:''
+    nombre: '',
+    descripcion: ''
   };
 
 
-  user:any;
+  user: any;
 
   listaArchivos = [];
   files = [];
-  filePath:any;
-  ref:any;
+  filePath: any;
+  ref: any;
 
   selectedFiles: FileList;
   currentUpload: Upload;
-  private basePath:string = '/cotizaciones';
+  private basePath = '/cotizaciones';
 
-  rol:any;
+  rol: any;
   moduloNivel2 = false;
   moduloSolicitudes = false;
 
@@ -119,25 +119,25 @@ export class SolicitudesNivel3Component implements OnInit {
   solicitudesEjecu = 0;
   montoSolicitudes = 0;
 
-  infosabs:any;
+  infosabs: any;
   viewsabs = false;
 
-  response:any;
+  response: any;
 
   comentario = '';
   costo = '';
 
-  role:any;
+  role: any;
   moduloNivel3 = false;
   moduloNivel25 = false;
 
-  persona:any;
-  faculty:any;
+  persona: any;
+  faculty: any;
 
-  constructor( private serviceMod3: ServicesNivel3Service, private storage:AngularFireStorage, private http:Http) {
+  constructor(private serviceMod3: ServicesNivel3Service, private storage: AngularFireStorage, private http: Http) {
   }
 
-   ngOnInit() {
+  ngOnInit() {
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
@@ -153,9 +153,9 @@ export class SolicitudesNivel3Component implements OnInit {
 
     this.alertaCargando();
 
-    if(this.moduloNivel3){
+    if (this.moduloNivel3) {
       this.serviceMod3.getCollectionSolicitudes().then(data1 => {
-        if(data1.size != 0){
+        if (data1.size !== 0) {
           this.itemsel = data1;
           this.estructurarSolicitudesActivas(data1).then(datos => {
 
@@ -169,7 +169,7 @@ export class SolicitudesNivel3Component implements OnInit {
 
             this.cerrarAlerta();
           });
-        }else{
+        } else {
           this.alertaError('No se han generado solicitudes de mantenimiento aún');
         }
 
@@ -177,10 +177,10 @@ export class SolicitudesNivel3Component implements OnInit {
       });
     }
 
-    if(this.moduloNivel25){
+    if (this.moduloNivel25) {
       this.getFaculty().then(retor => {
         let cont = 1;
-        let array = [];
+        const array = [];
         for (const key in this.faculty) {
           if (this.faculty.hasOwnProperty(key)) {
             this.serviceMod3.getCollectionSolicitudesFacultad(key).then(data1 => {
@@ -188,10 +188,10 @@ export class SolicitudesNivel3Component implements OnInit {
                 array.push(doc);
               });
 
-              console.log(retor['size'], cont)
-              if(retor['size'] == cont){
+              console.log(retor['size'], cont);
+              if (retor['size'] === cont) {
                 this.itemsel = array;
-                if(array.length != 0){
+                if (array.length !== 0) {
                   this.estructurarSolicitudesActivas(array).then(datos => {
 
                     this.dataSource.data = datos['data'];
@@ -204,11 +204,11 @@ export class SolicitudesNivel3Component implements OnInit {
 
                     this.cerrarAlerta();
                   });
-                }else{
+                } else {
                   this.alertaError('No se han generado solicitudes de mantenimiento aún');
                 }
 
-              }else{
+              } else {
                 cont++;
               }
 
@@ -218,7 +218,7 @@ export class SolicitudesNivel3Component implements OnInit {
           }
         }
 
-      })
+      });
 
     }
 
@@ -228,32 +228,32 @@ export class SolicitudesNivel3Component implements OnInit {
 
   // METODOS PARA SUBIR UNA COTIZACION
 
-  cambiarEstadoSolicitud(estado){
+  cambiarEstadoSolicitud(estado) {
     this.alertaCargando();
     const obj = {
-      acceptedBy:this.user.email,
+      acceptedBy: this.user.email,
       updatedAt: new Date().toISOString(),
-      status:'',
-      path:this.solsel.path
+      status: '',
+      path: this.solsel.path
     };
 
-    if(estado == 'rechazado'){
+    if (estado === 'rechazado') {
       obj['comment'] = this.comentario;
       obj.status = 'rechazada';
 
-      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
+      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(() => {
         this.alertaExito('Solicitud Rechazada');
         this.solsel.status = 'rechazada';
         $('#modal2').modal('hide');
       });
-    }else if(estado == 'aceptada'){
+    } else if (estado === 'aceptada') {
       obj.status = 'aceptada';
-      obj['dateAccepted'] =  new Date().toISOString();
-      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
+      obj['dateAccepted'] = new Date().toISOString();
+      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(() => {
         this.alertaExito('Solicitud Aceptada');
         this.solsel.status = 'aceptada';
       });
-    }else{
+    } else {
       obj.status = 'realizada';
       obj['costo'] = this.costo;
       const upload = this.uploadMulti();
@@ -261,7 +261,7 @@ export class SolicitudesNivel3Component implements OnInit {
         obj.path.push(upload[i]);
       }
 
-      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(()=>{
+      this.serviceMod3.updateSolicitudMantenimiento(this.solsel.uidsol, obj).then(() => {
         this.alertaExito('Solicitud Concluida');
         this.solsel.status = 'realizada';
 
@@ -278,24 +278,24 @@ export class SolicitudesNivel3Component implements OnInit {
   }
 
 
-  alistarVariables(event){
+  alistarVariables(event) {
 
     let tamano = false;
     for (let i = 0; i < event.target.files.length; i++) {
 
-      if(event.target.files[i].size >= 33554432){
+      if (event.target.files[i].size >= 33554432) {
         tamano = true;
         break;
       }
     }
 
-    if(tamano){
+    if (tamano) {
       swal(
         'Uno o mÁs archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );
-    }else{
+    } else {
       for (let i = 0; i < event.target.files.length; i++) {
         this.listaArchivos.push(event.target.files[i]);
       }
@@ -306,15 +306,15 @@ export class SolicitudesNivel3Component implements OnInit {
 
 
   uploadMulti() {
-    let filespath = [];
+    const filespath = [];
 
-    let files = this.listaArchivos;
-    let filesIndex = _.range(files.length)
+    const files = this.listaArchivos;
+    const filesIndex = _.range(files.length);
     _.each(filesIndex, (idx) => {
       this.currentUpload = new Upload(files[idx]);
       this.uploadFile(this.currentUpload);
 
-      filespath.push('cotizaciones/'+ this.currentUpload.file.name);
+      filespath.push('cotizaciones/' + this.currentUpload.file.name);
     });
 
     return filespath;
@@ -322,13 +322,13 @@ export class SolicitudesNivel3Component implements OnInit {
 
   uploadFile(upload: Upload) {
 
-    let storageRef = firebase.storage().ref();
-    let uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
+    const storageRef = firebase.storage().ref();
+    const uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
 
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-      (snapshot) =>  {
+      (snapshot) => {
         // upload in progress
-        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100
+        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100;
       },
       (error) => {
         // upload failed
@@ -373,10 +373,10 @@ export class SolicitudesNivel3Component implements OnInit {
   estructurarSolicitudesActivas(data) {
     this.datos = [];
     let size = data.size;
-    if(data.length){
-      size = data.length
+    if (data.length) {
+      size = data.length;
     }
-    let promise = new Promise((resolve, reject)=>{
+    const promise = new Promise((resolve, reject) => {
       const activo = [];
 
       const historial = [];
@@ -388,7 +388,7 @@ export class SolicitudesNivel3Component implements OnInit {
         this.serviceMod3.getLaboratorio(elemento.cfFacil).then(lab => {
           this.serviceMod3.consultarNotificaciones(elemento.createdBy).then(email => {
             const Solicitud = {
-              uidsol:element.id,
+              uidsol: element.id,
               uidlab: elemento.cfFacil,
               uidespacio: elemento.headquarter,
               nombrelab: lab.data().cfName,
@@ -398,30 +398,30 @@ export class SolicitudesNivel3Component implements OnInit {
               usuario: email.data().email,
               activo: elemento.active,
               idEquipo: elemento.relatedEquipments,
-              componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
+              componentes: this.estructurarComponenteId(elemento.relatedEquipments, elemento.relatedComponents),
               fecha: elemento.createdAt.split('T')[0],
               editado: elemento.updatedAt.split('T')[0],
               proveedores: elemento.providersInfo,
               path: elemento.path,
-              costo:elemento.costo,
+              costo: elemento.costo,
               acepto: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
             };
-            if(elemento.comment){
+            if (elemento.comment) {
               Solicitud['comment'] = elemento.comment;
             }
-            if(elemento.relatedEquipments != ''){
+            if (elemento.relatedEquipments !== '') {
               this.serviceMod3.getEquipo(elemento.relatedEquipments).then(equipo => {
                 Solicitud['equipo'] = equipo.data();
                 Solicitud['nombreEquip'] = equipo.data().cfName;
               });
-            }else{
+            } else {
               Solicitud['equipo'] = {};
               Solicitud['nombreEquip'] = 'no especificado';
-              Solicitud['panicoequipo'] =  elemento.panicoequipo;
-              Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
+              Solicitud['panicoequipo'] = elemento.panicoequipo;
+              Solicitud['panicodescripcion'] = elemento.panicodescripcion;
 
             }
-            if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
+            if (elemento.status === 'pendiente' || elemento.status === 'aceptada') {
               activo.push(Solicitud);
             } else {
               historial.push(Solicitud);
@@ -429,9 +429,9 @@ export class SolicitudesNivel3Component implements OnInit {
 
             this.datos.push(Solicitud);
 
-            console.log(size, activo.length+historial.length);
-            if(size == (activo.length+historial.length)){
-              resolve({data:activo, data2: historial});
+            console.log(size, activo.length + historial.length);
+            if (size === (activo.length + historial.length)) {
+              resolve({ data: activo, data2: historial });
             }
 
           });
@@ -458,20 +458,20 @@ export class SolicitudesNivel3Component implements OnInit {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.serviceMod3.getEquipo(clave).then(data => {
-           const equip =  data.data();
+          this.serviceMod3.getEquipo(clave).then(data => {
+            const equip = data.data();
 
-             // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                const equipo = {
-                  id: data.id,
-                  nombre: equip.cfName,
-                  activo: equip.active,
-                  precio: equip.price,
-                  componentes:this.estructurarComponents(clave),
-                };
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const equipo = {
+              id: data.id,
+              nombre: equip.cfName,
+              activo: equip.active,
+              precio: equip.price,
+              componentes: this.estructurarComponents(clave),
+            };
 
-                arr.push(equipo);
-           });
+            arr.push(equipo);
+          });
         }
 
       }
@@ -480,9 +480,9 @@ export class SolicitudesNivel3Component implements OnInit {
     return arr;
   }
 
-      // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarComponents(item){
+  estructurarComponents(item) {
     const arr = [];
 
     this.serviceMod3.getcomponents(item).then(data => {
@@ -503,23 +503,23 @@ export class SolicitudesNivel3Component implements OnInit {
         arr.push(componente);
       });
 
-     });
+    });
 
-     return arr;
+    return arr;
   }
 
-   // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarComponenteId(item, componente){
-     const arr = [];
+  estructurarComponenteId(item, componente) {
+    const arr = [];
 
-     for (const clave in componente) {
-       // Controlando que json realmente tenga esa propiedad
-       if (componente.hasOwnProperty(clave)) {
+    for (const clave in componente) {
+      // Controlando que json realmente tenga esa propiedad
+      if (componente.hasOwnProperty(clave)) {
 
-         if (componente[clave]) {
-            this.serviceMod3.getComponenteForId(item, clave).then(data => {
-              const element =  data.data();
+        if (componente[clave]) {
+          this.serviceMod3.getComponenteForId(item, clave).then(data => {
+            const element = data.data();
 
             const comp = {
               id: data.id,
@@ -532,18 +532,18 @@ export class SolicitudesNivel3Component implements OnInit {
             };
 
             arr.push(comp);
-            });
-         }
+          });
+        }
 
-       }
-     }
+      }
+    }
 
-     return arr;
+    return arr;
   }
 
 
 
-  cambiarDataSolicitud(item){
+  cambiarDataSolicitud(item) {
     this.solsel = item;
     const aux = this.buscarCoincidenciasSolicitudes(item);
     this.solicitudesCoin = aux.coin;
@@ -553,22 +553,22 @@ export class SolicitudesNivel3Component implements OnInit {
 
     this.infosabs = undefined;
     this.viewsabs = false;
-    if(item.idEquipo){
+    if (item.idEquipo) {
 
       this.serviceMod3.getEquipo(item.idEquipo).then(data => {
 
         this.consultarSabs(data.data().inventory).then(() => {
           console.log('hecho');
           this.infosabs = this.response;
-        }).catch((error)=>{
+        }).catch((error) => {
 
-            swal({
-              type: 'error',
-              title: 'No se pudo conectar con SABS',
-              showConfirmButton: true
-            });
-            this.viewsabs = true;
-            this.infosabs = undefined;
+          swal({
+            type: 'error',
+            title: 'No se pudo conectar con SABS',
+            showConfirmButton: true
+          });
+          this.viewsabs = true;
+          this.infosabs = undefined;
 
         });
       });
@@ -583,7 +583,7 @@ export class SolicitudesNivel3Component implements OnInit {
 
     const promise = new Promise((resolve, reject) => {
 
-      const url =  URLAPI;
+      const url = URLAPI;
       const body = {
         codInventario: item,
         codLab: '5646',
@@ -597,16 +597,16 @@ export class SolicitudesNivel3Component implements OnInit {
         console.log(res.json());
         if (res.status === 200) {
           console.log('funco');
-          this.response =  res.json().inventario;
+          this.response = res.json().inventario;
           resolve();
         } else {
           reject();
         }
 
       }, (error) => {
-          console.log('faio', error);
-          this.response = {};
-          reject();
+        console.log('faio', error);
+        this.response = {};
+        reject();
       });
 
 
@@ -632,9 +632,9 @@ export class SolicitudesNivel3Component implements OnInit {
     }
   }
 
-  getFaculty(){
-   let size = 0;
-    let promise = new Promise((resolve, reject) => {
+  getFaculty() {
+    let size = 0;
+    const promise = new Promise((resolve, reject) => {
       this.serviceMod3.buscarDirector(this.persona.cfPers).then(doc => {
         this.faculty = doc.data().faculty;
         for (const key in this.faculty) {
@@ -643,7 +643,7 @@ export class SolicitudesNivel3Component implements OnInit {
             size++;
           }
         }
-        resolve({size:size});
+        resolve({ size: size });
       });
     });
     return promise;
@@ -651,44 +651,44 @@ export class SolicitudesNivel3Component implements OnInit {
 
 
 
-  buscarCoincidenciasSolicitudes(item){
+  buscarCoincidenciasSolicitudes(item) {
     const coincidencias = [];
     let manejecutados = 0;
     let montosol = 0;
-    const fechaActual = parseInt(new Date().toISOString().split('-')[0])-2;
+    const fechaActual = parseInt(new Date().toISOString().split('-')[0], 10) - 2;
 
     for (let i = 0; i < this.datos.length; i++) {
 
 
-      if((this.datos[i].idEquipo == item.idEquipo)){
+      if ((this.datos[i].idEquipo === item.idEquipo)) {
         coincidencias.push(this.datos[i]);
-        if(this.datos[i].status == 'realizada'){
-          const fecha = parseInt(this.datos[i].editado.split('-')[0]);
+        if (this.datos[i].status === 'realizada') {
+          const fecha = parseInt(this.datos[i].editado.split('-')[0], 10);
 
-          if(fechaActual <= fecha){
+          if (fechaActual <= fecha) {
             manejecutados++;
-            montosol += parseInt(this.datos[i].costo);
+            montosol += parseInt(this.datos[i].costo, 10);
           }
         }
       }
     }
 
-    return {coin:coincidencias, mane:manejecutados, monto:montosol};
+    return { coin: coincidencias, mane: manejecutados, monto: montosol };
   }
 
 
-  cambiarDataComponentes(item){
-   this.dataSourceComp = new MatTableDataSource(item.componentes);
+  cambiarDataComponentes(item) {
+    this.dataSourceComp = new MatTableDataSource(item.componentes);
   }
 
-  descargarArchivo(index){
+  descargarArchivo(index) {
     const ref = this.storage.ref(this.solsel.path[index]);
     ref.getDownloadURL().subscribe(data => {
       window.open(data);
-    }); ;
+    });
   }
 
-  quitarArchivo(index){
+  quitarArchivo(index) {
 
     this.listaArchivos.splice(index, 1);
     swal(
@@ -699,7 +699,7 @@ export class SolicitudesNivel3Component implements OnInit {
   }
 
 
-  agregarProovedor(){
+  agregarProovedor() {
     this.proovedor.contactNumbers.push(this.telproov.tel1);
     this.proovedor.contactNumbers.push(this.telproov.tel2);
     this.reserMan.providersInfo.push(this.proovedor);
@@ -708,46 +708,46 @@ export class SolicitudesNivel3Component implements OnInit {
     console.log(this.reserMan.providersInfo);
   }
 
-  quitarProovedor(index){
+  quitarProovedor(index) {
     this.reserMan.providersInfo.splice(index, 1);
   }
 
 
-  inicializarProovedor(){
+  inicializarProovedor() {
     this.proovedor = {
-      name:'',
-      contactNumbers:[],
-      attachments:{}
+      name: '',
+      contactNumbers: [],
+      attachments: {}
     };
 
     this.telproov = {
-      tel1:'',
-      tel2:''
-    }
-  }
-
-  inicializarSolicitud(){
-
-    this.reserMan = {
-      cfOrgUnit:'',
-      headquarter:'',
-      cfFacil:'',
-      createdBy:'',
-      requestDesc:'',
-      requestType:'',
-      maintenanceType:'',
-      providersInfo:[],
-      relatedEquipments:'',
-      relatedComponents:{},
-      status:'pendiente',
-      active:true,
-      createdAt:'',
-      updatedAt:'',
-      path:[]
+      tel1: '',
+      tel2: ''
     };
   }
 
-  alertaCargando(){
+  inicializarSolicitud() {
+
+    this.reserMan = {
+      cfOrgUnit: '',
+      headquarter: '',
+      cfFacil: '',
+      createdBy: '',
+      requestDesc: '',
+      requestType: '',
+      maintenanceType: '',
+      providersInfo: [],
+      relatedEquipments: '',
+      relatedComponents: {},
+      status: 'pendiente',
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+      path: []
+    };
+  }
+
+  alertaCargando() {
     swal({
       title: 'Cargando un momento...',
       text: 'Espere mientras se cargan los datos',
@@ -757,7 +757,7 @@ export class SolicitudesNivel3Component implements OnInit {
     });
   }
 
-  alertaExito(mensaje){
+  alertaExito(mensaje) {
     return swal({
       type: 'success',
       title: mensaje,
@@ -765,7 +765,7 @@ export class SolicitudesNivel3Component implements OnInit {
     });
   }
 
-  alertaError(mensaje){
+  alertaError(mensaje) {
     swal({
       type: 'error',
       title: mensaje,
@@ -773,7 +773,7 @@ export class SolicitudesNivel3Component implements OnInit {
     });
   }
 
-  cerrarAlerta(){
+  cerrarAlerta() {
     swal.close();
   }
 
@@ -791,39 +791,39 @@ export class SolicitudesNivel3Component implements OnInit {
     this.dataSource2.filter = filterValue;
   }
 
-  cambiarIconoModal(box){
-    if(!this.iconosModal[box]){
+  cambiarIconoModal(box) {
+    if (!this.iconosModal[box]) {
       this.iconosModal[box] = true;
     } else {
       this.iconosModal[box] = false;
     }
   }
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  inicializar(){
+  inicializar() {
     this.solsel = undefined;
   }
 
-  inicializarMante(){
+  inicializarMante() {
     this.reserMan = {
-      cfOrgUnit:'',
-      headquarter:'',
-      cfFacil:'',
-      createdBy:'',
-      requestDesc:'',
-      requestType:'mantenimiento',
-      maintenanceType:'',
-      providersInfo:[],
-      relatedEquipments:'',
-      relatedComponents:{},
-      status:'pendiente',
-      active:true,
-      createdAt:'',
-      updatedAt:'',
-      path:[]
+      cfOrgUnit: '',
+      headquarter: '',
+      cfFacil: '',
+      createdBy: '',
+      requestDesc: '',
+      requestType: 'mantenimiento',
+      maintenanceType: '',
+      providersInfo: [],
+      relatedEquipments: '',
+      relatedComponents: {},
+      status: 'pendiente',
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+      path: []
     };
   }
 
@@ -833,13 +833,13 @@ export class SolicitudesNivel3Component implements OnInit {
 export class Upload {
 
   $key: string;
-  file:File;
-  name:string;
-  url:string;
-  progress:number;
+  file: File;
+  name: string;
+  url: string;
+  progress: number;
   createdAt: Date = new Date();
 
-  constructor(file:File) {
+  constructor(file: File) {
     this.file = file;
   }
 }

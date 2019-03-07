@@ -26,7 +26,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   ngOnInit() {
     if (localStorage.getItem('usuario')) {
       this.getUserId();
-      const labs =  JSON.parse(localStorage.getItem('laboratorios'));
+      const labs = JSON.parse(localStorage.getItem('laboratorios'));
       this.permisos = JSON.parse(localStorage.getItem('permisos'));
       this.estructurarLaboratorios(labs).then(() => {
         this.laboratorios2 = this.datosLabsEstructurados;
@@ -34,15 +34,15 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     }
   }
 
-  estructurarLaboratorios(labs){
+  estructurarLaboratorios(labs) {
     this.datosLabsEstructurados = [];
     let size = 0;
     for (const key in labs) {
       if (labs.hasOwnProperty(key)) {
-       size++;
+        size++;
       }
     }
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       for (const key in labs) {
         if (labs.hasOwnProperty(key)) {
           this.getLaboratorio(key).then(doc => {
@@ -51,10 +51,10 @@ export class BarAdminLaboratoriosComponent implements OnInit {
               nombre: this.ajustarTexto(elemento.cfName),
               uid: doc.id,
               labo: elemento,
-              roles : this.permisos[key]
+              roles: this.permisos[key]
             };
             this.datosLabsEstructurados.push(laboratorio);
-            if(size == this.datosLabsEstructurados.length){
+            if (size === this.datosLabsEstructurados.length) {
               resolve();
             }
           });
@@ -64,7 +64,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
     return promise;
   }
 
-  getLaboratorio(id){
+  getLaboratorio(id) {
     return this.afs.collection('cfFacil').doc(id).ref.get();
   }
 
@@ -77,7 +77,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   }
 
   getPersona(persid) {
-    return  this.afs.doc('cfPers/' + persid).snapshotChanges();
+    return this.afs.doc('cfPers/' + persid).snapshotChanges();
   }
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR

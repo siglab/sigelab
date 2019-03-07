@@ -465,10 +465,20 @@ export class BusServComponent implements OnInit, AfterViewInit {
       const ambiente = this;
       setTimeout(function() {
         ambiente.loadMap(item);
-        document.getElementById('detalle').scrollIntoView();
+        $('html, body').animate(
+          {
+            scrollTop: $('#detalle').offset().top - 55
+          },
+          1000
+        );
       }, 1000);
      } else {
-      document.getElementById('detalle').scrollIntoView();
+      $('html, body').animate(
+        {
+          scrollTop: $('#detalle').offset().top - 55
+        },
+        1000
+      );
       this.removerMarker();
       this.agregarMarker(item);
      }

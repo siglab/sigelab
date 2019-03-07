@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AngularFireStorage } from 'angularfire2/storage';
 
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
 import { Http } from '@angular/http';
 import { URLCORREO } from '../../../../config';
@@ -24,11 +24,11 @@ declare var $: any;
 export class SolicitudMantenimientoComponent implements OnInit {
   itemsel: any;
 
-  datos:any;
-  histodatos:any;
+  datos: any;
+  histodatos: any;
 
-  displayedColumns = ['id','nombre', 'fecha', 'tipo', 'estado'];
-  displayedColumns2 = ['id','nombre', 'fecha', 'laboratorio', 'estado'];
+  displayedColumns = ['id', 'nombre', 'fecha', 'tipo', 'estado'];
+  displayedColumns2 = ['id', 'nombre', 'fecha', 'laboratorio', 'estado'];
 
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource([]);
@@ -50,110 +50,110 @@ export class SolicitudMantenimientoComponent implements OnInit {
   dataSourceComp = new MatTableDataSource([]);
   @ViewChild('paginatorComp') paginatorComp: MatPaginator;
   @ViewChild('sortComp') sortComp: MatSort;
-  
+
   selection = new SelectionModel(true, []);
   selection2 = new SelectionModel(true, []);
 
-  
-  solsel:any;
+
+  solsel: any;
 
   reserMan = {
-    cfOrgUnit:'',
-    headquarter:'',
-    cfFacil:'',
-    createdBy:'',
-    requestDesc:'',
-    requestType:'mantenimiento',
-    maintenanceType:'',
-    providersInfo:[],
-    relatedEquipments:'',
-    relatedComponents:{},
-    status:'pendiente',
-    active:true,
-    createdAt:'',
-    updatedAt:'',
-    path:[],
-    costo:'0',
-    acceptedBy:'',
-    faculties:{}
+    cfOrgUnit: '',
+    headquarter: '',
+    cfFacil: '',
+    createdBy: '',
+    requestDesc: '',
+    requestType: 'mantenimiento',
+    maintenanceType: '',
+    providersInfo: [],
+    relatedEquipments: '',
+    relatedComponents: {},
+    status: 'pendiente',
+    active: true,
+    createdAt: '',
+    updatedAt: '',
+    path: [],
+    costo: '0',
+    acceptedBy: '',
+    faculties: {}
   };
 
   proovedor = {
-    name:'',
-    contactNumbers:'',
-    attachments:{},
-    cot:'',
-    correo:''
+    name: '',
+    contactNumbers: '',
+    attachments: {},
+    cot: '',
+    correo: ''
   };
 
 
   iconosModal = {
-    servicio:false,
-    variacion:false,
-    equipos:false,
-    componentes:false,
-    panico:false
+    servicio: false,
+    variacion: false,
+    equipos: false,
+    componentes: false,
+    panico: false
   };
 
   panico = {
-    nombre:'',
-    descripcion:''
+    nombre: '',
+    descripcion: ''
   };
 
-  lab_id:any;
+  lab_id: any;
 
-  equipos:any;
+  equipos: any;
 
-  user:any;
+  user: any;
 
   listaArchivos = [];
   files = [];
-  filePath:any;
-  ref:any;
+  filePath: any;
+  ref: any;
 
   selectedFiles: FileList;
   currentUpload: Upload;
-  private basePath:string = '/cotizaciones';
+  private basePath = '/cotizaciones';
 
-  rol:any;
+  rol: any;
   moduloNivel2 = false;
   moduloSolicitudes = false;
 
-  constructor(private obs: ObservablesService,  private servicioMod2:Modulo2Service, 
-              private storage:AngularFireStorage, private http:Http) {
+  constructor(private obs: ObservablesService, private servicioMod2: Modulo2Service,
+    private storage: AngularFireStorage, private http: Http) {
   }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-  
+
 
     if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));   
+      this.user = JSON.parse(localStorage.getItem('usuario'));
     }
     this.obs.currentObjectSolMan.subscribe(data => {
- 
+
       this.getRoles(data.roles);
-      if(data.length != 0){
+      if (data.length !== 0) {
 
         this.alertaCargando();
         this.itemsel = data;
         this.lab_id = data.uid;
 
         this.servicioMod2.getCollectionSolicitudesMantenimiento(data.uid).then(data1 => {
-          if(data1.size != 0){
+          if (data1.size !== 0) {
             this.datos = this.estructurarSolicitudesActivas(data1, data).then(datos => {
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
               this.dataSource.paginator = this.paginator;
-  
+
               this.dataSource2.data = datos['data2'];
               this.dataSource2.sort = this.sort2;
               this.dataSource2.paginator = this.paginator2;
-  
+
               this.cerrarAlerta();
             });
-          }else{
+          } else {
             swal({
               type: 'error',
               title: 'El laboratorio seleccionado aun no tiene solicitudes de mantenimiento',
@@ -161,7 +161,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
             });
           }
 
-                     
+
         });
 
         this.servicioMod2.buscarLab(data.uid).then(labo => {
@@ -169,21 +169,21 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
           this.dataSourceEquip = new MatTableDataSource(this.equipos);
 
-            setTimeout(() => {
-              
-              this.dataSourceEquip.sort = this.sortEquip;
-              this.dataSourceEquip.paginator = this.paginatorEquip;
+          setTimeout(() => {
 
-            }, 1000);
+            this.dataSourceEquip.sort = this.sortEquip;
+            this.dataSourceEquip.paginator = this.paginatorEquip;
+
+          }, 1000);
         });
       } else {
-      
+
         swal({
           type: 'error',
           title: 'No se ha seleccionado ningun laboratorio',
           showConfirmButton: true
         });
-        
+
       }
     });
   }
@@ -191,31 +191,31 @@ export class SolicitudMantenimientoComponent implements OnInit {
   // METODOS PARA SUBIR UNA COTIZACION
 
 
-   
-  alistarVariables(event){
-  
+
+  alistarVariables(event) {
+
     let tamano = false;
     for (let i = 0; i < event.target.files.length; i++) {
-      
-      if(event.target.files[i].size >= 33554432){
+
+      if (event.target.files[i].size >= 33554432) {
         tamano = true;
         break;
       }
     }
 
-    if(tamano){
+    if (tamano) {
       swal(
         'Uno o más archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );
-    }else{
+    } else {
       for (let i = 0; i < event.target.files.length; i++) {
         this.listaArchivos.push(event.target.files[i]);
       }
-      
+
     }
-   
+
   }
 
 
@@ -237,15 +237,15 @@ export class SolicitudMantenimientoComponent implements OnInit {
   }
 
   uploadMulti() {
-    let filespath = [];
+    const filespath = [];
 
-    let files = this.listaArchivos;
-    let filesIndex = _.range(files.length)
+    const files = this.listaArchivos;
+    const filesIndex = _.range(files.length);
     _.each(filesIndex, (idx) => {
       this.currentUpload = new Upload(files[idx]);
       this.uploadFile(this.currentUpload);
 
-      filespath.push('cotizaciones/'+ this.currentUpload.file.name);
+      filespath.push('cotizaciones/' + this.currentUpload.file.name);
     });
 
     return filespath;
@@ -253,13 +253,13 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   uploadFile(upload: Upload) {
 
-    let storageRef = firebase.storage().ref();
-    let uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
+    const storageRef = firebase.storage().ref();
+    const uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
 
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-      (snapshot) =>  {
+      (snapshot) => {
         // upload in progress
-        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100
+        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100;
       },
       (error) => {
         // upload failed
@@ -277,7 +277,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     const numSelected = this.selection.selected.length;
     const numRows = this.displayedColumnsEquip.length;
     return numSelected === numRows;
-    
+
   }
   masterToggle() {
     this.isAllSelected() ?
@@ -290,7 +290,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     const numSelected = this.selection2.selected.length;
     const numRows = this.displayedColumnsComp.length;
     return numSelected === numRows;
-    
+
   }
   masterToggle2() {
     this.isAllSelected() ?
@@ -302,17 +302,17 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
   estructurarSolicitudesActivas(data, lab) {
 
-    let promise = new Promise((resolve, reject)=>{
+    const promise = new Promise((resolve, reject) => {
       const activo = [];
 
       const historial = [];
 
       data.forEach(doc => {
         const elemento = doc.data();
-  
+
         this.servicioMod2.buscarUsuario(elemento.createdBy).then(email => {
           const Solicitud = {
-            uidsol:doc.id,
+            uidsol: doc.id,
             uidlab: elemento.cfFacil,
             uidespacio: elemento.headquarter,
             nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
@@ -321,43 +321,43 @@ export class SolicitudMantenimientoComponent implements OnInit {
             descripcion: elemento.requestDesc,
             usuario: email.data().email,
             activo: elemento.active,
-            componentes: this.estructurarComponenteId(elemento.relatedEquipments,elemento.relatedComponents),
+            componentes: this.estructurarComponenteId(elemento.relatedEquipments, elemento.relatedComponents),
             fecha: elemento.createdAt.split('T')[0],
             editado: elemento.updatedAt.split('T')[0],
             proveedores: elemento.providersInfo,
             path: elemento.path
           };
-          if(elemento.comment){
+          if (elemento.comment) {
             Solicitud['comment'] = elemento.comment;
           }
-          if(elemento.relatedEquipments != ''){
+          if (elemento.relatedEquipments !== '') {
             this.servicioMod2.buscarEquipo(elemento.relatedEquipments).then(equipo => {
               Solicitud['equipo'] = equipo.data();
               Solicitud['nombreEquip'] = equipo.data().cfName;
             });
-          }else{
+          } else {
             Solicitud['equipo'] = {};
-            Solicitud['nombreEquip'] = 'no especificado';  
-            Solicitud['panicoequipo'] =  elemento.panicoequipo;
-            Solicitud['panicodescripcion'] =  elemento.panicodescripcion;
+            Solicitud['nombreEquip'] = 'no especificado';
+            Solicitud['panicoequipo'] = elemento.panicoequipo;
+            Solicitud['panicodescripcion'] = elemento.panicodescripcion;
 
           }
-          if(elemento.status == 'pendiente' || elemento.status == 'aceptada'){
+          if (elemento.status === 'pendiente' || elemento.status === 'aceptada') {
             activo.push(Solicitud);
           } else {
             historial.push(Solicitud);
           }
 
 
-          if(data.size == (activo.length+historial.length)){
-            resolve({data:activo, data2: historial});
+          if (data.size === (activo.length + historial.length)) {
+            resolve({ data: activo, data2: historial });
           }
 
 
-  
+
         });
       });
-  
+
     });
 
 
@@ -377,19 +377,19 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
         if (item[clave]) {
           this.servicioMod2.buscarEquipo(clave).then(data => {
-           const equip =  data.data();
+            const equip = data.data();
 
-             // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                const equipo = {
-                  id: data.id,
-                  nombre: equip.cfName,
-                  activo: equip.active,
-                  precio: equip.price,
-                  componentes:this.estructurarComponents(clave),
-                };
-                
-                arr.push(equipo);
-           });
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const equipo = {
+              id: data.id,
+              nombre: equip.cfName,
+              activo: equip.active,
+              precio: equip.price,
+              componentes: this.estructurarComponents(clave),
+            };
+
+            arr.push(equipo);
+          });
         }
 
       }
@@ -398,45 +398,45 @@ export class SolicitudMantenimientoComponent implements OnInit {
     return arr;
   }
 
-      // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarComponents(item){
+  estructurarComponents(item) {
     const arr = [];
 
     this.servicioMod2.buscarComponente(item).then(data => {
       data.forEach(doc => {
         const element = doc.data();
 
-          const componente = {
-            id: doc.id,
-            nombre: element.cfName,
-            descripcion: element.cfDescription,
-            precio: element.cfPrice,
-            marca: element.brand,
-            modelo: element.model,
-            estado: element.active
-          };
-  
-          arr.push(componente);
+        const componente = {
+          id: doc.id,
+          nombre: element.cfName,
+          descripcion: element.cfDescription,
+          precio: element.cfPrice,
+          marca: element.brand,
+          modelo: element.model,
+          estado: element.active
+        };
+
+        arr.push(componente);
       });
 
     });
 
-     return arr;
+    return arr;
   }
 
-   // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarComponenteId(item, componente){
-     const arr = [];
+  estructurarComponenteId(item, componente) {
+    const arr = [];
 
-     for (const clave in componente) {
-       // Controlando que json realmente tenga esa propiedad
-       if (componente.hasOwnProperty(clave)) {
- 
-         if (componente[clave]) {
-            this.servicioMod2.getComponentForId(item, clave).then(data => {
-              const element =  data.data();
+    for (const clave in componente) {
+      // Controlando que json realmente tenga esa propiedad
+      if (componente.hasOwnProperty(clave)) {
+
+        if (componente[clave]) {
+          this.servicioMod2.getComponentForId(item, clave).then(data => {
+            const element = data.data();
 
             const comp = {
               id: data.id,
@@ -447,18 +447,18 @@ export class SolicitudMantenimientoComponent implements OnInit {
               modelo: element.model,
               estado: element.active
             };
-    
+
             arr.push(comp);
-            });
-         }
- 
-       }
-     }
- 
-     return arr;
+          });
+        }
+
+      }
+    }
+
+    return arr;
   }
 
-  agregarSolicitudMan(tipo){
+  agregarSolicitudMan(tipo) {
     this.alertaCargando();
     const fecha = new Date();
     this.reserMan.cfFacil = this.lab_id;
@@ -475,7 +475,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     this.reserMan.path = this.uploadMulti();
 
-    if(tipo == 'panico'){
+    if (tipo === 'panico') {
       this.reserMan.maintenanceType = 'panico';
       this.reserMan['panicoequipo'] = this.panico.nombre;
       this.reserMan['panicodescripcion'] = this.panico.descripcion;
@@ -484,50 +484,52 @@ export class SolicitudMantenimientoComponent implements OnInit {
     this.servicioMod2.addSolicitudMantenimiento(this.reserMan).then(data => {
       this.servicioMod2.Trazability(
         this.user.uid, 'create', 'request', data.id, this.reserMan
-      ).then(()=>{
+      ).then(() => {
         this.enviarNotificacionesCorreo();
+
+        swal.close();
 
         swal({
           type: 'success',
-          title: 'Se ha agregado la solicitud, el ID de la solicitud es: '+data.id,
+          title: 'Se ha agregado la solicitud, el ID de la solicitud es: ' + data.id,
           showCancelButton: true,
           confirmButtonText: 'OK',
           timer: 5000,
-  
-  
+
+
         }).then((result) => {
-  
+
           if (result.value) {
-            result.dismiss === swal.DismissReason.cancel
+
             this.cerrarModal('modal2');
             this.listaArchivos = [];
             this.inicializarMante();
           }
-  
+
         });
       });
-             
+
     });
-   
+
   }
 
 
-  cambiarDataSolicitud(item){
+  cambiarDataSolicitud(item) {
     this.solsel = item;
   }
 
-  cambiarDataComponentes(item){
-   this.dataSourceComp = new MatTableDataSource(item.componentes);
+  cambiarDataComponentes(item) {
+    this.dataSourceComp = new MatTableDataSource(item.componentes);
   }
 
-  descargarArchivo(index){
+  descargarArchivo(index) {
     const ref = this.storage.ref(this.solsel.path[index]);
     ref.getDownloadURL().subscribe(data => {
       window.open(data);
-    }); ;
+    });
   }
 
-  quitarArchivo(index){
+  quitarArchivo(index) {
 
     this.listaArchivos.splice(index, 1);
     swal(
@@ -538,7 +540,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
   }
 
 
-  agregarProovedor(){
+  agregarProovedor() {
 
     this.reserMan.providersInfo.push(this.proovedor);
     this.inicializarProovedor();
@@ -546,47 +548,47 @@ export class SolicitudMantenimientoComponent implements OnInit {
     console.log(this.reserMan.providersInfo);
   }
 
-  quitarProovedor(index){
+  quitarProovedor(index) {
     this.reserMan.providersInfo.splice(index, 1);
   }
 
 
-  inicializarProovedor(){
+  inicializarProovedor() {
     this.proovedor = {
-      name:'',
-      contactNumbers:'',
-      attachments:{},
-      cot:'',
-      correo:''
+      name: '',
+      contactNumbers: '',
+      attachments: {},
+      cot: '',
+      correo: ''
     };
 
   }
 
-  inicializarSolicitud(){
-    
+  inicializarSolicitud() {
+
     this.reserMan = {
-      cfOrgUnit:'',
-      headquarter:'',
-      cfFacil:'',
-      createdBy:'',
-      requestDesc:'',
-      requestType:'',
-      maintenanceType:'',
-      providersInfo:[],
-      relatedEquipments:'',
-      relatedComponents:{},
-      status:'pendiente',
-      active:true,
-      createdAt:'',
-      updatedAt:'',
-      path:[],
-      costo:'0',
-      acceptedBy:'',
-      faculties:{}
+      cfOrgUnit: '',
+      headquarter: '',
+      cfFacil: '',
+      createdBy: '',
+      requestDesc: '',
+      requestType: '',
+      maintenanceType: '',
+      providersInfo: [],
+      relatedEquipments: '',
+      relatedComponents: {},
+      status: 'pendiente',
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+      path: [],
+      costo: '0',
+      acceptedBy: '',
+      faculties: {}
     };
   }
 
-  alertaCargando(){
+  alertaCargando() {
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se cargan los datos',
@@ -596,7 +598,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     });
   }
 
-  alertaExito(mensaje){
+  alertaExito(mensaje) {
     return swal({
       type: 'success',
       title: mensaje,
@@ -604,7 +606,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
     });
   }
 
-  alertaError(mensaje){
+  alertaError(mensaje) {
     swal({
       type: 'error',
       title: mensaje,
@@ -612,12 +614,12 @@ export class SolicitudMantenimientoComponent implements OnInit {
     });
   }
 
-  cerrarAlerta(){
+  cerrarAlerta() {
     swal.close();
   }
 
 
-  enviarNotificacionesCorreo(){
+  enviarNotificacionesCorreo() {
     let ids = [];
     let email = [];
     let cont = 1;
@@ -625,13 +627,13 @@ export class SolicitudMantenimientoComponent implements OnInit {
       docs.forEach(doc => {
         ids.push(doc.id);
         email.push(doc.data().email);
-        if(docs.size == cont){
+        if (docs.size === cont) {
           this.enviarNotificaciones(ids, this.user.email);
           this.enviarEmails(this.user.email, email);
-        }else{
+        } else {
           cont++;
         }
-      })   
+      });
     });
 
     ids = [];
@@ -644,44 +646,44 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
           for (const key in this.itemsel.labo.faculties) {
             if (this.itemsel.labo.faculties.hasOwnProperty(key)) {
-  
-              if(persona.data().faculty[key]){
+
+              if (persona.data().faculty[key]) {
                 ids.push(doc.id);
                 email.push(doc.data().email);
               }
-              
+
             }
           }
-          
-          if(docs.size == cont){
+
+          if (docs.size === cont) {
             this.enviarNotificaciones(ids, this.user.email);
             this.enviarEmails(email, this.user.email);
-          }else{
+          } else {
             cont++;
           }
-      
+
         });
 
 
 
-      });  
+      });
     });
 
 
-   
+
   }
 
-  enviarNotificaciones(notificaciones, emailSolicitante){
+  enviarNotificaciones(notificaciones, emailSolicitante) {
 
     const fecha = new Date().toISOString().split('T')[0];
 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento:, esta fue solicitada en la fecha ' + 
-                      fecha +
-                      ' por el usuario con el correo: ' + emailSolicitante +'.';
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento:, esta fue solicitada en la fecha ' +
+      fecha +
+      ' por el usuario con el correo: ' + emailSolicitante + '.';
 
     const obj = {
       asunto: 'Solicitud de mantenimiento',
-      mensaje:mensaje,
+      mensaje: mensaje,
       fecha: new Date().toISOString().split('T')[0],
       estado: 'sinver'
     };
@@ -689,40 +691,40 @@ export class SolicitudMantenimientoComponent implements OnInit {
     for (let i = 0; i < notificaciones.length; i++) {
       const element = notificaciones[i];
 
-      this.servicioMod2.enviarNotificacion(element, obj).then(()=>{
-       
+      this.servicioMod2.enviarNotificacion(element, obj).then(() => {
+
       });
 
     }
 
   }
 
-  enviarEmails(emailSolicitante, analistas){
+  enviarEmails(emailSolicitante, analistas) {
 
 
     const fecha = new Date();
-    const fechaes = fecha.getDate()+'/'+(fecha.getMonth()+1)+'/'+fecha.getFullYear();
-   
+    const fechaes = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear();
+
 
     const url = URLCORREO;
     const asunto = 'NUEVA SOLICITUD DE MANTENIMIENTO';
     let destino = '';
-    if(analistas){
+    if (analistas) {
       for (let i = 0; i < analistas.length; i++) {
-        destino += analistas[i] + ','     
+        destino += analistas[i] + ',';
       }
     }
-    
-    const nombrelab = this.itemsel.nombre.nom1 + ' ' +this.itemsel.nombre.nom2;
 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento en el laboratorio: ' + 
-                    nombrelab + ', esta fue solicitada en la fecha ' + fechaes +
-                    ' por el usuario con el correo: ' + emailSolicitante +'.';
+    const nombrelab = this.itemsel.nombre.nom1 + ' ' + this.itemsel.nombre.nom2;
+
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud de mantenimiento en el laboratorio: ' +
+      nombrelab + ', esta fue solicitada en la fecha ' + fechaes +
+      ' por el usuario con el correo: ' + emailSolicitante + '.';
 
     destino += emailSolicitante;
 
-    this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-      if(res.status == 200){
+    this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
+      if (res.status === 200) {
         console.log('notificaciones enviadas');
       } else {
         console.log('error notificaciones');
@@ -747,66 +749,66 @@ export class SolicitudMantenimientoComponent implements OnInit {
     this.dataSource2.filter = filterValue;
   }
 
-  cambiarIconoModal(box){
-    if(!this.iconosModal[box]){
+  cambiarIconoModal(box) {
+    if (!this.iconosModal[box]) {
       this.iconosModal[box] = true;
     } else {
       this.iconosModal[box] = false;
     }
   }
 
-  cerrarModal(modal){
-    $('#'+modal).modal('hide');
+  cerrarModal(modal) {
+    $('#' + modal).modal('hide');
   }
 
-  inicializarMante(){
+  inicializarMante() {
     this.reserMan = {
-      cfOrgUnit:'',
-      headquarter:'',
-      cfFacil:'',
-      createdBy:'',
-      requestDesc:'',
-      requestType:'mantenimiento',
-      maintenanceType:'',
-      providersInfo:[],
-      relatedEquipments:'',
-      relatedComponents:{},
-      status:'pendiente',
-      active:true,
-      createdAt:'',
-      updatedAt:'',
-      path:[],
-      costo:'0',
-      acceptedBy:'',
-      faculties:{}
+      cfOrgUnit: '',
+      headquarter: '',
+      cfFacil: '',
+      createdBy: '',
+      requestDesc: '',
+      requestType: 'mantenimiento',
+      maintenanceType: '',
+      providersInfo: [],
+      relatedEquipments: '',
+      relatedComponents: {},
+      status: 'pendiente',
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+      path: [],
+      costo: '0',
+      acceptedBy: '',
+      faculties: {}
     };
   }
-  
-  limpiarDatos(){
-    
-  this.reserMan = {
-    cfOrgUnit:'',
-    headquarter:'',
-    cfFacil:'',
-    createdBy:'',
-    requestDesc:'',
-    requestType:'mantenimiento',
-    maintenanceType:'',
-    providersInfo:[],
-    relatedEquipments:'',
-    relatedComponents:{},
-    status:'pendiente',
-    active:true,
-    createdAt:'',
-    updatedAt:'',
-    path:[],
-    costo:'0',
-    acceptedBy:'',
-    faculties:{}
-  };
 
-  this.selection.clear();
-  this.selection2.clear();
+  limpiarDatos() {
+
+    this.reserMan = {
+      cfOrgUnit: '',
+      headquarter: '',
+      cfFacil: '',
+      createdBy: '',
+      requestDesc: '',
+      requestType: 'mantenimiento',
+      maintenanceType: '',
+      providersInfo: [],
+      relatedEquipments: '',
+      relatedComponents: {},
+      status: 'pendiente',
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+      path: [],
+      costo: '0',
+      acceptedBy: '',
+      faculties: {}
+    };
+
+    this.selection.clear();
+    this.selection2.clear();
   }
 }
 
@@ -814,13 +816,13 @@ export class SolicitudMantenimientoComponent implements OnInit {
 export class Upload {
 
   $key: string;
-  file:File;
-  name:string;
-  url:string;
-  progress:number;
+  file: File;
+  name: string;
+  url: string;
+  progress: number;
   createdAt: Date = new Date();
 
-  constructor(file:File) {
+  constructor(file: File) {
     this.file = file;
   }
-};
+}

@@ -170,8 +170,8 @@ export class AdminLaboratorios3Component implements OnInit {
   subsedes = [];
   facultades = [];
   departamentos = [];
-  modelSubsede = 'Selecciona subSede'
-  modelSede = 'Seleccione una sede'
+  modelSubsede = 'Selecciona subSede';
+  modelSede = 'Seleccione una sede';
 
 
   diassemana = [{ id: '1', nombre: 'LUNES' }, { id: '2', nombre: 'MARTES' }, { id: '3', nombre: 'MIERCOLES' },
@@ -362,7 +362,7 @@ export class AdminLaboratorios3Component implements OnInit {
       this.dataSource.data = this.laboratoriosEstructurados;
       setTimeout(() => {
 
-        if (this.laboratoriosEstructurados.length != 0) {
+        if (this.laboratoriosEstructurados.length !== 0) {
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         }
@@ -523,6 +523,16 @@ export class AdminLaboratorios3Component implements OnInit {
       }, 2000);
 
     });
+
+    setTimeout(() => {
+      $('html, body').animate(
+        {
+          scrollTop: $('#detalle').offset().top - 55
+        },
+        1000
+      );
+    }, 1500);
+
 
   }
 
@@ -718,6 +728,12 @@ export class AdminLaboratorios3Component implements OnInit {
 
   }
 
+  limpiarDatosNuevo() {
+    this.labo.nombre = '';
+    this.labo.email = ''
+      ;
+  }
+
   nuevoLaboratorio() {
 
     swal({
@@ -781,6 +797,7 @@ export class AdminLaboratorios3Component implements OnInit {
             this.serviceMod3.Trazability(
               this.user.uid, 'create', 'cfFacil', dato.id, objFacil
             ).then(() => {
+              swal.close();
               swal({
                 type: 'success',
                 title: 'Laboratorio creado',
@@ -1552,6 +1569,7 @@ export class AdminLaboratorios3Component implements OnInit {
           this.user.uid, 'update', 'cfFacil', this.labestructurado.uid, cambio
         ).then(() => {
           this.afs.doc('cfFacil/' + this.labestructurado.uid).set(cambio, { merge: true }).then(data => {
+            swal.close();
             swal(
               'Cambios Aprobados',
               '',
@@ -2474,12 +2492,12 @@ export class AdminLaboratorios3Component implements OnInit {
   setSpace() {
 
     console.log('2465',
-      isNaN(parseInt(this.space.spaceData.building)),
+      isNaN(parseInt(this.space.spaceData.building, 10)),
       !this.space.spaceData.building,
       !this.space.spaceData.place,
-      isNaN(parseInt(this.space.spaceData.place)));
+      isNaN(parseInt(this.space.spaceData.place, 10)));
     if ((!this.space.spaceData.building || !this.space.spaceData.place) ||
-      (isNaN(parseInt(this.space.spaceData.building)) || isNaN(parseInt(this.space.spaceData.place)))
+      (isNaN(parseInt(this.space.spaceData.building, 10)) || isNaN(parseInt(this.space.spaceData.place, 10)))
     ) {
 
       swal({
@@ -2511,6 +2529,13 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   actualizarEspacio() {
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se ejecuta la solicitud',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
 
     const nuevoespacio = {
       capacity: this.space.capacity,
@@ -2546,7 +2571,7 @@ export class AdminLaboratorios3Component implements OnInit {
         ).then(() => {
           // actualiza el estado del espacio dentro del laboratorio
           this.afs.doc('cfFacil/' + this.idlab).set(nuevoEstado, { merge: true });
-
+          swal.close();
           swal({
             type: 'success',
             title: 'Actualizado Correctamente',
@@ -2630,6 +2655,14 @@ export class AdminLaboratorios3Component implements OnInit {
   // actualiza el laboratorio con una nueva referencia de espacio
   updateFaciliti(idSp) {
 
+    swal({
+      title: 'Cargando un momento...',
+      text: 'espere mientras se ejecuta la solicitud',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
+
     if (idSp) {
       const relatedSpaces = {};
       relatedSpaces[idSp] = true;
@@ -2641,7 +2674,7 @@ export class AdminLaboratorios3Component implements OnInit {
       ).then(() => {
         this.afs.collection('cfFacil').doc(this.idlab).set({ relatedSpaces }, { merge: true })
           .then(() => {
-
+            swal.close();
             swal({
               type: 'success',
               title: 'Creado Correctamente',

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
 
-    if(localStorage.getItem('usuario')){
+    if (localStorage.getItem('usuario')) {
       this.ruta.navigate(['principal']);
     }
   }
@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
       }
     });
 
-     this._loginService.login().then( () => {
-       // mensaje de bienvenida
-       swal({
+    this._loginService.login().then(() => {
+      // mensaje de bienvenida
+      swal({
         type: 'success',
         title: 'Ingreso correcto',
         showConfirmButton: true
@@ -48,16 +48,16 @@ export class LoginComponent implements OnInit {
       this.ruta.navigate(['principal']);
 
 
-     }).catch(error => {
-        // this.ingresar();
+    }).catch(error => {
+      // this.ingresar();
 
-        swal({
-          type: 'error',
-          text: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
-                + 'Si el error persiste es posible que su usuario haya sido desactivado.',
-          showConfirmButton: true
-        });
-     });
+      swal({
+        type: 'error',
+        text: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
+          + 'Si el error persiste es posible que su usuario haya sido desactivado.',
+        showConfirmButton: true
+      });
+    });
   }
 
 
