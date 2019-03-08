@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 const domtoimage = require('dom-to-image');
 import { saveAs } from 'file-saver/FileSaver';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
+import swal from 'sweetalert2';
 
 declare var $: any;
 
@@ -1132,26 +1133,44 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         }
       } else if ((axu['teaching'] && (axu['extension']) && !axu['research'])) {
         if (doc.active) {
+          this.arregloBarra.docencia.ac++;
+          this.arregloBarra.extension.ac++;
           this.arregloBarra.docext.ac++;
         } else {
+          this.arregloBarra.docencia.in++;
+          this.arregloBarra.extension.in++;
           this.arregloBarra.docext.in++;
         }
       } else if ((axu['teaching'] && (axu['research']) && !axu['extension'])) {
         if (doc.active) {
+          this.arregloBarra.docencia.ac++;
+          this.arregloBarra.investigacion.ac++;
           this.arregloBarra.docinv.ac++;
         } else {
+          this.arregloBarra.docencia.in++;
+          this.arregloBarra.investigacion.in++;
           this.arregloBarra.docinv.in++;
         }
       } else if ((axu['research'] && (axu['extension']) && !axu['teaching'])) {
         if (doc.active) {
+          this.arregloBarra.extension.ac++;
+          this.arregloBarra.investigacion.ac++;
           this.arregloBarra.extinv.ac++;
         } else {
+          this.arregloBarra.extension.in++;
+          this.arregloBarra.investigacion.in++;
           this.arregloBarra.extinv.in++;
         }
       } else if ( axu['teaching'] && axu['extension'] && axu['research']) {
         if (doc.active) {
+          this.arregloBarra.docencia.ac++;
+          this.arregloBarra.extension.ac++;
+          this.arregloBarra.investigacion.ac++;
           this.arregloBarra.doexin.ac++;
         } else {
+          this.arregloBarra.docencia.in++;
+          this.arregloBarra.extension.in++;
+          this.arregloBarra.investigacion.in++;
           this.arregloBarra.doexin.in++;
         }
       }
@@ -1358,6 +1377,13 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
    prueba() {
+    swal({
+      title: 'Cargando un momento...',
+      text: 'Espere mientras se procesa la transacción',
+      onOpen: () => {
+        swal.showLoading();
+      }
+    });
     const f = new Date();
     const cad = f.getHours() + ':' + f.getMinutes() + ':' + f.getSeconds();
     const ambiente = this;
@@ -1384,6 +1410,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
         printWindow.document.close();
 
         setTimeout(() => {
+          swal.close();
           printWindow.print();
         }, 1000);
 

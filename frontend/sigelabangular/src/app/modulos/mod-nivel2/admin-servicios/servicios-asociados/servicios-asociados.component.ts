@@ -490,6 +490,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                   this.user.uid, 'create', 'cfFacil', data.id, 'variations', doc.id, element
                 ).then(() => {
                   if (i === this.variaciones.length - 1) {
+                    swal.close();
                     swal({
                       type: 'success',
                       title: 'Creado correctamente',
@@ -575,6 +576,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
               this.servicioMod2.TrazabilitySubCollection(
                 this.user.uid, 'create', 'cfSrv', this.itemsel.infoServ.uid, 'variations', doc.id, variacion.data
               ).then(() => {
+                swal.close();
                 swal({
                   type: 'success',
                   title: 'Editado correctamente',

@@ -19,7 +19,7 @@ export class ServicesNivel3Service {
 
   // METODOS DE CONSULTA
 
-  getLocalStorageUser(){
+  getLocalStorageUser() {
     return JSON.parse(localStorage.getItem('usuario'));
   }
 
@@ -31,7 +31,7 @@ export class ServicesNivel3Service {
 
   getSingleLaboratorios(id) {
 
-   return  this.afs.doc('cfFacil/' + id).ref.get();
+    return this.afs.doc('cfFacil/' + id).ref.get();
 
   }
 
@@ -132,7 +132,7 @@ export class ServicesNivel3Service {
 
   buscaServicioPrestado(keyserv) {
     const col = this.afs.collection('cfSrvReserv');
-    const refer =  col.ref.where('cfSrv', '==', keyserv) .where('status', '==', 'terminada');
+    const refer = col.ref.where('cfSrv', '==', keyserv).where('status', '==', 'terminada');
     return refer.get();
   }
 
@@ -156,7 +156,7 @@ export class ServicesNivel3Service {
 
 
 
-  getServicioPrestado(id){
+  getServicioPrestado(id) {
     const col = this.afs.collection('cfSrvReserv');
     const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'terminada');
 
@@ -171,29 +171,29 @@ export class ServicesNivel3Service {
 
   getCollectionSolicitudesFacultad(id) {
     const col = this.afs.collection('request');
-    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('faculties.'+id, '==', true);
+    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('faculties.' + id, '==', true);
 
     return refer.get();
   }
 
-  getUser(userid){
+  getUser(userid) {
     return this.afs.doc('user/' + userid).ref.get();
   }
 
-  getEquipo(equipid){
+  getEquipo(equipid) {
     return this.afs.doc('cfEquip/' + equipid).ref.get();
   }
 
-  getLaboratorio(labid){
+  getLaboratorio(labid) {
     return this.afs.doc('cfFacil/' + labid).ref.get();
   }
 
-  getcomponents(id){
+  getcomponents(id) {
     return this.afs.collection('cfEquip/' + id + '/components').ref.get();
   }
 
-  getComponenteForId(idequip, idcomp){
-    return  this.afs.collection('cfEquip/' + idequip + '/components').doc(idcomp).ref.get();
+  getComponenteForId(idequip, idcomp) {
+    return this.afs.collection('cfEquip/' + idequip + '/components').doc(idcomp).ref.get();
   }
 
 
@@ -216,14 +216,14 @@ export class ServicesNivel3Service {
 
   }
 
-  setUser( id, doc) {
-      console.log('llego el id', id);
+  setUser(id, doc) {
+    console.log('llego el id', id);
     return this.afs.doc('user/' + id).set(doc, { merge: true });
 
   }
 
-  updateSolicitudMantenimiento(id, doc){
-    return  this.afs.collection('request').doc(id).update(doc);
+  updateSolicitudMantenimiento(id, doc) {
+    return this.afs.collection('request').doc(id).update(doc);
   }
 
   updatedUser(id, doc) {
@@ -256,16 +256,17 @@ export class ServicesNivel3Service {
 
 
 
-   // METODO TRAZABILIDAD DE CAMBIOS
+  // METODO TRAZABILIDAD DE CAMBIOS
 
-   Trazability(user, type, collection, id, docIn){
+  Trazability(user, type, collection, id, docIn) {
     console.log('ejecuto');
     let size = 0;
     let cont = 1;
+    // tslint:disable-next-line:forin
     for (const key in docIn) {
       size++;
     }
-    let promise = new Promise((resolve, reject)=>{
+    const promise = new Promise((resolve, reject) => {
       let docAfter = {};
       this.afs.collection(collection).doc(id).ref.get().then(doc => {
         const documento = doc.data();
@@ -273,19 +274,19 @@ export class ServicesNivel3Service {
 
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
-             docAfter[key] = docIn[key];
-             console.log(cont, size);
-             if(cont == size){
+            docAfter[key] = docIn[key];
+            console.log(cont, size);
+            if (cont === size) {
 
               console.log(documento, docAfter);
 
-              this.addTrazability(user, type, collection, id, documento, docAfter).then(()=>{
+              this.addTrazability(user, type, collection, id, documento, docAfter).then(() => {
                 resolve();
               });
 
-             }else{
+            } else {
               cont++;
-             }
+            }
 
           }
         }
@@ -299,58 +300,59 @@ export class ServicesNivel3Service {
   }
 
 
-  TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn){
+  TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn) {
     console.log('ejecuto');
     let size = 0;
     let cont = 1;
+    // tslint:disable-next-line:forin
     for (const key in docIn) {
       size++;
     }
-    let promise = new Promise((resolve, reject)=>{
-      if(type != 'create'){
+    const promise = new Promise((resolve, reject) => {
+      if (type !== 'create') {
         let docAfter = {};
         this.afs.collection(collection).doc(idColl).collection(subColl).doc(idSub)
           .ref.get().then(doc => {
-          const documento = doc.data();
-          docAfter = doc.data();
+            const documento = doc.data();
+            docAfter = doc.data();
 
-          if(type != 'delete'){
-            for (const key in docIn) {
-              if (docIn.hasOwnProperty(key)) {
-                 docAfter[key] = docIn[key];
-                 console.log(cont, size);
-                 if(cont == size){
+            if (type !== 'delete') {
+              for (const key in docIn) {
+                if (docIn.hasOwnProperty(key)) {
+                  docAfter[key] = docIn[key];
+                  console.log(cont, size);
+                  if (cont === size) {
 
-                  console.log(documento, docAfter);
+                    console.log(documento, docAfter);
 
-                  this.addTrazability(
-                    user, type, collection+'/'+idColl+'/'+subColl, idSub,
-                    documento, docAfter).then(()=>{
-                    resolve();
-                  });
+                    this.addTrazability(
+                      user, type, collection + '/' + idColl + '/' + subColl, idSub,
+                      documento, docAfter).then(() => {
+                        resolve();
+                      });
 
-                 }else{
-                  cont++;
-                 }
+                  } else {
+                    cont++;
+                  }
 
+                }
               }
+            } else {
+              console.log(documento);
+              this.addTrazability(
+                user, type, collection + '/' + idColl + '/' + subColl, idSub, documento, {}).then(() => {
+                  resolve();
+                });
             }
-          } else {
-            console.log(documento);
-            this.addTrazability(
-              user, type, collection+'/'+idColl+'/'+subColl, idSub, documento, {}).then(()=>{
-              resolve();
-            });
-          }
 
 
-        });
+          });
       } else {
         this.addTrazability(
-          user, type, collection+'/'+idColl+'/'+subColl, idSub,
-          {}, docIn).then(()=>{
-          resolve();
-        });
+          user, type, collection + '/' + idColl + '/' + subColl, idSub,
+          {}, docIn).then(() => {
+            resolve();
+          });
 
       }
 
@@ -360,25 +362,25 @@ export class ServicesNivel3Service {
   }
 
 
-  addTrazability(user, type, collection, iddoc, docAnt, docDes){
+  addTrazability(user, type, collection, iddoc, docAnt, docDes) {
     const promise = new Promise((resolve, reject) => {
       publicIp.v4().then(ip => {
         const logger = {
-          user:user,
-          type:type,
+          user: user,
+          type: type,
           ip: ip,
           relatedDoc: iddoc,
-          collectionName:collection,
+          collectionName: collection,
           currentVer: docDes,
-          previousVer:docAnt,
+          previousVer: docAnt,
           createdAt: new Date().toISOString()
         };
 
-      console.log(logger);
+        console.log(logger);
 
-      this.afs.collection('logger').add(logger).then(()=>{
-        resolve();
-      });
+        this.afs.collection('logger').add(logger).then(() => {
+          resolve();
+        });
       });
 
     });
