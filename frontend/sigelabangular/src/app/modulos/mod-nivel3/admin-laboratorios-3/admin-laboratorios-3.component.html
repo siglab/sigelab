@@ -21,7 +21,7 @@
 
             <div *ngIf="this.moduloNivel3" class="form-group">
               <div class="col-md-12">
-                <button data-toggle="modal" data-target="#modalNuevoLab" style="float: right;" class="btn btn-danger" type="button">Nuevo Laboratorio</button>
+                <button data-toggle="modal" data-target="#modalNuevoLab" style="float: right;" class="btn btn-danger" type="button" (click)="limpiarDatosNuevo()">Nuevo Laboratorio</button>
               </div>
             </div>
 
@@ -101,7 +101,7 @@
 
 
   <!-- Main content -->
-  <section class="content" *ngIf="itemsel | async; let itemsel">
+  <section id="detalle" class="content" *ngIf="itemsel | async; let itemsel">
 
 
     <!--INFORMACION DE LABORATORIO-->

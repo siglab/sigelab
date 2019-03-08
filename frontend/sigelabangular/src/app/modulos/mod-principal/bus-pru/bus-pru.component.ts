@@ -98,11 +98,21 @@ export class BusPruComponent implements OnInit, AfterViewInit {
       this.moduloinfo = true;
       const ambiente = this;
       setTimeout(function() {
-        document.getElementById('detalle').scrollIntoView();
+        $('html, body').animate(
+          {
+            scrollTop: $('#detalle').offset().top - 55
+          },
+          1000
+        );
         ambiente.loadMap(item);
       }, 1000);
      } else {
-      document.getElementById('detalle').scrollIntoView();
+      $('html, body').animate(
+        {
+          scrollTop: $('#detalle').offset().top - 55
+        },
+        1000
+      );
       this.removerMarker();
       this.agregarMarker(item);
      }

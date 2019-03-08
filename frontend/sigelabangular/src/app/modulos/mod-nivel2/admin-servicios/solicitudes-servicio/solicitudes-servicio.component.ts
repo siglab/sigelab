@@ -1,7 +1,7 @@
 
 import { ObservablesService } from './../../../../shared/services/observables.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -9,11 +9,12 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
+// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { AngularFireStorage } from 'angularfire2/storage';
 declare var $: any;
 
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
 import { URLCORREO } from '../../../../config';
 import { Modulo2Service } from '../../services/modulo2.service';
@@ -23,24 +24,24 @@ import { Modulo2Service } from '../../services/modulo2.service';
   templateUrl: './solicitudes-servicio.component.html',
   styleUrls: ['./solicitudes-servicio.component.css']
 })
-export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDestroy  {
+export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
-moduloinfo = false;
+  moduloinfo = false;
 
-itemsel: any;
+  itemsel: any;
 
-// service: Observable<Array<any>>;
-service: any;
-histoservice: any;
+  // service: Observable<Array<any>>;
+  service: any;
+  histoservice: any;
 
-servicioActivoSel:any;
-histoServicioSel:any;
+  servicioActivoSel: any;
+  histoServicioSel: any;
 
-comentario = '';
+  comentario = '';
 
 
-  displayedColumns = ['nombre', 'fecha', 'edicion','aceptacion','estado', 'email'];
+  displayedColumns = ['nombre', 'fecha', 'edicion', 'aceptacion', 'estado', 'email'];
   displayedColumns2 = ['nombre', 'fecha', 'laboratorio', 'edicion', 'aceptacion', 'estado'];
 
   dataSource = new MatTableDataSource([]);
@@ -52,53 +53,53 @@ comentario = '';
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
 
-   // INICIALIZACION DE CONSULTAS PARA SERVICIOS RESERVADOS POR EL USUARIO
-   private collectionReserv: AngularFirestoreCollection<any>;
+  // INICIALIZACION DE CONSULTAS PARA SERVICIOS RESERVADOS POR EL USUARIO
+  private collectionReserv: AngularFirestoreCollection<any>;
 
-   private collectionHisto: AngularFirestoreCollection<any>;
+  private collectionHisto: AngularFirestoreCollection<any>;
 
-   datos:any;
-   histodatos:any;
+  datos: any;
+  histodatos: any;
 
-   variation:any;
-   condicion:any;
+  variation: any;
+  condicion: any;
 
-   condicionesobjeto = {};
-   condicionesobjetoSrv = {};
+  condicionesobjeto = {};
+  condicionesobjetoSrv = {};
 
-   buttons = true;
+  buttons = true;
 
-   user:any;
+  user: any;
 
-   iconos = {
-     sabs:false,
-     info:false,
-     archivos:false
-   }
+  iconos = {
+    sabs: false,
+    info: false,
+    archivos: false
+  };
 
-   sus: Subscription;
+  sus: Subscription;
 
   files = [];
 
   listaArchivos = [];
-  filePath:any;
-  ref:any;
+  filePath: any;
+  ref: any;
 
 
   selectedFiles: FileList;
   currentUpload: Upload;
-  private basePath: string = '/archivos';
+  private basePath = '/archivos';
 
-   rol:any;
-   moduloNivel2 = false;
-   moduloServicios = false;
+  rol: any;
+  moduloNivel2 = false;
+  moduloServicios = false;
 
 
-   valorParametro = [];
+  valorParametro = [];
 
-  constructor(private obs: ObservablesService, private servicioMod2:Modulo2Service,
-              private http: Http, private storage: AngularFireStorage) {
-  //this.obs.changeSolServ(this.servicioso);
+  constructor(private obs: ObservablesService, private servicioMod2: Modulo2Service,
+    private http: Http, private storage: AngularFireStorage) {
+    // this.obs.changeSolServ(this.servicioso);
   }
 
   ngOnInit() {
@@ -112,11 +113,11 @@ comentario = '';
 
     this.sus = this.obs.currentObjectSolSer.subscribe(data => {
       this.getRoles(data.roles);
-      if(data.length != 0){
+      if (data.length !== 0) {
         this.alertaCargando();
 
         this.servicioMod2.getCollectionReservasServicios(data.uid).then(data1 => {
-          if(data1.size != 0){
+          if (data1.size !== 0) {
             this.estructurarServiciosActivos(data1, data).then(datos => {
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
@@ -129,12 +130,12 @@ comentario = '';
               this.cerrarAlerta();
             });
           } else {
-            this.alertaError('No tiene solicitudes de servicio registradas aún')
+            this.alertaError('No tiene solicitudes de servicio registradas aún');
           }
 
 
         });
-      } else{
+      } else {
         swal({
           type: 'error',
           title: 'No se ha seleccionado ningún laboratorio',
@@ -153,7 +154,7 @@ comentario = '';
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sus.unsubscribe();
   }
 
@@ -185,7 +186,7 @@ comentario = '';
       data.forEach(doc => {
         const elemento = doc.data();
         this.servicioMod2.buscarServicio(elemento.cfSrv).then(data2 => {
-          const servicio =  data2.data();
+          const servicio = data2.data();
           const Reserv = {
             uidlab: elemento.cfFacil,
             nombrelab: lab.nombre.nom1 + ' ' + lab.nombre.nom2,
@@ -203,14 +204,14 @@ comentario = '';
             uidserv: data2.id,
             uidreserv: doc.id,
             path: elemento.path,
-            residuos:servicio.residuos ? 'Si' : 'No',
+            residuos: servicio.residuos ? 'Si' : 'No',
             acepto: elemento.acceptedBy !== '' ? elemento.acceptedBy : 'sin aceptar',
             fechaTermino: elemento.updatedAt.split('T')[0],
-            parametrosVar:elemento.parametros,
+            parametrosVar: elemento.parametros,
             parametrosSrv: elemento.parametrosSrv,
-            nombreParametros:servicio.parametros,
+            nombreParametros: servicio.parametros,
             precioTotal: elemento.precioTotal,
-            descuento:elemento.descuento,
+            descuento: elemento.descuento,
             fechaAceptacion: elemento.dateAccepted ? elemento.dateAccepted.split('T')[0] : 'sin aceptar'
           };
 
@@ -218,22 +219,22 @@ comentario = '';
 
             Reserv['variaciones'] = this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations);
           } else {
-            Reserv['variaciones']  = [];
+            Reserv['variaciones'] = [];
           }
 
-          if(elemento.dateAccepted){
+          if (elemento.dateAccepted) {
             Reserv['fechaAcepto'] = elemento.dateAccepted.split('T')[0];
           }
 
-            if(elemento.status == 'procesada' || elemento.status == 'aceptada' || elemento.status == 'pendiente' ){
-              activo.push(Reserv);
-            }else{
-              historial.push(Reserv);
-            }
+          if (elemento.status === 'procesada' || elemento.status === 'aceptada' || elemento.status === 'pendiente') {
+            activo.push(Reserv);
+          } else {
+            historial.push(Reserv);
+          }
 
-            if(data.size == (activo.length + historial.length)){
-              resolve({data:activo, data2:historial});
-            }
+          if (data.size === (activo.length + historial.length)) {
+            resolve({ data: activo, data2: historial });
+          }
 
 
         });
@@ -246,24 +247,24 @@ comentario = '';
   }
 
 
-  alistarVariables(event){
+  alistarVariables(event) {
     console.log(event.target.files);
     let tamano = false;
     for (let i = 0; i < event.target.files.length; i++) {
       console.log(event.target.files[i].size);
-      if(event.target.files[i].size >= 33554432){
+      if (event.target.files[i].size >= 33554432) {
         tamano = true;
         break;
       }
     }
 
-    if(tamano){
+    if (tamano) {
       swal(
         'Uno o más archivos tienen más peso del límite permitido (32 Mgb)',
         '',
         'error'
       );
-    }else{
+    } else {
       for (let i = 0; i < event.target.files.length; i++) {
         this.listaArchivos.push(event.target.files[i]);
       }
@@ -276,12 +277,12 @@ comentario = '';
 
     let filespath = [];
 
-    if(this.servicioActivoSel.path.length != 0){
+    if (this.servicioActivoSel.path.length !== 0) {
       filespath = this.servicioActivoSel.path;
     }
 
-    let files = this.listaArchivos;
-    let filesIndex = _.range(files.length);
+    const files = this.listaArchivos;
+    const filesIndex = _.range(files.length);
     _.each(filesIndex, (idx) => {
       this.currentUpload = new Upload(files[idx]);
       this.uploadFile(this.currentUpload);
@@ -294,13 +295,13 @@ comentario = '';
 
   uploadFile(upload: Upload) {
 
-    let storageRef = firebase.storage().ref();
-    let uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
+    const storageRef = firebase.storage().ref();
+    const uploadTask = storageRef.child(`${this.basePath}/${upload.file.name}`).put(upload.file);
 
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-      (snapshot) =>  {
+      (snapshot) => {
         // upload in progress
-        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100
+        upload.progress = (snapshot['bytesTransferred'] / snapshot['totalBytes']) * 100;
       },
       (error) => {
         // upload failed
@@ -315,7 +316,7 @@ comentario = '';
 
 
 
-  estructurarVariaciones(idser,item){
+  estructurarVariaciones(idser, item) {
     const arr = [];
 
     for (const clave in item) {
@@ -323,8 +324,8 @@ comentario = '';
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-         this.servicioMod2.buscarVariacion(idser, clave).then(data => {
-           const variacion =  data.data();
+          this.servicioMod2.buscarVariacion(idser, clave).then(data => {
+            const variacion = data.data();
 
             const vari = {
               id: clave,
@@ -332,13 +333,13 @@ comentario = '';
               descripcion: variacion.cfDescription,
               precio: variacion.cfPrice,
               activo: variacion.active,
-              parametros:variacion.parametros,
+              parametros: variacion.parametros,
               residuos: variacion.residuos ? 'Si' : 'No'
             };
 
-              arr.push(vari);
+            arr.push(vari);
 
-           });
+          });
         }
 
       }
@@ -348,7 +349,7 @@ comentario = '';
   }
 
 
-  quitarArchivo(index){
+  quitarArchivo(index) {
 
     this.listaArchivos.splice(index, 1);
     swal(
@@ -358,7 +359,7 @@ comentario = '';
     );
   }
 
-  eliminarArchivo(index){
+  eliminarArchivo(index) {
     swal({
 
       type: 'warning',
@@ -370,9 +371,9 @@ comentario = '';
     }).then((result) => {
 
       if (result.value) {
-        let nuevopath = [];
+        const nuevopath = [];
         this.servicioActivoSel.path.forEach(element => {
-          if(element != this.servicioActivoSel.path[index]){
+          if (element !== this.servicioActivoSel.path[index]) {
             nuevopath.push(element);
           }
         });
@@ -381,19 +382,19 @@ comentario = '';
         ref.delete().subscribe(() => {
 
           this.servicioMod2.updateReservasServicios(
-            this.servicioActivoSel.uidreserv, {path:nuevopath})
-          .then(() => {
+            this.servicioActivoSel.uidreserv, { path: nuevopath })
+            .then(() => {
 
 
-            swal({
-              type: 'success',
-              title: 'Archivo eliminado',
-              showConfirmButton: true
-            }).then(() => {
-              this.servicioActivoSel.path.splice(index,1);
+              swal({
+                type: 'success',
+                title: 'Archivo eliminado',
+                showConfirmButton: true
+              }).then(() => {
+                this.servicioActivoSel.path.splice(index, 1);
+              });
             });
-          });
-        }); ;
+        });
 
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
@@ -407,11 +408,11 @@ comentario = '';
 
   }
 
-  descargarArchivo(index){
+  descargarArchivo(index) {
     const ref = this.storage.ref(this.servicioActivoSel.path[index]);
     ref.getDownloadURL().subscribe(data => {
       window.open(data);
-    }); ;
+    });
   }
 
 
@@ -430,11 +431,11 @@ comentario = '';
 
 
   ocultar() {
-   this.moduloinfo = false;
+    this.moduloinfo = false;
   }
 
-  cambiarIcono(box){
-    if(!this.iconos[box]){
+  cambiarIcono(box) {
+    if (!this.iconos[box]) {
       this.iconos[box] = true;
     } else {
       this.iconos[box] = false;
@@ -471,7 +472,7 @@ comentario = '';
 
     this.moduloinfo = true;
     console.log(item);
-    if(table == 'activo'){
+    if (table === 'activo') {
       this.buttons = true;
       console.log('activpo');
     } else {
@@ -481,13 +482,13 @@ comentario = '';
 
   }
 
-  cambiarVariacion(item){
+  cambiarVariacion(item) {
 
-    if(item != 'inicial'){
+    if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
-      this.condicion =  this.buscarCondicion(item);
-      for (let i = 0; i < this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros.length; i++) {
-        const element = this.servicioActivoSel.parametrosVar.find(o => o.id == this.variation.id).parametros[i];
+      this.condicion = this.buscarCondicion(item);
+      for (let i = 0; i < this.servicioActivoSel.parametrosVar.find(o => o.id === this.variation.id).parametros.length; i++) {
+        const element = this.servicioActivoSel.parametrosVar.find(o => o.id === this.variation.id).parametros[i];
         this.valorParametro.push(element.value);
       }
 
@@ -502,16 +503,16 @@ comentario = '';
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-  buscarVariacion(item){
+  buscarVariacion(item) {
     for (let i = 0; i < this.servicioActivoSel.variaciones.length; i++) {
       const element = this.servicioActivoSel.variaciones[i];
-      if(element.id == item){
+      if (element.id === item) {
         return element;
       }
     }
   }
 
-  buscarCondicion(item){
+  buscarCondicion(item) {
     for (let i = 0; i < this.servicioActivoSel.condiciones.length; i++) {
       const element = this.servicioActivoSel.condiciones[i];
       if (element.idvariacion === item) {
@@ -529,8 +530,8 @@ comentario = '';
     }
   }
 
-   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-   estructurarCondicionesSrv(condiciones) {
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
       this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
@@ -540,7 +541,7 @@ comentario = '';
 
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
-  enviarComentario(){
+  enviarComentario() {
     swal({
 
       type: 'warning',
@@ -554,8 +555,8 @@ comentario = '';
       if (result.value) {
         this.alertaCargando();
         const fecha = new Date();
-        let cfSrvReserv = {
-          comments:this.servicioActivoSel.comentario
+        const cfSrvReserv = {
+          comments: this.servicioActivoSel.comentario
         };
 
         cfSrvReserv.comments.push({
@@ -566,11 +567,11 @@ comentario = '';
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, cfSrvReserv)
           .then(() => {
-            if(this.servicioActivoSel.status != 'pendiente'){
+            if (this.servicioActivoSel.status !== 'pendiente') {
               this.alertaExito('Comentario enviado');
               this.enviarNotificacionEmails();
             }
-        });
+          });
 
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
@@ -585,7 +586,7 @@ comentario = '';
 
   }
 
-  enviarNotificacionEmails(){
+  enviarNotificacionEmails() {
 
     let emailSolicitante = '';
     let emailAcepto = '';
@@ -599,15 +600,15 @@ comentario = '';
     emailLaboratorio = this.servicioActivoSel.infolab.otros.email;
     emailAcepto = this.servicioActivoSel.acepto;
     const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
-                    this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
-                    ' por el usuario con el correo ' + emailSolicitante;
+      this.servicioActivoSel.nombre + ' solicitada la fecha ' + this.servicioActivoSel.fecha +
+      ' por el usuario con el correo ' + emailSolicitante;
 
     this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
       emailEncargado = persona.data().email;
       destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
-      this.http.post(url,{para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-        if(res.status == 200){
-          //this.cerrarAlerta();
+      this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
+        if (res.status === 200) {
+          // this.cerrarAlerta();
         } else {
           this.alertaError('Fallo al enviar correos');
         }
@@ -616,7 +617,7 @@ comentario = '';
     });
   }
 
-  enviarEmails(estado, emaildirector){
+  enviarEmails(estado, emaildirector) {
 
     let emailSolicitante = '';
 
@@ -626,22 +627,22 @@ comentario = '';
 
     emailSolicitante = this.servicioActivoSel.usuario;
 
-    const mensaje = 'Se le notifica que se ha cambiado el estado de la solicitud del servicio '  +
-                    this.servicioActivoSel.nombre + ', solicitada la fecha ' + this.servicioActivoSel.fecha +
-                    ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' + estado ;
+    const mensaje = 'Se le notifica que se ha cambiado el estado de la solicitud del servicio ' +
+      this.servicioActivoSel.nombre + ', solicitada la fecha ' + this.servicioActivoSel.fecha +
+      ' por el usuario con el correo ' + emailSolicitante + '. El estado al que cambio fue: ' + estado;
 
 
     destino = emailSolicitante + ',' + emaildirector;
-    this.http.post(url, {para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
-      if (res.status == 200){
-        //this.cerrarAlerta();
+    this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
+      if (res.status === 200) {
+        // this.cerrarAlerta();
       } else {
         this.alertaError('Fallo al enviar correos');
       }
     });
   }
 
-  cambiarEstadoSolicitud(estado){
+  cambiarEstadoSolicitud(estado) {
     swal({
       type: 'warning',
       title: '¿Está seguro de cambiar el estado de la solicitud?',
@@ -657,10 +658,10 @@ comentario = '';
           status: estado,
           updatedAt: new Date().toISOString()
         };
-        if(estado == 'procesada'){
+        if (estado === 'procesada') {
           const filespath = this.uploadMulti();
           reserva['path'] = filespath;
-        } else if(estado == 'aceptada'){
+        } else if (estado === 'aceptada') {
           reserva['acceptedBy'] = this.user.email;
           reserva['dateAccepted'] = new Date().toISOString();
         }
@@ -668,23 +669,23 @@ comentario = '';
         this.servicioActivoSel.status = estado;
 
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, reserva)
-        .then(() => {
-          if(estado == 'procesada'){
-            swal({
-              type: 'success',
-              title: 'Solicitud procesada',
-              showConfirmButton: true
-            }).then(() => {
-              this.cerrarModal('modalProcesar');
-              this.listaArchivos = [];
-            });
+          .then(() => {
+            if (estado === 'procesada') {
+              swal({
+                type: 'success',
+                title: 'Solicitud procesada',
+                showConfirmButton: true
+              }).then(() => {
+                this.cerrarModal('modalProcesar');
+                this.listaArchivos = [];
+              });
 
-          }else{
-            this.cerrarAlerta();
-            this.alertaExito('Reserva ' + estado);
-          }
+            } else {
+              this.cerrarAlerta();
+              this.alertaExito('Reserva ' + estado);
+            }
 
-        });
+          });
         this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
           this.enviarEmails(estado, persona.data().email);
 
@@ -707,7 +708,7 @@ comentario = '';
   }
 
 
-  alertaCargando(){
+  alertaCargando() {
     swal({
       title: 'Cargando un momento...',
       text: 'Espere mientras se cargan los datos',
@@ -717,7 +718,7 @@ comentario = '';
     });
   }
 
-  alertaExito(mensaje){
+  alertaExito(mensaje) {
     swal({
       type: 'success',
       title: mensaje,
@@ -725,7 +726,7 @@ comentario = '';
     });
   }
 
-  alertaError(mensaje){
+  alertaError(mensaje) {
     swal({
       type: 'error',
       title: mensaje,
@@ -733,17 +734,17 @@ comentario = '';
     });
   }
 
-  cerrarAlerta(){
+  cerrarAlerta() {
     swal.close();
   }
 
 
 
-  cerrarModal(modal){
+  cerrarModal(modal) {
     $('#' + modal).modal('hide');
   }
 
-  resetIconos(){
+  resetIconos() {
     this.iconos.info = false;
     this.iconos.sabs = false;
     this.iconos.archivos = false;
@@ -765,4 +766,4 @@ export class Upload {
   constructor(file: File) {
     this.file = file;
   }
-};
+}

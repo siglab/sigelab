@@ -1,13 +1,14 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
+declare var $: any;
 
 @Injectable()
 export class ObservablesService {
 
 
 
-  constructor(private afs:AngularFirestore) { }
+  constructor(private afs: AngularFirestore) { }
 
 
   consultarNotificaciones(id){
@@ -67,6 +68,12 @@ export class ObservablesService {
 
   private objectSolBaja = new BehaviorSubject<any>([]);
   currentObjectSolBaja = this.objectSolBaja.asObservable();
+
+
+
+
+
+
 
 
 
@@ -134,5 +141,18 @@ export class ObservablesService {
     this.HistoSolserv.next(itemHistoSolserv);
   }
 
+
+
+  centerView( id ) {
+
+    setTimeout(function() {
+      $('html, body').animate(
+        {
+          scrollTop: $('#' + id).offset().top - 55
+        },
+        600
+      );
+    }, 500);
+  }
 
 }
