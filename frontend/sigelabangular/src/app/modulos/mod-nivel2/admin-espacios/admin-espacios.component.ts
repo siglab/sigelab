@@ -270,14 +270,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
-        this.servicioMod2.buscarEspacio(clave).subscribe(data => {
-          const espacio = data.payload.data();
+        this.servicioMod2.buscarEspacio(clave).then(data => {
+          const espacio = data.data();
 
           // funciona con una programacion, cuando hayan mas toca crear otro metodo
           if (espacio) {
             console.log('espacioo', espacio);
             const space = {
-              id_space: data.payload.id,
+              id_space: data.id,
               capacity: espacio.capacity,
               createdAt: espacio.createdAt,
               freeArea: espacio.freeArea,

@@ -70,21 +70,8 @@ export class ObservablesService {
   currentObjectSolBaja = this.objectSolBaja.asObservable();
 
 
-  constructor(private afs: AngularFirestore) { }
 
 
-  consultarNotificaciones(id) {
-
-    const col = this.afs.collection('user').doc(id).collection('notification',
-      ref => ref.where('estado', '==', 'sinver'));
-
-    return col.snapshotChanges();
-  }
-
-  finalizarNotificacion(user, id) {
-
-    return this.afs.collection('user').doc(user).collection('notification').doc(id).update({ estado: 'visto' });
-  }
 
 
 

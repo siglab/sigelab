@@ -38,7 +38,7 @@ export class Modulo2Service {
   }
 
   buscarEspacio(idesp){
-    return this.afs.doc('space/' + idesp).snapshotChanges();
+    return this.afs.doc('space/' + idesp).ref.get();
   }
 
   buscarServicio(idser){
