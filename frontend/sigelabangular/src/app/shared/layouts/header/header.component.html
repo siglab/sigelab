@@ -5,11 +5,7 @@
     <span class="logo-mini red-font"> <b class="s">S</b><b>LAB</b> </span>
     <!-- logo for regular state and mobile devices -->
     <span class="logo-lg logo-container">
-      <img
-        src="../../../../assets/img/Propuesta_1_Sigelab-15.png"
-        alt="Sigelab Logo"
-        class="logo-img"
-      />
+      <img src="../../../../assets/img/Propuesta_1_Sigelab-15.png" alt="Sigelab Logo" class="logo-img"/>
     </span>
   </a>
   <!-- Header Navbar: style can be found in header.less -->
@@ -74,12 +70,20 @@
                 class="img-circle"
                 alt="User Image"
               />
-              <p>
+              <p *ngIf="this.usuario.email.toLowerCase().includes('correounivalle.edu.co'); else noIternalUser">
                 <span class="name">
-                  {{ this.usuario.displayName.toLowerCase() }}
+                 {{ this.usuario.displayName.toLowerCase() }}
                 </span>
-                <small>Universidad del Valle</small>
+                <small>Usuario Institucional <br> Universidad del Valle</small>
               </p>
+              <ng-template #noIternalUser>
+                <p>
+                  <span class="name">
+                   {{ this.usuario.displayName.toLowerCase() }}
+                  </span>
+                  <small>Usuario no Institucional</small>
+                </p>
+              </ng-template>
             </li>
             <li class="user-footer">
               <div class="pull-right">
