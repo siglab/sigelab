@@ -183,13 +183,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       }
       swal({
         type: 'success',
-        title: 'Variación agregada',
+        title: 'Variación agregada a su solicitud',
         showConfirmButton: true
       });
     } else {
       swal({
         type: 'error',
-        title: 'Esta variación ya se encuentra agregada',
+        title: 'Esta variación ya fue agregada a su solicitud',
         showConfirmButton: true
       });
     }
