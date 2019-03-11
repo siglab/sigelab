@@ -1,9 +1,28 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
+declare var $: any;
 
 @Injectable()
 export class ObservablesService {
+
+
+
+  constructor(private afs: AngularFirestore) { }
+
+
+  consultarNotificaciones(id){
+
+    const col = this.afs.collection('user').doc(id).collection('notification',
+     ref => ref.where('estado','==','sinver'));
+
+    return col.snapshotChanges();
+  }
+
+  finalizarNotificacion(user, id){
+
+    return this.afs.collection('user').doc(user).collection('notification').doc(id).update({estado:'visto'});
+  }
 
 
   private object = new BehaviorSubject<any>([]);
@@ -51,21 +70,8 @@ export class ObservablesService {
   currentObjectSolBaja = this.objectSolBaja.asObservable();
 
 
-  constructor(private afs: AngularFirestore) { }
 
 
-  consultarNotificaciones(id) {
-
-    const col = this.afs.collection('user').doc(id).collection('notification',
-      ref => ref.where('estado', '==', 'sinver'));
-
-    return col.snapshotChanges();
-  }
-
-  finalizarNotificacion(user, id) {
-
-    return this.afs.collection('user').doc(user).collection('notification').doc(id).update({ estado: 'visto' });
-  }
 
 
 
@@ -135,5 +141,18 @@ export class ObservablesService {
     this.HistoSolserv.next(itemHistoSolserv);
   }
 
+
+
+  centerView( id ) {
+
+    setTimeout(function() {
+      $('html, body').animate(
+        {
+          scrollTop: $('#' + id).offset().top - 55
+        },
+        600
+      );
+    }, 500);
+  }
 
 }

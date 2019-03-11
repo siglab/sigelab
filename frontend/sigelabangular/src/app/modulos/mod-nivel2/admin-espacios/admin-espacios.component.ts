@@ -76,6 +76,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   moduloNivel2 = false;
 
   user = this.servicioMod2.getLocalStorageUser();
+  lab: any;
 
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
@@ -90,6 +91,17 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+
+    this.initDataComponent();
+
+
+  }
+
+
+
+
+  initDataComponent() {
+
     const now = moment().format();
     console.log(now);
 
@@ -102,7 +114,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.itemsel = Observable.of(this.espaestructurado.espacios);
           console.log(this.espaestructurado);
           this.idlab = data.uid;
-          this.dataSourceSpace = new MatTableDataSource(this.espaestructurado.espacios);
+          this.dataSourceSpace.data = (this.espaestructurado.espacios);
           // this.listSubHq();
 
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
@@ -152,11 +164,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       }
 
     });
-
-
-
   }
-
   ngOnDestroy() {
     this.sus.unsubscribe();
   }
@@ -278,7 +286,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               map: espacio.map,
               minArea: espacio.minArea,
               ocupedArea: espacio.ocupedArea,
-              totalArea: espacio.totalArea,
+              totalarea: espacio.totalArea,
               spaceData: espacio.spaceData,
               active: item[clave]
 
@@ -324,7 +332,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.formtrue = true;
     console.log(item);
     this.idsp = item.id_space;
-    this.space.totalArea = item.totalArea;
+    this.space.totalArea = item.totalarea;
     this.space.capacity = item.capacity;
     this.space.freeArea = item.freeArea;
     this.space.indxSa = item.indxSa;
@@ -352,6 +360,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       });
 
     });
+
+    this.obs.centerView('spacebox');
 
   }
 
@@ -469,7 +479,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           // actualiza el estado del espacio dentro del laboratorio
           this.servicioMod2.Trazability(
             this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
-          ).then(()=>{
+          ).then(() => {
 
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
 
@@ -479,14 +489,15 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
             swal({
               type: 'success',
               title: 'Actualizado Correctamente',
-              showConfirmButton: true
+              showConfirmButton: true,
+              timer: 1000
             }).then( result => {
 
-               if (result.value) {
 
-                 this.refreshContent();
 
-               }
+                 this.initDataComponent();
+
+
             });
           });
 
@@ -563,9 +574,25 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
       this.servicioMod2.Trazability(
         this.user.uid, 'update', 'cfFacil', this.idlab, {relatedSpaces}
-      ).then(()=>{
+      ).then(() => {
+
         this.servicioMod2.setDocLaboratorio(this.idlab, { relatedSpaces })
         .then(() => {
+
+
+          this.alert.hide();
+
+
+          swal({
+            type: 'success',
+            title: 'Espacio vinculado con éxito',
+            timer: 1500,
+            showConfirmButton: true
+          });
+
+
+          $('#modalespace').modal('hide');
+          this.idnewSp = '';
 
 
       });
@@ -579,10 +606,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         title: 'Hace falta campos importantes',
         showConfirmButton: true
       });
-    }
+
 
   }
-
+  }
   /* listar horario por espacio  */
 
   listPracticeforSpace(idSpace) {
