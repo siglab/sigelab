@@ -13,7 +13,7 @@
         />
       </div>
       <div class="pull-left info user-name">
-        <p>{{ this.usuario.displayName.toLowerCase() }}</p>
+        <p *ngIf="this.usuario.displayName">{{ this.usuario.displayName.toLowerCase() }}</p>
         <a> <i class="fa fa-circle text-success"></i>Online</a>
       </div>
     </div>

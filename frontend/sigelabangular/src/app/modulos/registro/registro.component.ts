@@ -62,6 +62,14 @@ export class RegistroComponent implements OnInit {
       });
     } if ( this.pass === this.pass2 ) {
 
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
+
       this.regSrv.createUser(this.email, this.pass).then(
         (ok) => {
           // swal({

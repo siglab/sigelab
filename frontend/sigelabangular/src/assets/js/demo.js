@@ -46,7 +46,7 @@ $(function () {
    */
   function get(name) {
     if (typeof (Storage) !== 'undefined') {
-      return localStorage.getItem(name)
+      return sessionStorage.getItem(name)
     } else {
       window.alert('Please use a modern browser to properly view this template!')
     }
@@ -61,7 +61,7 @@ $(function () {
    */
   function store(name, val) {
     if (typeof (Storage) !== 'undefined') {
-      localStorage.setItem(name, val)
+      sessionStorage.setItem(name, val)
     } else {
       window.alert('Please use a modern browser to properly view this template!')
     }

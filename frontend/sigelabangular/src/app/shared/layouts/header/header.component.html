@@ -59,7 +59,7 @@
               class="user-image"
               alt="User Image"
             />
-            <span class="hidden-xs name">{{
+            <span *ngIf="this.usuario.displayName" class="hidden-xs name">{{
               this.usuario.displayName.toLowerCase().split(' ')[0]
             }}</span>
           </a>
@@ -75,7 +75,7 @@
                 alt="User Image"
               />
               <p>
-                <span class="name">
+                <span *ngIf="this.usuario.displayName" class="name">
                   {{ this.usuario.displayName.toLowerCase() }}
                 </span>
                 <small>Universidad del Valle</small>

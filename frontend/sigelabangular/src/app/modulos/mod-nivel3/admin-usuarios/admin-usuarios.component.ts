@@ -183,7 +183,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
-    this.role = JSON.parse(localStorage.getItem('rol'));
+    this.role = JSON.parse(sessionStorage.getItem('rol'));
 
     for (const clave in this.role) {
       if (this.role[clave]) {

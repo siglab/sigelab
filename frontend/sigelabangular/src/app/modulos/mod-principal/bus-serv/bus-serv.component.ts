@@ -31,55 +31,55 @@ export class BusServComponent implements OnInit, AfterViewInit {
   cory = -76.5205;
   map: any;
 
-   itemsel: any;
+  itemsel: any;
 
-    moduloinfo = false;
-    layer = null;
+  moduloinfo = false;
+  layer = null;
 
-    llaveci:any;
+  llaveci: any;
 
-    DefaultIcon = L.icon({
-      iconUrl: 'assets/leaflet/images/marker-icon.png',
-      shadowUrl: 'assets/leaflet/images/marker-shadow.png'
-    });
+  DefaultIcon = L.icon({
+    iconUrl: 'assets/leaflet/images/marker-icon.png',
+    shadowUrl: 'assets/leaflet/images/marker-shadow.png'
+  });
 
-    campoCondicion = '';
-    condicionesobjeto = {};
-    condicionesobjetoServ = {};
+  campoCondicion = '';
+  condicionesobjeto = {};
+  condicionesobjetoServ = {};
 
-    parametros = {};
-    parametrosServ = {};
+  parametros = {};
+  parametrosServ = {};
 
-    variation:any;
-    variacionSel = "";
+  variation: any;
+  variacionSel = '';
 
-    preciototal = 0;
-    descuento = 0;
-    preciocondescuento = 0;
+  preciototal = 0;
+  descuento = 0;
+  preciocondescuento = 0;
 
-    // INICIALIZACION DATATABLE lABORATORIOS
-    displayedColumns = ['nombreserv', 'nombrelab'];
-    dataSource = new MatTableDataSource([]);
-    @ViewChild('paginator') paginator: MatPaginator;
-    @ViewChild('sort') sort: MatSort;
+  // INICIALIZACION DATATABLE lABORATORIOS
+  displayedColumns = ['nombreserv', 'nombrelab'];
+  dataSource = new MatTableDataSource([]);
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('sort') sort: MatSort;
 
-    listaVariaciones = [];
-    iconos = {
-      info: true,
-      var: false
-    };
+  listaVariaciones = [];
+  iconos = {
+    info: true,
+    var: false
+  };
 
-    selecunivalle = new FormControl();
-    univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
-    habilitarci = false;
-    valorci = '';
-    usuariounivalle = false;
+  selecunivalle = new FormControl();
+  univalle = ['Trabajo de grado', 'Maestria', 'Doctorado', 'Proyecto de investigacion'];
+  habilitarci = false;
+  valorci = '';
+  usuariounivalle = false;
 
   constructor(private observer: ObserverPrincipalService,
-              private query: QuerysPrincipalService,   private afs: AngularFirestore,
-              private ruta: Router, private http: Http) {
-    if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));
+    private query: QuerysPrincipalService, private afs: AngularFirestore,
+    private ruta: Router, private http: Http) {
+    if (sessionStorage.getItem('usuario')) {
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
       if (this.user.email.split('@')[1] === correoUnivalle) {
         this.usuariounivalle = true;
       }
@@ -89,7 +89,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
     // abrer loading mientras se cargan los datos
-      this.alert.show();
+    this.alert.show();
 
     this.query.getServicios().then(data => {
 
@@ -118,19 +118,19 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
-   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
-   buscarVariacion(item){
+  // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+  buscarVariacion(item) {
     for (let i = 0; i < this.itemsel.infoServ.variaciones.length; i++) {
       const element = this.itemsel.infoServ.variaciones[i];
-      if(element.id === item) {
+      if (element.id === item) {
         return element;
       }
     }
   }
 
-  cambiarVariacion(item){
+  cambiarVariacion(item) {
 
-    if(item != 'inicial'){
+    if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
       this.estructurarVariaciones(this.variation.data.cfConditions, this.variation.data.parametros);
     } else {
@@ -140,70 +140,70 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   }
 
-  //METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
-  estructuraCondiciones(condiciones, tipo){
+  // METODO QUE ME ESTRUCTURA EL ARREGLO DE CONDICIONES PARA EL OBJETO RESERVAS DE SERVICIOS
+  estructuraCondiciones(condiciones, tipo) {
     const arr = [];
     for (let i = 0; i < condiciones.length; i++) {
 
       let aux;
-      if(tipo != 'servicio'){
-        aux = this.condicionesobjeto["checkbox"+i]
-      }else{
-        aux = this.condicionesobjetoServ["checkboxServ"+i]
+      if (tipo !== 'servicio') {
+        aux = this.condicionesobjeto['checkbox' + i];
+      } else {
+        aux = this.condicionesobjetoServ['checkboxServ' + i];
       }
       const vari = {
         conditionText: condiciones[i],
         aceptada: aux
-      }
+      };
       arr.push(vari);
     }
     return arr;
   }
 
-   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
-  estructurarVariaciones(condiciones, parametros){
+  // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
+  estructurarVariaciones(condiciones, parametros) {
     this.condicionesobjeto = {};
     this.parametros = {};
     for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjeto["checkbox"+i] = true;
+      this.condicionesobjeto['checkbox' + i] = true;
     }
 
     for (let i = 0; i < parametros.length; i++) {
-      this.parametros["input" +i] = '';
+      this.parametros['input' + i] = '';
     }
   }
 
-  estructurarCondicionesServicio(condiciones, parametros){
+  estructurarCondicionesServicio(condiciones, parametros) {
     this.condicionesobjetoServ = {};
     this.parametrosServ = {};
     for (let i = 0; i < condiciones.length; i++) {
 
-      this.condicionesobjetoServ["checkboxServ"+i] = true;
+      this.condicionesobjetoServ['checkboxServ' + i] = true;
     }
 
     for (let i = 0; i < parametros.length; i++) {
-      //const element = condiciones[i];
-      this.parametrosServ["inputServ"+i] = '';
+      // const element = condiciones[i];
+      this.parametrosServ['inputServ' + i] = '';
     }
   }
 
   agregarSolicitudServicio() {
     const encontrado = this.listaVariaciones.find((element, index) => {
 
-      if(element.data.id == this.variation.id){
+      if (element.data.id === this.variation.id) {
         return true;
       }
       return false;
     });
 
-    if(!encontrado){
+    if (!encontrado) {
       const auxiliar = [];
-      if(this.parametros){
+      if (this.parametros) {
         let cont = 0;
 
         for (const key in this.parametros) {
           if (this.parametros.hasOwnProperty(key)) {
-            auxiliar.push({id:cont, value:this.parametros[key]});
+            auxiliar.push({ id: cont, value: this.parametros[key] });
             cont++;
           }
         }
@@ -213,9 +213,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
         condiciones: this.estructuraCondiciones(this.variation.data.cfConditions, 'var'),
         parametros: auxiliar
       });
-      this.preciototal += parseInt(this.variation.data.cfPrice);
-      if(this.usuariounivalle){
-        this.descuento = this.preciototal* (parseFloat(this.itemsel.infoServ.descuento)/100);
+      this.preciototal += parseInt(this.variation.data.cfPrice, 10);
+      if (this.usuariounivalle) {
+        this.descuento = this.preciototal * (parseFloat(this.itemsel.infoServ.descuento) / 100);
         this.preciocondescuento = this.preciototal - this.descuento;
       }
       swal({
@@ -237,15 +237,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
     const encontrado = this.listaVariaciones.find((element, index) => {
 
 
-      if(element.data.id == id) {
-        this.preciototal -= parseInt(element.data.data.cfPrice);
+      if (element.data.id === id) {
+        this.preciototal -= parseInt(element.data.data.cfPrice, 10);
         this.listaVariaciones.splice(index, 1);
         return true;
       }
       return false;
     });
 
-    if(encontrado) {
+    if (encontrado) {
       swal({
         type: 'success',
         title: 'Variación Eliminada',
@@ -274,131 +274,133 @@ export class BusServComponent implements OnInit, AfterViewInit {
         cfPrice: this.itemsel.infoServ.precio,
         status: 'pendiente',
         createdAt: fecha.toISOString(),
-        updatedAt:  fecha.toISOString(),
+        updatedAt: fecha.toISOString(),
         conditionsLog: [],
-        comments:[],
-        typeuser:'externo',
-        path:[],
-        datauser:{type:'', ci:'', llaveci:''},
+        comments: [],
+        typeuser: 'externo',
+        path: [],
+        datauser: { type: '', ci: '', llaveci: '' },
         emailuser: this.user.email,
-        acceptedBy:'',
-        parametrosSrv:[],
-        parametros:[],
-        descuento:this.descuento,
-        precioTotal:this.itemsel.infoServ.precio
+        acceptedBy: '',
+        parametrosSrv: [],
+        parametros: [],
+        descuento: this.descuento,
+        precioTotal: this.itemsel.infoServ.precio
       };
 
-      if(this.usuariounivalle) {
-        cfSrvReserv.cfPrice = ''+this.preciocondescuento;
+      if (this.usuariounivalle) {
+        cfSrvReserv.cfPrice = '' + this.preciocondescuento;
       }
 
-        swal({
+      swal({
 
-          type: 'warning',
-          title: '¿Está seguro que desea solicitar este servicio?',
-          showCancelButton: true,
-          confirmButtonText: 'Sí, Solicitar',
-          cancelButtonText: 'No, Cancelar'
+        type: 'warning',
+        title: '¿Está seguro que desea solicitar este servicio?',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, Solicitar',
+        cancelButtonText: 'No, Cancelar'
 
-        }).then((result) => {
+      }).then((result) => {
 
-          if (result.value) {
-            if(reserva == 'convariaciones') {
+        if (result.value) {
+          if (reserva === 'convariaciones') {
 
-              for (let j = 0; j < this.listaVariaciones.length; j++) {
-                const element = this.listaVariaciones[j];
-                cfSrvReserv.selectedVariations[element.data.id] = true;
-                cfSrvReserv.conditionsLog.push({condicion:element.condiciones, idvariacion: element.data.id});
+            for (let j = 0; j < this.listaVariaciones.length; j++) {
+              const element = this.listaVariaciones[j];
+              cfSrvReserv.selectedVariations[element.data.id] = true;
+              cfSrvReserv.conditionsLog.push({ condicion: element.condiciones, idvariacion: element.data.id });
 
-                cfSrvReserv.parametros.push({parametros:element.parametros, id:element.data.id});
-              }
+              cfSrvReserv.parametros.push({ parametros: element.parametros, id: element.data.id });
+            }
 
-              cfSrvReserv.precioTotal = ''+ this.preciototal;
+            cfSrvReserv.precioTotal = '' + this.preciototal;
 
-              if(this.usuariounivalle) {
-                cfSrvReserv.cfPrice = ''+ this.preciocondescuento;
-              } else {
-                cfSrvReserv.cfPrice = ''+this.preciototal;
-
-              }
+            if (this.usuariounivalle) {
+              cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+            } else {
+              cfSrvReserv.cfPrice = '' + this.preciototal;
 
             }
 
-            if(this.itemsel.infoServ.condiciones.length !== 0) {
-              cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
-            }
-
-            if(this.parametrosServ) {
-              let cont = 0;
-              for (const key in this.parametrosServ) {
-                if (this.parametrosServ.hasOwnProperty(key)) {
-                  cfSrvReserv.parametrosSrv.push({id:cont, value:this.parametrosServ[key]});
-                  cont++;
-                }
-              }
-            }
-            if(this.usuariounivalle) {
-              cfSrvReserv.typeuser = 'interno';
-              // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
-              cfSrvReserv.datauser.ci = this.valorci;
-              cfSrvReserv.datauser.llaveci = this.llaveci;
-            }
-
-            cfSrvReserv.comments.push({
-              commentText: this.campoCondicion,
-              fecha: fecha.getDate() + '/' + (fecha.getMonth()+1) + '/' + fecha.getFullYear(),
-              autor: 'usuario',
-              email: this.user.email,
-              uid: this.user.uid});
-
-
-            this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-
-              swal({
-                type: 'success',
-                title: 'Solicitud Creada Exitosamente',
-                showConfirmButton: true
-              }).then(()=> {
-                this.enviarNotificacionesCorreo();
-
-                this.query.enviarEmails(this.itemsel.nombreserv,this.user.email,this.itemsel.infoLab.emaildir,this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
-
-                this.limpiarDatos();
-
-                this.moduloinfo = false;
-
-                $('html, body').animate({ scrollTop: '0px' }, 'slow');
-              });
-
-            }).catch(error => {
-
-              swal({
-                type: 'error',
-                title: error,
-                showConfirmButton: true
-              });
-
-            });
-          } else if (
-            // Read more about handling dismissals
-            result.dismiss === swal.DismissReason.cancel
-          ) {
-            swal(
-              'Solicitud Cancelada',
-              '',
-              'error'
-            );
           }
 
-        });
+          if (this.itemsel.infoServ.condiciones.length !== 0) {
+            cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
+          }
+
+          if (this.parametrosServ) {
+            let cont = 0;
+            for (const key in this.parametrosServ) {
+              if (this.parametrosServ.hasOwnProperty(key)) {
+                cfSrvReserv.parametrosSrv.push({ id: cont, value: this.parametrosServ[key] });
+                cont++;
+              }
+            }
+          }
+          if (this.usuariounivalle) {
+            cfSrvReserv.typeuser = 'interno';
+            // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+            cfSrvReserv.datauser.ci = this.valorci;
+            cfSrvReserv.datauser.llaveci = this.llaveci;
+          }
+
+          cfSrvReserv.comments.push({
+            commentText: this.campoCondicion,
+            fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
+            autor: 'usuario',
+            email: this.user.email,
+            uid: this.user.uid
+          });
+
+
+          this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+
+            swal({
+              type: 'success',
+              title: 'Solicitud Creada Exitosamente',
+              showConfirmButton: true
+            }).then(() => {
+              this.enviarNotificacionesCorreo();
+
+              // tslint:disable-next-line:max-line-length
+              this.query.enviarEmails(this.itemsel.nombreserv, this.user.email, this.itemsel.infoLab.emaildir, this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
+
+              this.limpiarDatos();
+
+              this.moduloinfo = false;
+
+              $('html, body').animate({ scrollTop: '0px' }, 'slow');
+            });
+
+          }).catch(error => {
+
+            swal({
+              type: 'error',
+              title: error,
+              showConfirmButton: true
+            });
+
+          });
+        } else if (
+          // Read more about handling dismissals
+          result.dismiss === swal.DismissReason.cancel
+        ) {
+          swal(
+            'Solicitud Cancelada',
+            '',
+            'error'
+          );
+        }
+
+      });
 
     } else {
 
-        swal({
-          type: 'error',
-          title: 'Debe ingresar al sistema para poder solicitar este servicio',
-          showConfirmButton: true
-        });
+      swal({
+        type: 'error',
+        title: 'Debe ingresar al sistema para poder solicitar este servicio',
+        showConfirmButton: true
+      });
 
     }
 
@@ -416,7 +418,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         docs.forEach(doc => {
           ids.push(doc.id);
 
-          if(this.itemsel.personal.length === cont) {
+          if (this.itemsel.personal.length === cont) {
             this.query.enviarNotificaciones(ids, this.itemsel.nombreserv, this.user.email);
           } else {
             cont++;
@@ -444,7 +446,11 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.limpiarDatos();
     this.variation = undefined;
 
-     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
+    this.variacionSel = '';
+    this.iconos.var = false;
+    this.iconos.info = true;
+
+    /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
 
     this.itemsel = item;
 
@@ -463,7 +469,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     if (!this.moduloinfo) {
       this.moduloinfo = true;
       const ambiente = this;
-      setTimeout(function() {
+      setTimeout(function () {
         ambiente.loadMap(item);
         $('html, body').animate(
           {
@@ -472,7 +478,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
           1000
         );
       }, 1000);
-     } else {
+    } else {
       $('html, body').animate(
         {
           scrollTop: $('#detalle').offset().top - 55
@@ -481,7 +487,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
       );
       this.removerMarker();
       this.agregarMarker(item);
-     }
+    }
   }
 
   selectorunivalle() {
@@ -505,10 +511,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
 
   agregarMarker(item) {
-    this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
+    this.layer = L.marker([item.coord.lat, item.coord.lon], { icon: this.DefaultIcon });
     this.layer.addTo(this.map)
-    .bindPopup(item.nombrelab)
-    .openPopup();
+      .bindPopup(item.nombrelab)
+      .openPopup();
     this.map.setView([item.coord.lat, item.coord.lon], 17);
   }
 

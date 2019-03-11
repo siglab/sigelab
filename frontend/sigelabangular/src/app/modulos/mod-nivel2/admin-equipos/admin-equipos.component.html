@@ -23,7 +23,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body" *ngIf="dataSourceEquip.data">
-                    <div *ngIf="dataSourceEquip.data.length == 0">
+                    <div *ngIf="dataSourceEquip.data.length == 0" class="no-data">
                         <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
                       </div>
 
@@ -216,7 +216,7 @@
                     </div>
                     <div id="collapseComp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                       <div class="box-body">
-                          <div *ngIf="dataSourceComponentes.data.length == 0">
+                          <div *ngIf="dataSourceComponentes.data.length == 0" class="no-data">
                               <h3>EL EQUIPO SELECCIONADO NO CUENTA CON COMPONENTES</h3>
                           </div>
 
@@ -262,7 +262,7 @@
                       </div>
                       <div id="collapseServ" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                         <div class="box-body">
-                            <div *ngIf="dataSourceServicios.data.length == 0">
+                            <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
                                 <h3>EL EQUIPO SELECCIONADO NO CUENTA CON COMPONENTES</h3>
                               </div>
   
@@ -308,7 +308,7 @@
                       </div>
                       <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                         <div class="box-body">
-                            <div *ngIf="dataSourcePracticas.data.length == 0">
+                            <div *ngIf="dataSourcePracticas.data.length == 0" class="no-data">
                               <h3>EL EQUIPO SELECCIONADO NO CUENTA CON PRACTICAS</h3>
                             </div>
   

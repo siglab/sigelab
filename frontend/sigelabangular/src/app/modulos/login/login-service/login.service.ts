@@ -26,8 +26,8 @@ export class LoginService {
     private ruta: Router,
     private http: Http
   ) {
-    if (localStorage.getItem('usuario')) {
-      this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.usuario = JSON.parse(sessionStorage.getItem('usuario'));
       // this.consultarPermisos(this.usuario.uid);
     }
   }
@@ -50,7 +50,7 @@ export class LoginService {
               if (res.status === 200) {
                 this.consultarTipoUsuario(response.user.uid).then(() => {
                   this.usuario = response.user;
-                  localStorage.setItem('usuario', JSON.stringify(this.usuario));
+                  sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
                   console.log('termino consultar el tipo de usuario');
                   resolve();
                 });
@@ -61,7 +61,7 @@ export class LoginService {
 
             this.consultarTipoUsuario(response.user.uid).then(() => {
               this.usuario = response.user;
-              localStorage.setItem('usuario', JSON.stringify(this.usuario));
+              sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
               console.log('termino consultar el tipo de usuario');
               resolve();
             });
@@ -74,12 +74,12 @@ export class LoginService {
   }
 
   async logout() {
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('persona');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('laboratorios');
-    localStorage.removeItem('permisos');
-    localStorage.removeItem('nivel2');
+    sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('persona');
+    sessionStorage.removeItem('rol');
+    sessionStorage.removeItem('laboratorios');
+    sessionStorage.removeItem('permisos');
+    sessionStorage.removeItem('nivel2');
     return this.afAuth.auth.signOut();
   }
 
@@ -100,7 +100,7 @@ export class LoginService {
         .then(data => {
           console.log('login email');
           this.usuario = data;
-          localStorage.setItem('usuario', JSON.stringify(data));
+          sessionStorage.setItem('usuario', JSON.stringify(data));
 
           if (this.usuario) {
             this.consultarTipoUsuario(this.usuario.uid)
@@ -144,7 +144,7 @@ export class LoginService {
           user.sendEmailVerification().then(success => {
             swal({
               type: 'info',
-              title: 'Un mensaje de verificacion fue enviado a su correo',
+              title: 'Un mensaje de verificacion fue enviado a su correo, por favor revisar.',
               showConfirmButton: true
             });
           });
@@ -173,7 +173,7 @@ export class LoginService {
 
         if (data) {
           if (data.active) {
-            localStorage.setItem('persona', JSON.stringify(data));
+            sessionStorage.setItem('persona', JSON.stringify(data));
             const rol = data['appRoles'];
             let roleAdmin = false;
 
@@ -182,7 +182,7 @@ export class LoginService {
             if (data['cfPers'] === '') {
               this.estructurarPermisos(rol).then(ok => {
                 console.log('termino el metodo estructura permiso');
-                localStorage.setItem('rol', JSON.stringify(ok['permisos']));
+                sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
                 resolve();
               });
             }
@@ -192,7 +192,7 @@ export class LoginService {
                 console.log(
                   'termino el metodo estructura permiso administrador'
                 );
-                localStorage.setItem('rol', JSON.stringify(ok['permisos']));
+                sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
               });
             }
 
@@ -229,11 +229,11 @@ export class LoginService {
                                     arr,
                                     arrlab
                                   );
-                                  localStorage.setItem(
+                                  sessionStorage.setItem(
                                     'laboratorios',
                                     JSON.stringify(arr)
                                   );
-                                  localStorage.setItem(
+                                  sessionStorage.setItem(
                                     'permisos',
                                     JSON.stringify(arrlab)
                                   );

@@ -39,12 +39,12 @@ export class SidebarComponent implements OnInit {
   }
 
   getRol() {
-    if (localStorage.getItem('rol')) {
-      this.rolUser = JSON.parse(localStorage.getItem('rol'));
+    if (sessionStorage.getItem('rol')) {
+      this.rolUser = JSON.parse(sessionStorage.getItem('rol'));
     }
-    if (localStorage.getItem('laboratorios')) {
-      localStorage.setItem('nivel2', JSON.stringify(true));
-      this.roleNivel2 = JSON.parse(localStorage.getItem('laboratorios'));
+    if (sessionStorage.getItem('laboratorios')) {
+      sessionStorage.setItem('nivel2', JSON.stringify(true));
+      this.roleNivel2 = JSON.parse(sessionStorage.getItem('laboratorios'));
     }
     if (this.rolUser) {
       for (const clave in this.rolUser) {
@@ -78,8 +78,8 @@ export class SidebarComponent implements OnInit {
   }
 
   async getUser() {
-    if (localStorage.getItem('usuario')) {
-      this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.usuario = JSON.parse(sessionStorage.getItem('usuario'));
       // se visualizan los elementos
       return (this.imgUsr = true);
     } else {

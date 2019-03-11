@@ -340,7 +340,7 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   ngOnInit() {
-    this.persona = JSON.parse(localStorage.getItem('persona'));
+    this.persona = JSON.parse(sessionStorage.getItem('persona'));
 
     this.getUserId();
     this.getRoles();
@@ -1311,7 +1311,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
 
   getUserId() {
-    this.user = JSON.parse(localStorage.getItem('usuario'));
+    this.user = JSON.parse(sessionStorage.getItem('usuario'));
   }
 
   getPersonId(userid) {
@@ -1434,7 +1434,7 @@ export class AdminLaboratorios3Component implements OnInit {
             });
 
 
-            this.getPersona(JSON.parse(localStorage.getItem('persona')).cfPers).then(person => {
+            this.getPersona(JSON.parse(sessionStorage.getItem('persona')).cfPers).then(person => {
               aux.suggestedChanges.push({
                 pos: this.labestructurado.cambios.length,
                 data: dataEstructurada,
@@ -2256,7 +2256,7 @@ export class AdminLaboratorios3Component implements OnInit {
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
 
-    this.role = JSON.parse(localStorage.getItem('rol'));
+    this.role = JSON.parse(sessionStorage.getItem('rol'));
     for (const clave in this.role) {
       if (this.role[clave]) {
         if ((clave === 'moduloNivel3')) {

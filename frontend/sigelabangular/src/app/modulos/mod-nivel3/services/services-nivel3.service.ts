@@ -20,7 +20,7 @@ export class ServicesNivel3Service {
   // METODOS DE CONSULTA
 
   getLocalStorageUser() {
-    return JSON.parse(localStorage.getItem('usuario'));
+    return JSON.parse(sessionStorage.getItem('usuario'));
   }
 
 

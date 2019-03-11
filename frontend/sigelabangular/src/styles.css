@@ -85,3 +85,9 @@ input:checked + .slider:before {
           font-size: 14px;
 	       font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
       }
+
+
+      .no-data {
+        text-align: center;
+        color: #7d7d7da8;
+      }

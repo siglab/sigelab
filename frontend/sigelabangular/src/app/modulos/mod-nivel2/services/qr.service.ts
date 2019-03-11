@@ -67,7 +67,7 @@ export class QrService {
   getUser() {
 
     return new Promise((resolve, reject) => {
-      const usuario = JSON.parse(localStorage.getItem('usuario'));
+      const usuario = JSON.parse(sessionStorage.getItem('usuario'));
       this.afs
         .doc('user/' + usuario.uid)
         .valueChanges()

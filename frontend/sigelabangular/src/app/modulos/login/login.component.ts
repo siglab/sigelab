@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
 
-    if (localStorage.getItem('usuario')) {
+    if (sessionStorage.getItem('usuario')) {
       this.ruta.navigate(['principal']);
     }
   }
@@ -73,6 +73,14 @@ export class LoginComponent implements OnInit {
       });
 
     } else {
+
+      swal({
+        title: 'Cargando un momento...',
+        text: 'espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
 
       this._loginService.loginEmail(this.email, this.pass).then(ok => {
 
