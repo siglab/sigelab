@@ -42,7 +42,7 @@ export class AdminPracticasComponent implements OnInit {
   evento = {
     title: '',
     start: '',
-    color: ''
+    color: 'blue'
   };
   horaE;
   horaF;
@@ -709,7 +709,7 @@ export class AdminPracticasComponent implements OnInit {
       });
     } else {
 
-      const arr = this.events;
+
       const nev = {
         title: this.evento.title,
         start: this.evento.start + 'T' + this.horaE,
@@ -720,16 +720,19 @@ export class AdminPracticasComponent implements OnInit {
 
       console.log(nev);
 
-      arr.push(nev);
+      this.events.push(nev);
 
 
-      this.initCalendar(arr);
+      this.initCalendar(this.events);
 
       swal({
         type: 'success',
-        title: 'Nuevo evento agregado',
-        showConfirmButton: true
+        text: 'Nueva clase agregada con éxito',
+        showConfirmButton: true,
+        timer: 3900
       });
+
+      this.cerrarModal('myModal2');
     }
 
   }
@@ -803,6 +806,12 @@ export class AdminPracticasComponent implements OnInit {
     this.events = [];
 
 
+  }
+
+
+  // deshabilitar button
+  disabledcalendar(): boolean {
+  return  this.events.length > 0 ? false : true;
   }
 
 

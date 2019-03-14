@@ -20,6 +20,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   itemsel: Observable<Array<any>>;
+  tableselect = false;
   button = true;
   fecha = new Date();
   semester;
@@ -98,7 +99,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   user = this.servicioMod2.getLocalStorageUser();
 
   constructor(private obs: ObservablesService,
-              private servicioMod2:Modulo2Service) { }
+              private servicioMod2: Modulo2Service) { }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
@@ -113,9 +114,9 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         if (!this.proyestructurados) {
           this.estructurarLab(data.uid).then(() => {
             this.itemsel = Observable.of(this.proyestructurados.proyectos);
-            console.log(this.proyestructurados);
 
 
+            this.dataSourcePers.data = this.proyestructurados.personal;
             this.id_lab = this.proyestructurados.uid;
             this.dataSourceProy.data = this.proyestructurados.proyectos;
             // inactivos
@@ -123,8 +124,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
 
 
-            this.dataSourcePers.data = this.proyestructurados.personal;
-            const ambiente = this;
+            console.log(this.dataSourcePers.data );
+
 
             swal({
               title: 'Cargando un momento...',
@@ -134,17 +135,17 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
               }
             });
 
-            setTimeout(function () {
-              if (ambiente.proyestructurados.proyectos != 0) {
-                ambiente.dataSourceProy.sort = ambiente.sortProy;
-                ambiente.dataSourceProy.paginator = ambiente.paginatorProy;
+            setTimeout( () => {
+              if (this.proyestructurados.proyectos != 0) {
+                this.dataSourceProy.sort = this.sortProy;
+                this.dataSourceProy.paginator = this.paginatorProy;
 
-                ambiente.dataSourceProyIn.sort = ambiente.sortProyIn;
-                ambiente.dataSourceProyIn.paginator = ambiente.paginatorProyIn;
+                this.dataSourceProyIn.sort = this.sortProyIn;
+                this.dataSourceProyIn.paginator = this.paginatorProyIn;
                 // cierra loading luego de cargados los datos
 
-                ambiente.dataSourcePers.sort = ambiente.sortPers;
-                ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+                this.dataSourcePers.sort = this.sortPers;
+                this.dataSourcePers.paginator = this.paginatorPers;
 
                 swal.close();
               } else {
@@ -198,7 +199,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     let bool = false;
 
     this.rolesAgregados.forEach((doc, index) => {
-      if(doc.id == this.rolSelect){
+      if (doc.id === this.rolSelect) {
         bool = true;
       }
     });
@@ -210,7 +211,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect,
+      this.rolesAgregados.push({id: this.rolSelect,
         nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
     }
 
@@ -310,6 +311,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPersonas(item) {
 
+    console.log(item);
+
     const arr = [];
 
     for (const clave in item) {
@@ -378,7 +381,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   }
 
   cambiardata(item) {
-    this.button = true;
+    this.button = false;
 
     this.proyecto.nombre = item.nombre;
     this.proyecto.descripcion = item.descripcion;
@@ -412,10 +415,13 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         swal({
           type: 'success',
           title: 'Agregado correctamente',
-          showConfirmButton: true
+          showConfirmButton: true,
+          timer: 3000
         });
 
         this.proyecto.personal.push(element);
+
+        this.tableselect = false;
 
       } else {
 
@@ -487,6 +493,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
               text: 'Datos almacenados con éxito!',
               showConfirmButton: true
             });
+
+            this.cerrarModal('modal');
           });
 
       });
@@ -645,8 +653,8 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
   clearModal() {
 
-    this.button = false;
 
+    this.button = true;
     this.proyecto.ci = '';
     this.proyecto.descripcion = '';
     this.proyecto.estado = true;
@@ -675,7 +683,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
       this.servicioMod2.getProyectForCi(q).then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'CI disponible';
+          this.status = 'CI no encontrado, ingrese los datos del nuevo proyecto';
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
