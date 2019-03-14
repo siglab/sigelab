@@ -10,11 +10,11 @@ export class Modulo2Service {
 
   //METODOS DE CONSULTA
   getLocalStorageUser(){
-    return JSON.parse(localStorage.getItem('usuario'));
+    return JSON.parse(sessionStorage.getItem('usuario'));
   }
 
   getLocalStoragePers(){
-    return JSON.parse(localStorage.getItem('persona'));
+    return JSON.parse(sessionStorage.getItem('persona'));
   }
 
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR

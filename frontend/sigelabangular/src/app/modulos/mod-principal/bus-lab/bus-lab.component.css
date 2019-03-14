@@ -148,6 +148,40 @@ label {
   box-shadow: 1px 1px 10px -1px #888888;
 }
 
+label {
+  margin-top:2px;
+}
+
+::ng-deep .mat-checkbox-inner-container {
+  width:17px !important;
+  height: 17px !important;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+  background-color: #cc0000;
+}
+
+.modal-p {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.modal-button {
+  background-color: #cc0000;
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+.modal-button:hover {
+  background-color: #58595b;
+}
+
+.modal-content {
+  box-shadow: none;
+  background-color: transparent;
+  border:none;
+}
+
 #cambio {
   background-color: black !important;
   width: 300px;

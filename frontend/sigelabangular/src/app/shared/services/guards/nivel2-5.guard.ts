@@ -8,7 +8,7 @@ export class Nivel25Guard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      const rol = JSON.parse(localStorage.getItem('rol'));
+      const rol = JSON.parse(sessionStorage.getItem('rol'));
       console.log(rol);
       if (rol) {
         if (rol.hasOwnProperty('moduloComMasiva')) {

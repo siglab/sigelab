@@ -131,7 +131,7 @@ export class FormQrComponent implements OnInit {
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
 
-    this.rol = JSON.parse(localStorage.getItem('rol'));
+    this.rol = JSON.parse(sessionStorage.getItem('rol'));
 
     for (const clave in this.rol) {
       if (this.rol[clave]) {

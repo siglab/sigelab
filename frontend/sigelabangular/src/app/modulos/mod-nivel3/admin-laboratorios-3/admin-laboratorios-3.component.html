@@ -364,7 +364,7 @@
                               </div>
                               <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="dataSourceEquipos.data.length == 0">
+                                  <div *ngIf="dataSourceEquipos.data.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
                                   </div>
 
@@ -409,7 +409,7 @@
                               </div>
                               <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="dataSourcePracticas.data.length == 0">
+                                  <div *ngIf="dataSourcePracticas.data.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS</h3>
                                   </div>
 
@@ -454,7 +454,7 @@
                               </div>
                               <div id="collapseSol" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="dataSourceSolicitudes.data.length == 0">
+                                  <div *ngIf="dataSourceSolicitudes.data.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES</h3>
                                   </div>
 
@@ -510,7 +510,7 @@
                               </div>
                               <div id="collapseEsp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="labestructurado.espacioPrin.length == 0">
+                                  <div *ngIf="labestructurado.espacioPrin.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIO PRINCIPAL</h3>
                                   </div>
                                   <form *ngIf="labestructurado.espacioPrin.length != 0" id="form-work" class="" name="form-work" action="#">
@@ -580,7 +580,7 @@
                               </div>
                               <div id="collapseAso" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="labestructurado.espacios.length == 0">
+                                  <div *ngIf="labestructurado.espacios.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS ASOCIADOS</h3>
                                   </div>
                                   <form *ngIf="labestructurado.espacios.length != 0" id="form-work" class="" name="form-work" action="#">
@@ -668,7 +668,7 @@
                               </div>
                               <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="dataSourcePersonal.data.length == 0">
+                                  <div *ngIf="dataSourcePersonal.data.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PERSONAL</h3>
                                   </div>
 
@@ -713,7 +713,7 @@
                               </div>
                               <div id="collapseServ" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="dataSourceServicios.data.length == 0">
+                                  <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
                                   </div>
 
@@ -758,7 +758,7 @@
                               </div>
                               <div id="collapseProy" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                 <div class="box-body">
-                                  <div *ngIf="dataSourceProyectos.data.length == 0">
+                                  <div *ngIf="dataSourceProyectos.data.length == 0" class="no-data">
                                     <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
                                   </div>
 

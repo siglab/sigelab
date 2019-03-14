@@ -159,7 +159,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-    this.persona = JSON.parse(localStorage.getItem('persona'));
+    this.persona = JSON.parse(sessionStorage.getItem('persona'));
     this.getRoles();
     this.estructurarSedes();
     this.estructurarTodasSubSedes();
@@ -191,7 +191,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   getRoles() {
 
-    this.role = JSON.parse(localStorage.getItem('rol'));
+    this.role = JSON.parse(sessionStorage.getItem('rol'));
     for (const clave in this.role) {
       if (this.role[clave]) {
         if ((clave === 'moduloNivel3') || (clave === 'moduloNivel35')) {

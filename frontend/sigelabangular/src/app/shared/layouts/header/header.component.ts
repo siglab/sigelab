@@ -28,8 +28,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem('usuario')) {
-      this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.usuario = JSON.parse(sessionStorage.getItem('usuario'));
 
       console.log(this.usuario);
       // se visualizan los elementos
@@ -74,8 +74,8 @@ export class HeaderComponent implements OnInit {
   }
 
   async getUser() {
-    if (localStorage.getItem('usuario')) {
-      this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.usuario = JSON.parse(sessionStorage.getItem('usuario'));
       // se visualizan los elementos
       return (this.imgUsr = true);
     } else {

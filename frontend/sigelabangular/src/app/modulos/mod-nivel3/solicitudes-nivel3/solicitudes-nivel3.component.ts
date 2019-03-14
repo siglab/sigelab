@@ -143,12 +143,12 @@ export class SolicitudesNivel3Component implements OnInit {
 
     this.getRoles();
 
-    if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
     }
 
-    if (localStorage.getItem('persona')) {
-      this.persona = JSON.parse(localStorage.getItem('persona'));
+    if (sessionStorage.getItem('persona')) {
+      this.persona = JSON.parse(sessionStorage.getItem('persona'));
     }
 
     this.alertaCargando();
@@ -618,7 +618,7 @@ export class SolicitudesNivel3Component implements OnInit {
 
   getRoles() {
 
-    this.role = JSON.parse(localStorage.getItem('rol'));
+    this.role = JSON.parse(sessionStorage.getItem('rol'));
     for (const clave in this.role) {
       if (this.role[clave]) {
         if ((clave === 'moduloNivel3')) {

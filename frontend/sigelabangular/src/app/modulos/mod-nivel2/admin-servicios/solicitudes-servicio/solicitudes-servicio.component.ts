@@ -107,8 +107,8 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
     }
 
     this.sus = this.obs.currentObjectSolSer.subscribe(data => {

@@ -145,53 +145,64 @@ export class QuerysPrincipalService {
           this.buscarDirector(elemento.facilityAdmin).then(dueno => {
             const duenoLab = dueno.data();
 
+            const laboratorio = {
+              uid: doc.id,
+              nombre: elemento.cfName,
+              escuela: elemento.knowledgeArea !== '' ? elemento.knowledgeArea : 'ninguno',
+              inves: elemento.researchGroup !== '' ? elemento.researchGroup : 'ninguno',
+              iddirecto: elemento.facilityAdmin,
+              desc: elemento.cfDescr,
+              direspacio: {},
+              director: '',
+              emaildir: '',
+              coord: {
+                lat: 0,
+                lon: 0
+              },
+              telefonos: this.estructuraTelefonos(doc.id),
+              info: {
+                email: elemento.otros.email
+              },
+              servicios: this.estructurarServicios(elemento.relatedServices),
+              practicas: this.estructurarPracticas(elemento.relatedPractices),
+              personal: this.buscarAnalistas(elemento.relatedPers),
+              condiciones: elemento.cfConditions,
+              disponibilidad: elemento.cfAvailability
+            };
+
             if (duenoLab && elemento.otros) {
 
-              if (elemento.mainSpace !== '') {
+              laboratorio.director = duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames;
+              laboratorio.emaildir = duenoLab.email;
 
-                this.buscarEspacio(elemento.mainSpace).then(espacio => {
+            }
 
-                  const espacioLab = espacio.data();
+            if (elemento.mainSpace !== '') {
 
-                  this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
-                    const laboratorio = {
-                      uid: doc.id,
-                      nombre: elemento.cfName,
-                      escuela: elemento.knowledgeArea !== '' ? elemento.knowledgeArea : 'ninguno',
-                      inves: elemento.researchGroup !== '' ? elemento.researchGroup : 'ninguno',
-                      iddirecto: elemento.facilityAdmin,
-                      desc: elemento.cfDescr,
-                      direspacio: direspa,
-                      director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                      emaildir: duenoLab.email,
-                      coord: {
-                        lat: espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0,
-                        lon: espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0
-                      },
-                      telefonos: this.estructuraTelefonos(doc.id),
-                      info: {
-                        email: elemento.otros.email
-                      },
-                      servicios: this.estructurarServicios(elemento.relatedServices),
-                      practicas: this.estructurarPracticas(elemento.relatedPractices),
-                      personal: this.buscarAnalistas(elemento.relatedPers),
-                      condiciones: elemento.cfConditions,
-                      disponibilidad: elemento.cfAvailability
-                    };
+              this.buscarEspacio(elemento.mainSpace).then(espacio => {
 
-                    this.datosLabsEstructurados.push(laboratorio);
+                const espacioLab = espacio.data();
 
-                    // console.log(this.datosLabsEstructurados, data.size);
-                    if (this.datosLabsEstructurados.length === data.size) {
-                      resolve({
-                        data: this.datosLabsEstructurados
-                      });
-                    }
-                  });
+                this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
+                  laboratorio.direspacio = direspa;
 
+                  laboratorio.coord.lat = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0;
+                  laboratorio.coord.lon = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0;
                 });
-              }
 
+              });
+            }
+
+
+
+
+            this.datosLabsEstructurados.push(laboratorio);
+
+            // console.log(this.datosLabsEstructurados, data.size);
+            if (this.datosLabsEstructurados.length === data.size) {
+              resolve({
+                data: this.datosLabsEstructurados
+              });
             }
           });
         }

@@ -128,8 +128,8 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
 
 
-    if (localStorage.getItem('usuario')) {
-      this.user = JSON.parse(localStorage.getItem('usuario'));
+    if (sessionStorage.getItem('usuario')) {
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
     }
     this.obs.currentObjectSolMan.subscribe(data => {
 

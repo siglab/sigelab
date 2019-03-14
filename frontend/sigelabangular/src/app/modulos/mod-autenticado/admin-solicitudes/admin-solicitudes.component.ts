@@ -70,9 +70,9 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
      // abre loading mientras se cargan los datos
      $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    if (localStorage.getItem('usuario')) {
+    if (sessionStorage.getItem('usuario')) {
       this.alertaCargando();
-      this.user = JSON.parse(localStorage.getItem('usuario'));
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         if (data.length !== 0) {
           this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {

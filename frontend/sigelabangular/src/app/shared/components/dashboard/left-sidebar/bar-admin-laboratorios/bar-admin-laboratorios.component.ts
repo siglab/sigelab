@@ -24,10 +24,10 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   constructor(private obs: ObservablesService, private route: Router, private afs: AngularFirestore) { }
 
   ngOnInit() {
-    if (localStorage.getItem('usuario')) {
+    if (sessionStorage.getItem('usuario')) {
       this.getUserId();
-      const labs = JSON.parse(localStorage.getItem('laboratorios'));
-      this.permisos = JSON.parse(localStorage.getItem('permisos'));
+      const labs = JSON.parse(sessionStorage.getItem('laboratorios'));
+      this.permisos = JSON.parse(sessionStorage.getItem('permisos'));
       this.estructurarLaboratorios(labs).then(() => {
         this.laboratorios2 = this.datosLabsEstructurados;
       });
@@ -69,7 +69,7 @@ export class BarAdminLaboratoriosComponent implements OnInit {
   }
 
   getUserId() {
-    this.user = JSON.parse(localStorage.getItem('usuario'));
+    this.user = JSON.parse(sessionStorage.getItem('usuario'));
   }
 
   getPersonId(userid) {

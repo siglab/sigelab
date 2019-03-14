@@ -87,7 +87,7 @@ export class ComunicacionMasivaComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.persona = JSON.parse(localStorage.getItem('usuario'));
+    this.persona = JSON.parse(sessionStorage.getItem('usuario'));
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
