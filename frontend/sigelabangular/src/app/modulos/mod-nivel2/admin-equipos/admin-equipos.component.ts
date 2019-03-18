@@ -8,13 +8,13 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
 // tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
-import { URLAPI } from '../../../config';
 
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
 import { Modulo2Service } from '../services/modulo2.service';
 import { ENGINE_METHOD_DIGESTS } from 'constants';
+import { SabsService } from '../../../shared/services/sabs/sabs.service';
 
 declare var $: any;
 
@@ -28,69 +28,71 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-    // INICIALIZACION DATATABLE PRUEBAS
-    displayedColumnsEquip = ['nombre'];
-    dataSourceEquip = new MatTableDataSource([]);
-    @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
-    @ViewChild('sortEquip') sortEquip: MatSort;
+  // INICIALIZACION DATATABLE PRUEBAS
+  displayedColumnsEquip = ['nombre'];
+  dataSourceEquip = new MatTableDataSource([]);
+  @ViewChild('paginatorEquip') paginatorEquip: MatPaginator;
+  @ViewChild('sortEquip') sortEquip: MatSort;
 
-    // INICIALIZACION DATATABLE COMPONENTES
-    displayedColumnsComponentes = ['nombre'];
-    dataSourceComponentes = new MatTableDataSource([]);
-    @ViewChild('paginatorComponentes') paginatorComponentes: MatPaginator;
-    @ViewChild('sortComponentes') sortComponentes: MatSort;
+  // INICIALIZACION DATATABLE COMPONENTES
+  displayedColumnsComponentes = ['nombre'];
+  dataSourceComponentes = new MatTableDataSource([]);
+  @ViewChild('paginatorComponentes') paginatorComponentes: MatPaginator;
+  @ViewChild('sortComponentes') sortComponentes: MatSort;
 
-    // INICIALIZACION DATATABLE SERVICIOS
-    displayedColumnsServicios = ['nombre'];
-    dataSourceServicios = new MatTableDataSource([]);
-    @ViewChild('paginatorServicios') paginatorServicios: MatPaginator;
-    @ViewChild('sortServicios') sortServicios: MatSort;
+  // INICIALIZACION DATATABLE SERVICIOS
+  displayedColumnsServicios = ['nombre'];
+  dataSourceServicios = new MatTableDataSource([]);
+  @ViewChild('paginatorServicios') paginatorServicios: MatPaginator;
+  @ViewChild('sortServicios') sortServicios: MatSort;
 
-    // INICIALIZACION DATATABLE PRACTICAS
-    displayedColumnsPracticas = ['nombre'];
-    dataSourcePracticas = new MatTableDataSource([]);
-    @ViewChild('paginatorPracticas') paginatorPracticas: MatPaginator;
-    @ViewChild('sortPracticas') sortPracticas: MatSort;
+  // INICIALIZACION DATATABLE PRACTICAS
+  displayedColumnsPracticas = ['nombre'];
+  dataSourcePracticas = new MatTableDataSource([]);
+  @ViewChild('paginatorPracticas') paginatorPracticas: MatPaginator;
+  @ViewChild('sortPracticas') sortPracticas: MatSort;
 
 
 
-    equiposel: any;
-    tablesel: any;
-    seleccionado: any;
-    itemsel: Observable<Array<any>>;
+  equiposel: any;
+  tablesel: any;
+  seleccionado: any;
+  itemsel: Observable<Array<any>>;
 
-    equiestructurado: any;
-    infosabs = [];
-    infosabsel: any;
-    response: any;
+  equiestructurado: any;
+  infosabs = [];
+  infosabsel: any;
+  response: any;
 
-    iconos = {
-      info: false,
-      componente: false,
-      practica: false,
-      servicio: false,
-      sabs: false
+  iconos = {
+    info: false,
+    componente: false,
+    practica: false,
+    servicio: false,
+    sabs: false
 
-    };
+  };
 
-    modelEquipoSel = {
-      cfName: '',
-      price: '',
-      cfDescr: '',
-      model: '',
-      updatedAt: new Date().toISOString()
-    };
+  modelEquipoSel = {
+    cfName: '',
+    price: '',
+    cfDescr: '',
+    model: '',
+    updatedAt: new Date().toISOString()
+  };
 
-    ventana = false;
+  ventana = false;
 
-    sus: Subscription;
+  sus: Subscription;
 
-    rol: any;
-    moduloNivel2 = false;
+  rol: any;
+  moduloNivel2 = false;
 
-  constructor(private obs: ObservablesService, private http: Http, private servicioMod2: Modulo2Service ) {
+  constructor(private obs: ObservablesService, private http: Http,
+    private servicioMod2: Modulo2Service, private servicioSabs: SabsService) {
 
   }
+
 
   ngOnInit() {
     // abre loading mientras se cargan los datos
@@ -120,21 +122,21 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
             this.dataSourceEquip.data = this.equiestructurado.equipos;
 
 
-             setTimeout(() => {
-               if (this.equiestructurado.equipos !== 0) {
-                  this.dataSourceEquip.sort = this.sortEquip;
-                  this.dataSourceEquip.paginator = this.paginatorEquip;
-                  // cierra loading luego de cargados los datos
-                  swal.close();
-               } else {
+            setTimeout(() => {
+              if (this.equiestructurado.equipos !== 0) {
+                this.dataSourceEquip.sort = this.sortEquip;
+                this.dataSourceEquip.paginator = this.paginatorEquip;
+                // cierra loading luego de cargados los datos
+                swal.close();
+              } else {
                 swal({
                   type: 'error',
                   title: 'No existen equipos asociados al laboratorio',
                   showConfirmButton: true
                 });
-               }
+              }
 
-             }, 1500);
+            }, 1500);
 
           });
         }
@@ -148,8 +150,9 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       }
 
-     });
+    });
   }
+
 
   ngAfterViewInit(): void {
 
@@ -176,21 +179,21 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.equiestructurado = {};
     const promise = new Promise((resolve, reject) => {
 
-       let estadoLab;
-       if (objeto.active === true) {
-          estadoLab = 'Activo';
-       } else if ( objeto.active === false ) {
-          estadoLab = 'Inactivo';
-       }
+      let estadoLab;
+      if (objeto.active === true) {
+        estadoLab = 'Activo';
+      } else if (objeto.active === false) {
+        estadoLab = 'Inactivo';
+      }
 
-        this.equiestructurado = {
-          uid: key,
-          nombre: objeto.cfName,
-          equipos: this.estructurarEquipos(objeto.relatedEquipments),
-          estado: estadoLab
-        };
+      this.equiestructurado = {
+        uid: key,
+        nombre: objeto.cfName,
+        equipos: this.estructurarEquipos(objeto.relatedEquipments),
+        estado: estadoLab
+      };
 
-        resolve();
+      resolve();
     });
 
     return promise;
@@ -211,17 +214,17 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (item[clave]) {
           this.servicioMod2.buscarServicio(clave).then(data => {
-            const servicio =  data.data();
+            const servicio = data.data();
 
             this.servicioMod2.getSolicitudesServiciosForId(clave).then(dataSol => {
 
               const serv = {
-               nombre: servicio.cfName,
-               descripcion: servicio.cfDesc,
-               precio: servicio.cfPrice,
-               activo: servicio.active,
-               variaciones: this.variations(clave),
-               uid: data.id
+                nombre: servicio.cfName,
+                descripcion: servicio.cfDesc,
+                precio: servicio.cfPrice,
+                activo: servicio.active,
+                variaciones: this.variations(clave),
+                uid: data.id
               };
               arr.push(serv);
 
@@ -243,13 +246,13 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
             });
 
-           });
+          });
         }
 
       }
     }
 
-    return {arr, arr2};
+    return { arr, arr2 };
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
@@ -259,40 +262,40 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     const arr = [];
 
     this.servicioMod2.getPracticesForIdEquipo(item).then(data => {
-        data.forEach(doc => {
-          const practica =  doc.data();
-            this.servicioMod2.buscarProgramacion(doc.id).then(data2 => {
+      data.forEach(doc => {
+        const practica = doc.data();
+        this.servicioMod2.buscarProgramacion(doc.id).then(data2 => {
 
-             data2.forEach(progdoc => {
+          data2.forEach(progdoc => {
 
-              const prog = progdoc.data();
+            const prog = progdoc.data();
 
-              if (prog) {
-                const pract = {
-                  nombre: practica.practiceName,
-                  programacion: {
-                    id_pro: progdoc.id,
-                    estudiantes: prog.noStudents,
-                    horario: prog.schedule,
-                    semestre: prog.semester
-                  },
-                  activo: practica.active
-                 };
+            if (prog) {
+              const pract = {
+                nombre: practica.practiceName,
+                programacion: {
+                  id_pro: progdoc.id,
+                  estudiantes: prog.noStudents,
+                  horario: prog.schedule,
+                  semestre: prog.semester
+                },
+                activo: practica.active
+              };
 
-                 arr.push(pract);
-              }
-             });
+              arr.push(pract);
+            }
+          });
 
-            });
         });
       });
+    });
 
     return arr;
   }
 
 
 
-   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarEquipos(item) {
 
@@ -303,42 +306,42 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-           this.servicioMod2.buscarEquipo(clave).then(doc => {
-            const equip =  doc.data();
+          this.servicioMod2.buscarEquipo(clave).then(doc => {
+            const equip = doc.data();
             console.log(equip);
-             // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                const equipo = {
-                  id: doc.id,
-                  nombre: equip.cfName,
-                  descripcion: equip.cfDescr,
-                  modelo: equip.model,
-                  activo: equip.active,
-                  precio: equip.price,
-                  inventario: equip.inventory,
-                  componentes: this.estructurarComponents(clave),
-                  servicios:  this.estructurarServicios(equip.relatedSrv).arr,
-                  practicas: this.estructurarPracticas(doc.id)
-                };
+            // funciona con una programacion, cuando hayan mas toca crear otro metodo
+            const equipo = {
+              id: doc.id,
+              nombre: equip.cfName,
+              descripcion: equip.cfDescr,
+              modelo: equip.model,
+              activo: equip.active,
+              precio: equip.price,
+              inventario: equip.inventory,
+              componentes: this.estructurarComponents(clave),
+              servicios: this.estructurarServicios(equip.relatedSrv).arr,
+              practicas: this.estructurarPracticas(doc.id)
+            };
 
-                arr.push(equipo);
+            arr.push(equipo);
 
-                cont ++;
-                this.consultarSabs(equip.inventory).then(() => {
-                  this.infosabs.push(this.response);
-                  swal.close();
-                }).catch((error) => {
-                  console.log(cont, Object.keys(item).length);
-                  if (cont === Object.keys(item).length) {
-                    swal.close();
-                    swal({
-                      type: 'error',
-                      title: 'No se pudo conectar con SABS',
-                      showConfirmButton: true
-                    });
-                  }
+            cont++;
+            this.consultarSabs(equip.inventory).then(data => {
+              this.infosabs.push(data);
+              swal.close();
+            }).catch((error) => {
+              console.log(cont, Object.keys(item).length);
+              if (cont === Object.keys(item).length) {
+                swal.close();
+                swal({
+                  type: 'error',
+                  title: 'No se pudo conectar con SABS',
+                  showConfirmButton: true
                 });
+              }
+            });
 
-           });
+          });
         }
       }
     }
@@ -352,34 +355,15 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.infosabs = [];
     const promise = new Promise((resolve, reject) => {
 
-      const url =  URLAPI;
-      const body = {
-        codInventario: item,
-        codLab: '5646',
-        nomLab: 'fgh',
-        sede: 'fgh',
-        edificio: '567',
-        espacio: 'fghgf'
-      };
-
-
       if (this.ventana) {
-
-
-        this.http.post(url, body). subscribe((res) => {
-          console.log(res.json());
-          if (res.status === 200) {
-            console.log('funco');
-            this.response =  res.json().inventario;
-            resolve();
-          } else {
-            reject();
+        this.servicioSabs.buscarEquip(item).then(
+          dataEquip => {
+            console.log('Consulta Equip en SABS: ', dataEquip);
+            resolve(dataEquip);
           }
-
-        }, (error) => {
-            console.log('faio', error);
-            this.response = {};
-            reject();
+        ).catch(error => {
+          reject();
+          console.log('Error al consultar Equip en SABS: ', error);
         });
       }
 
@@ -387,10 +371,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
 
-   return promise;
+    return promise;
   }
 
-    // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
+  // METODO QUE ESTRUCTURA LA DATA DE LOS COMPONENTES EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarComponents(item) {
     const arr = [];
@@ -399,22 +383,22 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       data.forEach(doc => {
         const element = doc.data();
 
-          const componente = {
-            id: doc.id,
-            nombre: element.cfName,
-            descripcion: element.cfDescription,
-            precio: element.cfPrice,
-            marca: element.brand,
-            modelo: element.model,
-            estado: element.active
-          };
+        const componente = {
+          id: doc.id,
+          nombre: element.cfName,
+          descripcion: element.cfDescription,
+          precio: element.cfPrice,
+          marca: element.brand,
+          modelo: element.model,
+          estado: element.active
+        };
 
-          arr.push(componente);
+        arr.push(componente);
       });
 
-     });
+    });
 
-     return arr;
+    return arr;
   }
 
 
@@ -444,7 +428,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.equiposel = item;
 
 
-
+    console.log(this.infosabs);
     this.infosabsel = this.infosabs[index];
 
     this.modelEquipoSel.cfName = this.equiposel.nombre;
@@ -458,7 +442,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSourcePracticas.data = item.practicas;
 
 
-    setTimeout(function() {
+    setTimeout(function () {
       ambiente.dataSourceComponentes.sort = ambiente.sortComponentes;
       ambiente.dataSourceComponentes.paginator = ambiente.paginatorComponentes;
 
@@ -484,17 +468,17 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.servicioMod2.Trazability(
       user.uid, 'update', 'cfEquip', this.equiposel.id, this.modelEquipoSel).then(() => {
 
-      this.servicioMod2.updateEquip(this.equiposel.id, this.modelEquipoSel).then(() => {
-        swal.close();
-        swal({
-          type: 'success',
-          title: 'Éxito',
-          showConfirmButton: true
-        }).then(() => {
-          this.cerrarModal('modal2');
+        this.servicioMod2.updateEquip(this.equiposel.id, this.modelEquipoSel).then(() => {
+          swal.close();
+          swal({
+            type: 'success',
+            title: 'Éxito',
+            showConfirmButton: true
+          }).then(() => {
+            this.cerrarModal('modal2');
+          });
         });
       });
-    });
 
   }
 
