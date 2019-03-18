@@ -18,8 +18,10 @@
             <div class="form-group">
               <div class="col-md-12">
 
-                <button *ngIf="moduloNivel2" data-toggle="modal" (click)= "setValue()"   data-target="#modal1" style="float: right;" class="btn btn-success" type="button">Agregar
-                  Personal <i class="fa fa-plus" aria-hidden="true"></i>  </button>
+                <button *ngIf="moduloNivel2" data-toggle="modal" (click)="setValue()" data-target="#modal1" style="float: right;" class="btn btn-success"
+                  type="button">Agregar Personal
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -66,53 +68,53 @@
 
                                   <div class="box-body" *ngIf="dataSourcePers.data">
                                     <div class="table-responsive">
-                                    <div class="example-container mat-elevation-z8" *ngIf="dataSourcePers.data.length != 0">
-                                      <div class="example-header">
-                                        <mat-form-field>
-                                          <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
-                                        </mat-form-field>
-                                      </div>
+                                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePers.data.length != 0">
+                                        <div class="example-header">
+                                          <mat-form-field>
+                                            <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
+                                          </mat-form-field>
+                                        </div>
 
-                                      <mat-table #tablePers #sortPers="matSort" [dataSource]="dataSourcePers" matSort>
+                                        <mat-table #tablePers #sortPers="matSort" [dataSource]="dataSourcePers" matSort>
 
-                                        <ng-container matColumnDef="nombre">
-                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                          <mat-cell   *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                        </ng-container>
+                                          <ng-container matColumnDef="nombre">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          </ng-container>
 
-                                        <ng-container matColumnDef="apellido">
+                                          <ng-container matColumnDef="apellido">
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
-                                            <mat-cell   *matCellDef="let element"> {{element.apellidos}} </mat-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.apellidos}} </mat-cell>
                                           </ng-container>
 
-                                        <ng-container matColumnDef="codigo">
-                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
-                                          <mat-cell   *matCellDef="let element"> {{element.cc}} </mat-cell>
-                                        </ng-container>
-
-                                        <ng-container matColumnDef="estado">
-                                            <mat-header-cell  [ngClass]="'small'"  *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                            <mat-cell [ngClass]="'small'"    *matCellDef="let element"> {{element.activo  | activo }} </mat-cell>
+                                          <ng-container matColumnDef="codigo">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.cc}} </mat-cell>
                                           </ng-container>
 
-                                        <ng-container matColumnDef="email">
-                                          <mat-header-cell [ngClass]="'large'"  *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                          <mat-cell [ngClass]="'large'"  *matCellDef="let element"> {{element.email}} </mat-cell>
-                                        </ng-container>
+                                          <ng-container matColumnDef="estado">
+                                            <mat-header-cell [ngClass]="'small'" *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                            <mat-cell [ngClass]="'small'" *matCellDef="let element"> {{element.activo | activo }} </mat-cell>
+                                          </ng-container>
 
-                                        <ng-container matColumnDef="tipo">
-                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
-                                          <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
-                                        </ng-container>
+                                          <ng-container matColumnDef="email">
+                                            <mat-header-cell [ngClass]="'large'" *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                            <mat-cell [ngClass]="'large'" *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          </ng-container>
 
-                                        <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
-                                        <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"
-                                          data-toggle="modal" data-target="#modal"></mat-row>
-                                      </mat-table>
+                                          <ng-container matColumnDef="tipo">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                          </ng-container>
 
-                                      <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                                      </mat-paginator>
-                                    </div>
+                                          <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
+                                          <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"
+                                            data-toggle="modal" data-target="#modal"></mat-row>
+                                        </mat-table>
+
+                                        <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                        </mat-paginator>
+                                      </div>
                                     </div>
                                   </div>
                                   <!-- /.box-body -->
@@ -157,12 +159,12 @@
 
                                         <ng-container matColumnDef="codigo">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
-                                          <mat-cell   *matCellDef="let element"> {{element.cc}} </mat-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.cc}} </mat-cell>
                                         </ng-container>
 
                                         <ng-container matColumnDef="nombre">
                                           <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                          <mat-cell  [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                         </ng-container>
 
                                         <ng-container matColumnDef="email">
@@ -301,28 +303,39 @@
                 </div>
 
 
-                <div class="col-md-12" >
-                  <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
+                <div class="col-md-12">
+                  <label class="control-label" for="facul">
+                    <strong> Seleccione un rol :</strong>
+                  </label>
 
                   <div class="input-group">
 
-                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers" id="facul" >
-                          <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
-                      </select>
-                      <span class="input-group-btn">
-                          <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button" >
-                              <i class="fa fa-plus"></i></button>
-                      </span>
-                    </div><!-- /input-group -->
+                    <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers"
+                      id="facul">
+                      <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <!-- /input-group -->
                 </div>
 
-                <div class="col-md-12" >
+                <div class="col-md-12">
                   <div class="form-group">
                     <div class="col-md-12">
-                      <label class="control-label" for="listfacul"><strong>Roles actuales :</strong></label>
+                      <label class="control-label" for="listfacul">
+                        <strong>Roles actuales :</strong>
+                      </label>
                       <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
-                        <li *ngFor="let item of this.rolesAgregados; let i= index;"><a> <strong> {{item.nombre}} </strong>
-                            <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span></a></li>
+                        <li *ngFor="let item of this.rolesAgregados; let i= index;">
+                          <a>
+                            <strong> {{item.nombre}} </strong>
+                            <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span>
+                          </a>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -332,10 +345,10 @@
 
                   <div class="col-md-12" style="margin-top: 20px;">
                     <div class="form-group">
-                        <label class="switch">
-                          <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" style="float: right;">
-                          <span class="slider round"></span>
-                        </label>
+                      <label class="switch">
+                        <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" style="float: right;">
+                        <span class="slider round"></span>
+                      </label>
                     </div>
 
                   </div>
@@ -353,8 +366,9 @@
 
           </div>
           <div *ngIf="moduloNivel2" class="modal-footer">
-            <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar <i class="fa fa-refresh"></i>
-              </button>
+            <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar
+              <i class="fa fa-refresh"></i>
+            </button>
 
           </div>
         </div>
@@ -398,15 +412,16 @@
 
                 <div class="col-md-12">
 
-                    <mat-form-field>
-                      <input (focusout)="emailcheck($event)"  placeholder="Email" matInput [(ngModel)]="this.email" id="email" name="email"  type="email" #check ="ngModel" >
-                      <mat-hint>
-                        <strong>{{status}}</strong>
-                       </mat-hint>
-                    </mat-form-field>
+                  <mat-form-field>
+                    <input (focusout)="emailcheck($event)" placeholder="Email" matInput [(ngModel)]="this.email" id="email" name="email" type="email"
+                      #check="ngModel">
+                    <mat-hint>
+                      <strong>{{status}}</strong>
+                    </mat-hint>
+                  </mat-form-field>
 
 
-                 </div>
+                </div>
 
 
                 <!-- ocultar form  para validar si ya existe -->
@@ -415,18 +430,9 @@
                   <div class="form-group">
                     <div class="col-md-12">
 
-                       <mat-form-field>
-                         <input [(ngModel)]="this.person.cfBirthdate"  placeholder="Fecha nacimiento" matInput id="escuelaedit" name="fecha"  type="date">
-
-                       </mat-form-field>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="col-md-12">
-
                       <mat-form-field>
-                        <input [(ngModel)]="this.person.cfFirstNames" placeholder="Nombre" matInput id="escuelaedit" name="firstname"  type="text">
+                        <input [(ngModel)]="this.person.cfBirthdate" placeholder="Fecha nacimiento" matInput id="escuelaedit" name="fecha" type="date">
+
                       </mat-form-field>
                     </div>
                   </div>
@@ -434,30 +440,39 @@
                   <div class="form-group">
                     <div class="col-md-12">
 
-                       <mat-form-field>
-                         <input [(ngModel)]="this.person.cc" placeholder="Código o CC" matInput id="escuelaedit" name="codigo"  type="text">
-                       </mat-form-field>
+                      <mat-form-field>
+                        <input [(ngModel)]="this.person.cfFirstNames" placeholder="Nombre" matInput id="escuelaedit" name="firstname" type="text">
+                      </mat-form-field>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
 
-                       <mat-form-field>
-                         <input [(ngModel)]="this.person.cfFamilyNames" matInput placeholder="Apellidos" id="escuelaedit" name="othersname"  type="text">
-                       </mat-form-field>
+                      <mat-form-field>
+                        <input [(ngModel)]="this.person.cc" placeholder="Código o CC" matInput id="escuelaedit" name="codigo" type="text">
+                      </mat-form-field>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-md-12">
-                        <mat-form-field>
-                            <mat-select (selectionChange)="setClientRol()" [(ngModel)]="this.rolSelect" name ="selectniveles" placeholder="Perfil">
-                              <mat-option *ngFor="let item of niveles" [value]="item.id">
-                                {{item.nombre}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+
+                      <mat-form-field>
+                        <input [(ngModel)]="this.person.cfFamilyNames" matInput placeholder="Apellidos" id="escuelaedit" name="othersname" type="text">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <mat-form-field>
+                        <mat-select (selectionChange)="setClientRol()" [(ngModel)]="this.rolSelect" name="selectniveles" placeholder="Perfil">
+                          <mat-option *ngFor="let item of niveles" [value]="item.id">
+                            {{item.nombre}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
 
                     </div>
                   </div>
@@ -466,13 +481,13 @@
                   <div class="form-group">
                     <div class="col-md-12">
 
-                        <mat-form-field>
-                            <mat-select [(ngModel)]="this.person.type" name ="persontype" placeholder="Tipo personal">
-                              <mat-option *ngFor="let item of tipo" [value]="item">
-                                {{item}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                      <mat-form-field>
+                        <mat-select [(ngModel)]="this.person.type" name="persontype" placeholder="Tipo personal">
+                          <mat-option *ngFor="let item of tipo" [value]="item">
+                            {{item}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                       <!-- <label class="control-label" for="estadoserv">
                         <strong> Tipo personal:</strong>
                       </label>
@@ -494,15 +509,18 @@
                       </select> -->
 
                       <mat-form-field>
-                          <mat-select [(ngModel)]="this.person.cfGender" name ="genero" placeholder="Genero">
-                            <mat-option value="Hombre">
-                              Hombre
-                            </mat-option>
-                            <mat-option value="Mujer">
-                                Mujer
-                              </mat-option>
-                          </mat-select>
-                        </mat-form-field>
+                        <mat-select [(ngModel)]="this.person.cfGender" name="genero" placeholder="Genero">
+                          <mat-option value="Hombre">
+                            Hombre
+                          </mat-option>
+                          <mat-option value="Mujer">
+                            Mujer
+                          </mat-option>
+                          <mat-option value="Otro">
+                            Otro
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
 
 
@@ -522,7 +540,7 @@
 
           </div>
           <div class="modal-footer">
-            <button *ngIf="!addP"  type="button" (click)="setPers()" class="btn btn-success">Guardar
+            <button *ngIf="!addP" type="button" (click)="setPers()" class="btn btn-success">Guardar
               <i class="fa fa-check"></i>
             </button>
             <button *ngIf="addP" type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular
@@ -539,13 +557,3 @@
 </div>
 
 <app-spinner></app-spinner>
-
-
-
-
-
-
-
-
-
-

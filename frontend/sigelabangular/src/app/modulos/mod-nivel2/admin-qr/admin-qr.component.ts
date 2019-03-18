@@ -290,9 +290,20 @@ export class AdminQrComponent implements OnInit {
     this.dataSourceFacil.filter = filterValue;
   }
 
-  applyFilter(value) {
+  applyFilterQrSin(filterValue: string) {
 
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceQrIn.filter = filterValue;
   }
+
+  applyFilterQrCon(filterValue: string) {
+
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourceQr.filter = filterValue;
+  }
+
 
    // crea un archivo csv a partir de un array de los QRS generados
   downloadCsvDoc() {

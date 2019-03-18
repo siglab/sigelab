@@ -334,6 +334,8 @@ export class AdminLaboratorios3Component implements OnInit {
   rolSelect: any;
   rolesAgregados = [];
 
+  coord = false;
+
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
     private service: EspaciosService, private toastr: ToastrService,
     private serviceMod3: ServicesNivel3Service) {
@@ -412,12 +414,13 @@ export class AdminLaboratorios3Component implements OnInit {
       }
     });
 
+
     this.idlab = item.uid;
 
 
     this.itemsel = Observable.of(item);
     this.labestructurado = item;
-    console.log(item.active);
+    console.log(item);
     this.activo = item.active;
     this.limpiarData();
 
@@ -586,7 +589,7 @@ export class AdminLaboratorios3Component implements OnInit {
                                 telefonos: this.estructuraTelefonos(doc.id),
                                 info: { email: laboratorio.otros.email },
                                 equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                                personal: this.estructurarPersonas(laboratorio.relatedPers),
+                                personal: this.estructurarPersonas(laboratorio.relatedPers, laboratorio.facilityAdmin),
                                 facultades: this.estructurarFacultades(laboratorio.faculties),
                                 departamentos: this.estructurarDepartamentos(laboratorio.departments),
                                 espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
@@ -673,7 +676,7 @@ export class AdminLaboratorios3Component implements OnInit {
                           telefonos: this.estructuraTelefonos(doc.id),
                           info: { email: laboratorio.otros.email },
                           equipos: this.estructurarEquipos(laboratorio.relatedEquipments),
-                          personal: this.estructurarPersonas(laboratorio.relatedPers),
+                          personal: this.estructurarPersonas(laboratorio.relatedPers, laboratorio.facilityAdmin),
                           facultades: this.estructurarFacultades(laboratorio.faculties),
                           departamentos: this.estructurarDepartamentos(laboratorio.departments),
                           espacios: this.estructurarSpace(laboratorio.relatedSpaces, laboratorio.mainSpace),
@@ -1044,9 +1047,11 @@ export class AdminLaboratorios3Component implements OnInit {
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
-  estructurarPersonas(item) {
+  estructurarPersonas(item, person) {
 
     const arr = [];
+
+    item[person] = true;
 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
@@ -2967,9 +2972,12 @@ export class AdminLaboratorios3Component implements OnInit {
       this.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
 
+        const perso = laboratorio.relatedPers;
+
+        perso[laboratorio.facilityAdmin] = true;
 
         this.persestructurado = {
-          personal: this.estructurarPers(laboratorio.relatedPers),
+          personal: this.estructurarPers(perso),
           personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
           estado: laboratorio.active,
           uid: key
@@ -3137,6 +3145,12 @@ export class AdminLaboratorios3Component implements OnInit {
       }
     }
 
+    if (item.rolesClient[this.idlab]['S9wr9uK5BBF4yQZ7CwqX']) {
+      this.coord = true;
+    } else {
+      this.coord = false;
+    }
+
     this.idp = item.idpers;
     this.idu = item.iduser;
     console.log(item.rolesClient);
@@ -3153,7 +3167,7 @@ export class AdminLaboratorios3Component implements OnInit {
         const name = this.niveles.find(o => o.id === key);
         this.rolesAgregados.push({
           id: key,
-          nombre: name ? name.nombre : 'coordinador nivel 2'
+          nombre: name ? name.nombre : 'Coordinador de laboratorio'
         });
       }
     }

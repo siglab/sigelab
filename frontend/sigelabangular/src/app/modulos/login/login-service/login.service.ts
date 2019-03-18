@@ -432,4 +432,8 @@ export class LoginService {
     };
     return this.http.post(this.URL, peticion);
   }
+
+  getUserWithEmail(email: string) {
+    return this.afs.collection('user').ref.where('email', '==', email).get();
+  }
 }
