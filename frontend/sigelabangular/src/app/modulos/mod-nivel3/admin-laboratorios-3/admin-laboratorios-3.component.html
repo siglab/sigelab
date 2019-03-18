@@ -2438,7 +2438,7 @@
                   </div>
 
 
-                  <div class="col-md-12" >
+                  <div *ngIf="!coord" class="col-md-12" >
                       <label class="control-label" for="facul"><strong> Seleccione un rol :</strong></label>
     
                       <div class="input-group">
@@ -2452,14 +2452,14 @@
                           </span>
                         </div><!-- /input-group -->
                     </div>
-                    
+         
                     <div class="col-md-12" >
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="listfacul"><strong>Roles actuales :</strong></label>
                           <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
                             <li *ngFor="let item of this.rolesAgregados; let i= index;"><a> <strong> {{item.nombre}} </strong>
-                                <span (click)="quitarelementoRol( i )" class="puntero pull-right fa fa-trash"></span></a></li>
+                                <span *ngIf="!this.coord" (click)="quitarelementoRol( i )" class="puntero pull-right fa fa-trash"></span></a></li>
                           </ul>
                         </div>
                       </div>

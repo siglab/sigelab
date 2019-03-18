@@ -78,7 +78,7 @@
               </p>
               <ng-template #noIternalUser>
                 <p>
-                  <span class="name">
+                  <span *ngIf="this.usuario.displayName" class="name">
                    {{ this.usuario.displayName.toLowerCase() }}
                   </span>
                   <small>Usuario no Institucional</small>
