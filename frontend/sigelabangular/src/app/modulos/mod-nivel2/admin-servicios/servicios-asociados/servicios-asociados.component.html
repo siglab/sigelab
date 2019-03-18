@@ -368,10 +368,10 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label text-center" for="condiciones">
-                                                    <strong *ngIf="this.srv.cfCondition.length != 0">Condiciones Agregadas</strong>
-                                                    <strong *ngIf="this.srv.cfCondition.length == 0">Sin condiciones Agregadas</strong>
+                                                    <strong *ngIf="this.srv.cfCondition.length != 0">Condiciones agregadas</strong>
+                                                    <strong *ngIf="this.srv.cfCondition.length == 0">Sin condiciones agregadas</strong>
                                                 </label>
-                                                <ul class="nav nav-stacked divScroll">
+                                                <ul *ngIf="this.srv.cfCondition.length !== 0" class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.srv.cfCondition; let i = index">
                                                         <a style="cursor: pointer;">{{item}}
                                                             <span (click)="quitarCondicion(i)" class="pull-right badge bg-red">-</span>
@@ -470,15 +470,15 @@
 
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
+                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar condición</button>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label text-center" for="condiciones">
-                                                    <strong *ngIf="this.objectvariation.cfConditions.length != 0">Condiciones Agregadas</strong>
-                                                    <strong *ngIf="this.objectvariation.cfConditions.length == 0">Sin condiciones Agregadas</strong>
+                                                    <strong *ngIf="this.objectvariation.cfConditions.length != 0">Condiciones agregadas</strong>
+                                                    <strong *ngIf="this.objectvariation.cfConditions.length == 0">Sin condiciones agregadas</strong>
                                                 </label>
                                                 <ul class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.objectvariation.cfConditions; let i = index">
@@ -491,7 +491,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align: right">
-                                                <button (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar Variación</button>
+                                                <button (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar variación</button>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -502,10 +502,10 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label text-center" for="condiciones">
-                                                    <strong *ngIf="this.variaciones.length != 0">Variaciones Agregadas</strong>
-                                                    <strong *ngIf="this.variaciones.length == 0">Sin Variaciones Agregadas</strong>
+                                                    <strong *ngIf="this.variaciones.length != 0">Variaciones agregadas</strong>
+                                                    <strong *ngIf="this.variaciones.length == 0">Sin variaciones agregadas</strong>
                                                 </label>
-                                                <ul class="nav nav-stacked divScroll">
+                                                <ul *ngIf="this.variaciones.length !== 0" class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.variaciones; let i = index">
                                                         <a style="cursor: pointer;">{{item.cfName}}
                                                             <span (click)="quitarVariacion(i)" class="pull-right badge bg-red">-</span>
@@ -586,7 +586,7 @@
                     <fieldset>
                         <div class="form-group">
                             <div class="col-md-12 text-center">
-                                <button (click)="agregarServicio()" class="btn btn-danger" type="button">Guardar Servicio</button>
+                                <button (click)="agregarServicio()" class="btn btn-danger" type="button">Guardar servicio</button>
                             </div>
                         </div>
                     </fieldset>
@@ -605,7 +605,7 @@
         <div class="modal-content">
             <div class="modal-header text-center">
                 <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></span>
-                <h3 class="box-title">Editar Servicio</h3>
+                <h3 class="box-title">Editar servicio</h3>
             </div>
             <div class="modal-body">
                 <div class="box-group" id="accordionModal">
@@ -755,10 +755,10 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <label class="control-label text-center" for="condiciones">
-                                                    <strong *ngIf="this.variaciones.length != 0">Variaciones Agregadas</strong>
-                                                    <strong *ngIf="this.variaciones.length == 0">Sin Variaciones Agregadas</strong>
+                                                    <strong *ngIf="this.variaciones.length != 0">Variaciones agregadas</strong>
+                                                    <strong *ngIf="this.variaciones.length == 0">Sin variaciones agregadas</strong>
                                                 </label>
-                                                <ul class="nav nav-stacked divScroll">
+                                                <ul *ngIf="this.variaciones.length !== 0" class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.variaciones; let i = index">
                                                         <a style="cursor: pointer;">
                                                             <button (click)="cambiarDataEditarVariacion(item)" type="button" class="btn btn-primary btn-sm">Editar</button>
@@ -819,7 +819,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group" >
+                                        <div *ngIf="this.objectvariation.parametros.length !== 0" class="form-group" >
                                             <div class="col-md-12">
                                             <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
                                                 <ul class="nav nav-stacked divScroll">
@@ -850,7 +850,7 @@
                                                     <strong *ngIf="this.objectvariation.cfConditions.length != 0">Condiciones Agregadas</strong>
                                                     <strong *ngIf="this.objectvariation.cfConditions.length == 0">Sin condiciones Agregadas</strong>
                                                 </label>
-                                                <ul class="nav nav-stacked divScroll">
+                                                <ul *ngIf="this.objectvariation.cfConditions.length !== 0" class="nav nav-stacked divScroll">
                                                     <li *ngFor="let item of this.objectvariation.cfConditions; let i = index">
                                                         <a style="cursor: pointer;">{{item}}
                                                             <span (click)="quitarCondicionVariacion(i)" class="pull-right badge bg-red">-</span>

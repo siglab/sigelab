@@ -747,7 +747,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     swal({
       type: 'success',
-      title: 'Cambio de estado de variación hecho',
+      title: 'Exito, se cambio el estado de la variación',
       showConfirmButton: true
     });
 

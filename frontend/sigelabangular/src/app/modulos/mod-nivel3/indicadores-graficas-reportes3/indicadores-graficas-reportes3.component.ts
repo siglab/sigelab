@@ -137,13 +137,13 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   proyectos = [];
 
   arregloBarra = {
-    docencia: {ac: 0, in: 0},
-    extension: {ac: 0, in: 0},
-    investigacion: {ac: 0, in: 0},
-    docext: {ac: 0, in: 0},
-    docinv: {ac: 0, in: 0},
-    extinv: {ac: 0, in: 0},
-    doexin: {ac: 0, in: 0}
+    docencia: { ac: 0, in: 0 },
+    extension: { ac: 0, in: 0 },
+    investigacion: { ac: 0, in: 0 },
+    docext: { ac: 0, in: 0 },
+    docinv: { ac: 0, in: 0 },
+    extinv: { ac: 0, in: 0 },
+    doexin: { ac: 0, in: 0 }
   };
   graficoBarras = false;
 
@@ -284,32 +284,32 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     }
 
     this.serviceMod3.buscaDepartamento(keyfacul)
-    .then(departamento => {
-      departamento.forEach(doc => {
+      .then(departamento => {
+        departamento.forEach(doc => {
 
-        const element = doc.data();
+          const element = doc.data();
 
-        if (element.type === 'department') {
+          if (element.type === 'department') {
 
-          this.listSelect.departamento.push({
-            id: doc.id,
-            nombre: element.departmentName,
-            facul: keyfacul
-          });
+            this.listSelect.departamento.push({
+              id: doc.id,
+              nombre: element.departmentName,
+              facul: keyfacul
+            });
 
-        } else {
+          } else {
 
-        this.listSelect.escuela.push({
-          id: doc.id,
-          nombre: element.departmentName,
-          facul: keyfacul
+            this.listSelect.escuela.push({
+              id: doc.id,
+              nombre: element.departmentName,
+              facul: keyfacul
+            });
+
+          }
         });
 
-        }
+
       });
-
-
-    });
 
   }
 
@@ -415,19 +415,19 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       const coincidencias = [];
 
       const arr = {
-              sede: 'headquarter',
-              subsede: 'subHq',
-              facultad: 'faculties',
-              departamento: 'departments',
-              escuela: 'departments'
-            };
+        sede: 'headquarter',
+        subsede: 'subHq',
+        facultad: 'faculties',
+        departamento: 'departments',
+        escuela: 'departments'
+      };
 
       const correos = '';
       const notificaciones = [];
 
       const inicio = 'if(';
       const fin = '){' +
-            'coincidencias.push(element);}';
+        'coincidencias.push(element);}';
 
       let ifquery = '';
 
@@ -486,17 +486,17 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
                 ifquery += ' || ';
               }
 
-              }
             }
-
-
           }
+
 
         }
 
-        ifquery = ifquery.substr(0, ifquery.length - 4);
+      }
 
-        ifquery = inicio + ifquery + fin;
+      ifquery = ifquery.substr(0, ifquery.length - 4);
+
+      ifquery = inicio + ifquery + fin;
 
 
       this.serviceMod3.buscaLaboratorios().then(datos => {
@@ -512,15 +512,15 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
           } else {
 
-           // tslint:disable-next-line:no-eval
-           eval(ifquery);
+            // tslint:disable-next-line:no-eval
+            eval(ifquery);
 
           }
 
           if (datos.size !== cont) {
             cont++;
           } else {
-            resolve({data: coincidencias});
+            resolve({ data: coincidencias });
           }
 
         });
@@ -713,21 +713,21 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           if (array.length === cont) {
             actual = parseInt(ano, 10);
             servicios.push({
-              'name' : new Date(anio.split('T')[0]),
+              'name': new Date(anio.split('T')[0]),
               'value': arrayServicios['anio0'].length
             });
             for (let i = 1; i < 5; i++) {
               actual--;
 
               servicios.push({
-                'name' : new Date(actual + '-12-31'),
+                'name': new Date(actual + '-12-31'),
                 'value': arrayServicios['anio' + i].length
               });
 
-             if (i === 4) {
+              if (i === 4) {
 
-              resolve({data: servicios});
-             }
+                resolve({ data: servicios });
+              }
 
             }
 
@@ -756,11 +756,11 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       let cont = 1;
 
       const arrayServicios = {
-        anio0: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
-        anio1: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
-        anio2: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
-        anio3: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []},
-        anio4: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: []}
+        anio0: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: [] },
+        anio1: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: [] },
+        anio2: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: [] },
+        anio3: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: [] },
+        anio4: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: [] }
       };
 
       const arrayMontos = {
@@ -803,25 +803,25 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
               anioactualaux--;
               for (let j = 12; j > 0; j--) {
                 let auxmes = '' + j;
-                if (j < 10) {auxmes = '0' + j; }
+                if (j < 10) { auxmes = '0' + j; }
 
                 servicios.push({
-                  'name' : new Date(anioactualaux + '-' + auxmes + '-31'),
+                  'name': new Date(anioactualaux + '-' + auxmes + '-31'),
                   'value': arrayServicios['anio' + i][j].length
                 });
 
               }
 
               montos.push({
-                'name' : new Date(anioactualaux + '-12-31'),
+                'name': new Date(anioactualaux + '-12-31'),
                 'value': arrayMontos['anio' + i]
               });
 
 
-             if (i === 4) {
+              if (i === 4) {
 
-              resolve({data: servicios, monto: montos});
-             }
+                resolve({ data: servicios, monto: montos });
+              }
 
             }
 
@@ -912,36 +912,36 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
     const arraySeme = [];
 
-      if (parseInt(mes, 10) >= 6) {
+    if (parseInt(mes, 10) >= 6) {
 
-        for (let i = 0; i < 3; i++) {
-          if (i !== 2) {
-            arraySeme.push(actual + '-02');
-            arraySeme.push(actual + '-01');
-          } else {
-            arraySeme.push(actual + '-02');
-          }
-
-            actual--;
-
-        }
-      } else {
-        for (let i = 0; i < 3; i++) {
-          if (i === 0) {
-            arraySeme.push(actual + '-01');
-          } else {
-            arraySeme.push(actual + '-02');
-            arraySeme.push(actual + '-01');
-          }
-
-          actual--;
-
+      for (let i = 0; i < 3; i++) {
+        if (i !== 2) {
+          arraySeme.push(actual + '-02');
+          arraySeme.push(actual + '-01');
+        } else {
+          arraySeme.push(actual + '-02');
         }
 
+        actual--;
+
+      }
+    } else {
+      for (let i = 0; i < 3; i++) {
+        if (i === 0) {
+          arraySeme.push(actual + '-01');
+        } else {
+          arraySeme.push(actual + '-02');
+          arraySeme.push(actual + '-01');
+        }
+
+        actual--;
 
       }
 
-      return arraySeme;
+
+    }
+
+    return arraySeme;
 
   }
 
@@ -967,43 +967,43 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
         this.serviceMod3.getPracticaProgramacion(practica.id).then(datos2 => {
           console.log(datos2);
-            datos2.forEach(doc => {
-              arrayPracticas[doc.data().semester]++;
-              arrayEstudiantes[doc.data().semester] += parseInt(doc.data().noStudents, 10);
+          datos2.forEach(doc => {
+            arrayPracticas[doc.data().semester]++;
+            arrayEstudiantes[doc.data().semester] += parseInt(doc.data().noStudents, 10);
 
-              if (array.length === cont) {
+            if (array.length === cont) {
 
-                for (let i = 0; i < semestres.length; i++) {
-                  const aux = semestres[i].split('-');
-                  let aux2 = '';
-                  if (aux[1] === '01') {
-                    aux2 = '06';
-                  } else {
-                    aux2 = '12';
-                  }
-
-                  practicas.push({
-                    'name' : new Date(aux[0] + '-' + aux2 + '-31'),
-                    'value': arrayPracticas[semestres[i]]
-                  });
-
-                  estudiantes.push({
-                    'name' : new Date(aux[0] + '-' + aux2 + '-31'),
-                    'value': arrayEstudiantes[semestres[i]]
-                  });
-
-
-                  if (i === 4) {
-                    console.log(practicas, estudiantes);
-                    resolve({data: practicas, estu: estudiantes});
-                  }
-
+              for (let i = 0; i < semestres.length; i++) {
+                const aux = semestres[i].split('-');
+                let aux2 = '';
+                if (aux[1] === '01') {
+                  aux2 = '06';
+                } else {
+                  aux2 = '12';
                 }
 
-              } else {
-                cont++;
+                practicas.push({
+                  'name': new Date(aux[0] + '-' + aux2 + '-31'),
+                  'value': arrayPracticas[semestres[i]]
+                });
+
+                estudiantes.push({
+                  'name': new Date(aux[0] + '-' + aux2 + '-31'),
+                  'value': arrayEstudiantes[semestres[i]]
+                });
+
+
+                if (i === 4) {
+                  console.log(practicas, estudiantes);
+                  resolve({ data: practicas, estu: estudiantes });
+                }
+
               }
-            });
+
+            } else {
+              cont++;
+            }
+          });
 
 
         });
@@ -1040,7 +1040,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
       array.forEach(proyecto => {
 
         this.serviceMod3.getProyecto(proyecto.id).then(doc => {
-           let contador = 0;
+          let contador = 0;
 
           // tslint:disable-next-line:forin
           for (const key in doc.data().relatedPers) {
@@ -1061,17 +1061,17 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
               }
 
               proyectos.push({
-                'name' : new Date(aux[0] + '-' + aux2 + '-31'),
+                'name': new Date(aux[0] + '-' + aux2 + '-31'),
                 'value': arrayProyectos[semestres[i]]
               });
 
               estudiantes.push({
-                'name' : new Date(aux[0] + '-' + aux2 + '-31'),
+                'name': new Date(aux[0] + '-' + aux2 + '-31'),
                 'value': arrayEstudiantes[semestres[i]]
               });
 
               if (i === 4) {
-                resolve({data: proyectos, estu: estudiantes});
+                resolve({ data: proyectos, estu: estudiantes });
               }
 
             }
@@ -1101,15 +1101,15 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
   inicializarGraficoBarra(data) {
     this.singleBar = [];
     this.arregloBarra = {
-      docencia: {ac: 0, in: 0},
-      extension: {ac: 0, in: 0},
-      investigacion: {ac: 0, in: 0},
-      docext: {ac: 0, in: 0},
-      docinv: {ac: 0, in: 0},
-      extinv: {ac: 0, in: 0},
-      doexin: {ac: 0, in: 0}
+      docencia: { ac: 0, in: 0 },
+      extension: { ac: 0, in: 0 },
+      investigacion: { ac: 0, in: 0 },
+      docext: { ac: 0, in: 0 },
+      docinv: { ac: 0, in: 0 },
+      extinv: { ac: 0, in: 0 },
+      doexin: { ac: 0, in: 0 }
     };
-    let cont  = 1;
+    let cont = 1;
     data.forEach(doc => {
       const axu = doc.facilActivity;
       if ((axu['teaching']) && !(axu['extension'] || axu['research'])) {
@@ -1161,7 +1161,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
           this.arregloBarra.investigacion.in++;
           this.arregloBarra.extinv.in++;
         }
-      } else if ( axu['teaching'] && axu['extension'] && axu['research']) {
+      } else if (axu['teaching'] && axu['extension'] && axu['research']) {
         if (doc.active) {
           this.arregloBarra.docencia.ac++;
           this.arregloBarra.extension.ac++;
@@ -1290,7 +1290,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             'series': datos['monto']
           }];
 
-          this.cont = false;
+        this.cont = false;
       });
 
     } else {
@@ -1301,12 +1301,12 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   }
 
-   // tslint:disable-next-line:member-ordering
-   serv = true;
+  // tslint:disable-next-line:member-ordering
+  serv = true;
   cambiarGraficaLine(item) {
     if (item === 1) {
-     this.inicializarGraficoLineaServicios(this.servicios);
-     this.serv = true;
+      this.inicializarGraficoLineaServicios(this.servicios);
+      this.serv = true;
 
     } else if (item === 2) {
       console.log(this.practicas);
@@ -1376,7 +1376,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
 
 
-   prueba() {
+  prueba() {
     swal({
       title: 'Cargando un momento...',
       text: 'Espere mientras se procesa la transacción',
@@ -1390,37 +1390,46 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
     const scale = 'scale(0.85)';
     const filtros = this.buscaObjectos();
     domtoimage.toPng(document.getElementById('grafica'))
-    .then(function (dataUrl) {
+      .then(function (dataUrl) {
         const img = new Image();
         img.src = dataUrl;
 
-        const printWindow = window.open('', '', 'height=400,width=800');
-        printWindow.document.write('<html><head><title>REPORTE</title>');
-        printWindow.document.write('</head><body style="height:100%; width:100%;">');
-        printWindow.document.write('<strong> Hora de Generación: ' + cad + ' </strong>');
-        printWindow.document.body.appendChild(img);
-        printWindow.document.write('<br><strong> Correo del generador: : ' + ambiente.persona.email + ' </strong>');
-        printWindow.document.write('<h1>FILTROS USADOS</h1>');
-        printWindow.document.write(filtros);
-        printWindow.document.write('</body></html>');
-
-        printWindow.document.head.style.transform = scale;
-        printWindow.document.body.style.transform = scale;
-
-        printWindow.document.close();
-
-        setTimeout(() => {
-          swal.close();
-          printWindow.print();
-        }, 1000);
+        domtoimage.toPng(document.getElementById('grafica2'))
+          .then(function (dataUrl2) {
+            const img2 = new Image();
+            img2.src = dataUrl2;
 
 
-    })
-    .catch(function (error) {
+            const printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>REPORTE</title>');
+            printWindow.document.write('</head><body style="height:100%; width:100%;">');
+            printWindow.document.write('<strong> Hora de Generación: ' + cad + ' </strong>');
+            printWindow.document.body.appendChild(img);
+            printWindow.document.write('<br><br><br><br>');
+            printWindow.document.body.appendChild(img2);
+            printWindow.document.write('<br><strong> Correo del generador: : ' + ambiente.persona.email + ' </strong>');
+            printWindow.document.write('<h1>FILTROS USADOS</h1>');
+            printWindow.document.write(filtros);
+            printWindow.document.write('</body></html>');
+
+            printWindow.document.head.style.transform = scale;
+            printWindow.document.body.style.transform = scale;
+
+            printWindow.document.close();
+
+            setTimeout(() => {
+              swal.close();
+              printWindow.print();
+            }, 1000);
+          });
+
+
+      })
+      .catch(function (error) {
         console.error('oops, something went wrong!', error);
-    });
+      });
 
-   }
+  }
 
 
 }
