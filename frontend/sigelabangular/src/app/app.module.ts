@@ -104,6 +104,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
 import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { SabsService } from './shared/services/sabs/sabs.service';
 
 // libreria date time-picker
 
@@ -201,7 +202,8 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     Nivel25Guard,
     Nivel3Guard,
     Modulo2Service,
-    ServicesNivel3Service
+    ServicesNivel3Service,
+    SabsService
   ],
   bootstrap: [AppComponent]
 })
