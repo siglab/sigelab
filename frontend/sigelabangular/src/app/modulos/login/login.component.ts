@@ -74,6 +74,48 @@ export class LoginComponent implements OnInit {
 
     } else {
 
+      this._loginService.getUserWithEmail(this.email).then(data => {
+        if (data.empty) {
+          swal({
+            type: 'error',
+            title: 'El correo ingresado no tiene registro en la plataforma.',
+            showConfirmButton: true
+          });
+        } else {
+          this._loginService.loginEmail(this.email, this.pass).then(ok => {
+
+            if (ok['emailVerified']) {
+
+              swal({
+                type: 'success',
+                title: 'Ingreso correcto',
+                showConfirmButton: true
+              });
+
+              this.ruta.navigate(['principal']);
+
+            } else {
+
+              swal({
+                type: 'info',
+                title: 'Hace falta verificar su cuenta',
+                showConfirmButton: true
+              });
+
+            }
+
+          }).catch(err => {
+
+            swal({
+              type: 'error',
+              title: this.mensajesError(err.code),
+              showConfirmButton: true
+            });
+
+          });
+        }
+      });
+
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
@@ -82,38 +124,29 @@ export class LoginComponent implements OnInit {
         }
       });
 
-      this._loginService.loginEmail(this.email, this.pass).then(ok => {
 
-        if (ok['emailVerified']) {
-
-          swal({
-            type: 'success',
-            title: 'Ingreso correcto',
-            showConfirmButton: true
-          });
-
-          this.ruta.navigate(['principal']);
-
-        } else {
-
-          swal({
-            type: 'info',
-            title: 'Hace falta verificar su cuenta',
-            showConfirmButton: true
-          });
-
-        }
-
-
-        console.log('respuesta log', ok);
-
-
-      }).catch(err => {
-        this.ingresarEmail(em, ps);
-
-      });
     }
 
+  }
+
+
+
+  mensajesError(message) {
+    switch (message) {
+      case 'auth/app-not-authorized': return 'Acceso no autorizado.';
+      case 'auth/argument-error': return 'Datos Invalidos.';
+      case 'auth/invalid-api-key': return 'API KEY invalido.';
+      case 'auth/invalid-user-token': return 'TOKEN de acceso invalido.';
+      case 'auth/network-request-failed': return 'Error de red, por favor revise su internet.';
+      case 'auth/operation-not-allowed': return 'Proovedor invalido.';
+      case 'auth/too-many-requests': return 'Actividad inusual.';
+      case 'auth/unauthorized-domain': return 'Dominio invalido.';
+      case 'auth/user-disabled': return 'Usuario deshabilitado.';
+      case 'auth/user-token-expired': return 'Token de acceso expirado.';
+      case 'auth/web-storage-unsupported': return 'El navegador no permite almacenamiento web.';
+      case 'auth/wrong-password': return 'Password invalido o la cuenta registrada solo accede por medio de Google';
+      case 'auth/user-not-found': return 'El correo electrónico ingresado no está registrado.';
+    }
   }
 
 }

@@ -80,7 +80,7 @@
                             <div class="example-header">
                                 <button *ngIf="moduloNivel3" (click)="downloadAllTableCsv()" mat-raised-button  color="primary" style="float: right;" >csv</button>
                               <mat-form-field>
-                                <input style="outline: none;" matInput (keyup)="cambiardataInac($event.target.value)"
+                                <input style="outline: none;" matInput (keyup)="applyFilterQrSin($event.target.value)"
                                   placeholder="Buscar referencia">
                               </mat-form-field>
 
@@ -135,7 +135,7 @@
                           <div class="example-container mat-elevation-z8">
                             <div class="example-header">
                               <mat-form-field>
-                                <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
+                                <input style="outline: none;" matInput (keyup)="applyFilterQrCon($event.target.value)"
                                   placeholder="Buscar referencia">
                               </mat-form-field>
                             </div>

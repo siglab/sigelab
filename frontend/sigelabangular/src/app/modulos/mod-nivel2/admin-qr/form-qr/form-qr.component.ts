@@ -1,5 +1,5 @@
 import { QrService } from './../../services/qr.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import swal from 'sweetalert2';
@@ -72,7 +72,7 @@ export class FormQrComponent implements OnInit {
 
   constructor(
     private _Activatedroute: ActivatedRoute,
-    private qrser: QrService
+    private qrser: QrService, private route: Router
   ) { }
 
   ngOnInit() {
@@ -309,6 +309,14 @@ export class FormQrComponent implements OnInit {
 
         this.qrser.updatedQr(path, this.id);
 
+        swal({
+          type: 'success',
+          title: 'Guardado exitoso',
+          showConfirmButton: true
+        }).then(() => {
+          this.route.navigate(['principal/adminqr']);
+        });
+
       });
 
     } else {
@@ -333,7 +341,7 @@ export class FormQrComponent implements OnInit {
   }
 
   applyFilterLab(filterValue: string) {
-
+    console.log(filterValue);
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceFacil.filter = filterValue;
