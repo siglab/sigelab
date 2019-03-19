@@ -259,7 +259,7 @@ export class ServicesNivel3Service {
   // METODO TRAZABILIDAD DE CAMBIOS
 
   Trazability(user, type, collection, id, docIn) {
-    console.log('ejecuto');
+
     let size = 0;
     let cont = 1;
     // tslint:disable-next-line:forin
@@ -275,12 +275,11 @@ export class ServicesNivel3Service {
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
             docAfter[key] = docIn[key];
-            console.log(cont, size);
+
             if (cont === size) {
 
-              console.log(documento, docAfter);
-
               this.addTrazability(user, type, collection, id, documento, docAfter).then(() => {
+                console.log('ejecuto');
                 resolve();
               });
 

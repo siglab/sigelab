@@ -46,7 +46,8 @@
 
   .divScroll {
     overflow-y: scroll;
-    height: 445px;
+    max-height: 450px;
+    max-width: 1000px;
   }
   divScroll::-webkit-scrollbar-track
   {

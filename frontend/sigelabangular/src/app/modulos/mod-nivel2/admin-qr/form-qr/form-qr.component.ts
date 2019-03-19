@@ -110,15 +110,15 @@ export class FormQrComponent implements OnInit {
       this.inventario.marca = res['brand'];
       this.inventario.estado = res['active'];
 
-      this.qrser.postSabs(res['inventory']).subscribe(data => {
+      this.qrser.postSabs(res['inventory']).then(data => {
 
         console.log('datos sabs', data);
 
-        this.fecha_Aceptacion = data.inventario.fechaAceptacion;
-        this.responsable = data.inventario.responsable;
-        this.ubicacion = data.inventario.ubicacion;
-        this.edificio = data.inventario.edificio;
-        this.cod_lab = data.inventario.codLab;
+        this.fecha_Aceptacion = data.fechaAceptacion;
+        this.responsable = data.responsable;
+        this.ubicacion = data.ubicacion;
+        this.edificio = data.edificio;
+        this.cod_lab = data.codLab;
         this.inventario.costoinicial = data.inventario.costoInicial;
 
       }, err => console.log('error conectando sabs', err)
@@ -152,21 +152,21 @@ export class FormQrComponent implements OnInit {
       // this.dispo = false;
     } else {
       this.status = 'Buscando código en SABS...';
-      this.qrser.postSabs(q).subscribe(res => {
+      this.qrser.postSabs(q).then(res => {
         console.log(res);
-        if (res.inventario.encontrado === true) {
+        if (res.encontrado === true) {
           this.status = 'Código de inventario encontrado.';
           this.formulario = true;
           this.formEdit = 'false';
           console.log(this.formEdit);
           // asignar valores de la consulta a formulario
-          this.inventario.responsable = res.inventario.responsable;
-          this.inventario.ubicacion = res.inventario.ubicacion;
-          this.inventario.costoinicial = res.inventario.costoInicial;
-          this.inventario.marca = res.inventario.nombreMarca;
-          this.inventario.estado = res.inventario.estado;
+          this.inventario.responsable = res.responsable;
+          this.inventario.ubicacion = res.ubicacion;
+          this.inventario.costoinicial = res.costoInicial;
+          this.inventario.marca = res.nombreMarca;
+          this.inventario.estado = res.estado;
         }
-        if (res.inventario.encontrado === false) {
+        if (res.encontrado === false) {
           this.status =
             'Código de inventario no encontrado, revise y vuelva a intentar.';
           this.formulario = true;
@@ -195,19 +195,19 @@ export class FormQrComponent implements OnInit {
       // this.dispo = false;
     } else {
       this.statusComponent = 'Buscando código  componente  en SABS...';
-      this.qrser.postSabs(q).subscribe(res => {
+      this.qrser.postSabs(q).then(res => {
         console.log(res);
-        if (res.inventario.encontrado === true) {
+        if (res.encontrado === true) {
           this.statusComponent = 'Código componente de inventario encontrado.';
           this.formularioComp = true;
           console.log(this.formEdit);
           // asignar valores de la consulta a formulario
-          this.componente.ubicacion_c = res.inventario.ubicacion;
-          this.componente.costoinicial_c = res.inventario.costoInicial;
-          this.componente.marca_c = res.inventario.nombreMarca;
-          this.componente.estado_c = res.inventario.estado;
+          this.componente.ubicacion_c = res.ubicacion;
+          this.componente.costoinicial_c = res.costoInicial;
+          this.componente.marca_c = res.nombreMarca;
+          this.componente.estado_c = res.estado;
         }
-        if (res.inventario.encontrado === false) {
+        if (res.encontrado === false) {
           this.statusComponent = 'Código componente de inventario no encontrado, revise y vuelva a intentar.';
           this.formularioComp = true;
 

@@ -647,7 +647,9 @@ export class AdminUsuariosComponent implements OnInit {
 
   actualizarPers() {
 
-    const clientRole = ['6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB'];
+    const clientRole = [
+      '6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB', 'SXYQVs5Re8exTghONg6j',
+      'KMV8IWBtMoiDV21owDCj'];
 
     const coor = 'S9wr9uK5BBF4yQZ7CwqX';
 
@@ -670,7 +672,7 @@ export class AdminUsuariosComponent implements OnInit {
           }
         });
 
-        this.setKeyAdmin(doc.labs);
+        this.setKeyAdmin(doc.labs, this.idp);
       }
     });
 
@@ -762,6 +764,8 @@ export class AdminUsuariosComponent implements OnInit {
             type: 'success',
             title: 'Usuario actualizado correctamente',
             showConfirmButton: true
+          }).then(() => {
+            this.email = undefined;
           });
         });
     });
@@ -867,7 +871,9 @@ export class AdminUsuariosComponent implements OnInit {
     let boolfac = false;
     const facultades = {};
 
-    const clientRole = ['6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB'];
+    const clientRole = [
+      '6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB', 'SXYQVs5Re8exTghONg6j',
+      'KMV8IWBtMoiDV21owDCj'];
 
     const coor = 'S9wr9uK5BBF4yQZ7CwqX';
 
@@ -889,8 +895,6 @@ export class AdminUsuariosComponent implements OnInit {
             });
           }
         });
-
-        this.setKeyAdmin(doc.labs);
       }
     });
 
@@ -970,11 +974,12 @@ export class AdminUsuariosComponent implements OnInit {
 
         this.arrayPract.forEach((doc, index) => {
           if (doc.id === coor) {
+            console.log(ok.id, doc.labs);
             this.idp = ok.id;
-            this.setKeyAdmin(doc.labs);
+            this.setKeyAdmin(doc.labs, ok.id);
           }
         });
-        console.log(ok.id);
+
 
         // ocultar loading
         this.alert.hide();
@@ -1117,8 +1122,9 @@ export class AdminUsuariosComponent implements OnInit {
     this.dataSourceFacil.filter = filterValue;
   }
 
-  updatedAdminFacil(idlab) {
+  updatedAdminFacil(idlab, id) {
     // obtner referencia del director actual y borrarlo
+    console.log(idlab);
     this.serviceMod3
       .getSingleLaboratorios(idlab)
       .then((doc: any) => {
@@ -1154,9 +1160,9 @@ export class AdminUsuariosComponent implements OnInit {
               cfFacil: aux2
             };
 
-            console.log(data.facilityAdmin, this.idp);
+            console.log(data.facilityAdmin, id);
 
-            if (data.facilityAdmin !== this.idp) {
+            if (data.facilityAdmin !== id) {
               this.serviceMod3.Trazability(
                 this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
               ).then(() => {
@@ -1167,9 +1173,9 @@ export class AdminUsuariosComponent implements OnInit {
 
 
             this.serviceMod3.Trazability(
-              this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: this.idp }
+              this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: id }
             ).then(() => {
-              this.serviceMod3.updatedLab(idlab, { facilityAdmin: this.idp });
+              this.serviceMod3.updatedLab(idlab, { facilityAdmin: id });
             });
 
           })
@@ -1184,11 +1190,11 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
 
-  setKeyAdmin(labs) {
+  setKeyAdmin(labs, id) {
 
     // tslint:disable-next-line:no-shadowed-variable
     labs.forEach(element => {
-      this.updatedAdminFacil(element);
+      this.updatedAdminFacil(element, id);
     });
 
   }

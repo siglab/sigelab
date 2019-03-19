@@ -13,6 +13,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { URLAPI } from '../../../config';
 import { Http } from '@angular/http';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
+import { SabsService } from '../../../shared/services/sabs/sabs.service';
 
 declare var $: any;
 @Component({
@@ -134,7 +135,8 @@ export class SolicitudesNivel3Component implements OnInit {
   persona: any;
   faculty: any;
 
-  constructor(private serviceMod3: ServicesNivel3Service, private storage: AngularFireStorage, private http: Http) {
+  constructor(private serviceMod3: ServicesNivel3Service, private storage: AngularFireStorage, 
+    private http: Http, private servicioSabs: SabsService) {
   }
 
   ngOnInit() {
@@ -583,30 +585,15 @@ export class SolicitudesNivel3Component implements OnInit {
 
     const promise = new Promise((resolve, reject) => {
 
-      const url = URLAPI;
-      const body = {
-        codInventario: item,
-        codLab: '5646',
-        nomLab: 'fgh',
-        sede: 'fgh',
-        edificio: '567',
-        espacio: 'fghgf'
-      };
-
-      this.http.post(url, body).subscribe((res) => {
-        console.log(res.json());
-        if (res.status === 200) {
-          console.log('funco');
-          this.response = res.json().inventario;
+      this.servicioSabs.buscarEquip('05317500').then(
+        dataEquip => {
+          this.response = dataEquip.inventario;
           resolve();
-        } else {
-          reject();
+          console.log('Consulta Equip en SABS: ', dataEquip);
         }
-
-      }, (error) => {
-        console.log('faio', error);
-        this.response = {};
+      ).catch(error => {
         reject();
+        console.log('Error al consultar Equip en SABS: ', error);
       });
 
 

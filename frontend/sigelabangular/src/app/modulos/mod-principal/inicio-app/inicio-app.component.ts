@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 declare var $: any;
 import * as AOS from 'aos';
+import { SabsService } from '../../../shared/services/sabs/sabs.service';
 
 @Component({
   selector: 'app-inicio-app',
@@ -9,7 +10,16 @@ import * as AOS from 'aos';
   styleUrls: ['./inicio-app.component.css']
 })
 export class InicioAppComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private servicioSabs: SabsService) {
+    console.log('Prueba Servicio SABS');
+    this.servicioSabs.buscarEquip('05317500').then(
+      dataEquip => {
+        console.log('Consulta Equip en SABS: ', dataEquip);
+      }
+    ).catch(error => {
+      console.log('Error al consultar Equip en SABS: ', error);
+    });
+  }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');

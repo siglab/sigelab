@@ -6,12 +6,13 @@ import { URLAPI } from '../../../config';
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators/map';
+import { SabsService } from '../../../shared/services/sabs/sabs.service';
 
 @Injectable()
 export class QrService {
   private url = URLAPI;
   arraygeneral = [];
-  constructor(private afs: AngularFirestore, private http: Http) { }
+  constructor(private afs: AngularFirestore, private http: Http, private sabs: SabsService) { }
   // lista qrs sin asociar o inactivos
   listQrInactive() {
     return this.afs
@@ -35,19 +36,7 @@ export class QrService {
   // consulta los datos en sabs
   postSabs(cod) {
 
-    console.log('si llego el codigo' , cod);
-    const body = {
-      codInventario: cod,
-      codLab: '5646',
-      nomLab: 'fgh',
-      sede: 'fgh',
-      edificio: '567',
-      espacio: 'fghgf'
-    };
-
-    return this.http.post(this.url, body)
-      .map(this.extractData)
-      .catch(this.handleErrorObservable);
+    return this.sabs.buscarEquip(cod);
   }
 
 
