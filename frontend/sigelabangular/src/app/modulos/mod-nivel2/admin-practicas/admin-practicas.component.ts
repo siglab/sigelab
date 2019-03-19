@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -20,15 +20,20 @@ declare var $: any;
   templateUrl: './admin-practicas.component.html',
   styleUrls: ['./admin-practicas.component.css']
 })
-export class AdminPracticasComponent implements OnInit {
+export class AdminPracticasComponent implements OnInit, AfterContentInit {
   events = [
   ];
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   year = new Date().getFullYear();
+
+  modalCalendar: JQuery ;
+  programacionCalendar = [];
   id_prc;
   id_pro;
   residuos = false;
+  vercalendario = false;
+  consultarpractica = false;
   practica = {
     nombre: '',
     semestre: '',
@@ -111,7 +116,6 @@ export class AdminPracticasComponent implements OnInit {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
 
-    this.metodoInicio();
   }
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
@@ -125,6 +129,12 @@ export class AdminPracticasComponent implements OnInit {
         }
       }
     }
+  }
+
+
+  ngAfterContentInit() {
+
+    this.metodoInicio();
   }
 
 
@@ -218,6 +228,8 @@ export class AdminPracticasComponent implements OnInit {
 
 
         });
+
+
       } else {
         swal({
           type: 'error',
@@ -500,6 +512,9 @@ export class AdminPracticasComponent implements OnInit {
     this.dataSourcePrac.filter = filterValue;
   }
   cambiardata(row) {
+
+    this.addPractica = false;
+    this.consultarpractica = true;
     console.log(row);
     this.practica = row;
     this.practica.activo = row.activo;
@@ -513,8 +528,13 @@ export class AdminPracticasComponent implements OnInit {
     this.id_prc = row.id_pract;
     this.id_pro = row.programacion.id_pro;
     console.log(row.programacion.horario);
+
+    this.obs.centerView('mostrarpractica');
     if (row.programacion.horario.length > 0) {
-      this.initCalendarModal(row.programacion.horario);
+
+      this.programacionCalendar = row.programacion.horario;
+
+      // containerEl.fullCalendar( 'renderEvents', row.programacion.horario );
 
     }
 
@@ -536,9 +556,9 @@ export class AdminPracticasComponent implements OnInit {
       for (let j = 0; j < this.pracestructurado.equipos.length; j++) {
         const element2 = this.pracestructurado.equipos[j];
 
-        if(element.id == element2.id){
+        if (element.id == element2.id) {
           console.log(element2);
-        //this.selection.isSelected(element2);
+        // this.selection.isSelected(element2);
         this.selection.select(element2)
         console.log(this.selection.selected);
         }
@@ -629,6 +649,7 @@ export class AdminPracticasComponent implements OnInit {
 
                 this.clearObj();
                 stepper.reset();
+                this.addPractica = false;
               });
             });
 
@@ -668,32 +689,37 @@ export class AdminPracticasComponent implements OnInit {
   }
 
 
-  initCalendarModal(horario) {
+   triggerCalendar() {
 
-    const containerEl: JQuery = $AB('#cal2');
-    containerEl.fullCalendar('destroy');
+    this.vercalendario = true;
+    setTimeout(() => {
 
-    containerEl.fullCalendar({
-      // licencia
-      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-      // options here
-      height: 450,
-      header: {
-        left:   'title',
-        center: '',
-        right:  'today prev,next'
-      },
-      events: horario,
-      timeFormat: 'H(:mm)'
-    });
+      this.modalCalendar = $AB('#calendariomodal');
+      this.modalCalendar.fullCalendar('destroy');
+      console.log('entro al modal');
+       this.modalCalendar.fullCalendar({
+         // licencia
+         schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+         // options here
+         header: {
+           left:   'title',
+           center: '',
+           right:  'today prev,next'
+         },
+         events: this.programacionCalendar,
+         timeFormat: 'H(:mm)'
+       });
+       if (this.programacionCalendar[0].start ) {
 
-     if (horario[0].start ) {
+         this.modalCalendar.fullCalendar('gotoDate', this.programacionCalendar[0][0].start  );
+       }
+      }, 100);
 
-       // containerEl.fullCalendar('gotoDate', horario[0].start  );
-     }
 
 
-  }
+
+   }
+
   changeColor(value) {
 
     this.evento.color = value;
@@ -783,6 +809,7 @@ export class AdminPracticasComponent implements OnInit {
   down() {
 
     this.addPractica = true;
+    this.consultarpractica= false;
 
 
     setTimeout(() => {

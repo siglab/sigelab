@@ -264,8 +264,8 @@ const createUser = (req, res) => {
         .then(() => {
 
            console.log('se asocio correctamente el usuario');
-           return ref.doc(`/user/${event.uid}`).set(usr)
-             .then(() =>{ console.log('se asocio correctamente la persona');
+           return ref.doc(`/user/${req.uid}`).set(usr)
+                   .then(() =>{ console.log('se asocio correctamente la persona');
 
                return res.status(200).send({ msj: "exito creando el usuario"});
 

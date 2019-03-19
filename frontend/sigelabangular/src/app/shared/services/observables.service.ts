@@ -152,7 +152,7 @@ export class ObservablesService {
         },
         600
       );
-    }, 500);
+    }, 200);
   }
 
 }

@@ -316,9 +316,15 @@ export class QuerysPrincipalService {
           const elemento = doc.data();
           if (elemento.active) {
 
+            console.log(doc.id);
             this.afs.doc('practice/' + doc.id).collection('programmingData').snapshotChanges().subscribe(data2 => {
 
               // funciona con una programacion, cuando hayan mas toca crear otro metodo
+
+              if (!data2[0].payload.doc.exists) {
+
+                console.log('id no existe', data2[0].payload.doc.id);
+              }
               const prog = data2[0].payload.doc.data();
 
               this.buscarLaboratorio(elemento.cfFacil).then(lab => {
@@ -374,7 +380,7 @@ export class QuerysPrincipalService {
 
 
               });
-            });
+            }, err => console.log(err) );
           }
         });
       } else {

@@ -104,10 +104,10 @@ divScroll1::-webkit-scrollbar-track {
 /* estilos calendar */
 
 
-#cal {
+.calendario {
   /* 		float: right; */
   margin: 0 auto;
-  width: 800px;
+  width: auto;
   background-color: #FFFFFF;
   border-radius: 6px;
   box-shadow: 0 2px 2px 2px #C3C3C3;
