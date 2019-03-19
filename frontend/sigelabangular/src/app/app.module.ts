@@ -78,6 +78,7 @@ import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/o
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatIconModule} from '@angular/material/icon';
 
   // alertas toast
 import { ToastrModule } from 'ngx-toastr';
@@ -175,6 +176,7 @@ import { SabsService } from './shared/services/sabs/sabs.service';
     MatPaginatorModule,
     MatSlideToggleModule,
     MatSortModule,
+    MatIconModule,
     MatCheckboxModule,
     MatStepperModule,
     MatSelectModule,

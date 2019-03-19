@@ -92,3 +92,10 @@ divScroll1::-webkit-scrollbar-track
   position: fixed !important;
   z-index: 100000 !important; /* set value you need */
 }
+
+.right {
+
+  position: relative;
+  margin-left: 0;
+  float: left;
+}

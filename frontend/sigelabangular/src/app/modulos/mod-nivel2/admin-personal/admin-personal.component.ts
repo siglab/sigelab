@@ -37,8 +37,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   type;
   idlab;
   activos = [];
+  cc;
   inactivos = [];
   fecha = new Date();
+  fechanacimiento;
   addP;
   // objeto persona:
   person = {
@@ -274,6 +276,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                   roles: user.appRoles,
                   rolesClient : pers.clientRole,
                   nombre: pers.cfFirstNames,
+                  fechanacimiento: pers.cfBirthdate,
                   apellidos: pers.cfFamilyNames,
                   cc: pers.cc ? pers.cc : 'ninguno',
                   activo: item[clave],
@@ -293,6 +296,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 cc: pers.cc ? pers.cc : 'ninguno',
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
+                fechanacimiento: pers.cfBirthdate,
+
                 activo: item[clave],
                 tipo: pers.type ?  pers.type : ' ninguno' ,
                 email: pers.email,
@@ -330,6 +335,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                   rolesClient : pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
+                  fechanacimiento: pers.cfBirthdate,
+
                   activo: item[clave],
                   cc: pers.cc ? pers.cc : 'ninguno' ,
                   tipo: pers.type ? pers.type : 'ninguno' ,
@@ -347,6 +354,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               persona = {
                 rolesClient : pers.clientRole,
                 nombre: pers.cfFirstNames,
+                fechanacimiento: pers.cfBirthdate,
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
                 tipo: pers.type,
@@ -410,7 +418,9 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.nombre = item.nombre;
     this.estado = item.activo;
     this.email = item.email;
+    this.fechanacimiento = item.fechanacimiento;
     this.type = item.tipo;
+    this.cc = item.cc;
 
     this.apellido = item.apellidos;
 
@@ -439,6 +449,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     const pers = {
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
+      cc: this.cc,
+      cfBirthdate : this.fechanacimiento,
       type: this.type,
       clientRole: {},
       updatedAt: new Date().toISOString()

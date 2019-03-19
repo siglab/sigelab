@@ -242,104 +242,95 @@
           <div class="box-body">
             <form id="form-dash2equip" class="" name="form-dash2equip">
               <fieldset>
-                <div class="form-group row">
 
                   <div class="col-md-12">
-                    <label class="col-md-2 control-label" for="nombreprub">
-                      <strong>Nombre:</strong>
-                    </label>
-                    <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre" class="form-control"
-                        type="text">
-                    </div>
+                     <mat-form-field>
+                       <input matInput [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre"
+                         type="text" placeholder="Nombre" >
+                     </mat-form-field>
                   </div>
 
-                </div>
 
-
-
-                <div class="form-group row">
                   <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>Apellidos:</strong>
-                    </label>
-                    <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido" class="form-control"
-                        type="text">
-                    </div>
+                      <mat-form-field>
+                        <input  matInput [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido"
+                          type="text" placeholder="Apellidos">
+                      </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                      <mat-form-field>
+                        <input  matInput [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="cc" id="escuelaedit" name="cc"
+                          type="text" placeholder="Cc o Código">
+                      </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                      <mat-form-field>
+                        <input  matInput [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="fechanacimiento" id="escuelaedit" name="fechanacimiento"
+                          type="date" placeholder="Fecha de nacimiento">
+                      </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label> Tipo </mat-label>
+
+                      <mat-select [attr.disabled]="!moduloNivel2 ? false : null"  [(ngModel)]="this.type" name="estado">
+                        <mat-option *ngFor="let item of tipo" value="{{item}}"> {{item}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
                   </div>
-                </div>
 
-                <div class="form-group row">
+
                   <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="nombreprub">
-                      <strong>tipo:</strong>
-                    </label>
-                    <div class="col-md-10">
-
-                      <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.type" name="estado">
-
-                        <option *ngFor="let item of tipo" value="{{item}}"> {{item}} </option>
-
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-
-
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label class="control-label col-sm-2" for="estadoserv">
-                      <strong>Email:</strong>
-                    </label>
-
-                    <div class="col-md-10">
-                      <input [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email" class="form-control"
+                    <mat-form-field>
+                      <input matInput  placeholder="Email" [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email"
                         type="email">
+                    </mat-form-field>
+                  </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="listfacul">
+                          <strong>Roles actuales :</strong>
+                        </label>
+                        <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
+                          <li *ngFor="let item of this.rolesAgregados; let i= index;">
+                            <a>
+                              {{item.nombre}}
+                              <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
 
+                  <div class="col-md-4">
 
-                <div class="col-md-12">
-                  <label class="control-label" for="facul">
-                    <strong> Seleccione un rol :</strong>
-                  </label>
+                    <mat-form-field>
+                      <mat-label>Agregar  un nuevo rol </mat-label>
 
-                  <div class="input-group">
+                      <mat-select  [attr.disabled]="!moduloNivel2 ? false : null" [(ngModel)]="this.rolSelect" name="rolesPers"
+                        id="facul">
+                        <mat-option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
-                    <select [attr.disabled]="!moduloNivel2 ? false : null" class="form-control" [(ngModel)]="this.rolSelect" name="rolesPers"
-                      id="facul">
-                      <option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </option>
-                    </select>
-                    <span class="input-group-btn">
-                      <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </span>
                   </div>
-                  <!-- /input-group -->
+                  <div class="right">
+                    <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                 </div>
+
                 </div>
 
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <div class="col-md-12">
-                      <label class="control-label" for="listfacul">
-                        <strong>Roles actuales :</strong>
-                      </label>
-                      <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
-                        <li *ngFor="let item of this.rolesAgregados; let i= index;">
-                          <a>
-                            <strong> {{item.nombre}} </strong>
-                            <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+
 
                 <div *ngIf="moduloNivel2" class="row">
 
