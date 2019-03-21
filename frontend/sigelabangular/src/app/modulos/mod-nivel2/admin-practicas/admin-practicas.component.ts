@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit, OnDestroy } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -12,6 +12,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Modulo2Service } from '../services/modulo2.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
+import { Subscription } from 'rxjs';
 
 declare var $: any;
 
@@ -20,7 +21,7 @@ declare var $: any;
   templateUrl: './admin-practicas.component.html',
   styleUrls: ['./admin-practicas.component.css']
 })
-export class AdminPracticasComponent implements OnInit, AfterContentInit {
+export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDestroy {
   events = [
   ];
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
@@ -103,6 +104,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
   role: any;
   moduloNivel2 = false;
   addPractica = false ;
+  sucriptionPractice: Subscription = null;
 
   user = this.servicioMod2.getLocalStorageUser();
 
@@ -115,6 +117,10 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+
+  }
+
+  ngOnDestroy() {
 
   }
 
@@ -162,13 +168,13 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
           this.id_lab = data.uid;
           this.mainSpace = this.pracestructurado.mainSpace;
 
-          this.dataSourcePrac = new MatTableDataSource(this.pracestructurado.practicas);
+          this.dataSourcePrac.data = (this.pracestructurado.practicas);
 
-          this.dataSourcePracIn = new MatTableDataSource(this.pracestructurado.practicasInactivas);
+          this.dataSourcePracIn.data = (this.pracestructurado.practicasInactivas);
 
-          this.dataSourceEquip = new MatTableDataSource(this.pracestructurado.equipos);
+          this.dataSourceEquip.data = (this.pracestructurado.equipos);
 
-          this.dataSourceEsp = new MatTableDataSource(this.pracestructurado.espacios);
+          this.dataSourceEsp.data = (this.pracestructurado.espacios);
 
 
           setTimeout(() => {
@@ -195,7 +201,9 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
               });
             }
 
+
           }, 2000);
+
 
           // data acesor activos
           this.dataSourcePrac.sortingDataAccessor = (item, property) => {
@@ -761,6 +769,14 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
       this.cerrarModal('myModal2');
     }
 
+  }
+
+
+  clearEvent() {
+    this.evento.title = '';
+    this.evento.start = '';
+    this.horaE = '';
+    this.horaF = '';
   }
 
   actualizarPractica() {
