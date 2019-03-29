@@ -82,14 +82,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'apellido', 'email', 'tipo', 'estado', 'codigo'];
+  displayedColumnsPers = ['nombre', 'apellido', 'email', 'tipo', 'codigo', 'estado'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers') paginatorPers: MatPaginator;
   @ViewChild('sortPers') sortPers: MatSort;
 
   // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'estado', 'codigo' ];
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo' , 'codigo', 'estado' ];
   dataSourcePersIn = new MatTableDataSource([]);
 
   @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
@@ -446,6 +446,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     // $('#modal').modal('hide');
 
     /* objeto para persona  */
+    const date = new Date();
     const pers = {
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
@@ -453,17 +454,19 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       cfBirthdate : this.fechanacimiento,
       type: this.type,
       clientRole: {},
-      updatedAt: new Date().toISOString()
+      updatedAt: date.toISOString()
     };
     /* objeto para usuario */
 
 
     const nuevoEstado = {
       relatedPers: {},
-      updatedAt: new Date().toISOString()
+      updatedAt: date.toISOString()
     };
 
     pers.clientRole[this.idlab] = {};
+
+
 
     this.rolesAgregados.forEach(doc => {
       pers.clientRole[this.idlab][doc.id] = true;
@@ -475,31 +478,46 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     /* metodo firebase para subir un usuario actualizado */
 
-    this.servicioMod2.Trazability(
-      this.user.uid, 'update', 'cfPers', this.idp, pers
-    ).then(() => {
-      this.servicioMod2.updatePersona(this.idp, pers).then(
-        () => {
-          this.alert.show();
+    if (this.rolesAgregados.length > 0) {
+      this.servicioMod2.Trazability(
+        this.user.uid, 'update', 'cfPers', this.idp, pers
+      ).then(() => {
+        this.servicioMod2.updatePersona(this.idp, pers).then(
+          () => {
+            this.alert.show();
 
-        this.servicioMod2.Trazability(
-          this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
-        ).then(() => {
-         this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
+          this.servicioMod2.Trazability(
+            this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
+          ).then(() => {
+           this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
 
-         this.alert.hide();
+           this.alert.hide();
 
-          swal({
+           this.clearValues();
+           $('#modal').modal('hide');
+
+           swal({
             type: 'success',
-            title: 'Usuario actualizado correctamente',
-            showConfirmButton: true
+            title: 'Usuario actualizado',
+            text:  'El usuario fue actualizado con éxito'
+            // showConfirmButton: true
           });
-          this.clearValues();
-          $('#modal1').modal('hide');
-        });
+          });
 
+        });
       });
-    });
+
+    } else {
+
+      swal({
+        type: 'error',
+        title: 'Usuario sin ningun rol',
+        text: 'Por favor agregue un nuevo rol al usuario para poder actualizar'
+        // showConfirmButton: true
+      });
+
+
+    }
 
 
     /* metodo firebase para subir una persona actualizada */
@@ -539,6 +557,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                   showConfirmButton: true
                 });
                 this.clearValues();
+                this.dispo = false;
                 $('#modal1').modal('hide');
               });
 
@@ -726,6 +745,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   setValue() {
 
     this.email = '';
+    this.dispo = false;
+    this.status = '';
   }
 
 

@@ -8,12 +8,12 @@ export class Modulo2Service {
 
   constructor(private afs:AngularFirestore) { }
 
-  //METODOS DE CONSULTA
-  getLocalStorageUser(){
+  // METODOS DE CONSULTA
+  getLocalStorageUser() {
     return JSON.parse(sessionStorage.getItem('usuario'));
   }
 
-  getLocalStoragePers(){
+  getLocalStoragePers() {
     return JSON.parse(sessionStorage.getItem('persona'));
   }
 

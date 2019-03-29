@@ -12,7 +12,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Modulo2Service } from '../services/modulo2.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 declare var $: any;
 
@@ -26,7 +26,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   ];
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
-  year = new Date().getFullYear();
+  year = `${new Date().getFullYear().toString()}-01-01`;
 
   modalCalendar: JQuery ;
   programacionCalendar = [];
@@ -106,21 +106,29 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   addPractica = false ;
   sucriptionPractice: Subscription = null;
 
-  user = this.servicioMod2.getLocalStorageUser();
+
+  user: any;
+  paso2 = false;
+  paso3;
 
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
-    private toastr: ToastrService) {
+    private _formBuilder: FormBuilder) {
+
+      this.user = this.servicioMod2.getLocalStorageUser();
   }
 
 
   ngOnInit() {
-    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+  //   $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+  // this.year  = `${new Date().getFullYear().toString()}-00-00`;
+  console.log(this.year);
 
   }
 
   ngOnDestroy() {
+
 
   }
 
@@ -694,6 +702,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
 
 
     });
+
   }
 
 
@@ -772,12 +781,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   }
 
 
-  clearEvent() {
-    this.evento.title = '';
-    this.evento.start = '';
-    this.horaE = '';
-    this.horaF = '';
-  }
 
   actualizarPractica() {
 
@@ -825,7 +828,8 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   down() {
 
     this.addPractica = true;
-    this.consultarpractica= false;
+    this.consultarpractica = false;
+
 
 
     setTimeout(() => {
@@ -852,11 +856,26 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   }
 
 
+  initValidatorStepper() {
+
+  }
+
   // deshabilitar button
   disabledcalendar(): boolean {
   return  this.events.length > 0 ? false : true;
   }
 
+  showstp(st) {
 
+    console.log(st);
+  }
+
+
+  onSubmit( form ) {
+    if (form.valid) {
+      console.log(form);
+      form.reset();
+    }
+  }
 
 }

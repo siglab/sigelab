@@ -188,22 +188,22 @@
             <mat-card-title> <h3 class="text-center">Agregar nueva práctica</h3> 	</mat-card-title>
           <!-- /.box-header -->
           <mat-card-content>
-            <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
-              <mat-step>
-                <form #step1="ngForm">
+            <mat-horizontal-stepper  #stepper="matHorizontalStepper">
+              <mat-step >
+                <form #paso1="ngForm" >
                   <ng-template matStepLabel>Información básica</ng-template>
 
 
                   <mat-form-field>
-                    <input name="nombrep" [(ngModel)]="nameP" matInput placeholder="Nombre práctica" required>
+                    <input name="nombrep" [(ngModel)]="nameP"  matInput placeholder="Nombre práctica" required>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input   name="code" [(ngModel)]="code" matInput placeholder="Código de la matería" required >
+                    <input   name="code" [(ngModel)]="code" matInput   placeholder="Código de la matería" required >
                   </mat-form-field>
 
                   <mat-form-field>
-                    <mat-select  name="semester" placeholder="Semestre" [(ngModel)]="programming.semester"  >
+                    <mat-select  name="semester" placeholder="Semestre"  [(ngModel)]="programming.semester"  >
                       <mat-option  [value]= "this.year + '-' + '01'"  >
                         Periodo 01
                       </mat-option>
@@ -212,26 +212,24 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <!-- <mat-form-field>
-                    <mat-checkbox>Genera residuos la practica</mat-checkbox>
-                  </mat-form-field> -->
+
                   <mat-form-field>
-                    <input name="numeroes" [(ngModel)]="programming.noStudents" matInput placeholder="Número de estudiantes" required>
+                    <input name="numeroes" [(ngModel)]="programming.noStudents"  matInput placeholder="Número de estudiantes" required>
                   </mat-form-field>
 
                   <mat-checkbox name="residuos" [(ngModel)]="residuos">Genera residuos</mat-checkbox>
 
 
                   <div>
-                    <button [disabled] = "!step1.valid" mat-button matStepperNext (click)="initCalendar(events)" class="materialbtn">siguiente
+                    <button  *ngIf="paso1.valid" mat-button matStepperNext (click)=" initCalendar(events)"  class="materialbtn">siguiente
                       <i class="fa fa-arrow-right"></i> </button>
                   </div>
                 </form>
               </mat-step>
-              <mat-step>
+
+              <!-- step calendar -->
+              <mat-step *ngIf="paso1.valid" >
                 <ng-template matStepLabel>AGREGUE LAS FECHAS DE LA PRÁCTICA AL CALENDARIO</ng-template>
-
-
                 <div class="col-md-12">
                   <div class="box box-danger">
                     <div class="box-header">
@@ -240,7 +238,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button class="btn btn-success" style="float: center" type="button" (click) = "clearEvent()" data-toggle="modal" data-target="#myModal2">Agregar
+                      <button class="btn btn-success" style="float: center" type="button"  data-toggle="modal" data-target="#myModal2">Agregar
                         clase
                          <i class="fa fa-plus"></i>
                       </button>
@@ -259,14 +257,15 @@
                     <i class="fa fa-arrow-left"></i>
                     Anterior
                   </button>
-                  <button class="materialbtn" mat-button matStepperNext [disabled]="disabledcalendar()" >
+                  <button class="materialbtn" mat-button matStepperNext *ngIf="this.events.length > 0 " >
                     Siguiente
                     <i class="fa fa-arrow-right"></i>
                   </button>
                 </div>
 
               </mat-step>
-              <mat-step>
+
+              <mat-step *ngIf="this.events.length > 0 ">
                 <ng-template matStepLabel>Vincular Equipos</ng-template>
 
                 <div class="box box-danger">
@@ -589,7 +588,7 @@
 
                 <div class='col-md-6'>
                    <mat-form-field class="example-full-width">
-                       <input matInput  [(ngModel)]="this.evento.start" type ="date"  name="fecha-event" placeholder="Escriba una fecha para la clase" required >
+                       <input matInput  [(ngModel)]="this.evento.start" type ="date" min="{{year}}" onkeydown="return false"  name="fecha-event" placeholder="seleccione una fecha para la clase" required >
                      </mat-form-field>
                  </div>
 
@@ -606,7 +605,7 @@
                 </div>
 
                <div class="text-center" >
-                <button *ngIf="formClase.valid" (click)="agregarEvento()" type="button" class="btn btn-success">
+                <button *ngIf="formClase.valid" (click)="agregarEvento(); onSubmit(formClase);" type="button" class="btn btn-success">
                   Guardar
                 <i class="fa fa-check"></i>
                 </button>
