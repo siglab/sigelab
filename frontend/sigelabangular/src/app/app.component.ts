@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { LoginService } from './modulos/login/login-service/login.service';
+import { Router } from '@angular/router';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,23 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  constructor(private login: LoginService, private ruta: Router) {
+    this.login.consultarAuth().subscribe(user => {
+      if (user) {
+        this.ruta.navigate([this.ruta.url]);
+      }
+    });
+
+  }
+
+
+
+
+
+
+
+
+
+
 }

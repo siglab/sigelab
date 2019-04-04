@@ -106,6 +106,7 @@ import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
 import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { SabsService } from './shared/services/sabs/sabs.service';
+import { PrincipalGuard } from './shared/services/guards/principal.guard';
 
 // libreria date time-picker
 
@@ -203,6 +204,7 @@ import { SabsService } from './shared/services/sabs/sabs.service';
     Nivel2Guard,
     Nivel25Guard,
     Nivel3Guard,
+    PrincipalGuard,
     Modulo2Service,
     ServicesNivel3Service,
     SabsService

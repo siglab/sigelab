@@ -40,7 +40,7 @@ export class SabsService {
       // http://www.whateverorigin.org/
       $.ajax({
         type: 'GET',
-        url: 'http://www.whateverorigin.org/get?url=' + encodeURIComponent(URLSABS) + '&callback=?',
+        url: 'https://www.whateverorigin.org/get?url=' + encodeURIComponent(URLSABS) + '&callback=?',
         dataType: 'jsonp',
         // tslint:disable-next-line:no-shadowed-variable
         success: function (response, status, request) {

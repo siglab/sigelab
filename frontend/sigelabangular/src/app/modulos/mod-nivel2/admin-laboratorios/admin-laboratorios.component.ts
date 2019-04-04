@@ -144,7 +144,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   listaDisponibilidad = [];
   listaTelefonos = [];
   listaActividad = [
-    { id: 'extension', name: 'Extension' }, { id: 'research', name: 'Investigacion' },
+    { id: 'extension', name: 'Extensión' }, { id: 'research', name: 'Investigación' },
     { id: 'teaching', name: 'Docencia' }];
   selectfacul = '';
   selectdepar = '';
@@ -637,6 +637,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   estructurarPersonas(item) {
 
     const arr = [];
+    console.log(item);
 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
@@ -646,44 +647,43 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           this.servicioMod2.buscarPersona(clave).then(data => {
             const pers = data.data();
             let persona = {};
-            if (pers.user) {
-              this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
-                // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if (dataper.data()) {
+            this.servicioMod2.buscarUsuario(pers.user ? pers.user : '123').then(dataper => {
+              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+              if (dataper.data()) {
 
-                  persona = {
-                    id: clave,
-                    nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
-                    activo: pers.active,
-                    email: dataper.data().email,
-                    idpers: clave,
-                    iduser: pers.user
-                  };
+                persona = {
+                  id: clave,
+                  nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                  activo: pers.active,
+                  email: dataper.data().email,
+                  idpers: clave,
+                  iduser: pers.user
+                };
 
-                  arr.push(persona);
-                } else {
 
-                  persona = {
-                    id: clave,
-                    nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
-                    activo: pers.active,
-                    email: '',
-                    idpers: clave,
-                    iduser: ''
-                  };
-                  arr.push(persona);
+                arr.push(persona);
+              } else {
 
-                }
+                persona = {
+                  id: clave,
+                  nombre: pers.cfFirstNames + ' ' + pers.cfFamilyNames,
+                  activo: pers.active,
+                  email: '',
+                  idpers: clave,
+                  iduser: ''
+                };
+                arr.push(persona);
 
-              });
-            }
+              }
+
+            });
 
           });
         }
 
       }
     }
-
+    console.log(arr);
     return arr;
   }
 
@@ -822,6 +822,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   actividades(actividad) {
+
     const arrayActividades = [];
     const actividades = {
       extension: 'Extensión',
@@ -836,6 +837,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
       }
     }
+
 
     return arrayActividades;
   }
@@ -854,8 +856,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       data.forEach(doc => {
 
         this.subsedesStatic.push(
-          { id: doc.id, nombre: doc.data().cfAddrline2 + ' - ' + doc.data().cfAddrline1,
-            headquarter: doc.data().headquarter });
+          {
+            id: doc.id, nombre: doc.data().cfAddrline2 + ' - ' + doc.data().cfAddrline1,
+            headquarter: doc.data().headquarter
+          });
       });
     });
   }
@@ -957,9 +961,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
       swal({
 
         type: 'warning',
-        title: '¿Está seguro que desea enviar los cambios realizados?',
+        title: '¿Está seguro que desea guardad los cambios realizados?',
         showCancelButton: true,
-        confirmButtonText: 'Sí, enviar',
+        confirmButtonText: 'Sí, Guardar',
         cancelButtonText: 'No, Cancelar'
 
       }).then((result) => {
@@ -997,7 +1001,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                     title: 'Cambios Realizados',
                     showConfirmButton: true
                   }).then(() => {
-
+                    $('#buttonvolver').click();
                   });
 
                 });
@@ -1689,35 +1693,45 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     const selecsss = eval(select);
 
-    const encontrado = eval(lista).find((element, index) => {
+    if (selecsss !== '') {
+      const encontrado = eval(lista).find((element, index) => {
 
-      if (element.id === selecsss) {
-        return true;
-      }
-      return false;
-    });
-
-    if (!encontrado) {
-
-      this.buscarElemento(list, select, lista);
-
-      swal({
-        type: 'success',
-        title: list + ' agregada',
-        showConfirmButton: true
-      }).then(() => {
-
-        this.fac = '';
-        this.dep = '';
+        if (element.id === selecsss) {
+          return true;
+        }
+        return false;
       });
 
+      if (!encontrado) {
+
+        this.buscarElemento(list, select, lista);
+
+        swal({
+          type: 'success',
+          title: list + ' agregada',
+          showConfirmButton: true
+        }).then(() => {
+
+          this.fac = '';
+          this.dep = '';
+        });
+
+      } else {
+        swal({
+          type: 'error',
+          title: 'Esta ' + list + ' ya se encuentra agregada',
+          showConfirmButton: true
+        });
+      }
     } else {
       swal({
         type: 'error',
-        title: 'Esta ' + list + ' ya se encuentra agregada',
+        title: 'No ha seleccionado ninguna opcion',
         showConfirmButton: true
       });
     }
+
+
   }
 
   setDepartment(id) {
@@ -1731,11 +1745,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     });
 
 
-    // this.filteredOptions2 = this.myControl2.valueChanges
-    // .pipe(
-    //   startWith(''),
-    //   map(val =>  this.departamentos.slice())
-    // );
+    this.filteredOptions2 = this.myControl2.valueChanges
+    .pipe(
+      startWith(''),
+      map(val =>  this.departamentos.slice())
+    );
   }
 
   setSede(headquarter) {
@@ -1778,17 +1792,38 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   agregarDisponibilidad() {
-    const cadena = this.diassemana[this.selectdia - 1].nombre + ' : ' + this.selectHinicio + '-' + this.selectHFinal;
-    this.listaDisponibilidad.push({ id: this.selectdia, nombre: cadena });
-    if (this.moduloPermiso) {
-      this.listaDispoSugeridos.push({ id: this.selectdia, nombre: cadena });
+
+    if (this.selectdia !== 0) {
+      const cadena = this.diassemana[this.selectdia - 1].nombre + ' : ' + this.selectHinicio + '-' + this.selectHFinal;
+      const val = this.listaDisponibilidad.find(o => o.id === this.selectdia);
+
+      if (!val) {
+        this.listaDisponibilidad.push({ id: this.selectdia, nombre: cadena });
+        if (this.moduloPermiso) {
+          this.listaDispoSugeridos.push({ id: this.selectdia, nombre: cadena });
+        }
+
+        swal({
+          type: 'success',
+          title: 'Disponibilidad agregada',
+          showConfirmButton: true
+        });
+      } else {
+        swal({
+          type: 'error',
+          title: 'El dia seleccionado ya se encuentra agregado, por favor eliminelo de la disponibilidad para poderlo ingresar de nuevo',
+          showConfirmButton: true
+        });
+      }
+    } else {
+      swal({
+        type: 'error',
+        title: 'Seleccione un dia',
+        showConfirmButton: true
+      });
     }
 
-    swal({
-      type: 'success',
-      title: 'disponibilidad agregada',
-      showConfirmButton: true
-    });
+
 
   }
 

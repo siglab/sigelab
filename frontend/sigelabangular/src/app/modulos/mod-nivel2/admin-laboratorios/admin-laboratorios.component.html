@@ -678,7 +678,7 @@
 
         <div class="box box-danger">
           <div class="box-header text-center">
-            <button class="btn btn-danger" style="float: left;" type="button" data-toggle="tab" href="#home">Volver</button>
+            <button id="buttonvolver" class="btn btn-danger" style="float: left;" type="button" data-toggle="tab" href="#home">Volver</button>
             <i class="fa fa-address-card-o"></i>
 
             <h3 class="box-title">Panel para editar información</h3>
@@ -863,7 +863,7 @@
                           <ul class="nav nav-stacked">
                             <li *ngFor="let item of this.listaDepartamentos">
                               <a>{{item.nombre}}
-                                <span (click)="quitarelemento(item.id,'depar')" class="puntero pull-right badge bg-red">-</span>
+                                <span (click)="quitarelemento(item.id,'unidad')" class="puntero pull-right badge bg-red">-</span>
                               </a>
                             </li>
                           </ul>

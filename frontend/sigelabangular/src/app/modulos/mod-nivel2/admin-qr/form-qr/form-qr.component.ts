@@ -69,6 +69,12 @@ export class FormQrComponent implements OnInit {
   rol: any;
   moduloQr = false;
 
+  datos = {
+    precio: '',
+    descripcion: '',
+    modelo: ''
+  };
+
 
   constructor(
     private _Activatedroute: ActivatedRoute,
@@ -206,6 +212,7 @@ export class FormQrComponent implements OnInit {
           this.componente.costoinicial_c = res.costoInicial;
           this.componente.marca_c = res.nombreMarca;
           this.componente.estado_c = res.estado;
+          this.componente.codeinventario_c = q;
         }
         if (res.encontrado === false) {
           this.statusComponent = 'Código componente de inventario no encontrado, revise y vuelva a intentar.';
@@ -243,37 +250,75 @@ export class FormQrComponent implements OnInit {
 
   addComponent() {
 
-    const fecha = new Date();
+    if (this.validarDatos(this.datos)) {
+      const fecha = new Date();
 
-    const cmp = {
-      cfName: '',
-      cfDescription: '',
-      cfPrice: '',
-      brand: this.componente.marca_c,
-      conditions: [],
-      active: '',
-      inventory: this.componente.codeinventario_c,
-      model: '',
-      cfClass: '',
-      cfClassScheme: '',
-      createdAt: fecha.toISOString()
-    };
-    this.arrComponents.push(cmp);
-    swal({
-      type: 'success',
-      title: 'Componente agregado correctamente.',
-      showConfirmButton: true
-    });
+      const cmp = {
+        cfName: this.componente.marca_c,
+        cfDescription: this.datos.descripcion,
+        cfPrice: this.datos.precio,
+        brand: this.componente.marca_c,
+        conditions: [],
+        active: this.componente.estado_c,
+        inventory: this.componente.codeinventario_c,
+        model: this.datos.modelo,
+        cfClass: '',
+        cfClassScheme: '',
+        createdAt: fecha.toISOString(),
+        estado: this.componente.estado_c
+      };
+      this.arrComponents.push(cmp);
+      swal({
+        type: 'success',
+        title: 'Componente agregado correctamente.',
+        showConfirmButton: true
+      }).then(() => {
+        this.statusComponent = 'Campo obligatorio.';
+        this.formularioComp = false;
 
-    console.log(this.arrComponents);
+        this.componente.responsable_c = '';
+        this.componente.ubicacion_c = '';
+        this.componente.costoinicial_c = '';
+        this.componente.marca_c = '';
+        this.componente.estado_c = '';
 
+        this.datos.descripcion = '';
+        this.datos.modelo = '';
+        this.datos.precio = '';
+        $('#comp').val('');
+
+      });
+    } else {
+      swal({
+        type: 'error',
+        title: 'Debe llenar los datos del componente',
+        showConfirmButton: true
+      });
+    }
+
+  }
+
+  validarDatos(object) {
+    let vol = true;
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        const element = object[key];
+
+        if (element.trim() === '') {
+          vol = false;
+        }
+
+      }
+    }
+
+    return vol;
   }
 
 
   addEquipFirebase() {
     const fecha = new Date();
 
-    if (this.idspace) {
+    if (this.idspace !== 'inicial' && this.idspace !== undefined && this.idspace !== null) {
 
       // construir objeto equipo cerif
       const cfEquip = {
@@ -351,7 +396,7 @@ export class FormQrComponent implements OnInit {
   cambiardataLab(row) {
 
     console.log(row.id);
-    this.qrser.getSpaces(row.relatedSpaces , row.id)
+    this.qrser.getSpaces(row.relatedSpaces, row.id)
       .then((dataSpace: any) => {
         this.spaces = [];
         this.spaces = dataSpace;

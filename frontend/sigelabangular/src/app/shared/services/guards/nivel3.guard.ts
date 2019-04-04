@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { LoginService } from '../../../modulos/login/login-service/login.service';
 
 @Injectable()
 export class Nivel3Guard implements CanActivate {
+  constructor(private _loginService: LoginService) {
+  }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
@@ -21,7 +24,11 @@ export class Nivel3Guard implements CanActivate {
 
 
       } else {
-        return false;
+        return this._loginService.verificarUsuario().then(() => {
+          return true;
+        }).catch(() => {
+          return false;
+        });
       }
 
   }

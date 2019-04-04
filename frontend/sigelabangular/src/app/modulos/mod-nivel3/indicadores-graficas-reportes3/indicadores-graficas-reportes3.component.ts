@@ -20,7 +20,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
 
   //  PROPIEDADES DONA LABORATORIOS
   singleLabs = [];
-  viewLabs: any[] = [600, 300];
+  viewLabs: any[] = [1200, 300];
   tituloLabs = 'Laboratorios Registrados';
   showLegendLabs = false;
   colorSchemeLabs = {
@@ -1405,7 +1405,7 @@ export class IndicadoresGraficasReportes3Component implements OnInit {
             printWindow.document.write('</head><body style="height:100%; width:100%;">');
             printWindow.document.write('<strong> Hora de Generación: ' + cad + ' </strong>');
             printWindow.document.body.appendChild(img);
-            printWindow.document.write('<br><br><br><br>');
+            printWindow.document.write('<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>');
             printWindow.document.body.appendChild(img2);
             printWindow.document.write('<br><strong> Correo del generador: : ' + ambiente.persona.email + ' </strong>');
             printWindow.document.write('<h1>FILTROS USADOS</h1>');

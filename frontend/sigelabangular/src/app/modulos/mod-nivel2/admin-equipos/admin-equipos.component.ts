@@ -69,8 +69,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     componente: false,
     practica: false,
     servicio: false,
-    sabs: false
-
+    sabs: false,
+    sabsCompo: false
   };
 
   modelEquipoSel = {
@@ -87,6 +87,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
   rol: any;
   moduloNivel2 = false;
+
+  infosabsCompo: any;
 
   constructor(private obs: ObservablesService, private http: Http,
     private servicioMod2: Modulo2Service, private servicioSabs: SabsService) {
@@ -116,29 +118,32 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         });
         if (!this.equiestructurado) {
-          this.estructurarEquip(data.uid, data.labo).then(() => {
-            this.itemsel = Observable.of(this.equiestructurado.equipos);
+          this.servicioMod2.buscarLab(data.uid).then(doc => {
+            this.estructurarEquip(data.uid, doc.data()).then(() => {
+              this.itemsel = Observable.of(this.equiestructurado.equipos);
 
-            this.dataSourceEquip.data = this.equiestructurado.equipos;
+              this.dataSourceEquip.data = this.equiestructurado.equipos;
 
 
-            setTimeout(() => {
-              if (this.equiestructurado.equipos !== 0) {
-                this.dataSourceEquip.sort = this.sortEquip;
-                this.dataSourceEquip.paginator = this.paginatorEquip;
-                // cierra loading luego de cargados los datos
-                swal.close();
-              } else {
-                swal({
-                  type: 'error',
-                  title: 'No existen equipos asociados al laboratorio',
-                  showConfirmButton: true
-                });
-              }
+              setTimeout(() => {
+                if (this.equiestructurado.equipos !== 0) {
+                  this.dataSourceEquip.sort = this.sortEquip;
+                  this.dataSourceEquip.paginator = this.paginatorEquip;
+                  // cierra loading luego de cargados los datos
+                  swal.close();
+                } else {
+                  swal({
+                    type: 'error',
+                    title: 'No existen equipos asociados al laboratorio',
+                    showConfirmButton: true
+                  });
+                }
 
-            }, 1500);
+              }, 1500);
 
+            });
           });
+
         }
 
       } else {
@@ -338,6 +343,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
                   title: 'No se pudo conectar con SABS',
                   showConfirmButton: true
                 });
+                cont--;
               }
             });
 
@@ -390,7 +396,8 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
           precio: element.cfPrice,
           marca: element.brand,
           modelo: element.model,
-          estado: element.active
+          estado: element.estado,
+          inventario: element.inventory
         };
 
         arr.push(componente);
@@ -500,7 +507,20 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.seleccionado = row;
     if (table === 'practicas') {
       this.initCalendarModal(this.seleccionado.programacion.horario);
+    } else {
+
+      this.servicioSabs.buscarEquip(this.seleccionado.inventario).then(res => {
+        this.infosabsCompo = res;
+      }).catch(error => {
+        swal({
+          type: 'error',
+          title: 'No se pudo conectar con SABS',
+          showConfirmButton: true
+        });
+      });
     }
+
+
 
   }
 

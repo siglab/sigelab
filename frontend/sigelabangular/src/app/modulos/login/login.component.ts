@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LoginService } from './login-service/login.service';
 import swal from 'sweetalert2';
 import { SidebarComponent } from '../../shared/layouts/sidebar/sidebar.component';
+import { ServicesNivel3Service } from '../mod-nivel3/services/services-nivel3.service';
 
 @Component({
   selector: 'app-login',
@@ -15,14 +16,35 @@ export class LoginComponent implements OnInit {
   pass: string;
 
   constructor(private ruta: Router,
-    private _loginService: LoginService) { }
+    private _loginService: LoginService, private local: ServicesNivel3Service) { }
 
   ngOnInit() {
 
-    if (sessionStorage.getItem('usuario')) {
+    if (this.local.getLocalStorageUser()) {
       this.ruta.navigate(['principal']);
     }
+
   }
+
+
+  // verificarUsuario() {
+  //   const promise = new Promise((resolve, reject) => {
+  //     this._loginService.consultarAuth().subscribe((user) => {
+  //       if (user) {
+  //         this._loginService.restaurarSesion(user).then(() => {
+  //           resolve();
+  //         }).catch(() => {
+  //          reject();
+  //         });
+  //       } else {
+  //        reject();
+  //       }
+  //     });
+  //   });
+
+  //   return promise;
+
+  // }
 
 
   ingresar() {

@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit {
     this._loginService.logout().then(() => {
       this.itemLogout = false;
       // navegar al dashboard
-      this.ruta.navigate(['/login']);
+      // this.ruta.navigate(['/login']);
     });
   }
 

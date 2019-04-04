@@ -22,7 +22,7 @@
 
   </section>
 
-  <section  class="content">
+  <section class="content">
 
 
 
@@ -64,8 +64,7 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsFacil;" style="cursor: pointer;" (click)="cambiardataLab(row)"></mat-row>
               </mat-table>
 
-              <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                [showFirstLastButtons]="true">
+              <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
               </mat-paginator>
             </div>
 
@@ -118,8 +117,7 @@
 
                     </label>
 
-                    <input disabled="true" id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo"
-                      class="form-control" type="text">
+                    <input disabled="true" id="invetory" [(ngModel)]="this.inventario.codeinventario" name="codigo" class="form-control" type="text">
 
                   </div>
 
@@ -135,8 +133,7 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.costoinicial" name="costoinicial" class="form-control"
-                      type="text">
+                    <input disabled="true" [(ngModel)]="inventario.costoinicial" name="costoinicial" class="form-control" type="text">
 
                   </div>
 
@@ -172,8 +169,7 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="fecha_Aceptacion" name="fechaaceptacion" class="form-control"
-                      type="text">
+                    <input disabled="true" [(ngModel)]="fecha_Aceptacion" name="fechaaceptacion" class="form-control" type="text">
 
                   </div>
 
@@ -243,8 +239,7 @@
 
                     </label>
 
-                    <input disabled="true" [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control"
-                      type="text">
+                    <input disabled="true" [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
 
                   </div>
 
@@ -265,8 +260,7 @@
 
                   </label>
 
-                  <input (focusout)="codeCheck($event)" id="invetory" [(ngModel)]="this.iventory" name="codigo" class="form-control"
-                    type="text">
+                  <input (focusout)="codeCheck($event)" id="invetory" [(ngModel)]="this.iventory" name="codigo" class="form-control" type="text">
 
                   <span class="help-block"> {{status}}</span>
 
@@ -298,8 +292,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.responsable" id="escuelaedit" name="responsable"
-                      class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.responsable" id="escuelaedit" name="responsable" class="form-control"
+                      type="text">
 
 
 
@@ -319,8 +313,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [ngClass]="{disabled : this.formEdit}" [(ngModel)]="inventario.ubicacion"
-                      id="escuelaedit" name="ubicacion" class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [ngClass]="{disabled : this.formEdit}" [(ngModel)]="inventario.ubicacion" id="escuelaedit"
+                      name="ubicacion" class="form-control" type="text">
 
                   </div>
 
@@ -340,8 +334,8 @@
 
                     </label>
 
-                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial"
-                      class="form-control" type="text">
+                    <input [readonly]='true' [(ngModel)]="inventario.costoinicial" id="escuelaedit" name="costoinicial" class="form-control"
+                      type="text">
 
                   </div>
 
@@ -359,8 +353,8 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit"
-                      name="fechaaceptacion" class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [disabled]='this.formEdit' [(ngModel)]="inventario.marca" id="escuelaedit" name="fechaaceptacion"
+                      class="form-control" type="text">
 
                   </div>
 
@@ -378,8 +372,7 @@
 
                     </label>
 
-                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado"
-                      class="form-control" type="text">
+                    <input [readonly]='this.formEdit' [(ngModel)]="inventario.estado" id="escuelaedit" name="estado" class="form-control" type="text">
 
                   </div>
 
@@ -403,7 +396,7 @@
 
                       <option value="inicial">Seleccione un espacio</option>
 
-                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place? item.spaceData.place : item.spaceData.build   }}
+                      <option *ngFor="let item of this.spaces" value="{{item.id_space }}">{{item.spaceData.place? item.spaceData.place : item.spaceData.build }}
                       </option>
 
 
@@ -496,8 +489,6 @@
 
               <fieldset>
 
-
-
                 <div class="form-group has-info" [ngClass]="{'has-success': this.formularioComp, 'has-warning': !this.formularioComp }">
 
                   <div class="col-md-12">
@@ -508,15 +499,13 @@
 
                     </label>
 
-                    <input (focusout)="codeCheckComponent($event)" name="codigo_c" class="form-control" type="text">
+                    <input id="comp" (focusout)="codeCheckComponent($event)" name="codigo_c" class="form-control" type="text">
 
                     <span class="help-block"> {{statusComponent}}</span>
 
                   </div>
 
                 </div>
-
-
 
                 <div class="form-group">
 
@@ -534,10 +523,6 @@
 
                 </div>
 
-
-
-
-
                 <div class="form-group">
 
                   <div class="col-md-6">
@@ -554,8 +539,6 @@
 
                 </div>
 
-
-
                 <div class="form-group">
 
                   <div class="col-md-6">
@@ -571,8 +554,6 @@
                   </div>
 
                 </div>
-
-
 
                 <div class="form-group">
 
@@ -594,16 +575,80 @@
 
             </form>
 
+            <div class="row">
+              <div class="col-md-12">
+                <div class="box box-danger" style="margin-top: 20px">
 
+                  <div class="box-header text-center">
+
+                    <i class="fa fa-cogs"></i>
+
+                    <h3 class="box-title">Información de componente</h3>
+
+                  </div>
+
+                  <div class="box-body">
+
+                    <form id="form-2" class="" name="form-2">
+
+                      <fieldset>
+
+                        <div class="form-group">
+
+                          <div class="col-md-6">
+
+                            <label class="control-label" for="nombreprub">
+
+                              <strong> Precio:</strong>
+
+                            </label>
+
+                            <input [(ngModel)]="datos.precio" name="preciodatos" class="form-control" type="text">
+
+                          </div>
+
+
+                          <div class="col-md-6">
+
+                            <label class="control-label" for="nombreprub">
+
+                              <strong>Modelo:</strong>
+
+                            </label>
+
+                            <input [(ngModel)]="datos.modelo" name="modelodatos" class="form-control" type="text">
+
+                          </div>
+
+                          <div class="col-md-12">
+
+                            <label class="control-label" for="nombreprub">
+
+                              <strong> Descripción:</strong>
+
+                            </label>
+
+                            <textarea class="form-control" [(ngModel)]="datos.descripcion" name="descripdatos" id="" rows="8"></textarea>
+
+
+                          </div>
+
+                        </div>
+
+                      </fieldset>
+
+                    </form>
+
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
 
 
 
           </div>
-
-
-
-
-
 
 
         </div>
@@ -621,10 +666,6 @@
         </div>
 
       </div>
-
-
-
-
 
     </div>
 

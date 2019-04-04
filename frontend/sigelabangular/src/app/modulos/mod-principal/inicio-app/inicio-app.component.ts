@@ -12,13 +12,7 @@ import { SabsService } from '../../../shared/services/sabs/sabs.service';
 export class InicioAppComponent implements OnInit {
   constructor(private router: Router, private servicioSabs: SabsService) {
     console.log('Prueba Servicio SABS');
-    this.servicioSabs.buscarEquip('05317500').then(
-      dataEquip => {
-        console.log('Consulta Equip en SABS: ', dataEquip);
-      }
-    ).catch(error => {
-      console.log('Error al consultar Equip en SABS: ', error);
-    });
+  
   }
 
   ngOnInit() {
