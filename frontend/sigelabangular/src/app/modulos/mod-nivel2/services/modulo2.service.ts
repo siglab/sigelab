@@ -155,10 +155,10 @@ export class Modulo2Service {
   getEspaceForBuildAndPlace(edificio: string , espacio: string ){
 
 
-    const build = parseInt( edificio, 10 );
+  ;
     const place = parseInt( espacio, 10 );
     const col = this.afs.collection('space');
-    const refer = col.ref.where('spaceData.building', '==', build)
+    const refer = col.ref.where('spaceData.building', '==', edificio)
                           .where('spaceData.place', '==', place);
     return refer.get();
   }

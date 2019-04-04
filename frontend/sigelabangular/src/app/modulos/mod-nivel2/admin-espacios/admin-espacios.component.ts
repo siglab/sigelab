@@ -59,7 +59,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     minArea: 0,
     ocupedArea: 0,
     totalArea: 0,
-    spaceData: { building: '', place: '',
+    outcampus : false,
+    spaceData: { building: '', place: 0,
      floor: '', descripcion : '', direccion: '' , ciudad:  '' },
     active: true
   };
@@ -292,6 +293,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               indxSa: espacio.indxSa,
               map: espacio.map,
               minArea: espacio.minArea,
+              outcampus: espacio.outcampus,
               ocupedArea: espacio.ocupedArea,
               totalarea: espacio.totalArea,
               spaceData: espacio.spaceData,
@@ -349,7 +351,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.spaceData.floor = item.spaceData.floor;
     this.space.spaceData.place = item.spaceData.place;
     this.space.map = item.map;
-    this.space.active = item.active;
+    this.space.spaceData.descripcion = item.spaceData.descripcion;
+    this.space.spaceData.ciudad = item.spaceData.ciudad;
+    this.space.spaceData.direccion = item.spaceData.direccion;
+    this.space.outcampus = item.outcampus;
 
     console.log('capacidad a', item.capacity);
     // optener datos un espacio especifico
@@ -393,17 +398,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
-  setSpace() {
+  setSpace( nombre ) {
 
-    if (!this.space.spaceData.building && !this.space.spaceData.place && !this.space.spaceData.floor  ) {
-
-      swal({
-        type: 'info',
-        title: 'Hay campos vacíos importantes.',
-        showConfirmButton: true
-      });
-
-    } else {
 
       swal({
         type: 'info',
@@ -415,6 +411,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       }) .then( val => {
          if (val.value) {
 
+
+          if (this.space.spaceData.descripcion !== '') {
+
+            this.space.outcampus = true ;
+
+          }
 
            this.alert.show();
            console.log('acepto guardar');
@@ -448,7 +450,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
 
-    }
 
 
   }
@@ -695,19 +696,20 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // valida si ya existe un espacio para que pueda ser vinculado
-  spaceCheck(ed, sp) {
+  spaceCheck( espacio ) {
     this.idnewSp = '';
 
-    console.log(ed, sp);
+    console.log(espacio);
+    const edificio = this.space.spaceData.building;
 
-    if (ed.trim() === '' || sp.trim() === '') {
+    if ( espacio.trim() === '') {
       this.status = 'Campo obligatorio';
       // this.dispo = false;
     } else {
       this.status = 'Buscando espacio ...';
-      this.servicioMod2.getEspaceForBuildAndPlace(ed, sp).then((snapShot) => {
+      this.servicioMod2.getEspaceForBuildAndPlace( edificio, espacio ).then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'Espacio no encontrado, ingrese los datos de forma manual';
+          this.status = 'Espacio no encontrado';
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
@@ -783,7 +785,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.ocupedArea = 0;
     this.space.spaceData.building = '';
     this.space.spaceData.floor = '';
-    this.space.spaceData.place = '';
+    this.space.spaceData.place = 0;
   }
 
 
@@ -901,8 +903,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         if (item[key]) {
           cont++;
         }
-
-
       }
 
     }
