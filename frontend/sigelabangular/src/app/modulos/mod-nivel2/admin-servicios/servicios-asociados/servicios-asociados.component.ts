@@ -173,10 +173,12 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                 if (this.servasocestructurados.length !== 0) {
                   swal.close();
                 } else {
+                  swal.close();
                   swal({
                     type: 'error',
                     title: 'No existen servicios asociados al laboratorio',
-                    showConfirmButton: true
+                    showConfirmButton: true,
+                    timer: 3000
                   });
                 }
 
@@ -191,8 +193,9 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         swal({
           type: 'error',
           title: 'No se ha seleccionado ningún laboratorio',
-          showConfirmButton: true
-        }).then(() => { });
+          showConfirmButton: true,
+          timer: 3000
+        });
       }
 
     });
@@ -497,7 +500,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                         swal({
                           type: 'success',
                           title: 'Creado correctamente',
-                          showConfirmButton: true
+                          showConfirmButton: true,
+                          timer: 3000
                         }).then(() => {
                           this.cerrarModal('modal2');
                         });
@@ -509,7 +513,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                 swal({
                   type: 'success',
                   title: 'Creado correctamente',
-                  showConfirmButton: true
+                  showConfirmButton: true,
+                  timer: 3000
                 }).then(() => {
                   this.cerrarModal('modal2');
                 });
@@ -534,18 +539,22 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
         });
       } else {
+        swal.close();
         swal({
           type: 'error',
           title: 'Debe agregar almenos un equipo al servicio',
-          showConfirmButton: true
+          showConfirmButton: true,
+          timer: 3000
         });
       }
 
     } else {
+      swal.close();
       swal({
         type: 'error',
         title: 'Debe diligenciar los campos nombre, descripcion y precio',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     }
 
@@ -564,7 +573,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   editarServicio() {
     const fecha = new Date();
     if (this.validarDatosSrv(this.srv)) {
-      if (Object.keys(this.srv.relatedEquipments).length !== 0) {
+      if (this.itemsel.infoServ.equipos.length !== 0) {
         for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
           const equipo = this.itemsel.infoServ.equipos[i];
           this.srv.relatedEquipments[equipo.id] = true;
@@ -622,7 +631,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                 swal({
                   type: 'success',
                   title: 'Editado correctamente',
-                  showConfirmButton: true
+                  showConfirmButton: true,
+                  timer: 3000
                 }).then(() => {
                   this.variaciones = [];
                   this.cerrarModal('modal1');
@@ -655,7 +665,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             swal({
               type: 'success',
               title: 'Servicio editado correctamente',
-              showConfirmButton: true
+              showConfirmButton: true,
+              timer: 3000
             }).then(() => {
               this.variaciones = [];
               this.cerrarModal('modal1');
@@ -665,7 +676,21 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           });
         });
 
+      } else {
+        swal({
+          type: 'error',
+          title: 'Debe agregar almenos un equipo al servicio',
+          showConfirmButton: true,
+          timer: 3000
+        });
       }
+    } else {
+      swal({
+        type: 'error',
+        title: 'Debe diligenciar los campos nombre, descripcion y precio',
+        showConfirmButton: true,
+        timer: 3000
+      });
     }
 
 
@@ -680,7 +705,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       swal({
         type: 'error',
         title: 'Ingrese una condición',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     }
 
@@ -700,7 +726,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         swal({
           type: 'error',
           title: 'Ingrese un parametro',
-          showConfirmButton: true
+          showConfirmButton: true,
+          timer: 3000
         });
       }
 
@@ -736,7 +763,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         swal({
           type: 'error',
           title: 'Ingrese un parametro',
-          showConfirmButton: true
+          showConfirmButton: true,
+          timer: 3000
         });
       }
 
@@ -771,7 +799,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       swal({
         type: 'error',
         title: 'Ingrese una condición',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     }
 
@@ -806,13 +835,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       swal({
         type: 'success',
         title: 'Variación agregada',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     } else {
       swal({
         type: 'error',
         title: 'Debe diligenciar los campos nombre, descripcion y precio',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     }
 
@@ -853,7 +884,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     swal({
       type: 'success',
       title: 'Exito, se cambio el estado de la variación',
-      showConfirmButton: true
+      showConfirmButton: true,
+      timer: 3000
     });
 
 
@@ -878,13 +910,15 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       swal({
         type: 'success',
         title: 'Algunos equipos seleccionados ya se encuentran agregados',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     } else {
       swal({
         type: 'success',
         title: 'Equipo agregado',
-        showConfirmButton: true
+        showConfirmButton: true,
+        timer: 3000
       });
     }
 
@@ -902,7 +936,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           swal({
             type: 'error',
             title: 'Equipo retirado',
-            showConfirmButton: true
+            showConfirmButton: true,
+            timer: 3000
           });
         }
 

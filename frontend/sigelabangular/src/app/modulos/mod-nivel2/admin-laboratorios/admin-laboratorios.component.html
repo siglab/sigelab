@@ -798,7 +798,7 @@
                             <input placeholder="Seleccione una facultad" [(ngModel)]="fac" type="text" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
 
                             <mat-autocomplete #auto="matAutocomplete">
-                              <mat-option (click)="setDepartment(prog.id)" *ngFor="let prog of filteredOptions | async" [value]="prog.nombre">
+                              <mat-option *ngFor="let prog of filteredOptions | async" [value]="prog.nombre">
                                 {{prog.nombre}}
                               </mat-option>
                             </mat-autocomplete>

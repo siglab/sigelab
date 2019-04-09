@@ -12,11 +12,18 @@ export class AppComponent {
   title = 'app';
 
   constructor(private login: LoginService, private ruta: Router) {
-    this.login.consultarAuth().subscribe(user => {
-      if (user) {
-        this.ruta.navigate([this.ruta.url]);
-      }
-    });
+    // this.login.consultarAuth().subscribe(user => {
+    //   const uri = this.ruta.url;
+    //   if (user) {
+    //     const spli = uri.split('/')[1];
+
+    //     if (spli === 'login' || spli === 'inicio' || spli === 'registro') {
+    //      // this.ruta.navigate(['principal']);
+    //     } else {
+    //       this.ruta.navigate([this.ruta.url]);
+    //     }
+    //   }
+    // });
 
   }
 

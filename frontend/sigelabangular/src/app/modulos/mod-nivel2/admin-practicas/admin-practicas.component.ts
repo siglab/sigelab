@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit, OnDestroy } from '@angular/core';
 import { ObservablesService } from '../../../shared/services/observables.service';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -12,6 +12,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Modulo2Service } from '../services/modulo2.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
+import { Subscription } from 'rxjs/Subscription';
 
 declare var $: any;
 
@@ -20,12 +21,12 @@ declare var $: any;
   templateUrl: './admin-practicas.component.html',
   styleUrls: ['./admin-practicas.component.css']
 })
-export class AdminPracticasComponent implements OnInit, AfterContentInit {
+export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDestroy {
   events = [
   ];
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
-  year = new Date().getFullYear();
+  year = `${new Date().getFullYear().toString()}-01-01`;
 
   modalCalendar: JQuery ;
   programacionCalendar = [];
@@ -103,17 +104,30 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
   role: any;
   moduloNivel2 = false;
   addPractica = false ;
+  sucriptionPractice: Subscription = null;
 
-  user = this.servicioMod2.getLocalStorageUser();
+
+  user: any;
+  paso2 = false;
+  paso3;
 
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
-    private toastr: ToastrService) {
+    private _formBuilder: FormBuilder) {
+
+      this.user = this.servicioMod2.getLocalStorageUser();
   }
 
 
   ngOnInit() {
-    $('html, body').animate({ scrollTop: '0px' }, 'slow');
+  //   $('html, body').animate({ scrollTop: '0px' }, 'slow');
+
+  // this.year  = `${new Date().getFullYear().toString()}-00-00`;
+  console.log(this.year);
+
+  }
+
+  ngOnDestroy() {
 
 
   }
@@ -162,13 +176,13 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
           this.id_lab = data.uid;
           this.mainSpace = this.pracestructurado.mainSpace;
 
-          this.dataSourcePrac = new MatTableDataSource(this.pracestructurado.practicas);
+          this.dataSourcePrac.data = (this.pracestructurado.practicas);
 
-          this.dataSourcePracIn = new MatTableDataSource(this.pracestructurado.practicasInactivas);
+          this.dataSourcePracIn.data = (this.pracestructurado.practicasInactivas);
 
-          this.dataSourceEquip = new MatTableDataSource(this.pracestructurado.equipos);
+          this.dataSourceEquip.data = (this.pracestructurado.equipos);
 
-          this.dataSourceEsp = new MatTableDataSource(this.pracestructurado.espacios);
+          this.dataSourceEsp.data = (this.pracestructurado.espacios);
 
 
           setTimeout(() => {
@@ -195,7 +209,9 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
               });
             }
 
+
           }, 2000);
+
 
           // data acesor activos
           this.dataSourcePrac.sortingDataAccessor = (item, property) => {
@@ -686,6 +702,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
 
 
     });
+
   }
 
 
@@ -763,6 +780,8 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
 
   }
 
+
+
   actualizarPractica() {
 
     const fecha = new Date();
@@ -809,7 +828,8 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
   down() {
 
     this.addPractica = true;
-    this.consultarpractica= false;
+    this.consultarpractica = false;
+
 
 
     setTimeout(() => {
@@ -836,11 +856,26 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit {
   }
 
 
+  initValidatorStepper() {
+
+  }
+
   // deshabilitar button
   disabledcalendar(): boolean {
   return  this.events.length > 0 ? false : true;
   }
 
+  showstp(st) {
 
+    console.log(st);
+  }
+
+
+  onSubmit( form ) {
+    if (form.valid) {
+      console.log(form);
+      form.reset();
+    }
+  }
 
 }

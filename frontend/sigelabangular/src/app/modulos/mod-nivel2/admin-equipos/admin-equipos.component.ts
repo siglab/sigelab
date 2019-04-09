@@ -507,7 +507,7 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.seleccionado = row;
     if (table === 'practicas') {
       this.initCalendarModal(this.seleccionado.programacion.horario);
-    } else {
+    } else if (table === 'componentes') {
 
       this.servicioSabs.buscarEquip(this.seleccionado.inventario).then(res => {
         this.infosabsCompo = res;

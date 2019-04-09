@@ -188,22 +188,22 @@
             <mat-card-title> <h3 class="text-center">Agregar nueva práctica</h3> 	</mat-card-title>
           <!-- /.box-header -->
           <mat-card-content>
-            <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
-              <mat-step>
-                <form #step1="ngForm">
+            <mat-horizontal-stepper  #stepper="matHorizontalStepper">
+              <mat-step >
+                <form #paso1="ngForm" >
                   <ng-template matStepLabel>Información básica</ng-template>
 
 
                   <mat-form-field>
-                    <input name="nombrep" [(ngModel)]="nameP" matInput placeholder="Nombre práctica" required>
+                    <input name="nombrep" [(ngModel)]="nameP"  matInput placeholder="Nombre práctica" required>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input   name="code" [(ngModel)]="code" matInput placeholder="Código de la matería" required >
+                    <input   name="code" [(ngModel)]="code" matInput   placeholder="Código de la matería" required >
                   </mat-form-field>
 
                   <mat-form-field>
-                    <mat-select  name="semester" placeholder="Semestre" [(ngModel)]="programming.semester"  >
+                    <mat-select  name="semester" placeholder="Semestre"  [(ngModel)]="programming.semester"  >
                       <mat-option  [value]= "this.year + '-' + '01'"  >
                         Periodo 01
                       </mat-option>
@@ -212,26 +212,24 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <!-- <mat-form-field>
-                    <mat-checkbox>Genera residuos la practica</mat-checkbox>
-                  </mat-form-field> -->
+
                   <mat-form-field>
-                    <input name="numeroes" [(ngModel)]="programming.noStudents" matInput placeholder="Número de estudiantes" required>
+                    <input name="numeroes" [(ngModel)]="programming.noStudents"  matInput placeholder="Número de estudiantes" required>
                   </mat-form-field>
 
                   <mat-checkbox name="residuos" [(ngModel)]="residuos">Genera residuos</mat-checkbox>
 
 
                   <div>
-                    <button [disabled] = "!step1.valid" mat-button matStepperNext (click)="initCalendar(events)" class="materialbtn">siguiente
+                    <button  *ngIf="paso1.valid" mat-button matStepperNext (click)=" initCalendar(events)"  class="materialbtn">siguiente
                       <i class="fa fa-arrow-right"></i> </button>
                   </div>
                 </form>
               </mat-step>
-              <mat-step>
+
+              <!-- step calendar -->
+              <mat-step *ngIf="paso1.valid" >
                 <ng-template matStepLabel>AGREGUE LAS FECHAS DE LA PRÁCTICA AL CALENDARIO</ng-template>
-
-
                 <div class="col-md-12">
                   <div class="box box-danger">
                     <div class="box-header">
@@ -240,7 +238,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button class="btn btn-success" style="float: center" type="button" data-toggle="modal" data-target="#myModal2">Agregar
+                      <button class="btn btn-success" style="float: center" type="button"  data-toggle="modal" data-target="#myModal2">Agregar
                         clase
                          <i class="fa fa-plus"></i>
                       </button>
@@ -259,14 +257,15 @@
                     <i class="fa fa-arrow-left"></i>
                     Anterior
                   </button>
-                  <button class="materialbtn" mat-button matStepperNext [disabled]="disabledcalendar()" >
+                  <button class="materialbtn" mat-button matStepperNext *ngIf="this.events.length > 0 " >
                     Siguiente
                     <i class="fa fa-arrow-right"></i>
                   </button>
                 </div>
 
               </mat-step>
-              <mat-step>
+
+              <mat-step *ngIf="this.events.length > 0 ">
                 <ng-template matStepLabel>Vincular Equipos</ng-template>
 
                 <div class="box box-danger">
@@ -589,7 +588,7 @@
 
                 <div class='col-md-6'>
                    <mat-form-field class="example-full-width">
-                       <input matInput  [(ngModel)]="this.evento.start" type ="date"  name="fecha-event" placeholder="Escriba una fecha para la clase" required >
+                       <input matInput  [(ngModel)]="this.evento.start" type ="date" min="{{year}}" onkeydown="return false"  name="fecha-event" placeholder="seleccione una fecha para la clase" required >
                      </mat-form-field>
                  </div>
 
@@ -606,7 +605,7 @@
                 </div>
 
                <div class="text-center" >
-                <button *ngIf="formClase.valid" (click)="agregarEvento()" type="button" class="btn btn-success">
+                <button *ngIf="formClase.valid" (click)="agregarEvento(); onSubmit(formClase);" type="button" class="btn btn-success">
                   Guardar
                 <i class="fa fa-check"></i>
                 </button>
@@ -727,7 +726,7 @@
 
 
           </div>
-          <div class="modal-footer">
+           <div class="modal-footer">
             <button type="button" class="btn btn-danger">Guardar</button>
 
           </div>
@@ -739,237 +738,6 @@
   </div>
 </div>
 
-<!-- MODAL PARA VER INFORMACION DE PRACTICAS -->
-<div class="modal fade divScroll" id="myModal3" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-
-      <div class="modal-body">
-
-          <!-- datos de la practica -->
-          <div class="box box-danger" *ngIf="!vercalendario" >
-            <div class="box-header text-center">
-              <i class="fa fa-address-card-o"></i>
-
-              <h1 class="box-title">PRÁCTICA SELECCIONADA</h1>
-              <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModal3')"></span>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" *ngIf="itemsel | async; let itemsel">
-
-              <div class="col-md-6">
-
-                <div class="box box-danger">
-                  <div class="box-header">
-
-                    <h1 class="box-title">Información de la Práctica</h1>
-
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-
-                    <form id="form-work" class="" name="form-work" action="#">
-                      <fieldset>
-                          <div class="col-md-12">
-                            <mat-form-field>
-                              <input name="nombre" [disabled]="!moduloNivel2 ? false : null" [(ngModel)]="practica.nombre" matInput placeholder="Nombre práctica" >
-                            </mat-form-field>
-
-                          </div>
-
-                          <div class="col-md-12">
-                              <mat-form-field>
-                                <input name="numero-es" [disabled]="!moduloNivel2 ? false : null" [(ngModel)]="practica.numeroEst" matInput placeholder="Número Estudiantes" >
-                              </mat-form-field>
-
-                          </div>
-
-                          <div class="col-md-12">
-
-                            <mat-form-field>
-                                <input name="semestre" [disabled]="!moduloNivel2 ? false : null" [(ngModel)]="practica.semestre" matInput placeholder="Semestre" >
-                              </mat-form-field>
-
-                          </div>
 
 
-                        <div *ngIf="moduloNivel2" class="form-group">
-                          <div class="col-md-12">
-
-                            <label style="margin-top: 20px;" class="switch">
-                              <input name="active" [(ngModel)]="this.practica.estado" id="activo" type="checkbox" checked>
-                              <span class="slider round"></span>
-                            </label>
-
-
-                          </div>
-                        </div>
-
-
-
-                        <div *ngFor="let item of this.practica.space">
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="ciuor">
-                                <strong>Campus: </strong>
-                              </label>
-                            </div>
-                          </div>
-
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="ciudes">
-                                <strong>Edificio: {{item.spaceData.building}} </strong>
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="ciudes">
-                                <strong>Planta: {{item.spaceData.floor}} </strong>
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="ciudes">
-                                <strong>Espacio: {{item.spaceData.place}} </strong>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-
-
-
-                      </fieldset>
-                    </form>
-
-                    <div *ngIf="moduloNivel2" class="form-group" style="margin-top: 20px;">
-                      <div class="col-md-12">
-                        <button class="btn btn-info"   (click)="triggerCalendar()" type="button">
-                          Programación
-                          <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </button>
-
-                        <button class="btn btn-success" (click)="actualizarPractica()" type="button">
-                          Actualizar
-                          <i class="fa fa-refresh" aria-hidden="true"></i>
-                        </button>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-              </div>
-
-
-              <div class="col-md-6">
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <i class="fa fa-map"></i>
-
-                    <h3 class="box-title">EQUIPOS VINCULADOS</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <div class="box-body">
-                    <div class="box-body divScroll">
-                      <div *ngIf="this.practica.equipos.length == 0">
-                        <h3>Esta practica no tiene equipos asociados</h3>
-                      </div>
-                      <div *ngIf="this.practica.equipos.length != 0" class="list-group">
-                        <table class=" table row-border hover table-condensed">
-                          <thead>
-                            <tr>
-                              <th>Nombre de equipos</th>
-
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr style="cursor:pointer" *ngFor="let item of this.practica.equipos">
-                              <td>
-                                {{item.nombre}}
-                              </td>
-
-                            </tr>
-                          </tbody>
-
-                        </table>
-
-                      </div>
-
-                    </div>
-                  </div>
-                  <!-- /.box-body -->
-                </div>
-
-
-                <div *ngIf="this.interfaz" class="form-group text-center" style="margin-top: 20px;">
-                  <div class="col-md-12">
-                    <button class="btn2 btn-danger btn-lg danger" type="button">Reactivar</button>
-                  </div>
-                </div>
-
-              </div>
-
-
-            </div>
-
-          </div>
-
-
-          <!-- datos de programacion -->
-           <div class="box box-danger" *ngIf="vercalendario; " >
-              <div class="box-header text-center">
-                  <button (click) ="vercalendario = false; " class="btn btn-success btn-sm" style="float:left">   <i class="fa fa-arrow-left"></i> Regresar </button>
-
-                <i class="fa fa-calendar"></i>
-                <h1 class="box-title">Programación de la Práctica</h1>
-              </div>
-               <!-- /.box-header -->
-                <div class="box-body no-padding">
-
-                 <div  id="calendariomodal">
-                </div>
-              </div>
-
-          </div>
-
-
-
-
-      </div>
-    </div>
-
-  </div>
-</div>
-<!-- modal de horario de practica -->
-<div class="modal fade" id="practicaprog" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-
-      <div class="modal-body">
-        <div class="box box-danger">
-          <div class="box-header text-center">
-            <i class="fa fa-calendar"></i>
-
-            <h1 class="box-title">Programación de la Práctica</h1>
-           </div>
-          <!-- /.box-header -->
-             <div class="box-body no-padding">
-
-             <div class="cal" id="cal2">
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
 <app-spinner></app-spinner>

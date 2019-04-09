@@ -30,6 +30,7 @@ export class FormQrComponent implements OnInit {
   statusComponent;
   formularioComp = false;
   arrComponents = [];
+  formComponenteCode = false;
 
   //  modelo inventario
   inventario = {
@@ -70,7 +71,7 @@ export class FormQrComponent implements OnInit {
   moduloQr = false;
 
   datos = {
-    precio: '',
+    precio: 0,
     descripcion: '',
     modelo: ''
   };
@@ -206,6 +207,7 @@ export class FormQrComponent implements OnInit {
         if (res.encontrado === true) {
           this.statusComponent = 'Código componente de inventario encontrado.';
           this.formularioComp = true;
+          this.formComponenteCode = true;
           console.log(this.formEdit);
           // asignar valores de la consulta a formulario
           this.componente.ubicacion_c = res.ubicacion;
@@ -217,6 +219,8 @@ export class FormQrComponent implements OnInit {
         if (res.encontrado === false) {
           this.statusComponent = 'Código componente de inventario no encontrado, revise y vuelva a intentar.';
           this.formularioComp = true;
+          this.formComponenteCode = false;
+          
 
           this.componente.responsable_c = '';
           this.componente.ubicacion_c = '';
@@ -284,7 +288,7 @@ export class FormQrComponent implements OnInit {
 
         this.datos.descripcion = '';
         this.datos.modelo = '';
-        this.datos.precio = '';
+        this.datos.precio = 0;
         $('#comp').val('');
 
       });
@@ -299,16 +303,10 @@ export class FormQrComponent implements OnInit {
   }
 
   validarDatos(object) {
+    console.log(object);
     let vol = true;
-    for (const key in object) {
-      if (object.hasOwnProperty(key)) {
-        const element = object[key];
-
-        if (element.trim() === '') {
-          vol = false;
-        }
-
-      }
+    if (object.descripcion.trim() === '' || object.modelo.trim() === '' || object.precio === null) {
+      vol = false;
     }
 
     return vol;
@@ -375,14 +373,9 @@ export class FormQrComponent implements OnInit {
   }
 
   viewComp() {
-    if (this.formularioComp) {
-
-      this.formularioComp = false;
-
-    } else {
-
-      this.formularioComp = true;
-    }
+  
+    this.formularioComp = true;
+    this.formComponenteCode = false;
   }
 
   applyFilterLab(filterValue: string) {

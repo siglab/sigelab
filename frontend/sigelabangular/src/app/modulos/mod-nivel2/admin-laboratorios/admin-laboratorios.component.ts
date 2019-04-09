@@ -1651,6 +1651,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     if (list === 'facultad') {
       lista = eval('this.listaFacultades');
       sugerido = eval('this.listaFaculSugeridos');
+
+      this.retirarDepartamentos(id);
+
     } else {
       lista = eval('this.listaDepartamentos');
       sugerido = eval('this.listaDeparSugeridos');
@@ -1668,13 +1671,38 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     swal({
       type: 'success',
-      title: list + ' Eliminada',
+      title: list + ' eliminada',
       showConfirmButton: true
     });
 
   }
 
+  retirarDepartamentos(id) {
+
+    const auxiliar = [];
+
+    for (let index = 0; index < this.departamentos.length; index++) {
+      const element = this.departamentos[index];
+
+      if (element.idfacul !== id) {
+        auxiliar.push(element);
+      }
+    }
+
+
+    this.departamentos = auxiliar;
+
+    this.filteredOptions2 = this.myControl2.valueChanges
+      .pipe(
+        startWith(''),
+        map(val => this.filter2(val))
+      );
+  }
+
   agregarElemento(list) {
+
+
+
     let lista = '';
 
     let select = '';
@@ -1682,6 +1710,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     const objeto = {};
 
     if (list === 'facultad') {
+      this.selectfacul = this.facultades.find(o => o.nombre === this.fac).id;
       lista = 'this.listaFacultades';
       select = 'this.selectfacul';
 
@@ -1714,6 +1743,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
           this.fac = '';
           this.dep = '';
+
+          if (list === 'facultad') {
+            this.setDepartment();
+          }
         });
 
       } else {
@@ -1734,22 +1767,22 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   }
 
-  setDepartment(id) {
-    this.selectfacul = id;
+  setDepartment() {
+
     this.departamentos = [];
 
     this.departamentosStatic.forEach(doc => {
-      if (doc.idfacul === id) {
+      if (this.listaFacultades.find(o => o.id === doc.idfacul)) {
         this.departamentos.push(doc);
       }
     });
 
 
     this.filteredOptions2 = this.myControl2.valueChanges
-    .pipe(
-      startWith(''),
-      map(val =>  this.departamentos.slice())
-    );
+      .pipe(
+        startWith(''),
+        map(val => this.filter2(val))
+      );
   }
 
   setSede(headquarter) {
@@ -1875,7 +1908,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     swal({
       type: 'success',
-      title: 'Teléfono Eliminado',
+      title: 'Teléfono eliminado',
       showConfirmButton: true
     });
   }

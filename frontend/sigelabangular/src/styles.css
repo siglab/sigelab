@@ -91,3 +91,8 @@ input:checked + .slider:before {
         text-align: center;
         color: #7d7d7da8;
       }
+
+
+      .mat-checkbox-layout {
+        white-space: normal !important;
+      }

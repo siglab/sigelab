@@ -55,6 +55,17 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+
+  routerLogin() {
+    const uri = this.ruta.url.split('/');
+
+    if (uri[2] === 'qrinventario') {
+      this.ruta.navigate(['/login'], { queryParams: { codigo: uri[3] } });
+    } else {
+      this.ruta.navigate(['/login']);
+    }
+  }
+
   salir() {
     this._loginService.logout().then(() => {
       this.itemLogout = false;

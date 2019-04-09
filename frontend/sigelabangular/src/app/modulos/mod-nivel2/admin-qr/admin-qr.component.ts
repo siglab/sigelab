@@ -17,6 +17,8 @@ import { URLAPI, URLQR } from '../../../config';
 export class AdminQrComponent implements OnInit {
   QRimage;
   QrCantidad;
+
+  enableRecovery = false;
   base64;
   zip = new JSZip();
   img = this.zip.folder('images');

@@ -440,13 +440,6 @@
               </div>
 
 
-
-
-
-
-
-
-
             </fieldset>
 
 
@@ -507,75 +500,78 @@
 
                 </div>
 
-                <div class="form-group">
+                <div *ngIf="this.formComponenteCode">
+                  <div class="form-group">
 
-                  <div class="col-md-6">
+                    <div class="col-md-6">
 
-                    <label class="control-label" for="nombreprub">
+                      <label class="control-label" for="nombreprub">
 
-                      <strong> Ubicación:</strong>
+                        <strong> Ubicación:</strong>
 
-                    </label>
+                      </label>
 
-                    <input [(ngModel)]="componente.ubicacion_c" name="ubicacion_c" class="form-control" type="text">
+                      <input [(ngModel)]="componente.ubicacion_c" name="ubicacion_c" class="form-control" type="text">
 
-                  </div>
-
-                </div>
-
-                <div class="form-group">
-
-                  <div class="col-md-6">
-
-                    <label class="control-label" for="nombreprub">
-
-                      <strong>Costo Inicial:</strong>
-
-                    </label>
-
-                    <input [(ngModel)]="componente.costoinicial_c" name="costoinicial_c" class="form-control" type="text">
+                    </div>
 
                   </div>
 
-                </div>
+                  <div class="form-group">
 
-                <div class="form-group">
+                    <div class="col-md-6">
 
-                  <div class="col-md-6">
+                      <label class="control-label" for="nombreprub">
 
-                    <label class="control-label" for="nombreprub">
+                        <strong>Costo Inicial:</strong>
 
-                      <strong> Marca:</strong>
+                      </label>
 
-                    </label>
+                      <input [(ngModel)]="componente.costoinicial_c" name="costoinicial_c" class="form-control" type="text">
 
-                    <input [(ngModel)]="componente.marca_c" name="fechaaceptacion_c" class="form-control" type="text">
-
-                  </div>
-
-                </div>
-
-                <div class="form-group">
-
-                  <div class="col-md-6">
-
-                    <label class="control-label" for="nombreprub">
-
-                      <strong>Estado:</strong>
-
-                    </label>
-
-                    <input [(ngModel)]="componente.estado_c" name="estado_c" class="form-control" type="text">
+                    </div>
 
                   </div>
 
+                  <div class="form-group">
+
+                    <div class="col-md-6">
+
+                      <label class="control-label" for="nombreprub">
+
+                        <strong> Marca:</strong>
+
+                      </label>
+
+                      <input [(ngModel)]="componente.marca_c" name="fechaaceptacion_c" class="form-control" type="text">
+
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+
+                    <div class="col-md-6">
+
+                      <label class="control-label" for="nombreprub">
+
+                        <strong>Estado:</strong>
+
+                      </label>
+
+                      <input [(ngModel)]="componente.estado_c" name="estado_c" class="form-control" type="text">
+
+                    </div>
+
+                  </div>
                 </div>
+
 
               </fieldset>
 
             </form>
 
-            <div class="row">
+            <div class="row" *ngIf="this.formComponenteCode">
               <div class="col-md-12">
                 <div class="box box-danger" style="margin-top: 20px">
 
@@ -603,7 +599,7 @@
 
                             </label>
 
-                            <input [(ngModel)]="datos.precio" name="preciodatos" class="form-control" type="text">
+                            <input [(ngModel)]="datos.precio" name="preciodatos" class="form-control" type="number">
 
                           </div>
 
@@ -657,7 +653,7 @@
 
 
 
-        <div class="modal-footer" *ngIf="this.formularioComp">
+        <div class="modal-footer" *ngIf="this.formularioComp && this.formComponenteCode">
 
           <button type="button" (click)="addComponent()" class="btn btn-success">
 

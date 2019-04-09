@@ -3,6 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { LoginService } from '../login/login-service/login.service';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ServicesNivel3Service } from '../mod-nivel3/services/services-nivel3.service';
 
 @Component({
   selector: 'app-registro',
@@ -19,9 +20,17 @@ export class RegistroComponent implements OnInit {
   dispo = false;
   constructor(private afs: AngularFirestore,
               private regSrv: LoginService,
-              private router: Router) { }
+              private router: Router, private local: ServicesNivel3Service,
+              private login: LoginService) { }
 
   ngOnInit() {
+    if (this.local.getLocalStorageUser()) {
+      this.router.navigate(['principal']);
+    } else {
+      this.login.verificarUsuario().then(() => {
+        this.router.navigate(['principal']);
+      });
+    }
   }
 
   emailcheck($event, email) {

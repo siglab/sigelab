@@ -197,16 +197,24 @@
         <div class="modal-body">
           <div class="box box-danger">
             <div class="box-header with-border">
-              <h3 class="box-title">Recuperar Qr</h3>
+              <h3 class=" text-center">Información Qr asociado</h3>
 
-              <button data-dismiss="modal" [routerLink]=" ['/principal/qrinventario/' + this.secQrUrl]  " style="float: right"
-                class="btn btn-success">Ver <i class="fa fa-arrow-right"></i> </button>
-            </div>
+
+             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal">
+             <form class="form-horizontal">
               <div class="box-body">
-                <div class="form-group has-info" [ngClass]="{ 'has-success': this.dispo }">
+
+               <div class="text-center ">
+                  <button data-dismiss="modal" [routerLink]=" ['/principal/qrinventario/' + this.secQrUrl]  "
+                  class="btn btn-success">Consultar Qr <i class="fa fa-arrow-right"></i> </button>
+
+                 <button class="btn btn-success" (click) =" enableRecovery = true" >Recuperar Qr  <i class="fa fa-refresh"></i>
+                 </button>
+               </div>
+
+                <div class="form-group has-info" [ngClass]="{ 'has-success': this.dispo }" *ngIf="enableRecovery">
                   <label class="control-label" for="estadoserv">
                     <strong>Numero:</strong>
                   </label>

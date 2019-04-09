@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from './login-service/login.service';
 import swal from 'sweetalert2';
 import { SidebarComponent } from '../../shared/layouts/sidebar/sidebar.component';
@@ -15,39 +15,33 @@ export class LoginComponent implements OnInit {
   email: string;
   pass: string;
 
-  constructor(private ruta: Router,
+  rutadeQR: any;
+
+  constructor(private ruta: Router, private rout: ActivatedRoute,
     private _loginService: LoginService, private local: ServicesNivel3Service) { }
 
   ngOnInit() {
 
+    this.rout.queryParams.subscribe(re => {
+      this.rutadeQR = re['codigo'];
+    });
+
     if (this.local.getLocalStorageUser()) {
-      this.ruta.navigate(['principal']);
+      if (this.rutadeQR) {
+        this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
+      } else {
+
+        this.ruta.navigate(['principal']);
+      }
     }
 
   }
 
 
-  // verificarUsuario() {
-  //   const promise = new Promise((resolve, reject) => {
-  //     this._loginService.consultarAuth().subscribe((user) => {
-  //       if (user) {
-  //         this._loginService.restaurarSesion(user).then(() => {
-  //           resolve();
-  //         }).catch(() => {
-  //          reject();
-  //         });
-  //       } else {
-  //        reject();
-  //       }
-  //     });
-  //   });
-
-  //   return promise;
-
-  // }
-
-
   ingresar() {
+
+
+    //    console.log(this.rutadeQR);
     // loading mientras se crea el usuario
     swal({
       title: 'Cargando un momento...',
@@ -65,9 +59,16 @@ export class LoginComponent implements OnInit {
         showConfirmButton: true
       });
 
-      console.log('enrutameitno');
 
-      this.ruta.navigate(['principal']);
+      console.log(this.rutadeQR, 'ENTRO');
+
+      if (this.rutadeQR) {
+        console.log(this.rutadeQR, 'VAMO PA ALLA');
+        this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
+      } else {
+        this.ruta.navigate(['principal']);
+      }
+
 
 
     }).catch(error => {
@@ -85,6 +86,8 @@ export class LoginComponent implements OnInit {
 
 
   ingresarEmail(em, ps) {
+
+    this.rutadeQR = this.rout.snapshot.paramMap.get('codigo');
 
     if (em.invalid || ps.invalid) {
 
@@ -114,7 +117,15 @@ export class LoginComponent implements OnInit {
                 showConfirmButton: true
               });
 
-              this.ruta.navigate(['principal']);
+              console.log(this.rutadeQR, 'ENTRO');
+
+              if (this.rutadeQR) {
+                console.log(this.rutadeQR, 'VAMO PA ALLA');
+                this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
+              } else {
+                this.ruta.navigate(['principal']);
+              }
+
 
             } else {
 

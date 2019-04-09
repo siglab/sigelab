@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { Modulo2Service } from '../services/modulo2.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 import { Router } from '@angular/router';
+import { EDIFICIOSMELENDEZ } from './edificios';
 declare var $: any;
 
 
@@ -33,8 +34,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   dispo;
   idnewSp;
   status;
+  fcu = false;
   mensaje = false;
+  edificios = [];
   ocupacionAct;
+  laboratorio;
   idlab;
   idsh;
   itemsel: Observable<Array<any>>;
@@ -48,15 +52,17 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     capacity: 0,
     createdAt: '',
     freeArea: 0,
-    headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
+    headquarter: '',
     subHq: '',
     indxSa: 0,
     map: '',
     minArea: 0,
     ocupedArea: 0,
     totalArea: 0,
-    spaceData: { building: '', place: '', floor: '' },
-    active: false
+    outcampus : false,
+    spaceData: { building: '', place: 0,
+     floor: '', descripcion : '', direccion: '' , ciudad:  '' },
+    active: true
   };
 
   horariopractica;
@@ -77,6 +83,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   user = this.servicioMod2.getLocalStorageUser();
   lab: any;
+  otraSede: boolean;
 
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
@@ -185,7 +192,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     const promise = new Promise((resolve, reject) => {
       this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
-
+        this.laboratorio = labo.data();
         let estadoLab;
         if (laboratorio.active === true) {
           estadoLab = 'Activo';
@@ -200,6 +207,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           uid: key
         };
 
+        this.listSubHq();
         resolve();
 
       });
@@ -285,6 +293,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               indxSa: espacio.indxSa,
               map: espacio.map,
               minArea: espacio.minArea,
+              outcampus: espacio.outcampus,
               ocupedArea: espacio.ocupedArea,
               totalarea: espacio.totalArea,
               spaceData: espacio.spaceData,
@@ -342,7 +351,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.spaceData.floor = item.spaceData.floor;
     this.space.spaceData.place = item.spaceData.place;
     this.space.map = item.map;
-    this.space.active = item.active;
+    this.space.spaceData.descripcion = item.spaceData.descripcion;
+    this.space.spaceData.ciudad = item.spaceData.ciudad;
+    this.space.spaceData.direccion = item.spaceData.direccion;
+    this.space.outcampus = item.outcampus;
 
     console.log('capacidad a', item.capacity);
     // optener datos un espacio especifico
@@ -386,17 +398,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
-  setSpace() {
+  setSpace( nombre ) {
 
-    if (!this.space.spaceData.building && !this.space.spaceData.place && !this.space.spaceData.floor  ) {
-
-      swal({
-        type: 'info',
-        title: 'Hay campos vacíos importantes.',
-        showConfirmButton: true
-      });
-
-    } else {
 
       swal({
         type: 'info',
@@ -408,6 +411,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       }) .then( val => {
          if (val.value) {
 
+
+          if (this.space.spaceData.descripcion !== '') {
+
+            this.space.outcampus = true ;
+
+          }
 
            this.alert.show();
            console.log('acepto guardar');
@@ -441,7 +450,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
 
-    }
 
 
   }
@@ -510,11 +518,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
 
-  listSubHq(sede) {
-    this.alert.show();
-    this.spServ.listSubHq(sede).subscribe(res => {
+  listSubHq() {
+
+    this.space.headquarter = this.laboratorio.headquarter;
+    this.spServ.listSubHq(this.laboratorio.headquarter).subscribe(res => {
       this.subsedes = res;
-      this.alert.hide();
+
     });
 
   }
@@ -687,19 +696,20 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // valida si ya existe un espacio para que pueda ser vinculado
-  spaceCheck(ed, sp) {
+  spaceCheck( espacio ) {
     this.idnewSp = '';
 
-    console.log(ed, sp);
+    console.log(espacio);
+    const edificio = this.space.spaceData.building;
 
-    if (ed.trim() === '' || sp.trim() === '') {
+    if ( espacio.trim() === '') {
       this.status = 'Campo obligatorio';
       // this.dispo = false;
     } else {
       this.status = 'Buscando espacio ...';
-      this.servicioMod2.getEspaceForBuildAndPlace(ed, sp).then((snapShot) => {
+      this.servicioMod2.getEspaceForBuildAndPlace( edificio, espacio ).then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'Espacio no encontrado, ingrese los datos de forma manual';
+          this.status = 'Espacio no encontrado';
           this.dispo = true;
         } else {
           console.log(snapShot.docs[0].id);
@@ -711,9 +721,56 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     }
   }
 
-  getIdSubHq(id) {
-    console.log('llego este id', id);
-    this.idsh = id;
+  getIdSubHq(item) {
+
+
+  const sede =  JSON.parse(item);
+  this.fcu = false;
+  this.otraSede = false;
+
+   this.idsh = sede.id;
+
+     switch (sede.cfAddrline2) {
+
+       case 'Ciudad Universitaria Meléndez': {
+
+        this.edificios = EDIFICIOSMELENDEZ;
+        break;
+      }
+
+       case 'San Fernando': {
+        this.edificios = [];
+        this.otraSede = true;
+         break;
+      }
+
+      case 'Palmira': {
+        this.edificios = [];
+        this.otraSede = true;
+         break;
+      }
+
+      case 'Fuera del campus universitario': {
+
+        this.fcu = true;
+        break;
+      }
+
+
+
+
+       default:
+       break;
+    }
+
+  }
+
+
+  setEdificio( value) {
+
+    this.space.spaceData.building = value;
+
+    console.log(value);
   }
 
   /* setea campos del objeto */
@@ -728,7 +785,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.ocupedArea = 0;
     this.space.spaceData.building = '';
     this.space.spaceData.floor = '';
-    this.space.spaceData.place = '';
+    this.space.spaceData.place = 0;
   }
 
 
@@ -846,8 +903,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         if (item[key]) {
           cont++;
         }
-
-
       }
 
     }

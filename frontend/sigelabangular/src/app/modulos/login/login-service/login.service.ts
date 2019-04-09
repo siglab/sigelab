@@ -40,10 +40,10 @@ export class LoginService {
           this.restaurarSesion(user).then(() => {
             resolve();
           }).catch(() => {
-           reject();
+            reject();
           });
         } else {
-         reject();
+          reject();
         }
       });
     });
@@ -126,6 +126,7 @@ export class LoginService {
     sessionStorage.removeItem('laboratorios');
     sessionStorage.removeItem('permisos');
     sessionStorage.removeItem('nivel2');
+    localStorage.setItem('logout', 'true');
     return this.afAuth.auth.signOut();
   }
 
