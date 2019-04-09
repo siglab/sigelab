@@ -3,8 +3,6 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import swal from 'sweetalert2';
-import { LoginService } from '../../login/login-service/login.service';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as $AB from 'jquery';
 import 'fullcalendar';
@@ -17,6 +15,10 @@ import { Modulo2Service } from '../services/modulo2.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 import { Router } from '@angular/router';
 import { EDIFICIOSMELENDEZ } from './edificios';
+import { FormControl, NgForm } from '@angular/forms';
+
+import { map } from 'rxjs/operators/map';
+import { startWith } from 'rxjs/operators';
 declare var $: any;
 
 
@@ -84,6 +86,10 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   user = this.servicioMod2.getLocalStorageUser();
   lab: any;
   otraSede: boolean;
+  myControl: FormControl = new FormControl();
+  filteredOptions: Observable<string[]>;
+
+
 
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
@@ -100,6 +106,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
     this.initDataComponent();
+
+
+    this.filteredOptions = this.myControl.valueChanges
+    .pipe(
+      startWith(''),
+
+      map(val => this.filter(val))
+    );
 
 
   }
@@ -123,6 +137,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.idlab = data.uid;
           this.dataSourceSpace.data = (this.espaestructurado.espacios);
           // this.listSubHq();
+
+
+
 
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -186,6 +203,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+
+  filter(val: string): string[] {
+    return this.edificios.filter(option =>
+      option.toLowerCase().indexOf(val.toLowerCase()) === 0);
   }
 
   estructuraEspacio(key) {
@@ -398,7 +421,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
-  setSpace( nombre ) {
+  setSpace(formulario: NgForm) {
+
+
 
 
       swal({
@@ -418,8 +443,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
           }
 
-           this.alert.show();
-           console.log('acepto guardar');
+          this.alert.show();
+          this.space.spaceData.building = this.myControl.value;
+
           const nuevoespacio = this.space;
           nuevoespacio.subHq = this.idsh;
           this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
@@ -438,7 +464,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
                 type: 'success',
                 title : 'Almacenado correctamente',
                 text: 'Datos guardados correctamente.',
-                showConfirmButton: true
+                showConfirmButton: true,
+                timer : 1800
+              }).then( () => {
+
+                this.myControl.setValue('');
+                formulario.resetForm();
+
+
               });
           });
 
@@ -448,14 +481,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       });
 
 
-
-
-
-
   }
 
   actualizarEspacio() {
 
+
+    this.space.spaceData.building = this.myControl.value;
     const nuevoespacio = {
       capacity: this.space.capacity,
       createdAt: '',
@@ -699,25 +730,27 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   spaceCheck( espacio ) {
     this.idnewSp = '';
 
-    console.log(espacio);
-    const edificio = this.space.spaceData.building;
 
+   console.log(espacio);
+     const edificio = this.myControl.value;
+
+     console.log(edificio);
     if ( espacio.trim() === '') {
       this.status = 'Campo obligatorio';
-      // this.dispo = false;
-    } else {
+       this.dispo = false;
+     } else {
       this.status = 'Buscando espacio ...';
-      this.servicioMod2.getEspaceForBuildAndPlace( edificio, espacio ).then((snapShot) => {
-        if (snapShot.empty) {
-          this.status = 'Espacio no encontrado';
-          this.dispo = true;
-        } else {
+       this.servicioMod2.getEspaceForBuildAndPlace( edificio, espacio ).then((snapShot) => {
+       if (snapShot.empty) {
+         this.status = 'Espacio no encontrado';
+         this.dispo = true;
+       } else {
           console.log(snapShot.docs[0].id);
-          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
-          this.dispo = false;
-          this.idnewSp = snapShot.docs[0].id;
-        }
-      });
+         this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
+         this.dispo = false;
+         this.idnewSp = snapShot.docs[0].id;
+       }
+    });
     }
   }
 
@@ -732,23 +765,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
      switch (sede.cfAddrline2) {
 
-       case 'Ciudad Universitaria Meléndez': {
-
-        this.edificios = EDIFICIOSMELENDEZ;
-        break;
-      }
-
-       case 'San Fernando': {
-        this.edificios = [];
-        this.otraSede = true;
-         break;
-      }
-
-      case 'Palmira': {
-        this.edificios = [];
-        this.otraSede = true;
-         break;
-      }
 
       case 'Fuera del campus universitario': {
 
@@ -756,14 +772,27 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         break;
       }
 
+      default : {
 
+        console.log(sede.id);
+        this.servicioMod2.getEdificiosBySede(sede.id)
+        .then( res =>  {
 
+          console.log(res.data());
 
-       default:
-       break;
+          this.edificios = res.data().edificios;
+
+        });
+
+        break;
+      }
+
     }
 
   }
+
+
+
 
 
   setEdificio( value) {
@@ -916,6 +945,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/principal', {skipLocationChange: true})
     .then(() => this.router.navigate(['/principal/adminespacios']));
   }
+
+
 
 
 

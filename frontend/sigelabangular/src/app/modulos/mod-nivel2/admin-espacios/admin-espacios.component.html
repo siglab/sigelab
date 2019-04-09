@@ -18,16 +18,19 @@
           <div *ngIf="moduloNivel2" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
+
+
                 <button
                   data-toggle="modal"
                   (click)="clearObj()"
                   data-target="#modalespace"
                   style="float: right;"
                   class="btn btn-success"
-                  type="button"
-                >
+                  type="button">
                   Nuevo Espacio <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
+
+
               </div>
             </div>
           </div>
@@ -358,9 +361,8 @@
                         <div *ngIf="moduloNivel2" class="form-group">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label for="Activo" class="col-form-label"
-                                >Activo:</label
-                              >
+                              <label for="Activo" class="col-form-label">
+                                Activo:</label>
                             </div>
                           </div>
                           <div class="row">
@@ -483,7 +485,7 @@
           </div>
           <!-- /.box-header -->
           <div class="box-body">
-            <form id="form-work" name="form-work" #formSpace="ngForm">
+            <form id="form-work" #formSpace="ngForm" name="form-work" (ngSubmit)="setSpace(formSpace)" >
               <fieldset>
                 <!-- <div  class="col-md-12">
                   <mat-form-field>
@@ -511,65 +513,45 @@
                 </div>
 
                 <!-- espacios dentro del campus -->
-                <ng-container *ngIf="!fcu">
-                  <div class="col-md-12" *ngIf="!otraSede">
-                    <mat-form-field>
-                      <mat-select
-                        placeholder="Seleccione un edificio"
-                        (selectionChange)="setEdificio($event.value)"
-                        name="edificio"
-                        required>
-                        <mat-option
-                          *ngFor="let item of edificios"
-                          value="{{ item }}">
-                          {{ item }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
+             <ng-container *ngIf="!fcu">
+              <div class="col-md-12">
+                <mat-form-field>
 
-                  <div class="col-md-12" *ngIf="otraSede">
-                    <mat-form-field class="example-full-width">
-                      <input
-                        #build="ngModel"
-                        type="string"
-                        name="edificio"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.building"
-                        placeholder="Edificio"
-                        required />
-                    </mat-form-field>
-                    <mat-hint *ngIf="build.touched && build.invalid">
-                      <strong>Formato inválido</strong>
-                    </mat-hint>
-                  </div>
+                  <input type="text" placeholder="Seleccione un edificio" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                 </mat-form-field>
+              </div>
 
-                  <div class="col-md-12">
-                    <mat-form-field class="example-full-width">
-                      <input
-                        type="number"
-                        name="espacio"
-                        #sp
-                        matInput
-                        placeholder="Espacio"
-                        [(ngModel)]="this.space.spaceData.place"
-                        (focusout)="spaceCheck(sp.value)"
-                        required/>
-                    </mat-form-field>
-                    <span class="help-block"> {{ this.status }} </span>
-                  </div>
+                <div class="col-md-12">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      type="number"
+                      name="espacio"
+                      #sp
+                      matInput
+                      placeholder="Espacio"
+                      [(ngModel)]="this.space.spaceData.place"
+                      (focusout)="spaceCheck(sp.value)"
+                      required/>
+                  </mat-form-field>
+                  <span class="help-block"> {{ this.status }} </span>
+                </div>
 
-                  <div class="col-md-12">
-                    <mat-form-field class="example-full-width">
-                      <input
-                        type="number"
-                        name="planta"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.floor"
-                        placeholder="Planta"
-                        required />
-                    </mat-form-field>
-                  </div>
+                <div class="col-md-12">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      type="number"
+                      name="planta"
+                      matInput
+                      [(ngModel)]="this.space.spaceData.floor"
+                      placeholder="Planta"
+                      required />
+                  </mat-form-field>
+                </div>
                 </ng-container>
 
                 <!-- espacios fuera del campus universitario -->
@@ -627,11 +609,10 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <button
-                      *ngIf="!this.idnewSp && formSpace.valid"
-                      (click)="setSpace()"
+                     *ngIf="!this.idnewSp && formSpace.valid"
                       style="float: right;"
                       class="btn btn-success  "
-                      type="button">
+                      type="submit">
                       Guardar
                       <i class="fa fa-check"></i>
                     </button>
