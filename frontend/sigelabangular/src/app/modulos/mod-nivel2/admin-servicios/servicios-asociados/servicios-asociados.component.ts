@@ -136,7 +136,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
-    this.sus =  this.obs.currentObjectServAsoc.subscribe(data => {
+    this.sus = this.obs.currentObjectServAsoc.subscribe(data => {
       this.getRoles(data.roles);
       this.seleccion = true;
       this.moduloinfo = false;
@@ -149,60 +149,64 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         }
       });
 
-        if (data.length !== 0) {
+      if (data.length !== 0) {
 
-          this.lab_id = data.uid;
-          this.servicioMod2.getCollectionServicios(data.uid).then(servicios => {
+        this.lab_id = data.uid;
+        this.servicioMod2.getCollectionServicios(data.uid).then(servicios => {
 
-            this.servasocestructurados = this.estructurarDataServ(servicios);
-            this.servicioMod2.buscarLab(this.lab_id).then(labo => {
-              this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
+          this.servasocestructurados = this.estructurarDataServ(servicios);
+          this.servicioMod2.buscarLab(this.lab_id).then(labo => {
+            this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
 
-              if (this.servasocestructurados ) {
-                this.dataSource.data = this.servasocestructurados;
-                this.dataSourceEquip = new MatTableDataSource(this.equipos);
+            if (this.servasocestructurados) {
+              this.dataSource.data = this.servasocestructurados;
+              this.dataSourceEquip = new MatTableDataSource(this.equipos);
 
-                setTimeout(() => {
+              setTimeout(() => {
 
-                  this.dataSource.sort = this.sort;
-                  this.dataSource.paginator = this.paginator;
-                  // cierra loading luego de cargados los datos
+                this.dataSource.sort = this.sort;
+                this.dataSource.paginator = this.paginator;
+                // cierra loading luego de cargados los datos
 
-                  this.dataSourceEquip.sort = this.sortEquip;
-                  this.dataSourceEquip.paginator = this.paginatorEquip;
-                  if (this.servasocestructurados.length !== 0) {
-                    swal.close();
-                  } else {
-                    swal({
-                      type: 'error',
-                      title: 'No existen servicios asociados al laboratorio',
-                      showConfirmButton: true
-                    });
-                  }
+                this.dataSourceEquip.sort = this.sortEquip;
+                this.dataSourceEquip.paginator = this.paginatorEquip;
+                if (this.servasocestructurados.length !== 0) {
+                  swal.close();
+                } else {
+                  swal.close();
+                  swal({
+                    type: 'error',
+                    title: 'No existen servicios asociados al laboratorio',
+                    showConfirmButton: true,
+                    timer: 3000
+                  });
+                }
 
-                }, 1000);
+              }, 1000);
 
-              }
-            });
-
+            }
           });
-        } else {
-          swal({
-            type: 'error',
-            title: 'No se ha seleccionado ningún laboratorio',
-            showConfirmButton: true
-          });
-        }
 
-      });
+        });
+      } else {
+        swal.close();
+        swal({
+          type: 'error',
+          title: 'No se ha seleccionado ningún laboratorio',
+          showConfirmButton: true,
+          timer: 3000
+        });
+      }
+
+    });
   }
 
   ngOnDestroy() {
     this.sus.unsubscribe();
   }
 
-   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
-   getRoles(rol) {
+  // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
+  getRoles(rol) {
     this.moduloNivel2 = false;
     for (const clave in rol) {
       if (rol[clave]) {
@@ -245,7 +249,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     this.servasocestructurados = [];
 
-    data.forEach( doc => {
+    data.forEach(doc => {
       // convertir boolean a cadena de caracteres para estado del laboratorio
 
       const elemento = doc.data();
@@ -253,7 +257,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       let estadoServ;
       if (elemento.active === true) {
         estadoServ = 'Activo';
-      } else if ( elemento.active === false ) {
+      } else if (elemento.active === false) {
         estadoServ = 'Inactivo';
       }
 
@@ -291,7 +295,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         data.forEach(doc => {
           const element = doc.data();
 
-            variaciones.push({cfName: element.cfName, data: element, id: doc.id, active: element.active});
+          variaciones.push({ cfName: element.cfName, data: element, id: doc.id, active: element.active });
 
         });
 
@@ -390,7 +394,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     console.log(item);
     this.variation = undefined;
     this.campoCondicion = '';
-      /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
+    /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
     this.itemsel = item;
 
     if (item.infoServ.variaciones.length === 0) {
@@ -422,6 +426,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
 
   cambiarDatosEditar() {
+
     this.editar = true;
     this.botonEditar = true;
     this.srv.cfName = this.itemsel.nombreserv;
@@ -469,180 +474,242 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
       }
     });
 
+    if (this.validarDatosSrv(this.srv)) {
+      if (Object.keys(this.srv.relatedEquipments).length !== 0) {
+        this.servicioMod2.addServicio(this.srv).then(data => {
+          this.servicioMod2.Trazability(
+            this.user.uid, 'create', 'cfSrv', data.id, this.srv
+          ).then(() => {
 
-    this.servicioMod2.addServicio(this.srv).then(data => {
-      this.servicioMod2.Trazability(
-        this.user.uid, 'create', 'cfSrv', data.id, this.srv
-      ).then(() => {
-        console.log(data);
-        const objeto = {relatedServices: {}};
-        objeto.relatedServices[data.id] = true;
-        this.servicioMod2.Trazability(
-          this.user.uid, 'update', 'cfFacil', this.lab_id, objeto
-        ).then(() => {
-          this.servicioMod2.setDocLaboratorio(this.lab_id, objeto);
-          if (this.variaciones.length !== 0) {
-            for (let i = 0; i < this.variaciones.length; i++) {
-              const element = this.variaciones[i];
-              this.servicioMod2.addVariaciones(data.id, element).then(doc => {
-                // swal.close();
-                this.servicioMod2.TrazabilitySubCollection(
-                  this.user.uid, 'create', 'cfFacil', data.id, 'variations', doc.id, element
-                ).then(() => {
-                  if (i === this.variaciones.length - 1) {
-                    swal.close();
-                    swal({
-                      type: 'success',
-                      title: 'Creado correctamente',
-                      showConfirmButton: true
-                    }).then(() => {
-                      this.cerrarModal('modal2');
+            const objeto = { relatedServices: {} };
+            objeto.relatedServices[data.id] = true;
+            this.servicioMod2.Trazability(
+              this.user.uid, 'update', 'cfFacil', this.lab_id, objeto
+            ).then(() => {
+              this.servicioMod2.setDocLaboratorio(this.lab_id, objeto);
+              if (this.variaciones.length !== 0) {
+                for (let i = 0; i < this.variaciones.length; i++) {
+                  const element = this.variaciones[i];
+                  this.servicioMod2.addVariaciones(data.id, element).then(doc => {
+                    // swal.close();
+                    this.servicioMod2.TrazabilitySubCollection(
+                      this.user.uid, 'create', 'cfFacil', data.id, 'variations', doc.id, element
+                    ).then(() => {
+                      if (i === this.variaciones.length - 1) {
+                        swal.close();
+                        swal({
+                          type: 'success',
+                          title: 'Creado correctamente',
+                          showConfirmButton: true,
+                          timer: 3000
+                        }).then(() => {
+                          this.cerrarModal('modal2');
+                        });
+                      }
                     });
-                  }
+                  });
+                }
+              } else {
+                swal({
+                  type: 'success',
+                  title: 'Creado correctamente',
+                  showConfirmButton: true,
+                  timer: 3000
+                }).then(() => {
+                  this.cerrarModal('modal2');
                 });
+              }
+
+              this.selection.selected.forEach((element) => {
+                const srvEquip = {
+                  relatedSrv: {}
+                };
+                if (element.id) {
+                  srvEquip.relatedSrv[data.id] = true;
+                  this.servicioMod2.Trazability(
+                    this.user.uid, 'update', 'cfEquip', element.id, srvEquip
+                  ).then(() => {
+                    this.servicioMod2.setEquipo(element.id, srvEquip);
+                  });
+                }
               });
-            }
-          } else {
-            swal({
-              type: 'success',
-              title: 'Creado correctamente',
-              showConfirmButton: true
-            }).then(() => {
-              this.cerrarModal('modal2');
             });
-          }
 
-          this.selection.selected.forEach((element) => {
-            const srvEquip = {
-              relatedSrv: {}
-            };
-            if (element.id) {
-              srvEquip.relatedSrv[data.id] = true;
-              this.servicioMod2.Trazability(
-                this.user.uid, 'update', 'cfEquip', element.id, srvEquip
-              ).then(() => {
-                this.servicioMod2.setEquipo(element.id, srvEquip);
-              });
-            }
           });
+
         });
+      } else {
+        swal.close();
+        swal({
+          type: 'error',
+          title: 'Debe agregar almenos un equipo al servicio',
+          showConfirmButton: true,
+          timer: 3000
+        });
+      }
 
+    } else {
+      swal.close();
+      swal({
+        type: 'error',
+        title: 'Debe diligenciar los campos nombre, descripcion y precio',
+        showConfirmButton: true,
+        timer: 3000
       });
+    }
 
-    });
 
+  }
+
+
+  validarDatosSrv(srv) {
+    let bol = true;
+    if (srv.cfName.trim() === '' || srv.cfDesc.trim() === '' || srv.cfPrice === 0) {
+      bol = false;
+    }
+    return bol;
   }
 
   editarServicio() {
     const fecha = new Date();
-    for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
-      const equipo = this.itemsel.infoServ.equipos[i];
-      this.srv.relatedEquipments[equipo.id] = true;
+    if (this.validarDatosSrv(this.srv)) {
+      if (this.itemsel.infoServ.equipos.length !== 0) {
+        for (let i = 0; i < this.itemsel.infoServ.equipos.length; i++) {
+          const equipo = this.itemsel.infoServ.equipos[i];
+          this.srv.relatedEquipments[equipo.id] = true;
 
-      const srvequip = {
-        relatedSrv: {}
-      };
+          const srvequip = {
+            relatedSrv: {}
+          };
 
-      srvequip.relatedSrv[this.itemsel.infoServ.uid] = true;
-      this.servicioMod2.Trazability(
-        this.user.uid, 'update', 'cfEquip', equipo.id, srvequip
-      ).then(() => {
-        this.servicioMod2.setEquipo(equipo.id, srvequip);
-      });
+          srvequip.relatedSrv[this.itemsel.infoServ.uid] = true;
+          this.servicioMod2.Trazability(
+            this.user.uid, 'update', 'cfEquip', equipo.id, srvequip
+          ).then(() => {
+            this.servicioMod2.setEquipo(equipo.id, srvequip);
+          });
 
-    }
-    this.srv.cfFacil = this.lab_id;
-    this.srv.updatedAt = fecha.toISOString();
-
-
-    swal({
-      title: 'Cargando un momento...',
-      text: 'Espere mientras se cargan los datos',
-      onOpen: () => {
-        swal.showLoading();
-      }
-    });
-
-    this.servicioMod2.Trazability(
-      this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, this.srv
-    ).then(() => {
-      this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(() => {
+        }
+        this.srv.cfFacil = this.lab_id;
+        this.srv.updatedAt = fecha.toISOString();
 
 
-        for (let j = 0; j < this.variaciones.length; j++) {
-          const variacion = this.variaciones[j];
-          if (variacion.id === 'nuevo') {
-            this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(doc => {
-              this.servicioMod2.TrazabilitySubCollection(
-                this.user.uid, 'create', 'cfSrv', this.itemsel.infoServ.uid, 'variations', doc.id, variacion.data
-              ).then(() => {
+        swal({
+          title: 'Cargando un momento...',
+          text: 'Espere mientras se cargan los datos',
+          onOpen: () => {
+            swal.showLoading();
+          }
+        });
+
+        this.servicioMod2.Trazability(
+          this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, this.srv
+        ).then(() => {
+          this.servicioMod2.updateServicio(this.itemsel.infoServ.uid, this.srv).then(() => {
+
+
+            for (let j = 0; j < this.variaciones.length; j++) {
+              const variacion = this.variaciones[j];
+              if (variacion.id === 'nuevo') {
+                this.servicioMod2.addVariaciones(this.itemsel.infoServ.uid, variacion.data).then(doc => {
+                  this.servicioMod2.TrazabilitySubCollection(
+                    this.user.uid, 'create', 'cfSrv', this.itemsel.infoServ.uid, 'variations', doc.id, variacion.data
+                  );
+
+                });
+              } else {
+                this.servicioMod2.TrazabilitySubCollection(
+                  this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations', variacion.id, variacion.data
+                ).then(() => {
+                  this.servicioMod2.updateVariciones(this.itemsel.infoServ.uid, variacion.id, variacion.data);
+                });
+              }
+
+
+              if (j === this.variaciones.length - 1) {
                 swal.close();
                 swal({
                   type: 'success',
                   title: 'Editado correctamente',
-                  showConfirmButton: true
+                  showConfirmButton: true,
+                  timer: 3000
                 }).then(() => {
                   this.variaciones = [];
                   this.cerrarModal('modal1');
                 });
+
+              }
+
+            }
+
+            for (let i = 0; i < this.variacionesCambiadas.length; i++) {
+              this.servicioMod2.TrazabilitySubCollection(
+                this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations',
+                this.variacionesCambiadas[i].id,
+                { active: this.variacionesCambiadas[i].active }
+              ).then(() => {
+                this.servicioMod2.setVariaciones(
+                  this.itemsel.infoServ.uid,
+                  this.variacionesCambiadas[i].id,
+                  { active: this.variacionesCambiadas[i].active });
+
+                if (i === this.variacionesCambiadas.length - 1) {
+                  this.variacionesCambiadas = [];
+                }
               });
 
-            });
-          } else {
-            this.servicioMod2.TrazabilitySubCollection(
-              this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations', variacion.id, variacion.data
-            ).then(() => {
-              this.servicioMod2.updateVariciones(this.itemsel.infoServ.uid , variacion.id, variacion.data);
-            });
-          }
+            }
 
 
-          if (j === this.variaciones.length - 1) {
             swal.close();
             swal({
               type: 'success',
-              title: 'Editado correctamente',
-              showConfirmButton: true
+              title: 'Servicio editado correctamente',
+              showConfirmButton: true,
+              timer: 3000
             }).then(() => {
               this.variaciones = [];
               this.cerrarModal('modal1');
             });
 
-          }
 
-        }
-
-        for (let i = 0; i < this.variacionesCambiadas.length; i++) {
-          this.servicioMod2.TrazabilitySubCollection(
-            this.user.uid, 'update', 'cfSrv', this.itemsel.infoServ.uid, 'variations',
-            this.variacionesCambiadas[i].id,
-            {active: this.variacionesCambiadas[i].active}
-          ).then(() => {
-            this.servicioMod2.setVariaciones(
-              this.itemsel.infoServ.uid,
-              this.variacionesCambiadas[i].id,
-              {active: this.variacionesCambiadas[i].active});
-
-              if (i === this.variacionesCambiadas.length - 1) {
-                this.variacionesCambiadas = [];
-              }
           });
+        });
 
-        }
-
-
+      } else {
+        swal({
+          type: 'error',
+          title: 'Debe agregar almenos un equipo al servicio',
+          showConfirmButton: true,
+          timer: 3000
+        });
+      }
+    } else {
+      swal({
+        type: 'error',
+        title: 'Debe diligenciar los campos nombre, descripcion y precio',
+        showConfirmButton: true,
+        timer: 3000
       });
-    });
-
-
+    }
 
 
   }
 
 
   agregarCondicion() {
-    this.srv.cfCondition.push(this.condicion);
-    this.condicion = '';
+    if (this.condicion.trim() !== '') {
+      this.srv.cfCondition.push(this.condicion);
+      this.condicion = '';
+    } else {
+      swal({
+        type: 'error',
+        title: 'Ingrese una condición',
+        showConfirmButton: true,
+        timer: 3000
+      });
+    }
+
   }
 
   quitarCondicion(index) {
@@ -650,12 +717,32 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   agregarParametro(servar) {
+
     if (servar === 'servicio') {
-      this.listaParametrosServicio.push(this.parametro);
-      this.parametro = '';
+      if (this.parametro.trim() !== '') {
+        this.listaParametrosServicio.push(this.parametro);
+        this.parametro = '';
+      } else {
+        swal({
+          type: 'error',
+          title: 'Ingrese un parametro',
+          showConfirmButton: true,
+          timer: 3000
+        });
+      }
+
     } else {
-      this.listaParametrosVariacion.push(this.parametroVar);
-      this.parametroVar = '';
+      if (this.parametroVar.trim() !== '') {
+        this.listaParametrosVariacion.push(this.parametroVar);
+        this.parametroVar = '';
+      } else {
+        swal({
+          type: 'error',
+          title: 'Ingrese un parametro',
+          showConfirmButton: true
+        });
+      }
+
     }
   }
 
@@ -669,11 +756,30 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   agregarParametroEdit(servar) {
     if (servar === 'servicio') {
-      this.srv.parametros.push(this.parametro);
-      this.parametro = '';
+      if (this.parametro.trim() !== '') {
+        this.srv.parametros.push(this.parametro);
+        this.parametro = '';
+      } else {
+        swal({
+          type: 'error',
+          title: 'Ingrese un parametro',
+          showConfirmButton: true,
+          timer: 3000
+        });
+      }
+
     } else {
-      this.objectvariation.parametros.push(this.parametroVar);
-      this.parametroVar = '';
+      if (this.parametro.trim() !== '') {
+        this.objectvariation.parametros.push(this.parametroVar);
+        this.parametroVar = '';
+      } else {
+        swal({
+          type: 'error',
+          title: 'Ingrese un parametro',
+          showConfirmButton: true
+        });
+      }
+
     }
   }
 
@@ -686,8 +792,18 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   agregarCondicionVariacion() {
-    this.objectvariation.cfConditions.push(this.condicionvar);
-    this.condicionvar = '';
+    if (this.condicionvar.trim() !== '') {
+      this.objectvariation.cfConditions.push(this.condicionvar);
+      this.condicionvar = '';
+    } else {
+      swal({
+        type: 'error',
+        title: 'Ingrese una condición',
+        showConfirmButton: true,
+        timer: 3000
+      });
+    }
+
   }
 
   quitarCondicionVariacion(index) {
@@ -706,21 +822,41 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.objectvariation.createdAt = fecha.toISOString();
     this.objectvariation.updateAt = fecha.toISOString();
     this.objectvariation.parametros = this.listaParametrosVariacion;
-    if (!this.editar) {
-      this.variaciones.push(this.objectvariation);
+
+    if (this.validarVariacion(this.objectvariation)) {
+      if (!this.editar) {
+        this.variaciones.push(this.objectvariation);
+      } else {
+        this.variaciones.push({ cfName: this.objectvariation.cfName, data: this.objectvariation, id: 'nuevo' });
+      }
+
+      this.inicializarVariacion();
+
+      swal({
+        type: 'success',
+        title: 'Variación agregada',
+        showConfirmButton: true,
+        timer: 3000
+      });
     } else {
-      this.variaciones.push({cfName: this.objectvariation.cfName, data: this.objectvariation, id: 'nuevo'});
+      swal({
+        type: 'error',
+        title: 'Debe diligenciar los campos nombre, descripcion y precio',
+        showConfirmButton: true,
+        timer: 3000
+      });
     }
 
-    this.inicializarVariacion();
 
-    swal({
-      type: 'success',
-      title: 'Variación agregada',
-      showConfirmButton: true
-    });
+  }
 
+  validarVariacion(variation) {
+    let bol = true;
+    if (variation.cfName.trim() === '' || variation.cfDescription.trim() === '' || variation.cfPrice === 0) {
+      bol = false;
+    }
 
+    return bol;
   }
 
   quitarVariacion(index) {
@@ -732,13 +868,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     let indice = 0;
     this.variacionesCambiadas.forEach((doc, index) => {
       if (doc.id === this.variaciones[pos].id) {
-       encontrado = true;
-       indice = index;
+        encontrado = true;
+        indice = index;
       }
     });
 
     if (!encontrado) {
-      this.variacionesCambiadas.push({id: this.variaciones[pos].id, active: !active});
+      this.variacionesCambiadas.push({ id: this.variaciones[pos].id, active: !active });
     } else {
       this.variacionesCambiadas[indice].active = !active;
     }
@@ -748,24 +884,44 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     swal({
       type: 'success',
       title: 'Exito, se cambio el estado de la variación',
-      showConfirmButton: true
+      showConfirmButton: true,
+      timer: 3000
     });
 
 
   }
 
   agregarEquipo() {
+
+    let bol = false;
+
     this.selection.selected.forEach((element) => {
+      const do2 = this.itemsel.infoServ.equipos.find(o => o.id === element.id);
+      if (!do2) {
+        this.itemsel.infoServ.equipos.push(element);
+        this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
+      } else {
+        bol = true;
+      }
 
-      this.itemsel.infoServ.equipos.push(element);
-      this.dataSourceEquipvin = new MatTableDataSource(this.itemsel.infoServ.equipos);
     });
 
-    swal({
-      type: 'success',
-      title: 'Equipo agregado',
-      showConfirmButton: true
-    });
+    if (bol) {
+      swal({
+        type: 'success',
+        title: 'Algunos equipos seleccionados ya se encuentran agregados',
+        showConfirmButton: true,
+        timer: 3000
+      });
+    } else {
+      swal({
+        type: 'success',
+        title: 'Equipo agregado',
+        showConfirmButton: true,
+        timer: 3000
+      });
+    }
+
 
   }
 
@@ -780,7 +936,8 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           swal({
             type: 'error',
             title: 'Equipo retirado',
-            showConfirmButton: true
+            showConfirmButton: true,
+            timer: 3000
           });
         }
 

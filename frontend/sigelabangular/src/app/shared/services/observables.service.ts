@@ -11,17 +11,17 @@ export class ObservablesService {
   constructor(private afs: AngularFirestore) { }
 
 
-  consultarNotificaciones(id){
+  consultarNotificaciones(id) {
 
     const col = this.afs.collection('user').doc(id).collection('notification',
-     ref => ref.where('estado','==','sinver'));
+     ref => ref.where('estado', '==', 'sinver'));
 
     return col.snapshotChanges();
   }
 
-  finalizarNotificacion(user, id){
+  finalizarNotificacion(user, id) {
 
-    return this.afs.collection('user').doc(user).collection('notification').doc(id).update({estado:'visto'});
+    return this.afs.collection('user').doc(user).collection('notification').doc(id).update({estado: 'visto'});
   }
 
 

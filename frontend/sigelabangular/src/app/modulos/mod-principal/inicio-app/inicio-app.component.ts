@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 declare var $: any;
 import * as AOS from 'aos';
 import { SabsService } from '../../../shared/services/sabs/sabs.service';
+import { ServicesNivel3Service } from '../../mod-nivel3/services/services-nivel3.service';
+import { LoginService } from '../../login/login-service/login.service';
 
 @Component({
   selector: 'app-inicio-app',
@@ -10,19 +12,25 @@ import { SabsService } from '../../../shared/services/sabs/sabs.service';
   styleUrls: ['./inicio-app.component.css']
 })
 export class InicioAppComponent implements OnInit {
-  constructor(private router: Router, private servicioSabs: SabsService) {
+  constructor(private router: Router, private servicioSabs: SabsService, private local: ServicesNivel3Service,
+              private login: LoginService) {
     console.log('Prueba Servicio SABS');
-    this.servicioSabs.buscarEquip('05317500').then(
-      dataEquip => {
-        console.log('Consulta Equip en SABS: ', dataEquip);
-      }
-    ).catch(error => {
-      console.log('Error al consultar Equip en SABS: ', error);
-    });
   }
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
+    if (this.local.getLocalStorageUser()) {
+      this.router.navigate(['principal']);
+    } else {
+      this.login.verificarUsuario().then(() => {
+        console.log('VERIFICO');
+        setTimeout(() => {
+          console.log('la ruta se va');
+          this.router.navigate(['principal']);
+        }, 1000);
+      });
+    }
+
   }
 
   goContactSec(): void {

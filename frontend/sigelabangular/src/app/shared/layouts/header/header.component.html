@@ -32,7 +32,7 @@
         </li>
         <li class="messages-menu" *ngIf="!itemLogout">
           <a
-            [routerLink]="['/login']"
+            (click)="routerLogin()"
             class="btn "
             title="Ingresar"
             id="logout"

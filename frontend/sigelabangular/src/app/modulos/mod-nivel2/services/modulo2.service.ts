@@ -27,7 +27,7 @@ export class Modulo2Service {
     return this.afs.doc('cfPers/' + iddirector).ref.get();
   }
 
-   // METODO QUE TRAE UNA SEDE ESPECIFICA DEPENDIENDO EL ID-SEDE
+  // METODO QUE TRAE UNA SEDE ESPECIFICA DEPENDIENDO EL ID-SEDE
   buscarSede(idsede) {
     return this.afs.doc('headquarter/' + idsede).ref.get();
   }
@@ -37,73 +37,73 @@ export class Modulo2Service {
     return this.afs.doc('cfPAddr/' + idsub).ref.get();
   }
 
-  buscarEspacio(idesp){
+  buscarEspacio(idesp) {
     return this.afs.doc('space/' + idesp).ref.get();
   }
 
-  buscarServicio(idser){
+  buscarServicio(idser) {
     return this.afs.doc('cfSrv/' + idser).ref.get();
   }
 
-  buscarVariacion(idser, idvar){
-    return  this.afs.doc('cfSrv/' + idser + '/variations/' + idvar).ref.get();
+  buscarVariacion(idser, idvar) {
+    return this.afs.doc('cfSrv/' + idser + '/variations/' + idvar).ref.get();
   }
 
-  buscarPractica(idprac){
-    return this.afs.doc('practice/' + idprac).ref.get()
+  buscarPractica(idprac) {
+    return this.afs.doc('practice/' + idprac).ref.get();
   }
 
-  buscarProgramacion(idprac){
-    return this.afs.doc('practice/' + idprac ).collection('programmingData').ref.get();
+  buscarProgramacion(idprac) {
+    return this.afs.doc('practice/' + idprac).collection('programmingData').ref.get();
   }
 
-  buscarEquipo(idequip){
+  buscarEquipo(idequip) {
     return this.afs.doc('cfEquip/' + idequip).ref.get();
   }
 
-  buscarProyectos(idproy){
+  buscarProyectos(idproy) {
     return this.afs.doc('project/' + idproy).ref.get();
   }
 
-  buscarFacultad(idfac){
+  buscarFacultad(idfac) {
     return this.afs.doc('faculty/' + idfac).ref.get();
   }
 
-  buscarDepartamento(idfac, iddepar){
-    return  this.afs.doc('faculty/' + idfac).collection('departments').doc(iddepar).ref.get();
+  buscarDepartamento(idfac, iddepar) {
+    return this.afs.doc('faculty/' + idfac).collection('departments').doc(iddepar).ref.get();
   }
 
-  buscarTelefono(idlab){
-    return this.afs.doc('cfFacil/'+idlab).collection('cfEAddr').ref.get();
+  buscarTelefono(idlab) {
+    return this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get();
   }
 
-  buscarComponente(idequip){
+  buscarComponente(idequip) {
     return this.afs.collection('cfEquip/' + idequip + '/components').ref.get();
   }
 
-  buscarPersona(idpers){
+  buscarPersona(idpers) {
     return this.afs.doc('cfPers/' + idpers).ref.get();
   }
 
-  buscarUsuario(iduser){
+  buscarUsuario(iduser) {
     return this.afs.doc('user/' + iduser).ref.get();
   }
 
 
-  buscarUsuarioNivel3(){
+  buscarUsuarioNivel3() {
     const col = this.afs.collection('user');
-    const refer = col.ref.where('appRoles.lCpNW2BmPgMSHCD1EBpT','==',true);
+    const refer = col.ref.where('appRoles.lCpNW2BmPgMSHCD1EBpT', '==', true);
     return refer.get();
   }
 
-  buscarUsuarioNivel25(){
+  buscarUsuarioNivel25() {
     const col = this.afs.collection('user');
-    const refer = col.ref.where('appRoles.PFhLR4X2n9ybaZU3CR75','==',true);
+    const refer = col.ref.where('appRoles.PFhLR4X2n9ybaZU3CR75', '==', true);
     return refer.get();
   }
 
 
-  getSedes(){
+  getSedes() {
     return this.afs.collection('headquarter').ref.get();
   }
 
@@ -112,15 +112,15 @@ export class Modulo2Service {
     return this.afs.collection('cfPAddr').ref.get();
   }
 
-  getFacultades(){
+  getFacultades() {
     return this.afs.collection('faculty').ref.get();
   }
 
-  getDepartamentos(idfac){
-    return this.afs.doc('faculty/'+idfac).collection('departments').ref.get()
+  getDepartamentos(idfac) {
+    return this.afs.doc('faculty/' + idfac).collection('departments').ref.get();
   }
 
-  getVariaciones(idser){
+  getVariaciones(idser) {
     return this.afs.doc('cfSrv/' + idser).collection('variations').ref.get();
   }
 
@@ -133,29 +133,27 @@ export class Modulo2Service {
   }
 
 
-  getSolicitudesServiciosForId(id){
+  getSolicitudesServiciosForId(id) {
     const col = this.afs.collection('cfSrvReserv');
     const refer = col.ref.where('cfSrv', '==', id).where('status', '==', 'pendiente');
 
     return refer.get();
   }
 
-  getPracticesForIdEquipo(idEquip){
+  getPracticesForIdEquipo(idEquip) {
     const col = this.afs.collection('practice');
     const refer = col.ref.where('relatedEquipments.' + idEquip, '==', true);
-    return  refer.get()
+    return refer.get();
   }
 
-  getPracticesForIdEspacio(idSpace){
+  getPracticesForIdEspacio(idSpace) {
     const col = this.afs.collection('practice');
     const refer = col.ref.where('relatedSpaces.' + idSpace, '==', true);
     return refer.get();
   }
 
-  getEspaceForBuildAndPlace(edificio: string , espacio: string ){
+  getEspaceForBuildAndPlace(edificio: string, espacio: string) {
 
-
-  ;
     const place = parseInt( espacio, 10 );
     const col = this.afs.collection('space');
     const refer = col.ref.where('spaceData.building', '==', edificio)
@@ -163,17 +161,17 @@ export class Modulo2Service {
     return refer.get();
   }
 
-  getAppRoles(){
-    return  this.afs.collection('appRoles').ref.get();
+  getAppRoles() {
+    return this.afs.collection('appRoles').ref.get();
   }
 
-  getAppRoleForName(name){
+  getAppRoleForName(name) {
     const col = this.afs.collection('appRoles');
-    const refer = col.ref.where('roleName', '==',name);
+    const refer = col.ref.where('roleName', '==', name);
     return refer.get();
   }
 
-  getUserForEmail(email){
+  getUserForEmail(email) {
 
     const col = this.afs.collection('user').ref;
     const refer = col.where('email', '==', email);
@@ -181,14 +179,14 @@ export class Modulo2Service {
     return refer.get();
   }
 
-  getPersForEmail(email){
+  getPersForEmail(email) {
     const col = this.afs.collection('cfPers');
     const refer = col.ref.where('email', '==', email);
 
     return refer.get();
   }
 
-  getProyectForCi(ci){
+  getProyectForCi(ci) {
     const col = this.afs.collection('project');
     const refer = col.ref.where('ciNumber', '==', ci);
 
@@ -197,13 +195,13 @@ export class Modulo2Service {
 
   getCollectionServicios(labid) {
     const col = this.afs.collection('cfSrv');
-    const refer = col.ref.where('cfFacil', '==', labid)
+    const refer = col.ref.where('cfFacil', '==', labid);
 
     return refer.get();
   }
 
   getCollectionReservasServicios(labid) {
-    const col =  this.afs.collection('cfSrvReserv');
+    const col = this.afs.collection('cfSrvReserv');
     const refer = col.ref.where('cfFacil', '==', labid);
 
     return refer.get();
@@ -211,12 +209,12 @@ export class Modulo2Service {
 
   getCollectionSolicitudesMantenimiento(labid) {
     const col = this.afs.collection('request');
-    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('cfFacil','==',labid)
+    const refer = col.ref.where('requestType', '==', 'mantenimiento').where('cfFacil', '==', labid);
     return refer.get();
   }
 
-  getComponentForId(idequip, idcomp){
-    return  this.afs.collection('cfEquip/' + idequip + '/components').doc(idcomp).ref.get();
+  getComponentForId(idequip, idcomp) {
+    return this.afs.collection('cfEquip/' + idequip + '/components').doc(idcomp).ref.get();
   }
 
 
@@ -224,119 +222,121 @@ export class Modulo2Service {
 
   // METODOS DE MODIFICACION
 
-  updateDocLaboratorio(idlab, doc){
+  updateDocLaboratorio(idlab, doc) {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
 
   setDocLaboratorio(idlab, doc) {
 
-    return  this.afs.doc('cfFacil/' + idlab).set(doc, {merge: true});
+    return this.afs.doc('cfFacil/' + idlab).set(doc, { merge: true });
   }
 
-  updateEquip(idEquip, doc){
-    return this.afs.doc('cfEquip/'+idEquip).update(doc);
+  updateEquip(idEquip, doc) {
+    return this.afs.doc('cfEquip/' + idEquip).update(doc);
   }
 
-  setEquipo(idEquip, doc){
-    return  this.afs.doc('cfEquip/'+idEquip).set(doc,{merge:true});
+  setEquipo(idEquip, doc) {
+    return this.afs.doc('cfEquip/' + idEquip).set(doc, { merge: true });
   }
 
-  setEspacio(idSpace, doc){
+  setEspacio(idSpace, doc) {
     return this.afs.doc('space/' + idSpace).set(doc, { merge: true });
   }
 
-  setUser(iduser, doc){
+  setUser(iduser, doc) {
     return this.afs.collection('user').doc(iduser).set(doc, { merge: true });
   }
 
-  setPersona(idPers, doc){
+  setPersona(idPers, doc) {
     return this.afs.collection('cfPers/').doc(idPers).set(doc, { merge: true });
   }
 
-  updatePersona(idPers, doc){
+  updatePersona(idPers, doc) {
     return this.afs.collection('cfPers/').doc(idPers).update(doc);
   }
 
-  setPractica(idprac, doc){
+  setPractica(idprac, doc) {
     return this.afs.doc('practice/' + idprac).set(doc, { merge: true });
   }
 
-  setProgramacion(idprac, idprog, doc){
-    return  this.afs.doc('practice/' + idprac + '/programmingData/' + idprog).set(doc, { merge: true });
+  setProgramacion(idprac, idprog, doc) {
+    return this.afs.doc('practice/' + idprac + '/programmingData/' + idprog).set(doc, { merge: true });
   }
 
-  setProyecto(idproy, doc){
+  setProyecto(idproy, doc) {
     return this.afs.doc('project/' + idproy).set(doc, { merge: true });
   }
 
-  updateServicio(idsrv, doc){
+  updateServicio(idsrv, doc) {
     return this.afs.doc('cfSrv/' + idsrv).update(doc);
   }
 
-  updateVariciones(idsrv, idVar, doc){
+  updateVariciones(idsrv, idVar, doc) {
     return this.afs.collection('cfSrv/' + idsrv + '/variations').doc(idVar).update(doc);
   }
 
-  setVariaciones(idsrv, idVar, doc){
-    return this.afs.collection('cfSrv/' + idsrv + '/variations').doc(idVar).set(doc,{merge:true});
+  setVariaciones(idsrv, idVar, doc) {
+    return this.afs.collection('cfSrv/' + idsrv + '/variations').doc(idVar).set(doc, { merge: true });
   }
 
-  updateReservasServicios(idreserv, doc){
+  updateReservasServicios(idreserv, doc) {
     return this.afs.doc('cfSrvReserv/' + idreserv).update(doc);
   }
 
 
   // METODOS DE CREACION O ADICION
   addAddrLaboratorio(idlab, doc) {
-    return  this.afs.doc('cfFacil/' + idlab).collection('cfEAddr')
-                .add({cfClass: '68aa07f2-34c9-11e1-b86c-0800200c9a66',
-                      cfClassScheme: '1227a225-db7a-444d-a74b-3dd4b438b420', cfEAddrValue: doc});
+    return this.afs.doc('cfFacil/' + idlab).collection('cfEAddr')
+      .add({
+        cfClass: '68aa07f2-34c9-11e1-b86c-0800200c9a66',
+        cfClassScheme: '1227a225-db7a-444d-a74b-3dd4b438b420', cfEAddrValue: doc
+      });
   }
 
 
-  addESpacio(doc){
-    return  this.afs.collection('space').add(doc);
+  addESpacio(doc) {
+    return this.afs.collection('space').add(doc);
   }
 
-  addPersona(doc){
-    return  this.afs.collection('cfPers').add(doc);
+  addPersona(doc) {
+    return this.afs.collection('cfPers').add(doc);
   }
 
-  addPractica(doc){
-    return  this.afs.collection('practice').add(doc);
+  addPractica(doc) {
+    return this.afs.collection('practice').add(doc);
   }
 
-  addProgramacion(idprac, doc){
+  addProgramacion(idprac, doc) {
     return this.afs.doc('practice/' + idprac).collection('programmingData').add(doc);
   }
 
-  addProyecto(doc){
-    return  this.afs.collection('project').add(doc);
+  addProyecto(doc) {
+    return this.afs.collection('project').add(doc);
   }
 
-  addServicio(doc){
+  addServicio(doc) {
     return this.afs.collection('cfSrv').add(doc);
   }
 
-  addVariaciones(idsrv, doc){
-    return  this.afs.collection('cfSrv/' + idsrv + '/variations').add(doc);
+  addVariaciones(idsrv, doc) {
+    return this.afs.collection('cfSrv/' + idsrv + '/variations').add(doc);
   }
 
-  addSolicitudMantenimiento(doc){
-    return  this.afs.collection('request').add(doc);
+  addSolicitudMantenimiento(doc) {
+    return this.afs.collection('request').add(doc);
   }
 
 
-  enviarNotificacion(iduser, object){
-    return this.afs.doc('user/'+iduser).collection('notification').add(object);
+  enviarNotificacion(iduser, object) {
+    return this.afs.doc('user/' + iduser).collection('notification').add(object);
   }
 
 
   // METODOS DE ELIMINACION
 
-  deleteAddrLaboratorio(idlab, idAddr){
-    return  this.afs.doc('cfFacil/'+idlab).collection('cfEAddr')
-                .doc(idAddr).delete();
+  deleteAddrLaboratorio(idlab, idAddr) {
+    return this.afs.doc('cfFacil/' + idlab).collection('cfEAddr')
+      .doc(idAddr).delete();
   }
 
 
@@ -344,14 +344,15 @@ export class Modulo2Service {
 
   // METODO TRAZABILIDAD DE CAMBIOS
 
-  Trazability(user, type, collection, id, docIn){
+  Trazability(user, type, collection, id, docIn) {
     console.log('ejecuto');
     let size = 0;
     let cont = 1;
+    // tslint:disable-next-line:forin
     for (const key in docIn) {
       size++;
     }
-    let promise = new Promise((resolve, reject)=>{
+    const promise = new Promise((resolve, reject) => {
       let docAfter = {};
       this.afs.collection(collection).doc(id).ref.get().then(doc => {
         const documento = doc.data();
@@ -359,19 +360,19 @@ export class Modulo2Service {
 
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
-             docAfter[key] = docIn[key];
-             console.log(cont, size);
-             if(cont == size){
+            docAfter[key] = docIn[key];
+            console.log(cont, size);
+            if (cont === size) {
 
               console.log(documento, docAfter);
 
-              this.addTrazability(user, type, collection, id, documento, docAfter).then(()=>{
+              this.addTrazability(user, type, collection, id, documento, docAfter).then(() => {
                 resolve();
               });
 
-             }else{
+            } else {
               cont++;
-             }
+            }
 
           }
         }
@@ -385,58 +386,59 @@ export class Modulo2Service {
   }
 
 
-  TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn){
+  TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn) {
     console.log('ejecuto');
     let size = 0;
     let cont = 1;
+    // tslint:disable-next-line:forin
     for (const key in docIn) {
       size++;
     }
-    let promise = new Promise((resolve, reject)=>{
-      if(type != 'create'){
+    const promise = new Promise((resolve, reject) => {
+      if (type !== 'create') {
         let docAfter = {};
         this.afs.collection(collection).doc(idColl).collection(subColl).doc(idSub)
           .ref.get().then(doc => {
-          const documento = doc.data();
-          docAfter = doc.data();
+            const documento = doc.data();
+            docAfter = doc.data();
 
-          if(type != 'delete'){
-            for (const key in docIn) {
-              if (docIn.hasOwnProperty(key)) {
-                 docAfter[key] = docIn[key];
-                 console.log(cont, size);
-                 if(cont == size){
+            if (type !== 'delete') {
+              for (const key in docIn) {
+                if (docIn.hasOwnProperty(key)) {
+                  docAfter[key] = docIn[key];
+                  console.log(cont, size);
+                  if (cont === size) {
 
-                  console.log(documento, docAfter);
+                    console.log(documento, docAfter);
 
-                  this.addTrazability(
-                    user, type, collection+'/'+idColl+'/'+subColl, idSub,
-                    documento, docAfter).then(()=>{
-                    resolve();
-                  });
+                    this.addTrazability(
+                      user, type, collection + '/' + idColl + '/' + subColl, idSub,
+                      documento, docAfter).then(() => {
+                        resolve();
+                      });
 
-                 }else{
-                  cont++;
-                 }
+                  } else {
+                    cont++;
+                  }
 
+                }
               }
+            } else {
+              console.log(documento);
+              this.addTrazability(
+                user, type, collection + '/' + idColl + '/' + subColl, idSub, documento, {}).then(() => {
+                  resolve();
+                });
             }
-          } else {
-            console.log(documento);
-            this.addTrazability(
-              user, type, collection+'/'+idColl+'/'+subColl, idSub, documento, {}).then(()=>{
-              resolve();
-            });
-          }
 
 
-        });
+          });
       } else {
         this.addTrazability(
-          user, type, collection+'/'+idColl+'/'+subColl, idSub,
-          {}, docIn).then(()=>{
-          resolve();
-        });
+          user, type, collection + '/' + idColl + '/' + subColl, idSub,
+          {}, docIn).then(() => {
+            resolve();
+          });
 
       }
 
@@ -446,25 +448,25 @@ export class Modulo2Service {
   }
 
 
-  addTrazability(user, type, collection, iddoc, docAnt, docDes){
-    let promise = new Promise((resolve, reject) => {
+  addTrazability(user, type, collection, iddoc, docAnt, docDes) {
+    const promise = new Promise((resolve, reject) => {
       publicIp.v4().then(ip => {
         const logger = {
-          user:user,
-          type:type,
+          user: user,
+          type: type,
           ip: ip,
           relatedDoc: iddoc,
-          collectionName:collection,
+          collectionName: collection,
           currentVer: docDes,
-          previousVer:docAnt,
+          previousVer: docAnt,
           createdAt: new Date().toISOString()
         };
 
-      console.log(logger);
+        console.log(logger);
 
-      this.afs.collection('logger').add(logger).then(()=>{
-        resolve();
-      });
+        this.afs.collection('logger').add(logger).then(() => {
+          resolve();
+        });
       });
 
     });

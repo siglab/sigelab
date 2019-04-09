@@ -61,14 +61,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   fecha = new Date();
 
   constructor(private querys: QuerysAutenticadoService,
-              private observer: ObserverAutenticadoService,
-              private http: Http, private storage: AngularFireStorage) {
-
-   }
+    private observer: ObserverAutenticadoService,
+    private http: Http, private storage: AngularFireStorage ) {
+  }
 
   ngOnInit() {
-     // abre loading mientras se cargan los datos
-     $('html, body').animate({ scrollTop: '0px' }, 'slow');
+    // abre loading mientras se cargan los datos
+    $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     if (sessionStorage.getItem('usuario')) {
       this.alertaCargando();
@@ -86,7 +85,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
             this.dataSource2.paginator = this.paginator2;
 
             this.cerrarAlerta();
-           });
+          });
         } else {
           this.alertaError('No has solicitado servicios aun');
         }
@@ -96,6 +95,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
 
     }
+
+
 
 
 
@@ -147,7 +148,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
         this.valorParametro.push(element.value);
       }
 
-      this.condicion =  this.buscarCondicion(item);
+      this.condicion = this.buscarCondicion(item);
 
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
@@ -158,7 +159,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   }
 
 
-   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
+  // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarVariacion(item) {
     for (let i = 0; i < this.servsel.variaciones.length; i++) {
       const element = this.servsel.variaciones[i];
@@ -258,7 +259,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
           autor: 'usuario',
           email: this.user.email,
-          uid: this.user.uid});
+          uid: this.user.uid
+        });
 
         this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(() => {
           if (this.servsel.status !== 'pendiente') {
@@ -295,15 +297,15 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       emailLaboratorio = lab.payload.data().otros.email;
       emailAcepto = this.servsel.acepto;
       const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
-                      this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
-                      ' por el usuario con el correo ' + emailSolicitante + '. a continuacion vera el comentario: " ' +
-                      this.comentario + ' "';
+        this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
+        ' por el usuario con el correo ' + emailSolicitante + '. a continuacion vera el comentario: " ' +
+        this.comentario + ' "';
 
       this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
         emailEncargado = persona.payload.data().email;
         destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
         console.log(destino);
-        this.http.post(url, {para: destino, asunto: asunto, mensaje: mensaje}).subscribe((res) => {
+        this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
           if (res.status === 200) {
             // this.cerrarAlerta();
             this.alertaExito('Comentario enviado');

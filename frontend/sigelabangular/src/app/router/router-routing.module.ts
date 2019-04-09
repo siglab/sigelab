@@ -34,6 +34,7 @@ import { Nivel3Guard } from '../shared/services/guards/nivel3.guard';
 import { InicioAppComponent } from '../modulos/mod-principal/inicio-app/inicio-app.component';
 import { AdminUsuariosComponent } from '../modulos/mod-nivel3/admin-usuarios/admin-usuarios.component';
 import { QrRedirectComponent } from '../modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
+import { PrincipalGuard } from '../shared/services/guards/principal.guard';
 
 
 const routes: Routes = [
@@ -41,7 +42,7 @@ const routes: Routes = [
   { path: 'inventario', component: QrRedirectComponent },
   { path: 'inicio', component: InicioAppComponent},
   { path: 'registro', component: RegistroComponent},
-  { path: 'principal', component: PrincipalComponent,
+  { path: 'principal', component: PrincipalComponent, canActivate: [PrincipalGuard],
     children: [
       { path: 'busquedalaboratorio', component: BusLabComponent},
       { path: 'busquedaservicio', component: BusServComponent},

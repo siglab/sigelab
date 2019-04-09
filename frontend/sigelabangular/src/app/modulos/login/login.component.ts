@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from './login-service/login.service';
 import swal from 'sweetalert2';
 import { SidebarComponent } from '../../shared/layouts/sidebar/sidebar.component';
+import { ServicesNivel3Service } from '../mod-nivel3/services/services-nivel3.service';
 
 @Component({
   selector: 'app-login',
@@ -14,18 +15,33 @@ export class LoginComponent implements OnInit {
   email: string;
   pass: string;
 
-  constructor(private ruta: Router,
-    private _loginService: LoginService) { }
+  rutadeQR: any;
+
+  constructor(private ruta: Router, private rout: ActivatedRoute,
+    private _loginService: LoginService, private local: ServicesNivel3Service) { }
 
   ngOnInit() {
 
-    if (sessionStorage.getItem('usuario')) {
-      this.ruta.navigate(['principal']);
+    this.rout.queryParams.subscribe(re => {
+      this.rutadeQR = re['codigo'];
+    });
+
+    if (this.local.getLocalStorageUser()) {
+      if (this.rutadeQR) {
+        this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
+      } else {
+
+        this.ruta.navigate(['principal']);
+      }
     }
+
   }
 
 
   ingresar() {
+
+
+    //    console.log(this.rutadeQR);
     // loading mientras se crea el usuario
     swal({
       title: 'Cargando un momento...',
@@ -43,9 +59,16 @@ export class LoginComponent implements OnInit {
         showConfirmButton: true
       });
 
-      console.log('enrutameitno');
 
-      this.ruta.navigate(['principal']);
+      console.log(this.rutadeQR, 'ENTRO');
+
+      if (this.rutadeQR) {
+        console.log(this.rutadeQR, 'VAMO PA ALLA');
+        this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
+      } else {
+        this.ruta.navigate(['principal']);
+      }
+
 
 
     }).catch(error => {
@@ -63,6 +86,8 @@ export class LoginComponent implements OnInit {
 
 
   ingresarEmail(em, ps) {
+
+    this.rutadeQR = this.rout.snapshot.paramMap.get('codigo');
 
     if (em.invalid || ps.invalid) {
 
@@ -92,7 +117,15 @@ export class LoginComponent implements OnInit {
                 showConfirmButton: true
               });
 
-              this.ruta.navigate(['principal']);
+              console.log(this.rutadeQR, 'ENTRO');
+
+              if (this.rutadeQR) {
+                console.log(this.rutadeQR, 'VAMO PA ALLA');
+                this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
+              } else {
+                this.ruta.navigate(['principal']);
+              }
+
 
             } else {
 

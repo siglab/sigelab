@@ -32,6 +32,52 @@ export class LoginService {
     }
   }
 
+
+  verificarUsuario() {
+    const promise = new Promise((resolve, reject) => {
+      this.consultarAuth().subscribe((user) => {
+        if (user) {
+          this.restaurarSesion(user).then(() => {
+            resolve();
+          }).catch(() => {
+            reject();
+          });
+        } else {
+          reject();
+        }
+      });
+    });
+
+    return promise;
+
+  }
+
+  consultarAuth() {
+    return this.afAuth.authState;
+  }
+
+  restaurarSesion(data) {
+    const promise = new Promise((resolve, reject) => {
+      this.usuario = data;
+      sessionStorage.setItem('usuario', JSON.stringify(data));
+
+      if (this.usuario) {
+        this.consultarTipoUsuario(this.usuario.uid)
+          .then(() => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject();
+          });
+      } else {
+        reject();
+      }
+    });
+
+    return promise;
+
+  }
+
   login() {
     const promise = new Promise((resolve, reject) => {
       this.afAuth.auth
@@ -80,6 +126,7 @@ export class LoginService {
     sessionStorage.removeItem('laboratorios');
     sessionStorage.removeItem('permisos');
     sessionStorage.removeItem('nivel2');
+    localStorage.setItem('logout', 'true');
     return this.afAuth.auth.signOut();
   }
 
@@ -150,7 +197,7 @@ export class LoginService {
           });
           resolve(ok);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error.message);
         });
     });
