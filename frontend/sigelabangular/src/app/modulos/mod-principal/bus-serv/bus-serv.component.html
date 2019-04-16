@@ -2,95 +2,82 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-     Servicios
+        Oferta de servicios de laboratorio
       </h1>
-
     </section>
-
     <!-- Main content -->
     <section class="content">
-
-      <!-- Componente central de busqueda -->
-
-      <div class="row">
+    <!-- Componente central de busqueda -->
+    <div class="row">
         <div class="col-md-12 col-lg-12">
-          <div class="box box-danger">
+          <div class="box box-danger shadow">
             <div class="box-header">
               <i class="fa fa-search"></i>
-
-              <h3 class="box-title">Búsqueda</h3>
-
+              <h3 class="box-title">Búsqueda de información de servicios</h3>
             </div>
-
             <div class="box-body">
-
-              <div class="example-container mat-elevation-z8">
-                <div class="example-header">
-                  <mat-form-field>
-                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar servicio">
-                  </mat-form-field>
+              <div class="box-body">
+                <div class="table-responsive">
+                  <div class="example-container mat-elevation-z8">
+                    <div class="example-header">
+                      <mat-form-field>
+                        <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Busca por nombre de servicio o nombre de laboratorio que presta el servicio">
+                      </mat-form-field>
+                    </div>
+                    <mat-table #tableserv #sort="matSort" [dataSource]="dataSource" matSort>
+                      <!-- Position Column -->
+                      <ng-container matColumnDef="nombreserv">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre de servicio </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.nombreserv}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="nombrelab">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
+                      </ng-container>
+                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style = "cursor: pointer;"></mat-row>
+                    </mat-table>
+                    <mat-paginator #paginator="matPaginator"
+                      [pageSize]="5"
+                      [pageSizeOptions]="[5, 10, 20]"
+                      [showFirstLastButtons]="true">
+                    </mat-paginator>
+                  </div>
                 </div>
-
-                <mat-table #tableserv #sort="matSort" [dataSource]="dataSource" matSort>
-
-                  <!-- Position Column -->
-                  <ng-container matColumnDef="nombreserv">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Servicio </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.nombreserv}} </mat-cell>
-                  </ng-container>
-                  <ng-container matColumnDef="nombrelab">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
-                  </ng-container>
-
-                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style = "cursor: pointer;"></mat-row>
-                </mat-table>
-
-                <mat-paginator #paginator="matPaginator"
-                  [pageSize]="5"
-                  [pageSizeOptions]="[5, 10, 20]"
-                  [showFirstLastButtons]="true">
-                </mat-paginator>
               </div>
-
-
             </div>
           </div>
         </div>
-      </div>
-
-      <div *ngIf="!moduloinfo" class="row">
-          <div class="col-md-12 col-lg-12">
-              <div class="box box-danger">
-                  <div class="box-body">
-                      <h3>SIN DATOS SELECCIONADOS</h3>
-                  </div>
-              </div>
-
+    </div>
+    <!-- Pánel de información de servicio seleccionado -->
+    <div *ngIf="!moduloinfo" class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger shadow">
+          <div class="box-body no-data">
+            <h4>NO SE HA SELECCIONADO NINGÚN SERVICIO</h4>
           </div>
+        </div>
       </div>
-
-      <div id="detalle" *ngIf="moduloinfo" class="row">
+    </div>
+    <div id="detalle" *ngIf="moduloinfo" class="row">
           <div class="col-md-12 col-lg-12">
-            <div class="box box-danger">
+            <div class="box box-danger shadow">
               <div class="box-body">
                   <div class="box-header">
                     <i class="fa fa-building"></i>
-
-                    <h3 class="box-title">Detalles del servicio</h3>
+                    <h3 class="box-title">Detalles del servicio seleccionado</h3>
                   </div>
                 <div class="row" style="margin-top:20px;">
-                   <!-- INFORMACION LABORATORIO -->
+                   <!-- INFORMACION DE SERVICIO -->
                     <div class="col-md-6">
-                      <div class="box box-danger">
+                      <!-- Información básica del servicio -->
+                      <div class="box box-danger internal-shadow">
                         <div class="box-header">
                             <h4 (click)="cambiarIcono('info')" class="box-title">
                             <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                                INFORMACIÓN DE SERVICIO
+                                Información del servicio
                             </a>
                             </h4>
-
                         </div>
                         <div class="box-body">
                           <form  id="form-work" class="" name="form-work" action="#">
@@ -108,7 +95,7 @@
                                 </div>
                                 <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
                                   <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
-                                    <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                    <label class="control-label" for="precioserv"><strong>Términos y condiciones:</strong></label>
                                     <div class="form-group" *ngFor="let item of itemsel.infoServ.condiciones; let i = index">
                                         <label class="control-label" for="precioserv"><input name="{{'checkboxServ' + i}}" [(ngModel)]="condicionesobjetoServ['checkboxServ'+ i]" type="checkbox"> {{item}}</label>
                                     </div>
@@ -135,9 +122,13 @@
                                 </div>
                                 <div *ngIf="usuariounivalle" class="form-group">
                                     <div class="col-md-12">
-                                        <p>como es un usuario de la univalle, tiene derecho a un descuento sobre el costo total</p>
-                                        <label class="control-label" for="descripserv">
-                                            <strong>Descuento Univalle:</strong> {{itemsel.infoServ.descuento}} %</label>
+                                      <label class="control-label" for="descripserv">
+                                        <strong>Descuento Univalle:</strong>
+                                          {{itemsel.infoServ.descuento}} %
+                                        </label>
+                                      <p class="modal-p">
+                                        * Debido a que usted es un usuario institucional de la Universidad del Valle, tiene derecho a un descuento sobre el costo del servicio.
+                                      </p>
                                     </div>
                                 </div>
 
@@ -149,39 +140,46 @@
                                         <div class="form-group" *ngFor="let item of itemsel.infoServ.parametros; let i = index">
                                             <div class="col-md-6">
                                                 <label class="control-label" for="parserv">{{item}}
-                                                    <input class="form-control" name="{{'inputServ' + i}}" [(ngModel)]="parametrosServ['inputServ'+ i]" type="text"> </label>
+                                                  <input class="form-control" name="{{'inputServ' + i}}" [(ngModel)]="parametrosServ['inputServ'+ i]" type="text"> </label>
                                             </div>
-
                                           </div>
-
-
                                     </div>
                                 </div>
 
                                 <div *ngIf="usuariounivalle">
                                   <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group" style="margin-top: 20px;">
                                     <div class="col-md-12">
-                                      <p>como es un usuario de la univalle, debe escoger de manera obligatoria una de las siguientes opciones</p>
+                                      <label class="control-label">
+                                        <strong>Financiación: </strong>
+                                      </label>
                                       <mat-form-field>
                                         <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivalle" multiple (change)="selectorunivalle()">
                                           <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
                                         </mat-select>
                                       </mat-form-field>
+                                      <p class="modal-p">
+                                          * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione al menos una de las opciones de financiación.
+                                      </p>
                                     </div>
                                   </div>
 
                                   <div *ngIf="(itemsel.infoServ.variaciones.length == 0) && habilitarci" class="form-group" style="margin-top: 20px;">
                                     <div class="col-md-12">
-                                      <p>como seleccionó proyecto de investigación, por favor diligencie el respectivo CI </p>
+                                      <label class="control-label">
+                                        <strong>Código CI de proyecto: </strong>
+                                      </label>
                                       <input id="univ" (focusout)="ciCheck($event)" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text">
-                                      <p> {{status}} </p>
+                                      <p class="modal-p">* {{status}} </p>
+                                      <p class="modal-p">
+                                        * Debido a que usted seleccionó como método de financiación proyecto de investigación, se requiere que ingrese el código CI del respectivo proyecto.
+                                      </p>
                                     </div>
                                   </div>
                                 </div>
 
                                 <div *ngIf="itemsel.infoServ.equipos.length != 0" class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button class="btn2 btn-danger danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">Ver equipos asociados</button>
+                                        <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">Ver equipos asociados</button>
                                     </div>
                                 </div>
                                 <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
@@ -192,7 +190,7 @@
                                 </div>
                                 <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button  class="btn2 btn-danger btn-lg danger" type="button" (click)="enviarSolicitudServicio('sinvariaciones')" >Enviar Solicitud</button>
+                                        <button  class="btn btn-sm modal-button" type="button" (click)="enviarSolicitudServicio('sinvariaciones')" >Enviar Solicitud</button>
                                     </div>
                                 </div>
 
@@ -201,29 +199,29 @@
                           </form>
                         </div>
                       </div>
-
-                      <div *ngIf="itemsel.infoServ.variaciones.length != 0" class="box box-danger">
-                          <div class="box-header">
+                      <!-- Información de variaciones del servicio -->
+                      <div *ngIf="itemsel.infoServ.variaciones.length != 0" class="box box-danger internal-shadow">
+                        <div class="box-header">
                           <h4 (click)="cambiarIcono('var')" class="box-title">
-                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                              INFORMACIÓN DE VARIACIONES DE SERVICIO
+                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="true">
+                              Información de variaciones del serivicio
                               </a>
                           </h4>
-                          <a (click)="cambiarIcono('var')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
+                          <a (click)="cambiarIcono('var')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="true">
                               <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.var, 'glyphicon-minus':iconos.var}"></span>
                           </a>
-                          </div>
-                          <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        </div>
+                        <div id="collapseSab" class="panel-collapse collapse in" aria-expanded="true">
                             <div class="box-body">
                                 <form  id="form-workserv2" class="" name="form-workserv2" action="#">
                                     <fieldset>
                                       <div class="form-group">
                                         <div class="col-md-12">
-                                            <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
+                                            <label class="control-label" for="variacionserv"><strong>Variaciones disponibles:</strong></label>
 
                                           <mat-form-field>
                                             <mat-select name="sel" id="sel" [(value)]="variacionSel" placeholder="Seleccione una variación"  (change)="cambiarVariacion(variacionSel)">
-                    
+
                                               <mat-option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}">{{item.data.cfName}}</mat-option>
 
                                             </mat-select>
@@ -265,7 +263,7 @@
                                       </div>
                                       <div class="form-group">
                                         <div class="col-md-12">
-                                          <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                          <label class="control-label" for="precioserv"><strong>Términos y condiciones:</strong></label>
                                           <div class="form-group" *ngFor="let item of variation.data.cfConditions; let i = index">
                                               <label class="control-label" for="precioserv"><input name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item}}</label>
                                           </div>
@@ -274,19 +272,18 @@
                                     </div>
                                       <div class="form-group">
                                           <div class="col-md-12 text-center">
-                                              <button  class="btn btn-danger" type="button" (click)="agregarSolicitudServicio()" >Agregar variación</button>
+                                              <button  class="btn btn-sm modal-button" type="button" (click)="agregarSolicitudServicio()" >Agregar variación a la solicitud</button>
                                           </div>
                                       </div>
                                     </fieldset>
                                 </form>
                             </div>
-                          </div>
+                        </div>
                       </div>
-
-                      <div *ngIf="this.listaVariaciones.length != 0" class="box box-danger">
+                      <!-- Información de solicitud de servicio -->
+                      <div *ngIf="this.listaVariaciones.length != 0" class="box box-danger internal-shadow">
                           <div class="box-header">
                             <i class="fa fa-map"></i>
-
                             <h3 class="box-title">Variaciones Agregadas</h3>
                           </div>
                           <!-- /.box-header -->
@@ -356,11 +353,10 @@
 
                     <!--INFORMACION DE LABORATORIO-->
                   <div class="col-md-6">
-                    <div class="box box-danger">
+                    <div class="box box-danger internal-shadow">
                       <div class="box-header">
                         <i class="fa fa-map"></i>
-
-                        <h3 class="box-title">Ubicación</h3>
+                        <h3 class="box-title">Información del laboratorio</h3>
                       </div>
                       <!-- /.box-header -->
                       <div class="box-body">
@@ -425,12 +421,7 @@
 
                     </div>
                   </div>
-
                 </div>
-
-
-
-
               </div>
             </div>
           </div>
