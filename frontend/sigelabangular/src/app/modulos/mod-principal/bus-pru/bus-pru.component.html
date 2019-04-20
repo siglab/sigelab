@@ -18,52 +18,57 @@
             </h3>
           </div>
           <div class="box-body">
-            <div class="example-container mat-elevation-z8">
-              <div class="example-header">
-                <mat-form-field>
-                  <input
-                    style="outline: none;"
-                    matInput
-                    (keyup)="applyFilter($event.target.value)"
-                    placeholder="Buscar por nómbre de práctica"
-                  />
-                </mat-form-field>
+
+            <div class="box-body">
+              <div class="table-responsive">
+                <div class="example-container mat-elevation-z8">
+                  <div class="example-header">
+                    <mat-form-field>
+                      <input
+                        style="outline: none;"
+                        matInput
+                        (keyup)="applyFilter($event.target.value)"
+                        placeholder="Buscar por nómbre de práctica"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <mat-table
+                    #tableserv
+                    #sort="matSort"
+                    [dataSource]="dataSource"
+                    matSort
+                  >
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Nombre
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.nombreprub }}
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row
+                    *matHeaderRowDef="displayedColumns"
+                  ></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                    (click)="cambiardata(row)"
+                    style="cursor: pointer;"
+                  ></mat-row>
+                  </mat-table>
+                  <mat-paginator
+                    #paginator="matPaginator"
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true"
+                  >
+                  </mat-paginator>
+                </div>
               </div>
-
-              <mat-table
-                #tableserv
-                #sort="matSort"
-                [dataSource]="dataSource"
-                matSort
-              >
-                <!-- Position Column -->
-                <ng-container matColumnDef="nombre">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Nombre
-                  </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    {{ element.nombreprub }}
-                  </mat-cell>
-                </ng-container>
-
-                <mat-header-row
-                  *matHeaderRowDef="displayedColumns"
-                ></mat-header-row>
-                <mat-row
-                  *matRowDef="let row; columns: displayedColumns"
-                  (click)="cambiardata(row)"
-                  style="cursor: pointer;"
-                ></mat-row>
-              </mat-table>
-
-              <mat-paginator
-                #paginator="matPaginator"
-                [pageSize]="10"
-                [pageSizeOptions]="[5, 10, 20]"
-                [showFirstLastButtons]="true"
-              >
-              </mat-paginator>
             </div>
+
+
+
           </div>
         </div>
       </div>
