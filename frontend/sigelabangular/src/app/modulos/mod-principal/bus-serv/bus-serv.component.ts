@@ -248,7 +248,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     if (encontrado) {
       swal({
         type: 'success',
-        title: 'Variación Eliminada',
+        title: 'Variación eliminada',
         showConfirmButton: true
       });
     }

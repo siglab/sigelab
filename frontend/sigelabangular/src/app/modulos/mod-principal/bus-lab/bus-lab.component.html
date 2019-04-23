@@ -91,7 +91,7 @@
           <div class="box-body">
             <div class="box-header">
               <i class="fa fa-building"></i>
-              <h3 class="box-title">Detalles del laboratorio</h3>
+              <h3 class="box-title">Detalles del laboratorio seleccionado</h3>
             </div>
             <div class="col-md-12">
               <div class="row" style="margin-top:20px;">
@@ -318,16 +318,17 @@
                           <label class="control-label" for="precioserv">
                             <strong>Términos y condiciones del servicio:</strong>
                           </label>
-                          <div class="form-group" *ngFor="
+                          <div class="tCContainer">
+                            <div class="form-group" *ngFor="
                               let item of servsel.condiciones;
                               let i = index
                             ">
-                            <mat-checkbox name="{{ 'checkboxServ' + i }}" [(ngModel)]="
-                                condicionesobjetoServ['checkboxServ' + i]
-                              ">
-                              <p>{{ item }}</p>
-
-                            </mat-checkbox>
+                              <mat-checkbox name="{{ 'checkboxServ' + i }}" [(ngModel)]="
+                                  condicionesobjetoServ['checkboxServ' + i]
+                                ">
+                                <p>{{ item }}</p>
+                              </mat-checkbox>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -361,7 +362,7 @@
                       </div>
                       <div *ngIf="servsel.equipos.length != 0" class="form-group">
                         <div class="col-md-12 text-center">
-                          <button class="btn2 btn-danger danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
+                          <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
                             Ver equipos asociados
                           </button>
                         </div>
@@ -386,7 +387,7 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="variacionserv">
-                            <strong>Variaciones :</strong>
+                            <strong>Variaciones disponibles:</strong>
                           </label>
                           <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
                             <option value="" selected="selected" hidden="hidden">Seleccione una variación</option>
@@ -439,13 +440,15 @@
                           <label class="control-label" for="precioserv">
                             <strong>Términos y condiciones de variación:</strong>
                           </label>
-                          <div class="form-group" *ngFor="
+                          <div class="tCContainer">
+                            <div class="form-group" *ngFor="
                               let item of variation.data.cfConditions;
                               let i = index
                             ">
-                            <mat-checkbox name="{{ 'checkbox' + i }}" [(ngModel)]="condicionesobjeto['checkbox' + i]">
-                              <p>{{ item }}</p>
-                            </mat-checkbox>
+                              <mat-checkbox name="{{ 'checkbox' + i }}" [(ngModel)]="condicionesobjeto['checkbox' + i]">
+                                <p>{{ item }}</p>
+                              </mat-checkbox>
+                            </div>
                           </div>
                         </div>
                       </div>

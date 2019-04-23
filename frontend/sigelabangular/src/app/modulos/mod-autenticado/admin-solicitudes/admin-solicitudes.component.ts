@@ -17,47 +17,34 @@ declare var $: any;
 export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   user: any;
-
   // INICIALIZACION DATATABLE SERVICIO ACTIVOS
   displayedColumns = ['nombre', 'precio', 'edicion', 'estado', 'aceptacion'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
-
-
   // INICIALIZACION DATATABLE SERVICIOS
   displayedColumns2 = ['nombre', 'precio', 'edicion', 'estado', 'aceptacion'];
   dataSource2 = new MatTableDataSource([]);
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
-
   dtOptions: any = {};
   dtOptions1: any = {};
-
   moduloinfo = false;
-
   servsel: any;
-
   // servicios: any;
   datos: any;
   histodatos: any;
-
   buttoncancel = false;
-
   variation: any;
   valorParametro = [];
-
   condicion: any;
   condicionesobjeto = {};
   condicionesobjetoSrv = {};
-
   comentario = '';
-
   iconos = {
     info: false,
     sabs: false
   };
-
   fecha = new Date();
 
   constructor(private querys: QuerysAutenticadoService,
@@ -75,40 +62,22 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         if (data.length !== 0) {
           this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {
-
             this.dataSource.data = datos['data'];
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
-
             this.dataSource2.data = datos['data2'];
             this.dataSource2.sort = this.sort2;
             this.dataSource2.paginator = this.paginator2;
-
             this.cerrarAlerta();
           });
         } else {
           this.alertaError('No has solicitado servicios aun');
         }
-
-
       });
-
-
     }
-
-
-
-
-
   }
 
-  ngAfterViewInit() {
-
-
-
-  }
-
-
+  ngAfterViewInit() { }
 
   mostrardata(item) {
     this.servsel = item;
@@ -118,7 +87,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.estructurarCondicionesSrv(item.condicionesSrv);
     this.buttoncancel = false;
     this.moduloinfo = true;
-
     console.log(this.servsel);
   }
 
@@ -135,29 +103,22 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     } else {
       this.buttoncancel = false;
     }
-
-
   }
 
   cambiarVariacion(item) {
-
     if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
       for (let i = 0; i < this.servsel.parametrosVar.find(o => o.id === this.variation.id).parametros.length; i++) {
         const element = this.servsel.parametrosVar.find(o => o.id === this.variation.id).parametros[i];
         this.valorParametro.push(element.value);
       }
-
       this.condicion = this.buscarCondicion(item);
-
       this.estructurarCondiciones(this.condicion.condicion);
     } else {
       this.variation = undefined;
       this.condicion = undefined;
     }
-
   }
-
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
   buscarVariacion(item) {
@@ -182,9 +143,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
     for (let i = 0; i < condiciones.length; i++) {
-
       this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
-
     }
   }
 
@@ -193,10 +152,8 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.condicionesobjetoSrv = {};
     for (let i = 0; i < condiciones.length; i++) {
       this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
-
     }
   }
-
 
   cancelarSolicitudServicio() {
     swal({
@@ -230,9 +187,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           'error'
         );
       }
-
     });
-
   }
 
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE

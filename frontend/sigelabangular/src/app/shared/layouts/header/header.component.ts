@@ -30,12 +30,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if (sessionStorage.getItem('usuario')) {
       this.usuario = JSON.parse(sessionStorage.getItem('usuario'));
-
-      console.log(this.usuario);
       // se visualizan los elementos
       this.itemLogout = true;
       this.itemNotificacion = true;
-
       this.obs.consultarNotificaciones(this.usuario.uid).subscribe(datos => {
         this.notifications = [];
         for (let index = 0; index < datos.length; index++) {
@@ -58,7 +55,6 @@ export class HeaderComponent implements OnInit {
 
   routerLogin() {
     const uri = this.ruta.url.split('/');
-
     if (uri[2] === 'qrinventario') {
       this.ruta.navigate(['/login'], { queryParams: { codigo: uri[3] } });
     } else {
