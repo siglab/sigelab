@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="box-body">
                                       <div class="table-responsive">
-                                        <div *ngIf="!datasource || dataSource.data.length === 0; else activeRequestTable" class="no-data">
+                                        <div *ngIf="!dataSource || dataSource.data.length === 0; else activeRequestTable" class="no-data">
                                           <h4>NO CUENTAS CON SOLICITUDES DE SERVICIO ACTIVAS</h4>
                                         </div>
                                         <ng-template #activeRequestTable>

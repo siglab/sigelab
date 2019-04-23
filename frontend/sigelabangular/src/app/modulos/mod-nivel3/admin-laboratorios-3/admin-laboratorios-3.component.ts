@@ -57,6 +57,8 @@ export class AdminLaboratorios3Component implements OnInit {
 
   actSpaces;
 
+  status = '';
+
   // INICIALIZACION DATATABLE lABORATORIOS
   displayedColumns = ['nombre', 'correolab', 'ultima', 'director', 'estado', 'correodir'];
   dataSource = new MatTableDataSource([]);
@@ -97,6 +99,8 @@ export class AdminLaboratorios3Component implements OnInit {
   rol: any;
 
   role: any;
+
+  disponible = false;
 
 
   fecha = new Date();
@@ -482,5 +486,28 @@ export class AdminLaboratorios3Component implements OnInit {
     return this.afs.doc('cfPers/' + iddirector).ref.get();
   }
 
+
+  ciCheck($event) {
+    const q = $event.target.value;
+    if (q.trim() === '') {
+      this.status = 'Campo obligatorio';
+      // this.dispo = false;
+    } else {
+      this.status = 'Confirmando disponibilidad';
+      const collref = this.afs.collection('cfPers').ref;
+      const queryref = collref.where('email', '==', q);
+      queryref.get().then((snapShot) => {
+        if (snapShot.empty) {
+          this.status = 'El email ingresado no se encuentra registrado';
+          this.disponible = false;
+        } else {
+          console.log(snapShot.docs[0].id);
+          const nameProject = snapShot.docs[0].data().cfFirstNames;
+          this.status = 'Nombre del administrador: ' + nameProject;
+          this.disponible = true;
+        }
+      });
+    }
+  }
 
 }
