@@ -101,7 +101,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   listaVariaciones = [];
 
-  selecunivallelab = '';
+  selecunivallelab = new FormControl();
   univalle = [
     'Trabajo de grado',
     'Maestria',
@@ -236,7 +236,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         comments: [],
         path: [],
         typeuser: 'externo',
-        datauser: { type: '', ci: '', llaveci: '' },
+        datauser: { type: [], ci: '', llaveci: '' },
         emailuser: this.user.email,
         acceptedBy: '',
         parametrosSrv: [],
@@ -304,7 +304,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
           if (this.usuariounivalle) {
             cfSrvReserv.typeuser = 'interno';
-            cfSrvReserv.datauser.type = this.univalle[this.selecunivallelab];
+            cfSrvReserv.datauser.type = this.selecunivallelab.value;
             cfSrvReserv.datauser.ci = this.valorci;
             cfSrvReserv.datauser.llaveci = this.llaveci;
           }
@@ -470,7 +470,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   cambiarDataServicio(item) {
     this.limpiarDatos();
     this.variation = undefined;
+    this.variacionSel = '';
     this.servsel = item;
+
+    if (!this.user) {
+      swal('Para poder reservar este servicio debe ingresar primero al sistema', '', 'error');
+    }
 
     if (item.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.condiciones, item.parametros);
@@ -514,11 +519,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     });
   }
 
-  selectorunivalle(key) {
+  selectorunivalle() {
     this.habilitarci = false;
-    if (key === 3) {
-      this.habilitarci = true;
-    }
+    console.log(this.selecunivallelab.value);
+    this.selecunivallelab.value.forEach(elemento => {
+      if (elemento === 3) {
+        this.habilitarci = true;
+      }
+    });
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA
@@ -628,6 +636,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.descuento = 0;
     this.preciototal = 0;
     this.preciocondescuento = 0;
+    this.habilitarci = false;
+    this.selecunivallelab.setValue([]);
   }
 
   ciCheck($event) {

@@ -122,7 +122,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
     const containerEl: JQuery = $AB('#cal2');
 
-    if(containerEl.children().length > 0) {
+    if (containerEl.children().length > 0) {
 
       containerEl.fullCalendar('destroy');
     }
@@ -150,7 +150,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
   agregarMarker(item) {
     this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
     this.layer.addTo(this.map)
-    .bindPopup(item.nombreprub)
+    .bindPopup(item.nombrelab)
     .openPopup();
 
     this.map.setView([item.coord.lat, item.coord.lon], 17);

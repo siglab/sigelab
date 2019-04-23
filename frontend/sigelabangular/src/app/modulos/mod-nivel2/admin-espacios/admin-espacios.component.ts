@@ -59,9 +59,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     minArea: 0,
     ocupedArea: 0,
     totalArea: 0,
-    outcampus : false,
-    spaceData: { building: '', place: 0,
-     floor: '', descripcion : '', direccion: '' , ciudad:  '' },
+    outcampus: false,
+    spaceData: {
+      building: '', place: 0,
+      floor: '', descripcion: '', direccion: '', ciudad: ''
+    },
     active: true
   };
 
@@ -80,6 +82,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   role: any;
   moduloNivel2 = false;
+  moduloNivel3 = false;
+  moduloNivel25 = false;
 
   user = this.servicioMod2.getLocalStorageUser();
   lab: any;
@@ -172,6 +176,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     });
   }
+
   ngOnDestroy() {
     this.sus.unsubscribe();
   }
@@ -179,14 +184,25 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles(rol) {
     this.moduloNivel2 = false;
+    this.moduloNivel3 = false;
+    this.moduloNivel25 = false;
     for (const clave in rol) {
       if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
         }
+
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
+        }
       }
     }
   }
+
 
   estructuraEspacio(key) {
     const promise = new Promise((resolve, reject) => {
@@ -359,7 +375,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     console.log('capacidad a', item.capacity);
     // optener datos un espacio especifico
 
-     console.log('id del espacio', this.idsp);
+    console.log('id del espacio', this.idsp);
     this.cargarImagen(this.space.map);
     this.listPracticeforSpace(this.idsp).then((ok: any) => {
 
@@ -398,54 +414,54 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
-  setSpace( nombre ) {
+  setSpace(nombre) {
 
 
-      swal({
-        type: 'info',
-        title : 'Confirmar',
-        text: '¿Está seguro que desea guardar los cambios?',
-        showConfirmButton: true,
-        showCancelButton: true,
+    swal({
+      type: 'info',
+      title: 'Confirmar',
+      text: '¿Está seguro que desea guardar los cambios?',
+      showConfirmButton: true,
+      showCancelButton: true,
 
-      }) .then( val => {
-         if (val.value) {
-
-
-          if (this.space.spaceData.descripcion !== '') {
-
-            this.space.outcampus = true ;
-
-          }
-
-           this.alert.show();
-           console.log('acepto guardar');
-          const nuevoespacio = this.space;
-          nuevoespacio.subHq = this.idsh;
-          this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
-
-            // agrega el nuevo espacio al laboratorio actual
-            this.servicioMod2.Trazability(
-              this.user.uid, 'create', 'space', data.id, nuevoespacio).then(() => {
-                this.updateFaciliti(data.id);
-              });
-              this.alert.hide();
+    }).then(val => {
+      if (val.value) {
 
 
-              $('#modalespace').modal('hide');
+        if (this.space.spaceData.descripcion !== '') {
 
-              swal({
-                type: 'success',
-                title : 'Almacenado correctamente',
-                text: 'Datos guardados correctamente.',
-                showConfirmButton: true
-              });
+          this.space.outcampus = true;
+
+        }
+
+        this.alert.show();
+        console.log('acepto guardar');
+        const nuevoespacio = this.space;
+        nuevoespacio.subHq = this.idsh;
+        this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
+
+          // agrega el nuevo espacio al laboratorio actual
+          this.servicioMod2.Trazability(
+            this.user.uid, 'create', 'space', data.id, nuevoespacio).then(() => {
+              this.updateFaciliti(data.id);
+            });
+          this.alert.hide();
+
+
+          $('#modalespace').modal('hide');
+
+          swal({
+            type: 'success',
+            title: 'Almacenado correctamente',
+            text: 'Datos guardados correctamente.',
+            showConfirmButton: true
           });
+        });
 
-         }
+      }
 
 
-      });
+    });
 
 
 
@@ -480,7 +496,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     nuevoEstado.relatedSpaces[this.idsp] = this.space.active;
 
     this.servicioMod2.Trazability(
-      this.user.uid, 'update', 'space', this.idsp, nuevoespacio).then(()=>{
+      this.user.uid, 'update', 'space', this.idsp, nuevoespacio).then(() => {
         this.servicioMod2.setEspacio(this.idsp, nuevoespacio).then(() => {
           this.alert.show();
 
@@ -499,11 +515,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               title: 'Actualizado Correctamente',
               showConfirmButton: true,
               timer: 1000
-            }).then( result => {
+            }).then(result => {
 
 
 
-                 this.initDataComponent();
+              this.initDataComponent();
 
 
             });
@@ -511,7 +527,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
         });
-    });
+      });
 
 
     console.log(nuevoespacio);
@@ -582,29 +598,29 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
       this.servicioMod2.Trazability(
-        this.user.uid, 'update', 'cfFacil', this.idlab, {relatedSpaces}
+        this.user.uid, 'update', 'cfFacil', this.idlab, { relatedSpaces }
       ).then(() => {
 
         this.servicioMod2.setDocLaboratorio(this.idlab, { relatedSpaces })
-        .then(() => {
+          .then(() => {
 
 
-          this.alert.hide();
+            this.alert.hide();
 
 
-          swal({
-            type: 'success',
-            title: 'Espacio vinculado con éxito',
-            timer: 1500,
-            showConfirmButton: true
+            swal({
+              type: 'success',
+              title: 'Espacio vinculado con éxito',
+              timer: 1500,
+              showConfirmButton: true
+            });
+
+
+            $('#modalespace').modal('hide');
+            this.idnewSp = '';
+
+
           });
-
-
-          $('#modalespace').modal('hide');
-          this.idnewSp = '';
-
-
-      });
       });
 
 
@@ -617,7 +633,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
       });
 
 
-  }
+    }
   }
   /* listar horario por espacio  */
 
@@ -653,42 +669,42 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     // this.noEsPrac = [];
     const array = [];
     return this.servicioMod2.buscarProgramacion(id).then(data => {
-        let conta = 1;
-        data.forEach(onSnapshop => {
+      let conta = 1;
+      data.forEach(onSnapshop => {
 
-          const Pr = onSnapshop.data();
+        const Pr = onSnapshop.data();
 
-          console.log(Pr.noStudents);
+        console.log(Pr.noStudents);
 
-          const practicaH = {
+        const practicaH = {
 
-            numeroEs: Pr.noStudents,
-            horario: Pr.schedule,
-            id
-          };
-          //  crear un array de objetos numero de estudiantes y practicas
-          array.push(practicaH);
-          // crea un array con los horarios de la practica
-          Pr.schedule.forEach(element => {
+          numeroEs: Pr.noStudents,
+          horario: Pr.schedule,
+          id
+        };
+        //  crear un array de objetos numero de estudiantes y practicas
+        array.push(practicaH);
+        // crea un array con los horarios de la practica
+        Pr.schedule.forEach(element => {
 
-            this.horarios.push(element);
-          });
-
-          if (conta === data.size) {
-            return array;
-          } else {
-            conta++;
-          }
-
+          this.horarios.push(element);
         });
 
-        //  crear un array de objetos numero de estudiantes y practicas
-        // this.noEsPrac.push(practica);
-        // prog['schedule'].forEach(element => {
-        //   this.horarios.push(element);
-        // });
+        if (conta === data.size) {
+          return array;
+        } else {
+          conta++;
+        }
 
-      }).catch(e => console.log('ocurrio un err', e));
+      });
+
+      //  crear un array de objetos numero de estudiantes y practicas
+      // this.noEsPrac.push(practica);
+      // prog['schedule'].forEach(element => {
+      //   this.horarios.push(element);
+      // });
+
+    }).catch(e => console.log('ocurrio un err', e));
 
 
 
@@ -696,18 +712,18 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // valida si ya existe un espacio para que pueda ser vinculado
-  spaceCheck( espacio ) {
+  spaceCheck(espacio) {
     this.idnewSp = '';
 
     console.log(espacio);
     const edificio = this.space.spaceData.building;
 
-    if ( espacio.trim() === '') {
+    if (espacio.trim() === '') {
       this.status = 'Campo obligatorio';
       // this.dispo = false;
     } else {
       this.status = 'Buscando espacio ...';
-      this.servicioMod2.getEspaceForBuildAndPlace( edificio, espacio ).then((snapShot) => {
+      this.servicioMod2.getEspaceForBuildAndPlace(edificio, espacio).then((snapShot) => {
         if (snapShot.empty) {
           this.status = 'Espacio no encontrado';
           this.dispo = true;
@@ -724,30 +740,30 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   getIdSubHq(item) {
 
 
-  const sede =  JSON.parse(item);
-  this.fcu = false;
-  this.otraSede = false;
+    const sede = JSON.parse(item);
+    this.fcu = false;
+    this.otraSede = false;
 
-   this.idsh = sede.id;
+    this.idsh = sede.id;
 
-     switch (sede.cfAddrline2) {
+    switch (sede.cfAddrline2) {
 
-       case 'Ciudad Universitaria Meléndez': {
+      case 'Ciudad Universitaria Meléndez': {
 
         this.edificios = EDIFICIOSMELENDEZ;
         break;
       }
 
-       case 'San Fernando': {
+      case 'San Fernando': {
         this.edificios = [];
         this.otraSede = true;
-         break;
+        break;
       }
 
       case 'Palmira': {
         this.edificios = [];
         this.otraSede = true;
-         break;
+        break;
       }
 
       case 'Fuera del campus universitario': {
@@ -759,14 +775,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
 
-       default:
-       break;
+      default:
+        break;
     }
 
   }
 
 
-  setEdificio( value) {
+  setEdificio(value) {
 
     this.space.spaceData.building = value;
 
@@ -834,13 +850,13 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
     // tslint:disable-next-line:radix
 
-    if ( this.space.capacity === 0) {
+    if (this.space.capacity === 0) {
 
       console.log(' capacidad igual a cero');
 
       this.space.indxSa = 0;
 
-    } if (this.space.capacity > 0 ) {
+    } if (this.space.capacity > 0) {
 
       console.log(' capacidad mayor a cero');
       this.space.indxSa = (this.ocupacionAct / this.space.capacity);
@@ -913,8 +929,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
   refreshContent() {
-    this.router.navigateByUrl('/principal', {skipLocationChange: true})
-    .then(() => this.router.navigate(['/principal/adminespacios']));
+    this.router.navigateByUrl('/principal', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/principal/adminespacios']));
   }
 
 

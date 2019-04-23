@@ -106,6 +106,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   moduloNivel2 = false;
   moduloPermiso = false;
+  moduloNivel3 = false;
+  moduloNivel25 = false;
   rol: any;
 
 
@@ -927,8 +929,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles(rol) {
+    console.log(rol);
     this.moduloNivel2 = false;
+    this.moduloNivel3 = false;
     this.moduloPermiso = false;
+    this.moduloNivel25 = false;
     for (const clave in rol) {
       if (rol[clave]) {
 
@@ -937,6 +942,14 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
         }
         if ((clave === 'moduloDosPermiso')) {
           this.moduloPermiso = true;
+        }
+
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
         }
       }
     }
@@ -957,7 +970,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   editar() {
 
-    if (this.moduloNivel2) {
+    if (this.moduloNivel2 || this.moduloNivel3 || this.moduloNivel25) {
       swal({
 
         type: 'warning',

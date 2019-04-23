@@ -1,10 +1,5 @@
-<div class="content-wrapper">
+<div id="contenidowraperSpace" class="content-wrapper">
   <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>
-      Espacios
-    </h1>
-  </section>
 
   <!-- Main content -->
   <!-- <section class="content" *ngIf="itemsel | async; let itemsel"> -->
@@ -15,7 +10,7 @@
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
-          <div *ngIf="moduloNivel2" class="box-header">
+          <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
                 <button
@@ -355,7 +350,7 @@
                           </div>
                         </div>
 
-                        <div *ngIf="moduloNivel2" class="form-group">
+                        <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="form-group">
                           <div class="col-md-12">
                             <div class="form-group">
                               <label for="Activo" class="col-form-label"
@@ -397,7 +392,7 @@
                           </div>
                         </div>
 
-                        <div *ngIf="moduloNivel2" class="form-group">
+                        <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="form-group">
                           <div class="col-md-12">
                             <button
 

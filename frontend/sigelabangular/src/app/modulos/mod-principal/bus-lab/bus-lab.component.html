@@ -331,7 +331,7 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="this.user && usuariounivalle" class="form-group">
+                      <div *ngIf="usuariounivalle" class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="descripserv">
                             <strong>Descuento Univalle:</strong>
@@ -449,7 +449,7 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="this.user" class="form-group">
+                      <div class="form-group">
                         <div class="col-md-12 text-center">
                           <button class="btn btn-sm modal-button" type="button" (click)="agregarSolicitudServicio()">
                             Agregar esta variación a la solicitud
@@ -516,16 +516,16 @@
                             <label class="control-label">
                               <strong>Financiación: </strong>
                             </label>
-                            <select class="form-control" name="univa" id="univa" [(ngModel)]="selecunivallelab" (change)="selectorunivalle($event.target.value)">
-                              <option value="" selected="selected" hidden="hidden">Seleccione un tipo de financiación</option>
-                              <option *ngFor="let opciones of univalle; let i = index" [value]="i">
-                                {{ opciones }}
-                              </option>
-                            </select>
                             <p class="modal-p">
-                              * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione una de las opciones
-                              de financiación.
+                              * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione una o varias de
+                              las opciones de financiación.
                             </p>
+                            <mat-form-field>
+                              <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivallelab" multiple (change)="selectorunivalle()">
+                                <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+
                           </div>
                         </div>
                         <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
@@ -538,7 +538,7 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="this.user" class="form-group">
+                      <div class="form-group">
                         <div class="col-md-12" style="margin-top:10px">
                           <label class="control-label" for="condiciones">
                             <strong>Comentarios adicionales:</strong>
@@ -607,7 +607,9 @@
                         />
                         {{ item }}</label
                       > -->
-                      <mat-checkbox name="{{ 'checkboxServ' + i }}" [(ngModel)]="condicionesobjetoServ['checkboxServ' + i]"><p>{{ item }}</p></mat-checkbox>
+                      <mat-checkbox name="{{ 'checkboxServ' + i }}" [(ngModel)]="condicionesobjetoServ['checkboxServ' + i]">
+                        <p>{{ item }}</p>
+                      </mat-checkbox>
                     </div>
                   </div>
                 </div>
@@ -629,13 +631,13 @@
                     </p>
                   </div>
                 </div>
-                <div *ngIf="this.user && usuariounivalle" class="form-group">
+                <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
                       <strong>Total descuento: </strong>$ {{ this.descuento }}</label>
                   </div>
                 </div>
-                <div *ngIf="this.user && usuariounivalle" class="form-group">
+                <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
                       <strong>Precio total con descuento incluído: </strong>$ {{ this.preciocondescuento }}</label>
@@ -655,25 +657,28 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="this.user && usuariounivalle">
+                <div *ngIf="usuariounivalle">
                   <div class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
                       <label class="control-label">
                         <strong>Financiación: </strong>
                       </label>
-                      <select class="form-control" name="univa" id="univa" [(ngModel)]="selecunivallelab" (change)="selectorunivalle($event.target.value)">
-                        <option *ngFor="let opciones of univalle; let i = index" [value]="i">
-                          {{ opciones }}
-                        </option>
-                      </select>
                       <p class="modal-p">
                         * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione una de las opciones
                         de financiación.
                       </p>
+                      <mat-form-field>
+                        <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivallelab" multiple (change)="selectorunivalle()">
+                          <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </div>
-                  <div *ngIf="this.user && habilitarci" class="form-group" style="margin-top: 20px;">
+                  <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
                     <div class="col-md-12">
+                      <p>
+                        Como selecciono proyecto de investigación, por favor diligencie el respectivo CI
+                      </p>
                       <label class="control-label" for="UNIV">
                         <strong>CI:</strong>
                       </label>
@@ -689,7 +694,7 @@
                     </button>
                   </div>
                 </div>
-                <div *ngIf="this.user" class="form-group">
+                <div class="form-group">
                   <div class="col-md-12" style="margin-top:10px">
                     <label class="control-label" for="condiciones">
                       <strong>Comentarios adicionales:</strong>
@@ -813,7 +818,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive">
               <div class="cal" id="calendar2"></div>
             </div>
           </div>
