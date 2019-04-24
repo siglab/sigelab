@@ -13,15 +13,10 @@
           <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button
-                  data-toggle="modal"
-                  (click)="clearObj()"
-                  data-target="#modalespace"
-                  style="float: right;"
-                  class="btn btn-success"
-                  type="button"
-                >
-                  Nuevo Espacio <i class="fa fa-plus" aria-hidden="true"></i>
+                <button data-toggle="modal" (click)="clearObj()" data-target="#modalespace" style="float: right;" class="btn btn-success"
+                  type="button">
+                  Nuevo Espacio
+                  <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
@@ -39,27 +34,14 @@
                     <!-- <div *ngIf="this.itemsel.espacios.length == 0">
                                     <h3>SELECCIONE UN LABORATORIO</h3>
                                 </div> -->
-                    <div
-                      class="example-container mat-elevation-z8"
-                      *ngIf="dataSourceSpace.data.length > 0"
-                    >
+                    <div class="example-container mat-elevation-z8" *ngIf="dataSourceSpace.data.length > 0">
                       <div class="example-header">
                         <mat-form-field>
-                          <input
-                            style="outline: none;"
-                            matInput
-                            (keyup)="applyFilterPers($event.target.value)"
-                            placeholder="Buscar Espacio"
-                          />
+                          <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Espacio" />
                         </mat-form-field>
                       </div>
 
-                      <mat-table
-                        #tableSpace
-                        #sortSpace="matSort"
-                        [dataSource]="dataSourceSpace"
-                        matSort
-                      >
+                      <mat-table #tableSpace #sortSpace="matSort" [dataSource]="dataSourceSpace" matSort>
                         <ng-container matColumnDef="capacidad">
                           <mat-header-cell *matHeaderCellDef mat-sort-header>
                             Capacidad
@@ -114,22 +96,11 @@
                           </mat-cell>
                         </ng-container>
 
-                        <mat-header-row
-                          *matHeaderRowDef="displayedColumnsSpace"
-                        ></mat-header-row>
-                        <mat-row
-                          *matRowDef="let row; columns: displayedColumnsSpace"
-                          style="cursor: pointer;"
-                          (click)="cambiardata(row)"
-                        ></mat-row>
+                        <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsSpace" style="cursor: pointer;" (click)="cambiardata(row)"></mat-row>
                       </mat-table>
 
-                      <mat-paginator
-                        #paginatorSpace="matPaginator"
-                        [pageSize]="5"
-                        [pageSizeOptions]="[5, 10, 20]"
-                        [showFirstLastButtons]="true"
-                      >
+                      <mat-paginator #paginatorSpace="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                       </mat-paginator>
                     </div>
                   </div>
@@ -146,17 +117,10 @@
                     </h3>
                     <div class="form-group" style="float: right">
                       <div class="col-md-12">
-                        <button
-                          (click)="initCalendar()"
-                          data-toggle="modal"
-                          data-target="#modal2"
-                          type="button">
+                        <button (click)="initCalendar()" data-toggle="modal" data-target="#modal2" type="button">
                           <i class="fa fa-calendar"></i> Programación Espacio
                         </button>
-                        <button
-                          data-toggle="modal"
-                          data-target="#myModal"
-                          type="button">
+                        <button data-toggle="modal" data-target="#myModal" type="button">
                           <i class="fa fa-picture-o"></i> Ver plano
                         </button>
                       </div>
@@ -164,49 +128,27 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <form  name="form-work" #formEspacios="ngForm">
+                    <form name="form-work" #formEspacios="ngForm">
                       <fieldset>
                         <div class="row" *ngIf="!space.outcampus">
                           <div class="col-sm-4">
                             <mat-form-field>
-                              <input
-                                name="edificio"
-                                [(ngModel)]="this.space.spaceData.building"
-                                placeholder="Edificio"
-                                type="text"
-                                value=""
-                                matInput
-                                id="edificio"
-                                readonly
-                              />
+                              <input name="edificio" [(ngModel)]="this.space.spaceData.building" placeholder="Edificio" type="text" value="" matInput id="edificio"
+                                [readonly]="!this.moduloNivel3 && !this.moduloNivel25" />
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-4">
                             <mat-form-field>
-                              <input
-                                name="planta"
-                                [(ngModel)]="this.space.spaceData.floor"
-                                type="text"
-                                value=""
-                                placeholder="Planta"
-                                matInput
-                                id="edificio"
-                                readonly />
+                              <input name="planta" [(ngModel)]="this.space.spaceData.floor" type="text" value="" placeholder="Planta" matInput id="edificio"
+                                [readonly]="!this.moduloNivel3 && !this.moduloNivel25" />
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-4">
                             <mat-form-field>
-                              <input
-                                name="espacio"
-                                matInput
-                                [(ngModel)]="this.space.spaceData.place"
-                                type="text"
-                                value=""
-                                placeholder="Espacio"
-                                id="espac"
-                                readonly/>
+                              <input name="espacio" matInput [(ngModel)]="this.space.spaceData.place" type="text" value="" placeholder="Espacio" id="espac"
+                                [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
                             </mat-form-field>
                           </div>
                         </div>
@@ -214,40 +156,21 @@
                         <div class="row" *ngIf="space.outcampus">
                           <div class="col-sm-3">
                             <mat-form-field>
-                              <input
-                                matInput
-                                name="ciudad"
-                                [(ngModel)]="this.space.spaceData.ciudad"
-                                type="text"
-                                id="area"
-                                placeholder="Ciudad"
-                                readonly/>
+                              <input matInput name="ciudad" [(ngModel)]="this.space.spaceData.ciudad" type="text" id="area" placeholder="Ciudad" [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-3">
                             <mat-form-field>
-                              <input
-                                name="direccion"
-                                [(ngModel)]="this.space.spaceData.direccion"
-                                type="text"
-                                matInput
-                                id="arealibre"
-                                placeholder="Direccion"
-                                readonly />
+                              <input name="direccion" [(ngModel)]="this.space.spaceData.direccion" type="text" matInput id="arealibre" placeholder="Direccion"
+                              [readonly]="!this.moduloNivel3 && !this.moduloNivel25" />
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-6">
                             <mat-form-field>
-                              <input
-                                name="decripcion"
-                                [(ngModel)]="this.space.spaceData.descripcion"
-                                type="area"
-                                matInput
-                                id="ocupact"
-                                placeholder="Descripción"
-                                readonly/>
+                              <input name="decripcion" [(ngModel)]="this.space.spaceData.descripcion" type="area" matInput id="ocupact" placeholder="Descripción"
+                              [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
                             </mat-form-field>
                           </div>
                         </div>
@@ -255,96 +178,49 @@
                         <div class="row">
                           <div class="col-sm-4">
                             <mat-form-field>
-                              <input
-                                matInput
-                                name="areatotal"
-                                [(ngModel)]="this.space.totalArea"
-                                type="text"
-                                id="area"
-                                placeholder="Área total"
-                                readonly/>
+                              <input matInput name="areatotal" [(ngModel)]="this.space.totalArea" type="text" id="area" placeholder="Área total" [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-4">
                             <mat-form-field>
-                              <input
-                                name="ocupedarea"
-                                [(ngModel)]="this.space.ocupedArea"
-                                type="text"
-                                matInput
-                                id="arealibre"
-                                placeholder="Área ocupada"
-                                readonly/>
+                              <input name="ocupedarea" [(ngModel)]="this.space.ocupedArea" type="text" matInput id="arealibre" placeholder="Área ocupada"
+                              [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-4">
                             <mat-form-field>
-                              <input
-                                name="ocupacionactual"
-                                [(ngModel)]="this.ocupacionAct"
-                                type="text"
-                                matInput
-                                id="ocupact"
-                                placeholder="Ocupación actual"
-                                readonly
+                              <input name="ocupacionactual" [(ngModel)]="this.ocupacionAct" type="text" matInput id="ocupact" placeholder="Ocupación actual"
+                              [readonly]="!this.moduloNivel3 && !this.moduloNivel25" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <mat-form-field>
+                              <input name="arealibre" matInput [(ngModel)]="this.space.freeArea" type="text" value="" id="arealibre" placeholder="Área libre"
+                              [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="col-sm-4">
+                            <mat-form-field>
+                              <input name="capacidad" [(ngModel)]="this.space.capacity" type="text" id="arealibre" matInput placeholder="Capacidad" [readonly]="!this.moduloNivel3 && !this.moduloNivel25"/>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="col-sm-4">
+                            <mat-form-field>
+                              <input name="areamin" matInput [(ngModel)]="this.space.minArea" type="text" id="arealibre" placeholder="Área Mínima" [readonly]="!this.moduloNivel3 && !this.moduloNivel25"
                               />
-                            </mat-form-field>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <mat-form-field>
-                              <input
-                                name="arealibre"
-                                matInput
-                                [(ngModel)]="this.space.freeArea"
-                                type="text"
-                                value=""
-                                id="arealibre"
-                                placeholder="Área libre"
-                                readonly/>
-                            </mat-form-field>
-                          </div>
-
-                          <div class="col-sm-4">
-                            <mat-form-field>
-                              <input
-                                name="capacidad"
-                                [(ngModel)]="this.space.capacity"
-                                type="text"
-                                id="arealibre"
-                                matInput
-                                placeholder="Capacidad"
-                                readonly/>
-                            </mat-form-field>
-                          </div>
-
-                          <div class="col-sm-4">
-                            <mat-form-field>
-                              <input
-                                name="areamin"
-                                matInput
-                                [(ngModel)]="this.space.minArea"
-                                type="text"
-                                id="arealibre"
-                                placeholder="Área Mínima"
-                                readonly   />
                             </mat-form-field>
                           </div>
 
                           <div class="col-sm-3">
                             <mat-form-field>
-                              <input
-                                name="indxsa"
-                                matInput
-                                [(ngModel)]="this.space.indxSa"
-                                type="text"
-                                id="indice"
-                                placeholder="Índice saturación"
-                                readonly
+                              <input name="indxsa" matInput [(ngModel)]="this.space.indxSa" type="text" id="indice" placeholder="Índice saturación" [readonly]="!this.moduloNivel3 && !this.moduloNivel25"
                               />
                             </mat-form-field>
                           </div>
@@ -353,20 +229,13 @@
                         <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="form-group">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label for="Activo" class="col-form-label"
-                                >Activo:</label
-                              >
+                              <label for="Activo" class="col-form-label">Activo:</label>
                             </div>
                           </div>
                           <div class="row">
                             <div class="col-md-12">
                               <label class="switch">
-                                <input
-                                  name="active"
-                                  [(ngModel)]="this.space.active"
-                                  id="activo"
-                                  type="checkbox"
-                                />
+                                <input name="active" [(ngModel)]="this.space.active" id="activo" type="checkbox" />
                                 <span class="slider round"></span>
                               </label>
                             </div>
@@ -376,12 +245,9 @@
                         <div class="form-group">
                           <div class="col-md-12">
                             <div class="form-group row">
-                              <label
-                                class="col-sm-2 col-form-label" for="indice" >
+                              <label class="col-sm-2 col-form-label" for="indice">
                                 Actividad actual:</label>
-                              <ul
-                                *ngIf="this.actSpaces.length > 0"
-                                class="col-sm-5 col-form-label">
+                              <ul *ngIf="this.actSpaces.length > 0" class="col-sm-5 col-form-label">
                                 <li *ngFor="let item of this.actSpaces">
                                   {{ item }}
                                 </li>
@@ -394,15 +260,9 @@
 
                         <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="form-group">
                           <div class="col-md-12">
-                            <button
-
-                              *ngIf="formEspacios.touched"
-                              (click)="actualizarEspacio()"
-                              style="float: right;"
-                              class="btn btn-success"
-                              type="button">
+                            <button *ngIf="formEspacios.touched" (click)="actualizarEspacio()" style="float: right;" class="btn btn-success" type="button">
                               <i class="fa fa-refresh"> </i>
-                               Actualizar
+                              Actualizar
                             </button>
                           </div>
                         </div>
@@ -429,11 +289,7 @@
             <i class="fa fa-address-card-o"></i>
 
             <h1 class="box-title">Editar Espacio</h1>
-            <span
-              style="color:#dd4b39; float:right; cursor: pointer;"
-              class="glyphicon glyphicon-remove"
-              (click)="cerrarModal('myModal')"
-            ></span>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModal')"></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -441,17 +297,8 @@
               El laboratorio seleccionado no cuenta con ningún plano
             </h3>
 
-            <div
-              *ngIf="!this.plano"
-              style="width: 100%; height:100%;"
-              class="spinner"
-            ></div>
-            <img
-              *ngIf="this.plano"
-              style="width: 100%; height:100%;"
-              [src]="this.plano"
-              alt=""
-            />
+            <div *ngIf="!this.plano" style="width: 100%; height:100%;" class="spinner"></div>
+            <img *ngIf="this.plano" style="width: 100%; height:100%;" [src]="this.plano" alt="" />
           </div>
         </div>
       </div>
@@ -469,12 +316,7 @@
           <div class="box-header text-center">
             <i class="fa fa-building-o"></i>
             <h1 class="box-title">Nuevo Espacio</h1>
-            <span
-              style="color:#dd4b39; float:right; cursor: pointer;"
-              class="glyphicon glyphicon-remove"
-              data-dismiss="modal"
-              aria-label="Close "
-            ></span>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close "></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -492,13 +334,8 @@
 
                 <div class="col-md-12">
                   <mat-form-field>
-                    <mat-select
-                      placeholder="Seleccione una sede"
-                      (selectionChange)="getIdSubHq($event.value)"
-                      name="sede">
-                      <mat-option
-                        *ngFor="let item of subsedes"
-                        value="{{ item | json }}" >
+                    <mat-select placeholder="Seleccione una sede" (selectionChange)="getIdSubHq($event.value)" name="sede">
+                      <mat-option *ngFor="let item of subsedes" value="{{ item | json }}">
                         {{ item.cfAddrline2 }}
                       </mat-option>
                     </mat-select>
@@ -509,14 +346,8 @@
                 <ng-container *ngIf="!fcu">
                   <div class="col-md-12" *ngIf="!otraSede">
                     <mat-form-field>
-                      <mat-select
-                        placeholder="Seleccione un edificio"
-                        (selectionChange)="setEdificio($event.value)"
-                        name="edificio"
-                        required>
-                        <mat-option
-                          *ngFor="let item of edificios"
-                          value="{{ item }}">
+                      <mat-select placeholder="Seleccione un edificio" (selectionChange)="setEdificio($event.value)" name="edificio" required>
+                        <mat-option *ngFor="let item of edificios" value="{{ item }}">
                           {{ item }}
                         </mat-option>
                       </mat-select>
@@ -525,13 +356,7 @@
 
                   <div class="col-md-12" *ngIf="otraSede">
                     <mat-form-field class="example-full-width">
-                      <input
-                        #build="ngModel"
-                        type="string"
-                        name="edificio"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.building"
-                        placeholder="Edificio"
+                      <input #build="ngModel" type="string" name="edificio" matInput [(ngModel)]="this.space.spaceData.building" placeholder="Edificio"
                         required />
                     </mat-form-field>
                     <mat-hint *ngIf="build.touched && build.invalid">
@@ -541,14 +366,7 @@
 
                   <div class="col-md-12">
                     <mat-form-field class="example-full-width">
-                      <input
-                        type="number"
-                        name="espacio"
-                        #sp
-                        matInput
-                        placeholder="Espacio"
-                        [(ngModel)]="this.space.spaceData.place"
-                        (focusout)="spaceCheck(sp.value)"
+                      <input type="number" name="espacio" #sp matInput placeholder="Espacio" [(ngModel)]="this.space.spaceData.place" (focusout)="spaceCheck(sp.value)"
                         required/>
                     </mat-form-field>
                     <span class="help-block"> {{ this.status }} </span>
@@ -556,13 +374,7 @@
 
                   <div class="col-md-12">
                     <mat-form-field class="example-full-width">
-                      <input
-                        type="number"
-                        name="planta"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.floor"
-                        placeholder="Planta"
-                        required />
+                      <input type="number" name="planta" matInput [(ngModel)]="this.space.spaceData.floor" placeholder="Planta" required />
                     </mat-form-field>
                   </div>
                 </ng-container>
@@ -572,37 +384,19 @@
                 <ng-container *ngIf="fcu">
                   <div class="col-md-12">
                     <mat-form-field class="example-full-width">
-                      <input
-                        type="text"
-                        name="Ciudad"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.ciudad"
-                        placeholder="Ciudad"
-                        required/>
+                      <input type="text" name="Ciudad" matInput [(ngModel)]="this.space.spaceData.ciudad" placeholder="Ciudad" required/>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-12">
                     <mat-form-field class="example-full-width">
-                      <input
-                        type="text"
-                        name="Direccion"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.direccion"
-                        placeholder="Direccion"
-                        required/>
+                      <input type="text" name="Direccion" matInput [(ngModel)]="this.space.spaceData.direccion" placeholder="Direccion" required/>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-12">
                     <mat-form-field class="example-full-width">
-                      <input
-                        type="text"
-                        name="Descripcion"
-                        matInput
-                        [(ngModel)]="this.space.spaceData.descripcion"
-                        placeholder="Descripcion"
-                        required/>
+                      <input type="text" name="Descripcion" matInput [(ngModel)]="this.space.spaceData.descripcion" placeholder="Descripcion" required/>
                     </mat-form-field>
                   </div>
                 </ng-container>
@@ -610,32 +404,20 @@
                 <!-- ocultar form -->
                 <div *ngIf="idnewSp">
                   <div class="col-md-12">
-                    <mat-slide-toggle
-                      name="spaceactive"
-                      [(ngModel)]="this.space.active">
-                      <span *ngIf="this.space.active"> Inactivar </span
-                      ><span *ngIf="!this.space.active"> Activar </span>
+                    <mat-slide-toggle name="spaceactive" [(ngModel)]="this.space.active">
+                      <span *ngIf="this.space.active"> Inactivar </span>
+                      <span *ngIf="!this.space.active"> Activar </span>
                     </mat-slide-toggle>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="col-md-12">
-                    <button
-                      *ngIf="!this.idnewSp && formSpace.valid"
-                      (click)="setSpace()"
-                      style="float: right;"
-                      class="btn btn-success  "
-                      type="button">
+                    <button *ngIf="!this.idnewSp && formSpace.valid" (click)="setSpace()" style="float: right;" class="btn btn-success  " type="button">
                       Guardar
                       <i class="fa fa-check"></i>
                     </button>
-                    <button
-                      *ngIf="this.idnewSp"
-                      (click)="updateFaciliti(this.idnewSp)"
-                      style="float: right;"
-                      class="btn btn-success  "
-                      type="button">
+                    <button *ngIf="this.idnewSp" (click)="updateFaciliti(this.idnewSp)" style="float: right;" class="btn btn-success  " type="button">
                       Vincular
                       <i class="fa fa-plus"></i>
                     </button>
@@ -661,14 +443,10 @@
             <i class="fa fa-calendar"></i>
 
             <h1 class="box-title">Programación de Espacio</h1>
-            <span
-              style="color:#dd4b39; float:right; cursor: pointer;"
-              class="glyphicon glyphicon-remove"
-              (click)="cerrarModal('modal2')"
-            ></span>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal2')"></span>
           </div>
           <!-- /.box-header -->
-          <div class="box-body no-padding">
+          <div class="box-body no-padding table-responsive">
             <div class="cal" id="cal"></div>
           </div>
         </div>

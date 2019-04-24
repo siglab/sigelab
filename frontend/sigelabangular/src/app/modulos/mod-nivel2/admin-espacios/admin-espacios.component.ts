@@ -474,10 +474,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
     const nuevoespacio = {
       capacity: this.space.capacity,
-      createdAt: '',
       freeArea: this.space.freeArea,
-      headquarter: 'Vp0lIaYQJ8RGSEBwckdi',
-      subHq: this.space.subHq,
       map: this.space.capacity,
       minArea: this.space.minArea,
       ocupedArea: this.space.ocupedArea,
@@ -487,6 +484,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         place: this.space.spaceData.place,
         floor: this.space.spaceData.floor
       },
+      updatedAt: new Date().toISOString()
     };
 
     const nuevoEstado = {
