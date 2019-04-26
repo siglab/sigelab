@@ -1,107 +1,96 @@
-
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-
-       Servicios Solicitados
+       Mis solicitudes de servicios
       </h1>
     </section>
-
     <!-- Main content -->
     <section class="content">
-
       <!-- Componente central de busqueda -->
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="box box-danger">
             <div class="box-header">
               <i class="fa fa-audio-description"></i>
-
-              <h3 class="box-title">ADMINISTRADOR DE SOLICITUDES</h3>
-
+              <h3 class="box-title">Administrador de solicitudes</h3>
             </div>
-
             <div class="box-body">
-
                 <ul class="nav nav-tabs" >
-                    <li><a class="tablas" data-toggle="tab"  href="#home" (click)="ocultar()" >
-                      Solicitudes activas</a></li>
-                    <li><a class="tablas" data-toggle="tab" href="#menu1" (click)="ocultar()">
-                      Historial de solicitudes</a></li>
+                    <li class="active">
+                      <a class="tablas" data-toggle="tab"  href="#home" (click)="ocultar()" aria-expanded="true">
+                        Solicitudes activas
+                      </a>
+                    </li>
+                    <li>
+                      <a class="tablas" data-toggle="tab" href="#menu1" (click)="ocultar()">
+                        Historial de solicitudes
+                      </a>
+                    </li>
                 </ul>
-
-                <div class="row" style="margin-top:30px;">
+                <div class="row">
                     <div class="col-md-12">
                         <div class="box box-danger">
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
                                     <div class="box-header">
                                         <i class="fa fa-flask"></i>
-
-                                        <h3 class="box-title">SERVICIOS ACTIVOS</h3>
+                                        <h3 class="box-title">Solicitudes de servicio activas</h3>
                                     </div>
                                     <div class="box-body">
                                       <div class="table-responsive">
-                                        <div class="example-container mat-elevation-z8">
-                                          <div class="example-header">
-                                            <mat-form-field>
-                                              <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                                            </mat-form-field>
-                                          </div>
-
-                                          <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
-
-                                            <!-- Position Column -->
-                                            <ng-container matColumnDef="nombre">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                              <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Name Column -->
-                                            <ng-container matColumnDef="precio">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
-                                              <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Name Column -->
-                                            <ng-container matColumnDef="edicion">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
-                                              <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Weight Column -->
-                                            <ng-container matColumnDef="estado">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                              <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Name Column -->
-                                            <ng-container matColumnDef="aceptacion">
-                                              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
-                                              <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
-                                            </ng-container>
-
-
-                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="mostrardata2(row)" style = "cursor: pointer;"></mat-row>
-                                          </mat-table>
-
-                                          <mat-paginator #paginator="matPaginator"
-                                            [pageSize]="5"
-                                            [pageSizeOptions]="[5, 10, 20]"
-                                            [showFirstLastButtons]="true">
-                                        </mat-paginator>
+                                        <div *ngIf="!dataSource || dataSource.data.length === 0; else activeRequestTable" class="no-data">
+                                          <h4>NO CUENTAS CON SOLICITUDES DE SERVICIO ACTIVAS</h4>
                                         </div>
+                                        <ng-template #activeRequestTable>
+                                            <div class="example-container mat-elevation-z8">
+                                                <div class="example-header">
+                                                  <mat-form-field>
+                                                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Busca por cualquier valor que pueda tomar las columnas de la tabla">
+                                                  </mat-form-field>
+                                                </div>
+                                                <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
+                                                  <!-- Position Column -->
+                                                  <ng-container matColumnDef="nombre">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                  </ng-container>
+                                                  <!-- Name Column -->
+                                                  <ng-container matColumnDef="precio">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                                                  </ng-container>
+                                                  <!-- Name Column -->
+                                                  <ng-container matColumnDef="edicion">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
+                                                  </ng-container>
+                                                  <!-- Weight Column -->
+                                                  <ng-container matColumnDef="estado">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                                  </ng-container>
+                                                  <!-- Name Column -->
+                                                  <ng-container matColumnDef="aceptacion">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
+                                                  </ng-container>
+                                                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="mostrardata2(row)" style = "cursor: pointer;"></mat-row>
+                                                </mat-table>
+                                                <mat-paginator #paginator="matPaginator"
+                                                  [pageSize]="5"
+                                                  [pageSizeOptions]="[5, 10, 20]"
+                                                  [showFirstLastButtons]="true">
+                                                </mat-paginator>
+                                              </div>
+                                        </ng-template>
                                       </div>
                                     </div>
                                 </div>
-
                                 <div id="menu1" class="tab-pane fade">
                                     <div class="box-header">
                                         <i class="fa fa-flask"></i>
-
                                         <h3 class="box-title">HISTORIAL DE SERVICIOS</h3>
                                     </div>
                                     <div class="box-body">
@@ -109,47 +98,38 @@
                                             <div class="example-container mat-elevation-z8">
                                               <div class="example-header">
                                                 <mat-form-field>
-                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
+                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Busca por cualquier valor que pueda tomar las columnas de la tabla">
                                                 </mat-form-field>
                                               </div>
-
                                               <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
-
                                                 <!-- Position Column -->
                                                 <ng-container matColumnDef="nombre">
                                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                                 </ng-container>
-
                                                 <!-- Name Column -->
                                                 <ng-container matColumnDef="precio">
                                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
                                                 </ng-container>
-
                                                 <!-- Name Column -->
                                                 <ng-container matColumnDef="edicion">
                                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
                                                 </ng-container>
-
                                                 <!-- Weight Column -->
                                                 <ng-container matColumnDef="estado">
                                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
                                                 </ng-container>
-
                                                 <!-- Name Column -->
                                                 <ng-container matColumnDef="aceptacion">
                                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
                                                   <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
                                                 </ng-container>
-
-
                                                 <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
                                                 <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="mostrardata(row)" style = "cursor: pointer;" ></mat-row>
                                               </mat-table>
-
                                               <mat-paginator #paginator2="matPaginator"
                                                 [pageSize]="5"
                                                 [pageSizeOptions]="[5, 10, 20]"
@@ -157,16 +137,12 @@
                                               </mat-paginator>
                                             </div>
                                           </div>
-
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
-
             </div>
           </div>
         </div>
@@ -175,8 +151,8 @@
       <div *ngIf="!moduloinfo" class="row">
           <div class="col-md-12 col-lg-12">
               <div class="box box-danger">
-                  <div class="box-body">
-                      <h3>SIN DATOS SELECCIONADOS</h3>
+                  <div class="box-body no-data">
+                      <h4>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h4>
                   </div>
               </div>
 
@@ -185,17 +161,17 @@
 
       <div *ngIf="moduloinfo" class="row" style="margin-top:20px;">
 
-        
+
         <div class="col-md-12">
           <div class="col-md-6">
               <div class="box-group" id="accordion">
                   <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-    
+
                 <div class="box box-danger">
                     <div class="box-header">
                         <h4 (click)="cambiarIcono('info')" class="box-title">
                         <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                            INFORMACIÓN DE SERVICIO
+                            Información del servicio solicitado
                         </a>
                         </h4>
                         <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
@@ -208,37 +184,37 @@
                                 <fieldset>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="estado"><strong>Estado:</strong> {{servsel.status}}</label>
+                                      <label class="control-label" for="estado"><strong>Estado:</strong><div class="info-content">{{servsel.status}}</div></label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{servsel.nombre}}</label>
+                                      <label class="control-label" for="nombreserv"><strong>Nombre:</strong><div class="info-content">{{servsel.nombre}}</div></label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{servsel.descripcion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong><div class="info-content">{{servsel.descripcion}}</div></label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Fecha Aceptación:</strong> {{servsel.fechaAceptacion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Fecha aceptación:</strong> <div class="info-content">{{servsel.fechaAceptacion}}</div></label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Aceptado por:</strong> {{servsel.acepto}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Aceptado por:</strong> <div class="info-content">{{servsel.acepto}}</div></label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Última edición:</strong> {{servsel.fechaEdicion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Última edición:</strong> <div class="info-content">{{servsel.fechaEdicion}}</div></label>
                                     </div>
                                   </div>
                                   <div class="form-group">
                                     <div class="col-md-12">
-                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{servsel.descripcion}}</label>
+                                      <label class="control-label" for="descripserv"><strong>Descripción:</strong> <div class="info-content"></div></label>
                                     </div>
                                   </div>
                                   <div *ngIf="servsel.condicionesSrv.length != 0" class="form-group">
@@ -246,7 +222,7 @@
                                       <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
                                       <div class="form-group" *ngFor="let item of servsel.condicionesSrv; let i = index">
                                           <label class="control-label" for="precioserv"><input disabled name="{{'checkboxSrv' + i}}" [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                      </div>            
+                                      </div>
                                     </div>
                                   </div>
 
@@ -260,7 +236,7 @@
                                       <label class="control-label" for="precioserv"><strong>Descuento: $</strong> {{servsel.descuento}}</label>
                                     </div>
                                 </div>
-                                  
+
                                   <div class="form-group">
                                     <div class="col-md-12">
                                       <label class="control-label" for="precioserv"><strong>Precio Total con descuento: $</strong> {{servsel.precio}}</label>
@@ -277,27 +253,27 @@
                                                   <label class="control-label" for="parvar">{{item}}
                                                       <input class="form-control" id="item" name="item" disabled value="{{this.servsel.parametrosSrv[i].value}}" type="text"> </label>
                                               </div>
-                                              
+
                                             </div>
-                    
+
                                         </div>
                                     </div>
-                                      
+
                                   </div>
- 
+
 
                                   <div *ngIf="buttoncancel" class="row form-group" style="margin-top:20px;">
                                     <div class="col-md-12 text-center ">
                                       <button  class="btn btn-danger" type="button" (click)="cancelarSolicitudServicio()">CANCELAR SOLICITUD</button>
                                     </div>
-                                  </div> 
-          
+                                  </div>
+
                                 </fieldset>
                             </form>
                         </div>
                     </div>
                 </div>
-    
+
                 <div *ngIf="servsel.variaciones.length != 0" class="box box-danger">
                     <div class="box-header">
                     <h4 (click)="cambiarIcono('sabs')" class="box-title">
@@ -307,7 +283,7 @@
                     </h4>
                     <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
                         <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
-                    </a> 
+                    </a>
                     </div>
                     <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                     <div class="box-body">
@@ -323,12 +299,12 @@
                                 </div>
                               </div>
                             </fieldset>
-      
+
                             <fieldset *ngIf="variation">
                               <div class="form-group">
                                   <div class="col-md-12">
                                     <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
-          
+
                                   </div>
                               </div>
                               <div class="form-group">
@@ -341,10 +317,10 @@
                                   <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
                                   <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
                                       <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                  </div>            
+                                  </div>
                                 </div>
                               </div>
-                     
+
                               <div class="form-group">
                                   <div class="col-md-12">
                                     <label class="control-label" for="precioserv"><strong>Precio: $</strong> {{variation.precio}}</label>
@@ -361,20 +337,20 @@
                                               <label class="control-label" for="parvar">{{item}}
                                                   <input class="form-control" id="item" name="item" disabled value="{{this.valorParametro[i]}}" type="text"> </label>
                                           </div>
-                                         
+
                                         </div>
-                
+
                                     </div>
                                 </div>
-                                 
+
                               </div>
-          
-                            </fieldset> 
-                        </form> 
-    
+
+                            </fieldset>
+                        </form>
+
                     </div>
                     </div>
-                </div>  
+                </div>
 
                 <div *ngIf="((servsel.status == 'procesada') || (servsel.status == 'terminada')) && (servsel.path.length != 0)" class="box box-danger">
                     <div class="box-header">
@@ -385,7 +361,7 @@
                     </h4>
                     <a (click)="cambiarIcono('archivos')" data-toggle="collapse" data-parent="#accordion" href="#archivos" aria-expanded="false" class="collapsed">
                         <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.archivos, 'glyphicon-minus':iconos.archivos}"></span>
-                    </a> 
+                    </a>
                     </div>
                     <div id="archivos" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                       <div class="box-body">
@@ -396,35 +372,35 @@
                                           <label class="control-label" for="listfacul"><strong>Archivos Agregados :</strong></label>
                                           <ul class="nav nav-stacked">
                                             <li *ngFor="let item of this.servsel.path; let i = index;">
-                                              <a>{{item}}  <span (click)="descargarArchivo(i)" class="puntero pull-left badge bg-green">bajar</span> </a>                              
+                                              <a>{{item}}  <span (click)="descargarArchivo(i)" class="puntero pull-left badge bg-green">bajar</span> </a>
                                           </ul>
                                       </div>
-                                      
+
                                     </div>
                               </fieldset>
-            
-                             
+
+
                           </form>
-    
+
                       </div>
                     </div>
-                </div> 
-                              
+                </div>
+
               </div>
           </div>
-    
+
 
 
           <div class="col-md-6">
               <div class="box box-danger">
                   <div class="box-header">
                     <i class="fa fa-address-card-o"></i>
-  
+
                     <h3 class="box-title">Comentarios</h3>
                   </div>
 
                   <div class="box-body">
-                    
+
                     <!-- Conversations are loaded here -->
                     <div class="direct-chat-messages">
                       <!-- Message. Default to the left -->
@@ -442,7 +418,7 @@
                           <!-- /.direct-chat-text -->
                         </div>
                         <!-- /.direct-chat-msg -->
-    
+
                         <!-- Message to the right -->
                         <div *ngIf="item.autor == 'usuario'" class="direct-chat-msg right">
                           <div class="direct-chat-info clearfix">
@@ -450,16 +426,16 @@
                             <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
                           </div>
                           <!-- /.direct-chat-info -->
-            
+
                           <div class="direct-chat-text">
                             {{item.commentText}}
                           </div>
                           <!-- /.direct-chat-text -->
                         </div>
-                      </div>   
+                      </div>
                     </div>
                   </div>
-                    <!-- /.box-body -->   
+                    <!-- /.box-body -->
                   <div *ngIf="(servsel.status != 'rechazada') && (servsel.status != 'cancelada')" class="box-footer">
                       <form action="#" method="post">
                         <div class="input-group">
@@ -474,7 +450,7 @@
           </div>
         </div>
 
-            
+
 
 
       </div>

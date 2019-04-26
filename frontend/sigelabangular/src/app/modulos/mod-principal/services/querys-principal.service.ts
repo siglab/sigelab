@@ -217,7 +217,7 @@ export class QuerysPrincipalService {
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
   estructurarDataServ(data: any) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       this.datosServEstructurados = [];
       console.log(data.size);
       if (data.size != 0) {
@@ -277,7 +277,7 @@ export class QuerysPrincipalService {
 
                           this.datosServEstructurados.push(servicios);
 
-                          if (this.datosServEstructurados.length == data.size) {
+                          if (this.datosServEstructurados.length === data.size) {
                             resolve({
                               data: this.datosServEstructurados
                             });
@@ -308,10 +308,10 @@ export class QuerysPrincipalService {
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE PRUEBAS
   estructurarDataPruebas(data: any) {
 
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       this.datosPrubEstructurados = [];
 
-      if (data.size != 0) {
+      if (data.size !== 0) {
         data.forEach(doc => {
           const elemento = doc.data();
           if (elemento.active) {
@@ -368,7 +368,7 @@ export class QuerysPrincipalService {
 
                       this.datosPrubEstructurados.push(pruebas);
 
-                      if (this.datosPrubEstructurados.length == data.size) {
+                      if (this.datosPrubEstructurados.length === data.size) {
                         resolve({
                           data: this.datosPrubEstructurados
                         });
@@ -574,7 +574,7 @@ export class QuerysPrincipalService {
   }
 
   estructuraTelefonos(idlab) {
-    let tels = [];
+    const tels = [];
     this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
       data.forEach(element => {
         tels.push(element.data().cfEAddrValue);
@@ -633,7 +633,7 @@ export class QuerysPrincipalService {
     let destino = '';
     if (analistas) {
       for (let i = 0; i < analistas.length; i++) {
-        destino += analistas[i] + ','
+        destino += analistas[i] + ',';
       }
     }
 
@@ -651,7 +651,7 @@ export class QuerysPrincipalService {
       asunto: asunto,
       mensaje: mensaje
     }).subscribe((res) => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         console.log('notificaciones enviadas');
       } else {
         console.log('error notificaciones');
@@ -667,13 +667,13 @@ export class QuerysPrincipalService {
 
         if (personas[key]) {
           this.buscarDirector(key).then(doc => {
-            if (doc.data().user != '') {
+            if (doc.data().user !== '') {
               this.buscarUsuario(doc.data().user).then(user => {
                 if (user) {
                   for (const key in user.data().appRoles) {
                     if (user.data().appRoles.hasOwnProperty(key)) {
                       if (user.data().appRoles[key]) {
-                        if (key == '6ITqecW7XrgTLaW6fpn6') {
+                        if (key === '6ITqecW7XrgTLaW6fpn6') {
                           arra.push(doc.data().email);
                         }
                       }

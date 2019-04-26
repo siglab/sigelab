@@ -59,8 +59,6 @@ const routes: Routes = [
       { path: 'adminserviciosasociados', component: ServiciosAsociadosComponent, canActivate: [Nivel2Guard]},
       { path: 'adminproyectos', component: AdminProyectosComponent, canActivate: [Nivel2Guard]},
       { path: 'adminsolicitudmantenimiento', component: SolicitudMantenimientoComponent, canActivate: [Nivel2Guard]},
-
-
       { path: 'adminlaboratorios3', component: AdminLaboratorios3Component, canActivate: [Nivel3Guard]},
       { path: 'comunicacionmasiva', component: ComunicacionMasivaComponent, canActivate: [Nivel25Guard]},
       { path: 'usuarios', component: AdminUsuariosComponent, canActivate: [Nivel3Guard]},

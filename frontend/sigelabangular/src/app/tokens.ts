@@ -10,6 +10,15 @@ export const firebase = {
   messagingSenderId: '803777606972'
 };
 
+// export const firebase = {
+//   apiKey: 'AIzaSyAcWe0D2IcAS4nN4vZCP-l6XHtkmlGm8HM',
+//   authDomain: 'paginaweb-a5fb7.firebaseapp.com',
+//   databaseURL: 'https://paginaweb-a5fb7.firebaseio.com',
+//   projectId: 'paginaweb-a5fb7',
+//   storageBucket: 'paginaweb-a5fb7.appspot.com',
+//   messagingSenderId: '485854006647'
+// };
+
 
 // export const firebase = {
 //   apiKey: "AIzaSyCJ8Zt_EICvMz4EGlxwB6FjTdrfi2ets0k",
