@@ -367,6 +367,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
 
+  filter(val: string): string[] {
+    return this.edificios.filter(option =>
+      option.toLowerCase().indexOf(val.toLowerCase()) === 0);
+  }
+
+
 
   /* asigna la fila de la tabla a variables ngmodel */
   cambiardata(item) {
@@ -725,20 +731,24 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // valida si ya existe un espacio para que pueda ser vinculado
-  spaceCheck(espacio) {
+  spaceCheck( espacio ) {
     this.idnewSp = '';
 
 
-    if (espacio.trim() === '') {
+   console.log(espacio);
+     const edificio = this.myControl.value;
+
+     console.log(edificio);
+    if ( espacio.trim() === '') {
       this.status = 'Campo obligatorio';
        this.dispo = false;
      } else {
       this.status = 'Buscando espacio ...';
-      this.servicioMod2.getEspaceForBuildAndPlace(edificio, espacio).then((snapShot) => {
-        if (snapShot.empty) {
-          this.status = 'Espacio no encontrado';
-          this.dispo = true;
-        } else {
+       this.servicioMod2.getEspaceForBuildAndPlace( edificio, espacio ).then((snapShot) => {
+       if (snapShot.empty) {
+         this.status = 'Espacio no encontrado';
+         this.dispo = true;
+       } else {
           console.log(snapShot.docs[0].id);
          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
          this.dispo = false;
@@ -751,51 +761,40 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   getIdSubHq(item) {
 
 
-    const sede = JSON.parse(item);
+    const sede =  JSON.parse(item);
     this.fcu = false;
     this.otraSede = false;
 
-    this.idsh = sede.id;
+     this.idsh = sede.id;
 
-    switch (sede.cfAddrline2) {
+       switch (sede.cfAddrline2) {
 
-      case 'Ciudad Universitaria Meléndez': {
 
-      case 'Fuera del campus universitario': {
+        case 'Fuera del campus universitario': {
 
-        this.fcu = true;
-        break;
-      }
+          this.fcu = true;
+          break;
+        }
 
-      case 'San Fernando': {
-        this.edificios = [];
-        this.otraSede = true;
-        break;
-      }
+        default : {
 
-      case 'Palmira': {
-        this.edificios = [];
-        this.otraSede = true;
-        break;
-      }
+          console.log(sede.id);
+          this.servicioMod2.getEdificiosBySede(sede.id)
+          .then( res =>  {
 
-          console.log(res.data());
+            console.log(res.data());
 
-          this.edificios = res.data().edificios;
+            this.edificios = res.data().edificios;
 
-        });
+          });
 
-        break;
+          break;
+        }
+
       }
 
     }
 
-  }
-
-
-      default:
-        break;
-    }
 
 
 
