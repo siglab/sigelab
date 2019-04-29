@@ -24,8 +24,8 @@
             data-toggle="modal"
             data-target="#modalNotifications"
           >
-            <i class="fa fa-bell-o"></i>
-            <span class="label label-warning">{{
+            <i class="fa fa-bell"></i>
+            <span class="label custom-uv-label">{{
               this.notifications.length
             }}</span>
           </a>
@@ -117,10 +117,10 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body">
-        <div class="box box-danger">
-          <div class="box-header">
-            <i class="fa fa-map"></i>
-            <h3 class="box-title">NOTIFICACIONES</h3>
+        <div class="box box-danger shadow">
+          <div class="box-header text-center">
+            <i class="fa fa-bell"></i>
+            <h3 class="box-title">Notificaciones</h3>
             <span
               style="color:#dd4b39; float:right; cursor: pointer;"
               class="glyphicon glyphicon-remove"
@@ -128,39 +128,44 @@
             ></span>
           </div>
           <div class="box-body">
-            <div class="panel-group" id="accordion">
-              <div
-                *ngFor="let item of this.notifications; let i = index"
-                class="panel panel-default"
-              >
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a
-                      data-toggle="collapse"
-                      data-parent="#accordion"
-                      href="#collapse{{ i }}"
-                      >Notificacion {{ i }}: {{ item.asunto }}
-                      <strong style="float: right;"
-                        >Fecha: {{ item.fecha }}</strong
-                      ></a
-                    >
-                  </h4>
-                </div>
-                <div id="collapse{{ i }}" class="panel-collapse collapse">
-                  <div class="panel-body">
-                    {{ item.mensaje }}
-                    <button
-                      class="btn2 btn-danger danger"
-                      style="float: right;"
-                      type="button"
-                      (click)="finalizar(item.id, i)"
-                    >
-                      Finalizar notificacion
-                    </button>
+            <div *ngIf="this.notifications.length === 0 ;else notificationsPanel" class="no-data">
+              <h4>No tienes notificaciones pendientes</h4>
+            </div>
+            <ng-template #notificationsPanel>
+              <div class="panel-group" id="accordion">
+                <div
+                  *ngFor="let item of this.notifications; let i = index"
+                  class="panel panel-default"
+                >
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a
+                        data-toggle="collapse"
+                        data-parent="#accordion"
+                        href="#collapse{{ i }}"
+                        >Notificación {{ i }}: {{ item.asunto }}
+                        <strong style="float: right;"
+                          >Fecha: {{ item.fecha }}</strong
+                        ></a
+                      >
+                    </h4>
+                  </div>
+                  <div id="collapse{{ i }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      {{ item.mensaje }}
+                      <button
+                        class="btn btn-sm modal-button"
+                        style="float: right;"
+                        type="button"
+                        (click)="finalizar(item.id, i)"
+                      >
+                        Cerrar notificacion
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </ng-template>
           </div>
         </div>
       </div>
