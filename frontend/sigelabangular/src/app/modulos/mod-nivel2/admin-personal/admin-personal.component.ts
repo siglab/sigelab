@@ -105,6 +105,8 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   role: any;
   moduloNivel2 = false;
+  moduloNivel3 = false;
+  moduloNivel25 = false;
 
   niveles = [];
 
@@ -207,11 +209,22 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles(rol) {
     this.moduloNivel2 = false;
+    this.moduloNivel3 = false;
+    this.moduloNivel25 = false;
     console.log(rol);
     for (const clave in rol) {
       if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
           this.moduloNivel2 = true;
+        }
+
+        if ((clave === 'moduloNivel3')) {
+          this.moduloNivel3 = true;
+        }
+
+
+        if ((clave === 'moduloNivel25')) {
+          this.moduloNivel25 = true;
         }
       }
     }
@@ -378,12 +391,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
 
-  nombreRoles(item){
+  nombreRoles(item) {
     this.rolesAgregados = [];
     for (const key in item[this.idlab]  ) {
       if (item[this.idlab].hasOwnProperty(key)) {
         this.rolesAgregados.push({ id: key,
-          nombre: this.niveles.find(o => o.id == key).nombre});
+          nombre: this.niveles.find(o => o.id === key).nombre});
       }
     }
   }
@@ -437,7 +450,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  quitarelemento(i){
+  quitarelemento(i) {
     this.rolesAgregados.splice(i, 1);
   }
 
@@ -547,7 +560,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
               this.servicioMod2.Trazability(
                 this.user.uid, 'create', 'cfPers', ok.id, pers
-              ).then(()=>{
+              ).then(() => {
                 this.updateFaciliti(ok.id);
                 this.alert.hide();
 
@@ -558,7 +571,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 });
                 this.clearValues();
                 this.dispo = false;
-                $('#modal1').modal('hide');
+                $('#modal1Personal').modal('hide');
               });
 
 
@@ -581,7 +594,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 showConfirmButton: true
               });
               this.clearValues();
-              $('#modal1').modal('hide');
+              $('#modal1Personal').modal('hide');
 
             });
         }
@@ -633,7 +646,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     console.log('revisar este lab', this.idlab);
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfFacil', this.idlab, facil
-    ).then(()=>{
+    ).then(() => {
       this.servicioMod2.setDocLaboratorio(this.idlab, facil);
     });
 
@@ -691,7 +704,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.alert.hide();
 
           this.clearValues();
-          $('#modal1').modal('hide');
+          $('#modal1Personal').modal('hide');
           this.toastr.success('Almacenado correctamente.', 'éxito!');
       });
       });
@@ -706,26 +719,26 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  agregarRol(){
+  agregarRol() {
     console.log(this.rolSelect);
 
     let bool = false;
 
     this.rolesAgregados.forEach((doc, index) => {
-      if(doc.id == this.rolSelect){
+      if (doc.id === this.rolSelect) {
         bool = true;
       }
     });
 
-    if(bool){
+    if (bool) {
       swal({
         type: 'error',
         title: 'El rol ya se encuentra agregado.',
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id:this.rolSelect,
-        nombre: this.niveles.find(o => o.id == this.rolSelect).nombre});
+      this.rolesAgregados.push({id: this.rolSelect,
+        nombre: this.niveles.find(o => o.id === this.rolSelect).nombre});
     }
 
   }

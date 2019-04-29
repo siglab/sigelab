@@ -279,7 +279,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         comments: [],
         typeuser: 'externo',
         path: [],
-        datauser: { type: '', ci: '', llaveci: '' },
+        datauser: { type: [], ci: '', llaveci: '' },
         emailuser: this.user.email,
         acceptedBy: '',
         parametrosSrv: [],
@@ -339,7 +339,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
           }
           if (this.usuariounivalle) {
             cfSrvReserv.typeuser = 'interno';
-            // cfSrvReserv.datauser.type = this.univalle[this.selecunivalle];
+            cfSrvReserv.datauser.type = this.selecunivalle.value;
             cfSrvReserv.datauser.ci = this.valorci;
             cfSrvReserv.datauser.llaveci = this.llaveci;
           }
@@ -541,6 +541,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.preciototal = 0;
     this.descuento = 0;
     this.preciocondescuento = 0;
+    this.habilitarci = false;
+    this.selecunivalle.setValue([]);
   }
 
   ciCheck($event) {

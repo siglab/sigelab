@@ -102,6 +102,7 @@ import { ActivePipe } from './shared/services/active.pipe';
 
 import { NgxEditorModule } from 'ngx-editor';
 import { HttpClientModule } from '@angular/common/http';
+
 import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
 import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';

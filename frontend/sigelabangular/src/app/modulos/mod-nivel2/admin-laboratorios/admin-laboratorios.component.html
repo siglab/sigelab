@@ -1,15 +1,10 @@
-<div class="content-wrapper">
+<div id="contenidowraper" class="content-wrapper">
   <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>
-      Laboratorios
-    </h1>
-  </section>
 
   <!-- Main content -->
-  <section class="content" *ngIf="itemsel | async; let itemsel">
+  <section class="content" >
 
-    <div class="tab-content">
+    <div *ngIf="itemsel | async; let itemsel" class="tab-content">
       <div id="home" class="tab-pane fade in active">
         <!-- Componente central de busqueda -->
         <!-- INDICADORES -->
@@ -216,7 +211,7 @@
                                 <strong>Términos y condiciones:</strong> {{this.itemsel.condiciones}}</label>
                             </div>
                           </div>
-                          <div *ngIf="moduloNivel2 || moduloPermiso" class="form-group">
+                          <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25 || moduloPermiso" class="form-group">
                             <div class="col-md-12" style="margin-left: 70%; max-width: 120px;">
                               <button class="btn2 btn-danger btn-lg btn-block danger" type="button" (click)="limpiarData()" data-toggle="tab" href="#menu1">Editar</button>
                             </div>
@@ -686,9 +681,9 @@
 
           <div class="box-body">
 
-            <div [ngClass]="{'col-md-6':moduloNivel2, 'col-md-12':moduloPermiso}">
-              <div [ngClass]="{'box box-danger':moduloNivel2, '':moduloPermiso}">
-                <div *ngIf="moduloNivel2" class="box-header text-center">
+            <div [ngClass]="{'col-md-6':moduloNivel2 || moduloNivel3 || moduloNivel25, 'col-md-12':moduloPermiso}">
+              <div [ngClass]="{'box box-danger':moduloNivel2 || moduloNivel3 || moduloNivel25, '':moduloPermiso}">
+                <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="box-header text-center">
                   <i class="fa fa-address-card-o"></i>
 
                   <h3 class="box-title">Editar Información Actual</h3>
@@ -947,7 +942,7 @@
             </div>
 
 
-            <div *ngIf="moduloNivel2" class="col-md-6">
+            <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="col-md-6">
               <div class="box box-danger">
                 <div class="box-header text-center">
                   <i class="fa fa-address-card-o"></i>
@@ -1398,7 +1393,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive">
               <div class="cal" id="calendar2">
               </div>
             </div>

@@ -26,7 +26,19 @@
     background-color: #ECF1F3;
     cursor: pointer;
   }
-  
+
+  /* .prueba .content-wrapper{
+
+    min-height: 0% !important;
+    padding: 15px !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    background: red;
+  } */
+
+
   
   body {
     font-family: 'Open Sans', sans-serif;
