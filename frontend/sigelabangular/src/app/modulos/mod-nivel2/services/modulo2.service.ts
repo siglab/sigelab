@@ -6,7 +6,7 @@ const publicIp = require('public-ip');
 @Injectable()
 export class Modulo2Service {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(public afs: AngularFirestore) { }
 
   // METODOS DE CONSULTA
   getLocalStorageUser() {
@@ -477,5 +477,11 @@ export class Modulo2Service {
   }
 
 
+
+  getEdificiosBySede(id) {
+
+   return this.afs.doc(`cfPAddr/${id}`).ref.get();
+
+  }
 
 }
