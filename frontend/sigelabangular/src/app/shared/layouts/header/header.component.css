@@ -64,6 +64,7 @@
   margin: auto;
   padding-left: 10px;
   padding-right: 10px;
+  height: 25px;
 }
 
 .uv-logo-container {
@@ -83,4 +84,38 @@
 
 .messages-menu {
   height: 50px;
+}
+
+.custom-uv-label {
+  background-color: #6f7071 !important;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.no-data {
+  text-align: center;
+  color: #7d7d7da8;
+}
+
+.shadow {
+  box-shadow: 0px 0px 15px 0px #888888;
+}
+
+.modal-content {
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.modal-button {
+  background-color: #cc0000;
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+
+.modal-button:hover {
+  background-color: #58595b;
 }
