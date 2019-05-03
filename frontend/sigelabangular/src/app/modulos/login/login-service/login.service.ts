@@ -90,8 +90,8 @@ export class LoginService {
             console.log('usuario nuevo');
 
             this.postUserBackend(
-              response.user.uid,
-              response.user.email
+              response.user.email,
+              response.user.uid
             ).subscribe(res => {
               if (res.status === 200) {
                 this.consultarTipoUsuario(response.user.uid).then(() => {

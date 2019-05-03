@@ -40,6 +40,8 @@ const createUser = (req, res) => {
   email: req.email,
    };
 
+   console.log( "params", req.email, req.uid);
+
    console.log('datos auth', req);
    return ref.collection("cfPers").where("email", "==", req.email)
     .get()
