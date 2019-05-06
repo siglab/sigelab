@@ -1,6 +1,6 @@
-![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Propuesta_1_Sigelab-15.png)
+![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/angularApp/src/assets/img/Propuesta_1_Sigelab-15.png)
 <p align="center">
-  <img width="48%"src="https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png">
+  <img width="48%"src="https://github.com/siglab/sigelab/blob/develop/frontend/angularApp/src/assets/img/Logo-UV-Vice.png">
 </p>
 
 
