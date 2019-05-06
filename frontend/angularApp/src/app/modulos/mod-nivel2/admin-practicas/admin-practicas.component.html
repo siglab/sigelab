@@ -1,0 +1,743 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Prácticas
+    </h1>
+
+  </section>
+
+  <!-- Main content -->
+  <section class="content" *ngIf="itemsel | async; let itemsel">
+
+    <!-- Componente central de busqueda -->
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger">
+          <div *ngIf="moduloNivel2" class="box-header">
+            <div class="form-group">
+              <div class="col-md-12">
+                <button style="float: right;" (click)="down()" class="btn btn-success" type="button">Nuevo práctica,
+                  prueba o ensayo
+                  <i class="fa fa-plus"></i>
+
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-body">
+            <ul class="nav nav-tabs">
+              <li>
+                <a class="tablas" data-toggle="tab" href="#home">
+                  Activos</a>
+              </li>
+              <li>
+                <a class="tablas" data-toggle="tab" href="#menu1">
+                  Inactivos</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div id="home" class="tab-pane fade in active">
+                <div class="col-md-12" style="margin-top:20px;">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-book"></i>
+
+                      <h3 class="box-title">PRÁCTICAS ACTIVAS SEMESTRE</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePrac.data.length > 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
+                              placeholder="Buscar Prácticas">
+                          </mat-form-field>
+                        </div>
+
+                        <mat-table #tablePrac #sortPrac="matSort" [dataSource]="dataSourcePrac" matSort>
+
+                          <ng-container   matColumnDef="nombre">
+                            <mat-header-cell [ngClass]="'large'"  *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell [ngClass]="'large'"   *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="codigo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Código Practica </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.codigo}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="programacion.semestre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Semestre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.semestre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container   [ngClass]="'customWidthClass'"   matColumnDef="programacion.estudiantes">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Número estudiantes </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.estudiantes}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="activo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> estado </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.activo | activo}} </mat-cell>
+                          </ng-container>
+
+                          <mat-header-row *matHeaderRowDef="displayedColumnsPrac"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPrac;" style="cursor: pointer;"
+                            (click)="cambiardata(row)" ></mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginatorPrac="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true">
+                        </mat-paginator>
+                      </div>
+
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+
+                </div>
+              </div>
+
+              <div id="menu1" class="tab-pane fade">
+                <div class="col-md-12" style="margin-top:20px;">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-book"></i>
+
+                      <h3 class="box-title">PRÁCTICAS INACTIVAS SEMESTRE</h3>
+                    </div>
+
+                    <div *ngIf="dataSourcePracIn.data.length === 0">
+                      <h3>El laboratorio no cuenta con prácticas inactivas </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracIn.data.length > 0">
+                        <div class="example-header">
+                          <mat-form-field>
+                            <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
+                              placeholder="Buscar Prácticas">
+                          </mat-form-field>
+                        </div>
+
+                        <mat-table #tablePrac #sortPracIn="matSort" [dataSource]="dataSourcePracIn" matSort>
+
+                          <ng-container matColumnDef="codigo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Código Práctica </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.codigo}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="programacion.semestre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Semestre </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.semestre}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="programacion.estudiantes">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Número estudiantes </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.programacion.estudiantes}} </mat-cell>
+                          </ng-container>
+
+
+
+                          <ng-container matColumnDef="activo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> estado </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.activo | activo}} </mat-cell>
+                          </ng-container>
+
+
+
+
+
+                          <mat-header-row *matHeaderRowDef="displayedColumnsPracIn"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsPracIn;" style="cursor: pointer;"
+                            (click)="activarData(row)"></mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginatorPracIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true">
+                        </mat-paginator>
+                      </div>
+
+
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <!-- Agregar una nueva practica -->
+      <div *ngIf="moduloNivel2 && addPractica"  id="addpractica" class="col-md-12" style="margin-top:20px;">
+        <mat-card>
+
+            <mat-card-title> <h3 class="text-center">Agregar nueva práctica</h3> 	</mat-card-title>
+          <!-- /.box-header -->
+          <mat-card-content>
+            <mat-horizontal-stepper  #stepper="matHorizontalStepper">
+              <mat-step >
+                <form #paso1="ngForm" >
+                  <ng-template matStepLabel>Información básica</ng-template>
+
+
+                  <mat-form-field>
+                    <input name="nombrep" [(ngModel)]="nameP"  matInput placeholder="Nombre práctica" required>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input   name="code" [(ngModel)]="code" matInput   placeholder="Código de la matería" required >
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-select  name="semester" placeholder="Semestre"  [(ngModel)]="programming.semester"  >
+                      <mat-option  [value]= "this.year + '-' + '01'"  >
+                        Periodo 01
+                      </mat-option>
+                      <mat-option  [value]= "this.year + '-' + '02'"   >
+                        Periodo 02
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input name="numeroes" [(ngModel)]="programming.noStudents"  matInput placeholder="Número de estudiantes" required>
+                  </mat-form-field>
+
+                  <mat-checkbox name="residuos" [(ngModel)]="residuos">Genera residuos</mat-checkbox>
+
+
+                  <div>
+                    <button  *ngIf="paso1.valid" mat-button matStepperNext (click)=" initCalendar(events)"  class="materialbtn">siguiente
+                      <i class="fa fa-arrow-right"></i> </button>
+                  </div>
+                </form>
+              </mat-step>
+
+              <!-- step calendar -->
+              <mat-step *ngIf="paso1.valid" >
+                <ng-template matStepLabel>AGREGUE LAS FECHAS DE LA PRÁCTICA AL CALENDARIO</ng-template>
+                <div class="col-md-12">
+                  <div class="box box-danger">
+                    <div class="box-header">
+                      <i class="fa fa-calendar"></i>
+                      <h3 class="box-title">CALENDARIO</h3>
+                    </div>
+
+                    <div class="text-center">
+                      <button class="btn btn-success" style="float: center" type="button"  data-toggle="modal" data-target="#myModal2">Agregar
+                        clase
+                         <i class="fa fa-plus"></i>
+                      </button>
+
+                    </div>
+                    <!-- /.box-header -->
+
+                    <div class="box-body no-padding" style="margin-top:10px">
+                      <div class="calendario" id="cal"> </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div>
+                  <button class="materialbtn" mat-button matStepperPrevious>
+                    <i class="fa fa-arrow-left"></i>
+                    Anterior
+                  </button>
+                  <button class="materialbtn" mat-button matStepperNext *ngIf="this.events.length > 0 " >
+                    Siguiente
+                    <i class="fa fa-arrow-right"></i>
+                  </button>
+                </div>
+
+              </mat-step>
+
+              <mat-step *ngIf="this.events.length > 0 ">
+                <ng-template matStepLabel>Vincular Equipos</ng-template>
+
+                <div class="box box-danger">
+                  <div class="box-header">
+                    <i class="fa fa-laptop"></i>
+
+                    <h3 class="box-title">SELECCIONE EQUIPOS QUE DESEA VINCULAR</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <div class="example-container" *ngIf="dataSourceEquip.data.length > 0">
+
+                      <mat-table #tableEquip [dataSource]="dataSourceEquip">
+
+                        <!-- Checkbox Column -->
+                        <ng-container matColumnDef="select">
+                          <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!-- nombre Column -->
+                        <ng-container matColumnDef="nombre">
+                          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsEquip;" (click)="selection.toggle(row)">
+                        </mat-row>
+                      </mat-table>
+
+                    </div>
+
+                  </div>
+
+                  <!-- /.box-body -->
+                </div>
+
+                <div>
+                  <button class="materialbtn" mat-button matStepperPrevious>
+                    <i class="fa fa-arrow-left"></i> Anterior</button>
+                  <button (click)="addPractice( stepper )" class="materialbtn" mat-button matStepperNext>Guardar <i class="fa fa-check" aria-hidden="true"></i>
+
+                  </button>
+                </div>
+              </mat-step>
+
+              <!-- <mat-step>
+                <ng-template matStepLabel>Vincular Espacios</ng-template>
+
+                <div class="box box-danger">
+                  <div class="box-header">
+                    <i class="fa fa-map"></i>
+
+                    <h3 class="box-title">ESPACIOS VINCULADOS</h3>
+                  </div>
+
+                  <div class="box-body">
+                    <div class="example-container" *ngIf="dataSourceEsp.data.length > 0">
+
+                      <mat-table #tableEsp [dataSource]="dataSourceEsp">
+
+                        <ng-container matColumnDef="select">
+                          <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                          </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombre">
+                          <mat-header-cell *matHeaderCellDef> capacidad </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.capacity}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="freeArea">
+                          <mat-header-cell *matHeaderCellDef> Area libre </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.freeArea}} </mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumnsEsp"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsEsp;" (click)="selection.toggle(row)">
+                        </mat-row>
+                      </mat-table>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <button class="btn btn-success" mat-button matStepperPrevious> <i class="fa fa-arrow-left"></i> Anterior</button>
+                  <button (click)="addPractice()" class="btn btn-danger" mat-button matStepperNext>Guardar</button>
+                </div>
+              </mat-step> -->
+            </mat-horizontal-stepper>
+
+
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+       <!-- cierra agregr nueva practica -->
+
+       <!-- informacion consulta practica -->
+     <div *ngIf="consultarpractica && !addPractica"  id="mostrarpractica" class="col-md-12" style="margin-top:20px;">
+
+
+      <div class="col-md-6">
+       <mat-card>
+        <mat-card-title> <h3 class="text-center">Información de práctica</h3> 	</mat-card-title>
+          <!-- /.box-header -->
+         <mat-card-content>
+
+          <form id="form-work" class="" name="form-work">
+            <fieldset>
+                <div class="col-md-12">
+                  <mat-form-field>
+                    <input name="nombre" [disabled]="!moduloNivel2 ? false : null" [(ngModel)]="practica.nombre" matInput placeholder="Nombre práctica" >
+                  </mat-form-field>
+
+                </div>
+
+                <div class="col-md-12">
+                    <mat-form-field>
+                      <input name="numero-es" [disabled]="!moduloNivel2 ? false : null" [(ngModel)]="practica.numeroEst" matInput placeholder="Número Estudiantes" >
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-12">
+                  <mat-form-field>
+                      <input name="semestre" [disabled]="!moduloNivel2 ? false : null" [(ngModel)]="practica.semestre" matInput placeholder="Semestre" >
+                    </mat-form-field>
+                </div>
+
+
+              <div *ngIf="moduloNivel2" class="form-group">
+                <div class="col-md-12">
+
+                  <label style="margin-top: 20px;" class="switch">
+                    <input name="active" [(ngModel)]="this.practica.estado" id="activo" type="checkbox" checked>
+                    <span class="slider round"></span>
+                  </label>
+
+
+                </div>
+              </div>
+
+
+
+              <div *ngFor="let item of this.practica.space">
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="ciuor">
+                      <strong>Campus: </strong>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="ciudes">
+                      <strong>Edificio: {{item.spaceData.building}} </strong>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="ciudes">
+                      <strong>Planta: {{item.spaceData.floor}} </strong>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="ciudes">
+                      <strong>Espacio: {{item.spaceData.place}} </strong>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+
+
+            </fieldset>
+            <div *ngIf="moduloNivel2"  style="margin-top: 20px;">
+
+                <button class="btn btn-info"   (click)="triggerCalendar()" type="button">
+                  Programación
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </button>
+
+                <button class="btn btn-success" (click)="actualizarPractica()" type="button">
+                  Actualizar
+                  <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+            </div>
+          </form>
+
+
+          </mat-card-content>
+         </mat-card>
+      </div>
+
+       <div class="col-md-6" *ngIf="!vercalendario">
+        <mat-card>
+         <mat-card-title> <h3 class="text-center">Equipos vinculados</h3> 	</mat-card-title>
+           <!-- /.box-header -->
+          <mat-card-content>
+            <div class="divScroll">
+              <div *ngIf="this.practica.equipos.length == 0">
+                <h5>Esta práctica no tiene equipos asociados</h5>
+              </div>
+              <div *ngIf="this.practica.equipos.length != 0" class="list-group">
+                <table class=" table row-border hover table-condensed">
+                  <thead>
+                    <tr>
+                      <th>Nombre de equipos</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="cursor:pointer" *ngFor="let item of this.practica.equipos">
+                      <td>
+                        {{item.nombre}}
+                      </td>
+
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+           </mat-card-content>
+          </mat-card>
+       </div>
+
+       <div class="col-md-6" *ngIf="vercalendario" >
+        <mat-card>
+
+
+         <mat-card-title>
+            <button (click) ="vercalendario = false; " class="btn btn-success btn-sm" style="float:left">
+                <i class="fa fa-arrow-left"></i> Regresar
+              </button>
+           <h3 class="text-center">Programación de práctica</h3>
+         </mat-card-title>
+           <!-- /.box-header -->
+           <mat-card-content>
+
+              <div class="box-body no-padding" style="margin-top:10px">
+                <div class="calendario" id="calendariomodal"> </div>
+              </div>
+           </mat-card-content>
+          </mat-card>
+       </div>
+
+     </div>
+     <!-- cierra informacion consulta practica -->
+
+
+
+
+    </div>
+
+
+
+  </section>
+
+
+
+
+
+</div>
+
+<!-- MODAL PARA NUEVAS PRACTICAS -->
+<div class="modal fade" id="myModal2" role="dialog">
+  <div class="modal-dialog modal-md">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
+
+            <h1 class="box-title">Día de clase</h1>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModal2')"></span>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+
+
+           <form  #formClase ="ngForm">
+
+             <div class="col-md-6">
+
+                 <mat-form-field class="example-full-width">
+                     <input matInput  [(ngModel)]="this.evento.title"  name="new-event" placeholder="Escriba un título para la clase" required>
+                 </mat-form-field>
+
+             </div>
+
+
+                <div class='col-md-6'>
+                   <mat-form-field class="example-full-width">
+                       <input matInput  [(ngModel)]="this.evento.start" type ="date" min="{{year}}" onkeydown="return false"  name="fecha-event" placeholder="seleccione una fecha para la clase" required >
+                     </mat-form-field>
+                 </div>
+
+                <div class='col-md-6'>
+                   <mat-form-field class="example-full-width">
+                       <input matInput  type="time"   [(ngModel)]="horaE"  name="hora-event" placeholder="Hora de inicio" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" required >
+                     </mat-form-field>
+                </div>
+
+                <div class='col-md-6'>
+                    <mat-form-field class="example-full-width">
+                       <input matInput  type="time"   [(ngModel)]="horaF"  name="horaF-event" placeholder="Hora fin" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" required >
+                     </mat-form-field>
+                </div>
+
+               <div class="text-center" >
+                <button *ngIf="formClase.valid" (click)="agregarEvento(); onSubmit(formClase);" type="button" class="btn btn-success">
+                  Guardar
+                <i class="fa fa-check"></i>
+                </button>
+
+              </div>
+           </form>
+
+
+
+
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+
+
+<!--  modal editar informacion del personal -->
+<div class="modal fade" id="modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+            <h3 class="box-title">Información del Personal</h3>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal')"></span>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-dash2equip" class="" name="form-dash2equip">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Nombre :</strong>
+                    </label>
+                    <input id="escuelaedit" name="nombre" class="form-control" type="text">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Apellidos :</strong>
+                    </label>
+                    <input id="escuelaedit" name="apellido" class="form-control" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Tipo:</strong>
+                    </label>
+                    <input id="escuelaedit" name="rol" class="form-control" type="text">
+                  </div>
+                </div>
+
+
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Email:</strong>
+                    </label>
+                    <input id="escuelaedit" name="email" class="form-control" type="email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Estado:</strong>
+                    </label>
+                    <select class="form-control" name="estado">
+                      <option value="true"> Activo </option>
+                      <option value="false"> Inactivo</option>
+
+                    </select>
+                  </div>
+
+
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Rol:</strong>
+                    </label>
+                    <select class="form-control" name="estado">
+                      <option value="editar"> editar </option>
+                      <option value="nivel2"> nivel2 </option>
+                    </select>
+                  </div>
+
+
+                </div>
+
+
+
+              </fieldset>
+
+
+            </form>
+
+
+
+
+          </div>
+           <div class="modal-footer">
+            <button type="button" class="btn btn-danger">Guardar</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+<app-spinner></app-spinner>

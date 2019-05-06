@@ -1,0 +1,133 @@
+<!-- sidebar menu: : style can be found in sidebar.less -->
+<ul class="sidebar-menu" data-widget="tree" style="width: 100%;">
+  <li class="treeview" style="cursor:pointer;" routerLinkActive="active">
+    <a>
+      <i class="fa fa-briefcase"></i>
+      <span>Administrar Laboratorios</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li *ngFor="let item of this.laboratorios2" class="treeview" routerLinkActive="active">
+        <a>
+          <i class="fa fa-link"></i>
+          <span
+            >{{ item.nombre.nom1 }} <br />
+            {{ item.nombre.nom2 }}
+          </span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li class="treeview" (click)="enviaritemLab(item)" routerLinkActive="active">
+            <a [routerLink]="['adminlaboratorios']">
+              <i class="fa fa-circle-o"></i>Panel principal
+            </a>
+          </li>
+          <li
+            routerLinkActive="active"
+            class="treeview"
+            (click)="enviaritemEquip(item)"
+          >
+            <a [routerLink]="['adminequipos']">
+              <i class="fa fa-circle-o"></i>Equipos registrados
+            </a>
+          </li>
+          <li
+            routerLinkActive="active"
+            class="treeview"
+            (click)="enviaritemPer(item)"
+          >
+            <a [routerLink]="['adminpersonal']">
+              <i class="fa fa-circle-o"></i>Administración de personal
+            </a>
+          </li>
+          <li
+            routerLinkActive="active"
+            class="treeview"
+            (click)="enviaritemEsp(item)"
+          >
+            <a [routerLink]="['adminespacios']">
+              <i class="fa fa-circle-o"></i>Administración de espacios
+            </a>
+          </li>
+          <li
+            *ngIf="item.labo.facilActivity.teaching"
+            routerLinkActive="active"
+            class="treeview"
+            (click)="enviaritemPra(item)"
+          >
+            <a [routerLink]="['adminpracticas']">
+              <i class="fa fa-circle-o"></i>Administración de prácticas
+            </a>
+          </li>
+          <li
+            *ngIf="item.labo.facilActivity.extension"
+            routerLinkActive="active"
+            class="treeview"
+          >
+            <a>
+              <i class="fa fa-link"></i> Administración de servicios
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li routerLinkActive="active" (click)="enviaritemServAsoc(item)">
+                <a [routerLink]="['adminserviciosasociados']">
+                  <i class="fa fa-circle-o"></i>
+                  Servicios asociados</a
+                >
+              </li>
+              <li routerLinkActive="active" (click)="enviaritemSolServ(item)">
+                <a [routerLink]="['adminserviciosolicitud']">
+                  <i class="fa fa-circle-o"></i> Solicitudes de servicios</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li
+            *ngIf="item.labo.facilActivity.research"
+            routerLinkActive="active"
+            class="treeview"
+          >
+            <a [routerLink]="['adminproyectos']" (click)="enviaritemProy(item)">
+              <i class="fa fa-circle-o"></i>Administración de proyectos
+            </a>
+          </li>
+          <li class="treeview" routerLinkActive="active">
+            <a>
+              <i class="fa fa-circle-o"></i>
+              <span>Generación de solicitudes</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li routerLinkActive="active" class="treeview">
+                <a
+                  [routerLink]="['adminsolicitudmantenimiento']"
+                  (click)="enviaritemSolMante(item)"
+                >
+                  <i class="fa fa-circle-o"></i>Solicitud de mantenimiento
+                </a>
+              </li>
+              <li class="treeview">
+                <a (click)="abrirEnlaceBaja()">
+                  <i class="fa fa-circle-o"></i>Solicitud de baja
+                </a>
+              </li>
+              <li class="treeview">
+                <a (click)="abrirEnlaceQuiUv()">
+                  <i class="fa fa-circle-o"></i>Recolección de residuos
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>

@@ -1,0 +1,174 @@
+<header class="main-header sombra">
+  <!-- Logo -->
+  <a href="#" class="logo white-bg" (click)="(false)">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini red-font"> <b class="s">S</b><b>LAB</b> </span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg logo-container">
+      <img src="../../../../assets/img/Propuesta_1_Sigelab-15.png" alt="Sigelab Logo" class="logo-img"/>
+    </span>
+  </a>
+  <!-- Header Navbar: style can be found in header.less -->
+  <nav class="navbar navbar-static-top">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+    </a>
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <!-- OCULTAR MENU PARA NOTIFICACIONES -->
+        <li class="dropdown notifications-menu" *ngIf="itemNotificacion">
+          <a
+            class="dropdown-toggle"
+            data-toggle="modal"
+            data-target="#modalNotifications"
+          >
+            <i class="fa fa-bell"></i>
+            <span class="label custom-uv-label">{{
+              this.notifications.length
+            }}</span>
+          </a>
+        </li>
+        <li class="messages-menu" *ngIf="!itemLogout">
+          <a
+            (click)="routerLogin()"
+            class="btn "
+            title="Ingresar"
+            id="logout"
+            style="cursor:pointer;"
+          >
+            <i class="fa fa-sign-in" style="font-size: 14px;"></i> Ingresar</a
+          >
+        </li>
+        <li class="dropdown user user-menu" *ngIf="itemLogout">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="{{
+                this.usuario.photoURL ? this.usuario.photoURL : this.photoDummie
+              }}"
+              class="user-image"
+              alt="User Image"
+            />
+            <span *ngIf="this.usuario.displayName" class="hidden-xs name">{{
+              this.usuario.displayName.toLowerCase().split(' ')[0]
+            }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="user-header">
+              <img
+                src="{{
+                  this.usuario.photoURL
+                    ? this.usuario.photoURL
+                    : this.photoDummie
+                }}"
+                class="img-circle"
+                alt="User Image"
+              />
+              <p *ngIf="this.usuario.email.toLowerCase().includes('correounivalle.edu.co'); else noIternalUser">
+                <span class="name">
+                 {{ this.usuario.displayName.toLowerCase() }}
+                </span>
+                <small>Usuario Institucional <br> Universidad del Valle</small>
+              </p>
+              <ng-template #noIternalUser>
+                <p>
+                  <span *ngIf="this.usuario.displayName" class="name">
+                   {{ this.usuario.displayName.toLowerCase() }}
+                  </span>
+                  <small>Usuario no Institucional</small>
+                </p>
+              </ng-template>
+            </li>
+            <li class="user-footer">
+              <div class="pull-right">
+                <a
+                  href="#"
+                  class="btn btn-default btn-flat"
+                  (click)="salir(); (false)"
+                  >Salir</a
+                >
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="uv-logo-container">
+          <img src="../../../../assets/img/logo-univalle.png" alt="Univalle Logo" class="uv-logo hidden-xs hidden-sm">
+          <img src="../../../../assets/img/uv-logo-mobile.jpg" alt="Univalle Logo Mobile" class="uv-logo-mobile hidden-md hidden-lg">
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!--MODAL PARA MOSTRAR EQUIPOS RELACIONADOS-->
+<div
+  class="modal fade"
+  id="modalNotifications"
+  role="dialog"
+  *ngIf="itemNotificacion"
+>
+  <div class="modal-dialog modal-md">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="box box-danger shadow">
+          <div class="box-header text-center">
+            <i class="fa fa-bell"></i>
+            <h3 class="box-title">Notificaciones</h3>
+            <span
+              style="color:#dd4b39; float:right; cursor: pointer;"
+              class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('modalNotifications')"
+            ></span>
+          </div>
+          <div class="box-body">
+            <div *ngIf="this.notifications.length === 0 ;else notificationsPanel" class="no-data">
+              <h4>No tienes notificaciones pendientes</h4>
+            </div>
+            <ng-template #notificationsPanel>
+              <div class="panel-group" id="accordion">
+                <div
+                  *ngFor="let item of this.notifications; let i = index"
+                  class="panel panel-default"
+                >
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a
+                        data-toggle="collapse"
+                        data-parent="#accordion"
+                        href="#collapse{{ i }}"
+                        >Notificación {{ i }}: {{ item.asunto }}
+                        <strong style="float: right;"
+                          >Fecha: {{ item.fecha }}</strong
+                        ></a
+                      >
+                    </h4>
+                  </div>
+                  <div id="collapse{{ i }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      {{ item.mensaje }}
+                      <button
+                        class="btn btn-sm modal-button"
+                        style="float: right;"
+                        type="button"
+                        (click)="finalizar(item.id, i)"
+                      >
+                        Cerrar notificacion
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

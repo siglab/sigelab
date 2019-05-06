@@ -1,0 +1,121 @@
+#cambio{
+  background-color: black !important;
+  width: 300px;
+  height: 20px;
+/*
+  background-image: url('https://assets.trome.pe/files/ec_article_multimedia_gallery/uploads/2018/04/17/5ad609d27c1a7.jpeg');
+*/
+}
+/* @media only screen and (max-width: 400px) {
+
+  #image{
+     src: url('../../../../assets/img/logo-mobile.png');
+  }
+} */
+.sombra {
+  font-family: "Roboto", "Helvetica Neue",Helvetica,Arial,sans-serif;
+  box-shadow: 0px 0px 15px 0px #888888;
+}
+
+.white-bg {
+  background-color: white !important;
+}
+
+.logo-img {
+  /* max-width: 53%; */
+  height: 100%;
+}
+
+.logo-container {
+  width: 100%;
+  height: 100%;
+}
+
+.red-font {
+  font-family: "Roboto", "Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #e30613;
+}
+
+.user {
+  font-size: 1.4rem;
+}
+
+.user-header {
+  background-color: #cc0000 !important;
+}
+
+.user-header > p {
+  font-family: "Roboto", "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 1.6rem !important;
+  text-align: center;
+  color: white !important;
+}
+
+.name {
+  text-transform: capitalize;
+}
+
+.s {
+  color: #6b6b6b;
+}
+
+.uv-logo {
+  width: 200px;
+  margin: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 25px;
+}
+
+.uv-logo-container {
+  min-width: 70px;
+  height: 50px;
+  float: right;
+  margin: auto;
+  display: flex;
+  background-color: white;
+}
+
+.uv-logo-mobile {
+  width: 38px;
+  margin: auto;
+  height: 50px;
+}
+
+.messages-menu {
+  height: 50px;
+}
+
+.custom-uv-label {
+  background-color: #6f7071 !important;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.no-data {
+  text-align: center;
+  color: #7d7d7da8;
+}
+
+.shadow {
+  box-shadow: 0px 0px 15px 0px #888888;
+}
+
+.modal-content {
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.modal-button {
+  background-color: #cc0000;
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+
+.modal-button:hover {
+  background-color: #58595b;
+}

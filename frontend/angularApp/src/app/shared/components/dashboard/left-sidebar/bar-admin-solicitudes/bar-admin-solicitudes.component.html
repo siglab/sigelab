@@ -1,0 +1,19 @@
+<!-- sidebar menu: : style can be found in sidebar.less -->
+<ul class="sidebar-menu" data-widget="tree">
+  <li class="treeview pointer" routerLinkActive="active">
+    <a>
+      <i class="fa fa-audio-description"></i>
+      <span>Administrar mis solicitudes</span>
+      <span class="pull-right-container">
+        <i class="fa fa-angle-left pull-right"></i>
+      </span>
+    </a>
+    <ul class="treeview-menu">
+      <li routerLinkActive="active" style="width: 100%">
+        <a [routerLink]="['adminsolicitudes']">
+          <i class="fa fa-circle-o"></i>Solicitudes de servicios</a
+        >
+      </li>
+    </ul>
+  </li>
+</ul>

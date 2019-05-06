@@ -1,0 +1,40 @@
+.divScroll {
+  overflow-y: scroll;
+  height: 600px;
+  max-height: auto;
+}
+divScroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 3px #222d32;
+  border-radius: 2px;
+  background-color: #222d32;
+}
+.divScroll::-webkit-scrollbar {
+  width: 5px;
+  background-color: #222d32;
+}
+.divScroll::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  box-shadow: inset 0 0 3px#222d32;
+  background-color: #babec0;
+}
+.sombra:hover {
+  background-color: #222d32;
+  cursor: pointer;
+}
+
+.header {
+  color: #4b646f;
+  background: #1a2226;
+  overflow: hidden;
+  text-overflow: clip;
+  flex: 0 0 50px;
+}
+
+.user-name {
+  font-size: 1.3rem;
+  text-transform: capitalize;
+}
+
+.m-t-5{
+  margin-top: 5px;
+}

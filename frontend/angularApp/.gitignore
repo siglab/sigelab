@@ -1,0 +1,52 @@
+# compiled output
+/dist
+/dist-server
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+/functions/node_modules
+
+# firebase config
+.firebaserc
+.firebase/
+database.rules.json
+firebase.json
+firebase-debug.log
+firestore.indexes.json
+firestore.rules
+storage.rules
+functions/node_modules/
+
+# environment files
+/src/app/environments/*
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db

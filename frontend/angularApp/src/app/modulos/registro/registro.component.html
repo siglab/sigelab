@@ -1,0 +1,52 @@
+<div class="register-box">
+  <span class="title">
+    SIGELAB
+   </span>
+
+  <div class="register-box-body">
+    <p class="login-box-msg">Registro</p>
+
+    <form action="../../index.html" method="post">
+      <!-- <div class="form-group has-feedback">
+        <input type="text" class="form-control" placeholder="Full name">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div> -->
+      <div class="form-group has-feedback"   [ngClass]="{'has-error': (email2.errors?.required) && (email2.touched) || (email2.errors?.pattern) }"       >
+        <input #email2="ngModel" (keyup) ="emailcheck($event,email2 )"
+        [(ngModel)]="email" name="email"
+        placeholder="Correo"
+        type="email" class="form-control"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <div style="color:red;" *ngIf="(email2['errors']?.required) && (email2.touched)"> Este campo es obigatorio.</div>
+        <div style="color:red;" *ngIf="(email2['errors']?.pattern)"> Este campo no contiene un formato de correo válido.</div>
+        <div> {{ status}} </div>
+
+      </div>
+      <div class="form-group has-feedback"  [ngClass]="{'has-error': (pas.errors?.required) && (pas.touched)||(pas.errors?.minlength)  }"  >
+        <input placeholder="Contraseña" #pas="ngModel" [(ngModel)]="pass" minlength="7" name="password" type="password" class="form-control" required>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <div *ngIf="pas['errors']?.minlength " style="color:red;"> Escriba al menos {{pas['errors'].minlength.requiredLength}} caracteres.</div>
+        <div *ngIf="pas['errors']?.required && (pas.touched)" style="color:red;"> Este campo es obigatorio.</div>
+      </div>
+      <div class="form-group has-feedback">
+        <input placeholder="Repetir contraseña" #pas2="ngModel" [(ngModel)]="pass2" minlength="7" name="password2" type="password" class="form-control" required>
+        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+        <div *ngIf="pas2['errors']?.minlength " style="color:red;"> Escriba al menos {{pas2['errors'].minlength.requiredLength}} caracteres.</div>
+        <div *ngIf="pas2['errors']?.required && (pas2.touched)" style="color:red;"> Este campo es obigatorio.</div>
+      </div>
+      <div class="row">
+
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button  (click)=" createUser()" type="submit" class="btn btn-danger btn-block btn-flat">Registrar</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+
+
+  </div>
+  <!-- /.form-box -->
+</div>

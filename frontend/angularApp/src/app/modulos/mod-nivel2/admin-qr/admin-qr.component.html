@@ -1,0 +1,268 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <h1>
+      Admin Qr
+    </h1>
+    <ol class="breadcrumb">
+      <li>
+        <a href="#">
+          <i class="fa fa-dashboard"></i> Home</a>
+      </li>
+      <li class="active">Dashboard laboratorios</li>
+    </ol>
+  </section>
+
+  <section class="content">
+
+    <!-- OCULTAR O MOSTRAR DEPENDIENDO DEL ROL -->
+    <div *ngIf="moduloNivel3">
+
+      <div class="text-center">
+        <h4> Ingrese la cantidad para generar nuevos códigos QR </h4>
+        <mat-form-field class="example-full-width">
+          <input [(ngModel)]="QrCantidad" matInput placeholder="Número de códigos" type="number">
+        </mat-form-field>
+
+        <button class="btn btn-primary" (click)="addNewQr(QrCantidad)"> generar QR </button>
+
+        <button *ngIf="this.arrayCsv.length > 0" class="btn btn-success" (click)="downloadCsvDoc()"> Descargar archivo Csv </button>
+
+      </div>
+
+      <div class="text-center">
+
+        <img height="250" width="250" *ngIf="QRimage" [src]='QRimage' alt="">
+
+      </div>
+
+
+    </div>
+
+
+    <div>
+      <div class="box-body">
+        <div class="box-body">
+
+          <ul class="nav nav-tabs">
+            <li>
+              <a class="tablas" data-toggle="tab" href="#home">
+                Qrs sin asociar</a>
+            </li>
+            <li>
+              <a class="tablas" data-toggle="tab" href="#menu1">
+                Qrs asociados </a>
+            </li>
+          </ul>
+
+          <div class="row" style="margin-top:20px;">
+            <div class="col-md-12">
+              <div class="box box-danger">
+                <div class="tab-content">
+                  <div id="home" class="tab-pane fade in active">
+
+                    <div class="box-body" *ngIf="this.dataSourceQr">
+
+                      <div>
+                        <div class="box-header">
+                          <i class="fa fa-cubes"></i>
+
+                          <h3 class="box-title">Qrs sin asociar</h3>
+                          <!--       <h3   class="box-title" style="float: right;">{{this.itemsel.personal.length}} PERSONAS</h3> -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div *ngIf="dataSourceQrIn.data.length == 0">
+                          <h3> Genere nuevos códigos</h3>
+                        </div>
+
+                        <div class="box-body" *ngIf="dataSourceQrIn.data">
+
+                          <div class="example-container mat-elevation-z8">
+                            <div class="example-header">
+                                <button *ngIf="moduloNivel3" (click)="downloadAllTableCsv()" mat-raised-button  color="primary" style="float: right;" >csv</button>
+                              <mat-form-field>
+                                <input style="outline: none;" matInput (keyup)="applyFilterQrSin($event.target.value)"
+                                  placeholder="Buscar referencia">
+                              </mat-form-field>
+
+
+                            </div>
+
+                            <mat-table #tableQr [dataSource]="dataSourceQrIn" matSort>
+
+
+                              <ng-container matColumnDef="SecuenciaQr">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Secuencia código </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.secQr}} </mat-cell>
+                              </ng-container>
+
+
+
+                              <mat-header-row *matHeaderRowDef="displayedColumnsQrIn"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsQrIn;" style="cursor: pointer;"
+                                (click)="cambiardataInac(row)"></mat-row>
+                            </mat-table>
+
+                            <mat-paginator #paginatorQrIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                              [showFirstLastButtons]="true">
+                            </mat-paginator>
+                          </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div id="menu1" class="tab-pane fade">
+
+                    <div class="box-body">
+
+                      <div>
+
+                        <div class="box-header">
+
+                          <i class="fa fa-qrcode"></i>
+
+                          <h3 class="box-title">Qrs asociados a inventario</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div *ngIf="dataSourceQr.data.length == 0">
+                          <h3> No se han asociado códigos a ningún inventario</h3>
+                        </div>
+                        <div class="box-body" *ngIf="dataSourceQr.data.length > 0">
+
+                          <div class="example-container mat-elevation-z8">
+                            <div class="example-header">
+                              <mat-form-field>
+                                <input style="outline: none;" matInput (keyup)="applyFilterQrCon($event.target.value)"
+                                  placeholder="Buscar referencia">
+                              </mat-form-field>
+                            </div>
+
+                            <mat-table #tableQr [dataSource]="dataSourceQr" matSort>
+
+
+                              <ng-container matColumnDef="SecuenciaQr">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.secQr}} </mat-cell>
+                              </ng-container>
+
+
+
+                              <mat-header-row *matHeaderRowDef="displayedColumnsQr"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsQr;" style="cursor: pointer;"
+                                (click)="cambiardata(row)" data-toggle="modal" data-target="#myModal"></mat-row>
+                            </mat-table>
+
+                            <mat-paginator #paginatorFinca="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                              [showFirstLastButtons]="true">
+                            </mat-paginator>
+                          </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+
+
+
+
+  </section>
+
+</div>
+
+
+<div class="container">
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <div class="box box-danger">
+            <div class="box-header with-border">
+              <h3 class=" text-center">Información Qr asociado</h3>
+
+
+             </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+             <form class="form-horizontal">
+              <div class="box-body">
+
+               <div class="text-center ">
+                  <button data-dismiss="modal" [routerLink]=" ['/principal/qrinventario/' + this.secQrUrl]  "
+                  class="btn btn-success">Consultar Qr <i class="fa fa-arrow-right"></i> </button>
+
+                 <button class="btn btn-success" (click) =" enableRecovery = true" >Recuperar Qr  <i class="fa fa-refresh"></i>
+                 </button>
+               </div>
+
+                <div class="form-group has-info" [ngClass]="{ 'has-success': this.dispo }" *ngIf="enableRecovery">
+                  <label class="control-label" for="estadoserv">
+                    <strong>Numero:</strong>
+                  </label>
+
+                  <input placeholder="Número Inventario" (focusout)="searchInventory($event)" type="text" class="form-control"
+                    id="inputEmail3" placeholder="">
+                  <span class="help-block">{{status}}</span>
+                </div>
+
+                <!-- ocultar campos antes de comprobar disponibilidad -->
+
+                <div *ngIf="dispo">
+
+                  <div class="form-group">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Marca Equipo:</strong>
+                    </label>
+
+                    <input type="text" [(ngModel)]="marca_equip" name="marca_equipo" class="form-control" id="inputPassword3"
+                      placeholder="Nombre equipo">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Precio Equipo:</strong>
+                    </label>
+
+                    <input type="text" [(ngModel)]="precio_equip" name="precio_equipo" class="form-control" id="inputPassword3"
+                      placeholder="Nombre equipo">
+                  </div>
+
+
+
+                  <!-- /.box-body -->
+                  <div class="box-footer">
+                    <button (click)="recuperarQr()" class="btn btn-success pull-right"><i class="fa fa-qrcode"></i>
+                      Generar</button>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,534 @@
+<div id="contenidowraperPersonal" class="content-wrapper">
+  <!-- Content Header (Page header) -->
+
+  <!-- Main content -->
+  <section class="content" *ngIf="itemsel | async; let itemsel">
+
+    <!-- Componente central de busqueda -->
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger">
+          <div class="box-header">
+            <div class="form-group">
+              <div class="col-md-12">
+
+                <button *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" data-toggle="modal" (click)="setValue()" data-target="#modal1Personal" style="float: right;" class="btn btn-success"
+                  type="button">Agregar Personal
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-body">
+
+            <div class="col-md-12">
+              <div>
+
+
+                <div class="box-body">
+                  <div class="box-body">
+
+                    <ul class="nav nav-tabs">
+                      <li>
+                        <a class="tablas" data-toggle="tab" href="#homePersonal">
+                          Activos</a>
+                      </li>
+                      <li>
+                        <a class="tablas" data-toggle="tab" href="#menu1Personal">
+                          Inactivos</a>
+                      </li>
+                    </ul>
+
+                    <div class="row" style="margin-top:20px;">
+                      <div class="col-md-12">
+                        <div class="box box-danger">
+                          <div class="tab-content">
+                            <div id="homePersonal" class="tab-pane fade in active">
+
+                              <div class="box-body" *ngIf="this.itemsel">
+
+                                <div class="table-responsive-md">
+                                  <div class="box-header">
+                                    <i class="fa fa-users"></i>
+
+                                    <h3 class="box-title">Personal Vinculado</h3>
+                                    <!--       <h3   class="box-title" style="float: right;">{{this.itemsel.personal.length}} PERSONAS</h3> -->
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <div *ngIf="dataSourcePers.data.length == 0">
+                                    <h3>El laboratorio no cuenta con personal activo</h3>
+                                  </div>
+
+                                  <div class="box-body" *ngIf="dataSourcePers.data">
+                                    <div class="table-responsive">
+                                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePers.data.length != 0">
+                                        <div class="example-header">
+                                          <mat-form-field>
+                                            <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
+                                          </mat-form-field>
+                                        </div>
+
+                                        <mat-table #tablePers #sortPers="matSort" [dataSource]="dataSourcePers" matSort>
+
+                                          <ng-container matColumnDef="nombre">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="apellido">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.apellidos}} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="codigo">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.cc}} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="estado">
+                                            <mat-header-cell [ngClass]="'small'" *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                            <mat-cell [ngClass]="'small'" *matCellDef="let element"> {{element.activo | activo }} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="email">
+                                            <mat-header-cell [ngClass]="'large'" *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                            <mat-cell [ngClass]="'large'" *matCellDef="let element"> {{element.email}} </mat-cell>
+                                          </ng-container>
+
+                                          <ng-container matColumnDef="tipo">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                            <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                          </ng-container>
+
+                                          <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
+                                          <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"
+                                            data-toggle="modal" data-target="#modal"></mat-row>
+                                        </mat-table>
+
+                                        <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                        </mat-paginator>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- /.box-body -->
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div id="menu1Personal" class="tab-pane fade">
+
+                              <div class="box-body">
+
+                                <div>
+
+                                  <div class="box-header">
+
+                                    <i class="fa fa-users"></i>
+
+                                    <h3 class="box-title">Personal Vinculado</h3>
+                                  </div>
+                                  <!-- /.box-header -->
+                                  <div *ngIf="dataSourcePersIn.data.length == 0">
+                                    <h3>El laboratorio no cuenta con personal inactivo</h3>
+                                  </div>
+                                  <div class="box-body" *ngIf="dataSourcePersIn.data">
+
+
+
+                                    <div class="example-container mat-elevation-z8" *ngIf="dataSourcePersIn.data.length > 0">
+                                      <div class="example-header">
+                                        <mat-form-field>
+                                          <input style="outline: none;" matInput (keyup)="applyFilterPers($event.target.value)" placeholder="Buscar Personal">
+                                        </mat-form-field>
+                                      </div>
+
+                                      <mat-table #tablePersIn #sortPers="matSort" [dataSource]="dataSourcePersIn" matSort>
+
+                                        <ng-container matColumnDef="estado">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.activo | activo }} </mat-cell>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="codigo">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Código o Cc </mat-header-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.cc}} </mat-cell>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="nombre">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                          <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="email">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="tipo">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                          <mat-cell *matCellDef="let element"> {{element.tipo}} </mat-cell>
+                                        </ng-container>
+
+                                        <mat-header-row *matHeaderRowDef="displayedColumnsPersIn"></mat-header-row>
+                                        <mat-row *matRowDef="let row; columns: displayedColumnsPersIn;" style="cursor: pointer;" (click)="cambiardata(row, 'inactivos')"
+                                          data-toggle="modal" data-target="#modal"></mat-row>
+                                      </mat-table>
+
+                                      <mat-paginator #paginatorPersIn="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                      </mat-paginator>
+                                    </div>
+                                  </div>
+                                  <!-- /.box-body -->
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+
+            </div>
+
+
+
+
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </section>
+
+
+</div>
+
+<!--  modal editar informacion del personal -->
+<div class="modal fade" id="modal" role="dialog">
+  <div class="modal-dialog modal-md">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+            <h3 class="box-title">Información del Personal</h3>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal')"></span>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-dash2equip" class="" name="form-dash2equip">
+              <fieldset>
+
+                  <div class="col-md-12">
+                     <mat-form-field>
+                       <input matInput [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null" [(ngModel)]="this.nombre" id="escuelaedit" name="nombre"
+                         type="text" placeholder="Nombre" >
+                     </mat-form-field>
+                  </div>
+
+
+                  <div class="col-md-12">
+                      <mat-form-field>
+                        <input  matInput [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null" [(ngModel)]="this.apellido" id="escuelaedit" name="apellido"
+                          type="text" placeholder="Apellidos">
+                      </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                      <mat-form-field>
+                        <input  matInput [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null" [(ngModel)]="cc" id="escuelaedit" name="cc"
+                          type="text" placeholder="Cc o Código">
+                      </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                      <mat-form-field>
+                        <input  matInput [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null" [(ngModel)]="fechanacimiento" id="escuelaedit" name="fechanacimiento"
+                          type="date" placeholder="Fecha de nacimiento">
+                      </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label> Tipo </mat-label>
+
+                      <mat-select [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null"  [(ngModel)]="this.type" name="estado">
+                        <mat-option *ngFor="let item of tipo" value="{{item}}"> {{item}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+
+
+                  <div class="col-md-12">
+                    <mat-form-field>
+                      <input matInput  placeholder="Email" [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null" [(ngModel)]="this.email" id="escuelaedit" name="email"
+                        type="email">
+                    </mat-form-field>
+                  </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <label class="control-label" for="listfacul">
+                          <strong>Roles actuales :</strong>
+                        </label>
+                        <ul class="nav nav-stacked" *ngIf="this.rolesAgregados.length > 0">
+                          <li *ngFor="let item of this.rolesAgregados; let i= index;">
+                            <a>
+                              {{item.nombre}}
+                              <span (click)="quitarelemento( i )" class="puntero pull-right fa fa-trash"></span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+
+                    <mat-form-field>
+                      <mat-label>Agregar  un nuevo rol </mat-label>
+
+                      <mat-select  [attr.disabled]="!moduloNivel2 && !moduloNivel3 && !moduloNivel25 ? false : null" [(ngModel)]="this.rolSelect" name="rolesPers"
+                        id="facul">
+                        <mat-option *ngFor="let item of niveles" value="{{ item.id  }}"> {{item.nombre}} </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="right">
+                    <button *ngIf="this.rolSelect" (click)="agregarRol()" class="btn btn-success" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                 </div>
+
+                </div>
+
+
+
+                <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="row">
+
+                  <div class="col-md-12" style="margin-top: 20px;">
+                    <div class="form-group">
+                      <label class="switch">
+                        <input name="active" [(ngModel)]="this.estado" id="activo" type="checkbox" style="float: right;">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+
+                  </div>
+                </div>
+
+
+
+              </fieldset>
+
+
+            </form>
+
+
+
+
+          </div>
+          <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="modal-footer">
+            <button type="button" (click)="actualizarPers()" class="btn btn-success">Actualizar
+              <i class="fa fa-refresh"></i>
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+<!-- modal agregar nuevo personal al laboratorio -->
+
+<div class="modal fade" id="modal1Personal" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-users"></i>
+            <h3 class="box-title">Agregar Personal</h3>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1Personal')"></span>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-dash2equip" class="" name="form-dash2equip">
+              <fieldset>
+
+                <!-- <div class="form-group has-info" [ngClass]="{ 'has-error': this.dispo == false, 'has-success': this.dispo }">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv">
+                      <strong>Email:</strong>
+                    </label>
+                    <input (focusout)="emailcheck($event)" [(ngModel)]="this.email" id="email" name="email" class="form-control" type="email">
+                    <span class="help-block"> {{status}}</span>
+                  </div>
+                </div> -->
+
+                <div class="col-md-12">
+
+                  <mat-form-field>
+                    <input (focusout)="emailcheck($event)" placeholder="Email" matInput [(ngModel)]="this.email" id="email" name="email" type="email"
+                      #check="ngModel">
+                    <mat-hint>
+                      <strong>{{status}}</strong>
+                    </mat-hint>
+                  </mat-form-field>
+
+
+                </div>
+
+
+                <!-- ocultar form  para validar si ya existe -->
+                <div *ngIf="dispo">
+
+
+                  <div class="col-md-12">
+
+                    <mat-form-field>
+                      <input [(ngModel)]="this.person.cfFirstNames" placeholder="Nombre" matInput id="escuelaedit" name="firstname" type="text">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+
+                    <mat-form-field>
+                      <input [(ngModel)]="this.person.cfFamilyNames" matInput placeholder="Apellidos" id="escuelaedit" name="othersname" type="text">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+
+                    <mat-form-field>
+                      <input [(ngModel)]="this.person.cfBirthdate" placeholder="Fecha nacimiento" matInput id="escuelaedit" name="fecha" type="date">
+                    </mat-form-field>
+                  </div>
+
+                    <div class="col-md-12">
+
+                      <mat-form-field>
+                        <input [(ngModel)]="this.person.cc" placeholder="Código o CC" matInput id="escuelaedit" name="codigo" type="text">
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="col-md-12">
+                      <mat-form-field>
+                        <mat-select (selectionChange)="setClientRol()" [(ngModel)]="this.rolSelect" name="selectniveles" placeholder="Perfil">
+                          <mat-option *ngFor="let item of niveles" [value]="item.id">
+                            {{item.nombre}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    </div>
+
+
+                    <div class="col-md-12">
+
+                      <mat-form-field>
+                        <mat-select [(ngModel)]="this.person.type" name="persontype" placeholder="Tipo personal">
+                          <mat-option *ngFor="let item of tipo" [value]="item">
+                            {{item}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <!-- <label class="control-label" for="estadoserv">
+                        <strong> Tipo personal:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.type" name="tipo">
+                        <option *ngFor="let item of tipo" value = "{{item}}"> {{item}} </option>
+                      </select> -->
+                    </div>
+
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <!-- <label class="control-label" for="estadoserv">
+                        <strong>Género:</strong>
+                      </label>
+                      <select class="form-control" [(ngModel)]="this.person.cfGender" name="estado">
+                        <option value="Hombre">Hombre </option>
+                        <option value="Mujer">Mujer</option>
+
+                      </select> -->
+
+                      <mat-form-field>
+                        <mat-select [(ngModel)]="this.person.cfGender" name="genero" placeholder="Genero">
+                          <mat-option value="Hombre">
+                            Hombre
+                          </mat-option>
+                          <mat-option value="Mujer">
+                            Mujer
+                          </mat-option>
+                          <mat-option value="Otro">
+                            Otro
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+
+                  </div>
+
+                </div>
+
+
+
+              </fieldset>
+
+
+            </form>
+
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button *ngIf="!addP" type="button" (click)="setPers()" class="btn btn-success">Guardar
+              <i class="fa fa-check"></i>
+            </button>
+            <button *ngIf="addP" type="button" (click)="addLabPers( this.addP)" class="btn btn-success">Vincular
+              <i class="fa fa-plus"></i>
+
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<app-spinner></app-spinner>

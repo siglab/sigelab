@@ -1,16 +1,16 @@
-# sigelab
-##### Sistema Integrado De Gestión Estratégica De Laboratorios De La Universidad Del Valle - SIGELAB
-
-> **Codiciones:**
-> Actualizar el archivo .gitignore para mantener el repositorio lo mas limpio posible y no publicar llaves de acceso privadas.
-> El directorio frontend debe contener sólo el código fuente correspondiente a la capa de ejecución de la aplicación del lado del Cliente - Frontend.
-> El directorio backend debe contener sólo el código fuente correspondiente a la capa de ejecución de la aplicación del lado del Servidor - Backend.
-> El directorio documentacion debe contener sólo los artefactos generados en la descripción de requerimientos, análisis de requerimientos y de arquitectura del SIGELAB sin incluir código fuente.
+![alt text](https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Propuesta_1_Sigelab-15.png)
+<p align="center">
+  <img width="48%"src="https://github.com/siglab/sigelab/blob/develop/frontend/sigelabangular/src/assets/img/Logo-UV-Vice.png">
+</p>
 
 
+# Sistema Integrado de Gestión Estratégica de Laboratorios
 
+A web application built in firebase platform to fulfill the Univalle's Laboratories management needs.
+This application is still under development.
 
-### Estructura del Repositorio
+### Repository structure
+
     sigelab/
         backend/
             README.md
@@ -18,21 +18,38 @@
             README.md
         frontend/
             README.md
-        .gitignore
-        LICENSE
-        README.md
+    .gitignore
+    LICENSE
+    README.md
 
+### Prerequisites
 
+In order to run this project you will need:
 
+	Git
+	Nodejs v8+ & npm
+	Firebase CLI (check https://firebase.google.com/docs/cli/?hl=en-419)
 
-### Contribuciones
-| Nombre | URL |
-| ------ | ------ |
-| Sebastian Rios Sabogal | https://about.me/sebaxtian |
-| Julian Rodríguez | {URL} |
-| {Nombre} | {URL About.me} |
+## Getting Started
 
+These instructions will get you a copy of the project up and running on your local machine or even in your own firebase account for development and testing purposes.
 
+### Installation, Project configuration & Deployment
 
-## Licencia
-MIT
+    Section under construction
+
+## Authors
+
+* **Sebastian Rios** - *Geoprocess S.A.S developer team member* - *Initial work* - [sebaxtian](https://github.com/sebaxtian) - https://about.me/sebaxtian
+* **Francisco Hurtado** - *Geoprocess S.A.S developer team member* - *Initial work* - [franciscohurtado](https://github.com/franciscohurtado)
+* **Jeff Ramirez** - *Geoprocess S.A.S developer team member* - *Initial work* - [jeferramirez](https://github.com/jeferramirez)
+* **Jhon Diaz** - *Geoprocess S.A.S developer team member* - *Initial work* - [jhoncito10](https://github.com/jhoncito10)
+* **Ingrid Ruiz** - *Geoprocess S.A.S developer team member* - *Initial work* - [injuli](https://github.com/injuli)
+* **Julián Rodríguez** - *Web app architecture design - NoSQL database design*    - [felorodri](https://github.com/felorodri)
+* **Julien Wist** - *Project master mind* - [jwist](https://github.com/jwist)
+
+See also the list of [contributors](https://github.com/siglab/sigelab/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details

@@ -1,0 +1,1025 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Servicios
+        </h1>
+
+    </section>
+
+    <!-- Main content -->
+    <section class="content" *ngIf="seleccion">
+
+        <!-- Componente central de busqueda -->
+
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                <div class="box box-danger">
+                    <div *ngIf="moduloNivel2" class="box-header">
+                        <i class="fa fa-search"></i>
+
+                        <h3 class="box-title">Búsqueda</h3>
+                        <button (click)="nuevoEspacio()" style="float: right;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modal2">Nuevo Servicio
+                          <i class="fa fa-plus"></i>
+
+                        </button>
+                    </div>
+
+                    <div class="box-body">
+
+                        <div class="example-container mat-elevation-z8">
+                            <div class="example-header">
+                                <mat-form-field>
+                                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar servicio">
+                                </mat-form-field>
+                            </div>
+
+                            <mat-table #tableserv #sort="matSort" [dataSource]="dataSource" matSort>
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="nombreserv">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Servicio </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombreserv}} </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiardata(row)" style="cursor: pointer;"></mat-row>
+                            </mat-table>
+
+                            <mat-paginator #paginator="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                            </mat-paginator>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!moduloinfo" class="row">
+                <div class="col-md-6 col-lg-6">
+                    <div class="box box-danger">
+                        <div class="box-body">
+                            <h3>SIN DATOS SELECCIONADOS</h3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div *ngIf="moduloinfo" class="row">
+                <div class="col-md-6 col-lg-6">
+                    <div class="box-group" id="accordion">
+                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+
+                        <div class="box box-danger">
+                            <div class="box-header">
+                                <h4 (click)="cambiarIcono('info')" class="box-title">
+                                    <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
+                                        INFORMACIÓN DE SERVICIO
+                                    </a>
+                                </h4>
+                                <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false"
+                                    class="collapsed">
+                                    <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
+                                </a>
+                            </div>
+                            <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body">
+                                    <form id="form-work" class="" name="form-work" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nombreserv">
+                                                        <strong>Nombre :</strong> {{itemsel.nombreserv}}</label>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="descripserv">
+                                                        <strong>Descripción:</strong> {{itemsel.infoServ.descripcion}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="descripserv">
+                                                        <strong>Descuento Univalle:</strong> {{itemsel.infoServ.descuento}} %</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
+                                                    <label class="control-label" for="precioserv">
+                                                        <strong>Parámetros de servicio:</strong>
+                                                    </label>
+                                                    <ul>
+                                                        <li *ngFor="let item of itemsel.infoServ.parametros;">{{item}}</li>
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
+                                                    <label class="control-label" for="precioserv">
+                                                        <strong>Condiciones:</strong>
+                                                    </label>
+                                                    <ul>
+                                                        <li *ngFor="let item of itemsel.infoServ.condiciones; let i = index">{{item}}</li>
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="precioserv">
+                                                        <strong>Precio: $</strong> {{itemsel.infoServ.precio}}</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-12 text-center">
+                                                    <input id="residuosinfot" name="residuosinfo" [(ngModel)]="itemsel.infoServ.residuos" type="checkbox">
+                                                    <label class="control-label" for="descripcion">
+                                                        <strong>El servicio genera residuos</strong>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="moduloNivel2" class="form-group">
+                                                <div class="col-md-12">
+                                                    <button (click)="cambiarDatosEditar()" class="btn btn-danger" style="float: right;" data-toggle="modal" data-target="#modal1"
+                                                        type="button">Editar Servicio</button>
+                                                </div>
+                                            </div>
+
+
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box box-danger">
+                            <div class="box-header">
+                                <h4 (click)="cambiarIcono('sabs')" class="box-title">
+                                    <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
+                                        INFORMACIÓN DE VARIACIONES DE SERVICIO
+                                    </a>
+                                </h4>
+                                <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false"
+                                    class="collapsed">
+                                    <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
+                                </a>
+                            </div>
+                            <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body">
+                                    <form *ngIf="itemsel.infoServ.variaciones.length != 0" id="form-workserv2" class="" name="form-workserv2" action="#">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="variacionserv">
+                                                        <strong>Variaciones :</strong>
+                                                    </label>
+                                                    <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
+                                                        <option value="inicial">Seleccione una variación</option>
+                                                        <option *ngFor="let item of itemsel.infoServ.variaciones" value="{{item.id}}">{{item.data.cfName}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset *ngIf="variation">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="nombreserv">
+                                                        <strong>Nombre :</strong> {{variation.data.cfName}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="descripserv">
+                                                        <strong>Descripción:</strong> {{variation.data.cfDescription}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div *ngIf="itemsel.infoServ.condiciones.length != 0" class="col-md-12">
+                                                    <label class="control-label" for="precioserv">
+                                                        <strong>Parámetros de variación:</strong>
+                                                    </label>
+                                                    <ul>
+                                                        <li *ngFor="let item of variation.data.parametros;">{{item}}</li>
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="precioserv">
+                                                        <strong>Precio: $</strong> {{variation.data.cfPrice}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12 text-center">
+                                                    <input id="residuosinfovar" name="residuosinfovar" [(ngModel)]="variation.data.residuos" type="checkbox">
+                                                    <label class="control-label" for="descripcion">
+                                                        <strong>La variación genera residuos</strong>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="control-label" for="precioserv">
+                                                        <strong>Condiciones:</strong>
+                                                    </label>
+                                                    <ul>
+                                                        <li *ngFor="let item of variation.data.cfConditions">{{item}}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+
+</div>
+
+
+<!-- MODAL QUE PERMITE LA CREACION DE UN NUEVO SERVICIO ASOCIADO AL LABORATORIO -->
+<div *ngIf="!editar" class="modal fade" id="modal2" role="dialog">
+    <div Class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal2')"></span>
+                <h3 class="box-title">Nuevo Servicio</h3>
+            </div>
+            <div class="modal-body">
+                <div class="box-group" id="accordionModal">
+                    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false"
+                                    class="collapsed">
+                                    INFORMACIÓN DE SERVICIO
+                                </a>
+                            </h4>
+                            <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio"
+                                aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.servicio, 'glyphicon-minus':iconosModal.servicio}"></span>
+                            </a>
+                        </div>
+                        <div id="collapseServicio" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <form id="form-work2" class="" name="form-work2" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="nombre">
+                                                    <strong>Nombre:</strong>
+                                                </label>
+                                                <input id="nombre" [(ngModel)]="this.srv.cfName" name="nombre" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="precio">
+                                                    <strong>Precio: $</strong>
+                                                </label>
+                                                <input id="precio" [(ngModel)]="this.srv.cfPrice" name="precio" class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>Descripción:</strong>
+                                                </label>
+                                                <textarea name="descripcion" rows="4" [(ngModel)]="this.srv.cfDesc" id="descripcion" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuonuevoser" name="residuonuevoser" [(ngModel)]="this.srv.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>El Servicio genera residuos</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="par"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros del servicio con la primera letra mayúscula y el resto minúscula</p>
+                                            <div class="input-group">
+
+                                            <input id="tel" [(ngModel)]="parametro" name="tel" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.listaParametrosServicio; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametro(i, 'servicio')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>% Descuento para usuario univalle:</strong>
+                                                </label>
+                                                <p>Por favor ingrese el porcentaje en número enteros o decimales utilizando punto: <br>
+                                                   Ejemplo: 10, 5.9 , 25, 4.2 </p>
+                                                <input id="descuento" [(ngModel)]="this.srv.descuento" name="descuento" type="number" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="condiciones">
+                                                    <strong>Condiciones:</strong>
+                                                </label>
+                                                <textarea name="condiciones" rows="4" [(ngModel)]="condicion" id="condiciones" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button (click)="agregarCondicion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="condiciones">
+                                                    <strong *ngIf="this.srv.cfCondition.length != 0">Condiciones agregadas</strong>
+                                                    <strong *ngIf="this.srv.cfCondition.length == 0">Sin condiciones agregadas</strong>
+                                                </label>
+                                                <ul *ngIf="this.srv.cfCondition.length !== 0" class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.srv.cfCondition; let i = index">
+                                                        <a style="cursor: pointer;">{{item}}
+                                                            <span (click)="quitarCondicion(i)" class="pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIconoModal('variacion')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseVar" aria-expanded="false" class="collapsed">
+                                    AGREGAR VARIACIONES DE SERVICIO
+                                </a>
+                            </h4>
+                            <a (click)="cambiarIconoModal('variacion')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseVar" aria-expanded="false"
+                                class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.variacion, 'glyphicon-minus':iconosModal.variacion}"></span>
+                            </a>
+                        </div>
+                        <div id="collapseVar" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <form id="form-work2" class="" name="form-work2" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="nombre">
+                                                    <strong>Nombre:</strong>
+                                                </label>
+                                                <input id="nombre" [(ngModel)]="this.objectvariation.cfName" name="nombre" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="precio">
+                                                    <strong>Precio: $</strong>
+                                                </label>
+                                                <input id="precio" [(ngModel)]="this.objectvariation.cfPrice" name="precio" class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>Descripción:</strong>
+                                                </label>
+                                                <textarea name="descripcion" rows="4" [(ngModel)]="this.objectvariation.cfDescription" id="descripcion" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuonuevo" name="residuonuevo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>La variación genera residuos</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="parv"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros de a variación con la primera letra mayúscula y el resto minúscula</p>
+                                            <div class="input-group">
+
+                                            <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                    <button class="btn btn-success" type="button" (click)="agregarParametro('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.listaParametrosVariacion; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametro(i, 'var')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="condiciones">
+                                                    <strong>Condiciones:</strong>
+                                                </label>
+                                                <textarea name="condiciones" rows="4" [(ngModel)]="condicionvar" id="condiciones" style="width: 100%;"></textarea>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar condición</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="condiciones">
+                                                    <strong *ngIf="this.objectvariation.cfConditions.length != 0">Condiciones agregadas</strong>
+                                                    <strong *ngIf="this.objectvariation.cfConditions.length == 0">Sin condiciones agregadas</strong>
+                                                </label>
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.objectvariation.cfConditions; let i = index">
+                                                        <a style="cursor: pointer;">{{item}}
+                                                            <span (click)="quitarCondicionVariacion(i)" class="pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar variación</button>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+                                <form>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="condiciones">
+                                                    <strong *ngIf="this.variaciones.length != 0">Variaciones agregadas</strong>
+                                                    <strong *ngIf="this.variaciones.length == 0">Sin variaciones agregadas</strong>
+                                                </label>
+                                                <ul *ngIf="this.variaciones.length !== 0" class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.variaciones; let i = index">
+                                                        <a style="cursor: pointer;">{{item.cfName}}
+                                                            <span (click)="quitarVariacion(i)" class="pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIconoModal('equipos')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false"
+                                    class="collapsed">
+                                    AGREGAR EQUIPOS
+                                </a>
+                            </h4>
+                            <a (click)="cambiarIconoModal('equipos')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false"
+                                class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.equipos, 'glyphicon-minus':iconosModal.equipos}"></span>
+                            </a>
+                        </div>
+                        <div id="collapseEquip" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <div class="box-header">
+                                    <i class="fa fa-laptop"></i>
+
+                                    <h3 class="box-title">EQUIPOS VINCULADOS</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div class="example-container" *ngIf="dataSourceEquip.data.length > 0">
+
+                                        <mat-table #tableEquip [dataSource]="dataSourceEquip">
+
+                                            <!-- Checkbox Column -->
+                                            <ng-container matColumnDef="select">
+                                                <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                                                    <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                    </mat-checkbox>
+                                                </mat-header-cell>
+                                                <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                                                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                                                    </mat-checkbox>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <!-- nombre Column -->
+                                            <ng-container matColumnDef="nombre">
+                                                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                            </ng-container>
+
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumnsEquip;" (click)="selection.toggle(row)">
+                                            </mat-row>
+                                        </mat-table>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <form style="margin-top: 30px;">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-md-12 text-center">
+                                <button (click)="agregarServicio()" class="btn btn-danger" type="button">Guardar servicio</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL QUE PERMITE EDITAR LOS DATOS DE UN SERVICIO ASOCIADO AL LABORATORIO -->
+<div class="modal fade" id="modal1" role="dialog">
+    <div Class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></span>
+                <h3 class="box-title">Editar servicio</h3>
+            </div>
+            <div class="modal-body">
+                <div class="box-group" id="accordionModal">
+                    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIconoModal('servicio')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio" aria-expanded="false"
+                                    class="collapsed">
+                                    INFORMACIÓN DE SERVICIO
+                                </a>
+                            </h4>
+                            <a (click)="cambiarIconoModal('servicio')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseServicio"
+                                aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.servicio, 'glyphicon-minus':iconosModal.servicio}"></span>
+                            </a>
+                        </div>
+                        <div id="collapseServicio" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                                <form id="form-work2" class="" name="form-work2" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="nombre">
+                                                    <strong>Nombre:</strong>
+                                                </label>
+                                                <input id="nombre" [(ngModel)]="this.srv.cfName" name="nombre" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="precio">
+                                                    <strong>Precio: $</strong>
+                                                </label>
+                                                <input id="precio" [(ngModel)]="this.srv.cfPrice" name="precioSrv" class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>Descripción:</strong>
+                                                </label>
+                                                <textarea name="descripcion" rows="4" [(ngModel)]="this.srv.cfDesc" id="descripcion" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuoservedit" name="residuoservedit" [(ngModel)]="this.srv.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>El servicio genera residuos</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="editparv"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros del servicio con la primera letra mayúscula y el resto minúscula</p>
+                                            <div class="input-group">
+
+                                            <input id="parv" [(ngModel)]="parametro" name="parv" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button" (click)="agregarParametroEdit('servicio')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.srv.parametros; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametroEdit(i, 'servicio')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>% Descuento para usuario univalle:</strong>
+                                                </label>
+                                                <p>por favor ingrese el porcentaje en número: enteros o decimales; utilizando punto: <br>
+                                                    Ejemplo: 10, 5.9 , 25, 4.2 </p>
+                                                <input id="descuentoedit" [(ngModel)]="this.srv.descuento" name="descuentoedit" type="number" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="condiciones">
+                                                    <strong>Condiciones:</strong>
+                                                </label>
+                                                <textarea name="condiciones" rows="4" [(ngModel)]="condicion" id="condiciones" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button (click)="agregarCondicion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="condiciones">
+                                                    <strong *ngIf="this.srv.cfCondition.length != 0">Condiciones Agregadas</strong>
+                                                    <strong *ngIf="this.srv.cfCondition.length == 0">Sin condiciones Agregadas</strong>
+                                                </label>
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.srv.cfCondition; let i = index">
+                                                        <a style="cursor: pointer;">
+                                                            {{item}}
+                                                            <span (click)="quitarCondicion(i)" class="pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box box-danger">
+                        <div class="box-header">
+                            <h4 (click)="cambiarIconoModal('variacion')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseVar" aria-expanded="false" class="collapsed">
+                                    AGREGAR Y/O EDITAR VARIACIONES DE SERVICIO
+                                </a>
+                            </h4>
+                            <a (click)="cambiarIconoModal('variacion')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseVar" aria-expanded="false"
+                                class="collapsed">
+                                <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.variacion, 'glyphicon-minus':iconosModal.variacion}"></span>
+                            </a>
+                        </div>
+                        <div id="collapseVar" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+
+                                <form>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button style="margin-top: 20px;" (click)="nuevaVariacion()" type="button" class="btn btn-success btn-sm">Nueva Variacion</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="condiciones">
+                                                    <strong *ngIf="this.variaciones.length != 0">Variaciones agregadas</strong>
+                                                    <strong *ngIf="this.variaciones.length == 0">Sin variaciones agregadas</strong>
+                                                </label>
+                                                <ul *ngIf="this.variaciones.length !== 0" class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.variaciones; let i = index">
+                                                        <a style="cursor: pointer;">
+                                                            <button (click)="cambiarDataEditarVariacion(item)" type="button" class="btn btn-primary btn-sm">Editar</button>
+                                                            {{item.cfName}}
+
+                                                            <span *ngIf="item.active" (click)="cambiarEstadoVariacion(i, item.active)" class="pull-right badge bg-red">inactivar</span>
+                                                            <span *ngIf="!item.active" (click)="cambiarEstadoVariacion(i, item.active)" class="pull-right badge bg-green">activar</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <form id="form-work2" class="" name="form-work2" action="#">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="nombre">
+                                                    <strong>Nombre:</strong>
+                                                </label>
+                                                <input id="nombre" [(ngModel)]="this.objectvariation.cfName" name="nombre" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label class="control-label" for="precio">
+                                                    <strong>Precio: $</strong>
+                                                </label>
+                                                <input id="precio" [(ngModel)]="this.objectvariation.cfPrice" name="precio" class="form-control" type="number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>Descripcion:</strong>
+                                                </label>
+                                                <textarea name="descripcion" rows="4" [(ngModel)]="this.objectvariation.cfDescription" id="descripcion" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12 text-center">
+                                                <input id="residuo" name="residuo" [(ngModel)]="this.objectvariation.residuos" type="checkbox">
+                                                <label class="control-label" for="descripcion">
+                                                    <strong>La variación genera residuos</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="control-label" for="editparv"><strong>Parámetros :</strong></label>
+                                            <p>Por favor ingrese los parámetros de a variación con la primera letra mayúscula y el resto minúscula</p>
+                                            <div class="input-group">
+
+                                            <input id="parv" [(ngModel)]="parametroVar" name="parv" type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button" (click)="agregarParametroEdit('var')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                            </span>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="this.objectvariation.parametros.length !== 0" class="form-group" >
+                                            <div class="col-md-12">
+                                            <label class="control-label" for="listpar"><strong>Parámetros Agregados :</strong></label>
+                                                <ul class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.objectvariation.parametros; let i = index;">
+                                                        <a>{{item}}
+                                                            <span (click)="quitarParametroEdit(i, 'var')" class="puntero pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="condiciones">
+                                                    <strong>Condiciones:</strong>
+                                                </label>
+                                                <textarea name="condiciones" rows="4" [(ngModel)]="condicionvar" id="condiciones" style="width: 100%;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button (click)="agregarCondicionVariacion()" type="button" class="btn btn-success btn-sm">Agregar Condición</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="control-label text-center" for="condiciones">
+                                                    <strong *ngIf="this.objectvariation.cfConditions.length != 0">Condiciones Agregadas</strong>
+                                                    <strong *ngIf="this.objectvariation.cfConditions.length == 0">Sin condiciones Agregadas</strong>
+                                                </label>
+                                                <ul *ngIf="this.objectvariation.cfConditions.length !== 0" class="nav nav-stacked divScroll">
+                                                    <li *ngFor="let item of this.objectvariation.cfConditions; let i = index">
+                                                        <a style="cursor: pointer;">{{item}}
+                                                            <span (click)="quitarCondicionVariacion(i)" class="pull-right badge bg-red">-</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button *ngIf="nuevaVar" (click)="agregarVariacion()" type="button" class="btn btn-success btn-sm">Agregar Variación</button>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="box box-danger">
+                                    <div class="box-header">
+                                        <h4 (click)="cambiarIconoModal('equipos')" class="box-title">
+                                            <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false"
+                                                class="collapsed">
+                                                EQUIPOS VINCULADOS
+                                            </a>
+                                        </h4>
+                                        <a (click)="cambiarIconoModal('equipos')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip" aria-expanded="false"
+                                            class="collapsed">
+                                            <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.equipos, 'glyphicon-minus':iconosModal.equipos}"></span>
+                                        </a>
+                                    </div>
+                                    <div id="collapseEquip" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="box-body">
+                                            <!-- /.box-header -->
+                                            <div class="box-body">
+                                                <div class="example-container" *ngIf="dataSourceEquipvin.data.length > 0">
+
+                                                    <mat-table #tableEquipVin [dataSource]="dataSourceEquipvin">
+
+                                                        <!-- Checkbox Column -->
+                                                        <ng-container matColumnDef="select">
+                                                            <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                                                                <mat-checkbox (change)="$event ? masterToggle2() : null" [checked]="selection2.hasValue() && isAllSelected2()" [indeterminate]="selection2.hasValue() && !isAllSelected2()">
+                                                                </mat-checkbox>
+                                                            </mat-header-cell>
+                                                            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                                                                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection2.toggle(row) : null" [checked]="selection2.isSelected(row)">
+                                                                </mat-checkbox>
+                                                            </mat-cell>
+                                                        </ng-container>
+
+                                                        <!-- nombre Column -->
+                                                        <ng-container matColumnDef="nombre">
+                                                            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                        </ng-container>
+
+
+                                                        <mat-header-row *matHeaderRowDef="displayedColumnsEquipVin"></mat-header-row>
+                                                        <mat-row *matRowDef="let row; columns: displayedColumnsEquipVin;" (click)="selection2.toggle(row)">
+                                                        </mat-row>
+                                                    </mat-table>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button style="margin-top: 20px;" (click)="quitarEquipo()" type="button" class="btn btn-danger btn-sm">Quitar Equipo</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="box box-danger">
+                                    <div class="box-header">
+                                        <h4 (click)="cambiarIconoModal('equipos2')" class="box-title">
+                                            <a style="color:black;" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip2" aria-expanded="false"
+                                                class="collapsed">
+                                                AGREGAR EQUIPOS
+                                            </a>
+                                        </h4>
+                                        <a (click)="cambiarIconoModal('equipos2')" data-toggle="collapse" data-parent="#accordionModal" href="#collapseEquip2" aria-expanded="false"
+                                            class="collapsed">
+                                            <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconosModal.equipos2, 'glyphicon-minus':iconosModal.equipos2}"></span>
+                                        </a>
+                                    </div>
+                                    <div id="collapseEquip2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="box-body">
+
+                                            <!-- /.box-header -->
+                                            <div class="box-body">
+                                                <div class="example-container" *ngIf="dataSourceEquip.data.length > 0">
+
+                                                    <mat-table #tableEquip [dataSource]="dataSourceEquip">
+
+                                                        <!-- Checkbox Column -->
+                                                        <ng-container matColumnDef="select">
+                                                            <mat-header-cell [ngClass]="'customWidthClass'" *matHeaderCellDef>
+                                                                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                                </mat-checkbox>
+                                                            </mat-header-cell>
+                                                            <mat-cell [ngClass]="'customWidthClass'" *matCellDef="let row">
+                                                                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                                                                </mat-checkbox>
+                                                            </mat-cell>
+                                                        </ng-container>
+
+                                                        <!-- nombre Column -->
+                                                        <ng-container matColumnDef="nombre">
+                                                            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                                        </ng-container>
+
+
+                                                        <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
+                                                        <mat-row *matRowDef="let row; columns: displayedColumnsEquip;" (click)="selection.toggle(row)">
+                                                        </mat-row>
+                                                    </mat-table>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12" style="text-align: right">
+                                                <button style=" margin-top: 20px;" (click)="agregarEquipo()" type="button" class="btn btn-success btn-sm">Agregar Equipo</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <form style="margin-top: 30px;">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="col-md-12 text-center">
+                                    <button (click)="editarServicio()" class="btn btn-danger" type="button">Guardar Cambios</button>
+
+                                </div>
+
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

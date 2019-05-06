@@ -1,0 +1,245 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <!-- Main content -->
+  <section class="content">
+
+    <!-- Componente central de busqueda -->
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="box box-danger">
+          <div class="box-header">
+            <i class="fa fa-search"></i>
+
+            <h3 class="box-title">Búsqueda</h3>
+
+            <div *ngIf="this.moduloNivel3" class="form-group">
+              <div class="col-md-12">
+                <button data-toggle="modal" data-target="#modalNuevoLab" style="float: right;" class="btn btn-danger" type="button" (click)="limpiarDatosNuevo()">Nuevo Laboratorio</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="box-body">
+
+            <div class="box-body">
+              <div class="table-responsive">
+                <div class="example-container mat-elevation-z8">
+                  <div class="example-header">
+                    <mat-form-field>
+                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por: laboratorio, correo laboratorio, director, correo directos, estado laboratorio, fecha de última actualización">
+                    </mat-form-field>
+                  </div>
+
+                  <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="nombre">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="correolab">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Laboratorio </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="correodir">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Director </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.emaildirector}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="ultima">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.ultima}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="director">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Director </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.director}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="estado">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.estado}} </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiarLaboratorio(row)" style="cursor: pointer   "></mat-row>
+                  </mat-table>
+
+                  <mat-paginator #paginator="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                  </mat-paginator>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </section>
+
+
+  <!-- Main content -->
+  <section id="detalle" class="content" *ngIf="itemsel | async; let itemsel">
+
+
+    <!--INFORMACION DE LABORATORIO-->
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+
+        <ul class="nav nav-tabs">
+          <li>
+            <a class="tablas" data-toggle="tab" href="#homeNivel3">
+              Admin Laboratorio</a>
+          </li>
+          <li>
+            <a class="tablas" (click)="moverSpa()" data-toggle="tab" href="#menu1Nivel3">
+              Admin Espacios</a>
+          </li>
+          <li>
+            <a class="tablas" (click)="moverPers()" data-toggle="tab" href="#menu2Nivel3">
+              Admin Personal</a>
+          </li>
+        </ul>
+
+        <div class="row" style="margin-top:20px;">
+          <div class="col-md-12">
+
+            <div class="tab-content">
+              <!-- TAB ADMINISTRACION DE LABORATORIOS 2 -->
+              <div id="homeNivel3" class="tab-pane fade in active">
+
+                <div class="tab-content">
+                  <div id="home1Nivel3" class="tab-pane fade in active">
+                    <!-- Componente central de busqueda -->
+                    <!-- INDICADORES -->
+                    <div class="row">
+                      <app-admin-laboratorios></app-admin-laboratorios>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- TAB ADMINISTRACION DE ESPACIOS -->
+              <div id="menu1Nivel3" class="tab-pane fade">
+
+                <div class="box-body">
+
+                  <div class="row">
+                    <app-admin-espacios></app-admin-espacios>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <!-- TAB ADMINISTRACION DE ESPACIOS PERSONAL -->
+              <div id="menu2Nivel3" class="tab-pane fade">
+
+                <div class="box-body">
+
+                  <div class="row">
+                    <app-admin-personal></app-admin-personal>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+  </section>
+
+
+
+</div>
+
+
+<!-- ******************************************************+ -->
+
+
+
+
+<!-- MODAL PARA CREAR UN NUEVO LABORATORIO -->
+<div class="modal fade" id="modalNuevoLab" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
+
+            <h1 class="box-title">Nuevo Laboratorio</h1>
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-work" class="" name="form-work" action="#">
+              <fieldset>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub">
+                      <strong>Nombre Laboratorio:</strong>
+                    </label>
+                    <input id="nombreprub" [(ngModel)]="this.labo.nombre" name="nombreprub" class="form-control" type="text">
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="email">
+                      <strong>Email Encargado:</strong>
+                    </label>
+                    <input (focusout)="ciCheck($event)" id="email" [(ngModel)]="this.labo.email" name="email" class="form-control" type="text">
+                    <p> {{status}} </p>
+                  </div>
+                </div>
+
+
+
+                <div *ngIf="this.disponible" class="form-group">
+                  <div class="col-md-12 text-center">
+                    <button style="margin-top: 20px;" (click)="nuevoLaboratorio()" class="btn btn-danger" type="button">Crear Laboratorio</button>
+                  </div>
+                </div>
+
+              </fieldset>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ********************************************************* -->
+

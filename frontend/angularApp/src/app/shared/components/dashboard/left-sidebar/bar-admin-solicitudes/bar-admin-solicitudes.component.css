@@ -1,0 +1,8 @@
+.pointer {
+  cursor: pointer;
+}
+
+a:focus,
+a:hover {
+  text-decoration: none !important;
+}

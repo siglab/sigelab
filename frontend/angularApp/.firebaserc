@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "develop-univalle",
+    "demounivalle": "sigelab-univalle"
+  }
+}
