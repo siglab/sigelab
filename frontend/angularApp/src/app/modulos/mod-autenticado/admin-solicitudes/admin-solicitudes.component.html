@@ -79,7 +79,7 @@
                                                   <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="mostrardata2(row)" style = "cursor: pointer;"></mat-row>
                                                 </mat-table>
                                                 <mat-paginator #paginator="matPaginator"
-                                                  [pageSize]="5"
+                                                  [pageSize]="10"
                                                   [pageSizeOptions]="[5, 10, 20]"
                                                   [showFirstLastButtons]="true">
                                                 </mat-paginator>
@@ -91,14 +91,18 @@
                                 <div id="menu1" class="tab-pane fade">
                                     <div class="box-header">
                                         <i class="fa fa-flask"></i>
-                                        <h3 class="box-title">HISTORIAL DE SERVICIOS</h3>
+                                        <h3 class="box-title">Historial de solicitudes de servicio</h3>
                                     </div>
                                     <div class="box-body">
                                         <div class="table-responsive">
+                                          <div *ngIf="!dataSource2 || dataSource2.data.length === 0; else historyRequestTable" class="no-data">
+                                            <h4>NO CUENTAS CON HISTORIAL DE SOLICITUDES DE SERVICIO</h4>
+                                          </div>
+                                          <ng-template #historyRequestTable>
                                             <div class="example-container mat-elevation-z8">
                                               <div class="example-header">
                                                 <mat-form-field>
-                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Busca por cualquier valor que pueda tomar las columnas de la tabla">
+                                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Busca por nombre, precio, fecha de última edición, estado o fecha de aceptación">
                                                 </mat-form-field>
                                               </div>
                                               <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
@@ -131,12 +135,13 @@
                                                 <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="mostrardata(row)" style = "cursor: pointer;" ></mat-row>
                                               </mat-table>
                                               <mat-paginator #paginator2="matPaginator"
-                                                [pageSize]="5"
+                                                [pageSize]="10"
                                                 [pageSizeOptions]="[5, 10, 20]"
                                                 [showFirstLastButtons]="true">
                                               </mat-paginator>
                                             </div>
-                                          </div>
+                                          </ng-template>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -461,5 +466,4 @@
 
 
 </div>
-
-
+<app-spinner></app-spinner>

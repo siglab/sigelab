@@ -7,6 +7,7 @@ import swal from 'sweetalert2';
 import { Http } from '@angular/http';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { URLCORREO } from '../../../config';
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
 declare var $: any;
 @Component({
@@ -46,6 +47,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     sabs: false
   };
   fecha = new Date();
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   constructor(private querys: QuerysAutenticadoService,
     private observer: ObserverAutenticadoService,
@@ -53,11 +55,10 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    // abre loading mientras se cargan los datos
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
     if (sessionStorage.getItem('usuario')) {
-      this.alertaCargando();
+      this.alert.show();
+      // this.alertaCargando();
       this.user = JSON.parse(sessionStorage.getItem('usuario'));
       this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
         if (data.length !== 0) {
@@ -68,10 +69,13 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
             this.dataSource2.data = datos['data2'];
             this.dataSource2.sort = this.sort2;
             this.dataSource2.paginator = this.paginator2;
-            this.cerrarAlerta();
+            // this.cerrarAlerta();
+            this.alert.hide();
           });
         } else {
-          this.alertaError('No has solicitado servicios aun');
+          this.alert.hide();
+          // this.cerrarAlerta();
+          // this.alertaError('No has solicitado servicios aun');
         }
       });
     }
@@ -193,22 +197,17 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario() {
     swal({
-
       type: 'warning',
       title: '¿Está seguro que desea enviar este comentario?',
       showCancelButton: true,
       confirmButtonText: 'Sí, Solicitar',
       cancelButtonText: 'No, Cancelar'
-
     }).then((result) => {
-
       if (result.value) {
-
         const fecha = new Date();
         const cfSrvReserv = {
           comments: this.servsel.comentario
         };
-
         cfSrvReserv.comments.push({
           commentText: this.comentario,
           fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
@@ -216,14 +215,12 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           email: this.user.email,
           uid: this.user.uid
         });
-
         this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(() => {
           if (this.servsel.status !== 'pendiente') {
             // this.enviarEmails();
             console.log('envio emails');
           }
         });
-
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -231,11 +228,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
           'error'
         );
       }
-
     });
-
-
-
   }
 
   enviarEmails() {
@@ -280,7 +273,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       window.open(data);
     });
   }
-
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
