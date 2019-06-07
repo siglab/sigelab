@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig : {
-    apiKey: 'YOUR_FIREBASE_PRODUCTION_PROJECT_APIKEY',
-    authDomain: 'YOUR_FIREBASE_PRODUCTION_AUTH_DOMAIN',
-    databaseURL: 'YOUR_FIREBASE_PRODUCTION_DATABASE_URL',
-    projectId: 'YOUR_FIREBASE_PRODUCTION_PROJECT_ID',
-    storageBucket: 'YOUR_FIREBASE_PRODUCTION_STORAGE_BUCKED',
-    messagingSenderId: 'YOUR_FIREBASE_PRODUCTION_MESSAGING_SENDER_ID'
+    apiKey: "AIzaSyDC4Vz7dmno6gfbtBHvOg-9WH6iTC-pMuc",
+    authDomain: "sigelab-univalle.firebaseapp.com",
+    databaseURL: "https://sigelab-univalle.firebaseio.com",
+    projectId: "sigelab-univalle",
+    storageBucket: "sigelab-univalle.appspot.com",
+    messagingSenderId: "803777606972",
+    appId: "1:803777606972:web:b00da9a64070febc"
   }
 };

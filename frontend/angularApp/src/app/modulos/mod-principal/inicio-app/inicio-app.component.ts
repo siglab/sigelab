@@ -12,8 +12,10 @@ import { LoginService } from '../../login/login-service/login.service';
   styleUrls: ['./inicio-app.component.css']
 })
 export class InicioAppComponent implements OnInit {
+  show = false;
+
   constructor(private router: Router, private servicioSabs: SabsService, private local: ServicesNivel3Service,
-              private login: LoginService) {
+    private login: LoginService) {
     console.log('Prueba Servicio SABS');
   }
 
@@ -30,7 +32,43 @@ export class InicioAppComponent implements OnInit {
         }, 1000);
       });
     }
+    $(document).on('click', '#navContact', function () {
+      $('html, body').animate({
+        scrollTop: $('#contactInfoSec').offset().top - $('#topDiv').height()
+      }, 1000);
+    });
 
+    $(document).on('click', '#navAbout', function () {
+      $('html, body').animate({
+        scrollTop: $('#aboutSec').offset().top - $('#topDiv').height()
+      }, 1000);
+    });
+
+    $(document).on('click', '#nextBtn', function () {
+      $('html, body').animate({
+        scrollTop: $('#aboutSec').offset().top - $('#topDiv').height()
+      }, 1000);
+    });
+
+    $(document).on('click', '#goTopBtn', function () {
+      $('html, body').animate({
+        scrollTop: $('#mainSec').offset().top - $('#topDiv').height()
+      }, 1000);
+    });
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () { scrollFunction() };
+    function scrollFunction() {
+      try {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          document.getElementById("goTopBtn").style.display = "block";
+        } else {
+          document.getElementById("goTopBtn").style.display = "none";
+        }
+      } catch (error) {
+        return
+      }
+
+    }
   }
 
   goContactSec(): void {
@@ -53,6 +91,13 @@ export class InicioAppComponent implements OnInit {
 
   goToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+
+
+
+  toggleShow() {
+    this.show = !this.show;
   }
 
 }
