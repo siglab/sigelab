@@ -16,7 +16,6 @@ export class InicioAppComponent implements OnInit {
 
   constructor(private router: Router, private servicioSabs: SabsService, private local: ServicesNivel3Service,
     private login: LoginService) {
-    console.log('Prueba Servicio SABS');
   }
 
   ngOnInit() {
