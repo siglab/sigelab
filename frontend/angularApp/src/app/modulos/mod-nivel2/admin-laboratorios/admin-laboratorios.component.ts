@@ -155,7 +155,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   selectHinicio = '';
   selectHFinal = '';
 
-  telefono:string = '';
+  telefono: string = '';
 
   listaFaculSugeridos = [];
   listaDeparSugeridos = [];
@@ -1713,11 +1713,11 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   agregarElemento(list) {
-    console.log('1716',this.fac, this.dep)
+    console.log('1716', this.fac, this.dep)
 
-    if ((this.fac != undefined && this.fac.trim() != '' && list === 'facultad') || 
-    (this.dep != undefined && this.dep.trim() != '' && list === 'unidad')) {
-      console.log(this.fac,this.dep)
+    if ((this.fac != undefined && this.fac.trim() != '' && list === 'facultad') ||
+      (this.dep != undefined && this.dep.trim() != '' && list === 'unidad')) {
+      console.log(this.fac, this.dep)
       let lista = '';
 
       let select = '';
@@ -1904,23 +1904,27 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   agregarTelefonos() {
-    console.log('1907',this.listaTelefonos,this.telefono)
-    if (this.telefono != undefined && this.telefono != '') {
-      
+    console.log('1907', this.listaTelefonos, this.telefono)
+    if (this.telefono != undefined && this.telefono.trim() != '') {
+      this.listaTelefonos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
+      if (this.moduloPermiso) {
+        this.listaTelSugeridos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
+      }
+
+      swal({
+        type: 'success',
+        title: 'telefono agregado',
+        showConfirmButton: true
+      });
+      this.telefono = '';
     } else {
-      
-    }
-    this.listaTelefonos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
-    if (this.moduloPermiso) {
-      this.listaTelSugeridos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
+      swal({
+        type: 'error',
+        title: 'El campo teléfono no puede estar vacío',
+        showConfirmButton: true
+      });
     }
 
-    swal({
-      type: 'success',
-      title: 'telefono agregado',
-      showConfirmButton: true
-    });
-    this.telefono = '';
 
   }
 
