@@ -301,6 +301,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         cancelButtonText: 'No, Cancelar'
 
       }).then((result) => {
+        console.log('304',result)
 
         if (result.value) {
           if (reserva === 'convariaciones') {
@@ -339,9 +340,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
           }
           if (this.usuariounivalle) {
             cfSrvReserv.typeuser = 'interno';
-            cfSrvReserv.datauser.type = this.selecunivalle.value;
-            cfSrvReserv.datauser.ci = this.valorci;
-            cfSrvReserv.datauser.llaveci = this.llaveci;
+            cfSrvReserv.datauser.type = this.selecunivalle.value || '';
+            cfSrvReserv.datauser.ci = this.valorci || '';
+            cfSrvReserv.datauser.llaveci = this.llaveci || '';
           }
 
           cfSrvReserv.comments.push({
@@ -352,6 +353,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
             uid: this.user.uid
           });
 
+          console.log('356',cfSrvReserv)
 
           this.query.addSolicitudServicio(cfSrvReserv).then(() => {
 
