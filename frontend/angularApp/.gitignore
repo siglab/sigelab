@@ -20,7 +20,7 @@ storage.rules
 functions/node_modules/
 
 # environment files
-/src/app/environments/*
+/src/app/environments/
 
 # IDEs and editors
 /.idea
