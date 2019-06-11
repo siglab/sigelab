@@ -133,7 +133,10 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       console.log(data);
       this.getRoles(data.roles);
       if (data.length !== 0) {
-        this.estructuraIdPers(data.uid).then(() => {
+
+
+        this.initDataComponent(data.uid);
+       /* this.estructuraIdPers(data.uid).then(() => {
 
           // validators email
 
@@ -180,7 +183,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           }, 2000);
 
-        });
+        }); */
 
       } else {
         swal({
@@ -196,6 +199,62 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     });
 
   }
+
+
+
+  initDataComponent(uid) {
+
+
+    this.estructuraIdPers(uid).then(() => {
+
+
+      this.idlab = uid;
+
+      console.log('id del lab', uid);
+      this.itemsel = Observable.of(this.persestructurado.personal);
+      console.log(this.persestructurado);
+
+      this.dataSourcePers.data = this.persestructurado.personal;
+      this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
+
+      const ambiente = this;
+
+      swal({
+        title: 'Cargando un momento...',
+        text: 'Espere mientras se cargan los datos',
+        onOpen: () => {
+          swal.showLoading();
+        }
+      });
+
+
+      setTimeout(function () {
+        if (ambiente.persestructurado.personal !== 0) {
+
+          ambiente.dataSourcePers.sort = ambiente.sortPers;
+          ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+          ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
+          ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
+
+          swal.close();
+
+        } else {
+          swal({
+            type: 'error',
+            title: 'No existe personal asociado al laboratorio',
+            showConfirmButton: true
+          });
+        }
+
+
+
+      }, 2000);
+
+    });
+
+  }
+
+
 
   ngOnDestroy() {
     this.sus.unsubscribe();
@@ -567,11 +626,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 swal({
                   type: 'success',
                   title: 'Persona creada correctamente',
+                  timer: 1000,
                   showConfirmButton: true
+                }).then( () =>{
+
+                  this.clearValues();
+                  this.dispo = false;
+                  $('#modal1Personal').modal('hide');
+                  this.initDataComponent(this.idlab );
+
+
                 });
-                this.clearValues();
-                this.dispo = false;
-                $('#modal1Personal').modal('hide');
+
               });
 
 
@@ -591,10 +657,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               swal({
                 type: 'success',
                 title: 'Persona creada correctamente',
+                timer: 1000,
                 showConfirmButton: true
+              }).then( () =>{
+
+                this.clearValues();
+
+                $('#modal1Personal').modal('hide');
+                this.initDataComponent(this.idlab );
+
+
               });
-              this.clearValues();
-              $('#modal1Personal').modal('hide');
+
 
             });
         }
@@ -703,9 +777,23 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         .then(() => {
           this.alert.hide();
 
-          this.clearValues();
-          $('#modal1Personal').modal('hide');
-          this.toastr.success('Almacenado correctamente.', 'éxito!');
+
+          swal({
+            type: 'success',
+            title: 'Persona actualizada correctamente',
+            timer: 1000,
+            showConfirmButton: true
+          }).then( () =>{
+
+            this.clearValues();
+
+            $('#modal1Personal').modal('hide');
+            this.initDataComponent(this.idlab );
+
+
+          });
+
+
       });
       });
 
