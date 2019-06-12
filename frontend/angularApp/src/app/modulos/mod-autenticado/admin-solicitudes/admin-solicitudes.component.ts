@@ -51,7 +51,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   constructor(private querys: QuerysAutenticadoService,
     private observer: ObserverAutenticadoService,
-    private http: Http, private storage: AngularFireStorage ) {
+    private http: Http, private storage: AngularFireStorage) {
   }
 
   ngOnInit() {
@@ -91,11 +91,9 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.estructurarCondicionesSrv(item.condicionesSrv);
     this.buttoncancel = false;
     this.moduloinfo = true;
-    console.log(this.servsel);
   }
 
   mostrardata2(item) {
-    console.log(item);
     this.servsel = item;
     this.variation = undefined;
     this.condicion = undefined;
@@ -146,17 +144,24 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
-    for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
+
+    if (condiciones != undefined ) {
+      for (let i = 0; i < condiciones.length; i++) {
+        this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
+      }
     }
   }
 
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
-    for (let i = 0; i < condiciones.length; i++) {
-      this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
+
+    if (condiciones != undefined ) {
+      for (let i = 0; i < condiciones.length; i++) {
+        this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
+      }
     }
+
   }
 
   cancelarSolicitudServicio() {
@@ -218,7 +223,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
         this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(() => {
           if (this.servsel.status !== 'pendiente') {
             // this.enviarEmails();
-            console.log('envio emails');
           }
         });
       } else if (result.dismiss === swal.DismissReason.cancel) {
@@ -252,7 +256,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
       this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
         emailEncargado = persona.payload.data().email;
         destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
-        console.log(destino);
         this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
           if (res.status === 200) {
             // this.cerrarAlerta();

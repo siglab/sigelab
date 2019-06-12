@@ -437,7 +437,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
-  setSpace(nombre) {
+  setSpace() {
 
 
     swal({
@@ -459,6 +459,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
         this.alert.show();
         console.log('acepto guardar');
+        this.space.spaceData.building =   this.myControl.value;
         const nuevoespacio = this.space;
         nuevoespacio.subHq = this.idsh;
         this.servicioMod2.addESpacio(nuevoespacio).then((data) => {
@@ -798,11 +799,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
 
-  setEdificio(value) {
+  setEdificio() {
 
-    this.space.spaceData.building = value;
+    this.space.spaceData.building =   this.myControl.value;
 
-    console.log(value);
+    console.log(this.myControl.value);
   }
 
   /* setea campos del objeto */

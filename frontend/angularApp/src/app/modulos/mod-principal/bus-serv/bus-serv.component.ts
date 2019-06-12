@@ -326,6 +326,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
           if (this.itemsel.infoServ.condiciones.length !== 0) {
             cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
+          }else {
+            cfSrvReserv['conditionsLogServ'] = []
           }
 
           if (this.parametrosServ) {
@@ -339,9 +341,9 @@ export class BusServComponent implements OnInit, AfterViewInit {
           }
           if (this.usuariounivalle) {
             cfSrvReserv.typeuser = 'interno';
-            cfSrvReserv.datauser.type = this.selecunivalle.value;
-            cfSrvReserv.datauser.ci = this.valorci;
-            cfSrvReserv.datauser.llaveci = this.llaveci;
+            cfSrvReserv.datauser.type = this.selecunivalle.value || '';
+            cfSrvReserv.datauser.ci = this.valorci || '';
+            cfSrvReserv.datauser.llaveci = this.llaveci || '';
           }
 
           cfSrvReserv.comments.push({
@@ -559,7 +561,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
           this.status = 'El CI ingresado no se encuentra asociado a ningún proyecto actual';
           this.disponible = true;
         } else {
-          console.log(snapShot.docs[0].id);
           this.nameProject = snapShot.docs[0].data().projectName;
           this.status = 'Nombre del proyecto: ' + this.nameProject;
           this.llaveci = snapShot.docs[0].id;

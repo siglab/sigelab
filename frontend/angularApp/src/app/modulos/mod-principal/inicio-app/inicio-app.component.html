@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-12">
           <nav class="navbar navbar-light navbar-expand-md">
             <div class="container-fluid"><a class="navbar-brand" href="#" (click)="false;" id="navbarLogo"></a><button
@@ -52,11 +52,29 @@
                 <ul class="nav navbar-nav ml-auto" style="margin-right:5%;font-size:13px;">
                   <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;"><a class="nav-link"
                     (click)="goAboutSec()" >Acerca de SIGELab</a></li>
-                  <li class="nav-item" role="presentation" id="navContact"><a href="#" (click)="goContactSec(); false;" class="nav-link">Contacto</a></li>
+                  <li class="nav-item" role="presentation" id="navContact"><a href="#"  class="nav-link">Contacto</a></li>
                 </ul>
                 <button class="btn btn-primary btn-sm homeBtn" type="button" (click)="goToLogin()">
                   <a href="#" (click)="false;"><i class="icon ion-log-in"></i>&nbsp;Ingresar</a>
                 </button>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-12">
+          <nav class="navbar navbar-light navbar-expand-md">
+            <div class="container-fluid"><a class="navbar-brand" href="#" id="navbarLogo"></a><button
+                (click)="toggleShow()" class="navbar-toggler"  data-target="#navcol-1"><span class="sr-only">Toggle
+                  navigation</span><span class="navbar-toggler-icon"></span></button>
+              <div class="collapse navbar-collapse"  [ngClass]="{'myshow': show}" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto" style="margin-right:5%;font-size:13px;">
+                  <li class="nav-item" role="presentation" id="navAbout" style="color:#D51B23 !important;"><a class="nav-link"
+                    style="cursor: pointer;" >Acerca de SIADRI</a></li>
+                  <li class="nav-item" role="presentation" id="navContact"><a style="cursor: pointer;"  class="nav-link">Contacto</a></li>
+                </ul><button [routerLink]="'/login'" class="btn btn-primary btn-sm homeBtn" type="button"><i class="icon ion-log-in"></i>&nbsp;Ingresar
+                  &nbsp;</button>
               </div>
             </div>
           </nav>
