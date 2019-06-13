@@ -437,7 +437,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   // necesario el id de la subsede para almacenarlo en los metodos de los espacios
-  setSpace() {
+  setSpace(form) {
 
 
     swal({
