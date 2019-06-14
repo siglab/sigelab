@@ -90,7 +90,9 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   }
 
   mostrardata2(item) {
+
     this.servsel = item;
+
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);
@@ -140,8 +142,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
-
-    if (condiciones != undefined ) {
+    if (condiciones != undefined && condiciones.length > 0  ) {
       for (let i = 0; i < condiciones.length; i++) {
         this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
       }
@@ -151,8 +152,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
-
-    if (condiciones != undefined ) {
+    if (condiciones != undefined && condiciones.length > 0 ) {
       for (let i = 0; i < condiciones.length; i++) {
         this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
       }

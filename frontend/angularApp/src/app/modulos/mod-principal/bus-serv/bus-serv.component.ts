@@ -261,140 +261,153 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     if (this.user) {
 
-      const cfSrvReserv = {
-        cfFacil: this.itemsel.infoLab.uid,
-        namelab: this.itemsel.nombrelab,
-        cfSrv: this.itemsel.infoServ.uid,
-        user: this.user.uid,
-        selectedVariations: {},
-        cfStartDate: '',
-        cfEndDate: '',
-        cfClass: '',
-        cfClassScheme: '',
-        cfPrice: this.itemsel.infoServ.precio,
-        status: 'pendiente',
-        createdAt: fecha.toISOString(),
-        updatedAt: fecha.toISOString(),
-        conditionsLog: [],
-        comments: [],
-        typeuser: 'externo',
-        path: [],
-        datauser: { type: [], ci: '', llaveci: '' },
-        emailuser: this.user.email,
-        acceptedBy: '',
-        parametrosSrv: [],
-        parametros: [],
-        descuento: this.descuento,
-        precioTotal: this.itemsel.infoServ.precio
-      };
+      if (this.validancionCamposSolicitudServicio(reserva)
+      ) {
+        const cfSrvReserv = {
+          cfFacil: this.itemsel.infoLab.uid,
+          namelab: this.itemsel.nombrelab,
+          cfSrv: this.itemsel.infoServ.uid,
+          user: this.user.uid,
+          selectedVariations: {},
+          cfStartDate: '',
+          cfEndDate: '',
+          cfClass: '',
+          cfClassScheme: '',
+          cfPrice: this.itemsel.infoServ.precio,
+          status: 'pendiente',
+          createdAt: fecha.toISOString(),
+          updatedAt: fecha.toISOString(),
+          conditionsLog: [],
+          comments: [],
+          typeuser: 'externo',
+          path: [],
+          datauser: { type: [], ci: '', llaveci: '' },
+          emailuser: this.user.email,
+          acceptedBy: '',
+          parametrosSrv: [],
+          parametros: [],
+          descuento: this.descuento,
+          precioTotal: this.itemsel.infoServ.precio
+        };
 
-      if (this.usuariounivalle) {
-        cfSrvReserv.cfPrice = '' + this.preciocondescuento;
-      }
-
-      swal({
-
-        type: 'warning',
-        title: '¿Está seguro que desea solicitar este servicio?',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, Solicitar',
-        cancelButtonText: 'No, Cancelar'
-
-      }).then((result) => {
-
-        if (result.value) {
-          if (reserva === 'convariaciones') {
-
-            for (let j = 0; j < this.listaVariaciones.length; j++) {
-              const element = this.listaVariaciones[j];
-              cfSrvReserv.selectedVariations[element.data.id] = true;
-              cfSrvReserv.conditionsLog.push({ condicion: element.condiciones, idvariacion: element.data.id });
-
-              cfSrvReserv.parametros.push({ parametros: element.parametros, id: element.data.id });
-            }
-
-            cfSrvReserv.precioTotal = '' + this.preciototal;
-
-            if (this.usuariounivalle) {
-              cfSrvReserv.cfPrice = '' + this.preciocondescuento;
-            } else {
-              cfSrvReserv.cfPrice = '' + this.preciototal;
-
-            }
-
-          }
-
-          if (this.itemsel.infoServ.condiciones.length !== 0) {
-            cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
-          }else {
-            cfSrvReserv['conditionsLogServ'] = []
-          }
-
-          if (this.parametrosServ) {
-            let cont = 0;
-            for (const key in this.parametrosServ) {
-              if (this.parametrosServ.hasOwnProperty(key)) {
-                cfSrvReserv.parametrosSrv.push({ id: cont, value: this.parametrosServ[key] });
-                cont++;
-              }
-            }
-          }
-          if (this.usuariounivalle) {
-            cfSrvReserv.typeuser = 'interno';
-            cfSrvReserv.datauser.type = this.selecunivalle.value || '';
-            cfSrvReserv.datauser.ci = this.valorci || '';
-            cfSrvReserv.datauser.llaveci = this.llaveci || '';
-          }
-
-          cfSrvReserv.comments.push({
-            commentText: this.campoCondicion,
-            fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
-            autor: 'usuario',
-            email: this.user.email,
-            uid: this.user.uid
-          });
-
-
-          this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-
-            swal({
-              type: 'success',
-              title: 'Solicitud Creada Exitosamente',
-              showConfirmButton: true
-            }).then(() => {
-              this.enviarNotificacionesCorreo();
-
-              // tslint:disable-next-line:max-line-length
-              this.query.enviarEmails(this.itemsel.nombreserv, this.user.email, this.itemsel.infoLab.emaildir, this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
-
-              this.limpiarDatos();
-
-              this.moduloinfo = false;
-
-              $('html, body').animate({ scrollTop: '0px' }, 'slow');
-            });
-
-          }).catch(error => {
-
-            swal({
-              type: 'error',
-              title: error,
-              showConfirmButton: true
-            });
-
-          });
-        } else if (
-          // Read more about handling dismissals
-          result.dismiss === swal.DismissReason.cancel
-        ) {
-          swal(
-            'Solicitud Cancelada',
-            '',
-            'error'
-          );
+        if (this.usuariounivalle) {
+          cfSrvReserv.cfPrice = '' + this.preciocondescuento;
         }
 
-      });
+        swal({
+
+          type: 'warning',
+          title: '¿Está seguro que desea solicitar este servicio?',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, Solicitar',
+          cancelButtonText: 'No, Cancelar'
+
+        }).then((result) => {
+
+          if (result.value) {
+            if (reserva === 'convariaciones') {
+
+              for (let j = 0; j < this.listaVariaciones.length; j++) {
+                const element = this.listaVariaciones[j];
+                cfSrvReserv.selectedVariations[element.data.id] = true;
+                cfSrvReserv.conditionsLog.push({ condicion: element.condiciones, idvariacion: element.data.id });
+
+                cfSrvReserv.parametros.push({ parametros: element.parametros, id: element.data.id });
+              }
+
+              cfSrvReserv.precioTotal = '' + this.preciototal;
+
+              if (this.usuariounivalle) {
+                cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+              } else {
+                cfSrvReserv.cfPrice = '' + this.preciototal;
+
+              }
+
+            }
+
+            if (this.itemsel.infoServ.condiciones.length !== 0) {
+              cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
+            } else {
+              cfSrvReserv['conditionsLogServ'] = []
+            }
+
+            if (this.parametrosServ) {
+              let cont = 0;
+              for (const key in this.parametrosServ) {
+                if (this.parametrosServ.hasOwnProperty(key)) {
+                  const val = this.parametrosServ[key] || ''
+                  cfSrvReserv.parametrosSrv.push({ id: cont, value:  val });
+                  cont++;
+                }
+              }
+            }
+            if (this.usuariounivalle) {
+              cfSrvReserv.typeuser = 'interno';
+              cfSrvReserv.datauser.type = this.selecunivalle.value || '';
+              cfSrvReserv.datauser.ci = this.valorci || '';
+              cfSrvReserv.datauser.llaveci = this.llaveci || '';
+            }
+
+            cfSrvReserv.comments.push({
+              commentText: this.campoCondicion,
+              fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
+              autor: 'usuario',
+              email: this.user.email,
+              uid: this.user.uid
+            });
+
+
+            this.query.addSolicitudServicio(cfSrvReserv).then(() => {
+
+              swal({
+                type: 'success',
+                title: 'Solicitud Creada Exitosamente',
+                showConfirmButton: true
+              }).then(() => {
+                this.enviarNotificacionesCorreo();
+
+                // tslint:disable-next-line:max-line-length
+                this.query.enviarEmails(this.itemsel.nombreserv, this.user.email, this.itemsel.infoLab.emaildir, this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
+
+                this.limpiarDatos();
+
+                this.moduloinfo = false;
+
+                $('html, body').animate({ scrollTop: '0px' }, 'slow');
+              });
+
+            }).catch(error => {
+
+              swal({
+                type: 'error',
+                title: error,
+                showConfirmButton: true
+              });
+
+            });
+          } else if (
+            // Read more about handling dismissals
+            result.dismiss === swal.DismissReason.cancel
+          ) {
+            swal(
+              'Solicitud Cancelada',
+              '',
+              'error'
+            );
+          }
+
+        });
+
+
+      } else {
+        swal({
+          type: 'error',
+          title: 'Debe llenar todos los parámetros ',
+          showConfirmButton: true
+        });
+      }
+
 
     } else {
 
@@ -567,6 +580,22 @@ export class BusServComponent implements OnInit, AfterViewInit {
         }
       });
     }
+  }
+
+  validancionCamposSolicitudServicio(reserva) {
+
+    console.log('585', this.selecunivalle.value)
+    if (this.usuariounivalle) {
+      if (this.selecunivalle.value == undefined  || this.selecunivalle.value.length < 1) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return true
+    }
+ 
+
   }
 
 }
