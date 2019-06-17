@@ -34,9 +34,16 @@ export class QuerysAutenticadoService {
 
           this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
             const servicio =  data2.data();
-            const conditionsLogServ = elemento.conditionsLogServ ||[];
-            const conditionsLog = elemento.conditionsLog ||[];
-
+            console.log(37,elemento.parametrosSrv)
+            var conditionsLogServ = []
+            var conditionsLog =  []
+            if (elemento.conditionsLogServ) {
+              conditionsLogServ  =  elemento.conditionsLogServ
+            }
+            if (elemento.conditionsLog) {
+              conditionsLog  =  elemento.conditionsLogServ
+            }
+             
               const Reserv = {
                 email: email,
                 lab: elemento.namelab,
