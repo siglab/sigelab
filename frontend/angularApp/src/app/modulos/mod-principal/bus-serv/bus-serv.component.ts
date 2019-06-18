@@ -260,7 +260,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
     const fecha = new Date();
 
     if (this.user) {
-console.log(263,this.validancionCamposSolicitudServicio(reserva))
       if (this.validancionCamposSolicitudServicio(reserva)
       ) {
         const cfSrvReserv = {
@@ -594,13 +593,10 @@ console.log(263,this.validancionCamposSolicitudServicio(reserva))
           const element = valoresFinaciacionUnivalle[index];
           cont++
           if (element == 3 && (this.valorci == undefined || this.valorci.trim() == '')) {
-            console.log(596)
             return false
           } else {
-            console.log(598)
 
             if (cont == valoresFinaciacionUnivalle.length) {
-              console.log(602)
 
               return true
             }
