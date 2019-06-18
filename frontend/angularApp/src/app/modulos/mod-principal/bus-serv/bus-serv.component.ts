@@ -260,7 +260,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     const fecha = new Date();
 
     if (this.user) {
-
+console.log(263,this.validancionCamposSolicitudServicio(reserva))
       if (this.validancionCamposSolicitudServicio(reserva)
       ) {
         const cfSrvReserv = {
@@ -337,7 +337,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
               for (const key in this.parametrosServ) {
                 if (this.parametrosServ.hasOwnProperty(key)) {
                   const val = this.parametrosServ[key] || ''
-                  cfSrvReserv.parametrosSrv.push({ id: cont, value:  val });
+                  cfSrvReserv.parametrosSrv.push({ id: cont, value: val });
                   cont++;
                 }
               }
@@ -584,17 +584,35 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   validancionCamposSolicitudServicio(reserva) {
 
-    console.log('585', this.selecunivalle.value)
     if (this.usuariounivalle) {
-      if (this.selecunivalle.value == undefined  || this.selecunivalle.value.length < 1) {
+      if (this.selecunivalle.value == undefined || this.selecunivalle.value.length < 1) {
         return false
       } else {
-        return true
+        let valoresFinaciacionUnivalle: Array<any> = this.selecunivalle.value
+        var cont = 0
+        for (let index = 0; index < valoresFinaciacionUnivalle.length; index++) {
+          const element = valoresFinaciacionUnivalle[index];
+          cont++
+          if (element == 3 && (this.valorci == undefined || this.valorci.trim() == '')) {
+            console.log(596)
+            return false
+          } else {
+            console.log(598)
+
+            if (cont == valoresFinaciacionUnivalle.length) {
+              console.log(602)
+
+              return true
+            }
+          }
+        }
+   
+        // return true
       }
     } else {
       return true
     }
- 
+
 
   }
 
