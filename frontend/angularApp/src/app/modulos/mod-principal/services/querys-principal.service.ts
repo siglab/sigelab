@@ -14,21 +14,22 @@ import {
 import {
   URLCORREO
 } from '../../../config';
+import { promise } from 'protractor';
 
 @Injectable()
 export class QuerysPrincipalService {
 
   // INICIALIZACION DE CONSULTAS PARA LABORATORIOS
-  private labsCollection: AngularFirestoreCollection < any > ;
-  labs: Observable < any[] > ;
+  private labsCollection: AngularFirestoreCollection<any>;
+  labs: Observable<any[]>;
 
   // INICIALIZACION DE CONSULTAS PARA SERVICIOS
-  private servsCollection: AngularFirestoreCollection < any > ;
-  servs: Observable < any[] > ;
+  private servsCollection: AngularFirestoreCollection<any>;
+  servs: Observable<any[]>;
 
   // INICIALIZACION DE CONSULTAS PARA SERVICIOS
-  private pruebasCollection: AngularFirestoreCollection < any > ;
-  pruebas: Observable < any[] > ;
+  private pruebasCollection: AngularFirestoreCollection<any>;
+  pruebas: Observable<any[]>;
 
 
   datosLabsEstructurados = [];
@@ -41,9 +42,8 @@ export class QuerysPrincipalService {
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS LABORATORIOS
   getLaboratorios() {
-    const colle = this.afs.collection('cfFacil');
-    return colle.ref.where('active', '==', true).get();
-
+    const colle = this.afs.collection('cache').doc('cfFacil');
+    return colle.ref.get();
   }
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
@@ -57,7 +57,7 @@ export class QuerysPrincipalService {
   }
 
   // tslint:disable-next-line:member-ordering
-  private racesCollection: AngularFirestoreCollection < any > ;
+  private racesCollection: AngularFirestoreCollection<any>;
   // METODO QUE TRAE LA COLECCION DE TODOS LAS PRUEBAS
   getPruebas() {
     const coll = this.afs.collection('practice');
@@ -74,32 +74,32 @@ export class QuerysPrincipalService {
     console.log('entro');
     this.datosLabsEstructurados = [];
 
-     return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       data.forEach(doc => {
         const elemento = doc.data();
 
-        if ( elemento.facilityAdmin === '' ) {
+        if (elemento.facilityAdmin === '') {
 
           console.log(doc.id);
 
-         }
+        }
 
-          this.buscarDirector(elemento.facilityAdmin).then(adminlab => {
-            const duenoLab = adminlab.data();
-            console.log(adminlab.exists);
-
-
-              this.datosLabsEstructurados.push(elemento);
-
-              // console.log(this.datosLabsEstructurados, data.size);
-              if (this.datosLabsEstructurados.length === data.size) {
-                resolve({
-                  data: this.datosLabsEstructurados
-                });
-              }
+        this.buscarDirector(elemento.facilityAdmin).then(adminlab => {
+          const duenoLab = adminlab.data();
+          console.log(adminlab.exists);
 
 
-          });
+          this.datosLabsEstructurados.push(elemento);
+
+          // console.log(this.datosLabsEstructurados, data.size);
+          if (this.datosLabsEstructurados.length === data.size) {
+            resolve({
+              data: this.datosLabsEstructurados
+            });
+          }
+
+
+        });
 
       });
     });
@@ -135,79 +135,30 @@ export class QuerysPrincipalService {
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataLab(data: any) {
     this.datosLabsEstructurados = [];
+    var laboratorios = data.data().data
 
     const promise = new Promise((resolve, reject) => {
+      var cont = 0
+      var datasize = Object.keys(data)
 
-      data.forEach(doc => {
+      for (const key in laboratorios) {
+        if (laboratorios.hasOwnProperty(key)) {
+          const laboratorio = laboratorios[key];
 
-        const elemento = doc.data();
-        if (elemento.facilityAdmin !== '') {
-          this.buscarDirector(elemento.facilityAdmin).then(dueno => {
-            const duenoLab = dueno.data();
-
-            const laboratorio = {
-              uid: doc.id,
-              nombre: elemento.cfName,
-              escuela: elemento.knowledgeArea !== '' ? elemento.knowledgeArea : 'ninguno',
-              inves: elemento.researchGroup !== '' ? elemento.researchGroup : 'ninguno',
-              iddirecto: elemento.facilityAdmin,
-              desc: elemento.cfDescr,
-              direspacio: {},
-              director: '',
-              emaildir: '',
-              coord: {
-                lat: 0,
-                lon: 0
-              },
-              telefonos: this.estructuraTelefonos(doc.id),
-              info: {
-                email: elemento.otros.email
-              },
-              servicios: this.estructurarServicios(elemento.relatedServices),
-              practicas: this.estructurarPracticas(elemento.relatedPractices),
-              personal: this.buscarAnalistas(elemento.relatedPers),
-              condiciones: elemento.cfConditions,
-              disponibilidad: elemento.cfAvailability
-            };
-
-            if (duenoLab && elemento.otros) {
-
-              laboratorio.director = duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames;
-              laboratorio.emaildir = duenoLab.email;
-
-            }
-
-            if (elemento.mainSpace !== '') {
-
-              this.buscarEspacio(elemento.mainSpace).then(espacio => {
-
-                const espacioLab = espacio.data();
-
-                this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
-                  laboratorio.direspacio = direspa;
-
-                  laboratorio.coord.lat = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0;
-                  laboratorio.coord.lon = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0;
-                });
-
-              });
-            }
-
-
-
-
+          if (laboratorio.active) {
             this.datosLabsEstructurados.push(laboratorio);
 
-            // console.log(this.datosLabsEstructurados, data.size);
-            if (this.datosLabsEstructurados.length === data.size) {
-              resolve({
-                data: this.datosLabsEstructurados
-              });
-            }
-          });
-        }
+          }
+          cont++
 
-      });
+          if (cont === datasize.length) {
+            resolve({
+              data: this.datosLabsEstructurados
+            });
+          }
+        }
+      }
+
     });
 
 
@@ -380,7 +331,7 @@ export class QuerysPrincipalService {
 
 
               });
-            }, err => console.log(err) );
+            }, err => console.log(err));
           }
         });
       } else {
@@ -422,7 +373,75 @@ export class QuerysPrincipalService {
 
     return arr;
   }
+  getDataLab(lab: any) {
+    console.log(lab)
+    return this.buscarLaboratorio(lab.uid).then(labsnapshot => {
+      const elemento = labsnapshot.data()
+      if (lab.facilityAdmin !== '') {
+        return this.buscarDirector(elemento.facilityAdmin).then(dueno => {
+          const duenoLab = dueno.data();
+          var promesas = []
+          let laboratorio = {
+            uid: labsnapshot.id,
+            nombre: elemento.cfName,
+            escuela: elemento.knowledgeArea !== '' ? elemento.knowledgeArea : 'ninguno',
+            inves: elemento.researchGroup !== '' ? elemento.researchGroup : 'ninguno',
+            iddirecto: elemento.facilityAdmin,
+            desc: elemento.cfDescr,
+            direspacio: {},
+            director: '',
+            emaildir: '',
+            coord: {
+              lat: 0,
+              lon: 0
+            },
+            telefonos: this.estructuraTelefonos(labsnapshot.id),
+            info: {
+              email: elemento.otros.email
+            },
+            servicios: this.estructurarServicios(elemento.relatedServices),
+            practicas: this.estructurarPracticas(elemento.relatedPractices),
+            personal: this.buscarAnalistas(elemento.relatedPers),
+            condiciones: elemento.cfConditions,
+            disponibilidad: elemento.cfAvailability
+          };
 
+          if (duenoLab && elemento.otros) {
+
+            laboratorio.director = duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames;
+            laboratorio.emaildir = duenoLab.email;
+
+          }
+
+          if (elemento.mainSpace !== '') {
+
+            this.buscarEspacio(elemento.mainSpace).then(espacio => {
+
+              const espacioLab = espacio.data();
+
+              this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
+                laboratorio.direspacio = direspa;
+
+                laboratorio.coord.lat = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0;
+                laboratorio.coord.lon = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0;
+              });
+
+            });
+          }
+
+
+
+return laboratorio
+
+        });
+      }
+
+    })
+
+
+
+
+  }
 
   // METODO QUE TRAE UN LABORATORIO ESPECIFICO DEPENDIENDO EL ID-LABORATORIO
   buscarLaboratorio(idLab) {
@@ -510,65 +529,65 @@ export class QuerysPrincipalService {
   estructurarPracticas(item) {
 
 
-  const arr = [];
-   if (item) {
+    const arr = [];
+    if (item) {
 
-     for (const clave in item) {
-       // Controlando que json realmente tenga esa propiedad
-       if (item.hasOwnProperty(clave)) {
+      for (const clave in item) {
+        // Controlando que json realmente tenga esa propiedad
+        if (item.hasOwnProperty(clave)) {
 
-         if (item[clave]) {
-           this.afs.doc('practice/' + clave).ref.get().then(data => {
+          if (item[clave]) {
+            this.afs.doc('practice/' + clave).ref.get().then(data => {
 
-             if (!data.exists) {
-               console.log(data.id);
-             }
-             const practica = data.data();
-             this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
+              if (!data.exists) {
+                console.log(data.id);
+              }
+              const practica = data.data();
+              this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
 
-               // funciona con una programacion, cuando hayan mas toca crear otro metodo
-               if (data2.docs[0].exists) {
-                 const prog = data2.docs[0].data();
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                if (data2.docs[0].exists) {
+                  const prog = data2.docs[0].data();
 
-                 const pract = {
-                   nombre: practica.practiceName,
-                   id : data.id,
-                   programacion: {
+                  const pract = {
+                    nombre: practica.practiceName,
+                    id: data.id,
+                    programacion: {
 
-                     id_pro: data2.docs[0].id,
-                     estudiantes: prog.noStudents,
-                     horario: prog.schedule,
-                     semestre: prog.semester
-                   },
-                   activo: practica.active
-                 };
+                      id_pro: data2.docs[0].id,
+                      estudiantes: prog.noStudents,
+                      horario: prog.schedule,
+                      semestre: prog.semester
+                    },
+                    activo: practica.active
+                  };
 
 
-                 if (practica.active) {
+                  if (practica.active) {
                     arr.push(pract);
-                 }
+                  }
 
-               } else {
+                } else {
 
-                 const pract = {
-                   nombre: practica ? practica.practiceName : 'ninguno',
-                   activo: practica ? practica.active : 'none'
-                 };
+                  const pract = {
+                    nombre: practica ? practica.practiceName : 'ninguno',
+                    activo: practica ? practica.active : 'none'
+                  };
 
-                 if (practica.active) {
+                  if (practica.active) {
                     arr.push(pract);
+                  }
+
                 }
 
-               }
+              }).catch(err => console.log(err));
 
-             }).catch( err =>  console.log(err));
+            });
+          }
 
-           });
-         }
-
-       }
-     }
-   }
+        }
+      }
+    }
 
     return arr;
   }
@@ -734,7 +753,88 @@ export class QuerysPrincipalService {
   enviarNotificacion(iduser, object) {
     return this.afs.doc('user/' + iduser).collection('notification').add(object);
   }
+  //METODOS VIEJOS CON MUCHAS CONSULTAS
+  old_estructurarDataLab(data: any) {
+    this.datosLabsEstructurados = [];
 
+    const promise = new Promise((resolve, reject) => {
+      var cont = 0
+      data.forEach(doc => {
+
+        const elemento = doc.data();
+        console.log(elemento.facilityAdmin)
+        if (elemento.facilityAdmin !== '') {
+          this.buscarDirector(elemento.facilityAdmin).then(dueno => {
+            const duenoLab = dueno.data();
+
+            const laboratorio = {
+              uid: doc.id,
+              nombre: elemento.cfName,
+              escuela: elemento.knowledgeArea !== '' ? elemento.knowledgeArea : 'ninguno',
+              inves: elemento.researchGroup !== '' ? elemento.researchGroup : 'ninguno',
+              iddirecto: elemento.facilityAdmin,
+              desc: elemento.cfDescr,
+              direspacio: {},
+              director: '',
+              emaildir: '',
+              coord: {
+                lat: 0,
+                lon: 0
+              },
+              telefonos: this.estructuraTelefonos(doc.id),
+              info: {
+                email: elemento.otros.email
+              },
+              servicios: this.estructurarServicios(elemento.relatedServices),
+              practicas: this.estructurarPracticas(elemento.relatedPractices),
+              personal: this.buscarAnalistas(elemento.relatedPers),
+              condiciones: elemento.cfConditions,
+              disponibilidad: elemento.cfAvailability
+            };
+
+            if (duenoLab && elemento.otros) {
+
+              laboratorio.director = duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames;
+              laboratorio.emaildir = duenoLab.email;
+
+            }
+
+            if (elemento.mainSpace !== '') {
+
+              this.buscarEspacio(elemento.mainSpace).then(espacio => {
+
+                const espacioLab = espacio.data();
+
+                this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
+                  laboratorio.direspacio = direspa;
+
+                  laboratorio.coord.lat = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0;
+                  laboratorio.coord.lon = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0;
+                });
+
+              });
+            }
+
+            cont++
+
+
+            this.datosLabsEstructurados.push(laboratorio);
+
+            console.log(this.datosLabsEstructurados, data.size, cont);
+            if (cont === data.size) {
+              resolve({
+                data: this.datosLabsEstructurados
+              });
+            }
+          });
+        }
+
+      });
+    });
+
+
+    return promise;
+  }
 
 
 }

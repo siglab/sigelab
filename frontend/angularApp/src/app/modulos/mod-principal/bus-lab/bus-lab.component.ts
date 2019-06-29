@@ -401,9 +401,14 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     }
   }
 
+  selectRow(row){
+    this.query.getDataLab(row).then(data => {
+      this.cambiardata(data)
+    });
+  }
+
   cambiardata(item) {
-    /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-    // $('html, body').animate({ scrollTop: '400px' }, 'slow');
+ 
     this.itemsel = item;
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
@@ -414,10 +419,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
 
       setTimeout(function() {
-        // ambiente.dataSource2.sort = ambiente.sort2;
-        // ambiente.dataSource2.paginator = ambiente.paginator2;
-        // ambiente.dataSource3.sort = ambiente.sort3;
-        // ambiente.dataSource3.paginator = ambiente.paginator3;
+
         ambiente.loadMap(item);
         $('html, body').animate(
           {
@@ -444,7 +446,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         },
         1000
       );
-      // document.getElementById('detalle').scrollIntoView();
     }
 
     setTimeout(function() {
