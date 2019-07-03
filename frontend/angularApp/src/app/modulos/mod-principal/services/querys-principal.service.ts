@@ -377,10 +377,16 @@ export class QuerysPrincipalService {
     console.log(lab)
     return this.buscarLaboratorio(lab.uid).then(labsnapshot => {
       const elemento = labsnapshot.data()
+      console.log(elemento)
       if (lab.facilityAdmin !== '') {
         return this.buscarDirector(elemento.facilityAdmin).then(dueno => {
           const duenoLab = dueno.data();
           var promesas = []
+          var disponibilidad = []
+          if (elemento.cfAvailability) {
+            disponibilidad = elemento.cfAvailability
+          }
+          promesas.push(this.estructurarServicios(elemento.relatedServices))
           let laboratorio = {
             uid: labsnapshot.id,
             nombre: elemento.cfName,
@@ -399,11 +405,10 @@ export class QuerysPrincipalService {
             info: {
               email: elemento.otros.email
             },
-            servicios: this.estructurarServicios(elemento.relatedServices),
             practicas: this.estructurarPracticas(elemento.relatedPractices),
             personal: this.buscarAnalistas(elemento.relatedPers),
             condiciones: elemento.cfConditions,
-            disponibilidad: elemento.cfAvailability
+            disponibilidad: disponibilidad
           };
 
           if (duenoLab && elemento.otros) {
@@ -415,23 +420,26 @@ export class QuerysPrincipalService {
 
           if (elemento.mainSpace !== '') {
 
-            this.buscarEspacio(elemento.mainSpace).then(espacio => {
+            var buscarespacios = this.buscarEspacio(elemento.mainSpace).then(espacio => {
 
               const espacioLab = espacio.data();
-
-              this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
+              return this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
                 laboratorio.direspacio = direspa;
 
                 laboratorio.coord.lat = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0;
                 laboratorio.coord.lon = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0;
               });
 
-            });
+            })
+            promesas.push(buscarespacios)
           }
 
 
-
-return laboratorio
+          return Promise.all(promesas).then(values => { 
+            console.log(439,values); // [3, 1337, "foo"] 
+            laboratorio['servicios'] = values[0]
+            return laboratorio
+          });
 
         });
       }
@@ -489,118 +497,134 @@ return laboratorio
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LOS SERVICIOS ASOCIADOS
   estructurarServicios(item) {
 
-    const arr = [];
+    var arr = [];
+    var promesas = []
 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
 
         if (item[clave]) {
-          this.afs.doc('cfSrv/' + clave).ref.get().then(data => {
-            const servicio = data.data();
-
-            if (servicio.cfName) {
-              const serv = {
-                nombre: servicio.cfName,
-                descripcion: servicio.cfDesc,
-                precio: servicio.cfPrice,
-                activo: servicio.active,
-                equipos: this.estructurarEquipos(servicio.relatedEquipments),
-                condiciones: servicio.cfCondition,
-                descuento: servicio.descuento,
-                parametros: servicio.parametros,
-                variaciones: this.variations(clave),
-                uid: data.id
-              };
-              arr.push(serv);
-            }
-
-          });
+          var serv = this.afs.doc('cfSrv/' + clave).ref.get()
+          promesas.push(serv)
         }
 
       }
     }
 
-    return arr;
+    return Promise.all(promesas).then(responses => {
+      responses.forEach(data=>{
+        var servicio = data.data();
+
+        if (servicio.cfName) {
+          var serv = {
+            nombre: servicio.cfName,
+            descripcion: servicio.cfDesc,
+            precio: servicio.cfPrice,
+            activo: servicio.active,
+            equipos: this.estructurarEquipos(servicio.relatedEquipments),
+            condiciones: servicio.cfCondition,
+            descuento: servicio.descuento,
+            parametros: servicio.parametros,
+            variaciones: this.variations(data.key),
+            uid: data.id
+          };
+          arr.push(serv);
+        }
+      })
+      console.log(arr)
+      return arr
+    })
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPracticas(item) {
-
-
     const arr = [];
     if (item) {
-
-      for (const clave in item) {
-        // Controlando que json realmente tenga esa propiedad
-        if (item.hasOwnProperty(clave)) {
-
-          if (item[clave]) {
-            this.afs.doc('practice/' + clave).ref.get().then(data => {
-
-              if (!data.exists) {
-                console.log(data.id);
-              }
-              const practica = data.data();
-              this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
-
-                // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if (data2.docs[0].exists) {
-                  const prog = data2.docs[0].data();
-
-                  const pract = {
-                    nombre: practica.practiceName,
-                    id: data.id,
-                    programacion: {
-
-                      id_pro: data2.docs[0].id,
-                      estudiantes: prog.noStudents,
-                      horario: prog.schedule,
-                      semestre: prog.semester
-                    },
-                    activo: practica.active
-                  };
-
-
-                  if (practica.active) {
-                    arr.push(pract);
+      return new Promise((resolve, reject) => {
+        var keys = Object.keys(item)
+        var cont = 0
+        for (const clave in item) {
+          // Controlando que json realmente tenga esa propiedad
+          cont ++
+          if (item.hasOwnProperty(clave)) {
+  
+              this.afs.doc('practice/' + clave).ref.get().then(data => {
+             
+                const practica = data.data();
+                this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
+  
+                  // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                  if (data2.docs[0].exists) {
+                    const prog = data2.docs[0].data();
+  
+                    const pract = {
+                      nombre: practica.practiceName,
+                      id: data.id,
+                      programacion: {
+  
+                        id_pro: data2.docs[0].id,
+                        estudiantes: prog.noStudents,
+                        horario: prog.schedule,
+                        semestre: prog.semester
+                      },
+                      activo: practica.active
+                    };
+  
+  
+                    if (practica.active) {
+                      arr.push(pract);
+                    }
+  
+                  } else {
+  
+                    const pract = {
+                      nombre: practica ? practica.practiceName : 'ninguno',
+                      activo: practica ? practica.active : 'none'
+                    };
+  
+                    if (practica.active) {
+                      arr.push(pract);
+                    }
+  
                   }
-
-                } else {
-
-                  const pract = {
-                    nombre: practica ? practica.practiceName : 'ninguno',
-                    activo: practica ? practica.active : 'none'
-                  };
-
-                  if (practica.active) {
-                    arr.push(pract);
+                  if (cont == keys.length) {
+                    resolve(arr)
                   }
-
-                }
-
-              }).catch(err => console.log(err));
-
-            });
+  
+                }).catch(err => {
+                  if (cont == keys.length) {
+                    resolve(arr)
+                  }
+                  console.log(err)});
+  
+              });
+            
+  
           }
-
         }
-      }
+      }); 
+
+      
+    }else{
+      return arr;
     }
 
-    return arr;
   }
 
   estructuraTelefonos(idlab) {
-    const tels = [];
+    var tels = [];
+
     this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
       data.forEach(element => {
+        console.log(element.data())
+
         tels.push(element.data().cfEAddrValue);
       });
     });
-
     return tels;
+
   }
 
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO
