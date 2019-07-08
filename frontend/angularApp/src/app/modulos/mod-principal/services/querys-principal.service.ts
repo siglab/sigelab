@@ -164,7 +164,40 @@ export class QuerysPrincipalService {
 
     return promise;
   }
+  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
+  estructurarDataLabAdmin(data: any) {
+    this.datosLabsEstructurados = []
+    var laboratorios = data.data().data
 
+    const promise = new Promise((resolve, reject) => {
+      var cont = 0
+      var datasize = Object.keys(data)
+
+      for (const key in laboratorios) {
+        if (laboratorios.hasOwnProperty(key)) {
+          const laboratorio = laboratorios[key]
+          if (laboratorio.active) {
+            laboratorio.active = 'Activo'
+          } else {
+            laboratorio.active = 'Inactivo'
+          }
+          this.datosLabsEstructurados.push(laboratorio)
+
+          cont++
+
+          if (cont === datasize.length) {
+            resolve({
+              data: this.datosLabsEstructurados
+            })
+          }
+        }
+      }
+
+    });
+
+
+    return promise
+  }
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
   estructurarDataServ(data: any) {
 
@@ -435,8 +468,8 @@ export class QuerysPrincipalService {
           }
 
 
-          return Promise.all(promesas).then(values => { 
-            console.log(439,values); // [3, 1337, "foo"] 
+          return Promise.all(promesas).then(values => {
+            console.log(439, values); // [3, 1337, "foo"] 
             laboratorio['servicios'] = values[0]
             return laboratorio
           });
@@ -513,7 +546,7 @@ export class QuerysPrincipalService {
     }
 
     return Promise.all(promesas).then(responses => {
-      responses.forEach(data=>{
+      responses.forEach(data => {
         var servicio = data.data();
 
         if (servicio.cfName) {
@@ -547,67 +580,68 @@ export class QuerysPrincipalService {
         var cont = 0
         for (const clave in item) {
           // Controlando que json realmente tenga esa propiedad
-          cont ++
+          cont++
           if (item.hasOwnProperty(clave)) {
-  
-              this.afs.doc('practice/' + clave).ref.get().then(data => {
-             
-                const practica = data.data();
-                this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
-  
-                  // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                  if (data2.docs[0].exists) {
-                    const prog = data2.docs[0].data();
-  
-                    const pract = {
-                      nombre: practica.practiceName,
-                      id: data.id,
-                      programacion: {
-  
-                        id_pro: data2.docs[0].id,
-                        estudiantes: prog.noStudents,
-                        horario: prog.schedule,
-                        semestre: prog.semester
-                      },
-                      activo: practica.active
-                    };
-  
-  
-                    if (practica.active) {
-                      arr.push(pract);
-                    }
-  
-                  } else {
-  
-                    const pract = {
-                      nombre: practica ? practica.practiceName : 'ninguno',
-                      activo: practica ? practica.active : 'none'
-                    };
-  
-                    if (practica.active) {
-                      arr.push(pract);
-                    }
-  
+
+            this.afs.doc('practice/' + clave).ref.get().then(data => {
+
+              const practica = data.data();
+              this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
+
+                // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                if (data2.docs[0].exists) {
+                  const prog = data2.docs[0].data();
+
+                  const pract = {
+                    nombre: practica.practiceName,
+                    id: data.id,
+                    programacion: {
+
+                      id_pro: data2.docs[0].id,
+                      estudiantes: prog.noStudents,
+                      horario: prog.schedule,
+                      semestre: prog.semester
+                    },
+                    activo: practica.active
+                  };
+
+
+                  if (practica.active) {
+                    arr.push(pract);
                   }
-                  if (cont == keys.length) {
-                    resolve(arr)
+
+                } else {
+
+                  const pract = {
+                    nombre: practica ? practica.practiceName : 'ninguno',
+                    activo: practica ? practica.active : 'none'
+                  };
+
+                  if (practica.active) {
+                    arr.push(pract);
                   }
-  
-                }).catch(err => {
-                  if (cont == keys.length) {
-                    resolve(arr)
-                  }
-                  console.log(err)});
-  
+
+                }
+                if (cont == keys.length) {
+                  resolve(arr)
+                }
+
+              }).catch(err => {
+                if (cont == keys.length) {
+                  resolve(arr)
+                }
+                console.log(err)
               });
-            
-  
+
+            });
+
+
           }
         }
-      }); 
+      });
 
-      
-    }else{
+
+    } else {
       return arr;
     }
 

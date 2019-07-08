@@ -225,7 +225,20 @@ export class Modulo2Service {
   updateDocLaboratorio(idlab, doc) {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
+  updateCacheLaboratorios(uid,lab){
+    const laboratorio = {     
+      
+      labEmail:lab.otros.email,
+    
+      updatedAt:lab.active
+    }
+    const data = {}
+    data[uid] = laboratorio
+    console.log(251,data)
 
+    return this.afs.doc('cache/cfFacil/').update(data);
+
+}
   setDocLaboratorio(idlab, doc) {
 
     return this.afs.doc('cfFacil/' + idlab).set(doc, { merge: true });
@@ -345,7 +358,6 @@ export class Modulo2Service {
   // METODO TRAZABILIDAD DE CAMBIOS
 
   Trazability(user, type, collection, id, docIn) {
-    console.log('ejecuto');
     let size = 0;
     let cont = 1;
     // tslint:disable-next-line:forin
@@ -361,10 +373,8 @@ export class Modulo2Service {
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
             docAfter[key] = docIn[key];
-            console.log(cont, size);
             if (cont === size) {
 
-              console.log(documento, docAfter);
 
               this.addTrazability(user, type, collection, id, documento, docAfter).then(() => {
                 resolve();
@@ -387,7 +397,6 @@ export class Modulo2Service {
 
 
   TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn) {
-    console.log('ejecuto');
     let size = 0;
     let cont = 1;
     // tslint:disable-next-line:forin
@@ -406,10 +415,8 @@ export class Modulo2Service {
               for (const key in docIn) {
                 if (docIn.hasOwnProperty(key)) {
                   docAfter[key] = docIn[key];
-                  console.log(cont, size);
                   if (cont === size) {
 
-                    console.log(documento, docAfter);
 
                     this.addTrazability(
                       user, type, collection + '/' + idColl + '/' + subColl, idSub,
@@ -424,7 +431,6 @@ export class Modulo2Service {
                 }
               }
             } else {
-              console.log(documento);
               this.addTrazability(
                 user, type, collection + '/' + idColl + '/' + subColl, idSub, documento, {}).then(() => {
                   resolve();
@@ -462,7 +468,6 @@ export class Modulo2Service {
           createdAt: new Date().toISOString()
         };
 
-        console.log(logger);
 
         this.afs.collection('logger').add(logger).then(() => {
           resolve();

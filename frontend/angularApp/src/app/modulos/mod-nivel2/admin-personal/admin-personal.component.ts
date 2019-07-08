@@ -121,7 +121,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     private servicioMod2: Modulo2Service ) { }
 
   ngOnInit() {
-    console.log('Muestra usuario=>', this.user);
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
@@ -130,7 +129,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
     this.sus = this.obs.currentObjectPer.subscribe(data => {
-      console.log(data);
       this.getRoles(data.roles);
       if (data.length !== 0) {
 
@@ -143,9 +141,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
           this.idlab = data.uid;
 
-          console.log('id del lab', data.uid);
           this.itemsel = Observable.of(this.persestructurado.personal);
-          console.log(this.persestructurado);
 
           this.dataSourcePers.data = this.persestructurado.personal;
           this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
@@ -210,9 +206,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
       this.idlab = uid;
 
-      console.log('id del lab', uid);
       this.itemsel = Observable.of(this.persestructurado.personal);
-      console.log(this.persestructurado);
 
       this.dataSourcePers.data = this.persestructurado.personal;
       this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
@@ -270,7 +264,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.moduloNivel2 = false;
     this.moduloNivel3 = false;
     this.moduloNivel25 = false;
-    console.log(rol);
     for (const clave in rol) {
       if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
@@ -296,7 +289,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         if (doc.data().lvl === 'perfiles2') {
 
           this.niveles.push({ id: doc.id, nombre: doc.data().roleName });
-          console.log(this.niveles);
 
         }
       });
@@ -335,7 +327,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
         if (item[clave]) {
-            console.log(item[clave]);
           this.servicioMod2.buscarPersona(clave).then(data => {
             const pers = data.data();
 
@@ -470,7 +461,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           data.forEach(doc => {
             const idnuevo = doc.id;
 
-            console.log(idnuevo);
             resolve(idnuevo);
           });
 
@@ -486,7 +476,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   cambiardata(item, table) {
     this.tablesel = table;
-    console.log(item);
     this.nombre = item.nombre;
     this.estado = item.activo;
     this.email = item.email;
@@ -499,7 +488,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.nombreRoles(item.rolesClient);
 
-    console.log( 'array', item.rolesClient[this.idlab] );
 
     this.idp = item.idpers;
     this.idu = item.iduser;
@@ -544,7 +532,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       pers.clientRole[this.idlab][doc.id] = true;
     });
 
-    console.log(' se va actualizar esta persona', pers);
 
     nuevoEstado.relatedPers[this.idp] = this.estado;
 
@@ -695,7 +682,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       appRoles: {}
     };
     // asigna como boolean el id del rol al usuario
-    console.log(newUser);
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfFacil', path, newUser
     ).then(() => {
@@ -710,14 +696,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   updateFaciliti(idP) {
 
-    console.log('entrooooooo');
     const facil = {
       relatedPers: {}
     };
     facil.relatedPers[idP] = true;
 
 
-    console.log('revisar este lab', this.idlab);
     this.servicioMod2.Trazability(
       this.user.uid, 'update', 'cfFacil', this.idlab, facil
     ).then(() => {
@@ -729,7 +713,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   emailcheck($event) {
 
-    console.log($event);
     this.addP = '';
     const q = $event.target.value;
     if (q.trim() === '') {
@@ -743,14 +726,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.status = 'Email disponible';
           this.dispo = true;
         } else {
-          console.log(snapShot.docs[0].id);
           this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el botón vincular.';
           this.dispo = true;
           this.addP = snapShot.docs[0].id;
           this.person.cfFamilyNames = snapShot.docs[0].data().cfFamilyNames;
           this.person.cfFirstNames = snapShot.docs[0].data().cfFirstNames;
           this.person.type = snapShot.docs[0].data().type;
-          console.log(this.person.type);
           this.person.cfGender = snapShot.docs[0].data().cfGender;
           this.person.cfBirthdate = snapShot.docs[0].data().cfBirthdate;
         }
@@ -808,7 +789,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   agregarRol() {
-    console.log(this.rolSelect);
 
     let bool = false;
 
@@ -835,7 +815,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.person.clientRole [this.idlab] = {};
     this.person.clientRole [this.idlab] [this.rolSelect] = true;
-    console.log(this.person);
 
   }
 

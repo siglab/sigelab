@@ -41,21 +41,21 @@
                     </ng-container>
 
                     <!-- Name Column -->
-                    <ng-container matColumnDef="correolab">
+                    <ng-container matColumnDef="labEmail">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Laboratorio </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
+                      <mat-cell *matCellDef="let element"> {{element.labEmail}} </mat-cell>
                     </ng-container>
 
                     <!-- Weight Column -->
-                    <ng-container matColumnDef="correodir">
+                    <ng-container matColumnDef="directoremail">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Director </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.emaildirector}} </mat-cell>
+                      <mat-cell *matCellDef="let element"> {{element.directoremail}} </mat-cell>
                     </ng-container>
 
                     <!-- Weight Column -->
-                    <ng-container matColumnDef="ultima">
+                    <ng-container matColumnDef="updatedAt">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.ultima}} </mat-cell>
+                      <mat-cell *matCellDef="let element"> {{element.updatedAt}} </mat-cell>
                     </ng-container>
 
                     <!-- Symbol Column -->
@@ -65,9 +65,9 @@
                     </ng-container>
 
                     <!-- Symbol Column -->
-                    <ng-container matColumnDef="estado">
+                    <ng-container matColumnDef="active">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                      <mat-cell *matCellDef="let element"> {{element.estado}} </mat-cell>
+                      <mat-cell *matCellDef="let element"> {{element.active}} </mat-cell>
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -192,7 +192,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.cargarFacultades();
 
     this.sus = this.obs.currentObjectLab.subscribe(data => {
-      console.log(data);
       this.getRoles(data.roles);
       this.resetIconos();
 
@@ -214,7 +213,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
             this.setSede(this.labestructurado.sede.id);
 
-            console.log(this.labestructurado);
             if (this.labestructurado) {
               if (this.labestructurado.objectActividad.extension) {
                 this.dataSourceServicios.data = this.labestructurado.servicios;
@@ -334,6 +332,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   cambiardata(item, table) {
+    console.log(337,item,table)
     this.tablesel = table;
     this.seleccionado = item;
     if (this.tablesel === 'practicas') {
@@ -639,7 +638,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   estructurarPersonas(item) {
 
     const arr = [];
-    console.log(item);
 
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
@@ -685,7 +683,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
       }
     }
-    console.log(arr);
     return arr;
   }
 
@@ -929,7 +926,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles(rol) {
-    console.log(rol);
     this.moduloNivel2 = false;
     this.moduloNivel3 = false;
     this.moduloPermiso = false;
@@ -1007,7 +1003,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             .then(() => {
               this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
                 .then(data => {
-
+                  this.servicioMod2.updateCacheLaboratorios(this.labestructurado.uid,this.infolab)
                   swal.close();
                   swal({
                     type: 'success',
@@ -1713,11 +1709,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   agregarElemento(list) {
-    console.log('1716', this.fac, this.dep)
 
     if ((this.fac != undefined && this.fac.trim() != '' && list === 'facultad') ||
       (this.dep != undefined && this.dep.trim() != '' && list === 'unidad')) {
-      console.log(this.fac, this.dep)
       let lista = '';
 
       let select = '';
@@ -1811,7 +1805,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
   setSede(headquarter) {
     this.subsedes = [];
-    console.log(headquarter);
     this.subsedesStatic.forEach(doc => {
       if (doc.headquarter === headquarter) {
         this.subsedes.push(doc);
@@ -1904,7 +1897,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   agregarTelefonos() {
-    console.log('1907', this.listaTelefonos, this.telefono)
     if (this.telefono != undefined && this.telefono.trim() != '') {
       this.listaTelefonos.push({ id: this.listaTelefonos.length, nombre: this.telefono });
       if (this.moduloPermiso) {

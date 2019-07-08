@@ -13,7 +13,6 @@ export class Nivel3Guard implements CanActivate {
 
       const rol = JSON.parse(sessionStorage.getItem('rol'));
       if (rol) {
-        console.log(rol);
         if ( rol.hasOwnProperty('moduloNivel3') ||  rol.hasOwnProperty('moduloNivel25') ||  rol.hasOwnProperty('moduloNivel35')) {
 
           return true;
