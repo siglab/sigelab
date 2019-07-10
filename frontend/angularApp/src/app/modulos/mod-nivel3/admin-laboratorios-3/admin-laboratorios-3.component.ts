@@ -102,6 +102,7 @@ export class AdminLaboratorios3Component implements OnInit {
 
   fecha = new Date();
 
+  cache:any = {}
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
     private service: EspaciosService, private toastr: ToastrService,
@@ -122,7 +123,8 @@ export class AdminLaboratorios3Component implements OnInit {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     // trae los datos de los laboratorios
-    this.query.getLaboratorios().then(data => {
+    this.query.getLaboratorios().then((data) => {
+      this.cache.cfFacil = data.data()
       this.query.estructurarDataLabAdmin(data).then(datos => {
         this.estructurarLaboratorios(datos)    
 

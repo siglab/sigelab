@@ -230,13 +230,13 @@ export class Modulo2Service {
       
       labEmail:lab.otros.email,
     
-      updatedAt:lab.active
+      updatedAt:lab.updatedAt
     }
     const data = {}
     data[uid] = laboratorio
     console.log(251,data)
 
-    return this.afs.doc('cache/cfFacil/').update(data);
+    return this.afs.doc('cache/cfFacil/').set(data,  {merge: true} );
 
 }
   setDocLaboratorio(idlab, doc) {

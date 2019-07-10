@@ -135,7 +135,7 @@ export class QuerysPrincipalService {
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataLab(data: any) {
     this.datosLabsEstructurados = [];
-    var laboratorios = data.data().data
+    var laboratorios = data.data()
 
     const promise = new Promise((resolve, reject) => {
       var cont = 0
@@ -167,7 +167,7 @@ export class QuerysPrincipalService {
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataLabAdmin(data: any) {
     this.datosLabsEstructurados = []
-    var laboratorios = data.data().data
+    var laboratorios = data.data()
 
     const promise = new Promise((resolve, reject) => {
       var cont = 0
