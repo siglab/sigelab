@@ -477,6 +477,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     if (this.validarDatosSrv(this.srv)) {
       if (Object.keys(this.srv.relatedEquipments).length !== 0) {
         this.servicioMod2.addServicio(this.srv).then(data => {
+          const servicioUid = data.id
+          this.servicioMod2.buscarLab(this.lab_id).then(labSnap=>{
+            const nombreLab = labSnap.data().cfName
+            this.servicioMod2.pushCacheServicios(true,this.srv.cfName,nombreLab,servicioUid,this.srv.updatedAt ).then(res=>{
+             
+            })
+          })  
           this.servicioMod2.Trazability(
             this.user.uid, 'create', 'cfSrv', data.id, this.srv
           ).then(() => {
@@ -496,6 +503,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
                       this.user.uid, 'create', 'cfFacil', data.id, 'variations', doc.id, element
                     ).then(() => {
                       if (i === this.variaciones.length - 1) {
+                        
                         swal.close();
                         swal({
                           type: 'success',

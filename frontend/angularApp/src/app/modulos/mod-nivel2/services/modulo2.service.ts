@@ -17,7 +17,7 @@ export class Modulo2Service {
     return JSON.parse(sessionStorage.getItem('persona'));
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  // METODO QUE TRAE UN LABORATORIO ESPECIFICO DEPENDIENDO EL ID-LAB
   buscarLab(idlab) {
     return this.afs.doc('cfFacil/' + idlab).ref.get();
   }
@@ -154,10 +154,10 @@ export class Modulo2Service {
 
   getEspaceForBuildAndPlace(edificio: string, espacio: string) {
 
-    const place = parseInt( espacio, 10 );
+    const place = parseInt(espacio, 10);
     const col = this.afs.collection('space');
     const refer = col.ref.where('spaceData.building', '==', edificio)
-                          .where('spaceData.place', '==', place);
+      .where('spaceData.place', '==', place);
     return refer.get();
   }
 
@@ -225,32 +225,49 @@ export class Modulo2Service {
   updateDocLaboratorio(idlab, doc) {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
-  updateCacheLaboratorios(uid,lab){
-    const laboratorio = {     
-      
-      labEmail:lab.otros.email,
-    
-      updatedAt:lab.updatedAt
+  updateCacheLaboratorios(uid, lab) {
+    console.log(lab.hasOwnProperty('updatedAt'), lab.updatedAt)
+    var laboratorio = {
+
+      labEmail: lab.otros.email,
+
+      updatedAt: lab.updatedAt
     }
     const data = {}
     data[uid] = laboratorio
 
-    return this.afs.doc('cache/cfFacil/').set(data,  {merge: true} );
+    return this.afs.doc('cache/cfFacil/').set(data, { merge: true });
 
-}
-updateCacheServicios(uid,lab){
-  const servicio = {     
-    
-    labEmail:lab.otros.email,
-  
-    updatedAt:lab.updatedAt
   }
-  const data = {}
-  data[uid] = servicio
+  pushCacheLaboratorios(active = false,director, directoremail , escuela  , inves  ,  labEmail  ,
+    nombre, uid, updatedAt
+    ) {
+    const laboratorio = {active,director, directoremail , escuela  , inves  ,  labEmail  ,
+      nombre, uid, updatedAt
+    }
+    const newLAb = {}
+    newLAb[uid] = laboratorio
+    return this.afs.doc('cache/cfFacil/').set(newLAb, { merge: true });
 
-  return this.afs.doc('cache/cfSrv/').set(data,  {merge: true} );
+  }
+  updateCacheServicios(uid, lab) {
+    const servicio = {
 
-}
+      labEmail: lab.otros.email,
+
+      updatedAt: lab.updatedAt
+    }
+    const data = {}
+    data[uid] = servicio
+
+    return this.afs.doc('cache/cfSrv/').set(data, { merge: true })
+  }
+  pushCacheServicios(active = false,nombre,nombrelab,uid,updatedAt ) {
+    const servicio = {active,nombre,nombrelab,uid,updatedAt }
+    const newServicio = {}
+    newServicio[uid] = servicio
+    return this.afs.doc('cache/cfSrv/').set(newServicio, { merge: true })
+  }
   setDocLaboratorio(idlab, doc) {
 
     return this.afs.doc('cfFacil/' + idlab).set(doc, { merge: true });
@@ -497,7 +514,7 @@ updateCacheServicios(uid,lab){
 
   getEdificiosBySede(id) {
 
-   return this.afs.doc(`cfPAddr/${id}`).ref.get();
+    return this.afs.doc(`cfPAddr/${id}`).ref.get();
 
   }
 

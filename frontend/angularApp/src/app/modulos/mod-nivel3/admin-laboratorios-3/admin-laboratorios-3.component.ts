@@ -113,7 +113,10 @@ export class AdminLaboratorios3Component implements OnInit {
 
   ngOnInit() {
     this.persona = JSON.parse(sessionStorage.getItem('persona'));
-
+    if (sessionStorage.getItem('usuario')) {
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
+      
+    }
 
     this.getRoles();
 
@@ -388,18 +391,26 @@ export class AdminLaboratorios3Component implements OnInit {
       if (data.size !== 0) {
         data.forEach(doc => {
           const keyDirector = doc.id;
+          const nomDir = `${doc.data().cfFirstNames} ${doc.data().cfFamilyNames}`
+          const dirEmail = doc.data().email
           objFacil.facilityAdmin = keyDirector;
 
           this.afs.collection('cfFacil').add(objFacil).then(dato => {
+            const labUid = dato.id
             this.serviceMod3.Trazability(
               this.user.uid, 'create', 'cfFacil', dato.id, objFacil
             ).then(() => {
-              swal.close();
-              swal({
-                type: 'success',
-                title: 'Laboratorio creado',
-                showConfirmButton: true
-              });
+              this.servicioMod2.pushCacheLaboratorios(objFacil.active,
+                nomDir, dirEmail , objFacil.knowledgeArea, objFacil.researchGroup,  objFacil.otros.email  ,
+                objFacil.cfName, labUid, objFacil.updatedAt).then(refresponse=>{
+                  swal.close();
+                  swal({
+                    type: 'success',
+                    title: 'Laboratorio creado',
+                    showConfirmButton: true
+                  });
+              })
+             
             });
 
           });

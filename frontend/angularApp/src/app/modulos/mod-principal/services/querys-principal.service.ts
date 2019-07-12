@@ -101,34 +101,7 @@ export class QuerysPrincipalService {
     });
 
 
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
+  }// METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataLab(data: any) {
     this.datosLabsEstructurados = [];
     var laboratorios = data.data()
