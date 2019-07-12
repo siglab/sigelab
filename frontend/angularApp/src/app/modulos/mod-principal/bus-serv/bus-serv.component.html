@@ -36,12 +36,12 @@
                     matSort
                   >
                     <!-- Position Column -->
-                    <ng-container matColumnDef="nombreserv">
+                    <ng-container matColumnDef="nombre">
                       <mat-header-cell *matHeaderCellDef mat-sort-header>
                         Nombre de servicio
                       </mat-header-cell>
                       <mat-cell *matCellDef="let element">
-                        {{ element.nombreserv }}
+                        {{ element.nombre }}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="nombrelab">
@@ -57,7 +57,7 @@
                     ></mat-header-row>
                     <mat-row
                       *matRowDef="let row; columns: displayedColumns"
-                      (click)="cambiardata(row)"
+                      (click)="selectRow(row)"
                       style="cursor: pointer;"
                     ></mat-row>
                   </mat-table>

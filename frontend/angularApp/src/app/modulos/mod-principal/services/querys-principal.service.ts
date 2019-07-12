@@ -48,12 +48,8 @@ export class QuerysPrincipalService {
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
   getServicios() {
-    const coll = this.afs.collection('cfSrv');
-    const refer = coll.ref.where('active', '==', true);
-    // this.servs = this.servsCollection.valueChanges();
-
-    return refer.get();
-
+    const colle = this.afs.collection('cache').doc('cfSrv');
+    return colle.ref.get();
   }
 
   // tslint:disable-next-line:member-ordering
@@ -198,95 +194,117 @@ export class QuerysPrincipalService {
 
     return promise
   }
-  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
+
+
+  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataServ(data: any) {
+    this.datosServEstructurados = [];
+    var servicios = data.data()
 
     const promise = new Promise((resolve, reject) => {
-      this.datosServEstructurados = [];
-      console.log(data.size);
-      if (data.size != 0) {
-        data.forEach(doc => {
-          const elemento = doc.data();
+      var cont = 0
+      var datasize = Object.keys(servicios)
 
-          if (elemento.active) {
-            if (elemento.cfFacil) {
-              this.buscarLaboratorio(elemento.cfFacil).then(lab => {
-                const labencontrado = lab.data();
+      for (const key in servicios) {
+        if (servicios.hasOwnProperty(key)) {
+          const laboratorio = servicios[key];
 
-                if (labencontrado) {
-                  this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
-                    const duenoLab = dueno.data();
-                    if (duenoLab && labencontrado.mainSpace) {
+          if (laboratorio.active) {
+            this.datosServEstructurados.push(laboratorio);
 
-                      this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
-
-                        const espacioLab = espacio.data();
-
-                        this.buscarDireccion(labencontrado.headquarter, labencontrado.subHq, labencontrado.mainSpace).then(direspa => {
-                          const servicios = {
-                            nombreserv: elemento.cfName,
-                            nombrelab: labencontrado.cfName,
-                            infoServ: {
-                              descripcion: elemento.cfDesc,
-                              precio: elemento.cfPrice,
-                              variaciones: this.variations(doc.id),
-                              equipos: this.estructurarEquipos(elemento.relatedEquipments),
-                              condiciones: elemento.cfCondition,
-                              parametros: elemento.parametros,
-                              descuento: elemento.descuento,
-                              uid: doc.id
-                            },
-                            infoLab: {
-                              uid: elemento.cfFacil,
-                              direspacio: direspa,
-                              telefonos: this.estructuraTelefonos(elemento.cfFacil),
-                              personal: this.buscarAnalistas(labencontrado.relatedPers),
-                              iddirecto: labencontrado.facilityAdmin,
-                              desc: labencontrado.cfDescr,
-                              email: labencontrado.otros.email,
-                              escuela: labencontrado.knowledgeArea,
-                              inves: labencontrado.researchGroup,
-                              director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                              emaildir: duenoLab.email,
-                              condiciones: labencontrado.cfConditions,
-                              disponibilidad: labencontrado.cfAvailability
-                            },
-
-                            coord: {
-                              lat: espacioLab.spaceData.geoRep.longitud,
-                              lon: espacioLab.spaceData.geoRep.latitud
-                            }
-                          };
-
-
-                          this.datosServEstructurados.push(servicios);
-
-                          if (this.datosServEstructurados.length === data.size) {
-                            resolve({
-                              data: this.datosServEstructurados
-                            });
-                          }
-                        });
-
-                      });
-
-                    }
-                  });
-                }
-
-              });
-            }
           }
-
-        });
-      } else {
-        reject();
+          cont++
+          if (cont === datasize.length) {
+            resolve({
+              data: this.datosServEstructurados
+            });
+          }
+        }
       }
 
     });
 
 
     return promise;
+  }
+  //VIEJO!!!
+  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS   
+  getDataServ(data: any) {
+
+    return this.buscarServicio(data.uid).then(serv => {
+      const elemento = serv.data();
+
+      if (elemento.active) {
+        if (elemento.cfFacil) {
+        return  this.buscarLaboratorio(elemento.cfFacil).then(lab => {
+            const labencontrado = lab.data();
+
+            if (labencontrado) {
+              return this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
+                const duenoLab = dueno.data();
+                if (duenoLab && labencontrado.mainSpace) {
+
+                  return this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
+
+                    const espacioLab = espacio.data();
+
+                   return  this.buscarDireccion(labencontrado.headquarter, labencontrado.subHq, labencontrado.mainSpace).then(direspa => {
+                      const servicios = {
+                        nombreserv: elemento.cfName,
+                        nombrelab: labencontrado.cfName,
+                        infoServ: {
+                          descripcion: elemento.cfDesc,
+                          precio: elemento.cfPrice,
+                          variaciones: this.variations(serv.id),
+                          equipos: this.estructurarEquipos(elemento.relatedEquipments),
+                          condiciones: elemento.cfCondition,
+                          parametros: elemento.parametros,
+                          descuento: elemento.descuento,
+                          uid: serv.id
+                        },
+                        infoLab: {
+                          uid: elemento.cfFacil,
+                          direspacio: direspa,
+                          telefonos: this.estructuraTelefonos(elemento.cfFacil),
+                          personal: this.buscarAnalistas(labencontrado.relatedPers),
+                          iddirecto: labencontrado.facilityAdmin,
+                          desc: labencontrado.cfDescr,
+                          email: labencontrado.otros.email,
+                          escuela: labencontrado.knowledgeArea,
+                          inves: labencontrado.researchGroup,
+                          director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                          emaildir: duenoLab.email,
+                          condiciones: labencontrado.cfConditions,
+                          disponibilidad: labencontrado.cfAvailability
+                        },
+
+                        coord: {
+                          lat: espacioLab.spaceData.geoRep.longitud,
+                          lon: espacioLab.spaceData.geoRep.latitud
+                        }
+                      };
+
+
+                      return servicios
+
+
+                    });
+
+                  });
+
+                }
+              });
+            }
+
+          });
+        }
+      }
+
+
+    })
+
+
+
   }
 
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE PRUEBAS
@@ -489,6 +507,10 @@ export class QuerysPrincipalService {
     return this.afs.doc('cfFacil/' + idLab).ref.get();
   }
 
+  // METODO QUE TRAE UN SERVICIO ESPECIFICO DEPENDIENDO EL ID-SERVICIO
+  buscarServicio(idService) {
+    return this.afs.doc('cfSrv/' + idService).ref.get();
+  }
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarDirector(iddirector) {
     return this.afs.doc('cfPers/' + iddirector).ref.get();

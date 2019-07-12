@@ -58,7 +58,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   preciocondescuento = 0;
 
   // INICIALIZACION DATATABLE lABORATORIOS
-  displayedColumns = ['nombreserv', 'nombrelab'];
+  displayedColumns = ['nombre', 'nombrelab'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
@@ -92,13 +92,10 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.alert.show();
 
     this.query.getServicios().then(data => {
-
       this.query.estructurarDataServ(data).then(datos => {
-
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // cierra loading luego de cargados los datos
         this.alert.hide();
 
       }).catch(() => {
@@ -116,6 +113,12 @@ export class BusServComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
 
+  }
+
+  selectRow(row){
+    this.query.getDataServ(row).then(data => {
+      this.cambiardata(data)
+    });
   }
 
   // METODO QUE BUSCA LA VARIACION QUE COINCIDE CON EL ID ENVIADO DESDE LA VISTA

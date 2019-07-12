@@ -234,9 +234,21 @@ export class Modulo2Service {
     }
     const data = {}
     data[uid] = laboratorio
-    console.log(251,data)
 
     return this.afs.doc('cache/cfFacil/').set(data,  {merge: true} );
+
+}
+updateCacheServicios(uid,lab){
+  const servicio = {     
+    
+    labEmail:lab.otros.email,
+  
+    updatedAt:lab.updatedAt
+  }
+  const data = {}
+  data[uid] = servicio
+
+  return this.afs.doc('cache/cfSrv/').set(data,  {merge: true} );
 
 }
   setDocLaboratorio(idlab, doc) {
