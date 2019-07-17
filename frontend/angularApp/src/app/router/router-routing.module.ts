@@ -46,7 +46,7 @@ const routes: Routes = [
     children: [
       { path: 'busquedalaboratorio', component: BusLabComponent},
       { path: 'busquedaservicio', component: BusServComponent},
-      { path: 'busquedaprueba', component: BusPruComponent},
+      // { path: 'busquedaprueba', component: BusPruComponent},
       { path: 'adminsolicitudes', component: AdminSolicitudesComponent, canActivate: [AuthGuard]},
       { path: 'adminlaboratorios', component: AdminLaboratoriosComponent, canActivate: [Nivel2Guard]},
       { path: 'adminequipos', component: AdminEquiposComponent, canActivate: [Nivel2Guard]},

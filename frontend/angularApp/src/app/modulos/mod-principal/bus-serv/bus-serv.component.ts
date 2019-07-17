@@ -21,7 +21,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
   // variables ci check
-  status;
+  status = 'Este campo es obligatorio';
   disponible;
   nameProject;
 
@@ -256,9 +256,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   enviarSolicitudServicio(reserva) {
-
     const fecha = new Date();
-
     if (this.user) {
       if (this.validancionCamposSolicitudServicio(reserva)
       ) {
@@ -288,49 +286,36 @@ export class BusServComponent implements OnInit, AfterViewInit {
           descuento: this.descuento,
           precioTotal: this.itemsel.infoServ.precio
         };
-
         if (this.usuariounivalle) {
           cfSrvReserv.cfPrice = '' + this.preciocondescuento;
         }
-
         swal({
-
           type: 'warning',
           title: '¿Está seguro que desea solicitar este servicio?',
           showCancelButton: true,
           confirmButtonText: 'Sí, Solicitar',
           cancelButtonText: 'No, Cancelar'
-
         }).then((result) => {
-
           if (result.value) {
             if (reserva === 'convariaciones') {
-
               for (let j = 0; j < this.listaVariaciones.length; j++) {
                 const element = this.listaVariaciones[j];
                 cfSrvReserv.selectedVariations[element.data.id] = true;
                 cfSrvReserv.conditionsLog.push({ condicion: element.condiciones, idvariacion: element.data.id });
-
                 cfSrvReserv.parametros.push({ parametros: element.parametros, id: element.data.id });
               }
-
               cfSrvReserv.precioTotal = '' + this.preciototal;
-
               if (this.usuariounivalle) {
                 cfSrvReserv.cfPrice = '' + this.preciocondescuento;
               } else {
                 cfSrvReserv.cfPrice = '' + this.preciototal;
-
               }
-
             }
-
             if (this.itemsel.infoServ.condiciones.length !== 0) {
               cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(this.itemsel.infoServ.condiciones, 'servicio');
             } else {
               cfSrvReserv['conditionsLogServ'] = []
             }
-
             if (this.parametrosServ) {
               let cont = 0;
               for (const key in this.parametrosServ) {
@@ -347,43 +332,34 @@ export class BusServComponent implements OnInit, AfterViewInit {
               cfSrvReserv.datauser.ci = this.valorci || '';
               cfSrvReserv.datauser.llaveci = this.llaveci || '';
             }
-
-            cfSrvReserv.comments.push({
-              commentText: this.campoCondicion,
-              fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
-              autor: 'usuario',
-              email: this.user.email,
-              uid: this.user.uid
-            });
-
-
+            if (this.campoCondicion && this.campoCondicion != ''){
+              cfSrvReserv.comments.push({
+                commentText: this.campoCondicion,
+                fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
+                autor: 'usuario',
+                email: this.user.email,
+                uid: this.user.uid
+              });
+            }
             this.query.addSolicitudServicio(cfSrvReserv).then(() => {
-
               swal({
                 type: 'success',
                 title: 'Solicitud Creada Exitosamente',
                 showConfirmButton: true
               }).then(() => {
                 this.enviarNotificacionesCorreo();
-
                 // tslint:disable-next-line:max-line-length
                 this.query.enviarEmails(this.itemsel.nombreserv, this.user.email, this.itemsel.infoLab.emaildir, this.itemsel.infoLab.email, this.itemsel.infoLab.personal);
-
                 this.limpiarDatos();
-
                 this.moduloinfo = false;
-
                 $('html, body').animate({ scrollTop: '0px' }, 'slow');
               });
-
             }).catch(error => {
-
               swal({
                 type: 'error',
                 title: error,
                 showConfirmButton: true
               });
-
             });
           } else if (
             // Read more about handling dismissals
@@ -402,22 +378,17 @@ export class BusServComponent implements OnInit, AfterViewInit {
       } else {
         swal({
           type: 'error',
-          title: 'Debe llenar todos los parámetros ',
+          title: 'Se requiere diligenciar todos los campos obligatorios para remitir la solicitud.',
           showConfirmButton: true
         });
       }
-
-
     } else {
-
       swal({
         type: 'error',
-        title: 'Debe ingresar al sistema para poder solicitar este servicio',
+        title: 'Se requiere iniciar sesión en el sistema para poder realizar la solicitud de este servicio.',
         showConfirmButton: true
       });
-
     }
-
   }
 
   enviarNotificacionesCorreo() {
@@ -443,8 +414,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
     }
 
   }
-
-
 
   loadMap(item) {
     this.map = L.map('mapaaser').setView([this.corx, this.cory], 13);
@@ -491,7 +460,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
           },
           1000
         );
-      }, 1000);
+      }, 200);
     } else {
       $('html, body').animate(
         {
@@ -562,22 +531,23 @@ export class BusServComponent implements OnInit, AfterViewInit {
   ciCheck($event) {
     const q = $event.target.value;
     if (q.trim() === '') {
-      this.status = 'Campo obligatorio';
+      this.status = 'Este campo es obligatorio';
       // this.dispo = false;
     } else {
-      this.status = 'Confirmando disponibilidad';
-      const collref = this.afs.collection('project').ref;
-      const queryref = collref.where('ciNumber', '==', q);
-      queryref.get().then((snapShot) => {
-        if (snapShot.empty) {
-          this.status = 'El CI ingresado no se encuentra asociado a ningún proyecto actual';
-          this.disponible = true;
-        } else {
-          this.nameProject = snapShot.docs[0].data().projectName;
-          this.status = 'Nombre del proyecto: ' + this.nameProject;
-          this.llaveci = snapShot.docs[0].id;
-        }
-      });
+      this.status = null;
+      // this.status = 'Confirmando disponibilidad';
+      // const collref = this.afs.collection('project').ref;
+      // const queryref = collref.where('ciNumber', '==', q);
+      // queryref.get().then((snapShot) => {
+      //   if (snapShot.empty) {
+      //     this.status = 'El CI ingresado no se encuentra asociado a ningún proyecto actual';
+      //     this.disponible = true;
+      //   } else {
+      //     this.nameProject = snapShot.docs[0].data().projectName;
+      //     this.status = 'Nombre del proyecto: ' + this.nameProject;
+      //     this.llaveci = snapShot.docs[0].id;
+      //   }
+      // });
     }
   }
 
@@ -602,7 +572,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
             }
           }
         }
-   
+
         // return true
       }
     } else {
