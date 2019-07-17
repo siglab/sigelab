@@ -12,7 +12,6 @@ export class PrincipalGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const rol = JSON.parse(sessionStorage.getItem('usuario'));
     if (rol) {
-      console.log(rol);
       return true;
 
     } else {

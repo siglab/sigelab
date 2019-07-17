@@ -17,7 +17,7 @@ export class Modulo2Service {
     return JSON.parse(sessionStorage.getItem('persona'));
   }
 
-  // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
+  // METODO QUE TRAE UN LABORATORIO ESPECIFICO DEPENDIENDO EL ID-LAB
   buscarLab(idlab) {
     return this.afs.doc('cfFacil/' + idlab).ref.get();
   }
@@ -154,10 +154,10 @@ export class Modulo2Service {
 
   getEspaceForBuildAndPlace(edificio: string, espacio: string) {
 
-    const place = parseInt( espacio, 10 );
+    const place = parseInt(espacio, 10);
     const col = this.afs.collection('space');
     const refer = col.ref.where('spaceData.building', '==', edificio)
-                          .where('spaceData.place', '==', place);
+      .where('spaceData.place', '==', place);
     return refer.get();
   }
 
@@ -225,7 +225,49 @@ export class Modulo2Service {
   updateDocLaboratorio(idlab, doc) {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
+  updateCacheLaboratorios(uid, lab) {
+    console.log(lab.hasOwnProperty('updatedAt'), lab.updatedAt)
+    var laboratorio = {
 
+      labEmail: lab.otros.email,
+
+      updatedAt: lab.updatedAt
+    }
+    const data = {}
+    data[uid] = laboratorio
+
+    return this.afs.doc('cache/cfFacil/').set(data, { merge: true });
+
+  }
+  pushCacheLaboratorios(active = false,director, directoremail , escuela  , inves  ,  labEmail  ,
+    nombre, uid, updatedAt
+    ) {
+    const laboratorio = {active,director, directoremail , escuela  , inves  ,  labEmail  ,
+      nombre, uid, updatedAt
+    }
+    const newLAb = {}
+    newLAb[uid] = laboratorio
+    return this.afs.doc('cache/cfFacil/').set(newLAb, { merge: true });
+
+  }
+  updateCacheServicios(uid, lab) {
+    const servicio = {
+
+      labEmail: lab.otros.email,
+
+      updatedAt: lab.updatedAt
+    }
+    const data = {}
+    data[uid] = servicio
+
+    return this.afs.doc('cache/cfSrv/').set(data, { merge: true })
+  }
+  pushCacheServicios(active = false,nombre,nombrelab,uid,updatedAt ) {
+    const servicio = {active,nombre,nombrelab,uid,updatedAt }
+    const newServicio = {}
+    newServicio[uid] = servicio
+    return this.afs.doc('cache/cfSrv/').set(newServicio, { merge: true })
+  }
   setDocLaboratorio(idlab, doc) {
 
     return this.afs.doc('cfFacil/' + idlab).set(doc, { merge: true });
@@ -345,7 +387,6 @@ export class Modulo2Service {
   // METODO TRAZABILIDAD DE CAMBIOS
 
   Trazability(user, type, collection, id, docIn) {
-    console.log('ejecuto');
     let size = 0;
     let cont = 1;
     // tslint:disable-next-line:forin
@@ -361,10 +402,8 @@ export class Modulo2Service {
         for (const key in docIn) {
           if (docIn.hasOwnProperty(key)) {
             docAfter[key] = docIn[key];
-            console.log(cont, size);
             if (cont === size) {
 
-              console.log(documento, docAfter);
 
               this.addTrazability(user, type, collection, id, documento, docAfter).then(() => {
                 resolve();
@@ -387,7 +426,6 @@ export class Modulo2Service {
 
 
   TrazabilitySubCollection(user, type, collection, idColl, subColl, idSub, docIn) {
-    console.log('ejecuto');
     let size = 0;
     let cont = 1;
     // tslint:disable-next-line:forin
@@ -406,10 +444,8 @@ export class Modulo2Service {
               for (const key in docIn) {
                 if (docIn.hasOwnProperty(key)) {
                   docAfter[key] = docIn[key];
-                  console.log(cont, size);
                   if (cont === size) {
 
-                    console.log(documento, docAfter);
 
                     this.addTrazability(
                       user, type, collection + '/' + idColl + '/' + subColl, idSub,
@@ -424,7 +460,6 @@ export class Modulo2Service {
                 }
               }
             } else {
-              console.log(documento);
               this.addTrazability(
                 user, type, collection + '/' + idColl + '/' + subColl, idSub, documento, {}).then(() => {
                   resolve();
@@ -462,7 +497,6 @@ export class Modulo2Service {
           createdAt: new Date().toISOString()
         };
 
-        console.log(logger);
 
         this.afs.collection('logger').add(logger).then(() => {
           resolve();
@@ -480,7 +514,7 @@ export class Modulo2Service {
 
   getEdificiosBySede(id) {
 
-   return this.afs.doc(`cfPAddr/${id}`).ref.get();
+    return this.afs.doc(`cfPAddr/${id}`).ref.get();
 
   }
 

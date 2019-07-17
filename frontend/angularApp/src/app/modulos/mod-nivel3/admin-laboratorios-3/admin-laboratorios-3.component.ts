@@ -4,8 +4,8 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
-import { EDIFICIOSMELENDEZ } from '../../mod-nivel2/admin-espacios/edificios';
-
+import { QuerysPrincipalService } from "../../mod-principal/services/querys-principal.service";
+// modulos/mod-principal/services/querys-principal.service.ts
 import * as moment from 'moment';
 
 import swal from 'sweetalert2';
@@ -15,13 +15,10 @@ import { Subscription } from 'rxjs';
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 
-import * as $AB from 'jquery';
 
 declare var $: any;
 
-import { ActivatedRoute } from '@angular/router';
-import { map, take, debounceTime } from 'rxjs/operators';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
+
 import { ToastrService } from 'ngx-toastr';
 import { EspaciosService } from '../../mod-nivel2/services/espacios.service';
 import { ServicesNivel3Service } from '../services/services-nivel3.service';
@@ -60,7 +57,7 @@ export class AdminLaboratorios3Component implements OnInit {
   status = '';
 
   // INICIALIZACION DATATABLE lABORATORIOS
-  displayedColumns = ['nombre', 'correolab', 'ultima', 'director', 'estado', 'correodir'];
+  displayedColumns = ['nombre', 'labEmail', 'updatedAt', 'director', 'active', 'directoremail'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
@@ -105,16 +102,21 @@ export class AdminLaboratorios3Component implements OnInit {
 
   fecha = new Date();
 
+  cache:any = {}
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage,
     private service: EspaciosService, private toastr: ToastrService,
     private serviceMod3: ServicesNivel3Service, private servicioMod2: Modulo2Service,
+    private query: QuerysPrincipalService,
     private obs: ObservablesService) {
   }
 
   ngOnInit() {
     this.persona = JSON.parse(sessionStorage.getItem('persona'));
-
+    if (sessionStorage.getItem('usuario')) {
+      this.user = JSON.parse(sessionStorage.getItem('usuario'));
+      
+    }
 
     this.getRoles();
 
@@ -123,22 +125,14 @@ export class AdminLaboratorios3Component implements OnInit {
 
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
+    // trae los datos de los laboratorios
+    this.query.getLaboratorios().then((data) => {
+      this.cache.cfFacil = data.data()
+      this.query.estructurarDataLabAdmin(data).then(datos => {
+        this.estructurarLaboratorios(datos)    
 
-    this.estructurarLaboratorios().then(() => {
-
-      this.dataSource.data = this.laboratoriosEstructurados;
-      setTimeout(() => {
-
-        if (this.laboratoriosEstructurados.length !== 0) {
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        }
-
-      }, 1500);
+      });
     });
-
-
-
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -182,7 +176,6 @@ export class AdminLaboratorios3Component implements OnInit {
 
     this.itemsel = Observable.of(item);
     this.labestructurado = item;
-    console.log(item);
     this.activo = item.active;
 
 
@@ -205,7 +198,7 @@ export class AdminLaboratorios3Component implements OnInit {
   }
 
   // METODOS DE LA VISTA ADMIN LABORATORIOS 3
-  estructurarLaboratorios() {
+  estructurarLaboratorios(cachelab) {
     let laboratorioObject = {};
     this.laboratoriosEstructurados = [];
 
@@ -223,7 +216,6 @@ export class AdminLaboratorios3Component implements OnInit {
                 contlabo += labo.size;
                 labo.forEach(doc => {
                   const laboratorio = doc.data();
-
                   this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
                     const duenoLab = dueno.data();
                     if (duenoLab) {
@@ -232,22 +224,20 @@ export class AdminLaboratorios3Component implements OnInit {
                         nombre: laboratorio.cfName,
                         director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                         iddueno: laboratorio.facilityAdmin,
-                        emaildirector: duenoLab.email,
-                        info: { email: laboratorio.otros.email },
+                        directoremail: duenoLab.email,
+                        labEmail: laboratorio.otros.email ,
                         estado: laboratorio.active ? 'Activo' : 'Inactivo',
                         active: laboratorio.active,
-                        ultima: laboratorio.updatedAt.split('T')[0]
+                        updatedAt: laboratorio.updatedAt.split('T')[0]
                       };
 
 
 
                       this.laboratoriosEstructurados.push(laboratorioObject);
 
-                      console.log(this.laboratoriosEstructurados.length, contlabo);
                       if (this.laboratoriosEstructurados.length === contlabo) {
                         resolve();
                       }
-
 
                     }
                   });
@@ -262,44 +252,46 @@ export class AdminLaboratorios3Component implements OnInit {
 
         });
       } else {
-        this.getLaboratorios().then(labo => {
-          console.log(labo);
-          labo.forEach(doc => {
-            const laboratorio = doc.data();
+        this.dataSource.data = cachelab['data'];
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.getLaboratorios().then(labo => {
+        //   console.log(labo);
+        //   labo.forEach(doc => {
+        //     const laboratorio = doc.data();
 
 
-            this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
-              const duenoLab = dueno.data();
-              if (duenoLab) {
-                laboratorioObject = {
-                  uid: doc.id,
-                  nombre: laboratorio.cfName,
-                  director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                  iddueno: laboratorio.facilityAdmin,
-                  emaildirector: duenoLab.email,
-                  info: { email: laboratorio.otros.email },
-                  estado: laboratorio.active ? 'Activo' : 'Inactivo',
-                  active: laboratorio.active,
-                  ultima: laboratorio.updatedAt.split('T')[0]
-                };
+        //     this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
+        //       const duenoLab = dueno.data();
+        //       if (duenoLab) {
+        //         laboratorioObject = {
+        //           uid: doc.id,
+        //           nombre: laboratorio.cfName,
+        //           director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+        //           iddueno: laboratorio.facilityAdmin,
+        //           emaildirector: duenoLab.email,
+        //           info: { email: laboratorio.otros.email },
+        //           estado: laboratorio.active ? 'Activo' : 'Inactivo',
+        //           active: laboratorio.active,
+        //           ultima: laboratorio.updatedAt.split('T')[0]
+        //         };
 
 
 
-                this.laboratoriosEstructurados.push(laboratorioObject);
+        //         this.laboratoriosEstructurados.push(laboratorioObject);
 
-                console.log(this.laboratoriosEstructurados.length, labo.size);
-                if (this.laboratoriosEstructurados.length === labo.size) {
-                  resolve();
-                }
-
-
-              }
-            });
+        //         if (this.laboratoriosEstructurados.length === labo.size) {
+        //           resolve();
+        //         }
 
 
-          });
+        //       }
+        //     });
 
-        });
+
+        //   });
+
+        // });
       }
 
     });
@@ -399,18 +391,26 @@ export class AdminLaboratorios3Component implements OnInit {
       if (data.size !== 0) {
         data.forEach(doc => {
           const keyDirector = doc.id;
+          const nomDir = `${doc.data().cfFirstNames} ${doc.data().cfFamilyNames}`
+          const dirEmail = doc.data().email
           objFacil.facilityAdmin = keyDirector;
 
           this.afs.collection('cfFacil').add(objFacil).then(dato => {
+            const labUid = dato.id
             this.serviceMod3.Trazability(
               this.user.uid, 'create', 'cfFacil', dato.id, objFacil
             ).then(() => {
-              swal.close();
-              swal({
-                type: 'success',
-                title: 'Laboratorio creado',
-                showConfirmButton: true
-              });
+              this.servicioMod2.pushCacheLaboratorios(objFacil.active,
+                nomDir, dirEmail , objFacil.knowledgeArea, objFacil.researchGroup,  objFacil.otros.email  ,
+                objFacil.cfName, labUid, objFacil.updatedAt).then(refresponse=>{
+                  swal.close();
+                  swal({
+                    type: 'success',
+                    title: 'Laboratorio creado',
+                    showConfirmButton: true
+                  });
+              })
+             
             });
 
           });
@@ -423,7 +423,6 @@ export class AdminLaboratorios3Component implements OnInit {
           showConfirmButton: true
         });
       }
-      console.log(objFacil);
 
     });
 
@@ -501,7 +500,6 @@ export class AdminLaboratorios3Component implements OnInit {
           this.status = 'El email ingresado no se encuentra registrado';
           this.disponible = false;
         } else {
-          console.log(snapShot.docs[0].id);
           const nameProject = snapShot.docs[0].data().cfFirstNames;
           this.status = 'Nombre del administrador: ' + nameProject;
           this.disponible = true;
