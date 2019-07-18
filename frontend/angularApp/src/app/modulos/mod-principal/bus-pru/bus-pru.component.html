@@ -30,16 +30,16 @@
                   </div>
                   <mat-table #tableserv #sort="matSort" [dataSource]="dataSource" matSort>
                     <!-- Position Column -->
-                    <ng-container matColumnDef="nombre">
+                    <ng-container matColumnDef="practiceName">
                       <mat-header-cell *matHeaderCellDef mat-sort-header>
                         Nombre
                       </mat-header-cell>
                       <mat-cell *matCellDef="let element">
-                        {{ element.nombreprub }}
+                        {{ element.practiceName }}
                       </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="cambiardata(row)" style="cursor: pointer;"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)" style="cursor: pointer;"></mat-row>
                   </mat-table>
                   <mat-paginator #paginator="matPaginator" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                   </mat-paginator>

@@ -33,7 +33,7 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
 
     // INICIALIZACION DATATABLE lABORATORIOS
-    displayedColumns = ['nombre'];
+    displayedColumns = ['practiceName'];
     dataSource = new MatTableDataSource([]);
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('sort') sort: MatSort;
@@ -47,10 +47,10 @@ export class BusPruComponent implements OnInit, AfterViewInit {
          // abre loading mientras se cargan los datos
 
        this.alert.show();
-       this.query.getPruebas().then(data => {
+       this.query.getPractices().then(data => {
 
       this.query.estructurarDataPruebas(data).then(datos => {
-
+console.log(datos)
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -86,7 +86,11 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
     this.agregarMarker(item);
   }
-
+  selectRow(row){
+    this.query.getDataPractice(row).then(data => {
+      this.cambiardata(data)
+    });
+  }
   cambiardata(item) {
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */

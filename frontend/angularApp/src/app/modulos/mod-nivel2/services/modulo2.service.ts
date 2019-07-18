@@ -347,6 +347,15 @@ export class Modulo2Service {
   addPractica(doc) {
     return this.afs.collection('practice').add(doc);
   }
+  pushCachePractice(active ,subjectCode, practiceName , semester  , noStudents    ,
+     uid, updatedAt
+    ) {
+    const practice = {active,subjectCode, practiceName , semester  , noStudents  , uid, updatedAt  }
+    const newPractice = {}
+    newPractice[uid] = practice
+    return this.afs.doc('cache/practice/').set(newPractice, { merge: true });
+
+  }
 
   addProgramacion(idprac, doc) {
     return this.afs.doc('practice/' + idprac).collection('programmingData').add(doc);
