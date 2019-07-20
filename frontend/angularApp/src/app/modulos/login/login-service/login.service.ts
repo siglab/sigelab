@@ -7,8 +7,6 @@ import { map } from 'rxjs/operators/map';
 import { Router } from '@angular/router';
 import { QrService } from '../../mod-nivel2/services/qr.service';
 import { Http, Response } from '@angular/http';
-
-// tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs';
 import { URLDISABLED, ROLESARRAY } from '../../../config';
 import { URLUSER } from '../../../config';
@@ -32,11 +30,10 @@ export class LoginService {
     }
   }
 
-
   verificarUsuario() {
     const promise = new Promise((resolve, reject) => {
       this.consultarAuth().subscribe((user) => {
-        if (user) {
+        if (user && user['emailVerified']) {
           this.restaurarSesion(user).then(() => {
             resolve();
           }).catch(() => {
@@ -47,9 +44,7 @@ export class LoginService {
         }
       });
     });
-
     return promise;
-
   }
 
   consultarAuth() {
@@ -60,7 +55,6 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.usuario = data;
       sessionStorage.setItem('usuario', JSON.stringify(data));
-
       if (this.usuario) {
         this.consultarTipoUsuario(this.usuario.uid)
           .then(() => {
@@ -73,9 +67,7 @@ export class LoginService {
         reject();
       }
     });
-
     return promise;
-
   }
 
   login() {
@@ -83,12 +75,8 @@ export class LoginService {
       this.afAuth.auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(response => {
-          console.log('entro a login');
           console.log(response.additionalUserInfo.isNewUser);
-
           if (response.additionalUserInfo.isNewUser) {
-            console.log('usuario nuevo');
-
             this.postUserBackend(
               response.user.email,
               response.user.uid
@@ -103,19 +91,15 @@ export class LoginService {
               }
             });
           } else {
-            console.log('usuario antiguo');
-
             this.consultarTipoUsuario(response.user.uid).then(() => {
               this.usuario = response.user;
               sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
-              console.log('termino consultar el tipo de usuario');
               resolve();
             });
           }
         })
         .catch(error => console.log(error));
     });
-
     return promise;
   }
 
@@ -133,9 +117,9 @@ export class LoginService {
   recoverPassword(email) {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
+
   sendVerificationemail() {
     const user = this.afAuth.auth.currentUser;
-
     return user.sendEmailVerification();
   }
 
@@ -147,9 +131,9 @@ export class LoginService {
         .then(data => {
           console.log('login email');
           this.usuario = data;
-          sessionStorage.setItem('usuario', JSON.stringify(data));
-
-          if (this.usuario) {
+          if (this.usuario && this.usuario['emailVerified']) {
+            console.log('Cuenta verificada');
+            sessionStorage.setItem('usuario', JSON.stringify(data));
             this.consultarTipoUsuario(this.usuario.uid)
               .then(() => {
                 resolve(data);
@@ -158,6 +142,10 @@ export class LoginService {
                 reject();
               });
           } else {
+            this.logout().then(() => {
+              localStorage.removeItem('logout');
+            });
+            console.log('Cuenta no verificada');
             reject();
           }
         })
@@ -188,13 +176,8 @@ export class LoginService {
         .createUserWithEmailAndPassword(email, pass)
         .then(ok => {
           const user: any = firebase.auth().currentUser;
-          user.sendEmailVerification().then(success => {
-            swal({
-              type: 'info',
-              title: 'Un mensaje de verificacion fue enviado a su correo, por favor revisar.',
-              showConfirmButton: true
-            });
-          });
+          firebase.auth().signOut();
+          user.sendEmailVerification();
           resolve(ok);
         })
         .catch(function (error) {
@@ -215,17 +198,13 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.getUser(id).then(doc => {
         const data = doc.data();
-
         console.log('185', data);
-
         if (data) {
           if (data.active) {
             sessionStorage.setItem('persona', JSON.stringify(data));
             const rol = data['appRoles'];
             let roleAdmin = false;
-
             roleAdmin = this.buscarRole(rol);
-
             if (data['cfPers'] === '') {
               this.estructurarPermisos(rol).then(ok => {
                 console.log('termino el metodo estructura permiso');
@@ -233,7 +212,6 @@ export class LoginService {
                 resolve();
               });
             }
-
             if (roleAdmin) {
               this.estructurarPermisos(rol).then(ok => {
                 console.log(
@@ -242,7 +220,6 @@ export class LoginService {
                 sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
               });
             }
-
             if (data['cfPers'] !== '') {
               const arr = {};
               const arrlab = {};
@@ -314,7 +291,6 @@ export class LoginService {
         }
       });
     });
-
     return promise;
   }
 
@@ -353,7 +329,6 @@ export class LoginService {
               for (const key in permission) {
                 rollength++;
               }
-
               if (permission) {
                 // tslint:disable-next-line:forin
                 for (const llave in permission) {
@@ -428,9 +403,7 @@ export class LoginService {
       createdAt: fecha.toISOString(),
       email: email
     };
-
     console.log(email);
-
     return new Promise((resolve, reject) => {
       this.afs
         .collection('cfPers')
@@ -439,7 +412,6 @@ export class LoginService {
         .then(respers => {
           if (respers.empty) {
             console.log('no tiene una persona asociada');
-
             this.afs
               .doc('user/' + iduser)
               .set(usr)
@@ -449,7 +421,6 @@ export class LoginService {
               });
           } else {
             console.log('tiene una persona asociada');
-
             // asigna el id de la persona al usuario
             usr.cfPers = respers.docs[0].id;
             this.afs
@@ -457,7 +428,6 @@ export class LoginService {
               .set(usr)
               .then(() => {
                 console.log('usuario creado');
-
                 this.afs
                   .doc('cfPers/' + usr.cfPers)
                   .set({ user: iduser }, { merge: true })
@@ -483,4 +453,5 @@ export class LoginService {
   getUserWithEmail(email: string) {
     return this.afs.collection('user').ref.where('email', '==', email).get();
   }
+
 }
