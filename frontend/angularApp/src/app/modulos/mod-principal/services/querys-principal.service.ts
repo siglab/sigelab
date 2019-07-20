@@ -52,6 +52,11 @@ export class QuerysPrincipalService {
     return colle.ref.get();
   }
 
+    // METODO QUE TRAE LA EL DOCUMENTO CACHE DE TODOS LAS PRACTICAS
+    getPractices() {
+      const colle = this.afs.collection('cache').doc('practice');
+      return colle.ref.get();
+    }
   // tslint:disable-next-line:member-ordering
   private racesCollection: AngularFirestoreCollection<any>;
   // METODO QUE TRAE LA COLECCION DE TODOS LAS PRUEBAS
@@ -200,6 +205,12 @@ export class QuerysPrincipalService {
 
     return promise;
   }
+
+  
+
+
+
+
   //VIEJO!!!
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS   
   getDataServ(data: any) {
@@ -279,88 +290,107 @@ export class QuerysPrincipalService {
 
 
   }
-
-  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE PRUEBAS
+  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE LABORATORIOS
   estructurarDataPruebas(data: any) {
+    var practicas = data.data()
 
     const promise = new Promise((resolve, reject) => {
-      this.datosPrubEstructurados = [];
+      this.datosLabsEstructurados = [];
 
-      if (data.size !== 0) {
-        data.forEach(doc => {
-          const elemento = doc.data();
-          if (elemento.active) {
+      var cont = 0
+      var datasize = Object.keys(practicas)
 
-            console.log(doc.id);
-            this.afs.doc('practice/' + doc.id).collection('programmingData').snapshotChanges().subscribe(data2 => {
+      for (const key in practicas) {
+        if (practicas.hasOwnProperty(key)) {
+          const laboratorio = practicas[key];
 
-              // funciona con una programacion, cuando hayan mas toca crear otro metodo
+          if (laboratorio.active) {
+            this.datosLabsEstructurados.push(laboratorio);
 
-              if (!data2[0].payload.doc.exists) {
+          }
+          cont++
+console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
+          if (cont === datasize.length) {
+            resolve({
+              data: this.datosLabsEstructurados
+            });
+          }
+        }
+      }
 
-                console.log('id no existe', data2[0].payload.doc.id);
-              }
-              const prog = data2[0].payload.doc.data();
+    });
 
-              this.buscarLaboratorio(elemento.cfFacil).then(lab => {
-                const labencontrado = lab.data();
 
-                this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
-                  const duenoLab = dueno.data();
-                  if (duenoLab && labencontrado.mainSpace) {
+    return promise;
+  }
 
-                    this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
+  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE PRUEBAS
+  getDataPractice(data: any) {
 
-                      const espacioLab = espacio.data();
+    const promise = new Promise((resolve, reject) => {
 
-                      const pruebas = {
-                        nombreprub: elemento.practiceName,
-                        nombrelab: labencontrado.cfName,
-                        infoPrub: {
-                          programacion: {
-                            id_pro: data2[0].payload.doc.id,
-                            estudiantes: prog.noStudents,
-                            horario: prog.schedule,
-                            semestre: prog.semester
-                          }
-                        },
-                        infoLab: {
-                          dir: labencontrado.otros.direccion,
-                          desc: labencontrado.cfDescr,
-                          telefonos: this.estructuraTelefonos(elemento.cfFacil),
-                          email: labencontrado.otros.email,
-                          escuela: labencontrado.knowledgeArea,
-                          inves: labencontrado.researchGroup,
-                          director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                          condiciones: labencontrado.cfConditions,
-                          disponibilidad: labencontrado.cfAvailability
-                        },
-                        coord: {
-                          lat: espacioLab.spaceData.geoRep.longitud,
-                          lon: espacioLab.spaceData.geoRep.latitud
-                        }
-                      };
-
-                      this.datosPrubEstructurados.push(pruebas);
-
-                      if (this.datosPrubEstructurados.length === data.size) {
-                        resolve({
-                          data: this.datosPrubEstructurados
+            this.afs.doc('practice/' + data.uid).ref.get().then(practiceSnap => {//programmingData
+              this.afs.collection('practice/' + data.uid+'/programmingData').ref.get().then(programmingDataSnap=>{
+                const practica = practiceSnap.data()
+                programmingDataSnap.forEach(programing =>{
+                  const prog = programing.data();
+  
+                  this.buscarLaboratorio(practica.cfFacil).then(lab => {
+                    const labencontrado = lab.data();
+    
+                    this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
+                      const duenoLab = dueno.data();
+                      if (duenoLab && labencontrado.mainSpace) {
+    
+                        this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
+    
+                          const espacioLab = espacio.data();
+    
+                          const pruebas = {
+                            nombreprub: practica.practiceName,
+                            nombrelab: labencontrado.cfName,
+                            infoPrub: {
+                              programacion: {
+                                id_pro: programing.id,
+                                estudiantes: prog.noStudents,
+                                horario: prog.schedule,
+                                semestre: prog.semester
+                              }
+                            },
+                            infoLab: {
+                              dir: labencontrado.otros.direccion,
+                              desc: labencontrado.cfDescr,
+                              telefonos: this.estructuraTelefonos(practica.cfFacil),
+                              email: labencontrado.otros.email,
+                              escuela: labencontrado.knowledgeArea,
+                              inves: labencontrado.researchGroup,
+                              director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                              condiciones: labencontrado.cfConditions,
+                              disponibilidad: labencontrado.cfAvailability
+                            },
+                            coord: {
+                              lat: espacioLab.spaceData.geoRep.longitud,
+                              lon: espacioLab.spaceData.geoRep.latitud
+                            }
+                          };
+    
+    
+                            resolve(pruebas);
                         });
+    
                       }
                     });
-
-                  }
-                });
-
-
-              });
+    
+    
+                  });
+                  
+                })
+     
+           
+              })
+         
             }, err => console.log(err));
-          }
-        });
-      } else {
-        reject();
-      }
+  
 
     });
 
@@ -484,6 +514,7 @@ export class QuerysPrincipalService {
   buscarServicio(idService) {
     return this.afs.doc('cfSrv/' + idService).ref.get();
   }
+
   // METODO QUE TRAE UN DIRECTOR ESPECIFICO DEPENDIENDO EL ID-DIRECTOR
   buscarDirector(iddirector) {
     return this.afs.doc('cfPers/' + iddirector).ref.get();

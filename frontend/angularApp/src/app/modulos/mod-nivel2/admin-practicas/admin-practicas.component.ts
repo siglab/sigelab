@@ -562,6 +562,9 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     console.log(this.mainSpace);
     if (practica) {
         this.servicioMod2.addPractica(practica).then(ok => {
+          //agrega el objeto al cache de practicas
+          this.servicioMod2.pushCachePractice(practica.active ,practica.subjectCode, practica.practiceName , programming.semester  , programming.noStudents    ,
+            ok.id, practica.updatedAt)
           this.alert.show();
           this.servicioMod2.Trazability(
             this.user.uid, 'create', 'practice', ok.id, practica
