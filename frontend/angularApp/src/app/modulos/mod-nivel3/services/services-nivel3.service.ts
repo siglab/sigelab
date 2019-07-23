@@ -35,6 +35,15 @@ export class ServicesNivel3Service {
 
   }
 
+  getusersCache(){
+    const colle = this.afs.collection('cache').doc('user');
+    return colle.ref.get();
+  }
+
+  getuser(userID){
+    const colle = this.afs.doc('user/'+userID);
+    return colle.ref.get();
+  }
 
   getAppRoles() {
     return this.afs.collection('appRoles').ref.get();
@@ -387,6 +396,37 @@ export class ServicesNivel3Service {
     return promise;
 
 
+  }
+
+  estructurarDataUsersAdmin(data: any) {
+    var datosestructuradosusuarios = []
+    var users = data
+console.log(400,data)
+    const promise = new Promise((resolve, reject) => {
+      var cont = 0
+      var datasize = Object.keys(users)
+
+      for (const key in users) {
+        if (users.hasOwnProperty(key)) {
+          const usuario = users[key]
+          if (usuario.active) {
+            usuario.active = 'Activo'
+          } else {
+            usuario.active = 'Inactivo'
+          }
+          datosestructuradosusuarios.push(usuario)
+
+          cont++
+          if (cont === datasize.length) {
+            resolve(   datosestructuradosusuarios    )
+          }
+        }
+      }
+
+    });
+
+
+    return promise
   }
 
 }
