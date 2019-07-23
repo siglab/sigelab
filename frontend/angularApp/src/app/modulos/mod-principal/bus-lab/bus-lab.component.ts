@@ -416,9 +416,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     const ambiente = this;
     if (!this.moduloinfo) {
       this.moduloinfo = true;
-
-
-
       setTimeout(function() {
 
         ambiente.loadMap(item);

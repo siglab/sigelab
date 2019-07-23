@@ -15,17 +15,17 @@ import { LoginService } from '../../../../modulos/login/login-service/login.serv
 export class PrincipalComponent implements OnInit {
   uri = '';
 
-  constructor(private login: LoginService, private ruta: Router) {
+  constructor(private login: LoginService, private ruta: Router) { }
 
+  ngOnInit() {
     this.login.consultarAuth().subscribe(user => {
       if (!user) {
-        console.log('entro siiii');
         if (localStorage.getItem('logout')) {
           const uri = this.ruta.url.split('/');
-          console.log(uri);
           swal({
             type: 'error',
-            title: 'Se ha cerrado su sesión, sera dirigido hacia el login',
+            title: 'Se ha cerrado su sesión!',
+            text: 'Su sesión de usuario se ha cerrado en esta u otra instanancia de la aplicación. Usted será redirigido a la página de incio de sesión.',
             showConfirmButton: true
           }).then(() => {
             this.login.logout().then(() => {
@@ -36,18 +36,10 @@ export class PrincipalComponent implements OnInit {
                 this.ruta.navigate(['/login']);
               }
             });
-
           });
         }
-
       }
     });
-
   }
-  ngOnInit() {
-
-  }
-
-
 
 }

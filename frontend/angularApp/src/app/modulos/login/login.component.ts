@@ -14,33 +14,25 @@ export class LoginComponent implements OnInit {
 
   email: string;
   pass: string;
-
   rutadeQR: any;
 
   constructor(private ruta: Router, private rout: ActivatedRoute,
     private _loginService: LoginService, private local: ServicesNivel3Service) { }
 
   ngOnInit() {
-
     this.rout.queryParams.subscribe(re => {
       this.rutadeQR = re['codigo'];
     });
-
     if (this.local.getLocalStorageUser()) {
       if (this.rutadeQR) {
         this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
       } else {
-
         this.ruta.navigate(['principal']);
       }
     }
-
   }
 
-
   ingresar() {
-
-
     //    console.log(this.rutadeQR);
     // loading mientras se crea el usuario
     swal({
@@ -50,7 +42,6 @@ export class LoginComponent implements OnInit {
         swal.showLoading();
       }
     });
-
     this._loginService.login().then(() => {
       // mensaje de bienvenida
       swal({
@@ -58,22 +49,12 @@ export class LoginComponent implements OnInit {
         title: 'Ingreso correcto',
         showConfirmButton: true
       });
-
-
-      console.log(this.rutadeQR, 'ENTRO');
-
       if (this.rutadeQR) {
-        console.log(this.rutadeQR, 'VAMO PA ALLA');
         this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
       } else {
         this.ruta.navigate(['principal']);
       }
-
-
-
     }).catch(error => {
-      // this.ingresar();
-
       swal({
         type: 'error',
         text: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
@@ -83,22 +64,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-
-
   ingresarEmail(em, ps) {
-
     this.rutadeQR = this.rout.snapshot.paramMap.get('codigo');
-
     if (em.invalid || ps.invalid) {
-
       swal({
         type: 'error',
-        title: 'Hay campos importantes vacios',
+        title: 'Hay campos requeridos vacios',
         showConfirmButton: true
       });
-
     } else {
-
       this._loginService.getUserWithEmail(this.email).then(data => {
         if (data.empty) {
           swal({
@@ -108,47 +82,30 @@ export class LoginComponent implements OnInit {
           });
         } else {
           this._loginService.loginEmail(this.email, this.pass).then(ok => {
-
             if (ok['emailVerified']) {
-
               swal({
                 type: 'success',
                 title: 'Ingreso correcto',
                 showConfirmButton: true
               });
-
               console.log(this.rutadeQR, 'ENTRO');
-
               if (this.rutadeQR) {
                 console.log(this.rutadeQR, 'VAMO PA ALLA');
                 this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
               } else {
                 this.ruta.navigate(['principal']);
               }
-
-
-            } else {
-
-              swal({
-                type: 'info',
-                title: 'Hace falta verificar su cuenta',
-                showConfirmButton: true
-              });
-
             }
-
-          }).catch(err => {
-
+          }).catch(() => {
             swal({
-              type: 'error',
-              title: this.mensajesError(err.code),
+              type: 'info',
+              title: 'Cuenta sin verificar!',
+              text: 'Para ingresar al sistema hace falta verificar tu cuenta. Busca el mensaje de verificación de cuenta en tu correo electrónico y haz click en el link que encontrarás en él.',
               showConfirmButton: true
             });
-
           });
         }
       });
-
       swal({
         title: 'Cargando un momento...',
         text: 'espere mientras se cargan los datos',
@@ -156,13 +113,8 @@ export class LoginComponent implements OnInit {
           swal.showLoading();
         }
       });
-
-
     }
-
   }
-
-
 
   mensajesError(message) {
     switch (message) {

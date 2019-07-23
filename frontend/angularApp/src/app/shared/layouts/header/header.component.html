@@ -36,9 +36,9 @@
             class="btn "
             title="Ingresar"
             id="logout"
-            style="cursor:pointer;"
+            style="cursor:pointer; font-weight: 600"
           >
-            <i class="fa fa-sign-in" style="font-size: 14px;"></i> Ingresar</a
+            <i class="fa fa-sign-in" style="font-size: 14px; margin-right: 3px"></i> Ingresar</a
           >
         </li>
         <li class="dropdown user user-menu" *ngIf="itemLogout">
@@ -107,12 +107,7 @@
 </header>
 
 <!--MODAL PARA MOSTRAR EQUIPOS RELACIONADOS-->
-<div
-  class="modal fade"
-  id="modalNotifications"
-  role="dialog"
-  *ngIf="itemNotificacion"
->
+<div class="modal fade" id="modalNotifications" role="dialog" *ngIf="itemNotificacion">
   <div class="modal-dialog modal-md">
     <!-- Modal content-->
     <div class="modal-content">
@@ -129,7 +124,7 @@
           </div>
           <div class="box-body">
             <div *ngIf="this.notifications.length === 0 ;else notificationsPanel" class="no-data">
-              <h4>No tienes notificaciones pendientes</h4>
+              <h4>No tienes notificaciones pendientes por leer</h4>
             </div>
             <ng-template #notificationsPanel>
               <div class="panel-group" id="accordion">
@@ -143,7 +138,7 @@
                         data-toggle="collapse"
                         data-parent="#accordion"
                         href="#collapse{{ i }}"
-                        >Notificación {{ i }}: {{ item.asunto }}
+                        >Notificación {{ i+1 }}: {{ item.asunto }}
                         <strong style="float: right;"
                           >Fecha: {{ item.fecha }}</strong
                         ></a
@@ -159,7 +154,7 @@
                         type="button"
                         (click)="finalizar(item.id, i)"
                       >
-                        Cerrar notificacion
+                        Marcar como leída
                       </button>
                     </div>
                   </div>
