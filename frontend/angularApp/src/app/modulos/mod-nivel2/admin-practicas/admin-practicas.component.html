@@ -2,40 +2,32 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Prácticas
+      Administración de prácticas de docencia
     </h1>
-
   </section>
 
   <!-- Main content -->
   <section class="content" *ngIf="itemsel | async; let itemsel">
-
     <!-- Componente central de busqueda -->
-
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
           <div *ngIf="moduloNivel2" class="box-header">
             <div class="form-group">
               <div class="col-md-12">
-                <button style="float: right;" (click)="down()" class="btn btn-success" type="button">Nuevo práctica,
-                  prueba o ensayo
-                  <i class="fa fa-plus"></i>
-
-                </button>
+                <button style="float: right;" (click)="down()" class="btn btn-success" type="button">Agregar práctica</button>
               </div>
             </div>
           </div>
-
           <div class="box-body">
             <ul class="nav nav-tabs">
               <li>
                 <a class="tablas" data-toggle="tab" href="#home">
-                  Activos</a>
+                  Activas</a>
               </li>
               <li>
                 <a class="tablas" data-toggle="tab" href="#menu1">
-                  Inactivos</a>
+                  Inactivas</a>
               </li>
             </ul>
             <div class="tab-content">
@@ -44,8 +36,7 @@
                   <div class="box box-danger">
                     <div class="box-header">
                       <i class="fa fa-book"></i>
-
-                      <h3 class="box-title">PRÁCTICAS ACTIVAS SEMESTRE</h3>
+                      <h3 class="box-title">Prácticas activas para el semestre actual</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -108,7 +99,7 @@
                     <div class="box-header">
                       <i class="fa fa-book"></i>
 
-                      <h3 class="box-title">PRÁCTICAS INACTIVAS SEMESTRE</h3>
+                      <h3 class="box-title">Historial de prácticas</h3>
                     </div>
 
                     <div *ngIf="dataSourcePracIn.data.length === 0">

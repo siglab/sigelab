@@ -740,8 +740,8 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
       }
     }
 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' +
-      nombreserv + ', esta fue solicitada en la fecha ' + fechaes +
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio ' +
+      nombreserv + '. Esta fue realizada en la fecha ' + fechaes +
       ' por el usuario con el correo: ' + emailSolicitante + '.';
 
     destino += emailSolicitante + ',' + emailEncargado + ',' + emailLaboratorio;
@@ -801,9 +801,9 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
     console.log(notificaciones);
     const fecha = new Date().toISOString().split('T')[0];
 
-    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio: ' +
-      nombreserv + ', esta fue solicitada en la fecha ' + fecha +
-      ' por el usuario con el correo: ' + emailSolicitante + '.';
+    const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio ' +
+      nombreserv + '. Esta fue solicitada en la fecha ' + fecha +
+      ' por el usuario con el correo ' + emailSolicitante + '.';
 
     const obj = {
       asunto: 'Solicitud de servicio',

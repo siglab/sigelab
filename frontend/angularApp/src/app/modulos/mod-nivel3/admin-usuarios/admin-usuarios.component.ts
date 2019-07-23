@@ -963,6 +963,8 @@ console.log(data)
 
 
 
+
+        /*
         this.serviceMod3.Trazability(
           this.user.uid, 'update', 'user', this.idu, { cfPers: ok.id, appRoles: rolesUsuario }
         ).then(() => {
@@ -970,7 +972,7 @@ console.log(data)
         });
 
         this.serviceMod3.setUser(this.idu, { cfPers: ok.id, appRoles: rolesUsuario });
-
+         */
         this.arrayPract.forEach((doc, index) => {
           if (doc.id === coor) {
             console.log(ok.id, doc.labs);

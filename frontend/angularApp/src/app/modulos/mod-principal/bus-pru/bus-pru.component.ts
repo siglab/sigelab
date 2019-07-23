@@ -17,20 +17,17 @@ declare var $: any;
   styleUrls: ['./bus-pru.component.css']
 })
 export class BusPruComponent implements OnInit, AfterViewInit {
-
   corx = 3.42158;
   cory = -76.5205;
   map: any;
-    @ViewChild(SpinnerComponent) alert: SpinnerComponent;
-    itemsel: any;
-    moduloinfo = false;
-    layer = null;
-    DefaultIcon = L.icon({
-      iconUrl: 'assets/leaflet/images/marker-icon.png',
-      shadowUrl: 'assets/leaflet/images/marker-shadow.png'
-    });
-
-
+  @ViewChild(SpinnerComponent) alert: SpinnerComponent;
+  itemsel: any;
+  moduloinfo = false;
+  layer = null;
+  DefaultIcon = L.icon({
+    iconUrl: 'assets/leaflet/images/marker-icon.png',
+    shadowUrl: 'assets/leaflet/images/marker-shadow.png'
+  });
 
     // INICIALIZACION DATATABLE lABORATORIOS
     displayedColumns = ['practiceName'];
@@ -43,38 +40,27 @@ export class BusPruComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
-         // abre loading mientras se cargan los datos
-
+      // abre loading mientras se cargan los datos
        this.alert.show();
-       this.query.getPractices().then(data => {
-
-      this.query.estructurarDataPruebas(data).then(datos => {
-console.log(datos)
+       this.query.getPruebas().then(data => {
+       this.query.estructurarDataPruebas(data).then(datos => {
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.alert.hide();
-
        // cierra loading luego de cargados los datos
-
       }).catch(() => {
         this.alert.hide();
-
         swal({
           type: 'error',
           title: 'No existen prácticas registradas a la fecha',
           showConfirmButton: true
         });
       });
-
     });
   }
 
-  ngAfterViewInit(): void {
-
-
-  }
+  ngAfterViewInit(): void { }
 
 
   loadMap(item) {
@@ -92,11 +78,8 @@ console.log(datos)
     });
   }
   cambiardata(item) {
-
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-
     this.itemsel = item;
-
     this.initCalendarModal( item.infoPrub.programacion.horario);
     if (!this.moduloinfo) {
       this.moduloinfo = true;
@@ -123,15 +106,10 @@ console.log(datos)
   }
 
   initCalendarModal(horario) {
-
     const containerEl: JQuery = $AB('#cal2');
-
     if (containerEl.children().length > 0) {
-
       containerEl.fullCalendar('destroy');
     }
-
-
     containerEl.fullCalendar({
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
@@ -143,22 +121,17 @@ console.log(datos)
         right: 'today prev,next'
       },
       events: horario,
-
       defaultView: 'month',
       timeFormat: 'H(:mm)'
-
     });
   }
-
 
   agregarMarker(item) {
     this.layer = L.marker([item.coord.lat, item.coord.lon], {icon: this.DefaultIcon});
     this.layer.addTo(this.map)
     .bindPopup(item.nombrelab)
     .openPopup();
-
     this.map.setView([item.coord.lat, item.coord.lon], 17);
-
   }
 
   removerMarker() {
@@ -172,7 +145,6 @@ console.log(datos)
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
 
   cerrarModal(modal) {
     $('#' + modal).modal('hide');

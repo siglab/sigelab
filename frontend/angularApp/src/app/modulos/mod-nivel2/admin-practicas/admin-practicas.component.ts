@@ -147,13 +147,10 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
 
 
   ngAfterContentInit() {
-
     this.metodoInicio();
   }
 
-
   async metodoInicio() {
-
     swal({
       title: 'Cargando un momento...',
       text: 'Espere mientras se cargan los datos',
@@ -161,45 +158,27 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
         swal.showLoading();
       }
     });
-
     this.obs.currentObjectPra.subscribe(data => {
-
       this.getRoles(data.roles);
-
       if (data.length !== 0) {
         this.estructurarDataPrac(data.uid).then(() => {
-
-
           this.itemsel = Observable.of(this.pracestructurado);
-          console.log(this.pracestructurado);
-
           this.id_lab = data.uid;
           this.mainSpace = this.pracestructurado.mainSpace;
-
           this.dataSourcePrac.data = (this.pracestructurado.practicas);
-
           this.dataSourcePracIn.data = (this.pracestructurado.practicasInactivas);
-
           this.dataSourceEquip.data = (this.pracestructurado.equipos);
-
           this.dataSourceEsp.data = (this.pracestructurado.espacios);
-
-
           setTimeout(() => {
             if (this.pracestructurado) {
-
               this.dataSourcePrac.sort = this.sortPrac;
               this.dataSourcePrac.paginator = this.paginatorPrac;
-
               this.dataSourcePracIn.sort = this.sortPracIn;
               this.dataSourcePracIn.paginator = this.paginatorPracIn;
-
               this.dataSourceEquip.sort = this.sortEquip;
               this.dataSourceEquip.paginator = this.paginatorEquip;
-
               this.dataSourceEsp.sort = this.sortEsp;
               this.dataSourceEsp.paginator = this.paginatorEsp;
-
               swal.close();
             } else {
               swal({
@@ -208,11 +187,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
                 showConfirmButton: true
               });
             }
-
-
           }, 2000);
-
-
           // data acesor activos
           this.dataSourcePrac.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -221,7 +196,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
               default: return item[property];
             }
           };
-
           // data acesor inactivos
           this.dataSourcePracIn.sortingDataAccessor = (item, property) => {
             switch (property) {
@@ -230,7 +204,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
               default: return item[property];
             }
           };
-
           // data filter
           this.dataSourcePrac.filterPredicate = (dat, filter: string) => {
             const accumulator = (currentTerm, key) => {
@@ -241,11 +214,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
             const transformedFilter = filter.trim().toLowerCase();
             return dataStr.indexOf(transformedFilter) !== -1;
           };
-
-
         });
-
-
       } else {
         swal({
           type: 'error',
@@ -253,10 +222,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
           showConfirmButton: true
         });
       }
-
     });
-
-
   }
 
 
@@ -296,18 +262,14 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
 
   }
 
-
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAestructurarPracticasS ASOCIADOS
   estructurarPracticas(item) {
-
     const arr = [];
     const arr3 = [];
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
-
-
         this.servicioMod2.buscarPractica(clave).then(data => {
           const practica = data.data();
           this.servicioMod2.buscarProgramacion(clave).then(data2 => {
@@ -351,19 +313,18 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
           });
 
         });
-
-
       }
     }
-
     return { arr , arr3 };
   }
+
   // equipos
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.displayedColumnsEquip.length;
     return numSelected === numRows;
   }
+
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
@@ -376,12 +337,12 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     const numRows = this.displayedColumnsEsp.length;
     return numSelected === numRows;
   }
+
   masterToggle2() {
     this.isAllSelected2() ?
       this.selection2.clear() :
       this.dataSourceEsp.data.forEach(row => this.selection2.select(row));
   }
-
 
   getOnlySpace(clave) {
 
@@ -389,8 +350,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     if (clave) {
       this.servicioMod2.buscarEspacio(clave).then(data => {
         const espacio = data.data();
-
-
         // funciona con una programacion, cuando hayan mas toca crear otro metodo
         if (espacio) {
           const space = {
@@ -406,20 +365,15 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
             totalArea: espacio.totalArea,
             spaceData: espacio.spaceData,
           };
-
           arr.push(space);
-
         }
-
       });
     }
     return arr;
   }
 
   estructurarSpace(item) {
-
     const arr = [];
-
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
@@ -442,35 +396,26 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
                 ocupedArea: espacio.ocupedArea,
                 totalArea: espacio.totalArea,
                 spaceData: espacio.spaceData,
-
               };
-
               arr.push(space);
             }
-
           });
         }
-
       }
     }
-
     return arr;
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarEquipos(item) {
-
     const arr = [];
-
     for (const clave in item) {
       // Controlando que json realmente tenga esa propiedad
       if (item.hasOwnProperty(clave)) {
-
         if (item[clave]) {
           this.servicioMod2.buscarEquipo(clave).then(data => {
             const equip = data.data();
-
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
               id: data.id,
@@ -479,22 +424,13 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
               precio: equip.price,
               espacio: equip.space
             };
-
-
-
             arr.push(equipo);
-
-
           });
         }
-
       }
     }
-
     return arr;
   }
-
-
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
@@ -508,12 +444,8 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
         name2 += nombreArr[i] + ' ';
       }
     }
-
     return { nom1: name1, nom2: name2 };
   }
-
-
-
 
   equipoSeleccionado(item, bool) {
     this.interfaz = bool;
@@ -521,14 +453,15 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     console.log(item);
 
   }
+
   applyFilter(filterValue: string) {
 
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourcePrac.filter = filterValue;
   }
-  cambiardata(row) {
 
+  cambiardata(row) {
     this.addPractica = false;
     this.consultarpractica = true;
     console.log(row);
@@ -564,33 +497,25 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     this.programming.semester = row.programacion.semestre;
     this.programming.noStudents = row.programacion.estudiantes;
     this.residuos = row.residuos;
-
     this.selection.clear();
     const arra = [];
     for (let i = 0; i < row.equipos.length; i++) {
       const element = row.equipos[i];
       for (let j = 0; j < this.pracestructurado.equipos.length; j++) {
         const element2 = this.pracestructurado.equipos[j];
-
         if (element.id == element2.id) {
           console.log(element2);
         // this.selection.isSelected(element2);
         this.selection.select(element2)
         console.log(this.selection.selected);
         }
-
       }
-
     }
-
   }
 
   addPractice(stepper) {
-
     const fecha = new Date();
-
     const practica = {
-
       practiceName: this.nameP,
       subjectCode: this.code,
       cfFacil: this.id_lab,
@@ -636,15 +561,10 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     console.log(practica, 'programing', programming);
     console.log(this.mainSpace);
     if (practica) {
-
-
         this.servicioMod2.addPractica(practica).then(ok => {
-
           //agrega el objeto al cache de practicas
           this.servicioMod2.pushCachePractice(practica.active ,practica.subjectCode, practica.practiceName , programming.semester  , programming.noStudents    ,
             ok.id, practica.updatedAt)
-
-
           this.alert.show();
           this.servicioMod2.Trazability(
             this.user.uid, 'create', 'practice', ok.id, practica
@@ -655,19 +575,16 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
             ).then(()=>{
               this.servicioMod2.setDocLaboratorio(this.id_lab,facil);
             });
-
             this.servicioMod2.addProgramacion(ok.id, programming).then(doc => {
               this.servicioMod2.TrazabilitySubCollection(
                 this.user.uid, 'create', 'practice', ok.id, 'programmingData', doc.id, programming
               ).then(() => {
-
                 this.alert.hide();
                 swal({
                   type: 'success',
                   title: 'Almacenado correctamente',
                   showConfirmButton: true
                 });
-
                 this.clearObj();
                 stepper.reset();
                 this.addPractica = false;
@@ -684,38 +601,28 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   }
 
   initCalendar(horario) {
-
     const containerEl: JQuery = $AB('#cal');
     containerEl.fullCalendar('destroy');
-
     containerEl.fullCalendar({
       // licencia
       schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
       // options here
       height: 450,
-
       header: {
         left: 'month,agendaWeek,agendaDay',
         center: 'title',
         right: 'today prev,next',
       },
-
       events: horario,
-
       defaultView: 'month',
       timeFormat: 'H(:mm)'
-
-
     });
 
   }
 
-
-   triggerCalendar() {
-
+  triggerCalendar() {
     this.vercalendario = true;
     setTimeout(() => {
-
       this.modalCalendar = $AB('#calendariomodal');
       this.modalCalendar.fullCalendar('destroy');
       console.log('entro al modal');
@@ -732,23 +639,16 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
          timeFormat: 'H(:mm)'
        });
        if (this.programacionCalendar[0].start ) {
-
          this.modalCalendar.fullCalendar('gotoDate', this.programacionCalendar[0][0].start  );
        }
-      }, 100);
-
-
-
-
-   }
+    }, 100);
+  }
 
   changeColor(value) {
-
     this.evento.color = value;
-
   }
-  agregarEvento() {
 
+  agregarEvento() {
     if (!this.evento.title || !this.evento.start || !this.evento.start) {
       swal({
         type: 'error',
@@ -756,8 +656,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
         showConfirmButton: true
       });
     } else {
-
-
       const nev = {
         title: this.evento.title,
         start: this.evento.start + 'T' + this.horaE,
@@ -765,14 +663,8 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
         allDay: false,
         color: this.evento.color
       };
-
-      console.log(nev);
-
       this.events.push(nev);
-
-
       this.initCalendar(this.events);
-
       swal({
         type: 'success',
         text: 'Nueva clase agregada con éxito',
@@ -782,30 +674,20 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
 
       this.cerrarModal('myModal2');
     }
-
   }
 
-
-
   actualizarPractica() {
-
     const fecha = new Date();
     const practica = {
-
       practiceName: this.practica.nombre,
       active: this.practica.estado,
       updatedAt: fecha.toISOString()
-
     };
-
     const prog = {
       noStudents: this.practica.numeroEst,
       semester: this.practica.semestre
-
     };
-
     this.servicioMod2.Trazability(
-
       this.user.uid, 'update', 'practice', this.id_prc, practica
     ).then(() => {
       this.servicioMod2.setPractica(this.id_prc, practica).then(ok => {
@@ -814,8 +696,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
         this.user.uid, 'update', 'practice', this.id_prc, 'programmingData', this.id_pro, prog
       ).then(() => {
         this.servicioMod2.setProgramacion(this.id_prc, this.id_pro, prog);
-
-
         this.cerrarModal('myModal3');
         this.alert.hide();
           swal({
@@ -824,22 +704,15 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
             showConfirmButton: true
           });
         });
-
       });
     });
-
   }
 
   down() {
-
     this.addPractica = true;
     this.consultarpractica = false;
-
-
-
     setTimeout(() => {
       document.getElementById('addpractica').scrollIntoView({block: 'end', behavior: 'smooth'});
-
     }, 100);
   }
 
@@ -847,23 +720,17 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     $('#' + modal).modal('hide');
   }
 
-
   clearObj() {
-
     this.residuos = false;
     this.nameP = '';
     this.code = '';
     this.programming.semester = '';
     this.programming.noStudents = '';
     this.events = [];
-
-
   }
 
 
-  initValidatorStepper() {
-
-  }
+  initValidatorStepper() { }
 
   // deshabilitar button
   disabledcalendar(): boolean {
@@ -871,10 +738,8 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   }
 
   showstp(st) {
-
     console.log(st);
   }
-
 
   onSubmit( form ) {
     if (form.valid) {

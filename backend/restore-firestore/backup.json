@@ -1,0 +1,700 @@
+{
+  "appRoles": {
+    "6ITqecW7XrgTLaW6fpn6": {
+      "roleName": "Personal profesional",
+      "active": true,
+      "permissions": {
+        "moduloDosPermiso": true,
+        "moduloSolicitudes": true,
+        "moduloServicios": true
+      },
+      "description": "Este perfil puede acceder al panel de administración del laboratorio, sin embargo sólo tendrá acceso a la totalidad de las funcionalidades incluidas en el sub menú de solicitudes y la opción de solicitudes de servicio en el submenú administración de servicios. Puede proponer cámbios a la información del laboratorio.",
+      "lvl": "perfiles2"
+    },
+    "FH5dgAP3EjI8rGKrX0mP": {
+      "roleName": "Personal auxiliar",
+      "active": true,
+      "permissions": {
+        "moduloPrincipal": true,
+        "moduloDosPermiso": true,
+        "moduloSolicitudes": true,
+        "moduloQr": true
+      },
+      "description": "Este perfil puede acceder al panel de administración del laboratorio, sin embargo sólo tendrá acceso a la totalidad de las funcionalidades incluidas en las opciones en el sub menú de solicitudes de laboratorio. Puede proponer cámbios a la información del laboratorio.",
+      "lvl": "perfiles2"
+    },
+    "KMV8IWBtMoiDV21owDCj": {
+      "description": "Este perfil puede acceder al panel de administración del laboratorio, sin embargo no tendrá acceso a las funcionalidades, es decir, puede visualizar el personal asociado al laboratorio, visualizar y ver detalles de servicios, prácticas y demás opciones, pero será un perfil de sólo lectura. Puede proponer cámbios a la información del laboratorio.",
+      "lvl": "perfiles2",
+      "roleName": "Personal técnico",
+      "active": true,
+      "permissions": { "moduloPrincipal": true, "moduloDosPermiso": true }
+    },
+    "PFhLR4X2n9ybaZU3CR75": {
+      "roleName": "Nivel de acceso 2.5",
+      "active": true,
+      "permissions": { "moduloNivel25": true },
+      "description": "",
+      "lvl": ""
+    },
+    "S9wr9uK5BBF4yQZ7CwqX": {
+      "roleName": "Coordinador Laboratorio",
+      "active": true,
+      "permissions": { "moduloNivel2": true, "moduloPrincipal": true },
+      "description": "este rol tiene acceso al segundo nivel de la plataforma"
+    },
+    "SXYQVs5Re8exTghONg6j": {
+      "permissions": { "moduloPrincipal": true, "moduloDosPermiso": true },
+      "description": "Este perfil puede acceder al panel de administración del laboratorio, sin embargo no tendrá acceso a las funcionalidades, es decir, puede visualizar el personal asociado al laboratorio, visualizar y ver detalles de servicios, prácticas y demás opciones, pero será un perfil de sólo lectura. Puede proponer cámbios a la información del laboratorio.",
+      "lvl": "perfiles2",
+      "roleName": "Personal laboratorista",
+      "active": true
+    },
+    "UlcSFw3BLPAdLa533QKP": {
+      "roleName": "Personal nivel 3.5",
+      "active": true,
+      "permissions": { "moduloNivel35": true },
+      "description": "este rol permite el acceso a indicadores del nivel 3.5"
+    },
+    "W6ihltvrx8Gc7jVucH8M": {
+      "roleName": "Comunicación masiva",
+      "active": true,
+      "permissions": { "moduloComMasiva": true },
+      "description": "este rol se utiliza para acceder al panel de comunicacion masiva"
+    },
+    "k7uRIEzj99l7EjZ3Ppql": {
+      "description": "este perfil se asigna a personas que vayan a registrar los equipos por Qr",
+      "roleName": "Modulo Qr",
+      "active": true,
+      "permissions": { "moduloQr": true }
+    },
+    "lCpNW2BmPgMSHCD1EBpT": {
+      "roleName": "Nivel de Acceso 3",
+      "active": true,
+      "permissions": {
+        "moduloNivel3": true,
+        "moduloPrincipal": true,
+        "moduloComMasiva": true
+      },
+      "description": "Este rol permite el acceso a niveles administrativos mas altos",
+      "lvl": "nivel3"
+    },
+    "npKRYaA0u9l4C43YSruA": {
+      "permissions": { "moduloPrincipal": true },
+      "description": "Todos los usuarios registrados en la aplicación deben contar con este perfil.  \tEste perfil garantiza la utilización de la totalidad de las funcionalidades de nivel 1.",
+      "lvl": "nivel1",
+      "roleName": "nivel1",
+      "active": true
+    },
+    "yoVd80ZvcdgUf1a44ORB": {
+      "roleName": "Personal administrativo",
+      "active": true,
+      "permissions": { "moduloPrincipal": true, "moduloDosPermiso": true },
+      "description": "Este perfil puede acceder al panel de administración del laboratorio, sin embargo no tendrá acceso a las funcionalidades, es decir, puede visualizar el personal asociado al laboratorio, visualizar y ver detalles de servicios, prácticas y demás opciones, pero será un perfil de sólo lectura. Puede proponer cámbios a la información del laboratorio.",
+      "lvl": "perfiles2"
+    }
+  },
+  "cfClassScheme": {
+    "1227a225-db7a-444d-a74b-3dd4b438b420": {
+      "descr": {
+        "cfClassScheme": "1227a225-db7a-444d-a74b-3dd4b438b420",
+        "cfDescr": "This scheme contains CERIF vocabulary terms applicable in the cfElectronicAddress_Classification link entity, being used as a vocabulary of electronic address types.",
+        "cfDescrSrc": ""
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": "",
+      "name": {
+        "cfNameSrc": "",
+        "cfName": "Electronic Address Types",
+        "cfClassScheme": "1227a225-db7a-444d-a74b-3dd4b438b420"
+      },
+      "relatedClassScheme": { "68aa07f2-34c9-11e1-b86c-0800200c9a66": true }
+    },
+    "39f413d8-e5ee-409a-95f1-d204b78508b9": {
+      "name": {
+        "cfNameSrc": "",
+        "cfName": "Inter-Service Relations",
+        "cfClassScheme": "39f413d8-e5ee-409a-95f1-d204b78508b9"
+      },
+      "relatedClassScheme ": {
+        "nuevoid": { "cf7799e9-3477-11e1-b86c-0800200c9a66": true }
+      },
+      "descr": {
+        "cfDescr": "This scheme contains CERIF vocabulary terms applicable in a cfService_Service link entity, being thus an inter-service relations.",
+        "cfDescrSrc": "",
+        "cfClassScheme": "39f413d8-e5ee-409a-95f1-d204b78508b9"
+      },
+      "createdAt": "2018-04-25T20:30:50.796Z",
+      "updatedAt": "2018-04-25T20:30:50.796Z",
+      "cfURI": ""
+    },
+    "623d2471-8d16-40c9-915a-df496da086be": {
+      "descr": {
+        "cfDescrSrc": "",
+        "cfClassScheme": "623d2471-8d16-40c9-915a-df496da086be",
+        "cfDescr": "This scheme contains CERIF vocabulary terms applicable in a cfEquipment_Equipment link entity, being thus an inter-equipment relations."
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": "",
+      "name": {
+        "cfName": "Inter-Equipment Relations",
+        "cfClassScheme": "623d2471-8d16-40c9-915a-df496da086be",
+        "cfNameSrc": ""
+      },
+      "relatedClassScheme": { "cf7799e8-3477-11e1-b86c-0800200c9a66": true }
+    },
+    "6b2b7d24-3491-11e1-b86c-0800200c9a66": {
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": "",
+      "name": {
+        "cfName": "Person Professional Relationships",
+        "cfClassScheme": "6b2b7d24-3491-11e1-b86c-0800200c9a66",
+        "cfNameSrc": ""
+      },
+      "relatedClassScheme": { "cf7799e0-3477-11e1-b86c-0800200c9a66": true },
+      "descr": {
+        "cfDescrSrc": "",
+        "cfClassScheme": "6b2b7d24-3491-11e1-b86c-0800200c9a66",
+        "cfDescr": "This scheme contains CERIF vocabulary terms applicable in the cfPerson_Person link entity, being thus an interpersonal structure. "
+      }
+    },
+    "cf7772d0-3477-11e1-b86c-0800200c9a66": {
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": "",
+      "name": {
+        "cfNameSrc": "",
+        "cfName": "Inter-Organisational Structure",
+        "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66"
+      },
+      "relatedClassScheme": { "cf7799e2-3477-11e1-b86c-0800200c9a66": true },
+      "descr": {
+        "cfDescrSrc": "",
+        "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66",
+        "cfDescr": "This scheme contains CERIF vocabulary terms applicable in the cfOrganisationUnit_OrganisationUnit link entity, being thus an inter-organisational structure."
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z"
+    },
+    "da0e5a01-c73e-4489-8cf7-917e9efcdad4": {
+      "name": {
+        "cfNameSrc": "",
+        "cfName": "Inter-Facility Relations",
+        "cfClassScheme": "da0e5a01-c73e-4489-8cf7-917e9efcdad4"
+      },
+      "relatedClassScheme": { "cf7799e7-3477-11e1-b86c-0800200c9a66": true },
+      "descr": {
+        "cfDescrSrc": "",
+        "cfClassScheme": "da0e5a01-c73e-4489-8cf7-917e9efcdad4",
+        "cfDescr": "This scheme contains CERIF vocabulary terms applicable in a cfFacility_Facility link entity, being thus an inter-facility relations."
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": ""
+    }
+  },
+  
+  "cfOrgUnit": {
+    "i9dzCErPCO4n9WUfjxR9": {
+      "cfAcro": "UV",
+      "cfHeadcount": "0",
+      "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66",
+      "cfURI": "www.univalle.edu.co",
+      "cfClass": "cf7799e2-3477-11e1-b86c-0800200c9a66",
+      "cfKeyw": ["univalle", "universidad", "valle"],
+      "cfName": "Universidad del Valle",
+      "logoURL": "",
+      "cfCurrCode": "COP",
+      "cfResAct": "Institución de educación superior sujeta a inspección y vigilancia por el Ministerio de Educación Nacional",
+      "cfAvailabilty": [""],
+      "cfEAddr": ""
+    }
+  },
+  "cfPAddr": {
+    "WWxNJGJTbDa3ff5GliEJ": {
+      "cfClassScheme": "",
+      "cfAddrline3": "",
+      "cfAddrline4": "",
+      "updatedAt": "",
+      "headquarter": "Bmkiiz1wGyDmVUMHNSw2",
+      "cfClass": "",
+      "cfCountry": { "cfURI": "", "cfName": "Colombia", "cfCountryCode": "CO" },
+      "cfAddrline5": "",
+      "cfAddrline1": "Calle 4B # 36-00",
+      "geoRep": {},
+      "edificios": ["Edificio de prueba 1"],
+      "cfCityTown": "Cali",
+      "createdAt": "2018-08-23T19:38:52.676Z",
+      "cfAddrline2": "San Fernando"
+    },
+    "XgqkLkL9HLPBRY3hsCtY": {
+      "createdAt": { "cfName": "Colombia", "cfCountryCode": "CO", "cfURI": "" },
+      "cfAddrline1": "",
+      "cfAddrline2": "Fuera del campus universitario",
+      "desc": "fuera del campus cali",
+      "cfCityTown": "Cali",
+      "headquarter": "Bmkiiz1wGyDmVUMHNSw2"
+    },
+    "ZhLjaTfWwiXsMO9Gdc9P": {
+      "cfCityTown": "Tulua",
+      "headquarter": "BfM5Az9MEeF3HDpCuOz9",
+      "cfAddrline2": "Fuera del campus universitario",
+      "cfCountry": { "cfName": "Colombia", "cfCountryCode": "CO" }
+    },
+    "fFxC5Q3CDDMM9IxabhoE": {
+      "cfAddrline3": "",
+      "cfAddrline4": "",
+      "edificios": [""],
+      "cfCityTown": "Tulua",
+      "headquarter": "BfM5Az9MEeF3HDpCuOz9",
+      "cfCountry": { "cfName": "Colombia", "cfCountryCode": "CO" },
+      "cfAddrline5": "",
+      "cfAddrline1": "Carrera 35 No. 33-60 Esquina",
+      "cfAddrline2": "Tulua"
+    },
+    "g8BpPi1Do3Q05YQYt15k": {
+      "cfURI": "",
+      "cfCityTown": "Palmira",
+      "headquarter": "74K5k2YnYmuS7PWzt56p",
+      "cfName": "",
+      "cfCountryCode": "",
+      "cfAddrline2": "Fuera del campus universitario"
+    },
+    "h2gGQ7SeXw22EResUwvS": {
+      "cfAddrline5": "",
+      "cfAddrline1": "Pan-American Highway, Palmira, Valle del Cauca",
+      "geoRep": {},
+      "edificios": [""],
+      "cfCityTown": "Palmira",
+      "createdAt": "2018-08-23T19:38:52.676Z",
+      "cfAddrline2": "Palmira",
+      "cfClassScheme": "",
+      "cfAddrline3": "",
+      "cfAddrline4": "",
+      "updatedAt": "",
+      "headquarter": "74K5k2YnYmuS7PWzt56p",
+      "cfClass": "",
+      "cfCountry": { "cfName": "Colombia", "cfCountryCode": "CO", "cfURI": "" }
+    },
+    "qW39OVJHrAInUYUErpX9": {
+      "createdAt": "2018-08-23T19:38:52.676Z",
+      "cfStateOfCountry": "Valle del Cauca",
+      "cfAddrline2": "Ciudad Universitaria Meléndez",
+      "cfAddrline3": "",
+      "cfClassScheme": "",
+      "cfAddrline4": "",
+      "updatedAt": "",
+      "cfURI": "",
+      "headquarter": "Bmkiiz1wGyDmVUMHNSw2",
+      "cfClass": "",
+      "cfCountry": { "cfName": "Colombia", "cfCountryCode": "CO", "cfURI": "" },
+      "cfCountryCode": "CO",
+      "cfAddrline5": "",
+      "cfAddrline1": "Calle 13 # 100-00",
+      "geoRep": {},
+      "cfPostCode": "760032",
+      "edificios": [
+        "A1-305-Edificio el Ágora",
+        "A2-306-Edificio Alirio Sardi Dorronsoro / Fondo acumulativo-Servicio de salud-Desarrollo Humano / (Librería y programa editorial)",
+        "A3-Proyectado-Museo y Galerías - (Proyectado)",
+        "A4-Proyectado-Centro de Cultura e Idiomas - (Proyectado)",
+        "A5-Proyectado-Centro de Eventos y Exposiciones - (Proyectado)",
+        "A6-Proyectado-Edificio complementario al Servicio Médico - (Proyectado)",
+        "A7-310-Servicio Médico / Emilio Aljure Nasser",
+        "B1-352-Edificio Luis Sigifredo Espinal-Tascón / Herbario",
+        "B2-Proyectado-Espacio Multipropósito - Contenedores (Proyectado)",
+        "B3-Proyectado-Edificio Jardín Botánico – (Proyectado)",
+        "B4-Sin Nomenclatura Previa-Sistema de Abastecimiento de Agua",
+        "B5-Proyectado-Edificio de Extensión y Proyección Social UV – (Proyectado)",
+        "B6-Proyectado-Proyección Edificio 1 - Museo de la Ciencia y la Tecnología - Parque Tecnológico UV",
+        "B7-Proyección Edificio 2 - Parque Tecnológico UV",
+        "B8-Proyección Edificio 3 - Parque Tecnológico UV",
+        "B9-Proyectado-Proyección Edificio 4 - Parque Tecnológico UV",
+        "B10-Proyectado-Proyección Edificio 5 - Parque Tecnológico UV",
+        "B11-Proyectado-Proyección Edificio 6 - Parque Tecnológico UV",
+        "B12-Proyectado-Proyección Edificio 7 - Parque Tecnológico UV",
+        "B13-SNP-Escuela de Ingeniería de sistemas y computación EISC - Edificio Ciencias de la Computación y Nuevas Tecnologías",
+        "B14-SNP-SGC - Edificio del Sistema Geológico Colombiano / INGEOMINAS",
+        "B15-360-Escuela de Ingeniería de Recursos Naturales y del Ambiente / Laboratorio de Fluídos e Hidráulica / Facultad de Ingeniería",
+        "B16-359-Sección Gestión Documental / Archivo Central / Oficina de Inventarios",
+        "B17-358-Servicios Varios / Bodega Jardinería y Vivero",
+        "C1-Proyectado-Centro de Eventos - Concha Acústica - (Proyectado)",
+        "C2-Proyectado-Edificio C.D.U. No. 2 - Centro de Alto Rendimiento - (Proyectado)",
+        "C3-Proyectado-Cafetería - (Proyectado)",
+        "C4-Proyectado-Dojo - (Proyectado)",
+        "C5-390-Edificio C.D.U. No.1 - Gimnasio",
+        "C6-Proyectado-Cafetería - (Proyectado)",
+        "C7-Proyectado-Graderías y Camerinos - (Proyectado)",
+        "C8-Proyectado-Equipamiento de bienestar universitario - Cafetería, batería sanitaria y sala de estudio (Proyectado)",
+        "C9-Sin Nomenclatura Previa-Camerinos",
+        "C10-Sin Nomenclatura Previa-Cancha No.1",
+        "C11-Sin Nomenclatura Previa-Cancha No.2",
+        "C12Sin Nomenclatura Previa-Cancha No.3",
+        "C13Sin Nomenclatura Previa-Cancha No.4",
+        "C14-Sin Nomenclatura Previa-Cancha No.5",
+        "C15-Sin Nomenclatura Previa-Cancha No.6",
+        "C16-Sin Nomenclatura Previa-Cancha No.7",
+        "C17-Sin Nomenclatura Previa-Cancha No.8",
+        "C18-Sin Nomenclatura Previa-Cancha No.9",
+        "C19-Sin Nomenclatura Previa-Cancha No.10",
+        "C20-Sin Nomenclatura Previa-Cancha No.11",
+        "C21-Sin Nomenclatura Previa-Canchas de Tenis",
+        "C22-Sin Nomenclatura Previa-Piscinas",
+        "C23-Sin Nomenclatura Previa-Canchas de Microfútbol, Baloncesto y Voleibol",
+        "C24-Sin Nomenclatura Previa-Cancha de Voleibol Playa - (Proyectado)",
+        "6-Portería Corelca-Acceso Mixto: Calle 16",
+        "11-Sin Nomenclatura Previa-Estacionamiento",
+        "12-Proyectado-Estacionamiento (Proyectado)",
+        "13-10-Estacionamiento",
+        "D1-380-Escuela de Arquitectura - FAI",
+        "D2-Sin Nomenclatura Previa-Edificio Temporero - Escuela de Arquitectura - FAI / Taller de Estructuras",
+        "D3-Proyectado-Edificio Laboratorio de Arquitectura - FAI (Proyectado)",
+        "D4-381-Instituto de Educación y Pedagogía - IEP / Salud Ocupacional",
+        "D5-382-Departamento de Diseño - FAI",
+        "D6-383-Escuela de Ciencias de la Comunicación - FAI",
+        "D7-384-Departamento de Geografía - Facultad de Humanidades / Servicio Médico Estudiantil",
+        "D8-385-Edificio Estanislao Zuleta / Edificio de Posgrados - Facultad de Humanidades / Instituto de Psicología",
+        "D9-Proyectado-Sala de Estudio - (Proyectado)",
+        "D10-386-Edificio Carlos Restrepo Acuña / Facultad de Humanidades",
+        "D11-Proyectado-Centro de Atención al Usuario - (Proyectado)",
+        "D12-387-Facultad de Ciencias Sociales y Económicas",
+        "D13-388-Edificio Josué Angel / Instituto de Educación y Pedagogía - IEP / Instituto de Psicología / Servicio Odontológico",
+        "D14-389-Restaurante Universitario / Cafetería Central",
+        "D15-Proyectado-Ampliación Cafetería Central - (Proyectado)",
+        "D16-Sin Nomenclatura Previa-Tulpa del Lago",
+        "D17-391-Coliseo Alberto León Betancourth",
+        "D18-ProyectadoEquipamiento de bienestar universitario - Cafetería, baterías sanitarias y sala de estudio - (Proyectado)",
+        "D19-Sin Nomenclatura Previa-Lago central",
+        "7-Portería Carrera 100-Acceso Mixto: Carrera 100",
+        "1-Portería 1: Peatonal Pasoancho-Acceso Peatonal: Calle 13 - Avenida Pasoancho",
+        "E1-301-Administración Central",
+        "E2-Proyectado-Edificio de Aulas - (Proyectado)",
+        "E3-Proyectado-Archivo Institucional - (Proyectado)",
+        "E4-Proyectado-Imprenta - (Proyectado)",
+        "E5-Sin Nomenclatura Previa-FAI - Laboratorios de Artes",
+        "E6-314-FAI - Aulas Escuela de Música / Taller Departamento Artes Visuales",
+        "E7-314-FAI - Aulas Escuela de Música / Aulas Departamento de Artes Escénicas",
+        "E8-314-FAI - Aulas Escuela de Música / Aulas Departamento de Artes Escénicas",
+        "E9-314-FAI - Aulas Departamento de Artes Escénicas",
+        "E10-313-FAI - Aulas Departamento de Artes Visuales / Departamento de Artes Escénicas",
+        "E11-313-FAI - Departamento de Diseño",
+        "E12-313-FAI - Departamento de Diseño",
+        "E13-Proyectado-FAI - Escuela de Música (Proyectado)",
+        "E14-Proyectado-FAI - Escuela de Música (Proyectado)",
+        "E15-316-FAI - Tulio Ramirez",
+        "E16-Proyectado-Equipamiento de bienestar universitario / Cafetería, batería sanitaria y sala de estudio - (Proyectado)",
+        "E17-315-Escuela de Ciencias del Lenguaje / Facultad de Humanidades",
+        "E18-317-Edificio de Medios / DINTEV / CREE",
+        "E19-318-Biblioteca Central / Mario Carvajal",
+        "E20-320-Facultad de Ciencias Naturales y Exactas - Edificio principal",
+        "E21-Proyectado-Ampliación Faculta de Ciencias Naturales y Exactas (Proyectado)",
+        "E22-331-Torre Decanatura / Edificio Espíritu Santo Potes",
+        "E23-331-A-Plataforma Aulas / Edificio Espíritu Santo Potes",
+        "E24-332-Complejo Auditorios / Auditorios 1, 2, 3, 4 y 5",
+        "E25-Proyectado-Equipamiento de bienestar universitario / Cafetería, batería sanitaria y sala de estudio (Proyectado)",
+        "E26-333-Edificio de Aulas / Álvaro Escobar Navia / Facultad de Ingeniería",
+        "E27-336-Escuela de Ingeniería Química / Escuela de Ingeniería de Recursos Naturales y del Ambiente - EIDENAR",
+        "E28-335-Escuela de Ingeniería Química / Escuela de Ingeniería de Recursos Naturales y del Ambiente - EIDENAR",
+        "E29-334-Planta Piloto de Ingeniería Química - Laboratorios / Escuela de Ingenieía Química / Escuela de Ingeniería de Alimentos",
+        "E30-334-A-Escuela de Ingeniería Química / Laboratorio de Análisis Instrumental",
+        "E31-Proyectado-Escuela de Ingeniería de Alimentos / Laboratorios (Proyectado)",
+        "E32-338-Escuela de Ingeniería de Alimentos / Facultad de Ingeniería",
+        "E33-340-Escuela de Ingeniería Mecánica / Facultad de Ingeniería",
+        "E34-340-A-Edificio EIDENAR (Escuela de Ingeniería de Recursos Naturales y del Ambiente) - (Proyectado)",
+        "E35-Proyectado-Cafetería (Proyectado)",
+        "E36-Proyectado-Facultad de Ingeniería / Edificio de Posgrados (Proyectado)",
+        "E37-341-Escuela de Ingeniería de Recursos Naturales y del Ambiente - EIDENAR / CINARA (Instituto de Investigación y desarrollo",
+        "en abastecimiento de agua, saneamiento ambiental y conservación del recurso hídrico)",
+        "E38-343-Facultad de Ingeniería / Centro de Estudios Facultad de Ingeniería",
+        "E39-344-Facultad de Ingeniería / Escuela de Ingeniería de Recursos Naturales y del Ambiente - EIDENAR",
+        "E40-344-A-Escuela de Ingeniería Mecánica / Edificio Talleres (Proyectado)",
+        "E41-Proyectado-Cafetería (Proyectado)",
+        "E42-345-Escuela de Ingeniería Mecánica / Taller / Facultad de Ingeniería",
+        "E43-346-Escuela de Ingeniería Civil y Geomática",
+        "E44-347-Escuela de Ingeniería de Materiales / Escuela de ingeniería Civil y Geomática / Facultad de Ingeniería",
+        "E45-Proyectado-Escuela de Materiales / Edificio Talleres / Facultad de Ingeniería (Proyectado)",
+        "E46-348-Escuela de Ingeniería de Materiales - EIMA / Facultad de Ingeniería",
+        "E47-349-Escuela de Ingeniería de Materiales - EIMA / Facultad de Ingeniería",
+        "E48-350-Escuela de Ingeniería Civil y Geomática - EICG / Facultad de Ingeniería",
+        "E49-351-Facultad de Ingeniería / Escuela de Estadística",
+        "E50-356-Laboratorio de Alta Tensión - EIEE - Escuela de Ingeniería Eléctrica y Electrónica",
+        "E51-Proyectado-Complemento Laboratorio de Alta Tensión (Proyectado)",
+        "E52-353-Facultad de Ingeniería / EIEE - Escuela de Ingeniería Eléctrica y Electrónica",
+        "E53-354-Escuela de Ingeniería Eléctrica y Electrónica - EIEE / Facultad de Ingeniería",
+        "E54-Proyectado-Cafetería (Proyectado)",
+        "E55-355-Escuela de Ingeniería Eléctrica y Electrónica - EIEE / Facultad de Ingeniería",
+        "E56-357-Escuela de Ingeniería Industrial - EII / Facultad de Ingeniería",
+        "E57-Proyectado-Auditorio (Proyectado)"
+      ],
+      "cfCityTown": "Cali"
+    }
+  },
+
+
+  "cfClass": {
+    "68aa07f2-34c9-11e1-b86c-0800200c9a66": {
+      "cfURI": "",
+      "cfClass": "68aa07f2-34c9-11e1-b86c-0800200c9a66",
+      "def": {
+        "cfClassScheme": "1227a225-db7a-444d-a74b-3dd4b438b420",
+        "cfDefSrc": "http://wordnetweb.princeton.edu/perl/webwn?s=address",
+        "cfClass": "68aa07f2-34c9-11e1-b86c-0800200c9a66",
+        "cfDef": "An electronic address is a computer address, reference ((computer science) the code that identifies where a piece of information is stored)."
+      },
+      "relatedClassScheme": {},
+      "entityType": "cfEAddr",
+      "descr": {
+        "cfClass": "68aa07f2-34c9-11e1-b86c-0800200c9a66",
+        "cfDescrSrc": "CERIF Task Group",
+        "cfClassScheme": "1227a225-db7a-444d-a74b-3dd4b438b420",
+        "cfDescr": "In CERIF, the concept of electronic address is physically (cfEAddr) and logically (cfElectronicAddress) defined as an entity in the ERM, described through basic attributes and through semantically neutral relationships with persons (cfPers_EAddr), organisations (cfOrgUnit_EAddr), classification systems (cfEAddr_Class)."
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "term": {
+        "cfTerm": "Electronic Address",
+        "cfClassScheme": "1227a225-db7a-444d-a74b-3dd4b438b420",
+        "cfTermSrc": "CERIF ER-M",
+        "cfClass": "68aa07f2-34c9-11e1-b86c-0800200c9a66",
+        "cfRoleExpr": "is a",
+        "cfRoleExprOpp": ""
+      },
+      "cfClassScheme": "1227a225-db7a-444d-a74b-3dd4b438b420",
+      "updatedAt": "2018-04-25T20:38:04.810Z"
+    },
+    "cf7799e0-3477-11e1-b86c-0800200c9a66": {
+      "cfClassScheme": "6b2b7d24-3491-11e1-b86c-0800200c9a66",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": "",
+      "cfClass": "cf7799e0-3477-11e1-b86c-0800200c9a66",
+      "def": {
+        "cfClassScheme": "6b2b7d24-3491-11e1-b86c-0800200c9a66",
+        "cfDefSrc": "http://en.wikipedia.org/wiki/Person",
+        "cfClass": "cf7799e0-3477-11e1-b86c-0800200c9a66",
+        "cfDef": "A person (plural: persons or people; from Latin: persona, meaning \"mask\") is a being, such as a human, that has certain capacities or attributes constituting personhood, the precise definition of which is the subject of much controversy."
+      },
+      "relatedClassScheme": {},
+      "entityType": "cfPerson",
+      "descr": {
+        "cfDescr": "\"In CERIF, the concept of person is physically (cfPers) and logically (cfPerson) defined as an entity in an ERM, described through basic attributes and through semantically neutral relationships with e.g. persons (cfPers_Pers), qualifications (cfPers_Qual), events (cfPers_Event), classification systems (cfPers_Class), countries (cfPers_Country).In the CERIF vocabulary, we introduce the concept of person. In the physical CERIF data model, the classification of types for persons happens with the cfPers_Class entity, where a type is represented by a classification term (cfTerm) identified by its cfClassificationIdentifier (a uuid), and reused at instance level for assigning person types to person records. \"",
+        "cfClass": "cf7799e0-3477-11e1-b86c-0800200c9a66",
+        "cfDescrSrc": "CERIF Task Group",
+        "cfClassScheme": "6b2b7d24-3491-11e1-b86c-0800200c9a66"
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "term": {
+        "cfClass": "cf7799e0-3477-11e1-b86c-0800200c9a66",
+        "cfTerm": "Person",
+        "cfClassScheme": "6b2b7d24-3491-11e1-b86c-0800200c9a66",
+        "cfRoleExpr": "is a",
+        "cfRoleExprOpp": ""
+      }
+    },
+    "cf7799e2-3477-11e1-b86c-0800200c9a66": {
+      "cfClass": "cf7799e2-3477-11e1-b86c-0800200c9a66",
+      "def": {
+        "cfDefSrc": "http://en.wikipedia.org/wiki/Organization; RMAS Vocabulary",
+        "cfClass": "cf7799e2-3477-11e1-b86c-0800200c9a66",
+        "cfDef": "An organization (or organisation — see spelling differences) is a social group which distributes tasks for a collective goal. The word itself is derived from the Greek word organon, itself derived from the better-known word ergon - as we know `organ` - and it means a compartment for a particular job.",
+        "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66"
+      },
+      "relatedClassScheme": {},
+      "entityType": "",
+      "descr": {
+        "cfDescr": "\"In CERIF, the concept of organisation is physically (cfOrgUnit) and logically (cfOrganisationUnit) defined as an entity in an ERM, described through basic attributes and through semantically neutral relationships with e.g. person (cfPers_OrgUnit), events (cfOrgUnit_Event), classification systems (cfOrgUnit_Class), projects (cfProj_OrgUnit). In the CERIF vocabulary, we introduce the concept of organisation. In the physical CERIF data model, the classification of types for organisations happens with the cfOrgUnit_Class entity, where a type is represented by a classification term (cfTerm) identified by its cfClassificationIdentifier (a uuid), and reused at instance level for assigning organisation types to organisation records. \"",
+        "cfClass": "cf7799e2-3477-11e1-b86c-0800200c9a66",
+        "cfDescrSrc": "CERIF Task Group",
+        "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66"
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "term": {
+        "cfClass": "cf7799e2-3477-11e1-b86c-0800200c9a66",
+        "cfRoleExpr": "is a",
+        "cfRoleExprOpp": "",
+        "cfTerm": "Organisation",
+        "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66",
+        "cfTermSrc": "CERIF ER-M; RMAS project"
+      },
+      "cfClassScheme": "cf7772d0-3477-11e1-b86c-0800200c9a66",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": ""
+    },
+    "cf7799e7-3477-11e1-b86c-0800200c9a66": {
+      "entityType": "cfFacil",
+      "descr": {
+        "cfDescr": "In CERIF, the concept of Facility (also Research Facility) is physically (cfFacil) and logically (cfFacility) defined as an entity in an ERM, described through basic attributes and through semantically neutral relationships with e.g. persons (cfPers_Facil), organisations (cfOrgUnit_Facil), classification systems (cfFacil_Class), projects (cfProj_Facil). In the physical CERIF data model, the classification of types for facility happens with the cfFacil_Class entity, where a type is represented by a classification term (cfTerm) identified by its cfClassificationIdentifier (a uuid), and reused at instance level for assigning facility types to facility records.\"",
+        "cfClass": "cf7799e7-3477-11e1-b86c-0800200c9a66",
+        "cfDescrSrc": "CERIF Task Group",
+        "cfClassScheme": "da0e5a01-c73e-4489-8cf7-917e9efcdad4"
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z",
+      "term": {
+        "cfTerm": "Facility",
+        "cfClassScheme": "da0e5a01-c73e-4489-8cf7-917e9efcdad4",
+        "cfTermSrc": "CERIF ER-M; RMAS project",
+        "cfClass": "cf7799e7-3477-11e1-b86c-0800200c9a66",
+        "cfRoleExpr": "is a",
+        "cfRoleExprOpp": ""
+      },
+      "cfClassScheme": "da0e5a01-c73e-4489-8cf7-917e9efcdad4",
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "cfURI": "",
+      "cfClass": "cf7799e7-3477-11e1-b86c-0800200c9a66",
+      "def": {
+        "cfClassScheme": "da0e5a01-c73e-4489-8cf7-917e9efcdad4",
+        "cfDefSrc": "CERIF Task Group; http://www.jcpsg.ac.uk/guidance/",
+        "cfClass": "cf7799e7-3477-11e1-b86c-0800200c9a66",
+        "cfDef": "A facility is a space or equipment necessary for conducting research (CERIF Entity).  The full economic cost associated with the running of the institutional research facilities and equipment used in an activity (Activity Finance Category). The specification, procurement and installation of a facility (Activity Subtype)."
+      },
+      "relatedClassScheme": {}
+    },
+    "cf7799e8-3477-11e1-b86c-0800200c9a66": {
+      "term": {
+        "cfRoleExpr": "is a",
+        "cfRoleExprOpp": "",
+        "cfTerm": "Equipment",
+        "cfClassScheme": "623d2471-8d16-40c9-915a-df496da086be",
+        "cfTermSrc": "CERIF ER-M; RMAS project",
+        "cfClass": "cf7799e8-3477-11e1-b86c-0800200c9a66"
+      },
+      "updatedAt": "2018-04-25T20:38:04.810Z",
+      "def": {
+        "cfDefSrc": "http://wordnetweb.princeton.edu/perl/webwn?s=equipment; RMAS Vocabulary",
+        "cfClass": "cf7799e8-3477-11e1-b86c-0800200c9a66",
+        "cfDef": "Equipment is an instrumentality needed for undertaking or to perform a service (CERIF Entity). The costs associated with the purchase of equipment normally above a price threshold, e.g 1.000 GBP (Activity Finance Category).",
+        "cfClassScheme": "623d2471-8d16-40c9-915a-df496da086be"
+      },
+      "entityType": "cfEquip",
+      "relatedClassScheme ": {},
+      "descr": {
+        "cfClass": "cf7799e8-3477-11e1-b86c-0800200c9a66",
+        "cfDescrSrc": "CERIF Task Group",
+        "cfClassScheme": "623d2471-8d16-40c9-915a-df496da086be",
+        "cfDescr": "\"In CERIF, the concept of equipment is physically (cfEquip) and logically (cfEquipment) defined as an entity in an ERM, described through basic attributes and through semantically neutral relationships with e.g. persons (cfPers_Equip), organisations (cfOrgUnit_Equip), classification systems (cfEquip_Class), projects (cfProj_Equip). In the physicial CERIF data model, the classification of types for equipment happens with the cfEquip_Class entity, where a type is represented by a classification term (cfTerm) identified by its cfClassificationIdentifier (a uuid), and reused at instance level for assigning equipment types to equipment records.\"\"\""
+      },
+      "createdAt": "2018-04-25T20:38:04.810Z"
+    },
+    "cf7799e9-3477-11e1-b86c-0800200c9a66": {
+      "term": {
+        "cfTerm": "Service",
+        "cfClassScheme": "39f413d8-e5ee-409a-95f1-d204b78508b9",
+        "cfTermSrc": "CERIF ER-M",
+        "cfClass": "cf7799e9-3477-11e1-b86c-0800200c9a66",
+        "cfRoleExpr": "is a",
+        "cfRoleExprOpp": ""
+      },
+      "cfClassScheme": "39f413d8-e5ee-409a-95f1-d204b78508b9",
+      "updatedAt": "2018-04-25T20:30:50.796Z",
+      "cfURI": "",
+      "cfClass": "cf7799e9-3477-11e1-b86c-0800200c9a66",
+      "def": {
+        "cfDefSrc": "CERIF Task Group",
+        "cfClass": "cf7799e9-3477-11e1-b86c-0800200c9a66",
+        "cfDef": "A service is an exchange for money or other commodities where an enduser receives support from a supplier.",
+        "cfClassScheme": "39f413d8-e5ee-409a-95f1-d204b78508b9"
+      },
+      "relatedClassScheme": {},
+      "entityType": "cfSrv",
+      "descr": {
+        "cfDescr": "In CERIF, the concept of serive is physically (cfSrv) and logically (cfService) defined as an entity in an ERM, described through basic attributes and through semantically neutral relationships with e.g. persons (cfPers_Srv), organisations (cfOrgUnit_Srv), classification systems (cfSrv_Class), projects (cfProj_Srv). In the CERIF vocabulary, we introduce the concept of service. In the physical CERIF data model, the classification of types for service happens with the cfSrv_Class entity, where a type is represented by a classification term (cfTerm) identified by its cfClassificationIdentifier (a uuid), and reused at instance level for assigning service types to service records.\"",
+        "cfClass": "cf7799e9-3477-11e1-b86c-0800200c9a66",
+        "cfDescrSrc": "CERIF Task Group",
+        "cfClassScheme": "39f413d8-e5ee-409a-95f1-d204b78508b9"
+      },
+      "createdAt": "2018-04-25T20:30:50.796Z"
+    }
+  },
+  "faculty": {
+    "9H5PkaBVtDDFMO85iybL": {
+      "createdAt": "2018-08-19T20:17:06.633Z",
+      "facultyName": " FACULTAD DE CIENCAS DE LA ADMINISTRACION ",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "updatedAt": "",
+      "facultyDesc": ""
+    },
+    "LKvbYjE3UQwkGokr1odq": {
+      "facultyName": "FACULTAD DE CIENCIAS NATURALES Y EXACTAS  ",
+      "subHq": {},
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T20:09:20.717Z",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "updatedAt": ""
+    },
+    "MfEg0efzGgM8sG9MlHM9": {
+      "updatedAt": "",
+      "facultyName": "FACULTAD DE SALUD",
+      "subHq": {},
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T21:06:07.724Z",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9"
+    },
+    "Q0Le1WD5C8975PpoZo7E": {
+      "facultyName": "FACULTAD DE INGENIERIA",
+      "subHq": {},
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T20:39:56.832Z",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "updatedAt": ""
+    },
+    "SYemFJ4Zw1h4uxxL1wIG": {
+      "createdAt": "2018-08-19T21:31:43.058Z",
+      "facultyName": " INSTITUTO DE PSICOLOGIA",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "updatedAt": "",
+      "facultyDesc": ""
+    },
+    "XhrbcomnkWezarvDxUzx": {
+      "updatedAt": "",
+      "facultyDesc": "",
+      "createdAt": "2018-04-19T21:27:00.964Z",
+      "facultyName": "INSTITUTO DE EDUACION Y PEDAGOGIA",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9"
+    },
+    "aEDYGROpm2SsLHCRkPgg": {
+      "updatedAt": "",
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T19:49:56.793Z",
+      "facultyName": "FACULTAD DE ARTES INTEGRADAS  ",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9"
+    },
+    "rkPWviC42PLlw3MBhymu": {
+      "facultyName": "FACULTAD DE HUMANIDADES ",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "updatedAt": "",
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T20:34:09.892Z"
+    }
+  },
+  "headquarter": {
+    "74K5k2YnYmuS7PWzt56p": {
+      "active": true,
+      "cfName": "Palmira",
+      "createdAt": "2018-08-03T19:38:52.676Z",
+      "relatedFacil": "",
+      "subHeadquarters": { "h2gGQ7SeXw22EResUwvS": true },
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "updatedAt": ""
+    },
+    "BfM5Az9MEeF3HDpCuOz9": {
+      "cfName": "Tulua",
+      "subHeadquarters": { "fFxC5Q3CDDMM9IxabhoE": true },
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "createdAt": "2019-08-03T19:38:52.676Z",
+      "active": true
+    },
+    "Bmkiiz1wGyDmVUMHNSw2": {
+      "relatedFacil": {},
+      "subHeadquarters": {
+        "WWxNJGJTbDa3ff5GliEJ": true,
+        "qW39OVJHrAInUYUErpX9": true
+      },
+      "updatedAt": "",
+      "active": true,
+      "cfOrgUnitId": "i9dzCErPCO4n9WUfjxR9",
+      "cfName": "Cali",
+      "createdAt": "2018-08-23T19:38:52.676Z"
+    }
+  }
+
+ 
+}

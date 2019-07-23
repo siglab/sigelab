@@ -13,7 +13,6 @@ export class SpinnerComponent implements OnInit {
   ngOnInit() {
   }
 
-
   public show() {
     this.showspinner = true;
   }
