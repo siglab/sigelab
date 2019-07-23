@@ -81,7 +81,7 @@ export class AdminUsuariosComponent implements OnInit {
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'apellido', 'email', 'perfiles'];
+  displayedColumnsPers = ['nombre', 'apellido', 'email', 'appRoles'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers')
@@ -143,12 +143,12 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.getRoles();
 
-    this.userService.listCfFacil().subscribe(data => {
-      console.log('data labs', data);
-      this.dataSourceFacil.data = data;
+    // this.userService.listCfFacil().subscribe(data => {
+    //   console.log('data labs', data);
+    //   this.dataSourceFacil.data = data;
 
-      this.laboraorios = data;
-    });
+    //   this.laboraorios = data;
+    // });
 
     this.userService.listCfFaculties().subscribe(data => {
 
@@ -158,12 +158,12 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     this.estructuraIdPers().then((data: any) => {
-
-      this.dataSourcePers.data = data.user;
+console.log(data)
+      this.dataSourcePers.data = data;
 
 
       setTimeout(() => {
-        if (data.user.length !== 0) {
+        if (data.length !== 0) {
           this.dataSourcePers.sort = this.sortPers;
           this.dataSourcePers.paginator = this.paginatorPers;
 
@@ -180,7 +180,11 @@ export class AdminUsuariosComponent implements OnInit {
       }, 2000);
     });
   }
-
+  estructuraIdPers(){
+    return this.serviceMod3.getusersCache().then(userssnap=>{
+      return this.serviceMod3.estructurarDataUsersAdmin(userssnap.data())
+    })
+  }
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
     this.role = JSON.parse(sessionStorage.getItem('rol'));
@@ -207,12 +211,14 @@ export class AdminUsuariosComponent implements OnInit {
       });
     });
   }
-
-  estructuraIdPers() {
-    const usuarios = [];
+  selectRow(row,estado){
+    this.estructuradatausuario(row).then(data => {
+      this.cambiardata(data, estado)
+    });
+  }
+  estructuradatausuario(row) {
     const promise = new Promise((resolve, reject) => {
-      this.serviceMod3.buscarUsuarios().then(user => {
-        user.forEach(doc => {
+      this.serviceMod3.getuser(row.uid).then(doc => {
 
           // tslint:disable-next-line:no-shadowed-variable
           const element = doc.data();
@@ -256,18 +262,11 @@ export class AdminUsuariosComponent implements OnInit {
                       llave: finalrol['llave']
                     };
 
-                    usuarios.push(usuario);
-
-
-                    if (user.size === usuarios.length) {
-
-                      resolve({ user: usuarios });
-                    }
+                      resolve(usuario);
                   });
 
                 });
             });
-        });
       });
     });
 
