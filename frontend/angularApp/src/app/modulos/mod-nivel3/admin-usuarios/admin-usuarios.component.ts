@@ -143,12 +143,11 @@ export class AdminUsuariosComponent implements OnInit {
 
     this.getRoles();
 
-    // this.userService.listCfFacil().subscribe(data => {
-    //   console.log('data labs', data);
-    //   this.dataSourceFacil.data = data;
+    this.userService.listCfFacil().subscribe(data => {
+      this.dataSourceFacil.data = data;
 
-    //   this.laboraorios = data;
-    // });
+      this.laboraorios = data;
+    });
 
     this.userService.listCfFaculties().subscribe(data => {
 
@@ -158,7 +157,6 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     this.estructuraIdPers().then((data: any) => {
-console.log(data)
       this.dataSourcePers.data = data;
 
 
@@ -212,6 +210,7 @@ console.log(data)
     });
   }
   selectRow(row,estado){
+    console.log(row)
     this.estructuradatausuario(row).then(data => {
       this.cambiardata(data, estado)
     });
@@ -226,7 +225,6 @@ console.log(data)
           this.serviceMod3
             .getPersona(element.cfPers ? element.cfPers : '123')
             .then(data => {
-              console.log(doc.id, data.data());
               const persona = data.data() ? data.data() : ' ninguno';
 
               let varconsulta;
@@ -236,7 +234,6 @@ console.log(data)
                 varconsulta = this.clientRole(persona['clientRole']);
               }
 
-              console.log(data.data());
               this.nombresRoles(element.appRoles,
                 varconsulta ? data.data().faculty : '').then(rol => {
 
@@ -613,13 +610,11 @@ console.log(data)
     this.editar = false;
     this.selection.clear();
     this.idp = item.idPers;
-    console.log(this.idp);
 
     this.idu = item.id;
 
     this.arrayPract = item.llave;
     this.tablesel = table;
-    console.log(item);
     this.apellido = item.apellido;
     this.nombre = item.nombre;
     this.genero = item.cfGender;
@@ -670,7 +665,6 @@ console.log(data)
             });
           }
         });
-
         this.setKeyAdmin(doc.labs, this.idp);
       }
     });
@@ -744,6 +738,8 @@ console.log(data)
     ).then(() => {
       this.serviceMod3.updatedUser(this.idu, this.usuario)
         .then(() => {
+          console.log(474,this.idu,this.usuario)
+          this.serviceMod3.updateCacheUser(this.idu,this.usuario)
         });
     });
 
@@ -950,38 +946,20 @@ console.log(data)
       }
     }
 
-    console.log(person);
 
 
     if (!bool) {
-      console.log('valida ok');
       this.alert.show();
       this.serviceMod3.agregarPersona(person).then(ok => {
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
-
-
-
-
-        /*
-        this.serviceMod3.Trazability(
-          this.user.uid, 'update', 'user', this.idu, { cfPers: ok.id, appRoles: rolesUsuario }
-        ).then(() => {
-
-        });
-
-        this.serviceMod3.setUser(this.idu, { cfPers: ok.id, appRoles: rolesUsuario });
-         */
         this.arrayPract.forEach((doc, index) => {
           if (doc.id === coor) {
-            console.log(ok.id, doc.labs);
             this.idp = ok.id;
             this.setKeyAdmin(doc.labs, ok.id);
           }
         });
-
-
         // ocultar loading
         this.alert.hide();
 
@@ -1028,7 +1006,6 @@ console.log(data)
     };
     facil.relatedPers[idP] = true;
 
-    console.log('revisar este lab', this.idlab);
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'cfFacil', this.idlab, facil
     ).then(() => {
@@ -1098,7 +1075,6 @@ console.log(data)
       showConfirmButton: true
     });
 
-    console.log(this.arrayPract);
   }
   applyFilterLab(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -1107,12 +1083,10 @@ console.log(data)
   }
 
   cambiardataLab(row) {
-    console.log(row.id);
     this.idlab = row.id;
   }
 
   cambiarDataFacultad(row) {
-    console.log(row.id);
     this.idfacultad = row.id;
   }
 
@@ -1125,7 +1099,6 @@ console.log(data)
 
   updatedAdminFacil(idlab, id) {
     // obtner referencia del director actual y borrarlo
-    console.log(idlab);
     this.serviceMod3
       .getSingleLaboratorios(idlab)
       .then((doc: any) => {
@@ -1161,7 +1134,6 @@ console.log(data)
               cfFacil: aux2
             };
 
-            console.log(data.facilityAdmin, id);
 
             if (data.facilityAdmin !== id) {
               this.serviceMod3.Trazability(
@@ -1239,7 +1211,6 @@ console.log(data)
     this.cedula = undefined;
     this.type = undefined;
     this.idp = '';
-    console.log(this.idu);
     this.nuevo = true;
 
     $('html, body').animate({ scrollTop: '600px' }, 'slow');

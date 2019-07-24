@@ -35,13 +35,13 @@ export class ServicesNivel3Service {
 
   }
 
-  getusersCache(){
+  getusersCache() {
     const colle = this.afs.collection('cache').doc('user');
     return colle.ref.get();
   }
 
-  getuser(userID){
-    const colle = this.afs.doc('user/'+userID);
+  getuser(userID) {
+    const colle = this.afs.doc('user/' + userID);
     return colle.ref.get();
   }
 
@@ -401,7 +401,6 @@ export class ServicesNivel3Service {
   estructurarDataUsersAdmin(data: any) {
     var datosestructuradosusuarios = []
     var users = data
-console.log(400,data)
     const promise = new Promise((resolve, reject) => {
       var cont = 0
       var datasize = Object.keys(users)
@@ -418,7 +417,7 @@ console.log(400,data)
 
           cont++
           if (cont === datasize.length) {
-            resolve(   datosestructuradosusuarios    )
+            resolve(datosestructuradosusuarios)
           }
         }
       }
@@ -429,5 +428,67 @@ console.log(400,data)
     return promise
   }
 
+
+  updateCacheUser(uid, user) {
+    return this.afs.collection('appRoles/').ref.get().then((querySnapshot) => {
+      var obRoles = {}
+      querySnapshot.forEach((doc) => {
+        obRoles[doc.id] = doc.data()
+      });
+      return obRoles
+    }).then(roles => {
+      var rolesstring = ''
+      for (const rol in user.appRoles) {
+        if (user.appRoles.hasOwnProperty(rol)) {
+          const element = user.appRoles[rol];
+          console.log(166,user, element, rol, roles)
+          if (element) {
+            rolesstring += roles[rol].roleName + ', '
+          }
+
+        }
+      }
+      const usuario = {
+        active: user.active,
+        appRoles: rolesstring,
+        updatedAt: user.updatedAt
+      }
+      const data = {}
+      data[uid] = usuario
+
+      return this.afs.doc('cache/user/').set(data, { merge: true })
+    })
+
+
+  }
+  pushCacheUsuario(active , apellido, appRoles, email, nombre, uid, updatedAt ) {
+    const usuario = {active , apellido, appRoles, email, nombre, uid, updatedAt }
+    const newusuario = {}
+    newusuario[uid] = usuario
+    return this.afs.doc('cache/user/').set(newusuario, { merge: true })
+  }
+
 }
 
+// active: true
+// appRoles: {}
+// cc: "123456"
+// cfBirthdate: Tue Jul 09 2019 00:00:00 GMT-0500 (hora estándar de Colombia) {}
+// cfClass: "cf7799e0-3477-11e1-b86c-0800200c9a66"
+// cfClassScheme: "6b2b7d24-3491-11e1-b86c-0800200c9a66"
+// cfFacil: {}
+// cfFamilyNames: "hur"
+// cfFirstNames: "frac"
+// cfGender: "Hombre"
+// cfOrgUnit: "UK6cYXc1iYXCdSU30xmr"
+// cfOtherNames: ""
+// cfUri: ""
+// clientRole: {}
+// createdAt: "2019-07-23T21:39:28.871Z"
+// email: "ejemplo@ejemplo.com"
+// faculty: {}
+// nouser: true
+// relatedEquipments: {}
+// type: "Contratista"
+// updatedAt: "2019-07-23T21:39:28.871Z"
+// user: ""
