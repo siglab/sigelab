@@ -440,7 +440,12 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
           if (elemento.cfAvailability) {
             disponibilidad = elemento.cfAvailability
           }
+          console.log(443,elemento.relatedServices,elemento.relatedPractices,elemento.relatedPractices)
           promesas.push(this.estructurarServicios(elemento.relatedServices))
+          promesas.push(this.estructurarPracticas(elemento.relatedPractices))
+          promesas.push(this.estructuraTelefonos(elemento.relatedPractices))
+
+
           let laboratorio = {
             uid: labsnapshot.id,
             nombre: elemento.cfName,
@@ -455,11 +460,9 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
               lat: 0,
               lon: 0
             },
-            telefonos: this.estructuraTelefonos(labsnapshot.id),
             info: {
               email: elemento.otros.email
             },
-            practicas: this.estructurarPracticas(elemento.relatedPractices),
             personal: this.buscarAnalistas(elemento.relatedPers),
             condiciones: elemento.cfConditions,
             disponibilidad: disponibilidad
@@ -492,7 +495,13 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
           return Promise.all(promesas).then(values => {
             console.log(439, values); // [3, 1337, "foo"] 
             laboratorio['servicios'] = values[0]
+            laboratorio['practicas'] = values[1]
+            laboratorio['telefonos'] = values[2]
+
+
             return laboratorio
+          }).catch(err=>{
+            console.log(504,err)
           });
 
         });
@@ -591,7 +600,6 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
           arr.push(serv);
         }
       })
-      console.log(arr)
       return arr
     })
   }
@@ -600,9 +608,10 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPracticas(item) {
     const arr = [];
-    if (item) {
+    var keys = Object.keys(item)
+
+    if (keys.length) {
       return new Promise((resolve, reject) => {
-        var keys = Object.keys(item)
         var cont = 0
         for (const clave in item) {
           // Controlando que json realmente tenga esa propiedad
@@ -668,6 +677,7 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
 
 
     } else {
+      console.log(arr)
       return arr;
     }
 
@@ -676,15 +686,14 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
   estructuraTelefonos(idlab) {
     var tels = [];
 
-    this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
+    return this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
       data.forEach(element => {
         console.log(element.data())
 
         tels.push(element.data().cfEAddrValue);
       });
+      return tels;
     });
-    return tels;
-
   }
 
   // METODO QUE ESTRUCTURA LAS VARIACIONES DE UN SERVICIO

@@ -429,7 +429,8 @@ export class ServicesNivel3Service {
   }
 
 
-  updateCacheUser(uid, user) {
+  updateCacheUser(uid, user, person?) {
+    console.log(433, uid, user, person)
     return this.afs.collection('appRoles/').ref.get().then((querySnapshot) => {
       var obRoles = {}
       querySnapshot.forEach((doc) => {
@@ -438,20 +439,41 @@ export class ServicesNivel3Service {
       return obRoles
     }).then(roles => {
       var rolesstring = ''
+      if (person) {
+        for (const lab in person.clientRole) {
+          if (person.clientRole.hasOwnProperty(lab)) {
+            const laboratorio = person.clientRole[lab];
+            for (const rol in laboratorio) {
+              if (laboratorio.hasOwnProperty(rol)) {
+                const clientrole = laboratorio[rol];
+                if (clientrole) {
+                  rolesstring += roles[rol].roleName + ', '
+                }
+              }
+            }
+          }
+        }
+      }
+     
       for (const rol in user.appRoles) {
         if (user.appRoles.hasOwnProperty(rol)) {
           const element = user.appRoles[rol];
-          console.log(166,user, element, rol, roles)
+          console.log(166, user, element, rol, roles)
           if (element) {
             rolesstring += roles[rol].roleName + ', '
           }
 
         }
       }
+      rolesstring = rolesstring.slice(0, -2);
+
       const usuario = {
         active: user.active,
         appRoles: rolesstring,
-        updatedAt: user.updatedAt
+        updatedAt: user.updatedAt,
+        apellido: person.cfFamilyNames || '',
+        nombre: person.cfFirstNames || ''
+
       }
       const data = {}
       data[uid] = usuario
@@ -461,8 +483,8 @@ export class ServicesNivel3Service {
 
 
   }
-  pushCacheUsuario(active , apellido, appRoles, email, nombre, uid, updatedAt ) {
-    const usuario = {active , apellido, appRoles, email, nombre, uid, updatedAt }
+  pushCacheUsuario(active, apellido, appRoles, email, nombre, uid, updatedAt) {
+    const usuario = { active, apellido, appRoles, email, nombre, uid, updatedAt }
     const newusuario = {}
     newusuario[uid] = usuario
     return this.afs.doc('cache/user/').set(newusuario, { merge: true })

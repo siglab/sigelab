@@ -408,7 +408,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) {
- 
+    console.log(item.practicas)
     this.itemsel = item;
     console.log(413,this.itemsel)
     this.dataSource2.data = item.servicios;

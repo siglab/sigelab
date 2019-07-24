@@ -213,7 +213,6 @@ export class AdminUsuariosComponent implements OnInit {
     });
   }
   selectRow(row,estado){
-    console.log(row)
     this.estructuradatausuario(row).then(data => {
       this.cambiardata(data, estado)
     });
@@ -740,10 +739,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.user.uid, 'update', 'user', this.idu, this.usuario
     ).then(() => {
       this.serviceMod3.updatedUser(this.idu, this.usuario)
-        .then(() => {
-          console.log(474,this.idu,this.usuario)
-          this.serviceMod3.updateCacheUser(this.idu,this.usuario)
-        });
+       
     });
 
 
@@ -756,6 +752,8 @@ export class AdminUsuariosComponent implements OnInit {
 
         () => {
           // toca resetear en todos los laboratorios si el estado cambia
+          this.serviceMod3.updateCacheUser(this.idu,this.usuario,this.person)
+
           this.alert.hide();
 
           swal({
@@ -782,6 +780,7 @@ export class AdminUsuariosComponent implements OnInit {
         this.serviceMod3.Trazability(
           this.user.uid, 'update', 'cfFacil', doc.id, nuevoEstado
         ).then(() => {
+          console.log(784,doc.id, nuevoEstado)
           this.serviceMod3.setLaboratorio(doc.id, nuevoEstado);
         });
       });
@@ -1142,7 +1141,10 @@ export class AdminUsuariosComponent implements OnInit {
               this.serviceMod3.Trazability(
                 this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
               ).then(() => {
-                this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
+                this.serviceMod3.updatedPersona(data.facilityAdmin, persona).then(()=>{
+                  // this.serviceMod3.updateCacheUser(this.idu,this.usuario,this.person)
+
+                })
               });
 
             }
@@ -1152,7 +1154,6 @@ export class AdminUsuariosComponent implements OnInit {
               this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: id }
             ).then(() => {
               this.serviceMod3.updatedLab(idlab, { facilityAdmin: id }).then(resUpdate=>{
-                console.log(1155,idlab,id,adminSnapData)
                 // this._Modulo2Service.updateCacheLaboratorios()
               });
             });
