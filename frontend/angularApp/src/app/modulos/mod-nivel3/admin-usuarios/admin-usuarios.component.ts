@@ -16,6 +16,8 @@ import { ROLESARRAY } from '../../../config';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
+import { Modulo2Service } from "../../mod-nivel2/services/modulo2.service";
+
 declare var $: any;
 
 @Component({
@@ -132,7 +134,8 @@ export class AdminUsuariosComponent implements OnInit {
   constructor(private obs: ObservablesService,
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
-    private userService: QrService
+    private userService: QrService,
+    private _Modulo2Service:Modulo2Service
   ) { }
 
   ngOnInit() {
@@ -1109,7 +1112,7 @@ export class AdminUsuariosComponent implements OnInit {
             const aux = {};
             const aux2 = {};
             const admiUser = result.data().clientRole;
-
+            const adminSnapData = result.data()
             const cfFacil = result.data().cfFacil;
 
             for (const key in admiUser) {
@@ -1148,7 +1151,10 @@ export class AdminUsuariosComponent implements OnInit {
             this.serviceMod3.Trazability(
               this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: id }
             ).then(() => {
-              this.serviceMod3.updatedLab(idlab, { facilityAdmin: id });
+              this.serviceMod3.updatedLab(idlab, { facilityAdmin: id }).then(resUpdate=>{
+                console.log(1155,idlab,id,adminSnapData)
+                // this._Modulo2Service.updateCacheLaboratorios()
+              });
             });
 
           })
