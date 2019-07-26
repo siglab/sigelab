@@ -402,8 +402,16 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   selectRow(row){
+    this.alert.show();
+
     this.query.getDataLab(row).then(data => {
       this.cambiardata(data)
+      this.alert.hide();
+
+    }).catch(err=>{
+      console.log(err)
+      this.alert.hide();
+
     });
   }
 

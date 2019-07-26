@@ -116,8 +116,16 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   selectRow(row){
+    this.alert.show();
+
     this.query.getDataServ(row).then(data => {
       this.cambiardata(data)
+      this.alert.hide();
+
+    }).catch(err=>{
+      console.log(err)
+      this.alert.hide();
+
     });
   }
 

@@ -213,8 +213,15 @@ export class AdminUsuariosComponent implements OnInit {
     });
   }
   selectRow(row,estado){
+    this.alert.show();
+
     this.estructuradatausuario(row).then(data => {
       this.cambiardata(data, estado)
+      this.alert.hide();
+
+    }).catch(err=> {
+      this.alert.hide();
+
     });
   }
   estructuradatausuario(row) {
