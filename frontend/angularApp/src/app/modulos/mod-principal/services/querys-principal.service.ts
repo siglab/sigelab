@@ -52,11 +52,11 @@ export class QuerysPrincipalService {
     return colle.ref.get();
   }
 
-    // METODO QUE TRAE LA EL DOCUMENTO CACHE DE TODOS LAS PRACTICAS
-    getPractices() {
-      const colle = this.afs.collection('cache').doc('practice');
-      return colle.ref.get();
-    }
+  // METODO QUE TRAE LA EL DOCUMENTO CACHE DE TODOS LAS PRACTICAS
+  getPractices() {
+    const colle = this.afs.collection('cache').doc('practice');
+    return colle.ref.get();
+  }
   // tslint:disable-next-line:member-ordering
   private racesCollection: AngularFirestoreCollection<any>;
   // METODO QUE TRAE LA COLECCION DE TODOS LAS PRUEBAS
@@ -206,12 +206,11 @@ export class QuerysPrincipalService {
     return promise;
   }
 
-  
 
 
 
 
-  //VIEJO!!!
+
   // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS   
   getDataServ(data: any) {
 
@@ -220,7 +219,7 @@ export class QuerysPrincipalService {
 
       if (elemento.active) {
         if (elemento.cfFacil) {
-        return  this.buscarLaboratorio(elemento.cfFacil).then(lab => {
+          return this.buscarLaboratorio(elemento.cfFacil).then(lab => {
             const labencontrado = lab.data();
 
             if (labencontrado) {
@@ -232,44 +231,47 @@ export class QuerysPrincipalService {
 
                     const espacioLab = espacio.data();
 
-                   return  this.buscarDireccion(labencontrado.headquarter, labencontrado.subHq, labencontrado.mainSpace).then(direspa => {
-                      const servicios = {
-                        nombreserv: elemento.cfName,
-                        nombrelab: labencontrado.cfName,
-                        infoServ: {
-                          descripcion: elemento.cfDesc,
-                          precio: elemento.cfPrice,
-                          variaciones: this.variations(serv.id),
-                          equipos: this.estructurarEquipos(elemento.relatedEquipments),
-                          condiciones: elemento.cfCondition,
-                          parametros: elemento.parametros,
-                          descuento: elemento.descuento,
-                          uid: serv.id
-                        },
-                        infoLab: {
-                          uid: elemento.cfFacil,
-                          direspacio: direspa,
-                          telefonos: this.estructuraTelefonos(elemento.cfFacil),
-                          personal: this.buscarAnalistas(labencontrado.relatedPers),
-                          iddirecto: labencontrado.facilityAdmin,
-                          desc: labencontrado.cfDescr,
-                          email: labencontrado.otros.email,
-                          escuela: labencontrado.knowledgeArea,
-                          inves: labencontrado.researchGroup,
-                          director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                          emaildir: duenoLab.email,
-                          condiciones: labencontrado.cfConditions,
-                          disponibilidad: labencontrado.cfAvailability
-                        },
+                    return this.buscarDireccion(labencontrado.headquarter, labencontrado.subHq, labencontrado.mainSpace).then(direspa => {
+                      return this.estructuraTelefonos(elemento.cfFacil).then(snapTelefonos => {
+                        const servicios = {
+                          nombreserv: elemento.cfName,
+                          nombrelab: labencontrado.cfName,
+                          infoServ: {
+                            descripcion: elemento.cfDesc,
+                            precio: elemento.cfPrice,
+                            variaciones: this.variations(serv.id),
+                            equipos: this.estructurarEquipos(elemento.relatedEquipments),
+                            condiciones: elemento.cfCondition,
+                            parametros: elemento.parametros,
+                            descuento: elemento.descuento,
+                            uid: serv.id
+                          },
+                          infoLab: {
+                            uid: elemento.cfFacil,
+                            direspacio: direspa,
+                            telefonos: snapTelefonos,
+                            personal: this.buscarAnalistas(labencontrado.relatedPers),
+                            iddirecto: labencontrado.facilityAdmin,
+                            desc: labencontrado.cfDescr,
+                            email: labencontrado.otros.email,
+                            escuela: labencontrado.knowledgeArea,
+                            inves: labencontrado.researchGroup,
+                            director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                            emaildir: duenoLab.email,
+                            condiciones: labencontrado.cfConditions,
+                            disponibilidad: labencontrado.cfAvailability
+                          },
 
-                        coord: {
-                          lat: espacioLab.spaceData.geoRep.longitud,
-                          lon: espacioLab.spaceData.geoRep.latitud
-                        }
-                      };
+                          coord: {
+                            lat: espacioLab.spaceData.geoRep.longitud,
+                            lon: espacioLab.spaceData.geoRep.latitud
+                          }
+                        };
 
 
-                      return servicios
+                        return servicios
+                      })
+
 
 
                     });
@@ -309,7 +311,7 @@ export class QuerysPrincipalService {
 
           }
           cont++
-console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
+          console.log(practicas, cont, datasize.length, this.datosLabsEstructurados)
           if (cont === datasize.length) {
             resolve({
               data: this.datosLabsEstructurados
@@ -329,68 +331,68 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
 
     const promise = new Promise((resolve, reject) => {
 
-            this.afs.doc('practice/' + data.uid).ref.get().then(practiceSnap => {//programmingData
-              this.afs.collection('practice/' + data.uid+'/programmingData').ref.get().then(programmingDataSnap=>{
-                const practica = practiceSnap.data()
-                programmingDataSnap.forEach(programing =>{
-                  const prog = programing.data();
-  
-                  this.buscarLaboratorio(practica.cfFacil).then(lab => {
-                    const labencontrado = lab.data();
-    
-                    this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
-                      const duenoLab = dueno.data();
-                      if (duenoLab && labencontrado.mainSpace) {
-    
-                        this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
-    
-                          const espacioLab = espacio.data();
-    
-                          const pruebas = {
-                            nombreprub: practica.practiceName,
-                            nombrelab: labencontrado.cfName,
-                            infoPrub: {
-                              programacion: {
-                                id_pro: programing.id,
-                                estudiantes: prog.noStudents,
-                                horario: prog.schedule,
-                                semestre: prog.semester
-                              }
-                            },
-                            infoLab: {
-                              dir: labencontrado.otros.direccion,
-                              desc: labencontrado.cfDescr,
-                              telefonos: this.estructuraTelefonos(practica.cfFacil),
-                              email: labencontrado.otros.email,
-                              escuela: labencontrado.knowledgeArea,
-                              inves: labencontrado.researchGroup,
-                              director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-                              condiciones: labencontrado.cfConditions,
-                              disponibilidad: labencontrado.cfAvailability
-                            },
-                            coord: {
-                              lat: espacioLab.spaceData.geoRep.longitud,
-                              lon: espacioLab.spaceData.geoRep.latitud
-                            }
-                          };
-    
-    
-                            resolve(pruebas);
-                        });
-    
+      this.afs.doc('practice/' + data.uid).ref.get().then(practiceSnap => {//programmingData
+        this.afs.collection('practice/' + data.uid + '/programmingData').ref.get().then(programmingDataSnap => {
+          const practica = practiceSnap.data()
+          programmingDataSnap.forEach(programing => {
+            const prog = programing.data();
+
+            this.buscarLaboratorio(practica.cfFacil).then(lab => {
+              const labencontrado = lab.data();
+
+              this.buscarDirector(labencontrado.facilityAdmin).then(dueno => {
+                const duenoLab = dueno.data();
+                if (duenoLab && labencontrado.mainSpace) {
+
+                  this.buscarEspacio(labencontrado.mainSpace).then(espacio => {
+
+                    const espacioLab = espacio.data();
+
+                    const pruebas = {
+                      nombreprub: practica.practiceName,
+                      nombrelab: labencontrado.cfName,
+                      infoPrub: {
+                        programacion: {
+                          id_pro: programing.id,
+                          estudiantes: prog.noStudents,
+                          horario: prog.schedule,
+                          semestre: prog.semester
+                        }
+                      },
+                      infoLab: {
+                        dir: labencontrado.otros.direccion,
+                        desc: labencontrado.cfDescr,
+                        telefonos: this.estructuraTelefonos(practica.cfFacil),
+                        email: labencontrado.otros.email,
+                        escuela: labencontrado.knowledgeArea,
+                        inves: labencontrado.researchGroup,
+                        director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
+                        condiciones: labencontrado.cfConditions,
+                        disponibilidad: labencontrado.cfAvailability
+                      },
+                      coord: {
+                        lat: espacioLab.spaceData.geoRep.longitud,
+                        lon: espacioLab.spaceData.geoRep.latitud
                       }
-                    });
-    
-    
+                    };
+
+
+                    resolve(pruebas);
                   });
-                  
-                })
-     
-           
-              })
-         
-            }, err => console.log(err));
-  
+
+                }
+              });
+
+
+            });
+
+          })
+
+
+        })
+
+      }, err => console.log(err));
+
 
     });
 
@@ -440,7 +442,7 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
           if (elemento.cfAvailability) {
             disponibilidad = elemento.cfAvailability
           }
-          console.log(443,elemento.relatedServices,elemento.relatedPractices,elemento.relatedPractices)
+          console.log(443, elemento.relatedServices, elemento.relatedPractices, elemento.relatedPractices)
           promesas.push(this.estructurarServicios(elemento.relatedServices))
           promesas.push(this.estructurarPracticas(elemento.relatedPractices))
           promesas.push(this.estructuraTelefonos(elemento.relatedPractices))
@@ -500,8 +502,8 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
 
 
             return laboratorio
-          }).catch(err=>{
-            console.log(504,err)
+          }).catch(err => {
+            console.log(504, err)
           });
 
         });
@@ -568,118 +570,142 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
     var arr = [];
     var promesas = []
 
-    for (const clave in item) {
-      // Controlando que json realmente tenga esa propiedad
-      if (item.hasOwnProperty(clave)) {
 
-        if (item[clave]) {
-          var serv = this.afs.doc('cfSrv/' + clave).ref.get()
-          promesas.push(serv)
+
+    if ((typeof item) == 'object') {
+      var keys = Object.keys(item)
+
+      if (keys.length) {
+        for (const clave in item) {
+          // Controlando que json realmente tenga esa propiedad
+          if (item.hasOwnProperty(clave)) {
+
+            if (item[clave]) {
+              var serv = this.afs.doc('cfSrv/' + clave).ref.get()
+              promesas.push(serv)
+            }
+
+          }
         }
 
+        return Promise.all(promesas).then(responses => {
+          responses.forEach(data => {
+            var servicio = data.data();
+
+            if (servicio.cfName) {
+              var serv = {
+                nombre: servicio.cfName,
+                descripcion: servicio.cfDesc,
+                precio: servicio.cfPrice,
+                activo: servicio.active,
+                equipos: this.estructurarEquipos(servicio.relatedEquipments),
+                condiciones: servicio.cfCondition,
+                descuento: servicio.descuento,
+                parametros: servicio.parametros,
+                variaciones: this.variations(data.key),
+                uid: data.id
+              };
+              arr.push(serv);
+            }
+          })
+          return arr
+        })
+
+
+      } else {
+        console.log(arr)
+        return arr;
       }
+    } else {
+      return arr
     }
 
-    return Promise.all(promesas).then(responses => {
-      responses.forEach(data => {
-        var servicio = data.data();
 
-        if (servicio.cfName) {
-          var serv = {
-            nombre: servicio.cfName,
-            descripcion: servicio.cfDesc,
-            precio: servicio.cfPrice,
-            activo: servicio.active,
-            equipos: this.estructurarEquipos(servicio.relatedEquipments),
-            condiciones: servicio.cfCondition,
-            descuento: servicio.descuento,
-            parametros: servicio.parametros,
-            variaciones: this.variations(data.key),
-            uid: data.id
-          };
-          arr.push(serv);
-        }
-      })
-      return arr
-    })
+
   }
 
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPracticas(item) {
     const arr = [];
-    var keys = Object.keys(item)
+    if ((typeof item) == 'object') {
+      var keys = Object.keys(item)
 
-    if (keys.length) {
-      return new Promise((resolve, reject) => {
-        var cont = 0
-        for (const clave in item) {
-          // Controlando que json realmente tenga esa propiedad
-          cont++
-          if (item.hasOwnProperty(clave)) {
+      if (keys.length) {
+        return new Promise((resolve, reject) => {
+          var cont = 0
+          for (const clave in item) {
+            // Controlando que json realmente tenga esa propiedad
+            cont++
+            if (item.hasOwnProperty(clave)) {
 
-            this.afs.doc('practice/' + clave).ref.get().then(data => {
+              this.afs.doc('practice/' + clave).ref.get().then(data => {
 
-              const practica = data.data();
-              this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
+                const practica = data.data();
+                this.afs.doc('practice/' + clave).collection('programmingData').ref.get().then(data2 => {
 
-                // funciona con una programacion, cuando hayan mas toca crear otro metodo
-                if (data2.docs[0].exists) {
-                  const prog = data2.docs[0].data();
+                  // funciona con una programacion, cuando hayan mas toca crear otro metodo
+                  if (data2.docs[0].exists) {
+                    const prog = data2.docs[0].data();
 
-                  const pract = {
-                    nombre: practica.practiceName,
-                    id: data.id,
-                    programacion: {
+                    const pract = {
+                      nombre: practica.practiceName,
+                      id: data.id,
+                      programacion: {
 
-                      id_pro: data2.docs[0].id,
-                      estudiantes: prog.noStudents,
-                      horario: prog.schedule,
-                      semestre: prog.semester
-                    },
-                    activo: practica.active
-                  };
+                        id_pro: data2.docs[0].id,
+                        estudiantes: prog.noStudents,
+                        horario: prog.schedule,
+                        semestre: prog.semester
+                      },
+                      activo: practica.active
+                    };
 
 
-                  if (practica.active) {
-                    arr.push(pract);
+                    if (practica.active) {
+                      arr.push(pract);
+                    }
+
+                  } else {
+
+                    const pract = {
+                      nombre: practica ? practica.practiceName : 'ninguno',
+                      activo: practica ? practica.active : 'none'
+                    };
+
+                    if (practica.active) {
+                      arr.push(pract);
+                    }
+
+                  }
+                  if (cont == keys.length) {
+                    resolve(arr)
                   }
 
-                } else {
-
-                  const pract = {
-                    nombre: practica ? practica.practiceName : 'ninguno',
-                    activo: practica ? practica.active : 'none'
-                  };
-
-                  if (practica.active) {
-                    arr.push(pract);
+                }).catch(err => {
+                  if (cont == keys.length) {
+                    resolve(arr)
                   }
+                  console.log(err)
+                });
 
-                }
-                if (cont == keys.length) {
-                  resolve(arr)
-                }
-
-              }).catch(err => {
-                if (cont == keys.length) {
-                  resolve(arr)
-                }
-                console.log(err)
               });
 
-            });
 
-
+            }
           }
-        }
-      });
+        });
 
 
+      } else {
+        console.log(arr)
+        return arr;
+      }
     } else {
-      console.log(arr)
-      return arr;
+      return arr
     }
+
+
 
   }
 
@@ -687,12 +713,19 @@ console.log(practicas,cont, datasize.length,this.datosLabsEstructurados)
     var tels = [];
 
     return this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
-      data.forEach(element => {
-        console.log(element.data())
+      console.log(data.empty)
+      if (data.empty) {
+        return tels;
 
-        tels.push(element.data().cfEAddrValue);
-      });
-      return tels;
+      } else {
+        data.forEach(element => {
+          console.log(element.data())
+
+          tels.push(element.data().cfEAddrValue);
+        });
+        return tels;
+      }
+
     });
   }
 

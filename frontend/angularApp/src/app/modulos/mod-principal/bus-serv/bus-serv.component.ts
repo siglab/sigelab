@@ -437,9 +437,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.iconos.info = true;
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-
     this.itemsel = item;
-
     if (item.infoServ.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
     }
