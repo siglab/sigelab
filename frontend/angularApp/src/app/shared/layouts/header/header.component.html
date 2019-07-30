@@ -55,9 +55,12 @@
               class="user-image"
               alt="User Image"
             />
-            <span *ngIf="this.usuario.displayName" class="hidden-xs name">{{
+            <span *ngIf="this.usuario.displayName; else noNameTemplate" class="hidden-xs name">{{
               this.usuario.displayName.toLowerCase().split(' ')[0]
             }}</span>
+            <ng-template #noNameTemplate>
+              <span class="hidden-xs name">Usuario</span>
+            </ng-template>
           </a>
           <ul class="dropdown-menu">
             <li class="user-header">
@@ -78,9 +81,12 @@
               </p>
               <ng-template #noIternalUser>
                 <p>
-                  <span *ngIf="this.usuario.displayName" class="name">
+                  <span *ngIf="this.usuario.displayName; else noUserName" class="name">
                    {{ this.usuario.displayName.toLowerCase() }}
                   </span>
+                  <ng-template #noUserName>
+                    <span>Usuario registrado</span>
+                  </ng-template>
                   <small>Usuario no Institucional</small>
                 </p>
               </ng-template>

@@ -1,11 +1,28 @@
-/*  url para la api sabs*/
-export const URLAPI = 'http://localhost:1337/inventario/buscar';
-/* url para el qr*/
-export const URLQR = 'https://demosigelab.univalle.edu.co/principal/qrinventario/';
-/* cloud function de envio de correos */
-export const URLCORREO = 'https://us-central1-sigelab-univalle.cloudfunctions.net/enviarCorreo';
-export const URLUSER = 'https://us-central1-sigelab-univalle.cloudfunctions.net/createUser';
-export const URLDISABLED = 'https://us-central1-sigelab-univalle.cloudfunctions.net/disablePractices';
+/**
+  * Created by: Geoprocess S.A.S
+  * Created on: 27/07/2018
+  * Last modification by: Julian Rodríguez
+  * Description: Project Api points routes and default application config.
+*/
+
+// Application default config variables initialization
+const APP_DOMAIN_URL = 'YOUR_APP_DOMAIN';
+const ORG_EMAIL_DOMAIL = 'YOUR_ORGANIZATION_COMPLETE_EMAIL_DOMAIN';
+const MAIN_CLOUD_FUNCTIONS_ROUTE = 'YOUR_GIVEN_CLOUD_FUNCTIONS_URL_HERE';
+
+/**
+ * DO NOT TOUCH ANYTHING FROM HERE TO BELOW
+ */
+/* Application API routes */
+export const URLCORREO = 'https://' + MAIN_CLOUD_FUNCTIONS_ROUTE + '/enviarCorreo';
+export const URLUSER = 'https://' + MAIN_CLOUD_FUNCTIONS_ROUTE + '/createUser';
+export const URLDISABLED = 'https://' + MAIN_CLOUD_FUNCTIONS_ROUTE + '/disablePractices';
+export const URLQR = 'https://' + APP_DOMAIN_URL + 'principal/qrinventario/';
+/* Organization restrictions variable for internal users */
+/* Users logged with this email domain will see some options and functionalities that other users will not */
+export const correoUnivalle = ORG_EMAIL_DOMAIL;
+/*Default application base roles */
 export const ROLESARRAY = ['UlcSFw3BLPAdLa533QKP', 'lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75',
 'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
-export const correoUnivalle = 'correounivalle.edu.co';
+/* Default Universidad del Valle SABS API */
+export const URLAPI = 'http://localhost:1337/inventario/buscar';
