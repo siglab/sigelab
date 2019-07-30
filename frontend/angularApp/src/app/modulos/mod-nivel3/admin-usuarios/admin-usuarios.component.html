@@ -59,10 +59,10 @@
                   </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="perfiles">
+                <ng-container matColumnDef="appRoles">
                   <mat-header-cell *matHeaderCellDef mat-sort-header> Perfiles
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.roles}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.appRoles}} </mat-cell>
                 </ng-container>
 
                 <!-- <ng-container matColumnDef="estado">
@@ -72,7 +72,7 @@
                 </ng-container> -->
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsPers"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="cambiardata(row, 'activos')"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsPers;" style="cursor: pointer;" (click)="selectRow(row, 'activos')"></mat-row>
               </mat-table>
 
               <mat-paginator #paginatorPers="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">

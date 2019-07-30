@@ -34,6 +34,7 @@ const createUser = (req, res) => {
         return ref.doc(`/user/${req.uid}`).set(usr)
          .then(() => {
           console.log('se creo un nuevo usuario');
+          pushCacheUsuario(usr.active , '', usr.appRoles, usr.email, '', req.uid, usr.createdAt )
           return res.status(200).send({ msj: "exito creando el usuario."});
         }).catch(err => console.log('ocurrio un error al crear el nuevo usuario', err));
        // si la consulta retorna un valor se asigna el usuario a la persona y viceversa
@@ -49,13 +50,22 @@ const createUser = (req, res) => {
         .then(() => {
            console.log('se asocio correctamente el usuario');
            return ref.doc(`/user/${req.uid}`).set(usr)
-                   .then(() =>{ console.log('se asocio correctamente la persona');
+                   .then(() =>{ 
+                    pushCacheUsuario(usr.active , persona.cfFamilyNames, usr.appRoles, usr.email, persona.cfFirstNames, req.uid, usr.createdAt ) 
+                    console.log('se asocio correctamente la persona');
                return res.status(200).send({ msj: "exito creando el usuario"});
             }).catch(err => console.log('no se pudo asociar correctamente la persona', err));
          }).catch(err => console.log('no se pudo asociar correctamente el usuario', err));
       }
      }).catch(err => console.log('fallo la consulta', err));
 };
+
+let pushCacheUsuario = (active , apellido, appRoles, email, nombre, uid, updatedAt )=> {
+  const usuario = {active , apellido, appRoles, email, nombre, uid, updatedAt }
+  const newusuario = {}
+  newusuario[uid] = usuario
+  return ref.doc('cache/user/').set(newusuario, { merge: true })
+}
 
 let sendMail = (req, res) => {
   var mailsolicitante = {

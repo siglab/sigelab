@@ -239,10 +239,11 @@ export class Modulo2Service {
     return this.afs.doc('cache/cfFacil/').set(data, { merge: true });
 
   }
-  pushCacheLaboratorios(active = false,director, directoremail , escuela  , inves  ,  labEmail  ,
+  pushCacheLaboratorios(active = false, director, directoremail, escuela, inves, labEmail,
     nombre, uid, updatedAt
-    ) {
-    const laboratorio = {active,director, directoremail , escuela  , inves  ,  labEmail  ,
+  ) {
+    const laboratorio = {
+      active, director, directoremail, escuela, inves, labEmail,
       nombre, uid, updatedAt
     }
     const newLAb = {}
@@ -262,8 +263,8 @@ export class Modulo2Service {
 
     return this.afs.doc('cache/cfSrv/').set(data, { merge: true })
   }
-  pushCacheServicios(active = false,nombre,nombrelab,uid,updatedAt ) {
-    const servicio = {active,nombre,nombrelab,uid,updatedAt }
+  pushCacheServicios(active = false, nombre, nombrelab, uid, updatedAt) {
+    const servicio = { active, nombre, nombrelab, uid, updatedAt }
     const newServicio = {}
     newServicio[uid] = servicio
     return this.afs.doc('cache/cfSrv/').set(newServicio, { merge: true })
@@ -347,14 +348,25 @@ export class Modulo2Service {
   addPractica(doc) {
     return this.afs.collection('practice').add(doc);
   }
-  pushCachePractice(active ,subjectCode, practiceName , semester  , noStudents    ,
-     uid, updatedAt
-    ) {
-    const practice = {active,subjectCode, practiceName , semester  , noStudents  , uid, updatedAt  }
+  pushCachePractice(active, subjectCode, practiceName, semester, noStudents,
+    uid, updatedAt
+  ) {
+    const practice = { active, subjectCode, practiceName, semester, noStudents, uid, updatedAt }
     const newPractice = {}
     newPractice[uid] = practice
     return this.afs.doc('cache/practice/').set(newPractice, { merge: true });
 
+  }
+
+  updateCachePractice(active, subjectCode, practiceName, semester, noStudents,uid, updatedAt) {
+    const practice = {
+      active, subjectCode, practiceName, semester, noStudents,
+      uid, updatedAt
+    }
+    const data = {}
+    data[uid] = practice
+
+    return this.afs.doc('cache/practice/').set(data, { merge: true })
   }
 
   addProgramacion(idprac, doc) {

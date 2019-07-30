@@ -116,8 +116,16 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   selectRow(row){
+    this.alert.show();
+
     this.query.getDataServ(row).then(data => {
       this.cambiardata(data)
+      this.alert.hide();
+
+    }).catch(err=>{
+      console.log(err)
+      this.alert.hide();
+
     });
   }
 
@@ -437,9 +445,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.iconos.info = true;
 
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-
     this.itemsel = item;
-
     if (item.infoServ.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
     }
