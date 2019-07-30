@@ -1,7 +1,7 @@
 <p align="center">
- <img style="width:auto; max-height:200px" src="./frontend/angularApp/src/assets/img/Propuesta_1_Sigelab-15.png" alt="SigeLAB Logo">
+ <img width="auto" max-height="200px" src="./frontend/angularApp/src/assets/img/Propuesta_1_Sigelab-15.png" alt="SigeLAB Logo">
  <br>
- <img style="width:300px; margin-top:-20px" src="./frontend/angularApp/src/assets/img/Logo-UV-Vice.png" alt="VRIN UV Logo">
+ <img width="300px" margin-top="-20px" src="./frontend/angularApp/src/assets/img/Logo-UV-Vice.png" alt="VRIN UV Logo">
 </p>
 
 
