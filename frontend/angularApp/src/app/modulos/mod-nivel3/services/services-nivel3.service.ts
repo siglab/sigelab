@@ -35,6 +35,15 @@ export class ServicesNivel3Service {
 
   }
 
+  getusersCache() {
+    const colle = this.afs.collection('cache').doc('user');
+    return colle.ref.get();
+  }
+
+  getuser(userID) {
+    const colle = this.afs.doc('user/' + userID);
+    return colle.ref.get();
+  }
 
   getAppRoles() {
     return this.afs.collection('appRoles').ref.get();
@@ -389,5 +398,119 @@ export class ServicesNivel3Service {
 
   }
 
+  estructurarDataUsersAdmin(data: any) {
+    var datosestructuradosusuarios = []
+    var users = data
+    const promise = new Promise((resolve, reject) => {
+      var cont = 0
+      var datasize = Object.keys(users)
+
+      for (const key in users) {
+        if (users.hasOwnProperty(key)) {
+          const usuario = users[key]
+          if (usuario.active) {
+            usuario.active = 'Activo'
+          } else {
+            usuario.active = 'Inactivo'
+          }
+          datosestructuradosusuarios.push(usuario)
+
+          cont++
+          if (cont === datasize.length) {
+            resolve(datosestructuradosusuarios)
+          }
+        }
+      }
+
+    });
+
+
+    return promise
+  }
+
+
+  updateCacheUser(uid, user, person?) {
+    console.log(433, uid, user, person)
+    return this.afs.collection('appRoles/').ref.get().then((querySnapshot) => {
+      var obRoles = {}
+      querySnapshot.forEach((doc) => {
+        obRoles[doc.id] = doc.data()
+      });
+      return obRoles
+    }).then(roles => {
+      var rolesstring = ''
+      if (person) {
+        for (const lab in person.clientRole) {
+          if (person.clientRole.hasOwnProperty(lab)) {
+            const laboratorio = person.clientRole[lab];
+            for (const rol in laboratorio) {
+              if (laboratorio.hasOwnProperty(rol)) {
+                const clientrole = laboratorio[rol];
+                if (clientrole) {
+                  rolesstring += roles[rol].roleName + ', '
+                }
+              }
+            }
+          }
+        }
+      }
+     
+      for (const rol in user.appRoles) {
+        if (user.appRoles.hasOwnProperty(rol)) {
+          const element = user.appRoles[rol];
+          console.log(166, user, element, rol, roles)
+          if (element) {
+            rolesstring += roles[rol].roleName + ', '
+          }
+
+        }
+      }
+      rolesstring = rolesstring.slice(0, -2);
+
+      const usuario = {
+        active: user.active,
+        appRoles: rolesstring,
+        updatedAt: user.updatedAt,
+        apellido: person.cfFamilyNames || '',
+        nombre: person.cfFirstNames || ''
+
+      }
+      const data = {}
+      data[uid] = usuario
+
+      return this.afs.doc('cache/user/').set(data, { merge: true })
+    })
+
+
+  }
+  pushCacheUsuario(active, apellido, appRoles, email, nombre, uid, updatedAt) {
+    const usuario = { active, apellido, appRoles, email, nombre, uid, updatedAt }
+    const newusuario = {}
+    newusuario[uid] = usuario
+    return this.afs.doc('cache/user/').set(newusuario, { merge: true })
+  }
+
 }
 
+// active: true
+// appRoles: {}
+// cc: "123456"
+// cfBirthdate: Tue Jul 09 2019 00:00:00 GMT-0500 (hora estándar de Colombia) {}
+// cfClass: "cf7799e0-3477-11e1-b86c-0800200c9a66"
+// cfClassScheme: "6b2b7d24-3491-11e1-b86c-0800200c9a66"
+// cfFacil: {}
+// cfFamilyNames: "hur"
+// cfFirstNames: "frac"
+// cfGender: "Hombre"
+// cfOrgUnit: "UK6cYXc1iYXCdSU30xmr"
+// cfOtherNames: ""
+// cfUri: ""
+// clientRole: {}
+// createdAt: "2019-07-23T21:39:28.871Z"
+// email: "ejemplo@ejemplo.com"
+// faculty: {}
+// nouser: true
+// relatedEquipments: {}
+// type: "Contratista"
+// updatedAt: "2019-07-23T21:39:28.871Z"
+// user: ""

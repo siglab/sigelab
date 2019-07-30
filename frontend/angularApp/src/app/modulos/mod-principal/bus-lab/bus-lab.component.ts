@@ -401,23 +401,31 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     }
   }
 
+  selectRow(row){
+    this.alert.show();
+
+    this.query.getDataLab(row).then(data => {
+      this.cambiardata(data)
+      this.alert.hide();
+
+    }).catch(err=>{
+      console.log(err)
+      this.alert.hide();
+
+    });
+  }
+
   cambiardata(item) {
-    /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
-    // $('html, body').animate({ scrollTop: '400px' }, 'slow');
+    console.log(item.practicas)
     this.itemsel = item;
+    console.log(413,this.itemsel)
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
     const ambiente = this;
     if (!this.moduloinfo) {
       this.moduloinfo = true;
-
-
-
       setTimeout(function() {
-        // ambiente.dataSource2.sort = ambiente.sort2;
-        // ambiente.dataSource2.paginator = ambiente.paginator2;
-        // ambiente.dataSource3.sort = ambiente.sort3;
-        // ambiente.dataSource3.paginator = ambiente.paginator3;
+
         ambiente.loadMap(item);
         $('html, body').animate(
           {
@@ -444,7 +452,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         },
         1000
       );
-      // document.getElementById('detalle').scrollIntoView();
     }
 
     setTimeout(function() {

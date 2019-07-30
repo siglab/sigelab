@@ -9,15 +9,15 @@
   <li class="pointer" routerLinkActive="active">
     <a href="#" [routerLink]="['busquedaservicio']" (click)="false;">
       <i class="fa fa-laptop"></i>
-      <span>Búsqueda de servicios</span>
+      <span>Información de servicios</span>
     </a>
   </li>
-  <li class="pointer" routerLinkActive="active">
+  <!-- <li class="pointer" routerLinkActive="active">
     <a href="#" [routerLink]="['busquedaprueba']" (click)="false;">
       <i class="fa fa-search"></i>
       <span>Búsqueda de prácticas de docencia</span>
     </a>
-  </li>
+  </li> -->
   <!-- <app-bar-admin-solicitudes *ngIf="hasMainModule || hasLevel2Module"></app-bar-admin-solicitudes> -->
   <li class="pointer" routerLinkActive="active" *ngIf="hasMainModule || hasLevel2Module">
     <a href="#" [routerLink]="['adminsolicitudes']" (click)="false;">

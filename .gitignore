@@ -4,3 +4,7 @@
 # Actualizar este archivo, en el repositorio solo debe
 # contener archivos de codigo fuente.
 #
+frontend/angularApp/src/environments/
+frontend/sigelabangular/
+
+frontend/angularApp/\.firebaserc

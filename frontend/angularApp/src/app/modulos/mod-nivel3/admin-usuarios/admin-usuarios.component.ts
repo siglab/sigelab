@@ -16,6 +16,8 @@ import { ROLESARRAY } from '../../../config';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
 
+import { Modulo2Service } from "../../mod-nivel2/services/modulo2.service";
+
 declare var $: any;
 
 @Component({
@@ -81,7 +83,7 @@ export class AdminUsuariosComponent implements OnInit {
   persestructurado: any;
 
   // INICIALIZACION DATATABLE PERSONAL Activo
-  displayedColumnsPers = ['nombre', 'apellido', 'email', 'perfiles'];
+  displayedColumnsPers = ['nombre', 'apellido', 'email', 'appRoles'];
   dataSourcePers = new MatTableDataSource([]);
 
   @ViewChild('paginatorPers')
@@ -132,7 +134,8 @@ export class AdminUsuariosComponent implements OnInit {
   constructor(private obs: ObservablesService,
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
-    private userService: QrService
+    private userService: QrService,
+    private _Modulo2Service:Modulo2Service
   ) { }
 
   ngOnInit() {
@@ -144,7 +147,6 @@ export class AdminUsuariosComponent implements OnInit {
     this.getRoles();
 
     this.userService.listCfFacil().subscribe(data => {
-      console.log('data labs', data);
       this.dataSourceFacil.data = data;
 
       this.laboraorios = data;
@@ -158,12 +160,11 @@ export class AdminUsuariosComponent implements OnInit {
     });
 
     this.estructuraIdPers().then((data: any) => {
-
-      this.dataSourcePers.data = data.user;
+      this.dataSourcePers.data = data;
 
 
       setTimeout(() => {
-        if (data.user.length !== 0) {
+        if (data.length !== 0) {
           this.dataSourcePers.sort = this.sortPers;
           this.dataSourcePers.paginator = this.paginatorPers;
 
@@ -180,7 +181,11 @@ export class AdminUsuariosComponent implements OnInit {
       }, 2000);
     });
   }
-
+  estructuraIdPers(){
+    return this.serviceMod3.getusersCache().then(userssnap=>{
+      return this.serviceMod3.estructurarDataUsersAdmin(userssnap.data())
+    })
+  }
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles() {
     this.role = JSON.parse(sessionStorage.getItem('rol'));
@@ -207,12 +212,21 @@ export class AdminUsuariosComponent implements OnInit {
       });
     });
   }
+  selectRow(row,estado){
+    this.alert.show();
 
-  estructuraIdPers() {
-    const usuarios = [];
+    this.estructuradatausuario(row).then(data => {
+      this.cambiardata(data, estado)
+      this.alert.hide();
+
+    }).catch(err=> {
+      this.alert.hide();
+
+    });
+  }
+  estructuradatausuario(row) {
     const promise = new Promise((resolve, reject) => {
-      this.serviceMod3.buscarUsuarios().then(user => {
-        user.forEach(doc => {
+      this.serviceMod3.getuser(row.uid).then(doc => {
 
           // tslint:disable-next-line:no-shadowed-variable
           const element = doc.data();
@@ -220,7 +234,6 @@ export class AdminUsuariosComponent implements OnInit {
           this.serviceMod3
             .getPersona(element.cfPers ? element.cfPers : '123')
             .then(data => {
-              console.log(doc.id, data.data());
               const persona = data.data() ? data.data() : ' ninguno';
 
               let varconsulta;
@@ -230,7 +243,6 @@ export class AdminUsuariosComponent implements OnInit {
                 varconsulta = this.clientRole(persona['clientRole']);
               }
 
-              console.log(data.data());
               this.nombresRoles(element.appRoles,
                 varconsulta ? data.data().faculty : '').then(rol => {
 
@@ -256,18 +268,11 @@ export class AdminUsuariosComponent implements OnInit {
                       llave: finalrol['llave']
                     };
 
-                    usuarios.push(usuario);
-
-
-                    if (user.size === usuarios.length) {
-
-                      resolve({ user: usuarios });
-                    }
+                      resolve(usuario);
                   });
 
                 });
             });
-        });
       });
     });
 
@@ -614,13 +619,11 @@ export class AdminUsuariosComponent implements OnInit {
     this.editar = false;
     this.selection.clear();
     this.idp = item.idPers;
-    console.log(this.idp);
 
     this.idu = item.id;
 
     this.arrayPract = item.llave;
     this.tablesel = table;
-    console.log(item);
     this.apellido = item.apellido;
     this.nombre = item.nombre;
     this.genero = item.cfGender;
@@ -671,7 +674,6 @@ export class AdminUsuariosComponent implements OnInit {
             });
           }
         });
-
         this.setKeyAdmin(doc.labs, this.idp);
       }
     });
@@ -744,8 +746,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.user.uid, 'update', 'user', this.idu, this.usuario
     ).then(() => {
       this.serviceMod3.updatedUser(this.idu, this.usuario)
-        .then(() => {
-        });
+       
     });
 
 
@@ -758,6 +759,8 @@ export class AdminUsuariosComponent implements OnInit {
 
         () => {
           // toca resetear en todos los laboratorios si el estado cambia
+          this.serviceMod3.updateCacheUser(this.idu,this.usuario,this.person)
+
           this.alert.hide();
 
           swal({
@@ -784,6 +787,7 @@ export class AdminUsuariosComponent implements OnInit {
         this.serviceMod3.Trazability(
           this.user.uid, 'update', 'cfFacil', doc.id, nuevoEstado
         ).then(() => {
+          console.log(784,doc.id, nuevoEstado)
           this.serviceMod3.setLaboratorio(doc.id, nuevoEstado);
         });
       });
@@ -951,36 +955,20 @@ export class AdminUsuariosComponent implements OnInit {
       }
     }
 
-    console.log(person);
 
 
     if (!bool) {
-      console.log('valida ok');
       this.alert.show();
       this.serviceMod3.agregarPersona(person).then(ok => {
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
-
-
-
-        this.serviceMod3.Trazability(
-          this.user.uid, 'update', 'user', this.idu, { cfPers: ok.id, appRoles: rolesUsuario }
-        ).then(() => {
-
-        });
-
-        this.serviceMod3.setUser(this.idu, { cfPers: ok.id, appRoles: rolesUsuario });
-
         this.arrayPract.forEach((doc, index) => {
           if (doc.id === coor) {
-            console.log(ok.id, doc.labs);
             this.idp = ok.id;
             this.setKeyAdmin(doc.labs, ok.id);
           }
         });
-
-
         // ocultar loading
         this.alert.hide();
 
@@ -1027,7 +1015,6 @@ export class AdminUsuariosComponent implements OnInit {
     };
     facil.relatedPers[idP] = true;
 
-    console.log('revisar este lab', this.idlab);
     this.serviceMod3.Trazability(
       this.user.uid, 'update', 'cfFacil', this.idlab, facil
     ).then(() => {
@@ -1097,7 +1084,6 @@ export class AdminUsuariosComponent implements OnInit {
       showConfirmButton: true
     });
 
-    console.log(this.arrayPract);
   }
   applyFilterLab(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -1106,12 +1092,10 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   cambiardataLab(row) {
-    console.log(row.id);
     this.idlab = row.id;
   }
 
   cambiarDataFacultad(row) {
-    console.log(row.id);
     this.idfacultad = row.id;
   }
 
@@ -1124,7 +1108,6 @@ export class AdminUsuariosComponent implements OnInit {
 
   updatedAdminFacil(idlab, id) {
     // obtner referencia del director actual y borrarlo
-    console.log(idlab);
     this.serviceMod3
       .getSingleLaboratorios(idlab)
       .then((doc: any) => {
@@ -1135,7 +1118,7 @@ export class AdminUsuariosComponent implements OnInit {
             const aux = {};
             const aux2 = {};
             const admiUser = result.data().clientRole;
-
+            const adminSnapData = result.data()
             const cfFacil = result.data().cfFacil;
 
             for (const key in admiUser) {
@@ -1160,13 +1143,15 @@ export class AdminUsuariosComponent implements OnInit {
               cfFacil: aux2
             };
 
-            console.log(data.facilityAdmin, id);
 
             if (data.facilityAdmin !== id) {
               this.serviceMod3.Trazability(
                 this.user.uid, 'update', 'cfPers', data.facilityAdmin, persona
               ).then(() => {
-                this.serviceMod3.updatedPersona(data.facilityAdmin, persona);
+                this.serviceMod3.updatedPersona(data.facilityAdmin, persona).then(()=>{
+                  // this.serviceMod3.updateCacheUser(this.idu,this.usuario,this.person)
+
+                })
               });
 
             }
@@ -1175,7 +1160,9 @@ export class AdminUsuariosComponent implements OnInit {
             this.serviceMod3.Trazability(
               this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: id }
             ).then(() => {
-              this.serviceMod3.updatedLab(idlab, { facilityAdmin: id });
+              this.serviceMod3.updatedLab(idlab, { facilityAdmin: id }).then(resUpdate=>{
+                // this._Modulo2Service.updateCacheLaboratorios()
+              });
             });
 
           })
@@ -1238,7 +1225,6 @@ export class AdminUsuariosComponent implements OnInit {
     this.cedula = undefined;
     this.type = undefined;
     this.idp = '';
-    console.log(this.idu);
     this.nuevo = true;
 
     $('html, body').animate({ scrollTop: '600px' }, 'slow');

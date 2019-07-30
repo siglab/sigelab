@@ -25,7 +25,6 @@ export class QuerysAutenticadoService {
 
 
   estructurarSolicitudesServicios(email, data) {
-    console.log(data);
     const promise = new Promise((resolve, reject) => {
       const datos = [];
       const histodatos = [];
@@ -35,7 +34,16 @@ export class QuerysAutenticadoService {
 
           this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
             const servicio =  data2.data();
-
+            console.log(37,elemento.parametrosSrv)
+            var conditionsLogServ = []
+            var conditionsLog =  []
+            if (elemento.conditionsLogServ) {
+              conditionsLogServ  =  elemento.conditionsLogServ
+            }
+            if (elemento.conditionsLog) {
+              conditionsLog  =  elemento.conditionsLogServ
+            }
+             
               const Reserv = {
                 email: email,
                 lab: elemento.namelab,
@@ -46,8 +54,8 @@ export class QuerysAutenticadoService {
                 precio: elemento.cfPrice,
                 activo: servicio.active,
                 variaciones: this.estructurarVariaciones(elemento.cfSrv, elemento.selectedVariations),
-                condiciones: elemento.conditionsLog,
-                condicionesSrv: elemento.conditionsLogServ,
+                condiciones: conditionsLog,
+                condicionesSrv: conditionsLogServ,
                 comentario: elemento.comments,
                 usuario: elemento.emailuser,
                 fecha: elemento.createdAt.split('T')[0],
@@ -71,7 +79,6 @@ export class QuerysAutenticadoService {
               }
 
 
-            console.log(data.length, datos.length, histodatos.length);
 
             if (data.length === (datos.length + histodatos.length)) {
               resolve({data: datos, data2: histodatos});
@@ -129,7 +136,6 @@ export class QuerysAutenticadoService {
     let nombre = '';
     this.afs.doc('cfFacil/' + idlab).snapshotChanges().subscribe(data => {
       nombre = data.payload.data().cfName;
-        console.log(nombre);
     });
     return nombre;
   }

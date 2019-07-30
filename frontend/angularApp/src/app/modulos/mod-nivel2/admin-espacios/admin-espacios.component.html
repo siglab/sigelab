@@ -348,11 +348,18 @@
                 <ng-container *ngIf="!fcu">
                   <div class="col-md-12" *ngIf="!otraSede">
                     <mat-form-field>
-                      <mat-select placeholder="Seleccione un edificio" (selectionChange)="setEdificio($event.value)" name="edificio" required>
+                      <!-- <mat-select placeholder="Seleccione un edificio000" (selectionChange)="setEdificio($event.value)" name="edificio" required>
                         <mat-option *ngFor="let item of edificios" value="{{ item }}">
                           {{ item }}
                         </mat-option>
-                      </mat-select>
+                      </mat-select> -->
+
+                      <input type="text" placeholder="Seleccione un edificio"  (selectionChange)="setEdificio()" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let item of edificios" [value]="item">
+                          {{item}}
+                        </mat-option>
+                      </mat-autocomplete>
                     </mat-form-field>
                   </div>
 

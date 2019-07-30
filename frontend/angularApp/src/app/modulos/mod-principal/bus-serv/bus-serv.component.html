@@ -36,12 +36,12 @@
                     matSort
                   >
                     <!-- Position Column -->
-                    <ng-container matColumnDef="nombreserv">
+                    <ng-container matColumnDef="nombre">
                       <mat-header-cell *matHeaderCellDef mat-sort-header>
                         Nombre de servicio
                       </mat-header-cell>
                       <mat-cell *matCellDef="let element">
-                        {{ element.nombreserv }}
+                        {{ element.nombre }}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="nombrelab">
@@ -57,7 +57,7 @@
                     ></mat-header-row>
                     <mat-row
                       *matRowDef="let row; columns: displayedColumns"
-                      (click)="cambiardata(row)"
+                      (click)="selectRow(row)"
                       style="cursor: pointer;"
                     ></mat-row>
                   </mat-table>
@@ -241,6 +241,7 @@
                                       parametrosServ['inputServ' + i]
                                     "
                                     type="text"
+                                    [value]=""
                                   />
                                 </label>
                               </div>
@@ -256,7 +257,7 @@
                           >
                             <div class="col-md-12">
                               <label class="control-label">
-                                <strong>Financiación: </strong>
+                                <strong>Método de financiación: </strong>
                               </label>
                               <mat-form-field>
                                 <mat-select
@@ -294,7 +295,7 @@
                           >
                             <div class="col-md-12">
                               <label class="control-label">
-                                <strong>Código CI de proyecto: </strong>
+                                <strong>Número de centro de información (CI) asociado al proyecto: </strong>
                               </label>
                               <input
                                 id="univ"
@@ -308,7 +309,7 @@
                               <p class="modal-p">
                                 * Debido a que usted seleccionó como método de
                                 financiación proyecto de investigación, se
-                                requiere que ingrese el código CI del respectivo
+                                requiere que ingrese el número del centro del información (CI) del respectivo
                                 proyecto.
                               </p>
                             </div>
@@ -597,7 +598,7 @@
                       <div class="form-group" style="margin-top: 20px;">
                         <div class="col-md-12">
                           <label class="control-label">
-                            <strong>Financiación: </strong>
+                            <strong>Método de financiación: </strong>
                           </label>
                           <mat-form-field>
                             <mat-select
@@ -617,7 +618,7 @@
                           <p class="modal-p">
                             * Debido a que usted es un usuario institucional de
                             la Universidad del Valle, se requiere que seleccione
-                            al menos una de las opciones de financiación.
+                            al menos una de las opciones de método de financiación.
                           </p>
                         </div>
                       </div>
@@ -629,7 +630,7 @@
                       >
                         <div class="col-md-12">
                           <label class="control-label">
-                            <strong>Código CI de proyecto: </strong>
+                            <strong>Número de centro de información (CI) del proyecto: </strong>
                           </label>
                           <input
                             id="univ"
@@ -641,8 +642,8 @@
                           <p class="modal-p">{{ status }}</p>
                           <p class="modal-p">
                             * Debido a que usted seleccionó como método de
-                            financiación proyecto de investigación, se requiere
-                            que ingrese el código CI del respectivo proyecto.
+                            financiación proyecto de investigación, es requerido
+                            que ingrese el número del centro de información (CI) del respectivo proyecto.
                           </p>
                         </div>
                       </div>
@@ -751,7 +752,7 @@
                             <label class="control-label" for="dispo"
                               ><strong>Telefonos:</strong></label
                             >
-                            <ul>
+                            <ul >
                               <li *ngFor="let tel of itemsel.infoLab.telefonos">
                                 {{ tel }}
                               </li>

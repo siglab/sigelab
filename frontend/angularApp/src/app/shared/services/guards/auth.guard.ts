@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
       const rol = JSON.parse(sessionStorage.getItem('rol'));
-      console.log(rol);
       if (rol) {
         if (rol.hasOwnProperty('moduloPrincipal')) {
           return true;
