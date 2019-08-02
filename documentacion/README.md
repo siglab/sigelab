@@ -1,13 +1,18 @@
-# documentacion
-##### Este directorio debe contener sólo los artefactos generados en la descripción de requerimientos, análisis de requerimientos y de arquitectura del SIGELAB sin incluir código fuente.
+<h3 align="center">SigeLAB: Technical docs</h3>
 
 
-> **Codiciones:**
-> Cada directorio de documentación debe contener un archivo README con la descripción detallada de su estructura, resumen y así mismo todo lo que se considere necesario incluir.
+
+---
+
+<p align="center">
+  This is the SigeLAB technical docs repository. Here you will find the main database structure and other documents that explain technically how SigeLAB works internally. Nothing from here will be needed during the process of deployment of a new SigeLAB instance, but reading this files will let you know more in deep how this project works.
+    <br>
+</p>
+
+## 📝 Table of Contents
+- [Getting Started](#getting_started)
 
 
-### Estructura del Directorio
 
-    documentacion/
-        README.md
-
+## 🏁 Getting Started <a name = "getting_started"></a>
+Each folder has a README.md file with its own information and/or instructions to follow. Get into the folder of your interests and follow it's instructions or read the info you specifically need.

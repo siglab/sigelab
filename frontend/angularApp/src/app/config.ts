@@ -9,6 +9,9 @@
 const APP_DOMAIN_URL = 'YOUR_APP_DOMAIN';
 const ORG_EMAIL_DOMAIL = 'YOUR_ORGANIZATION_COMPLETE_EMAIL_DOMAIN';
 const MAIN_CLOUD_FUNCTIONS_ROUTE = 'YOUR_GIVEN_CLOUD_FUNCTIONS_URL_HERE';
+// Use the following constant definitions just for Universidad del Valle deployments.
+const MAIN_SABS_API_URL = 'UNIVERSIDAD_DEL_VALLE_SABS_API_URL';
+const SABS_PORT = '1337';
 
 /**
  * DO NOT TOUCH ANYTHING FROM HERE TO BELOW
@@ -25,4 +28,4 @@ export const correoUnivalle = ORG_EMAIL_DOMAIL;
 export const ROLESARRAY = ['UlcSFw3BLPAdLa533QKP', 'lCpNW2BmPgMSHCD1EBpT', 'PFhLR4X2n9ybaZU3CR75',
 'k7uRIEzj99l7EjZ3Ppql', 'W6ihltvrx8Gc7jVucH8M'];
 /* Default Universidad del Valle SABS API */
-export const URLAPI = 'http://localhost:1337/inventario/buscar';
+export const URLAPI = MAIN_SABS_API_URL + ':' + SABS_PORT + '/inventario/buscar';
