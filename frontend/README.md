@@ -60,7 +60,7 @@ This project has a specified repository structure with separated folders for eac
     const ORG_EMAIL_DOMAIL = 'correounivalle.edu.co';
     const MAIN_CLOUD_FUNCTIONS_ROUTE = 'us-central1-mydemosigelab.cloudfunctions.net';
     ```
-    Notice: Take in mind that all the cloud functions shares the domain, so you will need to set the MAIN_CLOUD_FUNCTIONS ROUTE variable just once, no matter how many cloud functions the project uses.
+    Notice: Take in mind that all the cloud functions shares the domain, so you will need to set the MAIN_CLOUD_FUNCTIONS ROUTE variable just once, no matter how many cloud functions the project uses. Additionally, if you are deploying this project for the Universidad del Valle, you will need to configure the ```MAIN_SABS_API_URL``` constant and make sure you include the "http//" or "https//" on it.
 
 12. From now, you can run and test this project using the firebase hosting service or your local machine.
 
