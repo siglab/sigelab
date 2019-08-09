@@ -92,9 +92,6 @@ export class InicioAppComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-
-
-
   toggleShow() {
     this.show = !this.show;
   }
