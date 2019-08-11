@@ -137,7 +137,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-
         this.alert.hide();
       });
     });

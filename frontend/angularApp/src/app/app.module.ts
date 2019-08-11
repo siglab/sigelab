@@ -3,7 +3,6 @@ import { QuerysPrincipalService } from './modulos/mod-principal/services/querys-
 import { ObserverPrincipalService } from './modulos/mod-principal/services/observer-principal.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
-
 import { DataTablesModule } from 'angular-datatables';
 import { ObservablesService } from './shared/services/observables.service';
 import { PrincipalComponent } from './shared/components/dashboard/principal/principal.component';
@@ -12,7 +11,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocationStrategy, HashLocationStrategy} from '@angular/common';
-
 import { AppComponent } from './app.component';
 import { DashCenterComponent } from './shared/layouts/dash-center/dash-center.component';
 import { HeaderComponent } from './shared/layouts/header/header.component';
@@ -21,7 +19,6 @@ import { BarBusquedaComponent } from './shared/components/dashboard/left-sidebar
 import { BusLabComponent } from './modulos/mod-principal/bus-lab/bus-lab.component';
 import { BusServComponent } from './modulos/mod-principal/bus-serv/bus-serv.component';
 import { BusPruComponent } from './modulos/mod-principal/bus-pru/bus-pru.component';
-
 import { Ng2CompleterModule } from 'ng2-completer';
 // tslint:disable-next-line:max-line-length
 import { BarAdminSolicitudesComponent } from './shared/components/dashboard/left-sidebar/bar-admin-solicitudes/bar-admin-solicitudes.component';
@@ -33,8 +30,6 @@ import { AdminEquiposComponent } from './modulos/mod-nivel2/admin-equipos/admin-
 import { AdminEspaciosComponent } from './modulos/mod-nivel2/admin-espacios/admin-espacios.component';
 import { AdminProyectosComponent } from './modulos/mod-nivel2/admin-proyectos/admin-proyectos.component';
 import { AdminPracticasComponent } from './modulos/mod-nivel2/admin-practicas/admin-practicas.component';
-
-
 // Necesario para angularfire2
 import { environment } from '../environments/environment';
 import { AngularFireModule } from 'angularfire2';
@@ -50,36 +45,28 @@ import { BarAdminUsuariosComponent } from './shared/components/dashboard/left-si
 import { BarIndicadoresComponent } from './shared/components/dashboard/left-sidebar/bar-indicadores/bar-indicadores.component';
 // tslint:disable-next-line:max-line-length
 import { BarComunicacionMasivaComponent } from './shared/components/dashboard/left-sidebar/bar-comunicacion-masiva/bar-comunicacion-masiva.component';
-
 import { ComunicacionMasivaComponent } from './modulos/mod-nivel3/comunicacion-masiva/comunicacion-masiva.component';
-
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SolicitudesNivel3Component } from './modulos/mod-nivel3/solicitudes-nivel3/solicitudes-nivel3.component';
 // tslint:disable-next-line:max-line-length
 import { BarSolicitudesNivel3Component } from './shared/components/dashboard/left-sidebar/bar-solicitudes-nivel3/bar-solicitudes-nivel3.component';
-
 // tslint:disable-next-line:max-line-length
 import { MatNativeDateModule, MatTableModule, MatInputModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, MatDialogModule, MatAutocompleteModule } from '@angular/material';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatCardModule} from '@angular/material/card';
-
-
 import { LoginComponent } from './modulos/login/login.component';
 import { LoginService } from './modulos/login/login-service/login.service';
-
 // angular fireauth
 import { AngularFireAuth } from 'angularfire2/auth';
 import { QuerysAutenticadoService } from './modulos/mod-autenticado/services/querys-autenticado.service';
 import { ObserverAutenticadoService } from './modulos/mod-autenticado/services/observer-autenticado.service';
-
 // librerias material
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatIconModule} from '@angular/material/icon';
-
-  // alertas toast
+// alertas toast
 import { ToastrModule } from 'ngx-toastr';
 import { AdminLaboratorios3Component } from './modulos/mod-nivel3/admin-laboratorios-3/admin-laboratorios-3.component';
 import { ServicesNivel3Service } from './modulos/mod-nivel3/services/services-nivel3.service';
@@ -88,7 +75,6 @@ import { IndicadoresGraficasReportes3Component } from './modulos/mod-nivel3/indi
 import { BardAdminQrComponent } from './shared/components/dashboard/left-sidebar/bard-admin-qr/bard-admin-qr.component';
 import { AdminQrComponent } from './modulos/mod-nivel2/admin-qr/admin-qr.component';
 import { FormQrComponent } from './modulos/mod-nivel2/admin-qr/form-qr/form-qr.component';
-
 import { EspaciosService } from './modulos/mod-nivel2/services/espacios.service';
 import { RegistroComponent } from './modulos/registro/registro.component';
 import { AuthGuard } from './shared/services/guards/auth.guard';
@@ -98,15 +84,14 @@ import { Nivel3Guard } from './shared/services/guards/nivel3.guard';
 import { InicioAppComponent } from './modulos/mod-principal/inicio-app/inicio-app.component';
 import { AdminUsuariosComponent } from './modulos/mod-nivel3/admin-usuarios/admin-usuarios.component';
 import { ActivePipe } from './shared/services/active.pipe';
-
 import { NgxEditorModule } from 'ngx-editor';
 import { HttpClientModule } from '@angular/common/http';
-
 import { Modulo2Service } from './modulos/mod-nivel2/services/modulo2.service';
 import { QrRedirectComponent } from './modulos/mod-nivel2/admin-qr/qr-redirect/qr-redirect.component';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { SabsService } from './shared/services/sabs/sabs.service';
 import { PrincipalGuard } from './shared/services/guards/principal.guard';
+import { CountUpModule } from 'countup.js-angular2';
 
 @NgModule({
   declarations: [
@@ -181,8 +166,8 @@ import { PrincipalGuard } from './shared/services/guards/principal.guard';
     ToastrModule.forRoot(),
     NgxEditorModule,
     HttpClientModule,
-    MatAutocompleteModule
-
+    MatAutocompleteModule,
+    CountUpModule
   ],
   providers: [
     ObservablesService,
