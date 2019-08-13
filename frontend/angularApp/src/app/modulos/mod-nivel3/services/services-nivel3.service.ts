@@ -50,16 +50,12 @@ export class ServicesNivel3Service {
   }
 
   buscarUsuarios() {
-
     return this.afs.collection('user').ref.get();
   }
-
-
 
   getPersona(id) {
     return this.afs.collection('cfPers').doc(id).ref.get();
   }
-
 
   consultarNombreRol(id) {
     return this.afs.collection('appRoles').doc(id).ref.get();
@@ -71,11 +67,9 @@ export class ServicesNivel3Service {
     return refer.get();
   }
 
-
   buscarDirector(iddirector) {
     return this.afs.doc('cfPers/' + iddirector).ref.get();
   }
-
 
   consultarNotificaciones(iduser) {
     return this.afs.doc('user/' + iduser).ref.get();
@@ -120,12 +114,9 @@ export class ServicesNivel3Service {
     return this.afs.collection('cfFacil').ref.get();
   }
 
-
   consultarHistorial() {
     return this.afs.collection('cfMailNotification').valueChanges();
   }
-
-
 
   // servicios
 
@@ -145,8 +136,6 @@ export class ServicesNivel3Service {
     return refer.get();
   }
 
-
-
   getServicio(id) {
     return this.afs.collection('cfSrv').doc(id).ref.get();
   }
@@ -162,8 +151,6 @@ export class ServicesNivel3Service {
   getPracticaProgramacion(id) {
     return this.afs.collection('practice').doc(id).collection('programmingData').ref.get();
   }
-
-
 
   getServicioPrestado(id) {
     const col = this.afs.collection('cfSrvReserv');
@@ -404,7 +391,6 @@ export class ServicesNivel3Service {
     const promise = new Promise((resolve, reject) => {
       var cont = 0
       var datasize = Object.keys(users)
-
       for (const key in users) {
         if (users.hasOwnProperty(key)) {
           const usuario = users[key]
@@ -414,17 +400,13 @@ export class ServicesNivel3Service {
             usuario.active = 'Inactivo'
           }
           datosestructuradosusuarios.push(usuario)
-
           cont++
           if (cont === datasize.length) {
             resolve(datosestructuradosusuarios)
           }
         }
       }
-
     });
-
-
     return promise
   }
 

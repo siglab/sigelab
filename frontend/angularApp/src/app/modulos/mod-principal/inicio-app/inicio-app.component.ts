@@ -20,22 +20,52 @@ export class InicioAppComponent implements OnInit {
   private servicesData;
   private usersData;
 
-  constructor(private router: Router, private local: ServicesNivel3Service,
-    private login: LoginService, private queryService: QuerysPrincipalService) {
+  constructor(private router: Router, private local: ServicesNivel3Service, private login: LoginService, private queryService: QuerysPrincipalService) {
+    if (!this.facilitiesData) {
+      this.queryService.getLaboratorios().then(data => {
+        this.queryService.estructurarDataLab(data).then((datos: any) => {
+          const facilArray = datos.data;
+          let activeLabs = 0;
+          for (let index = 0; index < facilArray.length; index++) {
+            if (facilArray[index].active && facilArray[index].active == true) {
+              activeLabs++;
+            }
+          }
+          this.facilitiesData = activeLabs;
+        });
+      });
+    }
+    if (!this.servicesData) {
+      this.queryService.getServicios().then(data => {
+        this.queryService.estructurarDataServ(data).then((datos: any) => {
+          const servicesArray = datos.data;
+          let activeServs = 0;
+          for (let index = 0; index < servicesArray.length; index++) {
+            if (servicesArray[index].active && servicesArray[index].active == true) {
+              activeServs++            
+            }
+          }
+          this.servicesData = activeServs;
+        });
+      });
+    }
+    if (!this.usersData) {
+      this.local.getusersCache().then(userssnap=>{
+        this.local.estructurarDataUsersAdmin(userssnap.data()).then((users:any)=>{
+          const usersArray = users;
+          let activeUsers = 0;
+          for (let index = 0; index < usersArray.length; index++) {
+            if (usersArray[index].active && usersArray[index].active == "Activo") {
+              activeUsers++;
+            };
+          }
+          this.usersData = activeUsers;
+        });
+      })
+    }
   }
 
   ngOnInit() {
-
-    // this.queryService.getLaboratorios().then(data => {
-    //   console.log(data);
-    //   this.query.estructurarDataLab(data).then(datos => {
-    //     this.dataSource.data = datos['data'];
-    //     this.dataSource.sort = this.sort;
-    //     this.dataSource.paginator = this.paginator;
-    //     this.alert.hide();
-    //   });
-    // });
-
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
     if (this.local.getLocalStorageUser()) {
       this.router.navigate(['principal']);
@@ -63,12 +93,7 @@ export class InicioAppComponent implements OnInit {
     });
     $(document).on('click', '#goTopBtn', function () {
       $('html, body').animate({
-        scrollTop: $('#mainSec').offset().top - $('#topDiv').height()
-      }, 1000);
-    });
-    $(document).on('click', '#goTopBtn', function () {
-      $('html, body').animate({
-        scrollTop: $('#mainSec').offset().top - $('#topDiv').height()
+        scrollTop: $('#mainSec').offset().top - $('#topDiv').height() - 10
       }, 1000);
     });
     // When the user scrolls down 20px from the top of the document, show the button and set inidicators numbers
@@ -109,9 +134,15 @@ export class InicioAppComponent implements OnInit {
   }
 
   setIndicatorsNumbers():void {
-    this.numberOfUsers = 5800;
-    this.numberOfFacilities = 287;
-    this.numberOfServices = 480;
+    if (this.usersData) {
+      this.numberOfUsers = this.usersData;
+    }
+    if(this.facilitiesData) {
+      this.numberOfFacilities = this.facilitiesData;
+    }
+    if (this.servicesData) {
+      this.numberOfServices = this.servicesData;
+    }
   }
 
   unsetIndicatorsNumbers():void {
@@ -130,12 +161,9 @@ export class InicioAppComponent implements OnInit {
   }
 
   goAboutSec(): void {
-    $('html, body').animate(
-      {
-        scrollTop: $('#aboutSec').offset().top - $('#topDiv').height() + 5
-      },
-      1000
-    );
+    $('html, body').animate({
+      scrollTop: $('#aboutSec').offset().top - $('#topDiv').height()
+    }, 1000);
   }
 
   goToLogin(): void {

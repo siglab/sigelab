@@ -42,6 +42,7 @@
 
 .user-header {
   background-color: #cc0000 !important;
+  height: auto !important;
 }
 
 .user-header > p {
