@@ -49,7 +49,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     cfUri: '',
     cfFamilyNames: '',
     cfFirstNames: '',
-    clientRole : {},
+    clientRole: {},
     cfOtherNames: '',
     cfOrgUnit: 'UK6cYXc1iYXCdSU30xmr',
     cfClass: 'cf7799e0-3477-11e1-b86c-0800200c9a66',
@@ -89,7 +89,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild('sortPers') sortPers: MatSort;
 
   // INICIALIZACION DATATABLE PERSONAL InActivo
-  displayedColumnsPersIn = ['nombre', 'email', 'tipo' , 'codigo', 'estado' ];
+  displayedColumnsPersIn = ['nombre', 'email', 'tipo', 'codigo', 'estado'];
   dataSourcePersIn = new MatTableDataSource([]);
 
   @ViewChild('paginatorPersIn') paginatorPersIn: MatPaginator;
@@ -118,7 +118,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(private obs: ObservablesService,
     private toastr: ToastrService,
     private register: LoginService,
-    private servicioMod2: Modulo2Service ) { }
+    private servicioMod2: Modulo2Service) { }
 
   ngOnInit() {
 
@@ -134,52 +134,52 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
         this.initDataComponent(data.uid);
-       /* this.estructuraIdPers(data.uid).then(() => {
-
-          // validators email
-
-
-          this.idlab = data.uid;
-
-          this.itemsel = Observable.of(this.persestructurado.personal);
-
-          this.dataSourcePers.data = this.persestructurado.personal;
-          this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
-
-          const ambiente = this;
-
-          swal({
-            title: 'Cargando un momento...',
-            text: 'Espere mientras se cargan los datos',
-            onOpen: () => {
-              swal.showLoading();
-            }
-          });
-
-
-          setTimeout(function () {
-            if (ambiente.persestructurado.personal !== 0) {
-
-              ambiente.dataSourcePers.sort = ambiente.sortPers;
-              ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
-              ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
-              ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
-
-              swal.close();
-
-            } else {
-              swal({
-                type: 'error',
-                title: 'No existe personal asociado al laboratorio',
-                showConfirmButton: true
-              });
-            }
-
-
-
-          }, 2000);
-
-        }); */
+        /* this.estructuraIdPers(data.uid).then(() => {
+ 
+           // validators email
+ 
+ 
+           this.idlab = data.uid;
+ 
+           this.itemsel = Observable.of(this.persestructurado.personal);
+ 
+           this.dataSourcePers.data = this.persestructurado.personal;
+           this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
+ 
+           const ambiente = this;
+ 
+           swal({
+             title: 'Cargando un momento...',
+             text: 'Espere mientras se cargan los datos',
+             onOpen: () => {
+               swal.showLoading();
+             }
+           });
+ 
+ 
+           setTimeout(function () {
+             if (ambiente.persestructurado.personal !== 0) {
+ 
+               ambiente.dataSourcePers.sort = ambiente.sortPers;
+               ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
+               ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
+               ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
+ 
+               swal.close();
+ 
+             } else {
+               swal({
+                 type: 'error',
+                 title: 'No existe personal asociado al laboratorio',
+                 showConfirmButton: true
+               });
+             }
+ 
+ 
+ 
+           }, 2000);
+ 
+         }); */
 
       } else {
         swal({
@@ -301,8 +301,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     const promise = new Promise((resolve, reject) => {
       this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
-
-
+        console.log(304, labo.id)
         this.persestructurado = {
           personal: this.estructurarPers(laboratorio.relatedPers),
           personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),
@@ -320,7 +319,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   estructurarPers(item) {
-
     const arr1 = [];
 
     for (const clave in item) {
@@ -330,21 +328,21 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           this.servicioMod2.buscarPersona(clave).then(data => {
             const pers = data.data();
 
-
+           if ((typeof pers)=='object') {
             let persona = {};
-            if (pers.user) {
-             this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
+            if (((typeof pers)=='object') && (pers.hasOwnProperty('user')) && (pers.user!='')) {
+              this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
                 const user = dataper.data();
                 persona = {
                   roles: user.appRoles,
-                  rolesClient : pers.clientRole,
+                  rolesClient: pers.clientRole,
                   nombre: pers.cfFirstNames,
                   fechanacimiento: pers.cfBirthdate,
                   apellidos: pers.cfFamilyNames,
                   cc: pers.cc ? pers.cc : 'ninguno',
                   activo: item[clave],
-                  tipo: pers.type ? pers.type : 'ninguno'  ,
-                  email: user.email ? user.email : 'ninguno asociado' ,
+                  tipo: pers.type ? pers.type : 'ninguno',
+                  email: user.email ? user.email : 'ninguno asociado',
                   idpers: clave,
                   iduser: pers.user,
                 };
@@ -355,14 +353,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             } else {
               persona = {
                 roles: '',
-                rolesClient : pers.clientRole,
+                rolesClient: pers.clientRole,
                 cc: pers.cc ? pers.cc : 'ninguno',
                 nombre: pers.cfFirstNames,
                 apellidos: pers.cfFamilyNames,
                 fechanacimiento: pers.cfBirthdate,
 
                 activo: item[clave],
-                tipo: pers.type ?  pers.type : ' ninguno' ,
+                tipo: pers.type ? pers.type : ' ninguno',
                 email: pers.email,
                 idpers: clave,
                 iduser: pers.user,
@@ -372,6 +370,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               arr1.push(persona);
 
             }
+           }
           });
 
         }
@@ -392,18 +391,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             const pers = data.data();
             let persona = {};
             if (pers.user) {
-             this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
+              this.servicioMod2.buscarUsuario(pers.user).then(dataper => {
                 // funciona con una programacion, cuando hayan mas toca crear otro metodo
                 persona = {
-                  rolesClient : pers.clientRole,
+                  rolesClient: pers.clientRole,
                   nombre: pers.cfFirstNames,
                   apellidos: pers.cfFamilyNames,
                   fechanacimiento: pers.cfBirthdate,
 
                   activo: item[clave],
-                  cc: pers.cc ? pers.cc : 'ninguno' ,
-                  tipo: pers.type ? pers.type : 'ninguno' ,
-                  email: dataper.data().email ?  dataper.data().email : 'ninguno asociado',
+                  cc: pers.cc ? pers.cc : 'ninguno',
+                  tipo: pers.type ? pers.type : 'ninguno',
+                  email: dataper.data().email ? dataper.data().email : 'ninguno asociado',
                   roles: dataper.data().appRoles,
                   idpers: clave,
                   iduser: pers.user,
@@ -415,13 +414,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
               });
             } else {
               persona = {
-                rolesClient : pers.clientRole,
+                rolesClient: pers.clientRole,
                 nombre: pers.cfFirstNames,
                 fechanacimiento: pers.cfBirthdate,
                 apellidos: pers.cfFamilyNames,
                 activo: item[clave],
                 tipo: pers.type,
-                cc: pers.cc ?  pers.cc : 'ninguno' ,
+                cc: pers.cc ? pers.cc : 'ninguno',
                 email: 'ninguno',
                 roles: 'ninguno',
                 idpers: clave,
@@ -443,10 +442,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
 
   nombreRoles(item) {
     this.rolesAgregados = [];
-    for (const key in item[this.idlab]  ) {
+    for (const key in item[this.idlab]) {
       if (item[this.idlab].hasOwnProperty(key)) {
-        this.rolesAgregados.push({ id: key,
-          nombre: this.niveles.find(o => o.id === key).nombre});
+        this.rolesAgregados.push({
+          id: key,
+          nombre: this.niveles.find(o => o.id === key).nombre
+        });
       }
     }
   }
@@ -456,7 +457,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   consultarRol() {
 
     return new Promise((resolve, reject) => {
-        this.servicioMod2.getAppRoleForName(this.rolc)
+      this.servicioMod2.getAppRoleForName(this.rolc)
         .then(data => {
           data.forEach(doc => {
             const idnuevo = doc.id;
@@ -511,7 +512,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       cfFirstNames: this.nombre,
       cfFamilyNames: this.apellido,
       cc: this.cc,
-      cfBirthdate : this.fechanacimiento,
+      cfBirthdate: this.fechanacimiento,
       type: this.type,
       clientRole: {},
       updatedAt: date.toISOString()
@@ -545,25 +546,25 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           () => {
             this.alert.show();
 
-          this.servicioMod2.Trazability(
-            this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
-          ).then(() => {
-           this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
+            this.servicioMod2.Trazability(
+              this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
+            ).then(() => {
+              this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
 
-           this.alert.hide();
+              this.alert.hide();
 
-           this.clearValues();
-           $('#modal').modal('hide');
+              this.clearValues();
+              $('#modal').modal('hide');
 
-           swal({
-            type: 'success',
-            title: 'Usuario actualizado',
-            text:  'El usuario fue actualizado con éxito'
-            // showConfirmButton: true
+              swal({
+                type: 'success',
+                title: 'Usuario actualizado',
+                text: 'El usuario fue actualizado con éxito'
+                // showConfirmButton: true
+              });
+            });
+
           });
-          });
-
-        });
       });
 
     } else {
@@ -615,12 +616,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                   title: 'Persona creada correctamente',
                   timer: 1000,
                   showConfirmButton: true
-                }).then( () =>{
+                }).then(() => {
 
                   this.clearValues();
                   this.dispo = false;
                   $('#modal1Personal').modal('hide');
-                  this.initDataComponent(this.idlab );
+                  this.initDataComponent(this.idlab);
 
 
                 });
@@ -646,12 +647,12 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                 title: 'Persona creada correctamente',
                 timer: 1000,
                 showConfirmButton: true
-              }).then( () =>{
+              }).then(() => {
 
                 this.clearValues();
 
                 $('#modal1Personal').modal('hide');
-                this.initDataComponent(this.idlab );
+                this.initDataComponent(this.idlab);
 
 
               });
@@ -755,27 +756,27 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
       ).then(() => {
 
         this.servicioMod2.setDocLaboratorio(this.idlab, lab)
-        .then(() => {
-          this.alert.hide();
+          .then(() => {
+            this.alert.hide();
 
 
-          swal({
-            type: 'success',
-            title: 'Persona actualizada correctamente',
-            timer: 1000,
-            showConfirmButton: true
-          }).then( () =>{
+            swal({
+              type: 'success',
+              title: 'Persona actualizada correctamente',
+              timer: 1000,
+              showConfirmButton: true
+            }).then(() => {
 
-            this.clearValues();
+              this.clearValues();
 
-            $('#modal1Personal').modal('hide');
-            this.initDataComponent(this.idlab );
+              $('#modal1Personal').modal('hide');
+              this.initDataComponent(this.idlab);
+
+
+            });
 
 
           });
-
-
-      });
       });
 
 
@@ -805,16 +806,18 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
         showConfirmButton: true
       });
     } else {
-      this.rolesAgregados.push({id: this.rolSelect,
-        nombre: this.niveles.find(o => o.id === this.rolSelect).nombre});
+      this.rolesAgregados.push({
+        id: this.rolSelect,
+        nombre: this.niveles.find(o => o.id === this.rolSelect).nombre
+      });
     }
 
   }
 
   setClientRol() {
 
-    this.person.clientRole [this.idlab] = {};
-    this.person.clientRole [this.idlab] [this.rolSelect] = true;
+    this.person.clientRole[this.idlab] = {};
+    this.person.clientRole[this.idlab][this.rolSelect] = true;
 
   }
 
