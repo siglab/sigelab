@@ -833,6 +833,9 @@ export class AdminUsuariosComponent implements OnInit {
     if (!bool) {
       this.alert.show();
       this.serviceMod3.agregarPersona(person).then(ok => {
+        console.log(963, this.user.uid, 'create', 'cfPers', ok.id, person)
+        //  this.serviceMod3.updateCacheUser(this.idu,this.usuario,person)
+
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
