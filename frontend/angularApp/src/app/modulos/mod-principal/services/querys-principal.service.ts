@@ -31,7 +31,6 @@ export class QuerysPrincipalService {
 
   // METODO QUE TRAE LA COLECCION DE TODOS LOS SERVICIOS
   getServicios() {
-    console.log('metodo servicio');
     const colle = this.afs.collection('cache').doc('cfSrv');
     return colle.ref.get();
   }

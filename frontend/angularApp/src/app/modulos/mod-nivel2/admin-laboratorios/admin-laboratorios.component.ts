@@ -192,6 +192,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
     this.cargarFacultades();
 
     this.sus = this.obs.currentObjectLab.subscribe(data => {
+
+      console.log('entro al componente', data);
       this.getRoles(data.roles);
       this.resetIconos();
 
@@ -208,6 +210,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
         if (!this.labestructurado) {
           this.estructurarLab(data.uid).then(() => {
+
+            console.log('entro al componente', data.uid);
             this.itemsel = Observable.of(this.labestructurado);
             this.limpiarData();
 

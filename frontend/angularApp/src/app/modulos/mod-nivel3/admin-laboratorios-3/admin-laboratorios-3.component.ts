@@ -115,7 +115,7 @@ export class AdminLaboratorios3Component implements OnInit {
     this.persona = JSON.parse(sessionStorage.getItem('persona'));
     if (sessionStorage.getItem('usuario')) {
       this.user = JSON.parse(sessionStorage.getItem('usuario'));
-      
+
     }
 
     this.getRoles();
@@ -129,7 +129,7 @@ export class AdminLaboratorios3Component implements OnInit {
     this.query.getLaboratorios().then((data) => {
       this.cache.cfFacil = data.data()
       this.query.estructurarDataLabAdmin(data).then(datos => {
-        this.estructurarLaboratorios(datos)    
+        this.estructurarLaboratorios(datos)
 
       });
     });
@@ -163,6 +163,8 @@ export class AdminLaboratorios3Component implements OnInit {
         swal.showLoading();
       }
     });
+
+    console.log( 'id del laboratorio', item.uid);
 
     this.enviaritemLab({ roles: role, uid: item.uid });
 
@@ -410,7 +412,7 @@ export class AdminLaboratorios3Component implements OnInit {
                     showConfirmButton: true
                   });
               })
-             
+
             });
 
           });

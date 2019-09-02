@@ -94,19 +94,15 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
     this.query.getServicios().then(data => {
 
+      // validar si existen datos
      const datos = Object.keys(data.data());
-
-     console.log(datos);
       if (datos.length === 0 ) {
-
 
         this.alert.hide();
 
       }
       this.query.estructurarDataServ(data).then(datos => {
 
-        console.log('entro a listar datos');
-        // valida existencia de servicios
 
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
