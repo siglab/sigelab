@@ -220,8 +220,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             if (this.labestructurado) {
               if (this.labestructurado.objectActividad.extension) {
                 this.dataSourceServicios.data = this.labestructurado.servicios;
-
-
                 this.dataSourceSolicitudes.data = this.labestructurado.solicitudes;
 
 
