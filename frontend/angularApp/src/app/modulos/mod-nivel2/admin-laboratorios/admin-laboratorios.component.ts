@@ -193,7 +193,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
     this.sus = this.obs.currentObjectLab.subscribe(data => {
 
-      console.log('entro al componente', data);
       this.getRoles(data.roles);
       this.resetIconos();
 
@@ -207,11 +206,9 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             swal.showLoading();
           }
         });
-
         if (!this.labestructurado) {
-          this.estructurarLab(data.uid).then(() => {
 
-            console.log('entro al componente', data.uid);
+          this.estructurarLab(data.uid).then(() => {
             this.itemsel = Observable.of(this.labestructurado);
             this.limpiarData();
 
@@ -336,7 +333,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   }
 
   cambiardata(item, table) {
-    console.log(337,item,table)
     this.tablesel = table;
     this.seleccionado = item;
     if (this.tablesel === 'practicas') {
@@ -357,10 +353,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
           this.servicioMod2.buscarSubSede(laboratorio.subHq ? laboratorio.subHq : 'mfij').then(sub => {
             const subsede = sub.data();
+
             this.servicioMod2.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
               const duenoLab = dueno.data();
-              if (duenoLab) {
-                // convertir boolean a cadena de caracteres para estado del laboratorio
+
                 let estadoLab;
                 if (laboratorio.active === true) {
                   estadoLab = 'Activo';
@@ -375,7 +371,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   inves: laboratorio.researchGroup,
                   objectActividad: laboratorio.facilActivity,
                   actividad: this.actividades(laboratorio.facilActivity),
-                  director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
                   iddueno: laboratorio.facilityAdmin,
                   sede: { id: laboratorio.headquarter, nombre: sede ? sede.cfName : '' },
                   subsede: {
@@ -397,6 +392,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                   estado: estadoLab
                 };
 
+                if (duenoLab) {
+                  this.labestructurado.director= duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames
+  
+                }else{
+                  this.labestructurado.director= `Sin asignar`
+  
+                }
                 if (laboratorio.facilActivity.extension) {
                   const servicesol = this.estructurarServicios(laboratorio.relatedServices);
                   this.labestructurado['solicitudes'] = servicesol.arr2;
@@ -417,7 +419,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
                 } else {
                   reject();
                 }
-              }
 
             });
           });

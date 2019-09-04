@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
   }
 
   ingresar() {
-    //    console.log(this.rutadeQR);
     // loading mientras se crea el usuario
     swal({
       title: 'Cargando un momento...',
@@ -88,9 +87,7 @@ export class LoginComponent implements OnInit {
                 title: 'Ingreso correcto',
                 showConfirmButton: true
               });
-              console.log(this.rutadeQR, 'ENTRO');
               if (this.rutadeQR) {
-                console.log(this.rutadeQR, 'VAMO PA ALLA');
                 this.ruta.navigate(['principal/qrinventario/' + this.rutadeQR]);
               } else {
                 this.ruta.navigate(['principal']);

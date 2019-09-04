@@ -226,7 +226,6 @@ export class Modulo2Service {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
   updateCacheLaboratorios(uid, lab) {
-    console.log(lab.hasOwnProperty('updatedAt'), lab.updatedAt)
     var laboratorio = {
 
       labEmail: lab.otros.email,
