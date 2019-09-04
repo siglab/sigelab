@@ -75,7 +75,6 @@ export class LoginService {
       this.afAuth.auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(response => {
-          console.log(response.additionalUserInfo.isNewUser);
           if (response.additionalUserInfo.isNewUser) {
             this.postUserBackend(
               response.user.email,
@@ -85,7 +84,6 @@ export class LoginService {
                 this.consultarTipoUsuario(response.user.uid).then(() => {
                   this.usuario = response.user;
                   sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
-                  console.log('termino consultar el tipo de usuario');
                   resolve();
                 });
               }
@@ -129,10 +127,8 @@ export class LoginService {
       this.afAuth.auth
         .signInWithEmailAndPassword(email, pass)
         .then(data => {
-          console.log('login email');
           this.usuario = data;
           if (this.usuario && this.usuario['emailVerified']) {
-            console.log('Cuenta verificada');
             sessionStorage.setItem('usuario', JSON.stringify(data));
             this.consultarTipoUsuario(this.usuario.uid)
               .then(() => {
@@ -145,7 +141,6 @@ export class LoginService {
             this.logout().then(() => {
               localStorage.removeItem('logout');
             });
-            console.log('Cuenta no verificada');
             reject();
           }
         })
@@ -181,7 +176,7 @@ export class LoginService {
           resolve(ok);
         })
         .catch(function (error) {
-          console.log(error.message);
+           console.log(error.message);
         });
     });
     return promise;
@@ -198,7 +193,6 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.getUser(id).then(doc => {
         const data = doc.data();
-        console.log('185', data);
         if (data) {
           if (data.active) {
             sessionStorage.setItem('persona', JSON.stringify(data));
@@ -207,16 +201,12 @@ export class LoginService {
             roleAdmin = this.buscarRole(rol);
             if (data['cfPers'] === '') {
               this.estructurarPermisos(rol).then(ok => {
-                console.log('termino el metodo estructura permiso');
                 sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
                 resolve();
               });
             }
             if (roleAdmin) {
               this.estructurarPermisos(rol).then(ok => {
-                console.log(
-                  'termino el metodo estructura permiso administrador'
-                );
                 sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
               });
             }
@@ -225,7 +215,6 @@ export class LoginService {
               const arrlab = {};
               this.getPersona(data['cfPers']).then(doc => {
                 const clientRole = doc.data().clientRole;
-                console.log(clientRole);
                 if (Object.keys(clientRole).length !== 0) {
                   const labs = doc.data().cfFacil;
                   let sizeLabs = 0;
@@ -235,24 +224,17 @@ export class LoginService {
                       sizeLabs++;
                     }
                   }
-                  console.log(sizeLabs, labs);
                   for (const key in labs) {
                     if (labs.hasOwnProperty(key)) {
                       if (labs[key]) {
                         arr[key] = true;
-                        console.log(clientRole, key);
                         for (const llave in clientRole[key]) {
                           if (clientRole[key].hasOwnProperty(llave)) {
                             this.estructurarPermisos(clientRole[key]).then(
                               ok => {
                                 arrlab[key] = ok['permisos'];
-                                console.log(sizeLabs, cont);
                                 if (sizeLabs === cont) {
-                                  console.log(
-                                    'termino el metodo estructura permiso',
-                                    arr,
-                                    arrlab
-                                  );
+                            
                                   sessionStorage.setItem(
                                     'laboratorios',
                                     JSON.stringify(arr)
@@ -309,7 +291,6 @@ export class LoginService {
   }
 
   estructurarPermisos(roles) {
-    console.log(roles);
     const promise = new Promise((resolve, reject) => {
       let rolelength = 0;
       // tslint:disable-next-line:forin
@@ -335,13 +316,9 @@ export class LoginService {
                   permisos[llave] = permission[llave];
                   controle++;
                   if (controle === rollength) {
-                    console.log('termino recorrer permisos');
                     cont++;
-                    console.log(rolelength, cont);
                     if (rolelength === cont) {
-                      console.log('termino de recorrer los roles');
                       if (permisos) {
-                        console.log(permisos);
                         resolve({ permisos: permisos });
                       } else {
                         reject('error');
@@ -403,7 +380,6 @@ export class LoginService {
       createdAt: fecha.toISOString(),
       email: email
     };
-    console.log(email);
     return new Promise((resolve, reject) => {
       this.afs
         .collection('cfPers')
@@ -411,28 +387,23 @@ export class LoginService {
         .get()
         .then(respers => {
           if (respers.empty) {
-            console.log('no tiene una persona asociada');
             this.afs
               .doc('user/' + iduser)
               .set(usr)
               .then(() => {
-                console.log('usuario creado');
                 resolve();
               });
           } else {
-            console.log('tiene una persona asociada');
             // asigna el id de la persona al usuario
             usr.cfPers = respers.docs[0].id;
             this.afs
               .doc('user/' + iduser)
               .set(usr)
               .then(() => {
-                console.log('usuario creado');
-                this.afs
+                             this.afs
                   .doc('cfPers/' + usr.cfPers)
                   .set({ user: iduser }, { merge: true })
                   .then(() => {
-                    console.log('persona asociada');
                     resolve();
                   });
               });

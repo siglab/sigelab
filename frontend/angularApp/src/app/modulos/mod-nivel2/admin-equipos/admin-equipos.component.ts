@@ -105,7 +105,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sus = this.obs.currentObjectequip.subscribe(data => {
 
       this.getRoles(data.roles);
-      console.log(data);
       this.equiestructurado = undefined;
       this.iniciliazarTablas();
 
@@ -313,7 +312,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
         if (item[clave]) {
           this.servicioMod2.buscarEquipo(clave).then(doc => {
             const equip = doc.data();
-            console.log(equip);
             // funciona con una programacion, cuando hayan mas toca crear otro metodo
             const equipo = {
               id: doc.id,
@@ -335,7 +333,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
               this.infosabs.push(data);
               swal.close();
             }).catch((error) => {
-              console.log(cont, Object.keys(item).length);
               if (cont === Object.keys(item).length) {
                 swal.close();
                 swal({
@@ -364,7 +361,6 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.ventana) {
         this.servicioSabs.buscarEquip(item).then(
           dataEquip => {
-            console.log('Consulta Equip en SABS: ', dataEquip);
             resolve(dataEquip);
           }
         ).catch(error => {
@@ -429,13 +425,10 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   cambiarDataEquipo(item, index) {
-    console.log(item);
-    console.log(index);
     const ambiente = this;
     this.equiposel = item;
 
 
-    console.log(this.infosabs);
     this.infosabsel = this.infosabs[index];
 
     this.modelEquipoSel.cfName = this.equiposel.nombre;

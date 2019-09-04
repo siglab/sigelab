@@ -34,7 +34,6 @@ export class QuerysAutenticadoService {
 
           this.afs.doc('cfSrv/' + elemento.cfSrv).ref.get().then(data2 => {
             const servicio =  data2.data();
-            console.log(37,elemento.parametrosSrv)
             var conditionsLogServ = []
             var conditionsLog =  []
             if (elemento.conditionsLogServ) {

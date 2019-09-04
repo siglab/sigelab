@@ -115,7 +115,7 @@ export class AdminLaboratorios3Component implements OnInit {
     this.persona = JSON.parse(sessionStorage.getItem('persona'));
     if (sessionStorage.getItem('usuario')) {
       this.user = JSON.parse(sessionStorage.getItem('usuario'));
-      
+
     }
 
     this.getRoles();
@@ -129,7 +129,7 @@ export class AdminLaboratorios3Component implements OnInit {
     this.query.getLaboratorios().then((data) => {
       this.cache.cfFacil = data.data()
       this.query.estructurarDataLabAdmin(data).then(datos => {
-        this.estructurarLaboratorios(datos)    
+        this.estructurarLaboratorios(datos)
 
       });
     });
@@ -255,43 +255,6 @@ export class AdminLaboratorios3Component implements OnInit {
         this.dataSource.data = cachelab['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.getLaboratorios().then(labo => {
-        //   console.log(labo);
-        //   labo.forEach(doc => {
-        //     const laboratorio = doc.data();
-
-
-        //     this.buscarDirector(laboratorio.facilityAdmin).then(dueno => {
-        //       const duenoLab = dueno.data();
-        //       if (duenoLab) {
-        //         laboratorioObject = {
-        //           uid: doc.id,
-        //           nombre: laboratorio.cfName,
-        //           director: duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames,
-        //           iddueno: laboratorio.facilityAdmin,
-        //           emaildirector: duenoLab.email,
-        //           info: { email: laboratorio.otros.email },
-        //           estado: laboratorio.active ? 'Activo' : 'Inactivo',
-        //           active: laboratorio.active,
-        //           ultima: laboratorio.updatedAt.split('T')[0]
-        //         };
-
-
-
-        //         this.laboratoriosEstructurados.push(laboratorioObject);
-
-        //         if (this.laboratoriosEstructurados.length === labo.size) {
-        //           resolve();
-        //         }
-
-
-        //       }
-        //     });
-
-
-        //   });
-
-        // });
       }
 
     });
@@ -410,7 +373,7 @@ export class AdminLaboratorios3Component implements OnInit {
                     showConfirmButton: true
                   });
               })
-             
+
             });
 
           });

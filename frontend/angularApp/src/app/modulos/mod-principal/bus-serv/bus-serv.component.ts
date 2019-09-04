@@ -78,6 +78,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
   constructor(private observer: ObserverPrincipalService,
     private query: QuerysPrincipalService, private afs: AngularFirestore,
     private ruta: Router, private http: Http) {
+
     if (sessionStorage.getItem('usuario')) {
       this.user = JSON.parse(sessionStorage.getItem('usuario'));
       if (this.user.email.split('@')[1] === correoUnivalle) {
@@ -92,13 +93,24 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.alert.show();
 
     this.query.getServicios().then(data => {
+
+      // validar si existen datos
+     const datos = Object.keys(data.data());
+      if (datos.length === 0 ) {
+
+        this.alert.hide();
+
+      }
       this.query.estructurarDataServ(data).then(datos => {
+
+
         this.dataSource.data = datos['data'];
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.alert.hide();
 
-      }).catch(() => {
+      }).catch((err) => {
+
         this.alert.hide();
         swal({
           type: 'error',
@@ -107,7 +119,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
         });
       });
 
-    });
+    }).catch( err => console.log(err));
   }
 
   ngAfterViewInit(): void {

@@ -95,7 +95,6 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   mostrardata2(item) {
     this.servsel = item;
-    console.log('SERVICIO SELECCIONADO', this.servsel);
     this.variation = undefined;
     this.condicion = undefined;
     this.estructurarCondiciones(item.condiciones);

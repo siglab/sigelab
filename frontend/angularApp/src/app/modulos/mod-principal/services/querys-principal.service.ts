@@ -151,7 +151,7 @@ export class QuerysPrincipalService {
     return promise;
   }
 
-  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS   
+  // METODO QUE ESTRUCTURA LA DATA PARA LA VISTA BUSQUEDA DE SERVICIOS
   getDataServ(data: any) {
     return this.buscarServicio(data.uid).then(serv => {
       const elemento = serv.data();
@@ -370,7 +370,7 @@ export class QuerysPrincipalService {
             promesas.push(buscarespacios)
           }
           return Promise.all(promesas).then(values => {
-            console.log(439, values); // [3, 1337, "foo"] 
+            console.log(439, values); // [3, 1337, "foo"]
             laboratorio['servicios'] = values[0]
             laboratorio['practicas'] = values[1]
             laboratorio['telefonos'] = values[2]
