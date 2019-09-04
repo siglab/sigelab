@@ -23,7 +23,7 @@
         <ul class="treeview-menu">
           <li class="treeview" (click)="enviaritemLab(item)" routerLinkActive="active">
             <a [routerLink]="['adminlaboratorios']">
-              <i class="fa fa-circle-o"></i>Panel principal
+              <i class="fa fa-circle-o"></i>Panel principal de resumen
             </a>
           </li>
           <li
@@ -32,7 +32,7 @@
             (click)="enviaritemEquip(item)"
           >
             <a [routerLink]="['adminequipos']">
-              <i class="fa fa-circle-o"></i>Equipos registrados
+              <i class="fa fa-circle-o"></i>Inventario de equipos registrados
             </a>
           </li>
           <li
@@ -53,7 +53,7 @@
               <i class="fa fa-circle-o"></i>Administración de espacios
             </a>
           </li>
-          <li
+          <!-- <li
             *ngIf="item.labo.facilActivity.teaching"
             routerLinkActive="active"
             class="treeview"
@@ -62,14 +62,19 @@
             <a [routerLink]="['adminpracticas']">
               <i class="fa fa-circle-o"></i>Administración de prácticas
             </a>
-          </li>
+          </li> -->
+          <!-- <li
+            *ngIf="item.labo.facilActivity.extension"
+            routerLinkActive="active"
+            class="treeview"
+          > -->
           <li
             *ngIf="item.labo.facilActivity.extension"
             routerLinkActive="active"
             class="treeview"
           >
             <a>
-              <i class="fa fa-link"></i> Administración de servicios
+              <i class="fa fa-link"></i> Servicios de laboratorio
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
@@ -78,17 +83,17 @@
               <li routerLinkActive="active" (click)="enviaritemServAsoc(item)">
                 <a [routerLink]="['adminserviciosasociados']">
                   <i class="fa fa-circle-o"></i>
-                  Servicios asociados</a
+                  Administración de servicios</a
                 >
               </li>
               <li routerLinkActive="active" (click)="enviaritemSolServ(item)">
                 <a [routerLink]="['adminserviciosolicitud']">
-                  <i class="fa fa-circle-o"></i> Solicitudes de servicios</a
+                  <i class="fa fa-circle-o"></i> Solicitudes de servicios recibidas</a
                 >
               </li>
             </ul>
           </li>
-          <li
+          <!-- <li
             *ngIf="item.labo.facilActivity.research"
             routerLinkActive="active"
             class="treeview"
@@ -96,7 +101,7 @@
             <a [routerLink]="['adminproyectos']" (click)="enviaritemProy(item)">
               <i class="fa fa-circle-o"></i>Administración de proyectos
             </a>
-          </li>
+          </li> -->
           <li class="treeview" routerLinkActive="active">
             <a>
               <i class="fa fa-circle-o"></i>

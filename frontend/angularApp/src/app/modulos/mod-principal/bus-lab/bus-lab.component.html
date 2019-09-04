@@ -107,8 +107,10 @@
                         <fieldset>
                           <div class="form-group">
                             <div class="col-md-12">
-                              <label class="control-label" for="desc">
-                                <strong>Descripción: </strong>{{ itemsel.desc }}</label>
+                              <label><strong>Descripción:</strong></label>
+                              <label class="control-label" for="desc" class="description">
+                                {{ itemsel.desc }}
+                              </label>
                             </div>
                           </div>
                           <div class="form-group">
@@ -155,9 +157,10 @@
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
-                              <label class="control-label" for="subsede">
-                                <strong>Términos y condiciones:</strong>
-                                {{ itemsel.condiciones }}</label>
+                              <label><strong>Términos, condiciones y/o recomendaciones:</strong></label>
+                              <label class="control-label" for="subsede" class="lab-terms">
+                                {{ itemsel.condiciones }}
+                              </label>
                             </div>
                           </div>
                         </fieldset>
@@ -692,7 +695,7 @@
                 </div>
                 <div *ngIf="servsel.equipos.length != 0" class="form-group">
                   <div class="col-md-12 text-center">
-                    <button class="btn2 btn-danger danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
+                    <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
                       Ver equipos asociados
                     </button>
                   </div>
@@ -766,21 +769,26 @@
         <div class="box box-danger">
           <div class="box-header">
             <i class="fa fa-map"></i>
-
-            <h3 class="box-title">Información Equipos Relacionados</h3>
+            <h3 class="box-title">Información de equipos relacionados a este servicio</h3>
             <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalEquips')"></span>
           </div>
-
           <div class="box-body">
             <div class="panel-group" id="accordion">
               <div *ngFor="let item of servsel.equipos; let i = index" class="panel panel-default">
-                <div class="panel-heading">
+                <div class="panel-heading equipment-header">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseEquipos{{ i }}">{{ item.nombre }}</a>
                   </h4>
                 </div>
                 <div id="collapseEquipos{{ i }}" class="panel-collapse collapse">
-                  <div class="panel-body">{{ item.descripcion }}</div>
+                  <div *ngIf="item.descripcion; else noDescription;">
+                    {{ item.descripcion }}
+                  </div>
+                  <ng-template #noDescription>
+                    <div class="no-data">
+                      <h5>Este equipo no cuenta con descripción.</h5>
+                    </div>
+                  </ng-template>
                 </div>
               </div>
             </div>

@@ -52,25 +52,22 @@
                             {{ element.capacity }}
                           </mat-cell>
                         </ng-container>
-
                         <ng-container matColumnDef="arealibre">
                           <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Area libre
+                            Área libre (m²)
                           </mat-header-cell>
                           <mat-cell *matCellDef="let element">
                             {{ element.freeArea }}
                           </mat-cell>
                         </ng-container>
-
                         <ng-container matColumnDef="totalarea">
                           <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            Total Area
+                            Área total (m²)
                           </mat-header-cell>
                           <mat-cell *matCellDef="let element">
                             {{ element.totalarea }}
                           </mat-cell>
                         </ng-container>
-
                         <ng-container matColumnDef="spaceData.building">
                           <mat-header-cell *matHeaderCellDef mat-sort-header>
                             Edificio
@@ -79,7 +76,6 @@
                             {{ element.spaceData.building }}
                           </mat-cell>
                         </ng-container>
-
                         <ng-container matColumnDef="spaceData.place">
                           <mat-header-cell *matHeaderCellDef mat-sort-header>
                             Espacio
@@ -88,7 +84,6 @@
                             {{ element.spaceData.place }}
                           </mat-cell>
                         </ng-container>
-
                         <ng-container matColumnDef="active">
                           <mat-header-cell *matHeaderCellDef mat-sort-header>
                             Estado
@@ -97,12 +92,10 @@
                             {{ element.active | activo }}
                           </mat-cell>
                         </ng-container>
-
                         <mat-header-row *matHeaderRowDef="displayedColumnsSpace"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: displayedColumnsSpace" style="cursor: pointer;" (click)="cambiardata(row)"></mat-row>
                       </mat-table>
-
-                      <mat-paginator #paginatorSpace="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                      <mat-paginator #paginatorSpace="matPaginator" [pageSize]="10" [pageSizeOptions]="[10, 25, 50]" [showFirstLastButtons]="true">
                       </mat-paginator>
                     </div>
                   </div>

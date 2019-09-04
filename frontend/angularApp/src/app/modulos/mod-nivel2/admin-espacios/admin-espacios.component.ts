@@ -491,8 +491,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   actualizarEspacio() {
-
-
+    console.log('ESTO ES NUUUEEEEVOOOOO', this.space.spaceData.building, this.myControl.value);
     this.space.spaceData.building = this.myControl.value;
     const nuevoespacio = {
       capacity: this.space.capacity,
@@ -524,49 +523,34 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.servicioMod2.Trazability(
             this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
           ).then(() => {
-
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
-
-
             this.alert.hide();
-
             swal({
               type: 'success',
               title: 'Actualizado Correctamente',
               showConfirmButton: true,
               timer: 1000
             }).then(result => {
-
-
-
               this.initDataComponent();
-
-
             });
           });
 
 
         });
       });
-
-
     console.log(nuevoespacio);
   }
 
 
   listSubHq() {
-
     this.space.headquarter = this.laboratorio.headquarter;
     this.spServ.listSubHq(this.laboratorio.headquarter).subscribe(res => {
       this.subsedes = res;
-
     });
-
   }
 
   // lista todas las sedes de la plataforma
   listHq() {
-
     this.spServ.listHq().subscribe((res) => {
       this.sedes = res;
       console.log('sedes', res);
@@ -575,7 +559,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   applyFilterPers(filterValue: string) {
-
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceSpace.filter = filterValue;

@@ -6,16 +6,11 @@ declare var $: any;
 @Injectable()
 export class ObservablesService {
 
-
-
   constructor(private afs: AngularFirestore) { }
 
-
   consultarNotificaciones(id) {
-
     const col = this.afs.collection('user').doc(id).collection('notification',
      ref => ref.where('estado', '==', 'sinver'));
-
     return col.snapshotChanges();
   }
 
@@ -24,18 +19,14 @@ export class ObservablesService {
     return this.afs.collection('user').doc(user).collection('notification').doc(id).update({estado: 'visto'});
   }
 
-
   private object = new BehaviorSubject<any>([]);
   currentObject = this.object.asObservable();
 
   private solserv = new BehaviorSubject<Array<any>>([]);
   currentSolServ = this.solserv.asObservable();
 
-
   private HistoSolserv = new BehaviorSubject<Array<any>>([]);
   currentHistoSolserv = this.HistoSolserv.asObservable();
-
-
 
   public objectEquip = new BehaviorSubject<any>([]);
   currentObjectequip = this.objectEquip.asObservable();
@@ -61,21 +52,11 @@ export class ObservablesService {
   private objectProy = new BehaviorSubject<any>([]);
   currentObjectProy = this.objectProy.asObservable();
 
-
   private objectSolMan = new BehaviorSubject<any>([]);
   currentObjectSolMan = this.objectSolMan.asObservable();
 
-
   private objectSolBaja = new BehaviorSubject<any>([]);
   currentObjectSolBaja = this.objectSolBaja.asObservable();
-
-
-
-
-
-
-
-
 
   changeObject(object: any) {
     this.object.next(object);
@@ -83,10 +64,7 @@ export class ObservablesService {
 
   changeObjectEquip(object: any) {
     console.log('cambioequipo');
-    //
-
     this.objectEquip.next(object);
-
   }
 
   changeObjectLab(object2: any) {
@@ -136,15 +114,11 @@ export class ObservablesService {
     this.solserv.next(itemSolServ);
   }
 
-
   changeHistoSolserv(itemHistoSolserv: Array<any>) {
     this.HistoSolserv.next(itemHistoSolserv);
   }
 
-
-
   centerView( id ) {
-
     setTimeout(function() {
       $('html, body').animate(
         {
