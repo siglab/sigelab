@@ -404,7 +404,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.alert.show();
 
     this.query.getDataLab(row).then(data => {
-      this.cambiardata(data)
+      this.cambiardata(data);
       this.alert.hide();
 
     }).catch(err=>{

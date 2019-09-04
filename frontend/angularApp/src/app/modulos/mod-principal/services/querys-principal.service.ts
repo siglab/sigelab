@@ -329,10 +329,10 @@ export class QuerysPrincipalService {
           if (elemento.cfAvailability) {
             disponibilidad = elemento.cfAvailability
           }
-          console.log(443, elemento.relatedServices, elemento.relatedPractices, elemento.relatedPractices)
-          promesas.push(this.estructurarServicios(elemento.relatedServices))
-          promesas.push(this.estructurarPracticas(elemento.relatedPractices))
-          promesas.push(this.estructuraTelefonos(elemento.relatedPractices))
+          console.log(443, elemento.relatedServices, elemento.relatedPractices, elemento.relatedPractices);
+          promesas.push(this.estructurarServicios(elemento.relatedServices));
+          promesas.push(this.estructurarPracticas(elemento.relatedPractices));
+          promesas.push(this.estructuraTelefonos(labsnapshot.id));
           let laboratorio = {
             uid: labsnapshot.id,
             nombre: elemento.cfName,

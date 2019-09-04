@@ -392,10 +392,10 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
 
                 if (duenoLab) {
                   this.labestructurado.director= duenoLab.cfFirstNames + ' ' + duenoLab.cfFamilyNames
-  
+
                 }else{
                   this.labestructurado.director= `Sin asignar`
-  
+
                 }
                 if (laboratorio.facilActivity.extension) {
                   const servicesol = this.estructurarServicios(laboratorio.relatedServices);
@@ -993,6 +993,8 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
           this.infolab.cfAvailability = this.listaDisponibilidad;
           this.infolab.faculties = this.estructurarEnvioSugerenciaFacDep(this.listaFacultades, 'faculties');
           this.infolab.departments = this.estructurarEnvioSugerenciaFacDep(this.listaDepartamentos, 'departments');
+
+
           this.selectorActividad();
 
           this.estructurarEnvioActividades();
@@ -1006,7 +1008,7 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             .then(() => {
               this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
                 .then(data => {
-                  this.servicioMod2.updateCacheLaboratorios(this.labestructurado.uid,this.infolab)
+                  this.servicioMod2.updateCacheLaboratorios(this.labestructurado.uid, this.infolab)
                   swal.close();
                   swal({
                     type: 'success',
