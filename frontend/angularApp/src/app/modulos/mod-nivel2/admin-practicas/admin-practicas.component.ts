@@ -123,7 +123,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   //   $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
   // this.year  = `${new Date().getFullYear().toString()}-00-00`;
-  console.log(this.year);
 
   }
 
@@ -134,7 +133,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
 
   // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
   getRoles(rol) {
-    console.log(rol);
     this.moduloNivel2 = false;
     for (const clave in rol) {
       if (rol[clave]) {
@@ -278,7 +276,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
 
             data2.forEach(prog => {
               if (prog) {
-                console.log('id que ingreso del espacio', prog['space']);
 
                 const pract = {
                   id_pract: data.id,
@@ -450,7 +447,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   equipoSeleccionado(item, bool) {
     this.interfaz = bool;
     this.practica = item;
-    console.log(item);
 
   }
 
@@ -464,7 +460,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   cambiardata(row) {
     this.addPractica = false;
     this.consultarpractica = true;
-    console.log(row);
     this.practica = row;
     this.practica.activo = row.activo;
 
@@ -476,7 +471,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     this.practica.space = row.espacio;
     this.id_prc = row.id_pract;
     this.id_pro = row.programacion.id_pro;
-    console.log(row.programacion.horario);
 
     this.obs.centerView('mostrarpractica');
     if (row.programacion.horario.length > 0) {
@@ -490,7 +484,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   }
 
   activarData(row){
-    console.log(row);
     $('html, body').animate({ scrollTop: '600px' }, 'slow');
     this.nameP = row.nombre;
     this.code = row.codigo;
@@ -504,10 +497,7 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
       for (let j = 0; j < this.pracestructurado.equipos.length; j++) {
         const element2 = this.pracestructurado.equipos[j];
         if (element.id == element2.id) {
-          console.log(element2);
-        // this.selection.isSelected(element2);
         this.selection.select(element2)
-        console.log(this.selection.selected);
         }
       }
     }
@@ -542,24 +532,14 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     };
 
     this.selection.selected.forEach((element) => {
-
-
-      console.log(element);
-
       if (element.id) {
         practica.relatedEquipments[element.id] = true;
-
       }
-
       if (element.espacio) {
         practica.relatedSpaces[element.espacio] = true;
       }
 
     });
-
-
-    console.log(practica, 'programing', programming);
-    console.log(this.mainSpace);
     if (practica) {
         this.servicioMod2.addPractica(practica).then(ok => {
           //agrega el objeto al cache de practicas
@@ -625,7 +605,6 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
     setTimeout(() => {
       this.modalCalendar = $AB('#calendariomodal');
       this.modalCalendar.fullCalendar('destroy');
-      console.log('entro al modal');
        this.modalCalendar.fullCalendar({
          // licencia
          schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
@@ -738,12 +717,10 @@ export class AdminPracticasComponent implements OnInit, AfterContentInit, OnDest
   }
 
   showstp(st) {
-    console.log(st);
   }
 
   onSubmit( form ) {
     if (form.valid) {
-      console.log(form);
       form.reset();
     }
   }

@@ -38,19 +38,15 @@ export class RegistroComponent implements OnInit {
     const q = $event.target.value;
     if (q.trim() === '') {
       // this.dispo = false;
-      console.log('campo vacio');
     } if ( email.valid ) {
-      console.log( ' entro', q );
       this.status = 'Confirmando disponibilidad';
        const collref = this.afs.collection('user').ref;
-      //  console.log(collref);
        const queryref = collref.where('email', '==', q);
        queryref.get().then((snapShot) => {
          if (snapShot.empty) {
            this.status = 'Email disponible';
           this.dispo = true;
          } else {
-          console.log(snapShot.docs[0].id);
            this.status = 'Ya existe un usuario en el sistema con el email ingresado.';
            this.dispo = false;
            this.addU = snapShot.docs[0].id;
@@ -61,7 +57,6 @@ export class RegistroComponent implements OnInit {
 
   createUser() {
     if (!this.email || !this.pass || this.addU) {
-      console.log(this.email, this.pass, this.addU);
       swal({
         type: 'error',
         title: 'Hay campos requeridos vacíos!',
@@ -87,7 +82,6 @@ export class RegistroComponent implements OnInit {
             userObject['uid']
           ).subscribe(res => {
             if (res.status === 200) {
-              console.log('Usuario creado satisfactoriamente.');
               this.login.logout().then(()=>{
                 localStorage.removeItem('logout');
                 swal({

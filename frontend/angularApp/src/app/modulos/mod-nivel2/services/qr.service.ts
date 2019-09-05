@@ -48,7 +48,6 @@ export class QrService {
   }
 
   handleErrorObservable(error: Response | any) {
-    console.error(error.message || error);
 
     return Observable.throw(error.message || error);
   }
@@ -102,7 +101,6 @@ export class QrService {
 
     return new Promise((resolve, reject) => {
       data.forEach(element => {
-        console.log('object', element.payload.doc.data().relatedSpaces);
 
         this.getSpaces(element.payload.doc.data().relatedSpaces, element.payload.doc.id).then(ok => {
 
@@ -178,13 +176,8 @@ export class QrService {
 
   addComponents(arrComponent, id) {
 
-     console.log('llego el id', id);
     if (arrComponent.length > 0) {
-       console.log('array que llego', arrComponent );
       arrComponent.forEach(element => {
-
-
-        console.log(element);
         this.afs.doc('cfEquip/' + id).collection('components').add(element);
 
       });
@@ -238,7 +231,6 @@ export class QrService {
 
   updatedLab(idLab, idEquip) {
 
-    console.log(idLab, idEquip);
     const newLab = { relatedEquipments: {} };
 
     newLab.relatedEquipments[idEquip] = true;

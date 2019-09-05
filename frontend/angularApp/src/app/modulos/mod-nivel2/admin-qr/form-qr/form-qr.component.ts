@@ -87,8 +87,6 @@ export class FormQrComponent implements OnInit {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
 
     this.qrser.listCfFacil().subscribe(data => {
-
-      console.log('data labs', data);
       this.dataSourceFacil.data = data;
     });
 
@@ -100,15 +98,11 @@ export class FormQrComponent implements OnInit {
 
     this.qrser.getQr(this.id).subscribe(res => {
       this.data = res;
-
-      console.log('qr', res);
     });
 
     this.formFirebase = false;
 
     this.qrser.getIdQr(this.id).then(res => {
-      console.log('trae algo', res);
-
       // oculta o muestra partes del template si existen datos asociados
       this.formFirebase = true;
       this.seleccionLab = false;
@@ -119,7 +113,6 @@ export class FormQrComponent implements OnInit {
 
       this.qrser.postSabs(res['inventory']).then(data => {
 
-        console.log('datos sabs', data);
 
         this.fecha_Aceptacion = data.fechaAceptacion;
         this.responsable = data.responsable;
@@ -155,17 +148,14 @@ export class FormQrComponent implements OnInit {
     const q = $event.target.value;
     if (q.trim() === '') {
       this.status = 'Campo obligatorio.';
-      console.log('se disparo invent');
       // this.dispo = false;
     } else {
       this.status = 'Buscando código en SABS...';
       this.qrser.postSabs(q).then(res => {
-        console.log(res);
         if (res.encontrado === true) {
           this.status = 'Código de inventario encontrado.';
           this.formulario = true;
           this.formEdit = 'false';
-          console.log(this.formEdit);
           // asignar valores de la consulta a formulario
           this.inventario.responsable = res.responsable;
           this.inventario.ubicacion = res.ubicacion;
@@ -198,17 +188,14 @@ export class FormQrComponent implements OnInit {
     const q = $event.target.value;
     if (q.trim() === '') {
       this.statusComponent = 'Campo obligatorio.';
-      console.log('se disparo invent');
       // this.dispo = false;
     } else {
       this.statusComponent = 'Buscando código  componente  en SABS...';
       this.qrser.postSabs(q).then(res => {
-        console.log(res);
         if (res.encontrado === true) {
           this.statusComponent = 'Código componente de inventario encontrado.';
           this.formularioComp = true;
           this.formComponenteCode = true;
-          console.log(this.formEdit);
           // asignar valores de la consulta a formulario
           this.componente.ubicacion_c = res.ubicacion;
           this.componente.costoinicial_c = res.costoInicial;
@@ -237,14 +224,10 @@ export class FormQrComponent implements OnInit {
 
 
   getSelectValueSpace(value) {
-    console.log('este es el value', value);
     this.idspace = value;
 
     this.spaces.forEach(element => {
       if (element.id_space === value) {
-
-        console.log(element.idlab);
-
         this.idlab = element.idlab;
       }
     });
@@ -303,7 +286,6 @@ export class FormQrComponent implements OnInit {
   }
 
   validarDatos(object) {
-    console.log(object);
     let vol = true;
     if (object.descripcion.trim() === '' || object.modelo.trim() === '' || object.precio === null) {
       vol = false;
@@ -338,9 +320,6 @@ export class FormQrComponent implements OnInit {
         createdAt: fecha.toISOString(),
         cfConditions: []
       };
-
-      console.log(cfEquip);
-
       this.qrser.addEquipFirebase(cfEquip).then(path => {
 
         if (this.arrComponents.length > 0) {
@@ -379,7 +358,6 @@ export class FormQrComponent implements OnInit {
   }
 
   applyFilterLab(filterValue: string) {
-    console.log(filterValue);
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceFacil.filter = filterValue;
@@ -387,14 +365,10 @@ export class FormQrComponent implements OnInit {
   }
 
   cambiardataLab(row) {
-
-    console.log(row.id);
     this.qrser.getSpaces(row.relatedSpaces, row.id)
       .then((dataSpace: any) => {
         this.spaces = [];
         this.spaces = dataSpace;
-        console.log('espacio asociado', dataSpace);
-
         this.seleccionLab = false;
       });
   }
