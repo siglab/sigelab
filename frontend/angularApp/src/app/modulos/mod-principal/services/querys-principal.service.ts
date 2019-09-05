@@ -442,9 +442,11 @@ export class QuerysPrincipalService {
           }
         }
         return Promise.all(promesas).then(responses => {
+          console.log(445,responses.values)
+
           responses.forEach(data => {
             var servicio = data.data();
-            if (servicio.cfName) {
+            if (servicio != undefined && servicio.hasOwnProperty('cfName') && servicio.cfName) {
               var serv = {
                 nombre: servicio.cfName,
                 descripcion: servicio.cfDesc,
