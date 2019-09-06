@@ -1008,7 +1008,13 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
             .then(() => {
               this.servicioMod2.updateDocLaboratorio(this.labestructurado.uid, this.infolab)
                 .then(data => {
-                  this.servicioMod2.updateCacheLaboratorios(this.labestructurado.uid, this.infolab)
+                  console.log(1011,this.infolab)
+              const labEmail = this.infolab.otros.email
+             const updatedAt = this.infolab.updatedAt
+
+              
+               const laboratorio = {labEmail,updatedAt}
+                  this.servicioMod2.updateCacheLaboratorios(this.labestructurado.uid, laboratorio)
                   swal.close();
                   swal({
                     type: 'success',
