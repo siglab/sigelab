@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from '@firebase/util';
+import { Modulo2Service } from "../../mod-nivel2/services/modulo2.service";
 
 
 const publicIp = require('public-ip');
@@ -14,7 +15,8 @@ export class ServicesNivel3Service {
 
   datosLabsEstructurados = [];
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore,
+    private _Modulo2Service:Modulo2Service) { }
 
 
   // METODOS DE CONSULTA
@@ -208,7 +210,11 @@ export class ServicesNivel3Service {
 
   setLaboratorio(id, doc) {
 
-    return this.afs.collection('cfFacil').doc(id).set(doc, { merge: true });
+    return this.afs.collection('cfFacil').doc(id).set(doc, { merge: true })
+    .then(res=>{
+      console.log(215,doc)
+      this._Modulo2Service.updateCacheLaboratorios(id,doc);
+    });
 
   }
 
@@ -230,7 +236,7 @@ export class ServicesNivel3Service {
 
   updatedLab(id, doc) {
 
-    return this.afs.doc('cfFacil/' + id).update(doc);
+    return this.afs.doc('cfFacil/' + id).update(doc)
 
   }
 

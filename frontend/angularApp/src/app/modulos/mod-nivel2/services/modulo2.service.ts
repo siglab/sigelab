@@ -226,15 +226,38 @@ export class Modulo2Service {
     return this.afs.doc('cfFacil/' + idlab).update(doc);
   }
   updateCacheLaboratorios(uid, lab) {
-    var laboratorio = {
+    var laboratorio = {  }
 
-      labEmail: lab.otros.email,
+    if (lab.hasOwnProperty('director')) {
+      laboratorio['director'] = lab.director
 
-      updatedAt: lab.updatedAt
+    }
+    if (lab.hasOwnProperty('directoremail')) {
+      laboratorio['directoremail'] = lab.directoremail
+
+    }
+    if (lab.hasOwnProperty('escuela')) {
+      laboratorio['escuela'] = lab.escuela
+
+    }
+    if (lab.hasOwnProperty('inves')) {
+      laboratorio['inves'] = lab.inves
+
+    }
+    if (lab.hasOwnProperty('labEmail')) {
+      laboratorio['labEmail'] = lab.labEmail
+    }
+    if (lab.hasOwnProperty('nombre')) {
+      laboratorio['labEmail'] = lab.nombre
+
+    }
+    if (lab.hasOwnProperty('updatedAt')) {
+      laboratorio['updatedAt'] = lab.updatedAt
+
     }
     const data = {}
     data[uid] = laboratorio
-
+console.log(260,data)
     return this.afs.doc('cache/cfFacil/').set(data, { merge: true });
 
   }

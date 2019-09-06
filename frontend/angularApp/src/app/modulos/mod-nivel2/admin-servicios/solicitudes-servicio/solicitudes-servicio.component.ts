@@ -248,10 +248,8 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
 
 
   alistarVariables(event) {
-    console.log(event.target.files);
     let tamano = false;
     for (let i = 0; i < event.target.files.length; i++) {
-      console.log(event.target.files[i].size);
       if (event.target.files[i].size >= 33554432) {
         tamano = true;
         break;
@@ -446,7 +444,6 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
 
   cambiarDataServicio(item, table) {
 
-    console.log(item);
     this.servicioActivoSel = item;
     this.variation = undefined;
     this.condicion = undefined;
@@ -471,13 +468,10 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
     }
 
     this.moduloinfo = true;
-    console.log(item);
     if (table === 'activo') {
       this.buttons = true;
-      console.log('activpo');
     } else {
       this.buttons = false;
-      console.log('historia');
     }
 
   }
@@ -498,7 +492,6 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
       this.condicion = undefined;
     }
 
-    console.log(item);
 
   }
 

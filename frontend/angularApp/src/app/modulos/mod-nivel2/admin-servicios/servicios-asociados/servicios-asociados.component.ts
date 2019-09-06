@@ -321,7 +321,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     if (item !== 'inicial') {
       this.variation = this.buscarVariacion(item);
-      console.log(this.variation);
       this.estructurarVariaciones(this.variation.data.cfConditions);
     } else {
       this.variation = undefined;
@@ -391,7 +390,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   }
 
   cambiardata(item) {
-    console.log(item);
     this.variation = undefined;
     this.campoCondicion = '';
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */

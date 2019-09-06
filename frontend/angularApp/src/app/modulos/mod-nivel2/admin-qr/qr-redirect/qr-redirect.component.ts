@@ -15,11 +15,9 @@ export class QrRedirectComponent implements OnInit {
 
   getUrl() {
     const url = window.location.href;
-    console.log(url);
 
     const corte = url.split('=');
 
-    console.log(corte[1]);
     this.router.navigate(['principal/qrinventario', corte[1]]);
   }
 }

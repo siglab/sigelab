@@ -301,7 +301,6 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     const promise = new Promise((resolve, reject) => {
       this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
-        console.log(304, labo.id)
         this.persestructurado = {
           personal: this.estructurarPers(laboratorio.relatedPers),
           personalInactivo: this.estructurarPersIna(laboratorio.relatedPers),

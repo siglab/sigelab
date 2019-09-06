@@ -399,7 +399,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.alert.show();
 
     this.query.getDataLab(row).then(data => {
-      this.cambiardata(data)
+      this.cambiardata(data);
       this.alert.hide();
 
     }).catch(err=>{
@@ -410,9 +410,7 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) {
-    console.log(item.practicas)
     this.itemsel = item;
-    console.log(413,this.itemsel)
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
     const ambiente = this;
@@ -521,7 +519,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   selectorunivalle() {
     this.habilitarci = false;
-    console.log(this.selecunivallelab.value);
     this.selecunivallelab.value.forEach(elemento => {
       if (elemento === 3) {
         this.habilitarci = true;
@@ -655,7 +652,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
             'El CI ingresado no se encuentra asociado a ningún proyecto actual';
           this.disponible = true;
         } else {
-          console.log(snapShot.docs[0].id);
           this.nameProject = snapShot.docs[0].data().projectName;
           this.status = 'Nombre del proyecto: ' + this.nameProject;
           this.llaveci = snapShot.docs[0].id;

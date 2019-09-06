@@ -544,8 +544,6 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     this.reserMan.providersInfo.push(this.proovedor);
     this.inicializarProovedor();
-
-    console.log(this.reserMan.providersInfo);
   }
 
   quitarProovedor(index) {
@@ -725,9 +723,7 @@ export class SolicitudMantenimientoComponent implements OnInit {
 
     this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
       if (res.status === 200) {
-        console.log('notificaciones enviadas');
       } else {
-        console.log('error notificaciones');
       }
     });
 
