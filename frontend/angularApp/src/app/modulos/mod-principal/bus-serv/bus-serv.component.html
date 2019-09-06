@@ -320,7 +320,7 @@
                           *ngIf="itemsel.infoServ.equipos.length != 0"
                           class="form-group"
                         >
-                          <div class="col-md-12 text-center">
+                          <div class="col-md-12 text-center" style="min-height: 25px">
                             <button
                               class="btn btn-sm modal-button"
                               style="float: right;"
@@ -694,17 +694,17 @@
                         <div class="form-group">
                           <div class="col-md-12">
                             <label class="control-label" for="nombre"
-                              ><strong>Nombre Laboratorio:</strong>
+                              ><strong>Nombre del laboratorio:</strong>
                               {{ itemsel.nombrelab }}</label
                             >
                           </div>
                         </div>
                         <div class="form-group">
                           <div class="col-md-12">
-                            <label class="control-label" for="desc"
-                              ><strong>Descripción: </strong
-                              >{{ itemsel.infoLab.desc }}</label
-                            >
+                            <label><strong>Descripción:</strong></label>
+                            <label class="control-label" for="desc" class="description">
+                              {{ itemsel.infoLab.desc }}
+                            </label>
                           </div>
                         </div>
                         <div class="form-group">
@@ -761,10 +761,10 @@
                         </div>
                         <div class="form-group">
                           <div class="col-md-12">
-                            <label class="control-label" for="subsede">
-                              <strong>Términos y condiciones:</strong>
-                              {{ itemsel.infoLab.condiciones }}</label
-                            >
+                            <label><strong>Términos, condiciones y/o recomendaciones:</strong></label>
+                            <label class="control-label" for="subsede" class="lab-terms">
+                              {{ itemsel.infoLab.condiciones }}
+                            </label>
                           </div>
                         </div>
                       </fieldset>
@@ -793,7 +793,7 @@
         <div class="box box-danger">
           <div class="box-header">
             <i class="fa fa-map"></i>
-            <h3 class="box-title">Información Equipos Relacionados</h3>
+            <h3 class="box-title">Información de equipos relacionados a este servicio</h3>
             <span
               style="color:#dd4b39; float:right; cursor: pointer;"
               class="glyphicon glyphicon-remove"
@@ -806,18 +806,28 @@
                 *ngFor="let item of itemsel.infoServ.equipos; let i = index"
                 class="panel panel-default"
               >
-                <div class="panel-heading">
+                <div class="panel-heading equipment-header">
                   <h4 class="panel-title">
                     <a
                       data-toggle="collapse"
                       data-parent="#accordion"
-                      href="#collapse{{ i }}"
+                      href="#collapseEquipos{{ i }}"
                       >{{ item.nombre }}</a
                     >
                   </h4>
                 </div>
-                <div id="collapse{{ i }}" class="panel-collapse collapse">
+                <!-- <div id="collapse{{ i }}" class="panel-collapse collapse">
                   <div class="panel-body">{{ item.descripcion }}</div>
+                </div> -->
+                <div id="collapseEquipos{{ i }}" class="panel-collapse collapse">
+                  <div *ngIf="item.descripcion; else noDescription;" class="panel-body">
+                    {{ item.descripcion }}
+                  </div>
+                  <ng-template #noDescription>
+                    <div class="no-data">
+                      <h5>Este equipo no cuenta con descripción.</h5>
+                    </div>
+                  </ng-template>
                 </div>
               </div>
             </div>

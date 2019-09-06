@@ -364,7 +364,7 @@
                         </div>
                       </div>
                       <div *ngIf="servsel.equipos.length != 0" class="form-group">
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-12 text-center" style="min-height: 25px">
                           <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
                             Ver equipos asociados
                           </button>
@@ -527,7 +527,7 @@
                               las opciones de financiación.
                             </p>
                             <mat-form-field>
-                              <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivallelab" multiple (change)="selectorunivalle()">
+                              <mat-select placeholder="Seleccione todas las opciones a las que aplique" [formControl]="selecunivallelab" multiple (change)="selectorunivalle()" required>
                                 <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
                               </mat-select>
                             </mat-form-field>
@@ -694,7 +694,7 @@
                   </div>
                 </div>
                 <div *ngIf="servsel.equipos.length != 0" class="form-group">
-                  <div class="col-md-12 text-center">
+                  <div class="col-md-12 text-center" style="min-height: 25px">
                     <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
                       Ver equipos asociados
                     </button>
@@ -781,7 +781,7 @@
                   </h4>
                 </div>
                 <div id="collapseEquipos{{ i }}" class="panel-collapse collapse">
-                  <div *ngIf="item.descripcion; else noDescription;">
+                  <div *ngIf="item.descripcion; else noDescription;" class="panel-body">
                     {{ item.descripcion }}
                   </div>
                   <ng-template #noDescription>

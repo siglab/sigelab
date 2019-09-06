@@ -423,7 +423,7 @@
                         </div>
                         <div class="box-body">
                           <!-- Conversations are loaded here -->
-                          <div class="direct-chat-messages">
+                          <div class="direct-chat-messages" *ngIf="servsel.comentario && servsel.comentario.length > 0 ;else noComments">
                             <!-- Message. Default to the left -->
                             <div *ngFor="let item of servsel.comentario; let i = index">
                               <div *ngIf="item.autor == 'lab'" class="direct-chat-msg">
@@ -452,18 +452,23 @@
                               </div>
                             </div>
                           </div>
+                          <ng-template #noComments>
+                            <div class="no-data">
+                              <h5>No hay comentarios en esta solicitud.</h5>
+                            </div>
+                          </ng-template>
                         </div>
                           <!-- /.box-body -->
                         <div *ngIf="(servsel.status != 'rechazada') && (servsel.status != 'cancelada')" class="box-footer">
-                            <form action="#" method="post">
-                              <div class="input-group">
-                                <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">
-                                <span class="input-group-btn">
-                                      <button (click)="enviarComentario()" type="button" class="btn btn-success btn-flat">Enviar</button>
-                                    </span>
-                              </div>
-                            </form>
-                          </div>
+                          <form action="#" method="post">
+                            <div class="input-group">
+                              <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">
+                              <span class="input-group-btn">
+                                <button (click)="enviarComentario()" type="button" class="btn btn-success btn-flat">Enviar</button>
+                              </span>
+                            </div>
+                          </form>
+                        </div>
                       </div>
                   </div>
                 </div>

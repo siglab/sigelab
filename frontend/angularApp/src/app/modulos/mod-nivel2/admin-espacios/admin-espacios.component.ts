@@ -86,40 +86,31 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   moduloNivel2 = false;
   moduloNivel3 = false;
   moduloNivel25 = false;
-
   user = this.servicioMod2.getLocalStorageUser();
   lab: any;
   otraSede: boolean;
   myControl: FormControl = new FormControl();
   filteredOptions: Observable<string[]>;
 
-
-
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
     private storage: AngularFireStorage,
     private router: Router,
-    private spServ: EspaciosService) {
-  }
+    private spServ: EspaciosService) { 
+
+    }
 
 
   // tslint:disable-next-line:max-line-length
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
-
     this.initDataComponent();
-
-
     this.filteredOptions = this.myControl.valueChanges
     .pipe(
       startWith(''),
-
       map(val => this.filter(val))
     );
-
-
   }
 
 

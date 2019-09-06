@@ -196,3 +196,38 @@ label {
   border:none;
 }
 
+.equipment-header {
+  background-color: #58595b;
+  color: white;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 3px grey; 
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c00; 
+  border-radius: 10px;
+}
+
+.description {
+  text-align: justify; 
+  max-height: 300px; 
+  overflow-y: auto; 
+  padding-right: 10px
+}
+
+.lab-terms {
+  text-align: justify; 
+  max-height: 300px; 
+  overflow-y: auto; 
+  padding-right: 10px
+}
