@@ -221,8 +221,12 @@ export class AdminUsuariosComponent implements OnInit {
           this.serviceMod3
             .getPersona(element.cfPers ? element.cfPers : '123')
             .then(data => {
-              const persona = data.data() ? data.data() : ' ninguno';
-
+              const persona = data.data() ? data.data() : 'ninguno';
+              console.log(data.data(),persona)
+              var faculty = ''
+              if (data.exists) {
+                faculty = data.data().faculty 
+              }
               let varconsulta;
               if (element.cfPers === '') {
                 varconsulta = undefined;
@@ -230,8 +234,8 @@ export class AdminUsuariosComponent implements OnInit {
                 varconsulta = this.clientRole(persona['clientRole']);
               }
 
-              this.nombresRoles(element.appRoles,
-                varconsulta ? data.data().faculty : '').then(rol => {
+              this.nombresRoles(element.appRoles,faculty
+                ).then(rol => {
 
                   this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
 
