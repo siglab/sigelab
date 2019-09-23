@@ -1012,7 +1012,6 @@ export class AdminUsuariosComponent implements OnInit {
               this.user.uid, 'update', 'cfPers', data.laboratorio.facilityAdmin, persona
             ).then(() => {
               this.serviceMod3.updatedPersona(data.laboratorio.facilityAdmin, persona).then(()=>{
-                // this.serviceMod3.updateCacheUser(this.idu,this.usuario,this.person)
   
               })
             });
@@ -1023,7 +1022,16 @@ export class AdminUsuariosComponent implements OnInit {
           this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: id }
         ).then(() => {
           this.serviceMod3.updatedLab(idlab, { facilityAdmin: id }).then(resUpdate=>{
-            // this._Modulo2Service.updateCacheLaboratorios()
+            if (cfPersonAdmin) {
+              const director = `${cfPersonAdmin.cfFirstNames} ${cfPersonAdmin.cfFamilyNames}`
+              const directoremail = cfPersonAdmin.email
+              const updatedAt = cfPersonAdmin.updatedAt
+
+              
+              const laboratorio = {director,directoremail,updatedAt}
+             this._Modulo2Service.updateCacheLaboratorios(idlab,laboratorio)
+
+            }
           });
         });
       }) .catch(err => {

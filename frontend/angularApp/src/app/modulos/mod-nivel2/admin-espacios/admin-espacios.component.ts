@@ -86,40 +86,31 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   moduloNivel2 = false;
   moduloNivel3 = false;
   moduloNivel25 = false;
-
   user = this.servicioMod2.getLocalStorageUser();
   lab: any;
   otraSede: boolean;
   myControl: FormControl = new FormControl();
   filteredOptions: Observable<string[]>;
 
-
-
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
     private storage: AngularFireStorage,
     private router: Router,
-    private spServ: EspaciosService) {
-  }
+    private spServ: EspaciosService) { 
+
+    }
 
 
   // tslint:disable-next-line:max-line-length
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
-
     this.initDataComponent();
-
-
     this.filteredOptions = this.myControl.valueChanges
     .pipe(
       startWith(''),
-
       map(val => this.filter(val))
     );
-
-
   }
 
 
@@ -482,8 +473,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   actualizarEspacio() {
-
-
+    console.log('ESTO ES NUUUEEEEVOOOOO', this.space.spaceData.building, this.myControl.value);
     this.space.spaceData.building = this.myControl.value;
     const nuevoespacio = {
       capacity: this.space.capacity,
@@ -515,48 +505,32 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.servicioMod2.Trazability(
             this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
           ).then(() => {
-
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
-
-
             this.alert.hide();
-
             swal({
               type: 'success',
               title: 'Actualizado Correctamente',
               showConfirmButton: true,
               timer: 1000
             }).then(result => {
-
-
-
               this.initDataComponent();
-
-
             });
           });
 
 
         });
       });
-
-
   }
 
-
   listSubHq() {
-
     this.space.headquarter = this.laboratorio.headquarter;
     this.spServ.listSubHq(this.laboratorio.headquarter).subscribe(res => {
       this.subsedes = res;
-
     });
-
   }
 
   // lista todas las sedes de la plataforma
   listHq() {
-
     this.spServ.listHq().subscribe((res) => {
       this.sedes = res;
     });
@@ -564,7 +538,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   applyFilterPers(filterValue: string) {
-
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceSpace.filter = filterValue;

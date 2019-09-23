@@ -1,47 +1,49 @@
-.divScroll2 {
+  .divScroll2 {
     overflow-y: scroll;
     height: 200px;
   }
-  divScroll2::-webkit-scrollbar-track
+
+  .divScroll2::-webkit-scrollbar-track
   {
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
       border-radius: 5px;
       background-color: #F5F5F5;
   }
+
   .divScroll2::-webkit-scrollbar
   {
       width: 12px;
       background-color: #F5F5F5;
   }
+
   .divScroll2::-webkit-scrollbar-thumb
   {
-      border-radius: 5px;
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-      background-color: #D62929;
+    border-radius: 5px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #D62929;
   }
 
   .divScroll3 {
     overflow-y: scroll;
     height: 400px;
   }
-  divScroll3::-webkit-scrollbar-track
-  {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-      border-radius: 5px;
-      background-color: #F5F5F5;
+  
+  .divScroll3::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 5px;
+    background-color: #F5F5F5;
   }
-  .divScroll3::-webkit-scrollbar
-  {
+
+  .divScroll3::-webkit-scrollbar {
       width: 12px;
       background-color: #F5F5F5;
   }
-  .divScroll3::-webkit-scrollbar-thumb
-  {
+
+  .divScroll3::-webkit-scrollbar-thumb {
       border-radius: 5px;
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+      box-shadow: inset 0 0 6px rgba(0,0,0,.3);
       background-color: #D62929;
   }
-
 
   .switch {
     position: relative;
@@ -149,4 +151,20 @@
   border: 1px solid #ccc;
   border-top-color: #07d;
   animation: spinner .6s linear infinite;
+}
+
+.mat-row {
+  cursor: pointer;
+}
+
+.mat-cell {
+  padding-left: 5px;
+  font-size: 1.3rem;
+  color: inherit;
+  text-align: center;
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center !important;
+
 }
