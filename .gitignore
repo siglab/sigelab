@@ -8,3 +8,5 @@ frontend/angularApp/src/environments/
 frontend/sigelabangular/
 
 frontend/angularApp/\.firebaserc
+
+frontend/angularApp/src/app/config\.ts

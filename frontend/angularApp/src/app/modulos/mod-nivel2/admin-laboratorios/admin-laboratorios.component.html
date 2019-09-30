@@ -1,1038 +1,1026 @@
-<div id="contenidowraper" class="content-wrapper">
+<div class="content-wrapper">
   <!-- Content Header (Page header) -->
-
+  <section class="content-header">
+    <h1>Panel principal de resumen de información</h1>
+  </section>
   <!-- Main content -->
   <section class="content" >
-
-    <div *ngIf="itemsel | async; let itemsel" class="tab-content">
-      <div id="home" class="tab-pane fade in active">
-        <!-- Componente central de busqueda -->
-        <!-- INDICADORES -->
+    <div *ngIf="itemsel | async as itemsel; else noLabSelected;" class="tab-content">
+      <div id="home" class="tab-pane fade active in">
+        <!-- Indicadores -->
         <div class="row">
           <div class="col-md-12 col-lg-12">
-            <div class="box box-danger">
+            <div class="box box-danger shadow">
               <div class="box-header">
-                <i class="fa fa-search"></i>
+                <i class="fa fa-building"></i>
                 <h3 class="box-title">{{itemsel.nombre.nom1}} {{itemsel.nombre.nom2}}</h3>
               </div>
-
               <div class="box-body">
                 <div class="row">
                   <div *ngIf="this.labestructurado.objectActividad.extension" class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
+                    <div class="info-box internal-shadow">
                       <span class="info-box-icon bg-aqua">
-                        <i class="fa fa-thumbs-o-up"></i>
-                      </span>
-
-                      <div class="info-box-content">
-                        <span class="info-box-text">SERVICIOS
-                          <br>ACTIVOS</span>
-                        <span class="info-box-number">{{itemsel.servicios.length}}</span>
-                      </div>
-                      <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                  </div>
-                  <!-- /.col -->
-                  <div *ngIf="this.labestructurado.objectActividad.research" class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                      <span class="info-box-icon bg-red">
-                        <i class="fa fa-suitcase"></i>
-                      </span>
-
-                      <div class="info-box-content">
-                        <span class="info-box-text">PROYECTOS
-                          <br>ACTIVOS</span>
-                        <span class="info-box-number">{{itemsel.proyectos.length}}</span>
-                      </div>
-                      <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                  </div>
-                  <!-- /.col -->
-
-                  <!-- fix for small devices only -->
-                  <div class="clearfix visible-sm-block"></div>
-
-                  <div *ngIf="this.labestructurado.objectActividad.extension" class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                      <span class="info-box-icon bg-green">
-                        <i class="fa fa-group"></i>
-                      </span>
-
-                      <div class="info-box-content">
-                        <span class="info-box-text">SOLICITUDES
-                          <br>PENDIENTES</span>
-                        <span class="info-box-number">{{itemsel.solicitudes.length}}</span>
-                      </div>
-                      <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                  </div>
-                  <!-- /.col -->
-                  <div *ngIf="this.labestructurado.objectActividad.teaching" class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                      <span class="info-box-icon bg-yellow">
+                        <!-- <i class="fa fa-thumbs-o-up"></i> -->
                         <i class="glyphicon glyphicon-ok"></i>
                       </span>
-
                       <div class="info-box-content">
-                        <span class="info-box-text">PRÁCTICAS
-                          <br>ACTIVAS</span>
-                        <span class="info-box-number">{{itemsel.practicas.length}}</span>
+                        <span class="info-box-text">
+                          Servicios <br>registrados <br>activos
+                        </span>
+                          <span class="info-box-number">{{itemsel.servicios.length}}</span>
+                        </div>
                       </div>
-                      <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->
+                    <div *ngIf="this.labestructurado.objectActividad.research" class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box internal-shadow not-available">
+                        <span class="info-box-icon bg-red">
+                          <!-- <i class="fa fa-suitcase"></i> -->
+                          <i class="fa fa-folder-open"></i>
+                        </span>
+                        <div class="info-box-content">
+                          <span class="info-box-text">
+                            Proyectos <br> registrados <br> activos
+                          </span>
+                          <span class="info-box-number">{{itemsel.proyectos.length}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- fix for small devices only -->
+                    <div class="clearfix visible-sm-block"></div>
+                    <div *ngIf="this.labestructurado.objectActividad.extension" class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box internal-shadow">
+                        <span class="info-box-icon bg-green">
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <div class="info-box-content">
+                          <span class="info-box-text">
+                            Solicitudes de <br> servicio <br> pendientes
+                          </span>
+                          <span class="info-box-number">{{itemsel.solicitudes.length}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="this.labestructurado.objectActividad.teaching" class="col-md-3 col-sm-6 col-xs-12">
+                      <div class="info-box internal-shadow not-available">
+                        <span class="info-box-icon bg-yellow">
+                          <!-- <i class="glyphicon glyphicon-ok"></i> -->
+                          <i class="fa fa-group"></i>
+                        </span>
+                        <div class="info-box-content">
+                          <span class="info-box-text">
+                            Prácticas de <br> laboratorios <br> activas
+                          </span>
+                          <span class="info-box-number">{{itemsel.practicas.length}}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <!-- /.col -->
                 </div>
-
-
-              </div>
             </div>
           </div>
         </div>
-
-
-
-        <!--INFORMACION DE LABORATORIO-->
+        <!-- Información de laboratorios -->
         <div class="row">
           <div class="col-md-12 col-lg-12">
-
-            <div class="col-md-6">
-              <div class="box-group" id="accordion">
-                <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('info')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
-                        INFORMACIÓN DE LABORATORIO
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
-                    </a>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="box-group" id="accordion">
+                  <!-- Información de laboratorio -->
+                  <div class="box box-danger shadow">
+                          <div class="box-header">
+                            <h4 (click)="cambiarIcono('info')" class="box-title">
+                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="true" class="collapsed">
+                                INFORMACIÓN DE LABORATORIO
+                              </a>
+                            </h4>
+                            <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="true">
+                              <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':iconos.info, 'glyphicon-minus':!iconos.info}"></span>
+                            </a>
+                          </div>
+                          <div id="collapse" class="panel-collapse collapse in" aria-expanded="true">
+                            <div class="box-body">
+                              <form *ngIf="itemsel" id="form-work" class="" name="form-work" action="#">
+                                <fieldset>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="nombre">
+                                        <strong>Nombre:</strong> {{this.itemsel.nombre.nom1 + this.itemsel.nombre.nom2}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label><strong>Descripción:</strong></label>
+                                      <label class="control-label" for="descrip" class="description">
+                                        {{this.itemsel.descripcion}}
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="sede">
+                                        <strong>Seccional:</strong> {{this.itemsel.sede.nombre}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="subsede">
+                                        <strong>Sede:</strong> {{this.itemsel.subsede.nombre}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group" style="margin-top: 20px;">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="dispo">
+                                        <strong>Disponibilidad:</strong>
+                                      </label>
+                                      <ul>
+                                        <li *ngFor="let dispo of itemsel.disponibilidad;">{{dispo.nombre}}</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="facultad">
+                                        <strong>Facultades:</strong>
+                                      </label>
+                                      <ul>
+                                        <li *ngFor="let facultad of itemsel.facultades;">{{facultad.nombre}}</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="form-group" style="margin-top: 20px;">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="depar">
+                                        <strong>Departamentos:</strong>
+                                      </label>
+                                      <ul>
+                                        <li *ngFor="let dep of itemsel.departamentos;">{{dep.nombre}}</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="activ">
+                                        <strong>Actividades :</strong>
+                                      </label>
+                                      <ul>
+                                        <li *ngFor="let item of itemsel.actividad;">{{item}} </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="espacio">
+                                        <strong>Encargado:</strong> {{this.itemsel.director}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="ciudes">
+                                        <strong>Email:</strong> {{this.itemsel.info.email}}</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group" style="margin-top: 20px;">
+                                    <div class="col-md-12">
+                                      <label class="control-label" for="dispo">
+                                        <strong>Teléfonos:</strong>
+                                      </label>
+                                      <ul>
+                                        <li *ngFor="let tel of itemsel.telefonos;">{{tel.nombre}}</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-12">
+                                      <label><strong>Términos, condiciones y/o recomendaciones:</strong></label>
+                                      <label class="control-label" for="subsede" class="lab-terms">
+                                        {{this.itemsel.condiciones}}
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25 || moduloPermiso" class="form-group">
+                                    <div class="col-md-12">
+                                      <button class="btn btn-sm modal-button pull-right" type="button" (click)="limpiarData()" data-toggle="tab" href="#menu1">Editar esta información</button>
+                                    </div>
+                                  </div>
+                                </fieldset>
+                              </form>
+                            </div>
+                          </div>
                   </div>
-                  <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <form *ngIf="itemsel" id="form-work" class="" name="form-work" action="#">
-                        <fieldset>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="nombre">
-                                <strong>Nombre:</strong> {{this.itemsel.nombre.nom1 + this.itemsel.nombre.nom2}}</label>
+                  <!-- Información de equipos -->
+                  <div class="box box-danger shadow">
+                          <div class="box-header">
+                            <h4 (click)="cambiarIcono('equipos')" class="box-title">
+                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed">
+                                EQUIPOS ASOCIADOS AL LABORATORIO
+                              </a>
+                            </h4>
+                            <a (click)="cambiarIcono('equipos')" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false"
+                              class="collapsed">
+                              <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.equipos, 'glyphicon-minus':iconos.equipos}"></span>
+                            </a>
+                          </div>
+                          <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                              <div *ngIf="dataSourceEquipos.data.length == 0" class="no-data">
+                                <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS ASOCIADOS</h4>
+                              </div>
+        
+                              <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquipos.data.length != 0">
+                                <div class="example-header">
+                                  <mat-form-field>
+                                    <input style="outline: none;" matInput (keyup)="applyFilterEquipos($event.target.value)" placeholder="Buscar Equipo">
+                                  </mat-form-field>
+                                </div>
+        
+                                <mat-table #tableEquipos #sortEquipos="matSort" [dataSource]="dataSourceEquipos" matSort>
+        
+        
+                                  <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  </ng-container>
+        
+                                  <mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></mat-header-row>
+                                  <mat-row *matRowDef="let row; columns: displayedColumnsEquipos;" style="cursor: pointer;" (click)="cambiardata(row, 'equipos')"
+                                    data-toggle="modal" data-target="#modal1"></mat-row>
+                                </mat-table>
+        
+                                <mat-paginator #paginatorEquipos="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                </mat-paginator>
+                              </div>
                             </div>
                           </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="descrip">
-                                <strong>Descripción:</strong> {{this.itemsel.descripcion}}</label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="sede">
-                                <strong>Seccional:</strong> {{this.itemsel.sede.nombre}}</label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="subsede">
-                                <strong>Sede:</strong> {{this.itemsel.subsede.nombre}}</label>
-                            </div>
-                          </div>
-                          <div class="form-group" style="margin-top: 20px;">
-                            <div class="col-md-12">
-                              <label class="control-label" for="dispo">
-                                <strong>Disponibilidad:</strong>
-                              </label>
-                              <ul>
-                                <li *ngFor="let dispo of itemsel.disponibilidad;">{{dispo.nombre}}</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="facultad">
-                                <strong>Facultades:</strong>
-                              </label>
-                              <ul>
-                                <li *ngFor="let facultad of itemsel.facultades;">{{facultad.nombre}}</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="form-group" style="margin-top: 20px;">
-                            <div class="col-md-12">
-                              <label class="control-label" for="depar">
-                                <strong>Departamentos:</strong>
-                              </label>
-                              <ul>
-                                <li *ngFor="let dep of itemsel.departamentos;">{{dep.nombre}}</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="activ">
-                                <strong>Actividades :</strong>
-                              </label>
-                              <ul>
-                                <li *ngFor="let item of itemsel.actividad;">{{item}} </li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="espacio">
-                                <strong>Encargado:</strong> {{this.itemsel.director}}</label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="ciudes">
-                                <strong>Email:</strong> {{this.itemsel.info.email}}</label>
-                            </div>
-                          </div>
-                          <div class="form-group" style="margin-top: 20px;">
-                            <div class="col-md-12">
-                              <label class="control-label" for="dispo">
-                                <strong>Teléfonos:</strong>
-                              </label>
-                              <ul>
-                                <li *ngFor="let tel of itemsel.telefonos;">{{tel.nombre}}</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="subsede">
-                                <strong>Términos y condiciones:</strong> {{this.itemsel.condiciones}}</label>
-                            </div>
-                          </div>
-                          <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25 || moduloPermiso" class="form-group">
-                            <div class="col-md-12" style="margin-left: 70%; max-width: 120px;">
-                              <button class="btn2 btn-danger btn-lg btn-block danger" type="button" (click)="limpiarData()" data-toggle="tab" href="#menu1">Editar</button>
-                            </div>
-                          </div>
-
-                        </fieldset>
-                      </form>
+                  </div>
+                  <!-- Información de servicios -->
+                  <div *ngIf="this.labestructurado.objectActividad.extension" class="box box-danger shadow">
+                    <div class="box-header">
+                      <h4 (click)="cambiarIcono('servicio')" class="box-title">
+                        <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ" class="collapsed" aria-expanded="false">
+                          SERVICIOS REGISTRADOS
+                        </a>
+                      </h4>
+                      <a (click)="cambiarIcono('servicio')" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ" aria-expanded="false"
+                        class="collapsed">
+                        <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.servicio, 'glyphicon-minus':iconos.servicio}"></span>
+                      </a>
                     </div>
-                  </div>
-                </div>
-
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('equipos')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed">
-                        EQUIPOS
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('equipos')" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.equipos, 'glyphicon-minus':iconos.equipos}"></span>
-                    </a>
-                  </div>
-                  <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="dataSourceEquipos.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquipos.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterEquipos($event.target.value)" placeholder="Buscar Equipo">
-                          </mat-form-field>
+                    <div id="collapseServ" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                      <div class="box-body">
+                        <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
+                          <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h4>
                         </div>
-
-                        <mat-table #tableEquipos #sortEquipos="matSort" [dataSource]="dataSourceEquipos" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsEquipos;" style="cursor: pointer;" (click)="cambiardata(row, 'equipos')"
-                            data-toggle="modal" data-target="#modal1"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorEquipos="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="this.labestructurado.objectActividad.teaching" class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('practica')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" class="collapsed" aria-expanded="false">
-                        PRÁCTICAS
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('practica')" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.practica, 'glyphicon-minus':iconos.practica}"></span>
-                    </a>
-                  </div>
-                  <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="dataSourcePracticas.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Prácticas">
-                          </mat-form-field>
+  
+                        <div class="example-container mat-elevation-z8" *ngIf="dataSourceServicios.data.length != 0">
+                          <div class="example-header">
+                            <mat-form-field>
+                              <input style="outline: none;" matInput (keyup)="applyFilterServicios($event.target.value)" placeholder="Buscar Servicios">
+                            </mat-form-field>
+                          </div>
+  
+                          <mat-table #tableServicios #sortServicios="matSort" [dataSource]="dataSourceServicios" matSort>
+  
+  
+                            <ng-container matColumnDef="nombre">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                            </ng-container>
+  
+                            <mat-header-row *matHeaderRowDef="displayedColumnsServicios"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumnsServicios;" style="cursor: pointer;" (click)="cambiardata(row, 'servicios')"
+                              data-toggle="modal" data-target="#modal1"></mat-row>
+                          </mat-table>
+  
+                          <mat-paginator #paginatorServicios="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                          </mat-paginator>
                         </div>
-
-                        <mat-table #tablePracticas #sortPracticas="matSort" [dataSource]="dataSourcePracticas" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsPracticas"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsPracticas;" style="cursor: pointer;" (click)="cambiardata(row, 'practicas')"
-                            data-toggle="modal" data-target="#modal1"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorPracticas="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div *ngIf="this.labestructurado.objectActividad.extension" class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('solicitud')" class="box-title">
-                      <a style="color: black;" data-toggle="collapse" data-parent="#accordion" href="#collapseSol" class="collapsed" aria-expanded="false">
-                        SOLICITUDES DE SERVICIO
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('solicitud')" data-toggle="collapse" data-parent="#accordion" href="#collapseSol" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.solicitud, 'glyphicon-minus':iconos.solicitud}"></span>
-                    </a>
-                  </div>
-                  <div id="collapseSol" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="dataSourceSolicitudes.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceSolicitudes.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterSolicitudes($event.target.value)" placeholder="Buscar Solicitudes">
-                          </mat-form-field>
-                        </div>
-
-                        <mat-table #tableSolicitudes #sortSolicitudes="matSort" [dataSource]="dataSourceSolicitudes" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombreServ}} </mat-cell>
-                          </ng-container>
-                          <ng-container matColumnDef="email">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsSolicitudes"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsSolicitudes;" style="cursor: pointer;" (click)="cambiardata(row, 'solicitudes')"
-                            data-toggle="modal" data-target="#modal1"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorSolicitudes="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+                  <!-- Información de prácticas -->
+                  <!-- <div *ngIf="this.labestructurado.objectActividad.teaching" class="box box-danger">
+                          <div class="box-header">
+                            <h4 (click)="cambiarIcono('practica')" class="box-title">
+                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" class="collapsed" aria-expanded="false">
+                                PRÁCTICAS
+                              </a>
+                            </h4>
+                            <a (click)="cambiarIcono('practica')" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" aria-expanded="false"
+                              class="collapsed">
+                              <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.practica, 'glyphicon-minus':iconos.practica}"></span>
+                            </a>
+                          </div>
+                          <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                            <div class="box-body">
+                              <div *ngIf="dataSourcePracticas.data.length == 0" class="no-data">
+                                <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS</h3>
+                              </div>
+        
+                              <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
+                                <div class="example-header">
+                                  <mat-form-field>
+                                    <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Prácticas">
+                                  </mat-form-field>
+                                </div>
+        
+                                <mat-table #tablePracticas #sortPracticas="matSort" [dataSource]="dataSourcePracticas" matSort>
+        
+        
+                                  <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  </ng-container>
+        
+                                  <mat-header-row *matHeaderRowDef="displayedColumnsPracticas"></mat-header-row>
+                                  <mat-row *matRowDef="let row; columns: displayedColumnsPracticas;" style="cursor: pointer;" (click)="cambiardata(row, 'practicas')"
+                                    data-toggle="modal" data-target="#modal1"></mat-row>
+                                </mat-table>
+        
+                                <mat-paginator #paginatorPracticas="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                                </mat-paginator>
+                              </div>
+                            </div>
+                          </div>
+                        </div> -->
+               </div>
               </div>
+              <div class="col-md-6">
+                  <div class="box-group" id="accordion2">
+                    <!-- Información de espacio principal -->
+                    <!-- <div class="box box-danger shadow">
+                      <div class="box-header">
+                        <h4 (click)="cambiarIcono('espacio')" class="box-title">
+                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false" class="collapsed">
+                            INFORMACIÓN DE ESPACIO PRINCIPAL
+                          </a>
+                        </h4>
+                        <a (click)="cambiarIcono('espacio')" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false"
+                          class="collapsed">
+                          <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.espacio, 'glyphicon-minus':iconos.espacio}"></span>
+                        </a>
+                      </div>
+                      <div id="collapseEsp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                          <div *ngIf="labestructurado.espacioPrin.length == 0" class="no-data">
+                            <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIO PRINCIPAL</h4>
+                          </div>
+                          <form *ngIf="labestructurado.espacioPrin.length != 0" id="form-work" class="" name="form-work" action="#">
+                            <fieldset>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="edif">
+                                    <strong>Edificio: </strong>
+                                    {{this.itemsel.espacioPrin[0].spaceData.building}}
+                                  </label>
+    
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="piso">
+                                    <strong>Piso: </strong>
+                                    {{this.itemsel.espacioPrin[0].spaceData.floor}}
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="lugar">
+                                    <strong>Lugar: </strong>
+                                    {{this.itemsel.espacioPrin[0].spaceData.place}}
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="area">
+                                    <strong>Area Total: </strong>
+                                    {{this.itemsel.espacioPrin[0].totalArea}}
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="capa">
+                                    <strong>Capacidad: </strong>
+                                    {{this.itemsel.espacioPrin[0].capacity}}
+                                  </label>
+    
+                                </div>
+                              </div>
+    
+                            </fieldset>
+                          </form>
+    
+                        </div>
+                      </div>
+                    </div> -->
+                     <!-- Información de solicitudes de servicio -->
+                    <!-- <div *ngIf="this.labestructurado.objectActividad.extension" class="box box-danger shadow"> -->
+                    <div class="box box-danger shadow">
+                      <div class="box-header">
+                        <h4 (click)="cambiarIcono('solicitud')" class="box-title">
+                          <a style="color: black;" data-toggle="collapse" data-parent="#accordion" href="#collapseSol" class="collapsed" aria-expanded="false">
+                            SOLICITUDES DE SERVICIO ACTIVAS
+                          </a>
+                        </h4>
+                        <a (click)="cambiarIcono('solicitud')" data-toggle="collapse" data-parent="#accordion" href="#collapseSol" aria-expanded="false"
+                          class="collapsed">
+                          <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.solicitud, 'glyphicon-minus':iconos.solicitud}"></span>
+                        </a>
+                      </div>
+                      <div id="collapseSol" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                          <div *ngIf="dataSourceSolicitudes.data.length == 0" class="no-data">
+                            <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES DE SERVICIO ACTIVAS</h4>
+                          </div>
+    
+                          <div class="example-container mat-elevation-z8" *ngIf="dataSourceSolicitudes.data.length != 0">
+                            <div class="example-header">
+                              <mat-form-field>
+                                <input style="outline: none;" matInput (keyup)="applyFilterSolicitudes($event.target.value)" placeholder="Buscar Solicitudes">
+                              </mat-form-field>
+                            </div>
+    
+                            <mat-table #tableSolicitudes #sortSolicitudes="matSort" [dataSource]="dataSourceSolicitudes" matSort>
+    
+    
+                              <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombreServ}} </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="email">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+                              </ng-container>
+    
+                              <mat-header-row *matHeaderRowDef="displayedColumnsSolicitudes"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsSolicitudes;" style="cursor: pointer;" (click)="cambiardata(row, 'solicitudes')"
+                                data-toggle="modal" data-target="#modal1"></mat-row>
+                            </mat-table>
+    
+                            <mat-paginator #paginatorSolicitudes="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                            </mat-paginator>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Información de espacios asociados -->
+                    <div class="box box-danger shadow">
+                      <div class="box-header">
+                        <h4 (click)="cambiarIcono('espaciosaso')" class="box-title">
+                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false" class="collapsed">
+                            INFORMACIÓN DE ESPACIOS ASOCIADOS
+                          </a>
+                        </h4>
+                        <a (click)="cambiarIcono('espaciosaso')" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false"
+                          class="collapsed">
+                          <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.espaciosaso, 'glyphicon-minus':iconos.espaciosaso}"></span>
+                        </a>
+    
+                      </div>
+                      <div id="collapseAso" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                          <div *ngIf="labestructurado.espacios.length == 0" class="no-data">
+                            <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS ASOCIADOS</h4>
+                          </div>
+                          <form *ngIf="labestructurado.espacios.length != 0" id="form-work" class="" name="form-work" action="#">
+                            <fieldset class="m-b-10">
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="espasel">
+                                    <strong>Espacios asociados a este laboratorio:</strong>
+                                  </label>
+                                  <select class="form-control" name="variatio" id="espasel" (change)="cambiarEspacioSel($event.target.value)">
+                                    <option value="inicial">Seleccione uno de los espacios asociados</option>
+                                    <option *ngFor="let item of labestructurado.espacios" value="{{item.id_space}}">Edificio {{item.spaceData.building}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </fieldset>
+                            <fieldset *ngIf="espaciosel" class="space-info">
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="edif">
+                                    <strong>Edificio: </strong>
+                                    {{this.espaciosel.spaceData.building}}
+                                  </label>
+    
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="piso">
+                                    <strong>Piso: </strong>
+                                    {{this.espaciosel.spaceData.floor}}
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="lugar">
+                                    <strong>Lugar: </strong>
+                                    {{this.espaciosel.spaceData.place}}
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="area">
+                                    <strong>Área total (m²): </strong>
+                                    {{this.espaciosel.totalArea}}
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="areao">
+                                    <strong>Área Ocupada (m²): </strong>
+                                    {{this.espaciosel.ocupedArea}}
+                                  </label>
+                                </div>
+                              </div>
+                              <!-- <div class="form-group">
+                                <div class="col-md-12">
+                                  <label class="control-label" for="capa">
+                                    <strong>Capacidad: </strong>
+                                    {{this.espaciosel.capacity}}
+                                  </label>
+    
+                                </div>
+                              </div> -->
+                              <div class="form-group">
+                                <div class="col-md-12">
+                                  <button (click)="cargarImagen()" class="btn btn-sm modal-button pull-right map-button" data-toggle="modal" data-target="#modal3"
+                                    type="button">
+                                    Ver plano del espacio
+                                  </button>
+                                  <div class="map-responssive" style="display: none">
+                                    <div *ngIf="!this.espaciosel || !this.espaciosel.map;else noMapResponssive" class="no-data">
+                                      <h5> El plano del espacio seleccionado no se encuentra disponible. </h5>
+                                    </div>
+                                    <ng-template #noMapResponssive>
+                                      <a href="{{this.espaciosel.map}}" target="_blank" class="btn btn-sm modal-button pull-right">Ver plano del espacio</a>
+                                    </ng-template>
+                                  </div>
+                                </div>
+                              </div>
+                            </fieldset>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Información de personal -->
+                    <div class="box box-danger shadow">
+                      <div class="box-header">
+                        <h4 (click)="cambiarIcono('personal')" class="box-title">
+                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" class="collapsed" aria-expanded="false">
+                            PERSONAL VINCULADO A ESTE LABORATORIO
+                          </a>
+                        </h4>
+                        <a (click)="cambiarIcono('personal')" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="false"
+                          class="collapsed">
+                          <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.personal, 'glyphicon-minus':iconos.personal}"></span>
+                        </a>
+                      </div>
+                      <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                          <div *ngIf="dataSourcePersonal.data.length == 0" class="no-data">
+                            <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON PERSONAL ACTIVO REGISTRADO </h4>
+                          </div>
+                          <div class="example-container mat-elevation-z8" *ngIf="dataSourcePersonal.data.length != 0">
+                            <div class="example-header">
+                              <mat-form-field>
+                                <input style="outline: none;" matInput (keyup)="applyFilterPersonal($event.target.value)" placeholder="Buscar Personal">
+                              </mat-form-field>
+                            </div>
+                            <mat-table #tablePersonal #sortPersonal="matSort" [dataSource]="dataSourcePersonal" matSort>
+                              <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                              </ng-container>
+                              <mat-header-row *matHeaderRowDef="displayedColumnsPersonal"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsPersonal;" style="cursor: pointer;" (click)="cambiardata(row, 'personal')"
+                                data-toggle="modal" data-target="#modal1"></mat-row>
+                            </mat-table>
+                            <mat-paginator #paginatorPersonal="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                            </mat-paginator>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Información de proyectos -->
+                    <!-- <div *ngIf="this.labestructurado.objectActividad.research" class="box box-danger shadow">
+                      <div class="box-header">
+                        <h4 (click)="cambiarIcono('proyecto')" class="box-title">
+                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseProy" class="collapsed" aria-expanded="false">
+                            PROYECTOS REGISTRADOS POR ESTE LABORATORIO
+                          </a>
+                        </h4>
+                        <a (click)="cambiarIcono('proyecto')" data-toggle="collapse" data-parent="#accordion2" href="#collapseProy" aria-expanded="false"
+                          class="collapsed">
+                          <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.proyecto, 'glyphicon-minus':iconos.proyecto}"></span>
+                        </a>
+                      </div>
+                      <div id="collapseProy" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="box-body">
+                          <div *ngIf="dataSourceProyectos.data.length == 0" class="no-data">
+                            <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS REGISTRADOS</h4>
+                          </div>
+                          <div class="example-container mat-elevation-z8" *ngIf="dataSourceProyectos.data.length != 0">
+                            <div class="example-header">
+                              <mat-form-field>
+                                <input style="outline: none;" matInput (keyup)="applyFilterProyectos($event.target.value)" placeholder="Buscar Proyectos">
+                              </mat-form-field>
+                            </div>
+                            <mat-table #tableProyectos #sortProyectos="matSort" [dataSource]="dataSourceProyectos" matSort>
+                              <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                              </ng-container>
+                              <mat-header-row *matHeaderRowDef="displayedColumnsProyectos"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsProyectos;" style="cursor: pointer;" (click)="cambiardata(row, 'proyectos')"
+                                data-toggle="modal" data-target="#modal1"></mat-row>
+                            </mat-table>
+                            <mat-paginator #paginatorProyectos="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                            </mat-paginator>
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
             </div>
-
-            <div class="col-md-6">
-              <div class="box-group" id="accordion2">
-
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('espacio')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false" class="collapsed">
-                        INFORMACIÓN DE ESPACIO PRINCIPAL
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('espacio')" data-toggle="collapse" data-parent="#accordion" href="#collapseEsp" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.espacio, 'glyphicon-minus':iconos.espacio}"></span>
-                    </a>
-
-                  </div>
-                  <div id="collapseEsp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="labestructurado.espacioPrin.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIO PRINCIPAL</h3>
-                      </div>
-                      <form *ngIf="labestructurado.espacioPrin.length != 0" id="form-work" class="" name="form-work" action="#">
-                        <fieldset>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="edif">
-                                <strong>Edificio: </strong>
-                                {{this.itemsel.espacioPrin[0].spaceData.building}}
-                              </label>
-
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="piso">
-                                <strong>Piso: </strong>
-                                {{this.itemsel.espacioPrin[0].spaceData.floor}}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="lugar">
-                                <strong>Lugar: </strong>
-                                {{this.itemsel.espacioPrin[0].spaceData.place}}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="area">
-                                <strong>Area Total: </strong>
-                                {{this.itemsel.espacioPrin[0].totalArea}}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="capa">
-                                <strong>Capacidad: </strong>
-                                {{this.itemsel.espacioPrin[0].capacity}}
-                              </label>
-
-                            </div>
-                          </div>
-
-                        </fieldset>
-                      </form>
-
-                    </div>
-                  </div>
-                </div>
-
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('espaciosaso')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false" class="collapsed">
-                        INFORMACIÓN DE ESPACIOS ASOCIADOS
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('espaciosaso')" data-toggle="collapse" data-parent="#accordion" href="#collapseAso" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.espaciosaso, 'glyphicon-minus':iconos.espaciosaso}"></span>
-                    </a>
-
-                  </div>
-                  <div id="collapseAso" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="labestructurado.espacios.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON ESPACIOS ASOCIADOS</h3>
-                      </div>
-                      <form *ngIf="labestructurado.espacios.length != 0" id="form-work" class="" name="form-work" action="#">
-                        <fieldset>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="espasel">
-                                <strong>Espacios :</strong>
-                              </label>
-                              <select class="form-control" name="variatio" id="espasel" (change)="cambiarEspacioSel($event.target.value)">
-                                <option value="inicial">Seleccione un espacio</option>
-                                <option *ngFor="let item of labestructurado.espacios" value="{{item.id_space}}">Edificio {{item.spaceData.building}}</option>
-                              </select>
-                            </div>
-                          </div>
-                        </fieldset>
-                        <fieldset *ngIf="espaciosel">
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="edif">
-                                <strong>Edificio: </strong>
-                                {{this.espaciosel.spaceData.building}}
-                              </label>
-
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="piso">
-                                <strong>Piso: </strong>
-                                {{this.espaciosel.spaceData.floor}}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="lugar">
-                                <strong>Lugar: </strong>
-                                {{this.espaciosel.spaceData.place}}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="area">
-                                <strong>Área Total: </strong>
-                                {{this.espaciosel.totalArea}}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <label class="control-label" for="capa">
-                                <strong>Capacidad: </strong>
-                                {{this.espaciosel.capacity}}
-                              </label>
-
-                            </div>
-                          </div>
-
-                          <div class="form-group">
-                            <div class="col-md-12" style="margin-left: 70%; max-width: 140px;">
-                              <button (click)="cargarImagen()" class="btn2 btn-danger btn-lg btn-block danger" data-toggle="modal" data-target="#modal3"
-                                type="button">Ver más</button>
-                            </div>
-                          </div>
-
-                        </fieldset>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('personal')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" class="collapsed" aria-expanded="false">
-                        PERSONAL
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('personal')" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.personal, 'glyphicon-minus':iconos.personal}"></span>
-                    </a>
-                  </div>
-                  <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="dataSourcePersonal.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PERSONAL</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourcePersonal.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterPersonal($event.target.value)" placeholder="Buscar Personal">
-                          </mat-form-field>
-                        </div>
-
-                        <mat-table #tablePersonal #sortPersonal="matSort" [dataSource]="dataSourcePersonal" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsPersonal"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsPersonal;" style="cursor: pointer;" (click)="cambiardata(row, 'personal')"
-                            data-toggle="modal" data-target="#modal1"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorPersonal="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="this.labestructurado.objectActividad.extension" class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('servicio')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ" class="collapsed" aria-expanded="false">
-                        SERVICIOS
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('servicio')" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.servicio, 'glyphicon-minus':iconos.servicio}"></span>
-                    </a>
-                  </div>
-                  <div id="collapseServ" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceServicios.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterServicios($event.target.value)" placeholder="Buscar Servicios">
-                          </mat-form-field>
-                        </div>
-
-                        <mat-table #tableServicios #sortServicios="matSort" [dataSource]="dataSourceServicios" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsServicios"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsServicios;" style="cursor: pointer;" (click)="cambiardata(row, 'servicios')"
-                            data-toggle="modal" data-target="#modal1"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorServicios="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="this.labestructurado.objectActividad.research" class="box box-danger">
-                  <div class="box-header">
-                    <h4 (click)="cambiarIcono('proyecto')" class="box-title">
-                      <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseProy" class="collapsed" aria-expanded="false">
-                        PROYECTOS
-                      </a>
-                    </h4>
-                    <a (click)="cambiarIcono('proyecto')" data-toggle="collapse" data-parent="#accordion2" href="#collapseProy" aria-expanded="false"
-                      class="collapsed">
-                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.proyecto, 'glyphicon-minus':iconos.proyecto}"></span>
-                    </a>
-                  </div>
-                  <div id="collapseProy" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                      <div *ngIf="dataSourceProyectos.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON PROYECTOS</h3>
-                      </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceProyectos.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterProyectos($event.target.value)" placeholder="Buscar Proyectos">
-                          </mat-form-field>
-                        </div>
-
-                        <mat-table #tableProyectos #sortProyectos="matSort" [dataSource]="dataSourceProyectos" matSort>
-
-
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsProyectos"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsProyectos;" style="cursor: pointer;" (click)="cambiardata(row, 'proyectos')"
-                            data-toggle="modal" data-target="#modal1"></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorProyectos="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
-
       <div id="menu1" class="tab-pane fade">
-
-        <div class="box box-danger">
-          <div class="box-header text-center">
-            <button id="buttonvolver" class="btn btn-danger" style="float: left;" type="button" data-toggle="tab" href="#home">Volver</button>
-            <i class="fa fa-address-card-o"></i>
-
-            <h3 class="box-title">Panel para editar información</h3>
-          </div>
-
-          <div class="box-body">
-
-            <div [ngClass]="{'col-md-6':moduloNivel2 || moduloNivel3 || moduloNivel25, 'col-md-12':moduloPermiso}">
-              <div [ngClass]="{'box box-danger':moduloNivel2 || moduloNivel3 || moduloNivel25, '':moduloPermiso}">
-                <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="box-header text-center">
-                  <i class="fa fa-address-card-o"></i>
-
-                  <h3 class="box-title">Editar Información Actual</h3>
-                </div>
-
-                <div class="box-body">
-                  <form id="form-work2" class="" name="form-work2" action="#">
-                    <fieldset>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="teledit">
-                            <strong>Descripción:</strong>
-                          </label>
-                          <textarea class="form-control" name="desc" id="desc" [(ngModel)]="this.infolab.cfDescr" rows="5"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="sede">
-                            <strong>Seccional :</strong>
-                          </label>
-                          <mat-form-field>
-                            <mat-select  name="sede" id="sede" [(value)]="this.infolab.headquarter" placeholder="Seleccione una seccional">
-                              <mat-option (click)="setSede(item.id)" *ngFor="let item of this.sedes" value="{{item.id}}">{{item.nombre}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="subsede">
-                            <strong>Sede :</strong>
-                          </label>
-                          <mat-form-field>
-                            <mat-select name="subsede" id="subsede" [(value)]="this.infolab.subHq" placeholder="Seleccione una sede" (change)="arregloEspacios()">
-                              <mat-option *ngFor="let item of this.subsedes" value="{{item.id}}">{{item.nombre}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="espacio">
-                            <strong>Espacio principal :</strong>
-                          </label>
-                          <mat-form-field>
-                            <mat-select name="espacio" id="espacio" [(value)]="this.infolab.mainSpace" placeholder="Seleccione el espacio principal">
-                              <mat-option *ngFor="let item of this.espacios" value="{{item.id_space}}">{{item.spaceData.building}} - {{item.spaceData.place}} </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label" for="dispo">
-                          <strong>Disponibilidad :</strong>
-                        </label>
-                        <div class="col-md-12">
-                          <div class="col-md-6">
-                            <label class="control-label">
-                              <strong>de :</strong>
+        <div class="box box-danger shadow">
+            <div class="box-header text-center">
+              <button id="buttonvolver" class="btn btn-danger" style="float: left;" type="button" data-toggle="tab" href="#home">Volver</button>
+              <i class="fa fa-info-circle"></i>
+              <h3 class="box-title">Panel de edición de información de laboratorio</h3>
+            </div>
+  
+            <div class="box-body">
+              <div [ngClass]="{'col-md-6':moduloNivel2 || moduloNivel3 || moduloNivel25, 'col-md-12':moduloPermiso}">
+                <div [ngClass]="{'box box-danger internal-shadow':moduloNivel2 || moduloNivel3 || moduloNivel25, '':moduloPermiso}">
+                  <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="box-header text-center">
+                    <i class="fa fa-address-card-o"></i>
+                    <h3 class="box-title">Información de laboratorio</h3>
+                  </div>
+                  <div class="box-body">
+                    <form id="form-work2" class="" name="form-work2" action="#">
+                      <fieldset>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="teledit">
+                              <strong>Descripción:</strong>
                             </label>
-                            <input name="horaini" id="horaini" [(ngModel)]="selectHinicio" type="time">
+                            <textarea class="form-control" name="desc" id="desc" [(ngModel)]="this.infolab.cfDescr" rows="5"></textarea>
                           </div>
-                          <div class="col-md-6">
-                            <label class="control-label">
-                              <strong> hasta :</strong>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="sede">
+                              <strong>Seccional :</strong>
                             </label>
-                            <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">
-                          </div>
-                          <div class="input-group">
                             <mat-form-field>
-                              <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un día de la semana">
-                                <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
+                              <mat-select  name="sede" id="sede" [(value)]="this.infolab.headquarter" placeholder="Seleccione una seccional">
+                                <mat-option (click)="setSede(item.id)" *ngFor="let item of this.sedes" value="{{item.id}}">{{item.nombre}}</mat-option>
                               </mat-select>
                             </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="subsede">
+                              <strong>Sede :</strong>
+                            </label>
+                            <mat-form-field>
+                              <mat-select name="subsede" id="subsede" [(value)]="this.infolab.subHq" placeholder="Seleccione una sede" (change)="arregloEspacios()">
+                                <mat-option *ngFor="let item of this.subsedes" value="{{item.id}}">{{item.nombre}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="espacio">
+                              <strong>Espacio principal :</strong>
+                            </label>
+                            <mat-form-field>
+                              <mat-select name="espacio" id="espacio" [(value)]="this.infolab.mainSpace" placeholder="Seleccione el espacio principal">
+                                <mat-option *ngFor="let item of this.espacios" value="{{item.id_space}}">{{item.spaceData.building}} - {{item.spaceData.place}} </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label" for="dispo">
+                            <strong>Disponibilidad :</strong>
+                          </label>
+                          <div class="col-md-12">
+                            <div class="col-md-6">
+                              <label class="control-label">
+                                <strong>de :</strong>
+                              </label>
+                              <input name="horaini" id="horaini" [(ngModel)]="selectHinicio" type="time">
+                            </div>
+                            <div class="col-md-6">
+                              <label class="control-label">
+                                <strong> hasta :</strong>
+                              </label>
+                              <input name="horafin" id="horafin" [(ngModel)]="selectHFinal" type="time">
+                            </div>
+                            <div class="input-group">
+                              <mat-form-field>
+                                <mat-select name="dispo" id="dispo" [(value)]="selectdia" placeholder="Seleccione un día de la semana">
+                                  <mat-option *ngFor="let item of this.diassemana" value="{{item.id}}">{{item.nombre}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <span class="input-group-btn">
+                                <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarDisponibilidad()">
+                                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="this.listaDisponibilidad.length != 0" class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="dispoag">
+                              <strong>Disponibilidades Agregadas :</strong>
+                            </label>
+                            <ul class="nav nav-stacked">
+                              <li *ngFor="let item of this.listaDisponibilidad">
+                                <a>{{item.nombre}}
+                                  <span (click)="quitarDisponibilidad(item.id)" class="puntero pull-right badge bg-red">-</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+  
+                        <!-- copiar admin usuarios -->
+                        <div class="col-md-12">
+                          <label class="control-label" for="facul">
+                            <strong>Facultades :</strong>
+                          </label>
+                          <div class="input-group">
+                            <mat-form-field class="example-full-width">
+  
+                              <input placeholder="Seleccione una facultad" [(ngModel)]="fac" type="text" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+  
+                              <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let prog of filteredOptions | async" [value]="prog.nombre">
+                                  {{prog.nombre}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+  
                             <span class="input-group-btn">
-                              <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarDisponibilidad()">
+                              <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('facultad')">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                               </button>
                             </span>
                           </div>
                         </div>
-                      </div>
-                      <div *ngIf="this.listaDisponibilidad.length != 0" class="form-group">
+                        <div *ngIf="this.listaFacultades.length != 0" class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="listfacul">
+                              <strong>Facultades Agregadas :</strong>
+                            </label>
+                            <ul class="nav nav-stacked">
+                              <li *ngFor="let item of this.listaFacultades">
+                                <a>{{item.nombre}}
+                                  <span (click)="quitarelemento(item.id,'facultad')" class="puntero pull-right badge bg-red">-</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+  
                         <div class="col-md-12">
-                          <label class="control-label" for="dispoag">
-                            <strong>Disponibilidades Agregadas :</strong>
+                          <label class="control-label" for="depar">
+                            <strong>Unidades :</strong>
                           </label>
-                          <ul class="nav nav-stacked">
-                            <li *ngFor="let item of this.listaDisponibilidad">
-                              <a>{{item.nombre}}
-                                <span (click)="quitarDisponibilidad(item.id)" class="puntero pull-right badge bg-red">-</span>
-                              </a>
-                            </li>
-                          </ul>
+                          <div class="input-group">
+  
+                            <mat-form-field class="example-full-width">
+  
+                              <input placeholder="Seleccione una unidad" [(ngModel)]="dep" type="text" aria-label="Number" matInput [formControl]="myControl2" [matAutocomplete]="auto2">
+  
+                              <mat-autocomplete #auto2="matAutocomplete">
+                                <mat-option (click)="setSelectDepar(prog.id)" *ngFor="let prog of filteredOptions2 | async" [value]="prog.nombre">
+                                  {{prog.nombre}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+  
+                            <!-- <mat-form-field>
+                              <mat-select name="depar" id="depar" [(value)]="selectdepar" placeholder="Seleccione una unidad">
+                                <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>
+                              </mat-select>
+                            </mat-form-field> -->
+                            <span class="input-group-btn">
+                              <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('unidad')">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                              </button>
+                            </span>
+                          </div>
                         </div>
-                      </div>
-
-                      <!-- copiar admin usuarios -->
-                      <div class="col-md-12">
-                        <label class="control-label" for="facul">
-                          <strong>Facultades :</strong>
-                        </label>
-                        <div class="input-group">
-                          <mat-form-field class="example-full-width">
-
-                            <input placeholder="Seleccione una facultad" [(ngModel)]="fac" type="text" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-
-                            <mat-autocomplete #auto="matAutocomplete">
-                              <mat-option *ngFor="let prog of filteredOptions | async" [value]="prog.nombre">
-                                {{prog.nombre}}
-                              </mat-option>
-                            </mat-autocomplete>
-                          </mat-form-field>
-
-                          <span class="input-group-btn">
-                            <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('facultad')">
-                              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                          </span>
+                        <div *ngIf="this.listaDepartamentos.length != 0" class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="listfacul">
+                              <strong>Unidades agregadas :</strong>
+                            </label>
+                            <ul class="nav nav-stacked">
+                              <li *ngFor="let item of this.listaDepartamentos">
+                                <a>{{item.nombre}}
+                                  <span (click)="quitarelemento(item.id,'unidad')" class="puntero pull-right badge bg-red">-</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                      </div>
-                      <div *ngIf="this.listaFacultades.length != 0" class="form-group">
+  
+  
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="listAct">
+                              <strong>Actividad :</strong>
+                            </label>
+                            <mat-form-field>
+                              <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecactividad" multiple>
+                                <mat-option *ngFor="let opciones of this.listaActividad;" [value]="opciones.name">{{opciones.name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+  
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="emailedit">
+                              <strong>Email:</strong>
+                            </label>
+                            <input id="emailedit" [(ngModel)]="this.infolab.otros.email" name="emailedit" class="form-control" type="text">
+                          </div>
+                        </div>
+  
+  
                         <div class="col-md-12">
-                          <label class="control-label" for="listfacul">
-                            <strong>Facultades Agregadas :</strong>
+                          <label class="control-label" for="tel">
+                            <strong>Teléfonos :</strong>
                           </label>
-                          <ul class="nav nav-stacked">
-                            <li *ngFor="let item of this.listaFacultades">
-                              <a>{{item.nombre}}
-                                <span (click)="quitarelemento(item.id,'facultad')" class="puntero pull-right badge bg-red">-</span>
-                              </a>
-                            </li>
-                          </ul>
+                          <div class="input-group">
+  
+                            <input id="tel" [(ngModel)]="telefono" name="tel" type="text" class="form-control">
+                            <span class="input-group-btn">
+                              <button class="btn btn-success" type="button" (click)="agregarTelefonos()">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                              </button>
+                            </span>
+                          </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-12">
-                        <label class="control-label" for="depar">
-                          <strong>Unidades :</strong>
-                        </label>
-                        <div class="input-group">
-
-                          <mat-form-field class="example-full-width">
-
-                            <input placeholder="Seleccione una unidad" [(ngModel)]="dep" type="text" aria-label="Number" matInput [formControl]="myControl2" [matAutocomplete]="auto2">
-
-                            <mat-autocomplete #auto2="matAutocomplete">
-                              <mat-option (click)="setSelectDepar(prog.id)" *ngFor="let prog of filteredOptions2 | async" [value]="prog.nombre">
-                                {{prog.nombre}}
-                              </mat-option>
-                            </mat-autocomplete>
-                          </mat-form-field>
-
-                          <!-- <mat-form-field>
-                            <mat-select name="depar" id="depar" [(value)]="selectdepar" placeholder="Seleccione una unidad">
-                              <mat-option *ngFor="let item of this.departamentos" value="{{item.id}}">{{item.nombre}}</mat-option>
-                            </mat-select>
-                          </mat-form-field> -->
-                          <span class="input-group-btn">
-                            <button class="btn btn-success" type="button" tabindex="-1" (click)="agregarElemento('unidad')">
-                              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                          </span>
+  
+  
+  
+                        <div *ngIf="this.listaTelefonos.length != 0" class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="listtel">
+                              <strong>teléfonos Agregados :</strong>
+                            </label>
+                            <ul class="nav nav-stacked">
+                              <li *ngFor="let item of this.listaTelefonos">
+                                <a>{{item.nombre}}
+                                  <span (click)="quitarTelefonos(item.id)" class="puntero pull-right badge bg-red">-</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                      </div>
-                      <div *ngIf="this.listaDepartamentos.length != 0" class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="listfacul">
-                            <strong>Unidades agregadas :</strong>
-                          </label>
-                          <ul class="nav nav-stacked">
-                            <li *ngFor="let item of this.listaDepartamentos">
-                              <a>{{item.nombre}}
-                                <span (click)="quitarelemento(item.id,'unidad')" class="puntero pull-right badge bg-red">-</span>
-                              </a>
-                            </li>
-                          </ul>
+  
+  
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <label class="control-label" for="condi">
+                              <strong>Términos y condiciones:</strong>
+                            </label>
+                            <textarea class="form-control" name="condi" id="condi" [(ngModel)]="this.infolab.cfConditions" rows="5"></textarea>
+                          </div>
                         </div>
-                      </div>
-
-
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="listAct">
-                            <strong>Actividad :</strong>
-                          </label>
-                          <mat-form-field>
-                            <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecactividad" multiple>
-                              <mat-option *ngFor="let opciones of this.listaActividad;" [value]="opciones.name">{{opciones.name}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <button (click)="editar()" class="btn2 btn-success btn-lg btn-block success" type="button">Guardar Cambios</button>
+                          </div>
                         </div>
-                      </div>
-
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="emailedit">
-                            <strong>Email:</strong>
-                          </label>
-                          <input id="emailedit" [(ngModel)]="this.infolab.otros.email" name="emailedit" class="form-control" type="text">
-                        </div>
-                      </div>
-
-
-                      <div class="col-md-12">
-                        <label class="control-label" for="tel">
-                          <strong>Teléfonos :</strong>
-                        </label>
-                        <div class="input-group">
-
-                          <input id="tel" [(ngModel)]="telefono" name="tel" type="text" class="form-control">
-                          <span class="input-group-btn">
-                            <button class="btn btn-success" type="button" (click)="agregarTelefonos()">
-                              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                          </span>
-                        </div>
-                      </div>
-
-
-
-                      <div *ngIf="this.listaTelefonos.length != 0" class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="listtel">
-                            <strong>teléfonos Agregados :</strong>
-                          </label>
-                          <ul class="nav nav-stacked">
-                            <li *ngFor="let item of this.listaTelefonos">
-                              <a>{{item.nombre}}
-                                <span (click)="quitarTelefonos(item.id)" class="puntero pull-right badge bg-red">-</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-
-
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="condi">
-                            <strong>Términos y condiciones:</strong>
-                          </label>
-                          <textarea class="form-control" name="condi" id="condi" [(ngModel)]="this.infolab.cfConditions" rows="5"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <button (click)="editar()" class="btn2 btn-success btn-lg btn-block success" type="button">Guardar Cambios</button>
-                        </div>
-                      </div>
-                    </fieldset>
-                  </form>
-                </div>
-              </div>
-            </div>
-
-
-            <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="col-md-6">
-              <div class="box box-danger">
-                <div class="box-header text-center">
-                  <i class="fa fa-address-card-o"></i>
-
-                  <h3 class="box-title">Cambios Propuestos</h3>
-                </div>
-                <div class="box-body">
-                  <form action="">
-                    <div *ngIf="labestructurado" class="form-group">
-                      <div class="col-md-12">
-                        <label class="control-label" for="espacioedit">
-                          <strong>Seleccione:</strong>
-                        </label>
-                        <select class="form-control" id="espacioedit" name="espacioedit" [(ngModel)]="seleccionado" (change)="cambiarSugerencia($event.target.value)">
-                          <option value="inicial">Seleccione una Sugerencia</option>
-                          <option *ngFor="let item of this.cambios" value="{{item.pos}}">{{item.nombre}} fecha: {{item.fecha}}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
-                <div *ngIf="this.sugerencia" class="row" style="margin-top: 20px;">
-                  <div class="col-md-12">
-                    <div class="box box-danger">
-                      <div class="box-header text-center">
-                        <i class="fa fa-address-card-o"></i>
-
-                        <h3 class="box-title">Cambios</h3>
-                      </div>
-                      <div class="box-body">
-                        <form action="">
-                          <fieldset>
-                            <div class="form-group">
-                              <div *ngFor="let item of this.sugerencia.data; let i = index" class="col-md-12">
-                                <label class="control-label" for="espacio">
-                                  <input name="{{'checkbox' + i}}" [(ngModel)]="checks['checkbox'+ i]" type="checkbox">
-                                  <strong>{{item.nombre}}:</strong>
-                                  <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')||(item.nombre == 'telefonos')||(item.nombre == 'actividad')">
-                                    <ul *ngIf="!item.quitar">
-                                      <li *ngFor="let sug of item.info">
-                                        <strong>Agregar: </strong>{{sug.nombre}}</li>
-                                    </ul>
-                                    <ul *ngIf="item.quitar">
-                                      <li *ngFor="let sug of item.infoaux">
-                                        <strong>Quitar: </strong>{{sug.nombre}}</li>
-                                    </ul>
-                                  </div>
-                                  <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')&&(item.nombre != 'telefonos')&&(item.nombre != 'actividad')">
-                                    {{item.infoaux}}
-                                  </div>
-
-                                </label>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="col-md-6">
-                                <button (click)="enviarSugerencia()" class="btn btn-success" type="button">Aprobar</button>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="col-md-6">
-                                <button (click)="desaprobarSugerencia()" class="btn btn-danger" type="button">Desaprobar</button>
-                              </div>
-                            </div>
-
-                          </fieldset>
-                        </form>
-                      </div>
-                    </div>
+                      </fieldset>
+                    </form>
                   </div>
-
-
                 </div>
               </div>
-            </div>
-
-
-          </div>
+              <div *ngIf="moduloNivel2 || moduloNivel3 || moduloNivel25" class="col-md-6">
+                <div class="box box-danger internal-shadow">
+                  <div class="box-header text-center">
+                    <i class="fa fa-address-card-o"></i>
+                    <h3 class="box-title">Cambios Propuestos</h3>
+                  </div>
+                  <div class="box-body">
+                    <form action="">
+                      <div *ngIf="labestructurado" class="form-group">
+                        <div class="col-md-12">
+                          <label class="control-label" for="espacioedit">
+                            <strong>Seleccione:</strong>
+                          </label>
+                          <select class="form-control" id="espacioedit" name="espacioedit" [(ngModel)]="seleccionado" (change)="cambiarSugerencia($event.target.value)">
+                            <option value="inicial">Seleccione una Sugerencia</option>
+                            <option *ngFor="let item of this.cambios" value="{{item.pos}}">{{item.nombre}} fecha: {{item.fecha}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+  
+                  <div *ngIf="this.sugerencia" class="row" style="margin-top: 20px;">
+                    <div class="col-md-12">
+                      <div class="box box-danger">
+                        <div class="box-header text-center">
+                          <i class="fa fa-address-card-o"></i>
+  
+                          <h3 class="box-title">Cambios</h3>
+                        </div>
+                        <div class="box-body">
+                          <form action="">
+                            <fieldset>
+                              <div class="form-group">
+                                <div *ngFor="let item of this.sugerencia.data; let i = index" class="col-md-12">
+                                  <label class="control-label" for="espacio">
+                                    <input name="{{'checkbox' + i}}" [(ngModel)]="checks['checkbox'+ i]" type="checkbox">
+                                    <strong>{{item.nombre}}:</strong>
+                                    <div *ngIf="(item.nombre == 'facultades')||(item.nombre == 'departamentos')||(item.nombre == 'disponibilidad')||(item.nombre == 'telefonos')||(item.nombre == 'actividad')">
+                                      <ul *ngIf="!item.quitar">
+                                        <li *ngFor="let sug of item.info">
+                                          <strong>Agregar: </strong>{{sug.nombre}}</li>
+                                      </ul>
+                                      <ul *ngIf="item.quitar">
+                                        <li *ngFor="let sug of item.infoaux">
+                                          <strong>Quitar: </strong>{{sug.nombre}}</li>
+                                      </ul>
+                                    </div>
+                                    <div *ngIf="(item.nombre != 'facultades')&&(item.nombre != 'departamentos')&&(item.nombre != 'disponibilidad')&&(item.nombre != 'telefonos')&&(item.nombre != 'actividad')">
+                                      {{item.infoaux}}
+                                    </div>
+  
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-6">
+                                  <button (click)="enviarSugerencia()" class="btn btn-success" type="button">Aprobar</button>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-md-6">
+                                  <button (click)="desaprobarSugerencia()" class="btn btn-danger" type="button">Desaprobar</button>
+                                </div>
+                              </div>
+  
+                            </fieldset>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+  
+  
+                  </div>
+                </div>
+              </div>
+              </div>
         </div>
-
       </div>
     </div>
-
-
+    <ng-template #noLabSelected>
+      <div class="no-selected-lab no-data">
+        <div style="margin: auto">
+          <h3>No se ha seleccionado ningún laboratorio.</h3>
+          <h4>Si refrescaste esta página selecciona nuevamente de la barra lateral la opción a la que deseas ingresar.</h4>
+        </div> 
+      </div>
+    </ng-template>
+    <div *ngIf="itemsel | async; let itemsel" class="tab-content">
+      <div id="home" class="tab-pane fade in active">
+        <!--INFORMACION DE LABORATORIO-->
+        <div class="row">
+                <div class="col-md-12 col-lg-12">
+                </div>
+        </div>
+      </div>
+    </div>
   </section>
-
-
-
 </div>
+
+
 
 <!-- MODAL QUE MUESTRA INFORMACION DEL ITEM SELECCIONADO -->
 <div class="modal fade" id="modal1" role="dialog">
@@ -1108,7 +1096,6 @@
                   <div class="col-md-12">
                     <label class="control-label" for="nombrePers">
                       <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-
                   </div>
                 </div>
                 <div class="form-group">
@@ -1117,7 +1104,6 @@
                       <strong>Email:</strong> {{seleccionado.email}}</label>
                   </div>
                 </div>
-
               </fieldset>
             </form>
 
@@ -1239,23 +1225,18 @@
 
 <!-- MODAL QUE MUESTRA LOS DATOS DE LOS ESPACIOS DE LOS DATOS DEL LABORATORIO -->
 <div class="modal fade" id="modal3" role="dialog">
-  <div class="modal-dialog modal-md">
-
+  <div class="modal-dialog modal-md" style="min-width:700px">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body">
-        <div class="box box-danger">
+        <div class="box box-danger shadow">
           <div class="box-header text-center">
             <i class="fa fa-address-card-o"></i>
-
-            <h3 class="box-title">Información de espacio</h3>
-
+            <h3 class="box-title">Plano del espacio seleccionado</h3>
             <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal3')"></span>
           </div>
-
           <div class="box-body" *ngIf="this.labestructurado">
-
-            <form id="form-work" class="" name="form-work" action="#">
+            <!-- <form id="form-work" class="" name="form-work" action="#">
               <fieldset *ngIf="espaciosel">
                 <div class="form-group">
                   <div class="col-md-12">
@@ -1263,7 +1244,6 @@
                       <strong>Edificio: </strong>
                       {{this.espaciosel.spaceData.building}}
                     </label>
-
                   </div>
                 </div>
                 <div class="form-group">
@@ -1285,7 +1265,7 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="area">
-                      <strong>Área Total: </strong>
+                      <strong>Área total (m²): </strong>
                       {{this.espaciosel.totalArea}}
                     </label>
                   </div>
@@ -1305,55 +1285,53 @@
                       {{this.espaciosel.ocupedArea}}
                     </label>
                   </div>
-                </div>
-                <div class="form-group">
+                </div> -->
+                <!-- <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="areal">
                       <strong>Área Libre: </strong>
                       {{this.espaciosel.freeArea}}
                     </label>
                   </div>
-                </div>
-                <div class="form-group">
+                </div> -->
+                <!-- <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="aream">
                       <strong>Área Mínima: </strong>
                       {{this.espaciosel.minArea}}
                     </label>
                   </div>
-                </div>
-                <div class="form-group">
+                </div> -->
+                <!-- <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="indice">
                       <strong>Índice Saturación: </strong>
                       {{this.espaciosel.indxSa}}
                     </label>
                   </div>
-                </div>
-
-              </fieldset>
-            </form>
-
-            <div *ngIf="espaciosel" class="box box-danger">
+                </div> -->
+              <!-- </fieldset>
+            </form> -->
+            <!-- <div *ngIf="espaciosel" class="box box-danger">
               <div class="box-header">
                 <i class="fa fa-address-card-o"></i>
-
                 <h3 class="box-title">Plano Espacio</h3>
               </div>
-
               <div class="box-body">
                 <h3 *ngIf=" this.espaciosel.map == ''"> El laboratorio seleccionado no cuenta con ningún plano </h3>
                 <img *ngIf="this.espaciosel.map != ''" style=" float: center; width: 100%;height: 100%;" [src]="this.plano | async" alt="">
-
               </div>
-
+            </div> -->
+            <div *ngIf="!this.espaciosel || !this.espaciosel.map;else structureData" class="no-data">
+              <h4>El plano del espacio seleccionado no se encuentra disponible.</h4>
             </div>
-
+            <ng-template #structureData>
+              <!-- {{this.espaciosel.map}} -->
+              <!-- <iframe src="{{this.espaciosel.map}}" width="650" height="600"></iframe> -->
+              <iframe src="https://drive.google.com/file/d/1sNRjj3n9Quegy1K9VnBLWPw4QL5dtFN-/preview" width="650" height="600"></iframe>
+            </ng-template>
           </div>
         </div>
-
-
-
       </div>
     </div>
   </div>
@@ -1362,24 +1340,18 @@
 <!-- modal de horario de practica -->
 <div class="modal fade" id="practicaprog" role="dialog">
   <div class="modal-dialog modal-lg">
-
     <!-- Modal content-->
     <div class="modal-content">
-
       <div class="modal-body">
         <div class="box box-danger">
           <div class="box-header text-center">
             <i class="fa fa-calendar"></i>
-
             <h1 class="box-title">Programación de la Práctica</h1>
-
             <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('practicaprog')"></span>
-
           </div>
           <!-- /.box-header -->
           <div class="box-body">
             <div *ngIf="this.seleccionado && tablesel == 'practicas'">
-
               <div class="form-group">
                 <div class="col-md-12">
                   <label class="control-label" for="semestre">
@@ -1397,12 +1369,9 @@
               <div class="cal" id="calendar2">
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 </div>

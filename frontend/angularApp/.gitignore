@@ -19,8 +19,6 @@ firestore.rules
 storage.rules
 functions/node_modules/
 
-# environment files
-src/environments
 # IDEs and editors
 /.idea
 .project

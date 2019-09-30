@@ -215,152 +215,147 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   enviarSolicitudServicio(reserva) {
     const fecha = new Date();
-
     if (this.user) {
-      const cfSrvReserv = {
-        cfFacil: this.itemsel.uid,
-        namelab: this.itemsel.nombre,
-        cfSrv: this.servsel.uid,
-        user: this.user.uid,
-        selectedVariations: {},
-        cfStartDate: '',
-        cfEndDate: '',
-        cfClass: '',
-        cfClassScheme: '',
-        cfPrice: this.servsel.precio,
-        status: 'pendiente',
-        createdAt: fecha.toISOString(),
-        updatedAt: fecha.toISOString(),
-        conditionsLog: [],
-        comments: [],
-        path: [],
-        typeuser: 'externo',
-        datauser: { type: [], ci: '', llaveci: '' },
-        emailuser: this.user.email,
-        acceptedBy: '',
-        parametrosSrv: [],
-        parametros: [],
-        descuento: this.descuento,
-        precioTotal: this.servsel.precio
-      };
-
-      if (this.usuariounivalle) {
-        cfSrvReserv.cfPrice = '' + this.preciocondescuento;
-      }
-
-      swal({
-        type: 'warning',
-        title: '¿Está seguro que desea solicitar este servicio?',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, Solicitar',
-        cancelButtonText: 'No, Cancelar'
-      }).then(result => {
-        if (result.value) {
-          if (reserva === 'convariaciones') {
-            for (let j = 0; j < this.listaVariaciones.length; j++) {
-              // tslint:disable-next-line:no-shadowed-variable
-              const element = this.listaVariaciones[j];
-              cfSrvReserv.selectedVariations[element.data.id] = true;
-              cfSrvReserv.conditionsLog.push({
-                condicion: element.condiciones,
-                idvariacion: element.data.id
-              });
-
-              cfSrvReserv.parametros.push({
-                parametros: element.parametros,
-                id: element.data.id
-              });
-            }
-
-            cfSrvReserv.precioTotal = '' + this.preciototal;
-
-            if (this.usuariounivalle) {
-              cfSrvReserv.cfPrice = '' + this.preciocondescuento;
-            } else {
-              cfSrvReserv.cfPrice = '' + this.preciototal;
-            }
-          }
-
-          if (this.servsel.condiciones.length !== 0) {
-            cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(
-              this.servsel.condiciones,
-              'servicio'
-            );
-          }
-
-          if (this.parametrosServ) {
-            let cont = 0;
-            for (const key in this.parametrosServ) {
-              if (this.parametrosServ.hasOwnProperty(key)) {
-                cfSrvReserv.parametrosSrv.push({
-                  id: cont,
-                  value: this.parametrosServ[key]
+      if (this.validancionCamposSolicitudServicio(reserva)) {
+        const cfSrvReserv = {
+          cfFacil: this.itemsel.uid,
+          namelab: this.itemsel.nombre,
+          cfSrv: this.servsel.uid,
+          user: this.user.uid,
+          selectedVariations: {},
+          cfStartDate: '',
+          cfEndDate: '',
+          cfClass: '',
+          cfClassScheme: '',
+          cfPrice: this.servsel.precio,
+          status: 'pendiente',
+          createdAt: fecha.toISOString(),
+          updatedAt: fecha.toISOString(),
+          conditionsLog: [],
+          comments: [],
+          path: [],
+          typeuser: 'externo',
+          datauser: { type: [], ci: '', llaveci: '' },
+          emailuser: this.user.email,
+          acceptedBy: '',
+          parametrosSrv: [],
+          parametros: [],
+          descuento: this.descuento,
+          precioTotal: this.servsel.precio
+        };
+        if (this.usuariounivalle) {
+          cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+        }
+        swal({
+          type: 'warning',
+          title: '¿Está seguro que desea solicitar este servicio?',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, Solicitar',
+          cancelButtonText: 'No, Cancelar'
+        }).then(result => {
+          if (result.value) {
+            if (reserva === 'convariaciones') {
+              for (let j = 0; j < this.listaVariaciones.length; j++) {
+                // tslint:disable-next-line:no-shadowed-variable
+                const element = this.listaVariaciones[j];
+                cfSrvReserv.selectedVariations[element.data.id] = true;
+                cfSrvReserv.conditionsLog.push({
+                  condicion: element.condiciones,
+                  idvariacion: element.data.id
                 });
-                cont++;
+  
+                cfSrvReserv.parametros.push({
+                  parametros: element.parametros,
+                  id: element.data.id
+                });
+              }
+  
+              cfSrvReserv.precioTotal = '' + this.preciototal;
+  
+              if (this.usuariounivalle) {
+                cfSrvReserv.cfPrice = '' + this.preciocondescuento;
+              } else {
+                cfSrvReserv.cfPrice = '' + this.preciototal;
               }
             }
-          }
-
-          if (this.usuariounivalle) {
-            cfSrvReserv.typeuser = 'interno';
-            cfSrvReserv.datauser.type = this.selecunivallelab.value;
-            cfSrvReserv.datauser.ci = this.valorci;
-            cfSrvReserv.datauser.llaveci = this.llaveci;
-          }
-
-          cfSrvReserv.comments.push({
-            commentText: this.campoCondicion,
-            fecha:
-              fecha.getDate() +
-              '/' +
-              (fecha.getMonth() + 1) +
-              '/' +
-              fecha.getFullYear(),
-            autor: 'usuario',
-            email: this.user.email,
-            uid: this.user.uid
-          });
-
-          console.log(cfSrvReserv);
-
-          this.query
-            .addSolicitudServicio(cfSrvReserv)
-            .then(() => {
-              this.enviarNotificacionesCorreo();
-
-              // tslint:disable-next-line:max-line-length
-              this.query.enviarEmails(
-                this.servsel.nombre,
-                this.user.email,
-                this.itemsel.emaildir,
-                this.itemsel.info.email,
-                this.itemsel.personal
+  
+            if (this.servsel.condiciones.length !== 0) {
+              cfSrvReserv['conditionsLogServ'] = this.estructuraCondiciones(
+                this.servsel.condiciones,
+                'servicio'
               );
-
-              this.limpiarDatos();
-
-              this.cerrarModal('myModalLabs');
-
-              swal({
-                type: 'success',
-                title: 'Solicitud Creada Exitosamente',
-                showConfirmButton: true
+            }
+  
+            if (this.parametrosServ) {
+              let cont = 0;
+              for (const key in this.parametrosServ) {
+                if (this.parametrosServ.hasOwnProperty(key)) {
+                  cfSrvReserv.parametrosSrv.push({
+                    id: cont,
+                    value: this.parametrosServ[key]
+                  });
+                  cont++;
+                }
+              }
+            }
+            if (this.usuariounivalle) {
+              cfSrvReserv.typeuser = 'interno';
+              cfSrvReserv.datauser.type = this.selecunivallelab.value;
+              cfSrvReserv.datauser.ci = this.valorci;
+              cfSrvReserv.datauser.llaveci = this.llaveci;
+            }
+            if (this.campoCondicion && this.campoCondicion != ''){
+              cfSrvReserv.comments.push({
+                commentText: this.campoCondicion,
+                fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
+                autor: 'usuario',
+                email: this.user.email,
+                uid: this.user.uid
               });
-            })
-            .catch(error => {
-              swal({
-                type: 'error',
-                title: '' + error,
-                showConfirmButton: true
+            }
+            this.query
+              .addSolicitudServicio(cfSrvReserv)
+              .then(() => {
+                this.enviarNotificacionesCorreo();
+  
+                // tslint:disable-next-line:max-line-length
+                this.query.enviarEmails(
+                  this.servsel.nombre,
+                  this.user.email,
+                  this.itemsel.emaildir,
+                  this.itemsel.info.email,
+                  this.itemsel.personal
+                );
+                this.limpiarDatos();
+                this.cerrarModal('myModalLabs');
+                swal({
+                  type: 'success',
+                  title: 'Solicitud Creada Exitosamente',
+                  showConfirmButton: true
+                });
+              })
+              .catch(error => {
+                swal({
+                  type: 'error',
+                  title: '' + error,
+                  showConfirmButton: true
+                });
               });
-            });
-        } else if (
-          // Read more about handling dismissals
-          result.dismiss === swal.DismissReason.cancel
-        ) {
-          swal('Solicitud Cancelada', '', 'error');
-        }
-      });
+          } else if (
+            // Read more about handling dismissals
+            result.dismiss === swal.DismissReason.cancel
+          ) {
+            swal('Solicitud Cancelada', '', 'error');
+          }
+        });
+      } else {
+        swal({
+          type: 'error',
+          title: 'Hay campos requeridos sin diligenciar!',
+          text: 'Se requiere diligenciar todos los campos obligatorios para remitir la solicitud.',
+          showConfirmButton: true
+        });
+      }
     } else {
       swal({
         type: 'error',
@@ -415,16 +410,13 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   }
 
   cambiardata(item) {
-    console.log(item.practicas)
     this.itemsel = item;
-    console.log(413,this.itemsel)
     this.dataSource2.data = item.servicios;
     this.dataSource3.data = item.practicas;
     const ambiente = this;
     if (!this.moduloinfo) {
       this.moduloinfo = true;
       setTimeout(function() {
-
         ambiente.loadMap(item);
         $('html, body').animate(
           {
@@ -527,7 +519,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   selectorunivalle() {
     this.habilitarci = false;
-    console.log(this.selecunivallelab.value);
     this.selecunivallelab.value.forEach(elemento => {
       if (elemento === 3) {
         this.habilitarci = true;
@@ -661,7 +652,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
             'El CI ingresado no se encuentra asociado a ningún proyecto actual';
           this.disponible = true;
         } else {
-          console.log(snapShot.docs[0].id);
           this.nameProject = snapShot.docs[0].data().projectName;
           this.status = 'Nombre del proyecto: ' + this.nameProject;
           this.llaveci = snapShot.docs[0].id;
@@ -669,4 +659,29 @@ export class BusLabComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+  validancionCamposSolicitudServicio(reserva) {
+    if (this.usuariounivalle) {
+      if (this.selecunivallelab.value == undefined || this.selecunivallelab.value.length < 1) {
+        return false
+      } else {
+        let valoresFinaciacionUnivalle: Array<any> = this.selecunivallelab.value
+        var cont = 0
+        for (let index = 0; index < valoresFinaciacionUnivalle.length; index++) {
+          const element = valoresFinaciacionUnivalle[index];
+          cont++
+          if (element == 3 && (this.valorci == undefined || this.valorci.trim() == '')) {
+            return false
+          } else {
+            if (cont == valoresFinaciacionUnivalle.length) {
+              return true
+            }
+          }
+        }
+      }
+    } else {
+      return true
+    }
+  }
+
 }

@@ -105,7 +105,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
     this.getRolesNivel2();
     this.sus = this.obs.currentObjectProy.subscribe(data => {
-      console.log(data);
       this.getRoles(data.roles);
       this.proyestructurados = undefined;
 
@@ -121,11 +120,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
             this.dataSourceProy.data = this.proyestructurados.proyectos;
             // inactivos
             this.dataSourceProyIn.data = this.proyestructurados.proyectosInactivo;
-
-
-
-            console.log(this.dataSourcePers.data );
-
 
             swal({
               title: 'Cargando un momento...',
@@ -183,7 +177,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
    // METODO QUE ME TRAE EL ROL DE ACCESSO A NIVEL 2
    getRoles(rol) {
     this.moduloNivel2 = false;
-    console.log(rol);
     for (const clave in rol) {
       if (rol[clave]) {
         if ((clave === 'moduloNivel2')) {
@@ -194,7 +187,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   }
 
   agregarRol(){
-    console.log(this.rolSelect);
 
     let bool = false;
 
@@ -241,7 +233,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     const promise = new Promise((resolve, reject) => {
       this.servicioMod2.buscarLab(key).then(labo => {
         const laboratorio = labo.data();
-        //   console.log(laboratorio);
         if (laboratorio) {
 
           this.proyestructurados = {
@@ -310,8 +301,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
   // METODO QUE ESTRUCTURA LA DATA DE LAS PRACTICAS EN LA VISTA BUSQUEDA DE LABORATORIOS
   // RECIBE EL NODO DE LABORATORIO QUE CONTIENE LAS PRACTICAS ASOCIADOS
   estructurarPersonas(item) {
-
-    console.log(item);
 
     const arr = [];
 
@@ -400,9 +389,7 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     let encontrado = false;
     const arrayselect = this.selection.selected;
     arrayselect.forEach(element => {
-      console.log(element);
       for (let i = 0; i < aux.length; i++) {
-        console.log(aux);
         const persona = aux[i];
         if (persona.id === element.id) {
           encontrado = true;
@@ -440,9 +427,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
 
   addProject() {
-
-    console.log(this.proyecto.personal);
-
     if (this.proyecto.personal.length === 0) {
       swal({
         type: 'info',
@@ -463,15 +447,9 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
       this.proyecto.personal.forEach((element) => {
 
-        console.log(element);
         proyect.relatedPers[element.idpers] = true;
 
       });
-
-
-      console.log(proyect);
-
-
       this.servicioMod2.addProyecto(proyect).then((ok) => {
 
         this.alert.show();
@@ -519,8 +497,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
     };
 
     this.proyecto.personal.forEach((element) => {
-
-      console.log(element);
       proyect.relatedPers[element.idpers] = true;
 
     });
@@ -671,9 +647,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
     this.addP = '';
     const q = $event.target.value;
-
-    console.log(q);
-
     if (q.trim() === '') {
 
       this.status = 'Campo obligatorio';
@@ -686,7 +659,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
           this.status = 'CI no encontrado, ingrese los datos del nuevo proyecto';
           this.dispo = true;
         } else {
-          console.log(snapShot.docs[0].id);
           this.status = 'Ya existe un proyecto en el sistema con el CI ingresado, si desea vincularlo presione el botón vincular.';
           this.dispo = false;
           this.addP = snapShot.docs[0].id;
@@ -705,8 +677,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
         if (doc.data().lvl === 'perfiles2') {
 
           this.niveles.push({ id: doc.id, nombre: doc.data().roleName });
-          console.log(this.niveles);
-
         }
       });
     });
@@ -716,8 +686,6 @@ export class AdminProyectosComponent implements OnInit, OnDestroy {
 
     this.person.clientRole [this.id_lab] = {};
     this.person.clientRole [this.id_lab] [this.rolSelect] = true;
-    console.log(this.person);
-
   }
 
 }

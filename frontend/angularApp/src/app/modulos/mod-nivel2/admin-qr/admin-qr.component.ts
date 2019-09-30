@@ -62,14 +62,9 @@ export class AdminQrComponent implements OnInit {
     //  consulta qr inactivos
     this.qrserv.listQrInactive().subscribe((data) => {
       this.dataSourceQrIn.data = data;
-
-      console.log(this.dataSourceQr.data);
-
     });
 
     this.qrserv.listCfFacil().subscribe(data => {
-
-      console.log('data labs', data);
       this.dataSourceFacil.data = data;
     });
 
@@ -77,8 +72,6 @@ export class AdminQrComponent implements OnInit {
     //  consulta qr activos
     this.qrserv.listQrActive().subscribe((data) => {
       this.dataSourceQr.data = data;
-
-      console.log('qr activos', this.dataSourceQr.data);
     });
   }
 
@@ -86,7 +79,6 @@ export class AdminQrComponent implements OnInit {
   getRoles() {
 
     this.role = JSON.parse(sessionStorage.getItem('rol'));
-    console.log(this.role);
     for (const clave in this.role) {
       if (this.role[clave]) {
         if ((clave === 'moduloNivel3')) {
@@ -108,22 +100,16 @@ export class AdminQrComponent implements OnInit {
 
 
           const image = this.img.file('qrcode' + id + '.png', this.base64, { base64: true });
-          console.log('image content', image);
-
-          console.log('cantidad :', cantidad, 'indice: ', index);
 
           if (cantidad === index) {
 
             this.zip.generateAsync({ type: 'blob' }).then((content) => {
               // see FileSaver.js
-
-              console.log('este es el content', content);
               saveAs(content, 'qrcodes.zip');
             });
           }
 
           resolve();
-          console.log(url);
         })
         .catch(err => {
           console.error(err);
@@ -149,20 +135,17 @@ export class AdminQrComponent implements OnInit {
 
 
             const image = this.img.file('qrcode' + this.cod_qr + '.png', this.base64, { base64: true });
-            console.log('image content', image);
 
 
 
             this.zip.generateAsync({ type: 'blob' }).then((content) => {
               // see FileSaver.js
 
-              console.log('este es el content', content);
               saveAs(content, 'qrcodes.zip');
             });
 
 
             resolve();
-            console.log(url);
           })
           .catch(err => {
             console.error(err);
@@ -195,7 +178,6 @@ export class AdminQrComponent implements OnInit {
           this.status = 'El código de Inventario no fue encontrado';
           this.dispo = false;
         } else {
-          console.log(snapShot.docs[0].id);
           this.status = 'Código de inventario encontrado puede Generar el código asociado';
           this.dispo = true;
           this.cod_qr = snapShot.docs[0].data().qr;
@@ -232,15 +214,12 @@ export class AdminQrComponent implements OnInit {
             this.genItQR(ok.id, cantidad, index).then();
 
 
-            console.log(ok.id);
             const qrmod = {
               secQr: ok.id
             };
 
-            console.log('nuevo objeto', qrmod);
             this.qrserv.setQr(ok.id, qrmod);
 
-            console.log('se agrego prro');
           });
       }
 
@@ -257,7 +236,6 @@ export class AdminQrComponent implements OnInit {
 
   cambiardata(row) {
 
-    console.log(row);
 
     this.secQrUrl = row.secQr;
 
@@ -269,7 +247,6 @@ export class AdminQrComponent implements OnInit {
 
   cambiardataInac(row) {
 
-    console.log(row);
     this.secQrUrl = row.secQr;
     this.router.navigate(['principal/qrinventario', row.secQr]);
 
@@ -277,11 +254,8 @@ export class AdminQrComponent implements OnInit {
 
   cambiardataLab(row) {
 
-    console.log(row);
     this.qrserv.getSpaces(row.relatedSpaces)
       .then(dataSpace => {
-
-        console.log(dataSpace);
       });
   }
 
@@ -310,7 +284,6 @@ export class AdminQrComponent implements OnInit {
    // crea un archivo csv a partir de un array de los QRS generados
   downloadCsvDoc() {
 
-    console.log(this.arrayCsv);
     let csvContent = '';
 
     this.arrayCsv.forEach((element) => {

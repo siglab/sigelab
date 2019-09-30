@@ -86,40 +86,31 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   moduloNivel2 = false;
   moduloNivel3 = false;
   moduloNivel25 = false;
-
   user = this.servicioMod2.getLocalStorageUser();
   lab: any;
   otraSede: boolean;
   myControl: FormControl = new FormControl();
   filteredOptions: Observable<string[]>;
 
-
-
   constructor(private obs: ObservablesService,
     private servicioMod2: Modulo2Service,
     private storage: AngularFireStorage,
     private router: Router,
     private spServ: EspaciosService) {
-  }
+
+    }
 
 
   // tslint:disable-next-line:max-line-length
 
   ngOnInit() {
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
-
     this.initDataComponent();
-
-
     this.filteredOptions = this.myControl.valueChanges
     .pipe(
       startWith(''),
-
       map(val => this.filter(val))
     );
-
-
   }
 
 
@@ -128,7 +119,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   initDataComponent() {
 
     const now = moment().format();
-    console.log(now);
 
     this.sus = this.obs.currentObjectEsp.subscribe(data => {
       this.getRoles(data.roles);
@@ -137,7 +127,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         this.estructuraEspacio(data.uid).then(() => {
           this.listHq();
           this.itemsel = Observable.of(this.espaestructurado.espacios);
-          console.log(this.espaestructurado);
           this.idlab = data.uid;
           this.dataSourceSpace.data = (this.espaestructurado.espacios);
           // this.listSubHq();
@@ -316,7 +305,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
           // funciona con una programacion, cuando hayan mas toca crear otro metodo
           if (espacio) {
-            console.log('espacioo', espacio);
             const space = {
               id_space: data.id,
               capacity: espacio.capacity,
@@ -351,7 +339,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   // METODO QUE AJUSTA EL NOMBRE DEL LABORATORIO PARA EL SIDEBAR
   ajustarTexto(nombre) {
-    console.log(nombre);
     const nombreArr = nombre.split(' ');
     let name1 = '';
     let name2 = '';
@@ -378,7 +365,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   cambiardata(item) {
 
     this.formtrue = true;
-    console.log(item);
     this.idsp = item.id_space;
     this.space.totalArea = item.totalarea;
     this.space.capacity = item.capacity;
@@ -395,14 +381,11 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.space.spaceData.direccion = item.spaceData.direccion;
     this.space.outcampus = item.outcampus;
 
-    console.log('capacidad a', item.capacity);
     // optener datos un espacio especifico
 
-    console.log('id del espacio', this.idsp);
     this.cargarImagen(this.space.map);
     this.listPracticeforSpace(this.idsp).then((ok: any) => {
 
-      console.log(ok['data']);
       this.getActividadAct(ok['data']).then((datos: any) => {
 
         this.actividadAct = datos['data'];
@@ -458,7 +441,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         }
 
         this.alert.show();
-        console.log('acepto guardar');
         this.space.spaceData.building =   this.myControl.value;
         const nuevoespacio = this.space;
         nuevoespacio.subHq = this.idsh;
@@ -524,58 +506,39 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.servicioMod2.Trazability(
             this.user.uid, 'update', 'cfFacil', this.idlab, nuevoEstado
           ).then(() => {
-
             this.servicioMod2.setDocLaboratorio(this.idlab, nuevoEstado);
-
-
             this.alert.hide();
-
             swal({
               type: 'success',
               title: 'Actualizado Correctamente',
               showConfirmButton: true,
               timer: 1000
             }).then(result => {
-
-
-
               this.initDataComponent();
-
-
             });
           });
 
 
         });
       });
-
-
-    console.log(nuevoespacio);
   }
 
-
   listSubHq() {
-
     this.space.headquarter = this.laboratorio.headquarter;
     this.spServ.listSubHq(this.laboratorio.headquarter).subscribe(res => {
       this.subsedes = res;
-
     });
-
   }
 
   // lista todas las sedes de la plataforma
   listHq() {
-
     this.spServ.listHq().subscribe((res) => {
       this.sedes = res;
-      console.log('sedes', res);
     });
 
   }
 
   applyFilterPers(filterValue: string) {
-
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceSpace.filter = filterValue;
@@ -584,7 +547,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   initCalendar() {
 
-    console.log(this.horarios);
     const horario = this.horarios;
     const containerEl: JQuery = $AB('#cal');
     containerEl.fullCalendar('destroy');
@@ -660,15 +622,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   listPracticeforSpace(idSpace) {
     const array = [];
     let cont = 1;
-    console.log(idSpace, this.espaestructurado.practicas);
     // traer array con todas las referencias de practicas con el espacio relacionado
     return new Promise((resolve, reject) => {
       this.espaestructurado.practicas.forEach(element => {
-        console.log('element array', element);
         if (element.programacion.spaceid === idSpace) {
           array.push(element);
         }
-        console.log(cont, this.espaestructurado.practicas.length);
         if (cont === this.espaestructurado.practicas.length) {
           resolve({ data: array });
         } else {
@@ -684,7 +643,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   getPrgramming(id) {
 
-    console.log('id de la practica', id);
     this.horarios = [];
     // this.noEsPrac = [];
     const array = [];
@@ -694,7 +652,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
         const Pr = onSnapshop.data();
 
-        console.log(Pr.noStudents);
 
         const practicaH = {
 
@@ -736,10 +693,8 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     this.idnewSp = '';
 
 
-   console.log(espacio);
      const edificio = this.myControl.value;
 
-     console.log(edificio);
     if ( espacio.trim() === '') {
       this.status = 'Campo obligatorio';
        this.dispo = false;
@@ -750,7 +705,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
          this.status = 'Espacio no encontrado';
          this.dispo = true;
        } else {
-          console.log(snapShot.docs[0].id);
          this.status = 'Ya existe el espacio, si desea vincularlo al laboratorio presione el botón vincular.';
          this.dispo = false;
          this.idnewSp = snapShot.docs[0].id;
@@ -778,15 +732,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         }
 
         default : {
-
-          console.log(sede.id);
           this.servicioMod2.getEdificiosBySede(sede.id)
           .then( res =>  {
-
-            console.log(res.data());
-
             this.edificios = res.data().edificios;
-
           });
 
           break;
@@ -802,8 +750,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   setEdificio() {
 
     this.space.spaceData.building =   this.myControl.value;
-
-    console.log(this.myControl.value);
   }
 
   /* setea campos del objeto */
@@ -828,7 +774,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   // obtiene el total de personas dentro de un laboratorio
   getTotalLab() {
-    console.log('obtiene total del laboratorio');
 
     return new Promise((resolve, reject) => {
       let pers;
@@ -862,20 +807,17 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
 
   totalOcupacion(estudiantesPract) {
-    console.log(estudiantesPract, this.espaestructurado.personal);
     const personalLab = this.espaestructurado.personal;
     this.ocupacionAct = (personalLab ? personalLab : 0) + (estudiantesPract ? estudiantesPract : 0);
     // tslint:disable-next-line:radix
 
     if (this.space.capacity === 0) {
 
-      console.log(' capacidad igual a cero');
 
       this.space.indxSa = 0;
 
     } if (this.space.capacity > 0) {
 
-      console.log(' capacidad mayor a cero');
       this.space.indxSa = (this.ocupacionAct / this.space.capacity);
 
     }
@@ -883,14 +825,12 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
   getActividadAct(arreglo) {
 
-    console.log('si entro al metodo act actual');
     return new Promise((resolve, reject) => {
 
       this.actSpaces = [];
       let estudiantes = 0;
       let cont = 1;
       let encontrado = false;
-      console.log('array para la consulta', arreglo);
 
       arreglo.forEach(prog => {
 
@@ -901,7 +841,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           const now = moment().format();
           if (moment(now).isBetween(fecha.start, fecha.end)) {
 
-            console.log('entro a la condicion actual');
             encontrado = true;
 
           }
@@ -914,7 +853,6 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
         }
 
         if (cont === arreglo.length) {
-          console.log(this.actSpaces);
           resolve({ data: this.actSpaces, data2: estudiantes });
         } else {
           cont++;

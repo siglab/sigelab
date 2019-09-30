@@ -401,7 +401,8 @@ export class BusServComponent implements OnInit, AfterViewInit {
       } else {
         swal({
           type: 'error',
-          title: 'Se requiere diligenciar todos los campos obligatorios para remitir la solicitud.',
+          title: 'Hay campos requeridos sin diligenciar!',
+          text: 'Se requiere diligenciar todos los campos obligatorios para remitir la solicitud.',
           showConfirmButton: true
         });
       }
@@ -573,7 +574,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
   }
 
   validancionCamposSolicitudServicio(reserva) {
-
     if (this.usuariounivalle) {
       if (this.selecunivalle.value == undefined || this.selecunivalle.value.length < 1) {
         return false
@@ -586,21 +586,14 @@ export class BusServComponent implements OnInit, AfterViewInit {
           if (element == 3 && (this.valorci == undefined || this.valorci.trim() == '')) {
             return false
           } else {
-
             if (cont == valoresFinaciacionUnivalle.length) {
-
               return true
             }
           }
         }
-
-        // return true
       }
     } else {
       return true
     }
-
-
   }
-
 }

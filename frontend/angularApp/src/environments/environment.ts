@@ -6,12 +6,12 @@
 export const environment = {
   production: false,
   firebaseConfig : {
-    apiKey: 'AIzaSyDC4Vz7dmno6gfbtBHvOg-9WH6iTC-pMuc',
-    authDomain: 'sigelab-univalle.firebaseapp.com',
-    databaseURL: 'https://sigelab-univalle.firebaseio.com',
-    projectId: 'sigelab-univalle',
-    storageBucket: 'sigelab-univalle.appspot.com',
-    messagingSenderId: '803777606972',
-    appId: '1:803777606972:web:b00da9a64070febc'
+    apiKey: "AIzaSyAu-oPzG9QqUtzZD46IxwXBLfcPW2cXZNo",
+    authDomain: "siglab-2bdb6.firebaseapp.com",
+    databaseURL: "https://siglab-2bdb6.firebaseio.com",
+    projectId: "siglab-2bdb6",
+    storageBucket: "siglab-2bdb6.appspot.com",
+    messagingSenderId: "774972434470",
+    appId: "1:774972434470:web:4f3bbcebb8d3760b"
   }
 };

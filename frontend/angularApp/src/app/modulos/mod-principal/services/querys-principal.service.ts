@@ -51,19 +51,14 @@ export class QuerysPrincipalService {
 
   // estructurar datos lab 2.0
   async estructurarDataCf(data: any) {
-    console.log('entro');
     this.datosLabsEstructurados = [];
     return new Promise((resolve, reject) => {
       data.forEach(doc => {
         const elemento = doc.data();
-        if (elemento.facilityAdmin === '') {
-          console.log(doc.id);
-        }
+      
         this.buscarDirector(elemento.facilityAdmin).then(adminlab => {
           const duenoLab = adminlab.data();
-          console.log(adminlab.exists);
           this.datosLabsEstructurados.push(elemento);
-          // console.log(this.datosLabsEstructurados, data.size);
           if (this.datosLabsEstructurados.length === data.size) {
             resolve({
               data: this.datosLabsEstructurados
@@ -227,7 +222,6 @@ export class QuerysPrincipalService {
             this.datosLabsEstructurados.push(laboratorio);
           }
           cont++
-          console.log(practicas, cont, datasize.length, this.datosLabsEstructurados)
           if (cont === datasize.length) {
             resolve({
               data: this.datosLabsEstructurados
@@ -317,10 +311,8 @@ export class QuerysPrincipalService {
   }
 
   getDataLab(lab: any) {
-    console.log(lab)
     return this.buscarLaboratorio(lab.uid).then(labsnapshot => {
       const elemento = labsnapshot.data()
-      console.log(elemento)
       if (lab.facilityAdmin !== '') {
         return this.buscarDirector(elemento.facilityAdmin).then(dueno => {
           const duenoLab = dueno.data();
@@ -329,7 +321,6 @@ export class QuerysPrincipalService {
           if (elemento.cfAvailability) {
             disponibilidad = elemento.cfAvailability
           }
-          console.log(443, elemento.relatedServices, elemento.relatedPractices, elemento.relatedPractices);
           promesas.push(this.estructurarServicios(elemento.relatedServices));
           promesas.push(this.estructurarPracticas(elemento.relatedPractices));
           promesas.push(this.estructuraTelefonos(labsnapshot.id));
@@ -370,7 +361,6 @@ export class QuerysPrincipalService {
             promesas.push(buscarespacios)
           }
           return Promise.all(promesas).then(values => {
-            console.log(439, values); // [3, 1337, "foo"]
             laboratorio['servicios'] = values[0]
             laboratorio['practicas'] = values[1]
             laboratorio['telefonos'] = values[2]
@@ -442,9 +432,10 @@ export class QuerysPrincipalService {
           }
         }
         return Promise.all(promesas).then(responses => {
+
           responses.forEach(data => {
             var servicio = data.data();
-            if (servicio.cfName) {
+            if (servicio != undefined && servicio.hasOwnProperty('cfName') && servicio.cfName) {
               var serv = {
                 nombre: servicio.cfName,
                 descripcion: servicio.cfDesc,
@@ -538,12 +529,10 @@ export class QuerysPrincipalService {
   estructuraTelefonos(idlab) {
     var tels = [];
     return this.afs.doc('cfFacil/' + idlab).collection('cfEAddr').ref.get().then(data => {
-      console.log(data.empty)
       if (data.empty) {
         return tels;
       } else {
         data.forEach(element => {
-          console.log(element.data())
           tels.push(element.data().cfEAddrValue);
         });
         return tels;
@@ -596,14 +585,12 @@ export class QuerysPrincipalService {
       nombreserv + '. Esta fue realizada en la fecha ' + fechaes +
       ' por el usuario con el correo: ' + emailSolicitante + '.';
     destino += emailSolicitante + ',' + emailEncargado + ',' + emailLaboratorio;
-    console.log(destino);
     this.http.post(url, {
       para: destino,
       asunto: asunto,
       mensaje: mensaje
     }).subscribe((res) => {
       if (res.status === 200) {
-        console.log('notificaciones enviadas');
       } else {
         console.log('error notificaciones');
       }
@@ -639,7 +626,6 @@ export class QuerysPrincipalService {
   }
 
   enviarNotificaciones(notificaciones, nombreserv, emailSolicitante) {
-    console.log(notificaciones);
     const fecha = new Date().toISOString().split('T')[0];
     const mensaje = 'Se le notifica que se ha realizado una nueva solicitud del servicio ' +
       nombreserv + '. Esta fue solicitada en la fecha ' + fecha +
@@ -678,7 +664,6 @@ export class QuerysPrincipalService {
       var cont = 0
       data.forEach(doc => {
         const elemento = doc.data();
-        console.log(elemento.facilityAdmin)
         if (elemento.facilityAdmin !== '') {
           this.buscarDirector(elemento.facilityAdmin).then(dueno => {
             const duenoLab = dueno.data();
@@ -722,7 +707,6 @@ export class QuerysPrincipalService {
             }
             cont++
             this.datosLabsEstructurados.push(laboratorio);
-            console.log(this.datosLabsEstructurados, data.size, cont);
             if (cont === data.size) {
               resolve({
                 data: this.datosLabsEstructurados
