@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig : {
-    apiKey: 'YOUR_FIREBASE_DEVELOPMENT_PROJECT_APIKEY',
-    authDomain: 'YOUR_FIREBASE_DEVELOPMENT_AUTH_DOMAIN',
-    databaseURL: 'YOUR_FIREBASE_DEVELOPMENT_DATABASE_URL',
-    projectId: 'YOUR_FIREBASE_DEVELOPMENT_PROJECT_ID',
-    storageBucket: 'YOUR_FIREBASE_DEVELOPMENT_STORAGE_BUCKED',
-    messagingSenderId: 'YOUR_FIREBASE_DEVELOPMENT_MESSAGING_SENDER_ID'
+    apiKey: 'AIzaSyAu-oPzG9QqUtzZD46IxwXBLfcPW2cXZNo',
+    authDomain: 'siglab-2bdb6.firebaseapp.com',
+    databaseURL: 'https://siglab-2bdb6.firebaseio.com',
+    projectId: 'siglab-2bdb6',
+    storageBucket: 'siglab-2bdb6.appspot.com',
+    messagingSenderId: '774972434470',
+    appId: '1:774972434470:web:4f3bbcebb8d3760b'
   }
 };

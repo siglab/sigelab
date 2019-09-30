@@ -493,7 +493,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   actualizarEspacio() {
 
 
-    this.space.spaceData.building = this.myControl.value;
+   // this.space.spaceData.building = this.myControl.value;
     const nuevoespacio = {
       capacity: this.space.capacity,
       freeArea: this.space.freeArea,

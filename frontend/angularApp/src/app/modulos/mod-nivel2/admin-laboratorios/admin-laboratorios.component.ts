@@ -1793,7 +1793,6 @@ export class AdminLaboratoriosComponent implements OnInit, OnDestroy {
   setDepartment() {
 
     this.departamentos = [];
-
     this.departamentosStatic.forEach(doc => {
       if (this.listaFacultades.find(o => o.id === doc.idfacul)) {
         this.departamentos.push(doc);
