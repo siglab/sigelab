@@ -96,7 +96,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
     private servicioMod2: Modulo2Service,
     private storage: AngularFireStorage,
     private router: Router,
-    private spServ: EspaciosService) { 
+    private spServ: EspaciosService) {
 
     }
 
@@ -473,8 +473,9 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
   }
 
   actualizarEspacio() {
-    console.log('ESTO ES NUUUEEEEVOOOOO', this.space.spaceData.building, this.myControl.value);
-    this.space.spaceData.building = this.myControl.value;
+
+
+   // this.space.spaceData.building = this.myControl.value;
     const nuevoespacio = {
       capacity: this.space.capacity,
       freeArea: this.space.freeArea,

@@ -133,7 +133,7 @@ export class AdminUsuariosComponent implements OnInit {
     private serviceMod3: ServicesNivel3Service,
     private _disabledU: LoginService,
     private userService: QrService,
-    private _Modulo2Service:Modulo2Service
+    private _Modulo2Service: Modulo2Service
   ) { }
 
   ngOnInit() {
@@ -168,8 +168,8 @@ export class AdminUsuariosComponent implements OnInit {
     });
   }
 
-  estructuraIdPers(){
-    return this.serviceMod3.getusersCache().then(userssnap=>{
+  estructuraIdPers() {
+    return this.serviceMod3.getusersCache().then(userssnap => {
       return this.serviceMod3.estructurarDataUsersAdmin(userssnap.data())
     })
   }
@@ -201,12 +201,12 @@ export class AdminUsuariosComponent implements OnInit {
     });
   }
 
-  selectRow(row,estado){
+  selectRow(row, estado) {
     this.alert.show();
     this.estructuradatausuario(row).then(data => {
       this.cambiardata(data, estado)
       this.alert.hide();
-    }).catch(err=> {
+    }).catch(err => {
       this.alert.hide();
     });
   }
@@ -215,51 +215,55 @@ export class AdminUsuariosComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.serviceMod3.getuser(row.uid).then(doc => {
 
-          // tslint:disable-next-line:no-shadowed-variable
-          const element = doc.data();
+        // tslint:disable-next-line:no-shadowed-variable
+        const element = doc.data();
 
-          this.serviceMod3
-            .getPersona(element.cfPers ? element.cfPers : '123')
-            .then(data => {
-              const persona = data.data() ? data.data() : ' ninguno';
+        this.serviceMod3
+          .getPersona(element.cfPers ? element.cfPers : '123')
+          .then(data => {
+            const persona = data.data() ? data.data() : 'ninguno';
+            console.log(data.id, data.data(), persona)
+            var faculty = ''
+            if (data.exists) {
+              faculty = data.data().faculty
+            }
+            let varconsulta;
+            if (element.cfPers === '') {
+              varconsulta = undefined;
+            } else {
+              varconsulta = this.clientRole(persona['clientRole']);
+            }
 
-              let varconsulta;
-              if (element.cfPers === '') {
-                varconsulta = undefined;
-              } else {
-                varconsulta = this.clientRole(persona['clientRole']);
-              }
+            this.nombresRoles(element.appRoles, faculty
+            ).then(rol => {
 
-              this.nombresRoles(element.appRoles,
-                varconsulta ? data.data().faculty : '').then(rol => {
+              this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
 
-                  this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
+                const usuario = {
+                  id: doc.id,
+                  nombre: persona['cfFirstNames']
+                    ? persona['cfFirstNames']
+                    : 'Ninguno',
+                  apellido: persona['cfFamilyNames']
+                    ? persona['cfFamilyNames']
+                    : 'Ninguno',
+                  idPers: element.cfPers,
+                  email: element.email,
+                  fechana_n: persona['cfBirthdate'],
+                  estado_p: persona['active'],
+                  estado_u: element.active,
+                  type: persona['type'],
+                  cfGender: persona['cfGender'],
+                  roles: finalrol['role'],
+                  cc: persona['cc'],
+                  llave: finalrol['llave']
+                };
 
-                    const usuario = {
-                      id: doc.id,
-                      nombre: persona['cfFirstNames']
-                        ? persona['cfFirstNames']
-                        : 'Ninguno',
-                      apellido: persona['cfFamilyNames']
-                        ? persona['cfFamilyNames']
-                        : 'Ninguno',
-                      idPers: element.cfPers,
-                      email: element.email,
-                      fechana_n: persona['cfBirthdate'],
-                      estado_p: persona['active'],
-                      estado_u: element.active,
-                      type: persona['type'],
-                      cfGender: persona['cfGender'],
-                      roles: finalrol['role'],
-                      cc: persona['cc'],
-                      llave: finalrol['llave']
-                    };
+                resolve(usuario);
+              });
 
-                      resolve(usuario);
-                  });
-
-                });
             });
+          });
       });
     });
 
@@ -656,7 +660,7 @@ export class AdminUsuariosComponent implements OnInit {
       this.serviceMod3.updatedPersona(this.idp, this.person).then(
         () => {
           // toca resetear en todos los laboratorios si el estado cambia
-          this.serviceMod3.updateCacheUser(this.idu,this.usuario,this.person)
+          this.serviceMod3.updateCacheUser(this.idu, this.usuario, this.person)
           this.alert.hide();
           swal({
             type: 'success',
@@ -830,22 +834,19 @@ export class AdminUsuariosComponent implements OnInit {
       }
     }
     if (!bool) {
+      console.log(843)
       this.alert.show();
       this.serviceMod3.agregarPersona(person).then(ok => {
-
+        console.log(ok)
         // actualizar referencia del usuario
-        this.serviceMod3.setUser(this.idu, {cfPers : ok.id}).then(
-          () => {
-            // actualizar referencia de la persona dentro del laboratorio
-            this.serviceMod3.setLaboratorio('', {relatedPers: ok.id}).then();
-          }
-        );
+        this.serviceMod3.setUser(this.idu, { cfPers: ok.id })
         //  this.serviceMod3.updateCacheUser(this.idu,this.usuario,person)
 
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
         this.arrayPract.forEach((doc, index) => {
+          console.log(doc.id, coor)
           if (doc.id === coor) {
             this.idp = ok.id;
             this.setKeyAdmin(doc.labs, ok.id);
@@ -969,19 +970,19 @@ export class AdminUsuariosComponent implements OnInit {
     this.dataSourceFacil.filter = filterValue;
   }
 
-  updatedAdminFacil(idlab, id) {
+  updatedAdminFacil(idlab, personaDocID) {
     // obtner referencia del director actual y borrarlo
     this.serviceMod3
       .getSingleLaboratorios(idlab)
       .then((doc: any) => {
         const laboratorio = doc.data();
-        return this.serviceMod3.getPersona(laboratorio.facilityAdmin).then(snappersona=>{
-          return ({snappersona,laboratorio})
+        return this.serviceMod3.getPersona(laboratorio.facilityAdmin).then(snappersona => {
+          return ({ snappersona, laboratorio })
         })
-         
-         
+
+
         // agregar la referencia actual del director al laboratorio
-      }).then(data=>{
+      }).then(data => {
         const cfPersonAdmin = data.snappersona.data()
         if (cfPersonAdmin) {
           const aux = {};
@@ -993,7 +994,7 @@ export class AdminUsuariosComponent implements OnInit {
               if (key !== idlab) {
                 aux[key] = admiUser[key];
               }
-  
+
             }
           }
           for (const key in cfFacil) {
@@ -1007,43 +1008,47 @@ export class AdminUsuariosComponent implements OnInit {
             clientRole: aux,
             cfFacil: aux2
           };
-          if (data.laboratorio.facilityAdmin !== id) {
+          if (data.laboratorio.facilityAdmin !== personaDocID) {
             this.serviceMod3.Trazability(
               this.user.uid, 'update', 'cfPers', data.laboratorio.facilityAdmin, persona
             ).then(() => {
-              this.serviceMod3.updatedPersona(data.laboratorio.facilityAdmin, persona).then(()=>{
-  
+              this.serviceMod3.updatedPersona(data.laboratorio.facilityAdmin, persona).then(() => {
+
               })
             });
           }
         }
-      
+
         this.serviceMod3.Trazability(
-          this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: id }
+          this.user.uid, 'update', 'cfFacil', idlab, { facilityAdmin: personaDocID }
         ).then(() => {
-          this.serviceMod3.updatedLab(idlab, { facilityAdmin: id }).then(resUpdate=>{
-            if (cfPersonAdmin) {
-              const director = `${cfPersonAdmin.cfFirstNames} ${cfPersonAdmin.cfFamilyNames}`
-              const directoremail = cfPersonAdmin.email
-              const updatedAt = cfPersonAdmin.updatedAt
+          this.serviceMod3.updatedLab(idlab, { facilityAdmin: personaDocID }).then(resUpdate => {
+            console.log(cfPersonAdmin)
+            this.serviceMod3.getPersona(personaDocID).then(snappersona => {
+              if (snappersona.exists) {
+                const newAdimnPerson = snappersona.data()
+                const director = `${newAdimnPerson.cfFirstNames} ${newAdimnPerson.cfFamilyNames}`
+                const directoremail = newAdimnPerson.email
+                const updatedAt = newAdimnPerson.updatedAt
+                const laboratorio = { director, directoremail, updatedAt }
+                this._Modulo2Service.updateCacheLaboratorios(idlab, laboratorio)
 
-              
-              const laboratorio = {director,directoremail,updatedAt}
-             this._Modulo2Service.updateCacheLaboratorios(idlab,laboratorio)
+              }
 
-            }
+            })
+
           });
         });
-      }) .catch(err => {
+      }).catch(err => {
         console.log(err);
       });
   }
 
 
-  setKeyAdmin(labs, id) {
+  setKeyAdmin(labs, personaDocId) {
     // tslint:disable-next-line:no-shadowed-variable
     labs.forEach(element => {
-      this.updatedAdminFacil(element, id);
+      this.updatedAdminFacil(element, personaDocId);
     });
 
   }
