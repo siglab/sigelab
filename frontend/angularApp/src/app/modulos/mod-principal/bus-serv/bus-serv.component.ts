@@ -396,8 +396,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
           }
 
         });
-
-
       } else {
         swal({
           type: 'error',
