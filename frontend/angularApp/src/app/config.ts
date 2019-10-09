@@ -6,9 +6,9 @@
 */
 
 // Application default config variables initialization
-const APP_DOMAIN_URL = 'sigelab.univalle.edu.co';
-const ORG_EMAIL_DOMAIL = 'correounivalle.edu.co';
-const MAIN_CLOUD_FUNCTIONS_ROUTE = 'us-central1-siglab-2bdb6.cloudfunctions.net';
+const APP_DOMAIN_URL = 'YOUR_APP_DOMAIN';
+const ORG_EMAIL_DOMAIL = 'YOUR_ORGANIZATION_COMPLETE_EMAIL_DOMAIN';
+const MAIN_CLOUD_FUNCTIONS_ROUTE = 'YOUR_GIVEN_CLOUD_FUNCTIONS_URL_HERE';
 // Use the following constant definitions just for Universidad del Valle deployments.
 const MAIN_SABS_API_URL = 'UNIVERSIDAD_DEL_VALLE_SABS_API_URL';
 const SABS_PORT = '1337';
