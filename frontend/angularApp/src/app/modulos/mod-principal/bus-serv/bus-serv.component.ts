@@ -129,15 +129,12 @@ export class BusServComponent implements OnInit, AfterViewInit {
 
   selectRow(row){
     this.alert.show();
-
     this.query.getDataServ(row).then(data => {
       this.cambiardata(data)
       this.alert.hide();
-
     }).catch(err=>{
       console.log(err)
       this.alert.hide();
-
     });
   }
 
@@ -450,25 +447,20 @@ export class BusServComponent implements OnInit, AfterViewInit {
   cambiardata(item) {
     this.limpiarDatos();
     this.variation = undefined;
-
     this.variacionSel = '';
     this.iconos.var = false;
     this.iconos.info = true;
-
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
     this.itemsel = item;
     if (item.infoServ.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);
     }
-
     if (this.usuariounivalle) {
       if (item.infoServ.variaciones.length === 0) {
         this.descuento = this.itemsel.infoServ.precio * (parseFloat(this.itemsel.infoServ.descuento) / 100);
         this.preciocondescuento = this.itemsel.infoServ.precio - this.descuento;
       }
     }
-
-
     if (!this.moduloinfo) {
       this.moduloinfo = true;
       const ambiente = this;

@@ -96,7 +96,10 @@ export class LoginService {
             });
           }
         })
-        .catch(error => console.log(error));
+        .catch((error) => {
+          console.log(error)
+          reject(error);
+        });
     });
     return promise;
   }

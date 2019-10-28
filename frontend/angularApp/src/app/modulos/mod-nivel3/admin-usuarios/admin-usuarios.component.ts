@@ -214,31 +214,25 @@ export class AdminUsuariosComponent implements OnInit {
   estructuradatausuario(row) {
     const promise = new Promise((resolve, reject) => {
       this.serviceMod3.getuser(row.uid).then(doc => {
-
-        // tslint:disable-next-line:no-shadowed-variable
         const element = doc.data();
-
         this.serviceMod3
           .getPersona(element.cfPers ? element.cfPers : '123')
           .then(data => {
             const persona = data.data() ? data.data() : 'ninguno';
-            console.log(data.id, data.data(), persona)
+            let varconsulta;
             var faculty = ''
-            if (data.exists) {
+            console.log(data.id, data.data(), persona)
+            if (data && data.exists) {
               faculty = data.data().faculty
             }
-            let varconsulta;
             if (element.cfPers === '') {
               varconsulta = undefined;
             } else {
               varconsulta = this.clientRole(persona['clientRole']);
             }
-
             this.nombresRoles(element.appRoles, faculty
             ).then(rol => {
-
               this.nombresClientRoles(varconsulta, rol['role'], rol['llave']).then(finalrol => {
-
                 const usuario = {
                   id: doc.id,
                   nombre: persona['cfFirstNames']
@@ -258,10 +252,8 @@ export class AdminUsuariosComponent implements OnInit {
                   cc: persona['cc'],
                   llave: finalrol['llave']
                 };
-
                 resolve(usuario);
               });
-
             });
           });
       });
@@ -313,7 +305,6 @@ export class AdminUsuariosComponent implements OnInit {
   nombresRoles(appRoles, faculty) {
     const nameroles = [];
     const llaves = [];
-
     let sixe = 0;
     for (const key in appRoles) {
       if (appRoles.hasOwnProperty(key)) {
@@ -330,7 +321,6 @@ export class AdminUsuariosComponent implements OnInit {
             this.serviceMod3.consultarNombreRol(key).then(doc => {
               if (doc.data().roleName !== 'nivel1') {
                 if (doc.id === 'PFhLR4X2n9ybaZU3CR75') {
-
                   llaves.push({
                     id: doc.id, fac: this.appRole(faculty),
                     nombre: doc.data().roleName, tipo: 'appRoles'
@@ -338,13 +328,9 @@ export class AdminUsuariosComponent implements OnInit {
                 } else {
                   llaves.push({ id: doc.id, nombre: doc.data().roleName, tipo: 'appRoles' });
                 }
-
               }
-
               nameroles.push(doc.data().roleName);
-
               contador++;
-
               if (sixe === contador) {
                 resolve({ role: nameroles.join(','), llave: llaves });
               }
@@ -551,8 +537,8 @@ export class AdminUsuariosComponent implements OnInit {
     this.idu = item.id;
     this.arrayPract = item.llave;
     this.tablesel = table;
-    this.apellido = item.apellido;
-    this.nombre = item.nombre;
+    this.apellido = item.apellido ? item.apellido : 'Ninguno';
+    this.nombre = item.nombre ? item.nombre : 'Ninguno';
     this.genero = item.cfGender;
     this.estado_u = item.estado_u;
     this.estado_p = item.estado_p;
@@ -584,7 +570,6 @@ export class AdminUsuariosComponent implements OnInit {
         adm = true;
         this.arrayPract.forEach((doc2, index2) => {
           if (clientRole.includes(doc2.id)) {
-            // tslint:disable-next-line:no-shadowed-variable
             doc.labs.forEach(element => {
               doc2.labs.forEach((element2, index3) => {
                 if (element === element2) {
@@ -1091,5 +1076,13 @@ export class AdminUsuariosComponent implements OnInit {
     this.idp = '';
     this.nuevo = true;
     $('html, body').animate({ scrollTop: '600px' }, 'slow');
+  }
+
+  isObject(data){
+    if (typeof data == 'object') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

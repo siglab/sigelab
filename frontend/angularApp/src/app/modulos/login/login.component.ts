@@ -4,6 +4,7 @@ import { LoginService } from './login-service/login.service';
 import swal from 'sweetalert2';
 import { SidebarComponent } from '../../shared/layouts/sidebar/sidebar.component';
 import { ServicesNivel3Service } from '../mod-nivel3/services/services-nivel3.service';
+import { shallowEqual } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-login',
@@ -35,9 +36,9 @@ export class LoginComponent implements OnInit {
   ingresar() {
     // loading mientras se crea el usuario
     swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
-      onOpen: () => {
+      title: 'Cargando...',
+      text: 'Espera un momento, el sistema está cargando la información',
+      onBeforeOpen: () => {
         swal.showLoading();
       }
     });
@@ -53,12 +54,13 @@ export class LoginComponent implements OnInit {
       } else {
         this.ruta.navigate(['principal']);
       }
-    }).catch(error => {
+    }).catch((error) => {
+      console.log(error);
       swal({
         type: 'error',
-        text: 'Ocurrio un error al intentar ingresar, intente de nuevo.'
-          + 'Si el error persiste es posible que su usuario haya sido desactivado.',
-        showConfirmButton: true
+        html: this.mensajesError(error.code),
+        showConfirmButton: true,
+        showLoaderOnConfirm: false
       });
     });
   }
@@ -68,7 +70,8 @@ export class LoginComponent implements OnInit {
     if (em.invalid || ps.invalid) {
       swal({
         type: 'error',
-        title: 'Hay campos requeridos vacios',
+        title: 'Se encontraron campos requeridos sin información.',
+        html: 'Se requiere del correo electrónico y la contraseña para iniciar sesión en el sistema.',
         showConfirmButton: true
       });
     } else {
@@ -104,8 +107,8 @@ export class LoginComponent implements OnInit {
         }
       });
       swal({
-        title: 'Cargando un momento...',
-        text: 'espere mientras se cargan los datos',
+        title: 'Cargando...',
+        text: 'Espera un momento, el sistema está cargando la información',
         onOpen: () => {
           swal.showLoading();
         }
@@ -119,15 +122,18 @@ export class LoginComponent implements OnInit {
       case 'auth/argument-error': return 'Datos Invalidos.';
       case 'auth/invalid-api-key': return 'API KEY invalido.';
       case 'auth/invalid-user-token': return 'TOKEN de acceso invalido.';
-      case 'auth/network-request-failed': return 'Error de red, por favor revise su internet.';
+      case 'auth/network-request-failed': return 'Ocurrió un error al intentar ingresar. Por favor compruebe su conexión a internet e intente nuevamente.';
       case 'auth/operation-not-allowed': return 'Proovedor invalido.';
       case 'auth/too-many-requests': return 'Actividad inusual.';
       case 'auth/unauthorized-domain': return 'Dominio invalido.';
       case 'auth/user-disabled': return 'Usuario deshabilitado.';
       case 'auth/user-token-expired': return 'Token de acceso expirado.';
       case 'auth/web-storage-unsupported': return 'El navegador no permite almacenamiento web.';
-      case 'auth/wrong-password': return 'Password invalido o la cuenta registrada solo accede por medio de Google';
-      case 'auth/user-not-found': return 'El correo electrónico ingresado no está registrado.';
+      case 'auth/wrong-password': return 'El password ingresado es inválido o la cuenta registrada solo accede por medio de Google';
+      case 'auth/user-not-found': return 'El correo electrónico ingresado no se encuentra registrado en el sistema.';
+      case 'auth/popup-closed-by-user': return 'La ventana de selección de cuenta de inicio de sesión a través de Google se ha cerrado por el usuario. <br> Seleccione nuevamente su método de incio de sesión.';
+      default: return 'Ocurrió un error al intentar ingresar. Por favor compruebe su conexión a internet e intente nuevamente. <br>'
+      + 'Si el error persiste es posible que su usuario haya sido inhabilitado para utilizar el sistema.'
     }
   }
 

@@ -191,8 +191,8 @@ export class QuerysPrincipalService {
                             disponibilidad: labencontrado.cfAvailability
                           },
                           coord: {
-                            lat: espacioLab.spaceData.geoRep.longitud,
-                            lon: espacioLab.spaceData.geoRep.latitud
+                            lat: espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0,
+                            lon: espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0,
                           }
                         };
                         return servicios
@@ -271,8 +271,8 @@ export class QuerysPrincipalService {
                         disponibilidad: labencontrado.cfAvailability
                       },
                       coord: {
-                        lat: espacioLab.spaceData.geoRep.longitud,
-                        lon: espacioLab.spaceData.geoRep.latitud
+                        lat: espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0,
+                        lon: espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0,
                       }
                     };
                     resolve(pruebas);
@@ -352,7 +352,7 @@ export class QuerysPrincipalService {
           if (elemento.mainSpace !== '') {
             var buscarespacios = this.buscarEspacio(elemento.mainSpace).then(espacio => {
               const espacioLab = espacio.data();
-              return this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
+                return this.buscarDireccion(elemento.headquarter, elemento.subHq, elemento.mainSpace).then(direspa => {
                 laboratorio.direspacio = direspa;
                 laboratorio.coord.lat = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.longitud : 0;
                 laboratorio.coord.lon = espacioLab.spaceData.geoRep ? espacioLab.spaceData.geoRep.latitud : 0;
@@ -432,7 +432,6 @@ export class QuerysPrincipalService {
           }
         }
         return Promise.all(promesas).then(responses => {
-
           responses.forEach(data => {
             var servicio = data.data();
             if (servicio != undefined && servicio.hasOwnProperty('cfName') && servicio.cfName) {
