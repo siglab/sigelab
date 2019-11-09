@@ -1,549 +1,609 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1>
-      Equipos
-    </h1>
+    <h1> Inventario de equipos asociados a este laboratorio</h1>
   </section>
-
   <!-- Main content -->
-
-    <section class="content" *ngIf="itemsel | async; let itemsel">
-    <!-- Componente central de busqueda -->
-
-    <div class="row">
+  <section class="content">
+    <div *ngIf="itemsel | async; let itemsel; else noLabSelected;">
+      <!-- Componente central de busqueda -->
+      <div class="row">
         <div class="col-md-12 col-lg-12">
-          
-          <div class="col-md-6">
-            <div class="box box-danger">
-                <div class="box-header">
-                  <i class="fa fa-search"></i>
-
-                  <h3 class="box-title">Lista de equipos vinculados</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body" *ngIf="dataSourceEquip.data">
-                    <div *ngIf="dataSourceEquip.data.length == 0" class="no-data">
-                        <h3>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS</h3>
+          <!-- Tabla de búsqueda de equipos -->
+          <div class="box box-danger shadow">
+            <div class="box-header">
+              <i class="fa fa-list"></i>
+              <h3 class="box-title">Listado de equipos vinculados a este laboratorios</h3>
+            </div>
+            <div class="box-body">
+              <div class="box-body">
+                <div class="table-responsive">
+                  <div class="example-container mat-elevation-z8">
+                    <div class="example-header">
+                      <mat-form-field>
+                        <input style="outline: none;" matInput (keyup)="applyFilterEquip($event.target.value)"
+                          placeholder="Buscar equipos">
+                      </mat-form-field>
+                    </div>
+                    <div
+                      *ngIf="dataSourceEquip && dataSourceEquip.filteredData && dataSourceEquip.filteredData.length == 0; else dataTable">
+                      <div class="no-data">
+                        <h4>NO SE ENCONTRARON EQUIPOS ASOCIADOS A ESTE LABORATORIO</h4>
                       </div>
-
-                      <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquip.data.length != 0">
-                        <div class="example-header">
-                          <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilterEquip($event.target.value)" placeholder="Buscar equipos">
-                          </mat-form-field>
-                        </div>
-
-                        <mat-table #tableEquip #sortEquip="matSort" [dataSource]="dataSourceEquip" matSort>
-
-                          <!-- Position Column -->
-                          <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                          </ng-container>
-
-                          <mat-header-row *matHeaderRowDef="displayedColumnsEquip"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsEquip; let i = index;" style = "cursor: pointer;" (click)="cambiarDataEquipo(row, i)" data-toggle="modal" data-target="#myModalLabs" ></mat-row>
-                        </mat-table>
-
-                        <mat-paginator #paginatorEquip="matPaginator"
-                          [pageSize]="5"
-                          [pageSizeOptions]="[5, 10, 20]"
-                          [showFirstLastButtons]="true">
-                        </mat-paginator>
-                      </div>
-
+                    </div>
+                    <ng-template #dataTable>
+                      <mat-table #tableEquip #sortEquip="matSort" [dataSource]="dataSourceEquip" matSort>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="nombre">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumnsEquip">
+                        </mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumnsEquip; let i = index;"
+                          style="cursor: pointer;" (click)="cambiarDataEquipo(row, i)" data-toggle="modal"
+                          data-target="#myModalLabs"></mat-row>
+                      </mat-table>
+                      <mat-paginator #paginatorEquip="matPaginator" [pageSize]="5" [pageSizeOptions]="[10, 20, 50, 100]"
+                        [showFirstLastButtons]="true">
+                      </mat-paginator>
+                    </ng-template>
+                  </div>
                 </div>
-
+              </div>
             </div>
           </div>
-
-          <div class="col-md-6">
-
-              <div *ngIf="equiposel" class="box-group" id="accordion">
-                  <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-
-                  <div class="box box-danger">
-                      <div class="box-header">
-                        <h4 (click)="cambiarIcono('info')" class="box-title">
-                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                             INFORMACIÓN DE EQUIPO
-                          </a>
-                        </h4>
-                        <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
-                            <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
-                        </a>
-                      </div>
-                      <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                        <div class="box-body">
-                          <form  id="form-work" class="" name="form-work" action="#">
-                              <fieldset>
-                                  <div class="form-group">
+        </div>
+      </div>
+      <!-- Detalles de equipo seleccionado -->
+      <div class="row" id="equipDetails">
+        <div class="col-md-12 col-lg-12">
+            <div class="box box-danger shadow">
+              <div *ngIf="!equiposel; else equipDetails">
+                <div class="box-body no-data">
+                  <h4>NO SE HA SELECCIONADO NINGÚN EQUIPO</h4>
+                </div>
+              </div>
+              <ng-template #equipDetails>
+                <div class="box-header">
+                  <i class="fa fa-info-circle"></i>
+                  <h3 class="box-title">Información de equipo seleccionado</h3>
+                </div>
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="box box-danger internal-shadow">
+                          <div class="box-header">
+                            <i class="fa fa-address-card-o"></i>
+                            <h3 class="box-title">Información general del equipo</h3>
+                          </div>
+                          <div class="box-body">
+                                <form id="form-work" class="" name="form-work" action="#">
+                                  <fieldset>
+                                    <div class="form-group">
                                       <div class="col-md-12">
-                                        <label class="control-label" for="nac"><strong>Inventario: </strong>
+                                        <label class="control-label" for="nac"><strong>Número de inventario: </strong>
                                           {{this.equiposel.inventario}}
                                         </label>
                                       </div>
-                                  </div>
-                                  <div class="form-group">
+                                    </div>
+                                    <div class="form-group">
                                       <div class="col-md-12">
                                         <label class="control-label" for="ccpas"><strong>Nombre: </strong>
                                           {{this.equiposel.nombre}}
                                         </label>
                                       </div>
-                                  </div>
-                                  <div class="form-group">
+                                    </div>
+                                    <div class="form-group">
                                       <div class="col-md-12">
-                                        <label class="control-label" for="nac"><strong>Descripción: </strong>
-                                          {{this.equiposel.descripcion}}
+                                        <label class="control-label" for="nac"><strong>Descripción:
+                                          </strong>
+                                          {{this.equiposel.descripcion ? this.equiposel.descripcion:'Sin descripción'}}
                                         </label>
                                       </div>
-                                  </div>
-                                  <div class="form-group">
+                                    </div>
+                                    <div class="form-group">
                                       <div class="col-md-12">
                                         <label class="control-label" for="nac"><strong>Modelo: </strong>
-                                          {{this.equiposel.modelo}}
+                                          {{this.equiposel.modelo ? this.equiposel.modelo:'Sin información'}}
                                         </label>
                                       </div>
-                                  </div>
-                                  <div class="form-group">
+                                    </div>
+                                    <div class="form-group">
                                       <div class="col-md-12">
                                         <label class="control-label" for="nac"><strong>Precio: $</strong>
-                                          {{this.equiposel.precio}}
+                                          {{this.equiposel.precio ? this.equiposel.precio:'-'}} (COP)
                                         </label>
                                       </div>
-                                  </div>
-                                  
-                                  <div *ngIf="moduloNivel2" class="form-group">
+                                    </div>
+              
+                                    <div *ngIf="moduloNivel2" class="form-group">
                                       <div class="col-md-6" style="float: right;">
-                                          <button class="btn btn-danger" style="float: right;" data-toggle="modal" data-target="#modal2" type="button">Editar Información</button>
+                                        <button class="btn btn-sm modal-button" style="float: right;" data-toggle="modal" data-target="#modal2"
+                                          type="button">Editar esta información</button>
                                       </div>
-                                  </div>
-                              </fieldset>
-                          </form>
+                                    </div>
+                                  </fieldset>
+                                </form>
+                          </div>
                         </div>
-                      </div>
-                  </div>
-
-                  <div *ngIf="this.infosabs.length > 0" class="box box-danger">
-                    <div class="box-header">
-                      <h4 (click)="cambiarIcono('sabs')" class="box-title">
-                        <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                          INFORMACIÓN DE SABS
-                        </a>
-                      </h4>
-                      <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
-                        <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
-                      </a> 
                     </div>
-                    <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                      <div class="box-body">
-                        <form  id="form-work" class="" name="form-work" action="#">
-                            <fieldset>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="nac"><strong>Código: </strong>
-                                        {{this.infosabsel.codInventario}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ccpas"><strong>Responsable: </strong>
-                                        {{this.infosabsel.responsable}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Serial: </strong>
-                                        {{this.infosabsel.numSerial}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Marca: </strong>
-                                        {{this.infosabsel.nombreMarca}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Ubicación: </strong>
-                                        {{this.infosabsel.ubicacion}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Fecha Aceptación: </strong>
-                                        {{this.infosabsel.fechaAceptacion}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Costo Inicial: </strong>
-                                        {{this.infosabsel.costoInicial}}
-                                      </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="ciuor"><strong>Estado: </strong>
-                                        {{this.infosabsel.estado}}
-                                      </label>
-                                    </div>
-                                </div>
-
-                            </fieldset>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="box box-danger">
-                    <div class="box-header">
-                      <h4 (click)="cambiarIcono('componente')" class="box-title">
-                        <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseComp" aria-expanded="false" class="collapsed">
-                          PARTES Y/O COMPONENTES : {{this.equiposel.componentes.length}}
-                        </a>
-                      </h4>
-                      <a (click)="cambiarIcono('componente')" data-toggle="collapse" data-parent="#accordion" href="#collapseComp" aria-expanded="false" class="collapsed">
-                        <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.componente, 'glyphicon-minus':iconos.componente}"></span>
-                      </a>
-                    </div>
-                    <div id="collapseComp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                      <div class="box-body">
-                          <div *ngIf="dataSourceComponentes.data.length == 0" class="no-data">
-                              <h3>EL EQUIPO SELECCIONADO NO CUENTA CON COMPONENTES</h3>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="box box-danger internal-shadow">
+                          <div class="box-header">
+                            <i class="fa fa-address-card-o"></i>
+                            <h3 class="box-title">Información del sistema de inventario (Sabs)</h3>
                           </div>
-
-                          <div class="example-container mat-elevation-z8" *ngIf="dataSourceComponentes.data.length != 0">
-                            <div class="example-header">
-                              <mat-form-field>
-                                <input style="outline: none;" matInput (keyup)="applyFilterComponentes($event.target.value)" placeholder="Buscar Componentes">
-                              </mat-form-field>
-                            </div>
-
-                            <mat-table #tableSComponentes #sortComponentes="matSort" [dataSource]="dataSourceComponentes" matSort>
-
-
-                              <ng-container matColumnDef="nombre">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                              </ng-container>
-
-                              <mat-header-row *matHeaderRowDef="displayedColumnsComponentes"></mat-header-row>
-                              <mat-row *matRowDef="let row; columns: displayedColumnsComponentes;" style = "cursor: pointer;" (click)="cambiarInfoModal(row, 'componentes')" data-toggle="modal" data-target="#modal1"></mat-row>
-                            </mat-table>
-
-                            <mat-paginator #paginatorComponentes="matPaginator"
-                              [pageSize]="5"
-                              [pageSizeOptions]="[5, 10, 20]"
-                              [showFirstLastButtons]="true">
-                            </mat-paginator>
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-    
-                  <div class="box box-danger">
-                      <div class="box-header">
-                        <h4 (click)="cambiarIcono('servicio')" class="box-title">
-                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ" aria-expanded="false" class="collapsed">
-                              SERVICIOS : {{equiposel.servicios.length}}
-                          </a>
-                        </h4>
-                        <a (click)="cambiarIcono('servicio')" data-toggle="collapse" data-parent="#accordion" href="#collapseServ" aria-expanded="false" class="collapsed">
-                          <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.servicio, 'glyphicon-minus':iconos.servicio}"></span>
-                        </a>
-                      </div>
-                      <div id="collapseServ" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                        <div class="box-body">
-                            <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
-                                <h3>EL EQUIPO SELECCIONADO NO CUENTA CON COMPONENTES</h3>
+                          <div class="box-body">
+                            <div *ngIf="!(this.infosabs.length > 0);else sabsInfo">
+                              <div class="box-body no-data">
+                                <h4>LA INFORMACIÓN DEL SISTEMA DE INVENTARIO NO SE ENCUENTRA DISPONIBLE</h4>
                               </div>
-  
-                                <div class="example-container mat-elevation-z8" *ngIf="dataSourceServicios.data.length != 0">
+                            </div>
+                            <ng-template #sabsInfo>
+                              <div class="box-body">
+                                  <form id="form-work" class="" name="form-work" action="#">
+                                      <fieldset>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="nac"><strong>Número de inventario: </strong>
+                                              {{this.infosabsel.codInventario}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ccpas"><strong>Responsable:
+                                              </strong>
+                                              {{this.infosabsel.responsable}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Serial: </strong>
+                                              {{this.infosabsel.numSerial}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Marca: </strong>
+                                              {{this.infosabsel.nombreMarca}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Ubicación:
+                                              </strong>
+                                              {{this.infosabsel.ubicacion}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Fecha Aceptación:
+                                              </strong>
+                                              {{this.infosabsel.fechaAceptacion}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Costo Inicial:
+                                              </strong>
+                                              {{this.infosabsel.costoInicial}}
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <div class="col-md-12">
+                                            <label class="control-label" for="ciuor"><strong>Estado: </strong>
+                                              {{this.infosabsel.estado}}
+                                            </label>
+                                          </div>
+                                        </div>
+                  
+                                      </fieldset>
+                                    </form>
+                              </div>
+                            </ng-template>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                      <div class="box box-danger internal-shadow">
+                            <div class="box-header">
+                              <i class="fa fa-cogs"></i>
+                              <h4 (click)="cambiarIcono('componente')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordion" href="#collapseComp"
+                                  aria-expanded="false" class="collapsed">
+                                  Partes y componentes del equipo: {{this.equiposel.componentes.length}}
+                                </a>
+                              </h4>
+                              <a (click)="cambiarIcono('componente')" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapseComp" aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;"
+                                  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.componente, 'glyphicon-minus':iconos.componente}"></span>
+                              </a>
+                            </div>
+                            <div id="collapseComp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                              <div class="box-body">
+                                <div *ngIf="dataSourceComponentes.data.length == 0" class="no-data">
+                                  <h4>ESTE EQUIPO NO CUENTA CON COMPONENTES</h4>
+                                </div>
+              
+                                <div class="example-container mat-elevation-z8" *ngIf="dataSourceComponentes.data.length != 0">
                                   <div class="example-header">
                                     <mat-form-field>
-                                      <input style="outline: none;" matInput (keyup)="applyFilterServicios($event.target.value)" placeholder="Buscar Servicios">
+                                      <input style="outline: none;" matInput (keyup)="applyFilterComponentes($event.target.value)"
+                                        placeholder="Buscar Componentes">
                                     </mat-form-field>
                                   </div>
-  
-                                  <mat-table #tableServicios #sortServicios="matSort" [dataSource]="dataSourceServicios" matSort>
-  
-  
+              
+                                  <mat-table #tableSComponentes #sortComponentes="matSort" [dataSource]="dataSourceComponentes"
+                                    matSort>
+              
+              
                                     <ng-container matColumnDef="nombre">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre
+                                      </mat-header-cell>
                                       <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                     </ng-container>
-  
-                                    <mat-header-row *matHeaderRowDef="displayedColumnsServicios"></mat-header-row>
-                                    <mat-row *matRowDef="let row; columns: displayedColumnsServicios;" style = "cursor: pointer;" (click)="cambiarInfoModal(row, 'servicios')" data-toggle="modal" data-target="#modal1"></mat-row>
+              
+                                    <mat-header-row *matHeaderRowDef="displayedColumnsComponentes">
+                                    </mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumnsComponentes;" style="cursor: pointer;"
+                                      (click)="cambiarInfoModal(row, 'componentes')" data-toggle="modal" data-target="#modal1">
+                                    </mat-row>
                                   </mat-table>
-  
-                                  <mat-paginator #paginatorServicios="matPaginator"
-                                    [pageSize]="5"
-                                    [pageSizeOptions]="[5, 10, 20]"
+              
+                                  <mat-paginator #paginatorComponentes="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                                     [showFirstLastButtons]="true">
                                   </mat-paginator>
                                 </div>
-                        </div>
-                      </div>
-                  </div>
-    
-                  <div class="box box-danger">
-                      <div class="box-header">
-                        <h4 (click)="cambiarIcono('practica')" class="box-title">
-                          <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapsePrac" aria-expanded="false" class="collapsed">
-                              PRACTICAS VINCULADAS : {{equiposel.practicas.length}}
-                          </a>
-                        </h4>
-                        <a (click)="cambiarIcono('practica')" data-toggle="collapse" data-parent="#accordion" href="#collapsePrac" aria-expanded="false" class="collapsed">
-                          <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.practica, 'glyphicon-minus':iconos.practica}"></span>
-                        </a>
-                      </div>
-                      <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                        <div class="box-body">
-                            <div *ngIf="dataSourcePracticas.data.length == 0" class="no-data">
-                              <h3>EL EQUIPO SELECCIONADO NO CUENTA CON PRACTICAS</h3>
-                            </div>
-  
-                            <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
-                              <div class="example-header">
-                                <mat-form-field>
-                                  <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)" placeholder="Buscar Servicios">
-                                </mat-form-field>
                               </div>
-  
-                              <mat-table #tablePracticas #sortPracticas="matSort" [dataSource]="dataSourcePracticas" matSort>
-  
-  
-                                <ng-container matColumnDef="nombre">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                </ng-container>
-  
-                                <mat-header-row *matHeaderRowDef="displayedColumnsPracticas"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumnsPracticas;" style = "cursor: pointer;" (click)="cambiarInfoModal(row, 'practicas')" data-toggle="modal" data-target="#modal1"></mat-row>
-                              </mat-table>
-  
-                              <mat-paginator #paginatorPracticas="matPaginator"
-                                [pageSize]="5"
-                                [pageSizeOptions]="[5, 10, 20]"
-                                [showFirstLastButtons]="true">
-                              </mat-paginator>
                             </div>
-                        </div>
                       </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      <div class="box box-danger internal-shadow">
+                            <div class="box-header">
+                              <i class="fa fa-laptop"></i>
+                              <h4 (click)="cambiarIcono('servicio')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseServ"
+                                  aria-expanded="false" class="collapsed">
+                                  Servicios asociados al equipo : {{equiposel.servicios.length}}
+                                </a>
+                              </h4>
+                              <a (click)="cambiarIcono('servicio')" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapseServ" aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;"
+                                  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.servicio, 'glyphicon-minus':iconos.servicio}"></span>
+                              </a>
+                            </div>
+                            <div id="collapseServ" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                              <div class="box-body">
+                                <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
+                                  <h4>ESTE EQUIPO NO CUENTA CON SERVICIOS ASOCIADOS</h4>
+                                </div>
+              
+                                <div class="example-container mat-elevation-z8" *ngIf="dataSourceServicios.data.length != 0">
+                                  <div class="example-header">
+                                    <mat-form-field>
+                                      <input style="outline: none;" matInput (keyup)="applyFilterServicios($event.target.value)"
+                                        placeholder="Buscar Servicios">
+                                    </mat-form-field>
+                                  </div>
+              
+                                  <mat-table #tableServicios #sortServicios="matSort" [dataSource]="dataSourceServicios" matSort>
+              
+              
+                                    <ng-container matColumnDef="nombre">
+                                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre
+                                      </mat-header-cell>
+                                      <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                    </ng-container>
+              
+                                    <mat-header-row *matHeaderRowDef="displayedColumnsServicios">
+                                    </mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumnsServicios;" style="cursor: pointer;"
+                                      (click)="cambiarInfoModal(row, 'servicios')" data-toggle="modal" data-target="#modal1">
+                                    </mat-row>
+                                  </mat-table>
+              
+                                  <mat-paginator #paginatorServicios="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                                    [showFirstLastButtons]="true">
+                                  </mat-paginator>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      <div class="box box-danger internal-shadow">
+                            <div class="box-header">
+                              <i class="fa fa-pencil"></i>
+                              <h4 (click)="cambiarIcono('practica')" class="box-title">
+                                <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapsePrac"
+                                  aria-expanded="false" class="collapsed">
+                                  Prácticas de docencia asociadas al equipo : {{equiposel.practicas.length}}
+                                </a>
+                              </h4>
+                              <a (click)="cambiarIcono('practica')" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapsePrac" aria-expanded="false" class="collapsed">
+                                <span style="color:#dd4b39; float:right;"
+                                  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.practica, 'glyphicon-minus':iconos.practica}"></span>
+                              </a>
+                            </div>
+                            <div id="collapsePrac" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                              <div class="box-body">
+                                <div *ngIf="dataSourcePracticas.data.length == 0" class="no-data">
+                                  <h4>ESTE EQUIPO NO CUENTA CON PRÁCTICAS DE DOCENCIA ASOCIADAS</h4>
+                                </div>
+              
+                                <div class="example-container mat-elevation-z8" *ngIf="dataSourcePracticas.data.length != 0">
+                                  <div class="example-header">
+                                    <mat-form-field>
+                                      <input style="outline: none;" matInput (keyup)="applyFilterPracticas($event.target.value)"
+                                        placeholder="Buscar Servicios">
+                                    </mat-form-field>
+                                  </div>
+              
+                                  <mat-table #tablePracticas #sortPracticas="matSort" [dataSource]="dataSourcePracticas" matSort>
+              
+              
+                                    <ng-container matColumnDef="nombre">
+                                      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre
+                                      </mat-header-cell>
+                                      <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                    </ng-container>
+              
+                                    <mat-header-row *matHeaderRowDef="displayedColumnsPracticas">
+                                    </mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumnsPracticas;" style="cursor: pointer;"
+                                      (click)="cambiarInfoModal(row, 'practicas')" data-toggle="modal" data-target="#modal1">
+                                    </mat-row>
+                                  </mat-table>
+              
+                                  <mat-paginator #paginatorPracticas="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                                    [showFirstLastButtons]="true">
+                                  </mat-paginator>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
                   </div>
-  
-    
-              </div>
+                </div>
+              </ng-template>
+            </div>
           </div>
-
-
-        </div>
+      </div>
     </div>
-
-
-  
-
+    <ng-template #noLabSelected>
+      <div class="no-selected-lab no-data">
+        <div style="margin: auto">
+          <h3>No se ha seleccionado ningún laboratorio.</h3>
+          <h4>Si refrescaste esta página selecciona nuevamente de la barra lateral la opción a la que deseas
+            ingresar.
+          </h4>
+        </div>
+      </div>
+    </ng-template>
   </section>
-
-
 </div>
 
 <div class="modal fade" id="modal1" role="dialog">
   <div class="modal-dialog modal-md">
-
-     <!-- Modal content-->
-     <div class="modal-content">
-
+    <!-- Modal content-->
+    <div class="modal-content">
       <div class="modal-body">
-          <div class="box box-danger">
-              <div class="box-header text-center">
-                <i class="fa fa-address-card-o"></i>
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
 
-                <h3 class="box-title">Información de {{tablesel}}</h3>
+            <h3 class="box-title">Información de {{tablesel}}</h3>
 
-                <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></span>
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-         
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('modal1')"></span>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
 
-                <form *ngIf="tablesel == 'servicios'"  id="form-dash2serv" class="" name="form-dash2serv" action="#">
-                  <fieldset>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="nombreprub"><strong>Nombre :</strong> {{seleccionado.nombre}}</label>
 
-                        </div>
+            <form *ngIf="tablesel == 'servicios'" id="form-dash2serv" class="" name="form-dash2serv" action="#">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub"><strong>Nombre :</strong>
+                      {{seleccionado.nombre}}</label>
+
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv"><strong>Descripción:</strong>
+                      {{seleccionado.descripcion}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="estadoserv"><strong>Precio: $</strong>
+                      {{seleccionado.precio}}</label>
+                  </div>
+                </div>
+
+              </fieldset>
+            </form>
+
+            <form *ngIf="tablesel == 'componentes'" id="form-dash2proy" class="" name="form-dash2proy" action="#">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="idProy"><strong>ID :</strong>
+                      {{seleccionado.id}}</label>
+
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreProy"><strong>Nombre:</strong>
+                      {{seleccionado.nombre}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="descripProy"><strong>Descripción:</strong>
+                      {{seleccionado.descripcion}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="descripProy"><strong>Marca:</strong>
+                      {{seleccionado.marca}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="descripProy"><strong>Modelo:</strong>
+                      {{seleccionado.modelo}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="descripProy"><strong>Precio:</strong>
+                      {{seleccionado.precio}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="descripProy"><strong>Estado:</strong>
+                      {{seleccionado.estado}}</label>
+                  </div>
+                </div>
+
+              </fieldset>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div *ngIf="this.infosabsCompo !== undefined" class="box box-danger">
+                    <div class="box-header">
+                      <h4 (click)="cambiarIcono('sabsCompo')" class="box-title">
+                        <a style="color:black;" data-toggle="collapse" data-parent="#accordion23"
+                          href="#collapseSabComp" aria-expanded="false" class="collapsed">
+                          INFORMACIÓN DE SABS
+                        </a>
+                      </h4>
+                      <a (click)="cambiarIcono('sabsCompo')" data-toggle="collapse" data-parent="#accordion23"
+                        href="#collapseSabComp" aria-expanded="false" class="collapsed">
+                        <span style="color:#dd4b39; float:right;"
+                          [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabsCompo, 'glyphicon-minus':iconos.sabsCompo}"></span>
+                      </a>
                     </div>
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <label class="control-label" for="estadoserv"><strong>Descripción:</strong> {{seleccionado.descripcion}}</label>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-md-12">
-                        <label class="control-label" for="estadoserv"><strong>Precio: $</strong> {{seleccionado.precio}}</label>
-                      </div>
-                    </div>
-
-                  </fieldset>
-                </form>
-
-                <form *ngIf="tablesel == 'componentes'"  id="form-dash2proy" class="" name="form-dash2proy" action="#">
-                    <fieldset>
-                      <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="idProy"><strong>ID :</strong> {{seleccionado.id}}</label>
-
-                          </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="nombreProy"><strong>Nombre:</strong> {{seleccionado.nombre}}</label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="descripProy"><strong>Descripción:</strong> {{seleccionado.descripcion}}</label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="descripProy"><strong>Marca:</strong> {{seleccionado.marca}}</label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="descripProy"><strong>Modelo:</strong> {{seleccionado.modelo}}</label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="descripProy"><strong>Precio:</strong> {{seleccionado.precio}}</label>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="descripProy"><strong>Estado:</strong> {{seleccionado.estado}}</label>
-                        </div>
-                      </div>
-
-                    </fieldset>
-
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div *ngIf="this.infosabsCompo !== undefined" class="box box-danger">
-                          <div class="box-header">
-                            <h4 (click)="cambiarIcono('sabsCompo')" class="box-title">
-                              <a style="color:black;" data-toggle="collapse" data-parent="#accordion23" href="#collapseSabComp" aria-expanded="false" class="collapsed">
-                                INFORMACIÓN DE SABS
-                              </a>
-                            </h4>
-                            <a (click)="cambiarIcono('sabsCompo')" data-toggle="collapse" data-parent="#accordion23" href="#collapseSabComp" aria-expanded="false" class="collapsed">
-                              <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabsCompo, 'glyphicon-minus':iconos.sabsCompo}"></span>
-                            </a> 
-                          </div>
-                          <div id="collapseSabComp" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                            <div class="box-body">
-                              <form  id="form-work" class="" name="form-work" action="#">
-                                  <fieldset>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="nac"><strong>Código: </strong>
-                                              {{this.infosabsCompo.codInventario}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ccpas"><strong>Responsable: </strong>
-                                              {{this.infosabsCompo.responsable}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ciuor"><strong>Serial: </strong>
-                                              {{this.infosabsCompo.numSerial}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ciuor"><strong>Marca: </strong>
-                                              {{this.infosabsCompo.nombreMarca}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ciuor"><strong>Ubicación: </strong>
-                                              {{this.infosabsCompo.ubicacion}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ciuor"><strong>Fecha Aceptación: </strong>
-                                              {{this.infosabsCompo.fechaAceptacion}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ciuor"><strong>Costo Inicial: </strong>
-                                              {{this.infosabsCompo.costoInicial}}
-                                            </label>
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                          <div class="col-md-12">
-                                            <label class="control-label" for="ciuor"><strong>Estado: </strong>
-                                              {{this.infosabsCompo.estado}}
-                                            </label>
-                                          </div>
-                                      </div>
-      
-                                  </fieldset>
-                              </form>
+                    <div id="collapseSabComp" class="panel-collapse collapse" aria-expanded="false"
+                      style="height: 0px;">
+                      <div class="box-body">
+                        <form id="form-work" class="" name="form-work" action="#">
+                          <fieldset>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="nac"><strong>Código:
+                                  </strong>
+                                  {{this.infosabsCompo.codInventario}}
+                                </label>
+                              </div>
                             </div>
-                          </div>
-                        </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ccpas"><strong>Responsable: </strong>
+                                  {{this.infosabsCompo.responsable}}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ciuor"><strong>Serial:
+                                  </strong>
+                                  {{this.infosabsCompo.numSerial}}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ciuor"><strong>Marca:
+                                  </strong>
+                                  {{this.infosabsCompo.nombreMarca}}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ciuor"><strong>Ubicación: </strong>
+                                  {{this.infosabsCompo.ubicacion}}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ciuor"><strong>Fecha
+                                    Aceptación: </strong>
+                                  {{this.infosabsCompo.fechaAceptacion}}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ciuor"><strong>Costo
+                                    Inicial: </strong>
+                                  {{this.infosabsCompo.costoInicial}}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label" for="ciuor"><strong>Estado:
+                                  </strong>
+                                  {{this.infosabsCompo.estado}}
+                                </label>
+                              </div>
+                            </div>
+
+                          </fieldset>
+                        </form>
                       </div>
                     </div>
-                </form>
-
-
-                <form  *ngIf="tablesel == 'practicas'"  id="form-workprub" class="" name="form-workprub" action="#">
-                  <fieldset>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                          <label class="control-label" for="nombreprub"><strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-
-                        </div>
-                    </div>
-   
-                    <div class="form-group">
-                      <div class="col-md-12" style="margin-top: 20px;">
-                          <button class="btn btn-danger" style="float: right;"  data-toggle="modal" data-target="#practicaprog"  type="button">Ver Programacion</button>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-
- 
+                  </div>
+                </div>
               </div>
+            </form>
+
+
+            <form *ngIf="tablesel == 'practicas'" id="form-workprub" class="" name="form-workprub" action="#">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombreprub"><strong>Nombre :</strong>
+                      {{seleccionado.nombre}}</label>
+
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12" style="margin-top: 20px;">
+                    <button class="btn btn-danger" style="float: right;" data-toggle="modal" data-target="#practicaprog"
+                      type="button">Ver Programacion</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
 
           </div>
+
+        </div>
       </div>
     </div>
 
@@ -553,78 +613,83 @@
 
 <!-- MODAL QUE PERMITE LA EDICION DE LOS DATOS DEL LABORATORIO -->
 <div class="modal fade" id="modal2" role="dialog">
-    <div Class="modal-dialog modal-md">
-  
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-body">
-            <div class="box box-danger">
-                <div class="box-header text-center">
-                  <i class="fa fa-address-card-o"></i>
-      
-                  <h3 class="box-title">Editar información de equipo</h3>
+  <div Class="modal-dialog modal-md">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <i class="fa fa-address-card-o"></i>
 
-                  <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal2')"></span>
+            <h3 class="box-title">Editar información de equipo</h3>
+
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('modal2')"></span>
+          </div>
+
+          <div class="box-body">
+
+            <form id="form-work2" class="" name="form-work2" action="#">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="nombredit">
+                      <strong>Nombre:</strong>
+                    </label>
+                    <input id="nombredit" [(ngModel)]="this.modelEquipoSel.cfName" name="nombredit" class="form-control"
+                      type="text">
+                  </div>
                 </div>
-       
-                <div class="box-body">
-  
-                  <form id="form-work2" class="" name="form-work2" action="#">
-                      <fieldset>
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="nombredit">
-                              <strong>Nombre:</strong>
-                            </label>
-                            <input id="nombredit" [(ngModel)]="this.modelEquipoSel.cfName"  name="nombredit" class="form-control" type="text">
-                          </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <label class="control-label" for="descripcion">
-                                    <strong>Descripción:</strong>
-                                </label>
-                                <textarea name="descripcionedit" rows="4" [(ngModel)]="this.modelEquipoSel.cfDescr" id="descripcionedit" style="width: 100%;"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="precioedit">
-                              <strong>Modelo:</strong>
-                            </label>
-                            <input id="modeledit" [(ngModel)]="this.modelEquipoSel.model" name="modeledit" class="form-control" type="text">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <label class="control-label" for="precioedit">
-                              <strong>Precio:</strong>
-                            </label>
-                            <input id="precioedit" [(ngModel)]="this.modelEquipoSel.price" name="precioedit" class="form-control" type="text">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <button (click)="editarEquipo()" class="btn2 btn-danger btn-lg btn-block danger" type="button">Guardar Cambios</button>
-                          </div>
-                        </div>
-                      </fieldset>
-                  </form>
-                  
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="descripcion">
+                      <strong>Descripción:</strong>
+                    </label>
+                    <textarea name="descripcionedit" rows="4" [(ngModel)]="this.modelEquipoSel.cfDescr"
+                      id="descripcionedit" style="width: 100%;"></textarea>
+                  </div>
                 </div>
-            </div>
-           
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="precioedit">
+                      <strong>Modelo:</strong>
+                    </label>
+                    <input id="modeledit" [(ngModel)]="this.modelEquipoSel.model" name="modeledit" class="form-control"
+                      type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="precioedit">
+                      <strong>Precio:</strong>
+                    </label>
+                    <input id="precioedit" [(ngModel)]="this.modelEquipoSel.price" name="precioedit"
+                      class="form-control" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <button (click)="editarEquipo()" class="btn2 btn-danger btn-lg btn-block danger"
+                      type="button">Guardar Cambios</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+          </div>
         </div>
+
       </div>
     </div>
   </div>
+</div>
 
-   <!-- modal de horario de practica -->
-<div class="modal fade" id="practicaprog" role="dialog" >
+<!-- modal de horario de practica -->
+<div class="modal fade" id="practicaprog" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
@@ -636,7 +701,8 @@
             <i class="fa fa-calendar"></i>
 
             <h1 class="box-title">Programación de la Practica</h1>
-            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('practicaprog')"></span>
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('practicaprog')"></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -644,20 +710,22 @@
 
               <div class="form-group">
                 <div class="col-md-12">
-                  <label class="control-label" for="semestre"><strong>Semestre:</strong> {{seleccionado.programacion.semestre}}</label>
+                  <label class="control-label" for="semestre"><strong>Semestre:</strong>
+                    {{seleccionado.programacion.semestre}}</label>
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-md-12">
-                  <label class="control-label" for="numero"><strong>No estudiantes:</strong> {{seleccionado.programacion.estudiantes}}</label>
+                  <label class="control-label" for="numero"><strong>No estudiantes:</strong>
+                    {{seleccionado.programacion.estudiantes}}</label>
                 </div>
               </div>
             </div>
-              <div class="col-md-12">
-                  <div class= "cal" id="calendar2">
-                  </div>
+            <div class="col-md-12">
+              <div class="cal" id="calendar2">
               </div>
-           
+            </div>
+
           </div>
 
         </div>

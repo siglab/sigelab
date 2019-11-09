@@ -1,14 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ObservablesService } from '../../../shared/services/observables.service';
-
 import swal from 'sweetalert2';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Http } from '@angular/http';
-// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
-
 import 'fullcalendar';
 import 'fullcalendar-scheduler';
 import * as $AB from 'jquery';
@@ -18,15 +15,13 @@ import { SabsService } from '../../../shared/services/sabs/sabs.service';
 
 declare var $: any;
 
-
 @Component({
   selector: 'app-admin-equipos',
   templateUrl: './admin-equipos.component.html',
   styleUrls: ['./admin-equipos.component.css']
 })
+
 export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
-
-
 
   // INICIALIZACION DATATABLE PRUEBAS
   displayedColumnsEquip = ['nombre'];
@@ -91,23 +86,16 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   infosabsCompo: any;
 
   constructor(private obs: ObservablesService, private http: Http,
-    private servicioMod2: Modulo2Service, private servicioSabs: SabsService) {
-
-  }
-
+    private servicioMod2: Modulo2Service, private servicioSabs: SabsService) { }
 
   ngOnInit() {
     // abre loading mientras se cargan los datos
     this.ventana = true;
-
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
     this.sus = this.obs.currentObjectequip.subscribe(data => {
-
       this.getRoles(data.roles);
       this.equiestructurado = undefined;
       this.iniciliazarTablas();
-
       if (data.length !== 0) {
         swal({
           title: 'Cargando un momento...',
@@ -120,47 +108,40 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
           this.servicioMod2.buscarLab(data.uid).then(doc => {
             this.estructurarEquip(data.uid, doc.data()).then(() => {
               this.itemsel = Observable.of(this.equiestructurado.equipos);
-
               this.dataSourceEquip.data = this.equiestructurado.equipos;
-
-
               setTimeout(() => {
                 if (this.equiestructurado.equipos !== 0) {
                   this.dataSourceEquip.sort = this.sortEquip;
                   this.dataSourceEquip.paginator = this.paginatorEquip;
                   // cierra loading luego de cargados los datos
                   swal.close();
-                } else {
-                  swal({
-                    type: 'error',
-                    title: 'No existen equipos asociados al laboratorio',
-                    showConfirmButton: true
-                  });
-                }
-
+                } 
+                // else {
+                //   swal({
+                //     type: 'error',
+                //     title: 'No existen equipos asociados al laboratorio',
+                //     showConfirmButton: true
+                //   });
+                // }
               }, 1500);
-
             });
           });
 
         }
 
-      } else {
-        swal.close();
-        swal({
-          type: 'error',
-          title: 'No se ha seleccionado ningún laboratorio',
-          showConfirmButton: true
-        });
-      }
-
+      } 
+      // else {
+      //   swal.close();
+      //   swal({
+      //     type: 'error',
+      //     title: 'No se ha seleccionado ningún laboratorio',
+      //     showConfirmButton: true
+      //   });
+      // }
     });
   }
 
-
-  ngAfterViewInit(): void {
-
-  }
+  ngAfterViewInit(): void { }
 
   ngOnDestroy() {
     this.sus.unsubscribe();
@@ -333,15 +314,15 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
               this.infosabs.push(data);
               swal.close();
             }).catch((error) => {
-              if (cont === Object.keys(item).length) {
-                swal.close();
-                swal({
-                  type: 'error',
-                  title: 'No se pudo conectar con SABS',
-                  showConfirmButton: true
-                });
-                cont--;
-              }
+              // if (cont === Object.keys(item).length) {
+              //   swal.close();
+              //   swal({
+              //     type: 'error',
+              //     title: 'No se pudo conectar con SABS',
+              //     showConfirmButton: true
+              //   });
+              //   cont--;
+              // }
             });
 
           });
@@ -427,33 +408,23 @@ export class AdminEquiposComponent implements OnInit, AfterViewInit, OnDestroy {
   cambiarDataEquipo(item, index) {
     const ambiente = this;
     this.equiposel = item;
-
-
     this.infosabsel = this.infosabs[index];
-
     this.modelEquipoSel.cfName = this.equiposel.nombre;
     this.modelEquipoSel.price = this.equiposel.precio;
     this.modelEquipoSel.cfDescr = this.equiposel.descripcion;
     this.modelEquipoSel.model = this.equiposel.modelo;
-
-
     this.dataSourceComponentes.data = item.componentes;
     this.dataSourceServicios.data = item.servicios;
     this.dataSourcePracticas.data = item.practicas;
-
-
     setTimeout(function () {
       ambiente.dataSourceComponentes.sort = ambiente.sortComponentes;
       ambiente.dataSourceComponentes.paginator = ambiente.paginatorComponentes;
-
       ambiente.dataSourceServicios.sort = ambiente.sortServicios;
       ambiente.dataSourceServicios.paginator = ambiente.paginatorServicios;
-
       ambiente.dataSourcePracticas.sort = ambiente.sortPracticas;
       ambiente.dataSourcePracticas.paginator = ambiente.paginatorPracticas;
     }, 1000);
-
-
+    $('html, body').animate({scrollTop: $('#equipDetails').offset().top - 51},800);
   }
 
   editarEquipo() {
