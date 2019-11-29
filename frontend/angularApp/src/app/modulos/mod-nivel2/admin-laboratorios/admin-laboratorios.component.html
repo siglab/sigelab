@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper admin-lab-panel">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>Panel principal de resumen de información</h1>
@@ -225,27 +225,21 @@
                               <div *ngIf="dataSourceEquipos.data.length == 0" class="no-data">
                                 <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON EQUIPOS ASOCIADOS</h4>
                               </div>
-        
                               <div class="example-container mat-elevation-z8" *ngIf="dataSourceEquipos.data.length != 0">
                                 <div class="example-header">
                                   <mat-form-field>
                                     <input style="outline: none;" matInput (keyup)="applyFilterEquipos($event.target.value)" placeholder="Buscar Equipo">
                                   </mat-form-field>
                                 </div>
-        
                                 <mat-table #tableEquipos #sortEquipos="matSort" [dataSource]="dataSourceEquipos" matSort>
-        
-        
                                   <ng-container matColumnDef="nombre">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                     <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                                   </ng-container>
-        
                                   <mat-header-row *matHeaderRowDef="displayedColumnsEquipos"></mat-header-row>
                                   <mat-row *matRowDef="let row; columns: displayedColumnsEquipos;" style="cursor: pointer;" (click)="cambiardata(row, 'equipos')"
                                     data-toggle="modal" data-target="#modal1"></mat-row>
                                 </mat-table>
-        
                                 <mat-paginator #paginatorEquipos="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                                 </mat-paginator>
                               </div>
@@ -270,27 +264,21 @@
                         <div *ngIf="dataSourceServicios.data.length == 0" class="no-data">
                           <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS</h4>
                         </div>
-  
                         <div class="example-container mat-elevation-z8" *ngIf="dataSourceServicios.data.length != 0">
                           <div class="example-header">
                             <mat-form-field>
                               <input style="outline: none;" matInput (keyup)="applyFilterServicios($event.target.value)" placeholder="Buscar Servicios">
                             </mat-form-field>
                           </div>
-  
                           <mat-table #tableServicios #sortServicios="matSort" [dataSource]="dataSourceServicios" matSort>
-  
-  
                             <ng-container matColumnDef="nombre">
                               <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                               <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                             </ng-container>
-  
                             <mat-header-row *matHeaderRowDef="displayedColumnsServicios"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: displayedColumnsServicios;" style="cursor: pointer;" (click)="cambiardata(row, 'servicios')"
                               data-toggle="modal" data-target="#modal1"></mat-row>
                           </mat-table>
-  
                           <mat-paginator #paginatorServicios="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                           </mat-paginator>
                         </div>
@@ -372,7 +360,6 @@
                                     <strong>Edificio: </strong>
                                     {{this.itemsel.espacioPrin[0].spaceData.building}}
                                   </label>
-    
                                 </div>
                               </div>
                               <div class="form-group">
@@ -405,13 +392,10 @@
                                     <strong>Capacidad: </strong>
                                     {{this.itemsel.espacioPrin[0].capacity}}
                                   </label>
-    
                                 </div>
                               </div>
-    
                             </fieldset>
                           </form>
-    
                         </div>
                       </div>
                     </div> -->
@@ -434,17 +418,13 @@
                           <div *ngIf="dataSourceSolicitudes.data.length == 0" class="no-data">
                             <h4>EL LABORATORIO SELECCIONADO NO CUENTA CON SOLICITUDES DE SERVICIO ACTIVAS</h4>
                           </div>
-    
                           <div class="example-container mat-elevation-z8" *ngIf="dataSourceSolicitudes.data.length != 0">
                             <div class="example-header">
                               <mat-form-field>
                                 <input style="outline: none;" matInput (keyup)="applyFilterSolicitudes($event.target.value)" placeholder="Buscar Solicitudes">
                               </mat-form-field>
                             </div>
-    
                             <mat-table #tableSolicitudes #sortSolicitudes="matSort" [dataSource]="dataSourceSolicitudes" matSort>
-    
-    
                               <ng-container matColumnDef="nombre">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                                 <mat-cell *matCellDef="let element"> {{element.nombreServ}} </mat-cell>
@@ -453,12 +433,10 @@
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
                                 <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
                               </ng-container>
-    
                               <mat-header-row *matHeaderRowDef="displayedColumnsSolicitudes"></mat-header-row>
                               <mat-row *matRowDef="let row; columns: displayedColumnsSolicitudes;" style="cursor: pointer;" (click)="cambiardata(row, 'solicitudes')"
                                 data-toggle="modal" data-target="#modal1"></mat-row>
                             </mat-table>
-    
                             <mat-paginator #paginatorSolicitudes="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                             </mat-paginator>
                           </div>
@@ -528,7 +506,7 @@
                                 <div class="col-md-12">
                                   <label class="control-label" for="area">
                                     <strong>Área total (m²): </strong>
-                                    {{this.espaciosel.totalArea}}
+                                    {{this.espaciosel.totalArea == 0? 'No disponible' : this.espaciosel.totalArea}}
                                   </label>
                                 </div>
                               </div>
@@ -536,7 +514,7 @@
                                 <div class="col-md-12">
                                   <label class="control-label" for="areao">
                                     <strong>Área Ocupada (m²): </strong>
-                                    {{this.espaciosel.ocupedArea}}
+                                    {{this.espaciosel.ocupedArea == 0? 'No disponible' : this.espaciosel.ocupedArea}}
                                   </label>
                                 </div>
                               </div>
@@ -1017,17 +995,13 @@
 <!-- MODAL QUE MUESTRA INFORMACION DEL ITEM SELECCIONADO -->
 <div class="modal fade" id="modal1" role="dialog">
   <div class="modal-dialog modal-md">
-
     <!-- Modal content-->
     <div class="modal-content">
-
       <div class="modal-body">
         <div class="box box-danger">
           <div class="box-header text-center">
             <i class="fa fa-address-card-o"></i>
-
             <h3 class="box-title">Información de {{tablesel}}</h3>
-
             <i style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal1')"></i>
           </div>
           <!-- /.box-header -->
@@ -1038,26 +1012,22 @@
                   <div class="col-md-12">
                     <label class="control-label" for="nombreprub">
                       <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
-                      <strong>Precio:</strong> {{seleccionado.precio}}</label>
+                      <strong>Precio:</strong> {{seleccionado.precio ? seleccionado.precio : '-'}} (COP)</label>
                   </div>
                 </div>
-
               </fieldset>
             </form>
-
             <form *ngIf="tablesel == 'servicios'" id="form-dash2serv" class="" name="form-dash2serv" action="#">
               <fieldset>
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="nombreprub">
                       <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-
                   </div>
                 </div>
                 <div class="form-group">
@@ -1075,13 +1045,11 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadoserv">
-                      <strong>Precio: $</strong> {{seleccionado.precio}}</label>
+                      <strong>Precio: $</strong> {{seleccionado.precio}} (COP)</label>
                   </div>
                 </div>
-
               </fieldset>
             </form>
-
             <form *ngIf="tablesel == 'personal'" id="form-dash2epers" class="" name="form-dash2epers" action="#">
               <fieldset>
                 <div class="form-group">
@@ -1093,13 +1061,12 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="nombrePers">
-                      <strong>Email:</strong> {{seleccionado.email}}</label>
+                      <strong>Email:</strong> {{seleccionado.email ? seleccionado.email : 'Información no disponible'}}</label>
                   </div>
                 </div>
               </fieldset>
             </form>
-
-            <form *ngIf="tablesel == 'proyectos'" id="form-dash2proy" class="" name="form-dash2proy" action="#">
+            <!-- <form *ngIf="tablesel == 'proyectos'" id="form-dash2proy" class="" name="form-dash2proy" action="#">
               <fieldset>
                 <div class="form-group">
                   <div class="col-md-12">
@@ -1121,33 +1088,28 @@
                   </div>
                 </div>
               </fieldset>
-            </form>
-
-
-            <form *ngIf="tablesel == 'practicas'" id="form-workprub" class="" name="form-workprub" action="#">
+            </form> -->
+            <!-- <form *ngIf="tablesel == 'practicas'" id="form-workprub" class="" name="form-workprub" action="#">
               <fieldset>
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="nombreprub">
                       <strong>Nombre :</strong> {{seleccionado.nombre}}</label>
-
                   </div>
                 </div>
-
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <button class="btn btn-danger" style="float: right;" data-toggle="modal" data-target="#practicaprog" type="button">Ver Programacion</button>
                   </div>
                 </div>
               </fieldset>
-            </form>
-
+            </form> -->
             <form *ngIf="tablesel == 'solicitudes'" id="form-dash2sol" class="" name="form-dash2sol" action="#">
               <fieldset>
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <label class="control-label">
-                      <strong style="color: red;">INFORMACIÓN SERVICIO</strong>
+                      <strong>Detalles de solicitud:</strong>
                     </label>
                   </div>
                 </div>
@@ -1160,19 +1122,23 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadosol">
-                      <strong>Descripción:</strong> {{seleccionado.descripcionServ}}</label>
+                      <strong>Descripción:</strong>
+                    </label>
+                    <label class="description">
+                      {{seleccionado.descripcionServ}}
+                    </label>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="estadosol">
-                      <strong>Precio: $</strong> {{seleccionado.precioServ}}</label>
+                      <strong>Precio: $</strong> {{seleccionado.precioServ}} (COP)</label>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <label class="control-label">
-                      <strong style="color: red;">INFORMACIÓN DE QUIEN SOLICITA EL SERVICIO</strong>
+                      <strong>Información de usuario solicitante:</strong>
                     </label>
                   </div>
                 </div>
@@ -1185,7 +1151,7 @@
                 <div class="form-group">
                   <div class="col-md-12" style="margin-top: 20px;">
                     <label class="control-label">
-                      <strong style="color: red;">INFORMACIÓN DE LA SOLICITUD</strong>
+                      <strong>Detalles de la solicitud:</strong>
                     </label>
                   </div>
                 </div>
@@ -1205,25 +1171,22 @@
               </fieldset>
             </form>
           </div>
-
         </div>
       </div>
     </div>
-
-
   </div>
 </div>
 
 
 <!-- MODAL QUE MUESTRA LOS DATOS DE LOS ESPACIOS DE LOS DATOS DEL LABORATORIO -->
 <div class="modal fade" id="modal3" role="dialog">
-  <div class="modal-dialog modal-md" style="min-width:700px">
+  <div class="modal-dialog modal-md">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body">
         <div class="box box-danger shadow">
           <div class="box-header text-center">
-            <i class="fa fa-address-card-o"></i>
+            <i class="fa fa-picture-o"></i>
             <h3 class="box-title">Plano del espacio seleccionado</h3>
             <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modal3')"></span>
           </div>

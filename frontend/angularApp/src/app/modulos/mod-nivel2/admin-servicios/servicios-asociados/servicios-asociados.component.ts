@@ -43,26 +43,21 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
   @ViewChild('paginatorEquipVin') paginatorEquipVin: MatPaginator;
   @ViewChild('sortEquipVin') sortEquipVin: MatSort;
 
-
   campoCondicion = '';
   condicionesobjeto = {};
   variation: any;
   variacionSel = '';
-
   moduloinfo = false;
-
   iconos = {
     info: false,
     sabs: false
   };
-
   iconosModal = {
     servicio: false,
     variacion: false,
     equipos: false,
     equipos2: false
   };
-
   srv = {
     active: true,
     cfAcro: '',
@@ -100,42 +95,29 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
   variaciones = [];
   variacionesCambiadas = [];
-
   condicion = '';
   condicionvar = '';
-
   lab_id = '';
-
   selection = new SelectionModel(true, []);
   selection2 = new SelectionModel(true, []);
-
   equipos: any;
-
   editar = false;
   botonEditar = false;
   nuevaVar = false;
-
   sus: Subscription;
-
   role: any;
   moduloNivel2 = false;
-
   parametro = '';
   listaParametrosServicio = [];
-
   parametroVar = '';
   listaParametrosVariacion = [];
-
   seleccion = false;
-
   user = this.servicioMod2.getLocalStorageUser();
 
   constructor(private obs: ObservablesService, private servicioMod2: Modulo2Service) { }
 
   ngOnInit() {
-
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
     this.sus = this.obs.currentObjectServAsoc.subscribe(data => {
       this.getRoles(data.roles);
       this.seleccion = true;
@@ -148,54 +130,45 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
           swal.showLoading();
         }
       });
-
       if (data.length !== 0) {
-
         this.lab_id = data.uid;
         this.servicioMod2.getCollectionServicios(data.uid).then(servicios => {
-
           this.servasocestructurados = this.estructurarDataServ(servicios);
           this.servicioMod2.buscarLab(this.lab_id).then(labo => {
             this.equipos = this.estructurarEquipos(labo.data().relatedEquipments);
-
             if (this.servasocestructurados) {
               this.dataSource.data = this.servasocestructurados;
               this.dataSourceEquip = new MatTableDataSource(this.equipos);
-
               setTimeout(() => {
-
                 this.dataSource.sort = this.sort;
                 this.dataSource.paginator = this.paginator;
                 // cierra loading luego de cargados los datos
-
                 this.dataSourceEquip.sort = this.sortEquip;
                 this.dataSourceEquip.paginator = this.paginatorEquip;
-                if (this.servasocestructurados.length !== 0) {
-                  swal.close();
-                } else {
-                  swal.close();
-                  swal({
-                    type: 'error',
-                    title: 'No existen servicios asociados al laboratorio',
-                    showConfirmButton: true,
-                    timer: 3000
-                  });
-                }
-
+                swal.close();
+                // if (this.servasocestructurados.length !== 0) {
+                //   swal.close();
+                // } else {
+                //   swal.close();
+                //   swal({
+                //     type: 'error',
+                //     title: 'No existen servicios asociados al laboratorio',
+                //     showConfirmButton: true,
+                //     timer: 3000
+                //   });
+                // }
               }, 1000);
-
             }
           });
-
         });
       } else {
         swal.close();
-        swal({
-          type: 'error',
-          title: 'No se ha seleccionado ningún laboratorio',
-          showConfirmButton: true,
-          timer: 3000
-        });
+        // swal({
+        //   type: 'error',
+        //   title: 'No se ha seleccionado ningún laboratorio',
+        //   showConfirmButton: true,
+        //   timer: 3000
+        // });
       }
 
     });
@@ -394,7 +367,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.campoCondicion = '';
     /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
     this.itemsel = item;
-
     if (item.infoServ.variaciones.length === 0) {
       if (item.infoServ.condiciones.length !== 0) {
         this.estructurarVariaciones(item.infoServ.condiciones);
@@ -402,7 +374,7 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
 
     }
     this.moduloinfo = true;
-
+    $('html, body').animate({scrollTop: $('#serviceDetails').offset().top - 55 },800);
   }
 
 
@@ -995,14 +967,11 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
     this.listaParametrosServicio = [];
   }
 
-  nuevoEspacio() {
+  nuevoServicio() {
     this.editar = false;
     this.variaciones = [];
-
     this.inicializarServicio();
     this.inicializarVariacion();
-
-
   }
 
   applyFilter(filterValue: string) {

@@ -122,10 +122,7 @@ export class BusServComponent implements OnInit, AfterViewInit {
     }).catch( err => console.log(err));
   }
 
-  ngAfterViewInit(): void {
-
-
-  }
+  ngAfterViewInit(): void { }
 
   selectRow(row){
     this.alert.show();
@@ -450,7 +447,6 @@ export class BusServComponent implements OnInit, AfterViewInit {
     this.variacionSel = '';
     this.iconos.var = false;
     this.iconos.info = true;
-    /*  navega hacia bajo para mostrar al usuario la posicion de los datos */
     this.itemsel = item;
     if (item.infoServ.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.infoServ.condiciones, item.infoServ.parametros);

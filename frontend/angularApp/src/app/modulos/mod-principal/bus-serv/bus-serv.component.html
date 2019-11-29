@@ -127,8 +127,10 @@
                           <div class="col-md-12">
                             <label class="control-label" for="descripserv"
                               ><strong>Descripción:</strong>
-                              {{ itemsel.infoServ.descripcion }}</label
-                            >
+                            </label>
+                            <label class="description">
+                              {{ itemsel.infoServ.descripcion }}
+                            </label>
                           </div>
                         </div>
                         <div
@@ -169,8 +171,11 @@
                           <div class="col-md-12">
                             <label class="control-label" for="precioserv"
                               ><strong>Precio: $</strong>
-                              {{ itemsel.infoServ.precio }}</label
+                              {{ itemsel.infoServ.precio }} (COP)</label
                             >
+                            <div class="price-text">
+                              Este es un costo calculado aproximado y podría variar.
+                            </div>
                           </div>
                         </div>
                         <div
@@ -183,7 +188,7 @@
                           <div class="col-md-12">
                             <label class="control-label" for="precioserv">
                               <strong>Total descuento: </strong>$
-                              {{ this.descuento }}</label
+                              {{ this.descuento }} (COP)</label
                             >
                           </div>
                         </div>
@@ -198,7 +203,7 @@
                           <div class="col-md-12">
                             <label class="control-label" for="precioserv">
                               <strong>Precio Total con descuento: </strong>$
-                              {{ this.preciocondescuento }}</label
+                              {{ this.preciocondescuento }} (COP)</label
                             >
                           </div>
                         </div>
@@ -455,18 +460,23 @@
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
-                              <label class="control-label" for="descripserv"
-                                ><strong>Descripción:</strong>
-                                {{ variation.data.cfDescription }}</label
-                              >
-                            </div>
+                                <label>
+                                  <strong>Descripción:</strong>
+                                </label>
+                                <label class="description">
+                                  {{variation.data.cfDescription}}
+                                </label>
+                              </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="precioserv"
                                 ><strong>Precio: $</strong>
-                                {{ variation.data.cfPrice }}</label
+                                {{ variation.data.cfPrice }} (COP)</label
                               >
+                              <div class="price-text">
+                                Este es un costo calculado aproximado y podría variar.
+                              </div>
                             </div>
                           </div>
                           <div class="form-group">
@@ -562,20 +572,22 @@
                         >
                       </li>
                     </ul>
-
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="total"
-                          ><strong>TOTAL: $</strong
-                          >{{ this.preciototal }}</label
+                          ><strong>Costo total de esta solicitud : $</strong
+                          >{{ this.preciototal }} (COP)</label
                         >
+                        <div class="price-text">
+                          Este es un costo calculado aproximado y podría variar..
+                        </div>
                       </div>
                     </div>
                     <div *ngIf="usuariounivalle" class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="precioserv">
                           <strong>Total descuento: </strong>$
-                          {{ this.descuento }}</label
+                          {{ this.descuento }} (COP)</label
                         >
                         <p class="modal-p">
                           * Debido a que usted es un usuario institucional de la
@@ -589,7 +601,7 @@
                       <div class="col-md-12">
                         <label class="control-label" for="precioserv">
                           <strong>Precio total con descuento: </strong>$
-                          {{ this.preciocondescuento }}</label
+                          {{ this.preciocondescuento }} (COP)</label
                         >
                       </div>
                     </div>

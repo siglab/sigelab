@@ -2,27 +2,20 @@
   <!-- Content Header (Page header) -->
   <!-- Main content -->
   <section class="content">
-
     <!-- Componente central de busqueda -->
-
     <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="box box-danger">
           <div class="box-header">
             <i class="fa fa-search"></i>
-
             <h3 class="box-title">Búsqueda</h3>
-
             <div *ngIf="this.moduloNivel3" class="form-group">
               <div class="col-md-12">
                 <button data-toggle="modal" data-target="#modalNuevoLab" style="float: right;" class="btn btn-danger" type="button" (click)="limpiarDatosNuevo()">Nuevo Laboratorio</button>
               </div>
             </div>
-
           </div>
-
           <div class="box-body">
-
             <div class="box-body">
               <div class="table-responsive">
                 <div class="example-container mat-elevation-z8">
@@ -31,74 +24,56 @@
                       <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar por: laboratorio, correo laboratorio, director, correo directos, estado laboratorio, fecha de última actualización">
                     </mat-form-field>
                   </div>
-
                   <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
-
                     <!-- Position Column -->
                     <ng-container matColumnDef="nombre">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
                     </ng-container>
-
                     <!-- Name Column -->
                     <ng-container matColumnDef="labEmail">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Laboratorio </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.labEmail}} </mat-cell>
                     </ng-container>
-
                     <!-- Weight Column -->
                     <ng-container matColumnDef="directoremail">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Correo Director </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.directoremail}} </mat-cell>
                     </ng-container>
-
                     <!-- Weight Column -->
                     <ng-container matColumnDef="updatedAt">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.updatedAt}} </mat-cell>
                     </ng-container>
-
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="director">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Director </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.director}} </mat-cell>
                     </ng-container>
-
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="active">
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.active}} </mat-cell>
                     </ng-container>
-
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="cambiarLaboratorio(row)" style="cursor: pointer   "></mat-row>
                   </mat-table>
-
                   <mat-paginator #paginator="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
                   </mat-paginator>
                 </div>
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
     </div>
-
-
-
   </section>
-
 
   <!-- Main content -->
   <section id="detalle" class="content" *ngIf="itemsel | async; let itemsel">
-
-
     <!--INFORMACION DE LABORATORIO-->
     <div class="row">
       <div class="col-md-12 col-lg-12">
-
         <ul class="nav nav-tabs">
           <li>
             <a class="tablas" data-toggle="tab" href="#homeNivel3">
@@ -114,74 +89,46 @@
           </li>
         </ul>
 
-        <div class="row" style="margin-top:20px;">
+        <div class="row">
           <div class="col-md-12">
-
             <div class="tab-content">
               <!-- TAB ADMINISTRACION DE LABORATORIOS 2 -->
               <div id="homeNivel3" class="tab-pane fade in active">
-
                 <div class="tab-content">
                   <div id="home1Nivel3" class="tab-pane fade in active">
                     <!-- Componente central de busqueda -->
                     <!-- INDICADORES -->
-                    <div class="row">
+                    <div class="row admin-panel">
                       <app-admin-laboratorios></app-admin-laboratorios>
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
-
-
               <!-- TAB ADMINISTRACION DE ESPACIOS -->
               <div id="menu1Nivel3" class="tab-pane fade">
-
                 <div class="box-body">
-
                   <div class="row">
                     <app-admin-espacios></app-admin-espacios>
                   </div>
-
-
                 </div>
               </div>
-
               <!-- TAB ADMINISTRACION DE ESPACIOS PERSONAL -->
               <div id="menu2Nivel3" class="tab-pane fade">
-
                 <div class="box-body">
-
                   <div class="row">
                     <app-admin-personal></app-admin-personal>
                   </div>
-
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-
-
-
       </div>
     </div>
-
   </section>
-
-
-
 </div>
 
-
 <!-- ******************************************************+ -->
-
-
-
-
 <!-- MODAL PARA CREAR UN NUEVO LABORATORIO -->
 <div class="modal fade" id="modalNuevoLab" role="dialog">
   <div class="modal-dialog">
@@ -240,6 +187,5 @@
 
   </div>
 </div>
-
 <!-- ********************************************************* -->
 

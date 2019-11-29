@@ -33,7 +33,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
   estado;
   idu;
   idp;
-  tipo = ['Funcionario', 'Estudiante', 'Contratista', 'Otro'];
+  tipo = ['Funcionario', 'Contratista', 'Otro'];
   type;
   idlab;
   activos = [];
@@ -131,23 +131,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.sus = this.obs.currentObjectPer.subscribe(data => {
       this.getRoles(data.roles);
       if (data.length !== 0) {
-
-
         this.initDataComponent(data.uid);
         /* this.estructuraIdPers(data.uid).then(() => {
- 
-           // validators email
- 
- 
            this.idlab = data.uid;
- 
            this.itemsel = Observable.of(this.persestructurado.personal);
- 
            this.dataSourcePers.data = this.persestructurado.personal;
            this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
- 
            const ambiente = this;
- 
            swal({
              title: 'Cargando un momento...',
              text: 'Espere mientras se cargan los datos',
@@ -155,18 +145,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                swal.showLoading();
              }
            });
- 
- 
            setTimeout(function () {
              if (ambiente.persestructurado.personal !== 0) {
- 
                ambiente.dataSourcePers.sort = ambiente.sortPers;
                ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
                ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
                ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
- 
                swal.close();
- 
              } else {
                swal({
                  type: 'error',
@@ -174,45 +159,19 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
                  showConfirmButton: true
                });
              }
- 
- 
- 
            }, 2000);
- 
          }); */
-
-      } else {
-        swal({
-          type: 'error',
-          title: 'No se ha seleccionado ningún laboratorio',
-          showConfirmButton: true
-        });
-      }
-
-
-
-
+      } 
     });
-
   }
 
-
-
   initDataComponent(uid) {
-
-
     this.estructuraIdPers(uid).then(() => {
-
-
       this.idlab = uid;
-
       this.itemsel = Observable.of(this.persestructurado.personal);
-
       this.dataSourcePers.data = this.persestructurado.personal;
       this.dataSourcePersIn.data = this.persestructurado.personalInactivo;
-
       const ambiente = this;
-
       swal({
         title: 'Cargando un momento...',
         text: 'Espere mientras se cargan los datos',
@@ -220,18 +179,13 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
           swal.showLoading();
         }
       });
-
-
       setTimeout(function () {
         if (ambiente.persestructurado.personal !== 0) {
-
           ambiente.dataSourcePers.sort = ambiente.sortPers;
           ambiente.dataSourcePers.paginator = ambiente.paginatorPers;
           ambiente.dataSourcePersIn.sort = ambiente.sortPersIn;
           ambiente.dataSourcePersIn.paginator = ambiente.paginatorPersIn;
-
           swal.close();
-
         } else {
           swal({
             type: 'error',
@@ -239,11 +193,7 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
             showConfirmButton: true
           });
         }
-
-
-
       }, 2000);
-
     });
 
   }
@@ -716,14 +666,14 @@ export class AdminPersonalComponent implements OnInit, AfterViewInit, OnDestroy 
     this.addP = '';
     const q = $event.target.value;
     if (q.trim() === '') {
-      this.status = 'Campo obligatorio';
+      this.status = 'Este campo es obligatorio para continuar.';
       // this.dispo = false;
     } else {
       this.status = 'Confirmando disponibilidad';
 
       this.servicioMod2.getPersForEmail(q).then((snapShot) => {
         if (snapShot.empty) {
-          this.status = 'Email disponible';
+          this.status = 'No se encontró ningún usuario con este correo en el sistema. Ingrese la información de la persona y posteriormente haga click en el botón "Crear y vincular" para continuar.';
           this.dispo = true;
         } else {
           this.status = 'Ya existe un usuario en el sistema con el email ingresado, si desea vincularlo presione el botón vincular.';

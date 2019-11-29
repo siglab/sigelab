@@ -172,14 +172,7 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
 
         });
 
-      } else {
-        swal({
-          type: 'error',
-          title: 'No se ha seleccionado ningún laboratorio',
-          showConfirmButton: true
-        });
-      }
-
+      } 
     });
   }
 

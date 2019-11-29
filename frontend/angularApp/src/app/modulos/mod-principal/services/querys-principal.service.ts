@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import { URLCORREO } from '../../../config';
 import { promise } from 'protractor';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable()
 export class QuerysPrincipalService {
@@ -444,7 +445,7 @@ export class QuerysPrincipalService {
                 condiciones: servicio.cfCondition,
                 descuento: servicio.descuento,
                 parametros: servicio.parametros,
-                variaciones: this.variations(data.key),
+                variaciones: this.variations(data.id),
                 uid: data.id
               };
               arr.push(serv);

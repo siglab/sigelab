@@ -231,3 +231,8 @@ label {
   overflow-y: auto; 
   padding-right: 10px
 }
+
+.price-text {
+  font-size: 0.85em;
+  padding-bottom: 10px;
+}

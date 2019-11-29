@@ -374,13 +374,11 @@ export class BusLabComponent implements OnInit, AfterViewInit {
         this.user.email
       );
     });
-
     let cont = 0;
     for (let i = 0; i < this.itemsel.personal.length; i++) {
       this.query.buscarUsuarioWithEmail(this.itemsel.personal).then(docs => {
         docs.forEach(doc => {
           ids.push(doc.id);
-
           if (this.itemsel.personal.length === cont) {
             this.query.enviarNotificaciones(
               ids,
@@ -397,15 +395,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
 
   selectRow(row){
     this.alert.show();
-
     this.query.getDataLab(row).then(data => {
       this.cambiardata(data);
       this.alert.hide();
-
     }).catch(err=>{
       console.log(err)
       this.alert.hide();
-
     });
   }
 
@@ -470,15 +465,12 @@ export class BusLabComponent implements OnInit, AfterViewInit {
     this.variation = undefined;
     this.variacionSel = '';
     this.servsel = item;
-
     if (!this.user) {
       swal('Para poder reservar este servicio debe ingresar primero al sistema', '', 'error');
     }
-
     if (item.condiciones.length !== 0) {
       this.estructurarCondicionesServicio(item.condiciones, item.parametros);
     }
-
     if (this.usuariounivalle) {
       if (item.variaciones.length === 0) {
         this.descuento =

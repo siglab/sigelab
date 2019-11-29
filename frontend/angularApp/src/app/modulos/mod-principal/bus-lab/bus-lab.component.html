@@ -63,7 +63,6 @@
                         {{ element.director }}
                       </mat-cell>
                     </ng-container>
-
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)" style="cursor: pointer   "></mat-row>
                   </mat-table>
@@ -109,20 +108,20 @@
                             <div class="col-md-12">
                               <label><strong>Descripción:</strong></label>
                               <label class="control-label" for="desc" class="description">
-                                {{ itemsel.desc }}
+                                {{ itemsel.desc ? itemsel.desc : 'Información no disponible' }}
                               </label>
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="dir">
-                                <strong>Dirección: </strong>{{ itemsel.direspacio.dir }}</label>
+                                <strong>Dirección: </strong>{{ itemsel.direspacio.dir ? itemsel.direspacio.dir : 'Información no disponible'}}</label>
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="esp">
-                                <strong>Espacio: </strong>{{ itemsel.direspacio.espa }}</label>
+                                <strong>Espacio: </strong>{{ itemsel.direspacio.espa ? itemsel.direspacio.espa : 'Información no disponible' }}</label>
                             </div>
                           </div>
                           <div class="form-group" style="margin-top: 20px;">
@@ -152,7 +151,7 @@
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="email">
-                                <strong>Email: </strong>{{ itemsel.info.email }}</label>
+                                <strong>Email: </strong>{{ itemsel.info.email ? itemsel.info.email : 'Información no disponible' }}</label>
                             </div>
                           </div>
                           <div class="form-group">
@@ -175,7 +174,6 @@
                       <h3 class="box-title">Detalles de ubicación</h3>
                     </div>
                     <div class="box-body">
-                      <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
                       <div id="mapa" style="height:250px"></div>
                     </div>
                   </div>
@@ -313,7 +311,10 @@
                         <div class="col-md-12">
                           <label class="control-label" for="descripserv">
                             <strong>Descripción:</strong>
-                            {{ servsel.descripcion }}</label>
+                          </label>
+                          <label class="description">
+                            {{ servsel.descripcion }}
+                          </label>
                         </div>
                       </div>
                       <div class="form-group">
@@ -389,13 +390,21 @@
                     <fieldset>
                       <div class="form-group">
                         <div class="col-md-12">
-                          <label class="control-label" for="variacionserv">
+                          <!-- <label class="control-label" for="variacionserv">
                             <strong>Variaciones disponibles:</strong>
-                          </label>
-                          <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
+                          </label> -->
+                          <!-- <select class="form-control" name="variatio" id="variato" [(ngModel)]="variacionSel" (change)="cambiarVariacion($event.target.value)">
                             <option value="" selected="selected" hidden="hidden">Seleccione una variación</option>
                             <option *ngFor="let item of servsel.variaciones" value="{{ item.id }}">{{ item.data.cfName }}</option>
-                          </select>
+                          </select> -->
+                          <mat-form-field>
+                            <mat-label>Variaciones de servicio disponibles:</mat-label>
+                            <mat-select name="variatio" id="variato" [(ngModel)]="variacionSel">
+                              <mat-option *ngFor="let item of servsel.variaciones" [value]="item.id" (click)="cambiarVariacion(item.id)">
+                                {{item.data.cfName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
                         </div>
                       </div>
                     </fieldset>
@@ -411,14 +420,20 @@
                         <div class="col-md-12">
                           <label class="control-label" for="descripserv">
                             <strong>Descripción:</strong>
-                            {{ variation.data.cfDescription }}</label>
+                          </label>
+                          <label class="description">
+                            {{ variation.data.cfDescription }}
+                          </label>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
-                            <strong>Precio: </strong>${{ variation.data.cfPrice }}
+                            <strong>Precio: </strong>${{ variation.data.cfPrice ? variation.data.cfPrice : '-' }} (COP)
                           </label>
+                          <div class="price-text">
+                            Este es un costo calculado aproximado y podría variar.
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
@@ -494,9 +509,12 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="condiciones">
-                            <strong>Total: $</strong>
-                            {{ this.preciototal }}
+                            <strong>Costo total de esta solicitud: $</strong>
+                            {{ this.preciototal }} (COP)
                           </label>
+                          <div class="price-text">
+                            Este es un costo calculado aproximado y podría variar.
+                          </div>
                         </div>
                       </div>
                       <div *ngIf="usuariounivalle" class="form-group">
@@ -594,7 +612,10 @@
                   <div class="col-md-12">
                     <label class="control-label" for="descripserv">
                       <strong>Descripción:</strong>
-                      {{ servsel.descripcion }}</label>
+                    </label>
+                    <label class="description">
+                      {{ servsel.descripcion }}
+                    </label>
                   </div>
                 </div>
                 <div class="form-group">
@@ -622,7 +643,10 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Precio del servicio: </strong>$ {{ servsel.precio }}</label>
+                      <strong>Precio: </strong>$ {{ servsel.precio }} (COP)</label>
+                      <div class="price-text">
+                        Este es un costo calculado aproximado y podría variar.
+                      </div>
                   </div>
                 </div>
                 <div *ngIf="usuariounivalle" class="form-group">
@@ -798,7 +822,7 @@
     </div>
   </div>
 </div>
-<!-- modal de horario de practica -->
+<!-- MODAL PARA MOSTRAR HORARIO DE PRÁCTICAS -->
 <div class="modal fade" id="practicaprog" role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- Modal content-->
