@@ -130,21 +130,13 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
           this.idlab = data.uid;
           this.dataSourceSpace.data = (this.espaestructurado.espacios);
           // this.listSubHq();
-
-
-
-
           this.dataSourceSpace.sortingDataAccessor = (item, property) => {
             switch (property) {
-
               case 'spaceData.place': return item.spaceData.place;
-
               case 'spaceData.building': return item.spaceData.building;
-
               default: return item[property];
             }
           };
-
           swal({
             title: 'Cargando un momento...',
             text: 'espere mientras se cargan los datos',
@@ -152,26 +144,14 @@ export class AdminEspaciosComponent implements OnInit, OnDestroy {
               swal.showLoading();
             }
           });
-
-
           setTimeout(() => {
             if (this.espaestructurado.espacios.length > 0) {
               this.dataSourceSpace.paginator = this.paginatorSpace;
               this.dataSourceSpace.sort = this.sortSpace;
               swal.close();
-            } else {
-              swal({
-                type: 'error',
-                title: 'No existen espacios asociados al laboratorio',
-                showConfirmButton: true
-              });
             }
-
           }, 1000);
-
-
         });
-
       } 
     });
   }

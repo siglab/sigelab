@@ -1,598 +1,650 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1>
-    Solicitudes de servicios
-    </h1>
-
+    <h1>Solicitudes de servicios recibidas</h1>
   </section>
-
   <!-- Main content -->
   <section class="content">
-
-    <!-- Componente central de busquedad -->
-    <div class="row">
-      <div class="col-md-12 col-lg-12">
-        <div class="box box-danger">
-          <div class="box-header">
-            <i class="fa fa-audio-description"></i>
-
-            <h3 class="box-title">ADMINISTRADOR DE SOLICITUDES</h3>
-
-          </div>
-
-          <div class="box-body">
-
-              <ul class="nav nav-tabs" >
-                  <li><a class="tablas" data-toggle="tab"  href="#home" (click)="ocultar()" >
-                    Solicitudes activas</a></li>
-                  <li><a class="tablas" data-toggle="tab" href="#menu1" (click)="ocultar()">
-                    Historial de solicitudes</a></li>
+    <div *ngIf="selectedLab; else noLabSelected;">
+      <!-- Componente central de busquedad -->
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="box box-danger shadow">
+            <div class="box-header">
+              <i class="fa fa-audio-description"></i>
+              <h3 class="box-title">Administrador de solicitudes</h3>
+            </div>
+            <div class="box-body">
+              <ul class="nav nav-tabs">
+                <li class="active">
+                  <a class="tablas" data-toggle="tab" href="#home" (click)="ocultar()" aria-expanded="true">
+                    Solicitudes activas
+                  </a>
+                </li>
+                <li>
+                  <a class="tablas" data-toggle="tab" href="#menu1" (click)="ocultar()">
+                    Historial de solicitudes
+                  </a>
+                </li>
               </ul>
-
-              <div class="row" style="margin-top:30px;">
-                  <div class="col-md-12">
-                      <div class="box box-danger">
-                          <div class="tab-content">
-                              <div id="home" class="tab-pane fade in active">
-                                  <div class="box-header">
-                                      <i class="fa fa-flask"></i>
-
-                                      <h3 class="box-title">SERVICIOS ACTIVOS</h3>
-                                  </div>
-                                  <div class="box-body">
-
-                                      <div class="table-responsive">
-
-                                          <div class="example-container mat-elevation-z8">
-                                            <div class="example-header">
-                                              <mat-form-field>
-                                                <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                                              </mat-form-field>
-                                            </div>
-
-                                            <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
-
-                                              <!-- Position Column -->
-                                              <ng-container matColumnDef="nombre">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                              </ng-container>
-
-                                              <!-- Name Column -->
-                                              <ng-container matColumnDef="fecha">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Solicitud </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
-                                              </ng-container>
-
-
-                                              <!-- Weight Column -->
-                                              <ng-container matColumnDef="edicion">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.fechaTermino}} </mat-cell>
-                                              </ng-container>
-
-
-                                              <!-- Weight Column -->
-                                              <ng-container matColumnDef="aceptacion">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
-                                              </ng-container>
-
-
-                                              <!-- Weight Column -->
-                                              <ng-container matColumnDef="email">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.usuario}} </mat-cell>
-                                              </ng-container>
-
-
-                                              <!-- Symbol Column -->
-                                              <ng-container matColumnDef="estado">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                                <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
-                                              </ng-container>
-
-                                              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                              <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;" (click)="cambiarDataServicio(row, 'activo')"></mat-row>
-                                            </mat-table>
-
-                                            <mat-paginator #paginator="matPaginator"
-                                              [pageSize]="4"
-                                              [pageSizeOptions]="[2, 3, 4]"
-                                              [showFirstLastButtons]="true">
-                                          </mat-paginator>
-                                          </div>
-                                      </div>
-                                  </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="box box-danger">
+                    <div class="tab-content">
+                      <div id="home" class="tab-pane fade in active">
+                        <div class="box-header">
+                          <h3 class="box-title">Solicitudes de servicio activas</h3>
+                        </div>
+                        <div class="box-body">
+                          <div class="table-responsive">
+                            <div *ngIf="!dataSource || dataSource.data.length === 0; else activeRequestTable"
+                              class="no-data">
+                              <h4>ESTE LABORATORIO NO CUENTA CON SOLICITUDES DE SERVICIO ACTIVAS</h4>
+                            </div>
+                            <ng-template #activeRequestTable>
+                              <div class="example-container mat-elevation-z8">
+                                <div class="example-header">
+                                  <mat-form-field>
+                                    <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
+                                      placeholder="Filter">
+                                  </mat-form-field>
+                                </div>
+                                <mat-table #table #sort="matSort" [dataSource]="dataSource" matSort>
+                                  <!-- Position Column -->
+                                  <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Name Column -->
+                                  <ng-container matColumnDef="fecha">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Solicitud
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Weight Column -->
+                                  <ng-container matColumnDef="edicion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.fechaTermino}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Weight Column -->
+                                  <ng-container matColumnDef="aceptacion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Weight Column -->
+                                  <ng-container matColumnDef="email">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.usuario}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Symbol Column -->
+                                  <ng-container matColumnDef="estado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                  </ng-container>
+                                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                  <mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;"
+                                    (click)="cambiarDataServicio(row, 'activo')"></mat-row>
+                                </mat-table>
+                                <mat-paginator #paginator="matPaginator" [pageSize]="10"
+                                  [pageSizeOptions]="[20, 50, 100]" [showFirstLastButtons]="true">
+                                </mat-paginator>
                               </div>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="menu1" class="tab-pane fade">
+                        <div class="box-header">
+                          <h3 class="box-title">Historial de solicitudes de servicio</h3>
+                        </div>
+                        <div class="box-body">
+                          <div class="table-responsive">
+                            <div *ngIf="!dataSource2 || dataSource2.data.length === 0; else historyRequestTable"
+                              class="no-data">
+                              <h4>ESTE LABORATORIO NO CUENTA CON HISTORIAL DE SOLICITUDES DE SERVICIO</h4>
+                            </div>
+                            <ng-template #historyRequestTable>
+                              <div class="example-container mat-elevation-z8">
+                                <div class="example-header">
+                                  <mat-form-field>
+                                    <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)"
+                                      placeholder="Filter">
+                                  </mat-form-field>
+                                </div>
+                                <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+                                  <!-- Position Column -->
+                                  <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Name Column -->
+                                  <ng-container matColumnDef="fecha">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Weight Column -->
+                                  <ng-container matColumnDef="laboratorio">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Weight Column -->
+                                  <ng-container matColumnDef="edicion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.fechaTermino}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Weight Column -->
+                                  <ng-container matColumnDef="aceptacion">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
+                                  </ng-container>
+                                  <!-- Symbol Column -->
+                                  <ng-container matColumnDef="estado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                  </ng-container>
+                                  <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                  <mat-row *matRowDef="let row; columns: displayedColumns2;"
+                                    (click)="cambiarDataServicio(row, 'historial')"></mat-row>
+                                </mat-table>
+                                <mat-paginator #paginator2="matPaginator" [pageSize]="10"
+                                  [pageSizeOptions]="[20, 50, 100]" [showFirstLastButtons]="true">
+                                </mat-paginator>
+                              </div>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!moduloinfo" class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="box box-danger shadow">
+            <div class="box-body no-data">
+              <h4>NO SE HA SELECCIONADO NINGUNA SOLICITUD</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="moduloinfo" class="row" id="detalle">
+        <div class="col-md-12 col-lg-12">
+          <div class="box box-danger shadow">
+            <div class="box-header">
+              <h3 class="box-title">Detalles de la solicitud seleccionada</h3>
+            </div>
+            <div class="box-body">
+              <div class="col-md-12">
+                <div class="row">
 
-                              <div id="menu1" class="tab-pane fade">
-                                  <div class="box-header">
-                                      <i class="fa fa-flask"></i>
-
-                                      <h3 class="box-title">HISTORIAL DE SERVICIOS</h3>
+                  <div class="col-md-6">
+                    <div class="" id="accordion">
+                      <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                      <div class="box box-danger internal-shadow">
+                        <div class="box-header">
+                          <i class="fa fa-info-circle"></i>
+                          <h3 class="box-title">Información de servicio solicitado</h3>
+                          <!-- <h4 (click)="cambiarIcono('info')" class="box-title">
+                                  <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
+                                      INFORMACIÓN DE SERVICIO
+                                  </a>
+                                  </h4>
+                                  <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
+                                      <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
+                                  </a> -->
+                        </div>
+                        <div id="collapse" aria-expanded="true">
+                          <div class="box-body">
+                            <form id="form-workserv" class="" name="form-workserv" action="#">
+                              <fieldset>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="estado"><strong>Estado:</strong>
+                                      {{servicioActivoSel.status}}</label>
                                   </div>
-                                  <div class="box-body divScroll">
-                                    <div class="table-responsive">
-                                      <div class="example-container mat-elevation-z8">
-                                        <div class="example-header">
-                                          <mat-form-field>
-                                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filter">
-                                          </mat-form-field>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="nombreserv"><strong>Nombre :</strong>
+                                      {{servicioActivoSel.nombre}}</label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <!-- <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{servicioActivoSel.descripcion}}</label> -->
+                                    <label class="control-label" for="descripserv">
+                                      <strong>Descripción de servicio:</strong>
+                                    </label>
+                                    <label class="description">
+                                      {{servicioActivoSel.descripcion}}
+                                    </label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="descripserv"><strong>El servicio genera
+                                        residuos:</strong> {{servicioActivoSel.residuos}}</label>
+                                  </div>
+                                </div>
+                                <div *ngIf="servicioActivoSel.condicionesSrv.length != 0" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Términos y
+                                        condiciones:</strong></label>
+                                    <div class="form-group"
+                                      *ngFor="let item of servicioActivoSel.condicionesSrv; let i = index">
+                                      <label class="control-label" for="precioserv"><input disabled
+                                          name="{{'checkboxSrv' + i}}"
+                                          [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]" type="checkbox">
+                                        {{item.conditionText}}</label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Precio Inicial: $</strong>
+                                      {{servicioActivoSel.precioTotal}} (COP)</label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Descuento: $</strong>
+                                      {{servicioActivoSel.descuento}} (COP)</label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Precio Total con descuento:
+                                        $</strong> {{servicioActivoSel.precio}} (COP)</label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="row">
+                                    <div *ngIf="servicioActivoSel.nombreParametros.length != 0" class="col-md-12">
+                                      <label class="control-label" for="precioserv">
+                                        <strong>Parámetros de variación:</strong>
+                                      </label>
+                                      <div class="form-group">
+                                        <div class="col-md-6"
+                                          *ngFor="let item of servicioActivoSel.nombreParametros; let i = index;">
+                                          <label class="control-label" for="parvar">{{item}}
+                                            <input class="form-control" id="item" name="item" disabled
+                                              value="{{this.servicioActivoSel.parametrosSrv[i].value}}" type="text">
+                                          </label>
                                         </div>
-
-                                        <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
-
-                                          <!-- Position Column -->
-                                          <ng-container matColumnDef="nombre">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
-                                          </ng-container>
-
-                                          <!-- Name Column -->
-                                          <ng-container matColumnDef="fecha">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.fecha}} </mat-cell>
-                                          </ng-container>
-
-                                          <!-- Weight Column -->
-                                          <ng-container matColumnDef="laboratorio">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Laboratorio </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.nombrelab}} </mat-cell>
-                                          </ng-container>
-
-                                          <!-- Weight Column -->
-                                          <ng-container matColumnDef="edicion">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.fechaTermino}} </mat-cell>
-                                          </ng-container>
-
-
-                                          <!-- Weight Column -->
-                                          <ng-container matColumnDef="aceptacion">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
-                                          </ng-container>
-
-                                          <!-- Symbol Column -->
-                                          <ng-container matColumnDef="estado">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                            <mat-cell *matCellDef="let element" > {{element.status}} </mat-cell>
-                                          </ng-container>
-
-                                          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-                                          <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="cambiarDataServicio(row, 'historial')"></mat-row>
-                                        </mat-table>
-
-                                        <mat-paginator #paginator2="matPaginator"
-                                          [pageSize]="4"
-                                          [pageSizeOptions]="[2, 3, 4]"
-                                          [showFirstLastButtons]="true">
-                                      </mat-paginator>
                                       </div>
                                     </div>
+                                  </div>
+                                </div>
+                                <div *ngIf="servicioActivoSel.status == 'aceptada'" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="aceptado"><strong>Aceptado por:</strong>
+                                      {{servicioActivoSel.acepto}}</label>
+                                  </div>
+                                </div>
+                                <div *ngIf="servicioActivoSel.status == 'aceptada'" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="fechaaceptado"><strong>Fecha aceptado:</strong>
+                                      {{servicioActivoSel.fechaAcepto}}</label>
+                                  </div>
+                                </div>
+                                <div *ngIf="servicioActivoSel.status != 'aceptada'" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="fechaterminado"><strong>Fecha última
+                                        edición:</strong> {{servicioActivoSel.fechaTermino}}</label>
+                                  </div>
+                                </div>
+                                <div *ngIf="buttons" class="row" style="margin-top:20px;">
+                                  <div class="col-md-12 text-center form-group">
+                                    <div
+                                      *ngIf="(servicioActivoSel.status == 'pendiente') && (moduloNivel2 || moduloServicios)"
+                                      class="">
+                                      <button class="btn btn-sm modal-button" type="button"
+                                        (click)="cambiarEstadoSolicitud('aceptada')">Aceptar esta solicitud</button>
+                                      <button class="btn btn-sm cancel-button" type="button"
+                                        (click)="cambiarEstadoSolicitud('rechazada')">Denegar esta solicitud</button>
+                                    </div>
+                                    <div
+                                      *ngIf="(servicioActivoSel.status == 'aceptada') && (moduloNivel2 || moduloServicios)"
+                                      class="col-md-12">
+                                      <button class="btn btn-sm modal-button" style="float: right;" type="button"
+                                        data-toggle="modal" data-target="#modalProcesar">Procesar solicitud</button>
+                                    </div>
+                                    <div
+                                      *ngIf="(servicioActivoSel.status == 'procesada') && (moduloNivel2 || moduloServicios)"
+                                      class="col-md-12">
+                                      <button class="btn btn-sm modal-button" style="float: right;" type="button"
+                                        data-toggle="modal" data-target="#modalProcesar">Adjuntar archivos</button>
+                                    </div>
+                                    <div *ngIf="(servicioActivoSel.status == 'procesada') && (moduloNivel2)"
+                                      class="col-md-12">
+                                      <button class="btn btn-sm modal-button" style="margin-top: 20px; float:right;"
+                                        type="button" (click)="cambiarEstadoSolicitud('terminada')">Concluir solicitud</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </fieldset>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div *ngIf="servicioActivoSel.variaciones.length != 0" class="box box-danger internal-shadow">
+                        <div class="box-header">
+                          <i class="fa fa-cogs"></i>
+                          <h3 class="box-title"> Información de variaciones de servicio solicitadas</h3>
+                          <!-- <h4 (click)="cambiarIcono('sabs')" class="box-title">
+                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab"
+                              aria-expanded="false" class="collapsed">
+                              INFORMACIÓN DE VARIACIONES DE SERVICIO
+                            </a>
+                          </h4>
+                          <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion"
+                            href="#collapseSab" aria-expanded="false" class="collapsed">
+                            <span style="color:#dd4b39; float:right;"
+                              [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
+                          </a> -->
+                        </div>
+                        
+                          <div class="box-body">
+                            <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                              <fieldset>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <!-- <label class="control-label" for="variacionserv"><strong>Variaciones
+                                        :</strong></label>
+                                    <select class="form-control" name="variatio" id="variato"
+                                      (change)="cambiarVariacion($event.target.value)">
+                                      <option value="inicial">Seleccione una variación</option>
+                                      <option *ngFor="let item of servicioActivoSel.variaciones" value="{{item.id}}">
+                                        {{item.nombre}}</option>
+                                    </select> -->
+                                    <mat-form-field>
+                                        <mat-label>Variaciones solicitadas en este servicio:</mat-label>
+                                        <mat-select name="variatio" id="variato">
+                                          <mat-option *ngFor="let item of servicioActivoSel.variaciones" [value]="item.id" (click)="cambiarVariacion(item.id)">
+                                            {{item.nombre}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </fieldset>
+
+                              <fieldset *ngIf="variation">
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="nombreserv"><strong>Nombre :</strong>
+                                      {{variation.nombre}}</label>
 
                                   </div>
-                              </div>
-                            </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <!-- <label class="control-label" for="descripserv"><strong>Descripción:</strong>
+                                      {{variation.descripcion}}</label> -->
+                                      <label class="control-label" for="descripserv">
+                                      <strong>Descripción de variación:</strong>
+                                    </label>
+                                    <label class="description">
+                                      {{variation.descripcion}}
+                                    </label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="descripserv"><strong>La variación genera
+                                        residuos:</strong> {{variation.residuos}}</label>
+                                  </div>
+                                </div>
+                                <div *ngIf="condicion" class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
+                                    <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
+                                      <label class="control-label" for="precioserv"><input disabled
+                                          name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]"
+                                          type="checkbox"> {{item.conditionText}}</label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="precioserv"><strong>Precio: $</strong>
+                                      {{variation.precio}}</label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="row">
+                                    <div *ngIf="variation.parametros != 0" class="col-md-12">
+                                      <label class="control-label" for="precioserv">
+                                        <strong>Parámetros de variación:</strong>
+                                      </label>
+                                      <div class="form-group">
+                                        <div class="col-md-6" *ngFor="let item of variation.parametros; let i = index;">
+                                          <label class="control-label" for="parvar">{{item}}
+                                            <input class="form-control" id="item" name="item" disabled
+                                              value="{{this.valorParametro[i]}}" type="text"> </label>
+                                        </div>
+
+                                      </div>
+
+                                    </div>
+                                  </div>
+
+                                </div>
 
 
+                              </fieldset>
+                            </form>
+
+                          </div>
+                        
                       </div>
-                  </div>
-              </div>
 
+                      <div
+                        *ngIf="((servicioActivoSel.status == 'procesada') || (servicioActivoSel.status == 'terminada')) && (servicioActivoSel.path.length != 0)"
+                        class="box box-danger internal-shadow">
+                        <div class="box-header">
+                          <i class="fa fa-file"></i>
+                          <h3 class="box-title">Archivos adjuntos a esta solicitud</h3>
+                          <!-- <h4 (click)="cambiarIcono('archivos')" class="box-title">
+                            <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#archivos"
+                              aria-expanded="false" class="collapsed">
+                              Archivos adjuntos a esta solicitud
+                            </a>
+                          </h4>
+                          <a (click)="cambiarIcono('archivos')" data-toggle="collapse" data-parent="#accordion"
+                            href="#archivos" aria-expanded="false" class="collapsed">
+                            <span style="color:#dd4b39; float:right;"
+                              [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.archivos, 'glyphicon-minus':iconos.archivos}"></span>
+                          </a> -->
+                        </div>
+                        <div id="archivos" aria-expanded="true">
+                          <div class="box-body">
+                            <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                              <fieldset>
+                                <div class="form-group">
+                                  <div class="col-md-12">
+                                    <label class="control-label" for="listfacul"><strong>Archivos Agregados
+                                        :</strong></label>
+                                    <ul class="nav nav-stacked">
+                                      <li *ngFor="let item of this.servicioActivoSel.path; let i = index;">
+                                        <a> <span (click)="descargarArchivo(i)"
+                                            class="puntero pull-left badge bg-red">Descargar</span>
+                                            <span style="margin-left: 10px;"> {{item.replace('archivos/','')}} </span>
+                                          <span *ngIf="(moduloNivel2 || moduloServicios) && servicioActivoSel.status != 'terminada'" (click)="eliminarArchivo(i)"
+                                            class="puntero pull-right badge bg-red">-</span></a></li>
+                                    </ul>
+                                  </div>
+
+                                </div>
+                              </fieldset>
+
+
+                            </form>
+
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="box box-danger internal-shadow">
+                      <div class="box-header">
+                        <i class="fa fa-comments-o"></i>
+                        <h3 class="box-title">Comentarios</h3>
+                      </div>
+                      <div class="box-body">
+                        <!-- Conversations are loaded here -->
+                        <div class="direct-chat-messages"
+                          *ngIf="servicioActivoSel && servicioActivoSel.comentario && servicioActivoSel.comentario.length > 0 ;else noComments">
+                          <!-- Message. Default to the left -->
+                          <div *ngFor="let item of servicioActivoSel.comentario; let i = index">
+                            <div *ngIf="item.autor == 'lab'" class="direct-chat-msg">
+                              <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-left">{{servicioActivoSel.nombrelab}}</span>
+                                <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
+                              </div>
+                              <!-- /.direct-chat-info -->
+
+                              <div class="direct-chat-text">
+                                {{item.commentText}}
+                              </div>
+                              <!-- /.direct-chat-text -->
+                            </div>
+                            <!-- /.direct-chat-msg -->
+
+                            <!-- Message to the right -->
+                            <div *ngIf="item.autor == 'usuario'" class="direct-chat-msg right">
+                              <div class="direct-chat-info clearfix">
+                                <span class="direct-chat-name pull-right">{{servicioActivoSel.usuario}}</span>
+                                <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
+                              </div>
+                              <!-- /.direct-chat-info -->
+
+                              <div class="direct-chat-text">
+                                {{item.commentText}}
+                              </div>
+                              <!-- /.direct-chat-text -->
+                            </div>
+                          </div>
+                        </div>
+                        <ng-template #noComments>
+                          <div class="no-data">
+                            <h5>No hay comentarios en esta solicitud.</h5>
+                          </div>
+                        </ng-template>
+                      </div>
+                      <!-- /.box-body -->
+                      <div
+                        *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'rechazada') && (moduloNivel2 || moduloServicios)"
+                        class="box-footer">
+                        <form action="#" method="post">
+                          <div class="input-group">
+                            <input type="text" name="message" [(ngModel)]="comentario"
+                              placeholder="Escribe comentario...." class="form-control">
+                            <span class="input-group-btn">
+                              <button (click)="enviarComentario()" type="button" class="btn modal-button btn-flat"> <i
+                                  class="fa fa-paper-plane" aria-hidden="true"></i> Enviar</button>
+                            </span>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-
-    <div *ngIf="!moduloinfo" class="row">
-      <div class="col-md-12 col-lg-12">
-          <div class="box box-danger">
-              <div class="box-body">
-                  <h3>SIN DATOS SELECCIONADOS</h3>
-              </div>
-          </div>
-
+    <ng-template #noLabSelected>
+      <div class="no-selected-lab no-data">
+        <div style="margin: auto">
+          <h3>No se ha seleccionado ningún laboratorio.</h3>
+          <h4>Si refrescaste esta página selecciona nuevamente de la barra lateral la opción a la que deseas
+            ingresar.
+          </h4>
+        </div>
       </div>
-  </div>
-
-  <div *ngIf="moduloinfo" class="row" style="margin-top:20px;">
-
-
-    <div class="col-md-12">
-
-      <div class="col-md-6">
-          <div class="box-group" id="accordion">
-              <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h4 (click)="cambiarIcono('info')" class="box-title">
-                    <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
-                        INFORMACIÓN DE SERVICIO
-                    </a>
-                    </h4>
-                    <a (click)="cambiarIcono('info')" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
-                        <span style="color:#dd4b39; float:right;" [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.info, 'glyphicon-minus':iconos.info}"></span>
-                    </a>
-                </div>
-                <div id="collapse" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                    <div class="box-body">
-                        <form  id="form-workserv" class="" name="form-workserv" action="#">
-                            <fieldset>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                      <label class="control-label" for="estado"><strong>Estado:</strong> {{servicioActivoSel.status}}</label>
-                                    </div>
-                                </div>
-                              <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{servicioActivoSel.nombre}}</label>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{servicioActivoSel.descripcion}}</label>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="descripserv"><strong>El servicio genera residuos:</strong> {{servicioActivoSel.residuos}}</label>
-                                </div>
-                              </div>
-                              <div *ngIf="servicioActivoSel.condicionesSrv.length != 0" class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                                    <div class="form-group" *ngFor="let item of servicioActivoSel.condicionesSrv; let i = index">
-                                        <label class="control-label" for="precioserv"><input disabled name="{{'checkboxSrv' + i}}" [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="precioserv"><strong>Precio Inicial: $</strong> {{servicioActivoSel.precioTotal}}</label>
-                                  </div>
-                              </div>
-                                <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="precioserv"><strong>Descuento: $</strong> {{servicioActivoSel.descuento}}</label>
-                                  </div>
-                              </div>
-
-                                <div class="form-group">
-                                  <div class="col-md-12">
-                                    <label class="control-label" for="precioserv"><strong>Precio Total con descuento: $</strong> {{servicioActivoSel.precio}}</label>
-                                  </div>
-                                </div>
-                              <div class="form-group">
-                                  <div class="row">
-                                      <div *ngIf="servicioActivoSel.nombreParametros.length != 0" class="col-md-12">
-                                          <label class="control-label" for="precioserv">
-                                              <strong>Parámetros de variación:</strong>
-                                          </label>
-                                          <div class="form-group">
-                                            <div class="col-md-6" *ngFor="let item of servicioActivoSel.nombreParametros; let i = index;">
-                                                <label class="control-label" for="parvar">{{item}}
-                                                    <input class="form-control" id="item" name="item" disabled value="{{this.servicioActivoSel.parametrosSrv[i].value}}" type="text"> </label>
-                                            </div>
-
-                                          </div>
-
-                                      </div>
-                                  </div>
-
-                                </div>
-
-                            <div *ngIf="servicioActivoSel.status == 'aceptada'" class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="aceptado"><strong>Aceptado por:</strong> {{servicioActivoSel.acepto}}</label>
-                                </div>
-                            </div>
-                            <div *ngIf="servicioActivoSel.status == 'aceptada'" class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="fechaaceptado"><strong>Fecha aceptado:</strong> {{servicioActivoSel.fechaAcepto}}</label>
-                                </div>
-                            </div>
-                            <div *ngIf="servicioActivoSel.status != 'aceptada'" class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="fechaterminado"><strong>Fecha última edición:</strong> {{servicioActivoSel.fechaTermino}}</label>
-                                </div>
-                            </div>
-
-
-                            <div *ngIf="buttons" class="row" style="margin-top:20px;">
-                              <div class="col-md-12 text-center form-group">
-
-                                <div *ngIf="(servicioActivoSel.status == 'pendiente') && (moduloNivel2 || moduloServicios)" class="col-md-6" style="float: right;">
-                                    <button class="btn btn-success" type="button" (click)="cambiarEstadoSolicitud('aceptada')">ACEPTAR</button>
-                                    <button class="btn btn-danger" type="button" (click)="cambiarEstadoSolicitud('rechazada')">RECHAZAR</button>
-                                </div>
-                                <div *ngIf="(servicioActivoSel.status == 'aceptada') && (moduloNivel2 || moduloServicios)" class="col-md-12">
-                                    <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalProcesar">PROCESAR</button>
-                                </div>
-                                <div *ngIf="(servicioActivoSel.status == 'procesada') && (moduloNivel2 || moduloServicios)" class="col-md-12">
-                                    <button class="btn btn-danger" style="float: right;" type="button" data-toggle="modal" data-target="#modalProcesar">ADJUNTAR MAS ARCHIVOS</button>
-                                </div>
-                                <div *ngIf="(servicioActivoSel.status == 'procesada') && (moduloNivel2)" class="col-md-12">
-                                    <button class="btn btn-danger" style="margin-top: 20px; float:right;" type="button" (click)="cambiarEstadoSolicitud('terminada')">TERMINAR</button>
-                                </div>
-
-                              </div>
-                            </div>
-
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div *ngIf="servicioActivoSel.variaciones.length != 0" class="box box-danger">
-                <div class="box-header">
-                <h4 (click)="cambiarIcono('sabs')" class="box-title">
-                    <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapseSab" aria-expanded="false" class="collapsed">
-                    INFORMACIÓN DE VARIACIONES DE SERVICIO
-                    </a>
-                </h4>
-                <a (click)="cambiarIcono('sabs')" data-toggle="collapse" data-parent="#accordion" href="#collapseSab" aria-expanded="false" class="collapsed">
-                    <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.sabs, 'glyphicon-minus':iconos.sabs}"></span>
-                </a>
-                </div>
-                <div id="collapseSab" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                  <div class="box-body">
-                      <form  id="form-workserv3" class="" name="form-workserv3" action="#">
-                          <fieldset>
-                            <div class="form-group">
-                              <div class="col-md-12">
-                                  <label class="control-label" for="variacionserv"><strong>Variaciones :</strong></label>
-                                <select class="form-control" name="variatio" id="variato" (change)="cambiarVariacion($event.target.value)">
-                                  <option value="inicial">Seleccione una variación</option>
-                                  <option *ngFor="let item of servicioActivoSel.variaciones" value="{{item.id}}" >{{item.nombre}}</option>
-                                </select>
-                              </div>
-                            </div>
-                          </fieldset>
-
-                          <fieldset *ngIf="variation">
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="nombreserv"><strong>Nombre :</strong> {{variation.nombre}}</label>
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="descripserv"><strong>Descripción:</strong> {{variation.descripcion}}</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="col-md-12">
-                                <label class="control-label" for="descripserv"><strong>La variación genera residuos:</strong> {{variation.residuos}}</label>
-                              </div>
-                            </div>
-                            <div *ngIf="condicion" class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Condiciones:</strong></label>
-                                  <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
-                                      <label class="control-label" for="precioserv"><input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox"> {{item.conditionText}}</label>
-                                  </div>
-                                </div>
-                              </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Precio: $</strong> {{variation.precio}}</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div *ngIf="variation.parametros != 0" class="col-md-12">
-                                        <label class="control-label" for="precioserv">
-                                            <strong>Parámetros de variación:</strong>
-                                        </label>
-                                        <div class="form-group">
-                                          <div class="col-md-6" *ngFor="let item of variation.parametros; let i = index;">
-                                              <label class="control-label" for="parvar">{{item}}
-                                                  <input class="form-control" id="item" name="item" disabled value="{{this.valorParametro[i]}}" type="text"> </label>
-                                          </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                              </div>
-
-
-                          </fieldset>
-                      </form>
-
-                  </div>
-                </div>
-            </div>
-
-            <div *ngIf="((servicioActivoSel.status == 'procesada') || (servicioActivoSel.status == 'terminada')) && (servicioActivoSel.path.length != 0)" class="box box-danger">
-                <div class="box-header">
-                <h4 (click)="cambiarIcono('archivos')" class="box-title">
-                    <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#archivos" aria-expanded="false" class="collapsed">
-                      ARCHIVOS ADJUNTOS
-                    </a>
-                </h4>
-                <a (click)="cambiarIcono('archivos')" data-toggle="collapse" data-parent="#accordion" href="#archivos" aria-expanded="false" class="collapsed">
-                    <span style="color:#dd4b39; float:right;"  [ngClass]="{'glyphicon':true, 'glyphicon-plus':!iconos.archivos, 'glyphicon-minus':iconos.archivos}"></span>
-                </a>
-                </div>
-                <div id="archivos" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                  <div class="box-body">
-                      <form  id="form-workserv3" class="" name="form-workserv3" action="#">
-                          <fieldset>
-                              <div class="form-group">
-                                  <div class="col-md-12">
-                                      <label class="control-label" for="listfacul"><strong>Archivos Agregados :</strong></label>
-                                      <ul class="nav nav-stacked">
-                                        <li *ngFor="let item of this.servicioActivoSel.path; let i = index;">
-                                          <a>{{item}}  <span (click)="descargarArchivo(i)" class="puntero pull-left badge bg-green">bajar</span>
-                                            <span *ngIf="(moduloNivel2 || moduloServicios)" (click)="eliminarArchivo(i)" class="puntero pull-right badge bg-red">-</span></a></li>
-                                      </ul>
-                                  </div>
-
-                                </div>
-                          </fieldset>
-
-
-                      </form>
-
-                  </div>
-                </div>
-            </div>
-
-
-          </div>
-      </div>
-
-
-
-      <div class="col-md-6">
-          <div class="box box-danger">
-              <div class="box-header">
-                <i class="fa fa-address-card-o"></i>
-
-                <h3 class="box-title">Comentarios</h3>
-              </div>
-
-              <div class="box-body">
-
-                <!-- Conversations are loaded here -->
-                <div class="direct-chat-messages">
-                  <!-- Message. Default to the left -->
-                  <div *ngFor="let item of servicioActivoSel.comentario; let i = index">
-                    <div *ngIf="item.autor == 'lab'" class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">{{servicioActivoSel.nombrelab}}</span>
-                        <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-
-                      <div class="direct-chat-text">
-                        {{item.commentText}}
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message to the right -->
-                    <div *ngIf="item.autor == 'usuario'" class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-right">{{servicioActivoSel.usuario}}</span>
-                        <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-
-                      <div class="direct-chat-text">
-                        {{item.commentText}}
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-                <!-- /.box-body -->
-              <div *ngIf="(servicioActivoSel.status != 'cancelada') && (servicioActivoSel.status != 'rechazada') && (moduloNivel2 || moduloServicios)" class="box-footer">
-                  <form action="#" method="post">
-                    <div class="input-group">
-                      <input type="text" name="message" [(ngModel)]="comentario" placeholder="Escribe comentario...." class="form-control">
-                      <span class="input-group-btn">
-                            <button (click)="enviarComentario()" type="button" class="btn btn-success btn-flat">Enviar</button>
-                          </span>
-                    </div>
-                  </form>
-                </div>
-            </div>
-      </div>
-    </div>
-
-
-
-
-  </div>
-
-
+    </ng-template>
   </section>
-
-
-
 </div>
 
 
 <!-- modal de horario de practica -->
-<div class="modal fade" id="modalProcesar" role="dialog" >
-    <div class="modal-dialog modal-md">
+<div class="modal fade" id="modalProcesar" role="dialog">
+  <div class="modal-dialog modal-md">
 
-      <!-- Modal content-->
-      <div class="modal-content">
+    <!-- Modal content-->
+    <div class="modal-content">
 
-        <div class="modal-body">
-          <div class="box box-danger">
-            <div class="box-header text-center">
-              <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalProcesar')"></span>
-              <h1 class="box-title">Procesar la solicitud de servicio</h1>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <form  id="form-workserv" class="" name="form-workserv" action="#">
-                    <fieldset>
-
-                      <div class="form-group">
-
-                          <div class="col-md-12">
-                              <label class="control-label" for="teledit">
-                                  <strong>Seleccione Archivo:</strong>
-                                </label>
-
-                                <div class="btn btn-default btn-file">
-                                    <i class="fa fa-paperclip"></i> File
-                                    <input class="form-control" type="file" name="attachment"  multiple="multiple" (change)="alistarVariables($event)">
-                                </div>
-                                  <p class="help-block">Máx. 32MB</p>
-                          </div>
-                        </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                              <div *ngIf="currentUpload">
-                                <div class="progress">
-                                  <div class="progress-bar progress-bar-animated" [ngStyle]="{'width': currentUpload?.progress + '%'} " > </div>
-                                </div>   Progreso: {{currentUpload?.name}} | {{currentUpload?.progress}}% Completo
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-12">
-                                <label class="control-label" for="listfacul"><strong>Archivos Agregados :</strong></label>
-                                <ul class="nav nav-stacked">
-                                  <li *ngFor="let item of this.listaArchivos; let i = index;"><a>{{item.name}} <span (click)="quitarArchivo(i)" class="puntero pull-right badge bg-red">-</span></a></li>
-                                </ul>
-                            </div>
-
-                          </div>
-
-
-
-
-
-                      <div *ngIf="this.listaArchivos.length != 0" class="form-group">
-                        <div class="col-md-12 text-center">
-                            <button class="btn btn-danger btn-md" type="button" (click)="cambiarEstadoSolicitud('procesada')">PROCESAR SERVICIO</button>
-                        </div>
-                      </div>
-                    </fieldset>
-                </form>
-
-            </div>
-
+      <div class="modal-body">
+        <div class="box box-danger">
+          <div class="box-header text-center">
+            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('modalProcesar')"></span>
+            <h1 class="box-title">Procesar la solicitud de servicio</h1>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form id="form-workserv" class="" name="form-workserv" action="#">
+              <fieldset>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="teledit">
+                      <strong>Seleccione Archivo:</strong>
+                    </label>
+                    <div class="btn btn-default btn-file">
+                      <i class="fa fa-paperclip"></i> File
+                      <input class="form-control" type="file" name="attachment" multiple="multiple"
+                        (change)="alistarVariables($event)">
+                    </div>
+                    <p class="help-block">Máx. 32MB</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <div *ngIf="currentUpload">
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-animated"
+                          [ngStyle]="{'width': currentUpload?.progress + '%'} "> </div>
+                      </div> Progreso: {{currentUpload?.name}} | {{currentUpload?.progress}}% Completo
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label class="control-label" for="listfacul"><strong>Archivos Agregados :</strong></label>
+                    <ul class="nav nav-stacked">
+                      <li *ngFor="let item of this.listaArchivos; let i = index;"><a>{{item.name}} <span
+                            (click)="quitarArchivo(i)" class="puntero pull-right badge bg-red">-</span></a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div *ngIf="this.listaArchivos.length != 0" class="form-group">
+                  <div class="col-md-12 text-center">
+                    <button class="btn btn-sm modal-button" type="button"
+                      (click)="cambiarEstadoSolicitud('procesada')">Cargar archivos</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
           </div>
         </div>
       </div>
-
     </div>
+  </div>
 </div>

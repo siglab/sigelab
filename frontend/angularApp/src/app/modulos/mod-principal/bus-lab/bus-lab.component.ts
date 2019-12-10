@@ -77,7 +77,8 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   preciocondescuento = 0;
 
   // INICIALIZACION DATATABLE lABORATORIOS
-  displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
+  // displayedColumns = ['nombre', 'escuela', 'investigacion', 'director'];
+  displayedColumns = ['nombre', 'director'];
   dataSource = new MatTableDataSource([]);
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
@@ -146,7 +147,6 @@ export class BusLabComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   agregarSolicitudServicio() {
-    // tslint:disable-next-line:no-shadowed-variable
     const encontrado = this.listaVariaciones.find((element, index) => {
       if (element.data.id === this.variation.id) {
         return true;

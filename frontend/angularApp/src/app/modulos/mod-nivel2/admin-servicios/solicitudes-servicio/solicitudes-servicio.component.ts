@@ -6,96 +6,72 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
-
 import swal from 'sweetalert2';
 import { Http } from '@angular/http';
-// tslint:disable-next-line:import-blacklist
 import { Subscription } from 'rxjs';
 import { AngularFireStorage } from 'angularfire2/storage';
-declare var $: any;
-
 import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
 import { URLCORREO } from '../../../../config';
 import { Modulo2Service } from '../../services/modulo2.service';
+
+declare var $: any;
 
 @Component({
   selector: 'app-solicitudes-servicio',
   templateUrl: './solicitudes-servicio.component.html',
   styleUrls: ['./solicitudes-servicio.component.css']
 })
+
 export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDestroy {
-
-
   moduloinfo = false;
-
   itemsel: any;
-
   // service: Observable<Array<any>>;
   service: any;
   histoservice: any;
-
   servicioActivoSel: any;
   histoServicioSel: any;
-
   comentario = '';
-
-
   displayedColumns = ['nombre', 'fecha', 'edicion', 'aceptacion', 'estado', 'email'];
   displayedColumns2 = ['nombre', 'fecha', 'laboratorio', 'edicion', 'aceptacion', 'estado'];
-
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource([]);
 
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('sort') sort: MatSort;
-
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('sort2') sort2: MatSort;
 
   // INICIALIZACION DE CONSULTAS PARA SERVICIOS RESERVADOS POR EL USUARIO
   private collectionReserv: AngularFirestoreCollection<any>;
-
   private collectionHisto: AngularFirestoreCollection<any>;
 
   datos: any;
   histodatos: any;
-
   variation: any;
   condicion: any;
-
   condicionesobjeto = {};
   condicionesobjetoSrv = {};
-
   buttons = true;
-
   user: any;
-
   iconos = {
     sabs: false,
     info: false,
     archivos: false
   };
-
   sus: Subscription;
-
   files = [];
-
   listaArchivos = [];
   filePath: any;
   ref: any;
-
-
   selectedFiles: FileList;
   currentUpload: Upload;
   private basePath = '/archivos';
-
   rol: any;
   moduloNivel2 = false;
   moduloServicios = false;
-
-
   valorParametro = [];
+  selectedLab = false;
 
   constructor(private obs: ObservablesService, private servicioMod2: Modulo2Service,
     private http: Http, private storage: AngularFireStorage) {
@@ -103,47 +79,31 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnInit() {
-
-
     $('html, body').animate({ scrollTop: '0px' }, 'slow');
-
     if (sessionStorage.getItem('usuario')) {
       this.user = JSON.parse(sessionStorage.getItem('usuario'));
     }
-
     this.sus = this.obs.currentObjectSolSer.subscribe(data => {
       this.getRoles(data.roles);
       if (data.length !== 0) {
+        this.selectedLab = true;
         this.alertaCargando();
-
         this.servicioMod2.getCollectionReservasServicios(data.uid).then(data1 => {
           if (data1.size !== 0) {
             this.estructurarServiciosActivos(data1, data).then(datos => {
               this.dataSource.data = datos['data'];
               this.dataSource.sort = this.sort;
               this.dataSource.paginator = this.paginator;
-
               this.dataSource2.data = datos['data2'];
               this.dataSource2.sort = this.sort2;
               this.dataSource2.paginator = this.paginator2;
-
               this.cerrarAlerta();
             });
           } else {
-            this.alertaError('No tiene solicitudes de servicio registradas aún');
+            this.cerrarAlerta();
           }
-
-
         });
-      } else {
-        swal({
-          type: 'error',
-          title: 'No se ha seleccionado ningún laboratorio',
-          showConfirmButton: true
-        });
-      }
-
-
+      } 
     });
 
   }
@@ -443,37 +403,28 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
 
 
   cambiarDataServicio(item, table) {
-
     this.servicioActivoSel = item;
     this.variation = undefined;
     this.condicion = undefined;
-
     if (item.condiciones) {
       this.estructurarCondiciones(item.condiciones);
-
     } else {
-
       this.condicionesobjeto['condiciones'] = [];
-
-
     }
-
     if (item.condicionesSrv) {
-
       this.estructurarCondicionesSrv(item.condicionesSrv);
     } else {
-
       this.servicioActivoSel.condicionesSrv = [];
-
     }
-
     this.moduloinfo = true;
     if (table === 'activo') {
       this.buttons = true;
     } else {
       this.buttons = false;
     }
-
+    setTimeout(() => {
+      $('html, body').animate({scrollTop: $('#detalle').offset().top - 55}, 1000);
+    }, 200);
   }
 
   cambiarVariacion(item) {
@@ -642,11 +593,8 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
       showCancelButton: true,
       confirmButtonText: 'Sí, Cambiar',
       cancelButtonText: 'No, Cancelar'
-
     }).then((result) => {
-
       if (result.value) {
-
         const reserva = {
           status: estado,
           updatedAt: new Date().toISOString()
@@ -658,9 +606,7 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
           reserva['acceptedBy'] = this.user.email;
           reserva['dateAccepted'] = new Date().toISOString();
         }
-
         this.servicioActivoSel.status = estado;
-
         this.servicioMod2.updateReservasServicios(this.servicioActivoSel.uidreserv, reserva)
           .then(() => {
             if (estado === 'procesada') {
@@ -672,21 +618,16 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
                 this.cerrarModal('modalProcesar');
                 this.listaArchivos = [];
               });
-
             } else {
               this.cerrarAlerta();
-              this.alertaExito('Reserva ' + estado);
+              this.alertaExito('Solicitud ' + estado);
             }
-
           });
         this.servicioMod2.buscarPersona(this.servicioActivoSel.infolab.facilityAdmin).then(persona => {
           this.enviarEmails(estado, persona.data().email);
-
         });
-
         this.moduloinfo = false;
         this.resetIconos();
-
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal(
           'Solicitud Cancelada',
@@ -694,10 +635,7 @@ export class SolicitudesServicioComponent implements OnInit, AfterViewInit, OnDe
           'error'
         );
       }
-
     });
-
-
   }
 
 

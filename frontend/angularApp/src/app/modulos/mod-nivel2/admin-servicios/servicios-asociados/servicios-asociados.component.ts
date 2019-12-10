@@ -443,15 +443,13 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         swal.showLoading();
       }
     });
-
     if (this.validarDatosSrv(this.srv)) {
-      if (Object.keys(this.srv.relatedEquipments).length !== 0) {
+      // if (Object.keys(this.srv.relatedEquipments).length !== 0) {
         this.servicioMod2.addServicio(this.srv).then(data => {
           const servicioUid = data.id
           this.servicioMod2.buscarLab(this.lab_id).then(labSnap=>{
             const nombreLab = labSnap.data().cfName
             this.servicioMod2.pushCacheServicios(true,this.srv.cfName,nombreLab,servicioUid,this.srv.updatedAt ).then(res=>{
-             
             })
           })  
           this.servicioMod2.Trazability(
@@ -514,18 +512,17 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
             });
 
           });
-
         });
-      } else {
-        swal.close();
-        swal({
-          type: 'error',
-          title: 'Debe agregar almenos un equipo al servicio',
-          showConfirmButton: true,
-          timer: 3000
-        });
-      }
-
+      // } 
+      // else {
+      //   swal.close();
+      //   swal({
+      //     type: 'error',
+      //     title: 'Debe agregar almenos un equipo al servicio',
+      //     showConfirmButton: true,
+      //     timer: 3000
+      //   });
+      // }
     } else {
       swal.close();
       swal({
@@ -535,8 +532,6 @@ export class ServiciosAsociadosComponent implements OnInit, OnDestroy {
         timer: 3000
       });
     }
-
-
   }
 
 

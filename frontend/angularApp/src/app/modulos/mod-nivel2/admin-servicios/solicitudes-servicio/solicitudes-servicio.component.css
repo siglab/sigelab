@@ -2,28 +2,27 @@
   overflow-y: scroll;
   height: 400px;
 }
-divScroll::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius: 5px;
-    background-color: #F5F5F5;
+.divScroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 5px;
+  background-color: #F5F5F5;
 }
-.divScroll::-webkit-scrollbar
-{
-    width: 12px;
-    background-color: #F5F5F5;
+
+.divScroll::-webkit-scrollbar {
+  width: 12px;
+  background-color: #F5F5F5;
 }
-.divScroll::-webkit-scrollbar-thumb
-{
-    border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #D62929;
+
+.divScroll::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #D62929;
 }
+
 .sombra:hover{
   background-color: #ECF1F3;
   cursor: pointer;
 }
-
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -61,7 +60,6 @@ strong {
 
 label {
   font-weight: normal;
-  margin-top: 15px;
 }
 
 /* input {
@@ -90,11 +88,10 @@ label {
 .tablas:hover{
   background-color: rgba(253, 251, 251, 0.979);
 }
+
 .tablas{
   background-color: rgba(184, 16, 16, 0.938);border-color: rgb(87, 83, 83);color: rgb(255, 255, 255);font-weight: bold;
 }
-
-
 
 .example-container {
   display: flex;
@@ -121,4 +118,97 @@ label {
   color: black;
 }
 
+.no-selected-lab {
+  height: 75vh;
+  display: flex;
+  width: 100%;
+  text-align: center;
+}
 
+.no-data {
+  text-align: center;
+  color: #7d7d7da8;
+}
+
+.shadow {
+  box-shadow: 0px 0px 15px 0px #888888;
+}
+
+.internal-shadow {
+  box-shadow: 1px 1px 10px -1px #888888;
+}
+
+.modal-button {
+  background-color: #cc0000;
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+
+.description {
+  text-align: justify;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+
+/* .modal-button:hover {
+  background-color: #58595b;
+} */
+
+.cancel-button {
+  background-color: #58595b;
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}
+
+::ng-deep .mat-checkbox-inner-container {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #cc0000;
+}
+
+::ng-deep .mat-checkbox-layout .mat-checkbox-label {
+  line-height: 20px !important;
+}
+
+.tCContainer {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.btn-flat {
+  margin-top: 0;
+  margin-left: 3px !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 3px grey; 
+  border-radius: 10px;
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c00; 
+  border-radius: 10px;
+}
+
+.text-center {
+  text-align: center;
+}
