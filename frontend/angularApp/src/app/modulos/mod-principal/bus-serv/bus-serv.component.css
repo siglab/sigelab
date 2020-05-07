@@ -236,3 +236,11 @@ label {
   font-size: 0.85em;
   padding-bottom: 10px;
 }
+
+.notice {
+  font-size: 1.3rem;
+  color: #c00;
+  font-weight: 800;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

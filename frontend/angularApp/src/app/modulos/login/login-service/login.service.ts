@@ -1,15 +1,15 @@
-import { AngularFirestore } from 'angularfire2/firestore';
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
-import swal from 'sweetalert2';
-import { map } from 'rxjs/operators/map';
-import { Router } from '@angular/router';
-import { QrService } from '../../mod-nivel2/services/qr.service';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import { URLDISABLED, ROLESARRAY } from '../../../config';
-import { URLUSER } from '../../../config';
+import { AngularFirestore } from "angularfire2/firestore";
+import { Injectable } from "@angular/core";
+import { AngularFireAuth } from "angularfire2/auth";
+import * as firebase from "firebase/app";
+import swal from "sweetalert2";
+import { map } from "rxjs/operators/map";
+import { Router } from "@angular/router";
+import { QrService } from "../../mod-nivel2/services/qr.service";
+import { Http, Response } from "@angular/http";
+import { Observable } from "rxjs";
+import { URLDISABLED, ROLESARRAY } from "../../../config";
+import { URLUSER } from "../../../config";
 
 @Injectable()
 export class LoginService {
@@ -24,8 +24,8 @@ export class LoginService {
     private ruta: Router,
     private http: Http
   ) {
-    if (sessionStorage.getItem('usuario')) {
-      this.usuario = JSON.parse(sessionStorage.getItem('usuario'));
+    if (sessionStorage.getItem("usuario")) {
+      this.usuario = JSON.parse(sessionStorage.getItem("usuario"));
       // this.consultarPermisos(this.usuario.uid);
     }
   }
@@ -33,12 +33,14 @@ export class LoginService {
   verificarUsuario() {
     const promise = new Promise((resolve, reject) => {
       this.consultarAuth().subscribe((user) => {
-        if (user && user['emailVerified']) {
-          this.restaurarSesion(user).then(() => {
-            resolve();
-          }).catch(() => {
-            reject();
-          });
+        if (user && user["emailVerified"]) {
+          this.restaurarSesion(user)
+            .then(() => {
+              resolve();
+            })
+            .catch(() => {
+              reject();
+            });
         } else {
           reject();
         }
@@ -54,13 +56,13 @@ export class LoginService {
   restaurarSesion(data) {
     const promise = new Promise((resolve, reject) => {
       this.usuario = data;
-      sessionStorage.setItem('usuario', JSON.stringify(data));
+      sessionStorage.setItem("usuario", JSON.stringify(data));
       if (this.usuario) {
         this.consultarTipoUsuario(this.usuario.uid)
           .then(() => {
             resolve(data);
           })
-          .catch(err => {
+          .catch((err) => {
             reject();
           });
       } else {
@@ -74,16 +76,19 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.afAuth.auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-        .then(response => {
+        .then((response) => {
           if (response.additionalUserInfo.isNewUser) {
             this.postUserBackend(
               response.user.email,
               response.user.uid
-            ).subscribe(res => {
+            ).subscribe((res) => {
               if (res.status === 200) {
                 this.consultarTipoUsuario(response.user.uid).then(() => {
                   this.usuario = response.user;
-                  sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
+                  sessionStorage.setItem(
+                    "usuario",
+                    JSON.stringify(this.usuario)
+                  );
                   resolve();
                 });
               }
@@ -91,13 +96,13 @@ export class LoginService {
           } else {
             this.consultarTipoUsuario(response.user.uid).then(() => {
               this.usuario = response.user;
-              sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
+              sessionStorage.setItem("usuario", JSON.stringify(this.usuario));
               resolve();
             });
           }
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           reject(error);
         });
     });
@@ -105,13 +110,13 @@ export class LoginService {
   }
 
   async logout() {
-    sessionStorage.removeItem('usuario');
-    sessionStorage.removeItem('persona');
-    sessionStorage.removeItem('rol');
-    sessionStorage.removeItem('laboratorios');
-    sessionStorage.removeItem('permisos');
-    sessionStorage.removeItem('nivel2');
-    localStorage.setItem('logout', 'true');
+    sessionStorage.removeItem("usuario");
+    sessionStorage.removeItem("persona");
+    sessionStorage.removeItem("rol");
+    sessionStorage.removeItem("laboratorios");
+    sessionStorage.removeItem("permisos");
+    sessionStorage.removeItem("nivel2");
+    localStorage.setItem("logout", "true");
     return this.afAuth.auth.signOut();
   }
 
@@ -129,25 +134,25 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.afAuth.auth
         .signInWithEmailAndPassword(email, pass)
-        .then(data => {
+        .then((data) => {
           this.usuario = data;
-          if (this.usuario && this.usuario['emailVerified']) {
-            sessionStorage.setItem('usuario', JSON.stringify(data));
+          if (this.usuario && this.usuario["emailVerified"]) {
+            sessionStorage.setItem("usuario", JSON.stringify(data));
             this.consultarTipoUsuario(this.usuario.uid)
               .then(() => {
                 resolve(data);
               })
-              .catch(err => {
+              .catch((err) => {
                 reject();
               });
           } else {
             this.logout().then(() => {
-              localStorage.removeItem('logout');
+              localStorage.removeItem("logout");
             });
             reject();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           reject(err);
         });
     });
@@ -159,10 +164,10 @@ export class LoginService {
     return new Promise((resolve, reject) => {
       this.afAuth.auth.sendPasswordResetEmail(email).then(() => {
         swal({
-          type: 'success',
+          type: "success",
           title:
-            'Se envió un correo al nuevo usuario para establece su contraseña ',
-          showConfirmButton: true
+            "Se envió un correo al nuevo usuario para establece su contraseña ",
+          showConfirmButton: true,
         });
       });
     });
@@ -172,14 +177,14 @@ export class LoginService {
     const promise = new Promise((resolve, reject) => {
       this.afAuth.auth
         .createUserWithEmailAndPassword(email, pass)
-        .then(ok => {
+        .then((ok) => {
           const user: any = firebase.auth().currentUser;
           firebase.auth().signOut();
           user.sendEmailVerification();
           resolve(ok);
         })
         .catch(function (error) {
-           console.log(error.message);
+          console.log(error.message);
         });
     });
     return promise;
@@ -194,68 +199,74 @@ export class LoginService {
   // disabled auth user
   consultarTipoUsuario(id) {
     const promise = new Promise((resolve, reject) => {
-      this.getUser(id).then(doc => {
+      this.getUser(id).then((doc) => {
         const data = doc.data();
         if (data) {
           if (data.active) {
-            sessionStorage.setItem('persona', JSON.stringify(data));
-            const rol = data['appRoles'];
+            sessionStorage.setItem("persona", JSON.stringify(data));
+            const rol = data["appRoles"];
             let roleAdmin = false;
             roleAdmin = this.buscarRole(rol);
-            if (data['cfPers'] === '') {
-              this.estructurarPermisos(rol).then(ok => {
-                sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
+            if (data["cfPers"] === "") {
+              this.estructurarPermisos(rol).then((ok) => {
+                sessionStorage.setItem("rol", JSON.stringify(ok["permisos"]));
                 resolve();
               });
             }
             if (roleAdmin) {
-              this.estructurarPermisos(rol).then(ok => {
-                sessionStorage.setItem('rol', JSON.stringify(ok['permisos']));
+              this.estructurarPermisos(rol).then((ok) => {
+                sessionStorage.setItem("rol", JSON.stringify(ok["permisos"]));
               });
             }
-            if (data['cfPers'] !== '') {
+            if (data["cfPers"] !== "") {
               const arr = {};
               const arrlab = {};
-              this.getPersona(data['cfPers']).then(doc => {
+              this.getPersona(data["cfPers"]).then((doc) => {
                 const clientRole = doc.data().clientRole;
                 if (Object.keys(clientRole).length !== 0) {
                   const labs = doc.data().cfFacil;
-                  let sizeLabs = 0;
+                  let sizeLabs = Object.keys(labs).length
+                    ? Object.keys(labs).length
+                    : 0;
                   let cont = 1;
+                  // for (const key in labs) {
+                  //   console.log(key);
+                  //   console.log(labs.hasOwnProperty(key));
+                  //   if (labs.hasOwnProperty(key)) {
+                  //     sizeLabs++;
+                  //   }
+                  // }
+                  // if (Object.keys(labs).length > 0) {
+                  //   sizeLabs = Object.keys(labs).length;
+                  // }
                   for (const key in labs) {
-                    if (labs.hasOwnProperty(key)) {
-                      sizeLabs++;
-                    }
-                  }
-                  for (const key in labs) {
-                    if (labs.hasOwnProperty(key)) {
-                      if (labs[key]) {
-                        arr[key] = true;
-                        for (const llave in clientRole[key]) {
-                          if (clientRole[key].hasOwnProperty(llave)) {
-                            this.estructurarPermisos(clientRole[key]).then(
-                              ok => {
-                                arrlab[key] = ok['permisos'];
-                                if (sizeLabs === cont) {
-                            
-                                  sessionStorage.setItem(
-                                    'laboratorios',
-                                    JSON.stringify(arr)
-                                  );
-                                  sessionStorage.setItem(
-                                    'permisos',
-                                    JSON.stringify(arrlab)
-                                  );
-                                  resolve();
-                                } else {
-                                  cont++;
-                                }
+                    // if (labs.hasOwnProperty(key)) {
+                    if (labs[key]) {
+                      arr[key] = true;
+                      for (const llave in clientRole[key]) {
+                        if (clientRole[key].hasOwnProperty(llave)) {
+                          this.estructurarPermisos(clientRole[key]).then(
+                            (ok) => {
+                              arrlab[key] = ok["permisos"];
+                              if (sizeLabs === cont) {
+                                sessionStorage.setItem(
+                                  "laboratorios",
+                                  JSON.stringify(arr)
+                                );
+                                sessionStorage.setItem(
+                                  "permisos",
+                                  JSON.stringify(arrlab)
+                                );
+                                resolve();
+                              } else {
+                                cont++;
                               }
-                            );
-                          }
+                            }
+                          );
                         }
                       }
                     }
+                    // }
                   }
                 } else {
                   resolve();
@@ -296,7 +307,6 @@ export class LoginService {
   estructurarPermisos(roles) {
     const promise = new Promise((resolve, reject) => {
       let rolelength = 0;
-      // tslint:disable-next-line:forin
       for (const key in roles) {
         rolelength++;
       }
@@ -305,16 +315,14 @@ export class LoginService {
       for (const clave in roles) {
         if (roles[clave]) {
           this.getRol(clave)
-            .then(datarol => {
+            .then((datarol) => {
               const permission = datarol.data().permissions;
               let rollength = 0;
               let controle = 0;
-              // tslint:disable-next-line:forin
               for (const key in permission) {
                 rollength++;
               }
               if (permission) {
-                // tslint:disable-next-line:forin
                 for (const llave in permission) {
                   permisos[llave] = permission[llave];
                   controle++;
@@ -324,35 +332,34 @@ export class LoginService {
                       if (permisos) {
                         resolve({ permisos: permisos });
                       } else {
-                        reject('error');
+                        reject("error");
                       }
                     }
                   }
                 }
               }
             })
-            .catch(err => console.log('error consultando el rol', err));
+            .catch((err) => console.log("error consultando el rol", err));
         }
       }
     });
-
     return promise;
   }
 
   getRol(idrol) {
-    return this.afs.doc('appRoles/' + idrol).ref.get();
+    return this.afs.doc("appRoles/" + idrol).ref.get();
   }
 
   getUser(iduser) {
-    return this.afs.doc('user/' + iduser).ref.get();
+    return this.afs.doc("user/" + iduser).ref.get();
   }
 
   getPersona(idPers) {
-    return this.afs.doc('cfPers/' + idPers).ref.get();
+    return this.afs.doc("cfPers/" + idPers).ref.get();
   }
 
   getModulo(idPermiso) {
-    return this.afs.doc('permission/' + idPermiso).ref.get();
+    return this.afs.doc("permission/" + idPermiso).ref.get();
   }
 
   disabledAuth(id) {
@@ -374,24 +381,24 @@ export class LoginService {
   getPersonforId(iduser: string, email: string) {
     const fecha = new Date();
     const usr = {
-      cfOrgId: 'i9dzCErPCO4n9WUfjxR9',
+      cfOrgId: "i9dzCErPCO4n9WUfjxR9",
       active: true,
-      cfPers: '',
+      cfPers: "",
       appRoles: {
-        npKRYaA0u9l4C43YSruA: true
+        npKRYaA0u9l4C43YSruA: true,
       },
       createdAt: fecha.toISOString(),
-      email: email
+      email: email,
     };
     return new Promise((resolve, reject) => {
       this.afs
-        .collection('cfPers')
-        .ref.where('email', '==', email)
+        .collection("cfPers")
+        .ref.where("email", "==", email)
         .get()
-        .then(respers => {
+        .then((respers) => {
           if (respers.empty) {
             this.afs
-              .doc('user/' + iduser)
+              .doc("user/" + iduser)
               .set(usr)
               .then(() => {
                 resolve();
@@ -400,11 +407,11 @@ export class LoginService {
             // asigna el id de la persona al usuario
             usr.cfPers = respers.docs[0].id;
             this.afs
-              .doc('user/' + iduser)
+              .doc("user/" + iduser)
               .set(usr)
               .then(() => {
-                             this.afs
-                  .doc('cfPers/' + usr.cfPers)
+                this.afs
+                  .doc("cfPers/" + usr.cfPers)
                   .set({ user: iduser }, { merge: true })
                   .then(() => {
                     resolve();
@@ -419,13 +426,12 @@ export class LoginService {
   postUserBackend(email: string, uid: string) {
     const peticion = {
       email,
-      uid
+      uid,
     };
     return this.http.post(this.URL, peticion);
   }
 
   getUserWithEmail(email: string) {
-    return this.afs.collection('user').ref.where('email', '==', email).get();
+    return this.afs.collection("user").ref.where("email", "==", email).get();
   }
-
 }

@@ -23,10 +23,9 @@ declare var $: any;
   templateUrl: './admin-usuarios.component.html',
   styleUrls: ['./admin-usuarios.component.css']
 })
+
 export class AdminUsuariosComponent implements OnInit {
-
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
-
   idfacultad;
   rolSelect;
   arrayPract = [];
@@ -563,10 +562,10 @@ export class AdminUsuariosComponent implements OnInit {
     const clientRole = [
       '6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB', 'SXYQVs5Re8exTghONg6j',
       'KMV8IWBtMoiDV21owDCj'];
-    const coor = 'S9wr9uK5BBF4yQZ7CwqX';
+    const coordinatorRoleId = 'S9wr9uK5BBF4yQZ7CwqX';
     let adm = false;
     this.arrayPract.forEach((doc, index) => {
-      if (doc.id === coor) {
+      if (doc.id === coordinatorRoleId) {
         adm = true;
         this.arrayPract.forEach((doc2, index2) => {
           if (clientRole.includes(doc2.id)) {
@@ -703,12 +702,7 @@ export class AdminUsuariosComponent implements OnInit {
     this.idu = '';
     this.idp = '';
     this.nuevo = true;
-    $('html, body').animate(
-      {
-        scrollTop: $('#nuevoDet').offset().top - 55
-      },
-      1000
-    );
+    $('html, body').animate({scrollTop: $('#nuevoDet').offset().top - 55},1000);
   }
 
   crearPersona() {
@@ -733,9 +727,7 @@ export class AdminUsuariosComponent implements OnInit {
       createdAt: this.fecha.toISOString(),
       updatedAt: this.fecha.toISOString(),
       faculty: {},
-
     };
-
     swal({
       title: 'Cargando un momento...',
       text: 'espere mientras se cargan los datos',
@@ -743,43 +735,44 @@ export class AdminUsuariosComponent implements OnInit {
         swal.showLoading();
       }
     });
-
     const rolesUsuario = { 'npKRYaA0u9l4C43YSruA': true };
     const rolesPersona = {};
     const cfFacil = {};
     let boolfac = false;
     const facultades = {};
     const clientRole = [
-      '6ITqecW7XrgTLaW6fpn6', 'FH5dgAP3EjI8rGKrX0mP', 'yoVd80ZvcdgUf1a44ORB', 'SXYQVs5Re8exTghONg6j',
-      'KMV8IWBtMoiDV21owDCj'];
-    const coor = 'S9wr9uK5BBF4yQZ7CwqX';
+      '6ITqecW7XrgTLaW6fpn6', 
+      'FH5dgAP3EjI8rGKrX0mP', 
+      'yoVd80ZvcdgUf1a44ORB', 
+      'SXYQVs5Re8exTghONg6j',
+      'KMV8IWBtMoiDV21owDCj'
+    ];
+    const coordinatorRoleId = 'S9wr9uK5BBF4yQZ7CwqX';
     let adm = false;
+    // Revisa si el usuario tiene asignado algún tipo de rol
     this.arrayPract.forEach((doc, index) => {
-      if (doc.id === coor) {
+      console.log('doc1', doc, index);
+      if (doc.id === coordinatorRoleId) {
         adm = true;
-        this.arrayPract.forEach((doc2, index2) => {
-          if (clientRole.includes(doc2.id)) {
-            // tslint:disable-next-line:no-shadowed-variable
-            doc.labs.forEach(element => {
-              doc2.labs.forEach((element2, index3) => {
-                if (element === element2) {
-                  this.arrayPract[index2].labs.splice(index3, 1);
-                }
-              });
+      } else {
+        if (clientRole.includes(doc.id)) {
+          doc.labs.forEach(element => {
+            doc.labs.forEach((element2, index3) => {
+              if (element === element2) {
+                this.arrayPract[index].labs.splice(index3, 1);
+              }
             });
-          }
-        });
+          });
+        }
       }
     });
-
     if (this.arrayPract.length > 0) {
-      // valida si el array contiene la llave de adminstrador
+      // Valida si el array contiene la llave de adminstrador de la aplicación
       this.arrayPract.forEach(doc => {
         if (doc.tipo === 'appRoles') {
           rolesUsuario[doc.id] = true;
           if (doc.id === 'PFhLR4X2n9ybaZU3CR75') {
             boolfac = true;
-            // tslint:disable-next-line:no-shadowed-variable
             doc.fac.forEach(element => {
               facultades[element] = true;
             });
@@ -824,15 +817,16 @@ export class AdminUsuariosComponent implements OnInit {
       this.serviceMod3.agregarPersona(person).then(ok => {
         console.log(ok)
         // actualizar referencia del usuario
-        this.serviceMod3.setUser(this.idu, { cfPers: ok.id })
-        //  this.serviceMod3.updateCacheUser(this.idu,this.usuario,person)
-
+        // console.log('this.idu', this.id)
+        if (this.idu) {
+          this.serviceMod3.setUser(this.idu, { cfPers: ok.id })
+          this.serviceMod3.updateCacheUser(this.idu,this.usuario,person)
+        }
         this.serviceMod3.Trazability(
           this.user.uid, 'create', 'cfPers', ok.id, person
         );
         this.arrayPract.forEach((doc, index) => {
-          console.log(doc.id, coor)
-          if (doc.id === coor) {
+          if (doc.id === coordinatorRoleId) {
             this.idp = ok.id;
             this.setKeyAdmin(doc.labs, ok.id);
           }

@@ -180,6 +180,12 @@ label {
   margin-bottom: 10px;
 }
 
+.notice {
+  font-size: 1.3rem;
+  color: #c00;
+  font-weight: 800;
+}
+
 .modal-button {
   background-color: #cc0000;
   color: white;

@@ -210,7 +210,7 @@
                         <div *ngIf="usuariounivalle" class="form-group">
                           <div class="col-md-12">
                             <label class="control-label" for="descripserv">
-                              <strong>Descuento Univalle:</strong>
+                              <strong>Descuento de usuario institucional:</strong>
                               {{ itemsel.infoServ.descuento }} %
                             </label>
                             <p class="modal-p">
@@ -337,13 +337,20 @@
                             </button>
                           </div>
                         </div>
+                        <div *ngIf="itemsel.infoServ.variaciones.length == 0" class="form-group">
+                          <div class="col-md-12">
+                            <p class="notice">
+                              Este servicio o prueba no cuenta con acreditación de alta calidad.
+                            </p>
+                          </div>
+                        </div>
                         <div
                           *ngIf="itemsel.infoServ.variaciones.length == 0"
                           class="form-group"
                         >
                           <div class="col-md-12">
                             <label class="control-label" for="condiciones"
-                              ><strong>Comentarios:</strong></label
+                              ><strong>Comentarios adicionales:</strong></label
                             >
                             <textarea
                               name="condiciones"
@@ -660,11 +667,17 @@
                         </div>
                       </div>
                     </div>
-
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <p class="notice">
+                          Este servicio o prueba no cuenta con acreditación de alta calidad.
+                        </p>
+                      </div>
+                    </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <label class="control-label" for="condiciones"
-                          ><strong>Comentarios:</strong></label
+                          ><strong>Comentarios adicionales:</strong></label
                         >
                         <textarea
                           name="condiciones"

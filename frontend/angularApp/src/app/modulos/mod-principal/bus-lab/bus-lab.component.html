@@ -339,7 +339,7 @@
                       <div *ngIf="usuariounivalle" class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="descripserv">
-                            <strong>Descuento Univalle:</strong>
+                            <strong>Descuento de usuario institucional:</strong>
                             {{ servsel.descuento }} %</label>
                           <p class="modal-p">
                             * Debido a que usted es un usuario institucional de la Universidad del Valle, tiene derecho a un descuento sobre el costo
@@ -521,7 +521,7 @@
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
                             <strong>Total descuento: </strong>
-                            ${{ this.descuento }}
+                            ${{ this.descuento }} (COP)
                           </label>
                         </div>
                       </div>
@@ -530,7 +530,7 @@
                           <label class="control-label" for="precioserv">
                             <strong>Precio total con descuento incluído:
                             </strong>
-                            ${{ this.preciocondescuento }}
+                            ${{ this.preciocondescuento }} (COP)
                           </label>
                         </div>
                       </div>
@@ -560,6 +560,13 @@
                             <input id="univ" (focusout)="ciCheck($event)" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text" />
                             <p>{{ status }}</p>
                           </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <p class="notice">
+                            Este servicio o prueba no cuenta con acreditación de alta calidad.
+                          </p>
                         </div>
                       </div>
                       <div class="form-group">
@@ -652,7 +659,7 @@
                 <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="descripserv">
-                      <strong>Descuento Univalle:</strong>
+                      <strong>Descuento de usuario institucional:</strong>
                       {{ servsel.descuento }}%
                     </label>
                     <p class="modal-p">
@@ -664,13 +671,13 @@
                 <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Total descuento: </strong>$ {{ this.descuento }}</label>
+                      <strong>Total descuento: </strong>$ {{ this.descuento }} (COP)</label>
                   </div>
                 </div>
                 <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Precio total con descuento incluído: </strong>$ {{ this.preciocondescuento }}</label>
+                      <strong>Precio total con descuento incluído: </strong>$ {{ this.preciocondescuento }} (COP)</label>
                   </div>
                 </div>
                 <div class="form-group">
@@ -722,6 +729,13 @@
                     <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
                       Ver equipos asociados
                     </button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <p class="notice">
+                      Este servicio o prueba no cuenta con acreditación de alta calidad.
+                    </p>
                   </div>
                 </div>
                 <div class="form-group">

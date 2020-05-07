@@ -1,10 +1,4 @@
 
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ FONT ]*/
-
 @font-face {
   font-family: Ubuntu-Regular;
   src: url('../../../assets/fonts/ubuntu/Ubuntu-Regular.ttf');
@@ -14,9 +8,6 @@
   font-family: Ubuntu-Bold;
   src: url('../../../assets/fonts/ubuntu/Ubuntu-Regular.ttf');
 }
-
-/*//////////////////////////////////////////////////////////////////
-[ RESTYLE TAG ]*/
 
 * {
 	margin: 0px;
@@ -29,7 +20,6 @@ body, html {
 	font-family: Ubuntu-Regular, sans-serif;
 }
 
-/*---------------------------------------------*/
 a {
 	font-family: Ubuntu-Regular;
 	font-size: 14px;
@@ -51,7 +41,6 @@ a:hover {
   color: #403866;
 }
 
-/*---------------------------------------------*/
 h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
 }
@@ -70,7 +59,6 @@ ul, li {
 }
 
 
-/*---------------------------------------------*/
 input {
 	outline: none;
 	border: none;
@@ -89,7 +77,6 @@ input::-webkit-input-placeholder { color: #8f8fa1;}
 input:-moz-placeholder { color: #8f8fa1;}
 input::-moz-placeholder { color: #8f8fa1;}
 input:-ms-input-placeholder { color: #8f8fa1;}
-
 textarea::-webkit-input-placeholder { color: #8f8fa1;}
 textarea:-moz-placeholder { color: #8f8fa1;}
 textarea::-moz-placeholder { color: #8f8fa1;}
@@ -239,7 +226,7 @@ iframe {
 .wrap-input100 {
   width: 100%;
   position: relative;
-  background-color: #e6e6e6;
+  /* background-color: #e6e6e6; */
   border: 1px solid transparent;
   border-radius: 3px;
 }
@@ -375,11 +362,11 @@ iframe {
 }
 
 .login100-form-btn {
-  font-family: Ubuntu-Bold;
-  font-size: 16px;
+  font-family: Roboto, Ubuntu-Bold;
+  font-size: 1em;
   color: #fff;
   line-height: 1.2;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -389,17 +376,32 @@ iframe {
   align-items: center;
   padding: 0 20px;
   width: 100%;
-  height: 42px;
-  background-color: #f10d0d;
-  border-radius: 3px;
+  min-height: 40px;
+  background-color: #c80000;
+  border-radius: 20px;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
 
+.info {
+	margin: 10px;
+    font-size: 0.95em;
+    text-align: justify;
+	color: #737272f5;
+	margin-bottom: 20px;
+}
+
 .login100-form-btn:hover {
   background-color: #58595B;
+}
+
+::ng-deep .mat-form-field {
+	font-size: 1.15em;
+	width: 100%;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 
 
