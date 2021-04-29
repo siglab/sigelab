@@ -16,12 +16,23 @@
           <div class="box-body">
             <ul class="nav nav-tabs">
               <li class="active">
-                <a class="tablas" data-toggle="tab" href="#home" (click)="ocultar()" aria-expanded="true">
+                <a
+                  class="tablas"
+                  data-toggle="tab"
+                  href="#home"
+                  (click)="ocultar()"
+                  aria-expanded="true"
+                >
                   Solicitudes activas
                 </a>
               </li>
               <li>
-                <a class="tablas" data-toggle="tab" href="#menu1" (click)="ocultar()">
+                <a
+                  class="tablas"
+                  data-toggle="tab"
+                  href="#menu1"
+                  (click)="ocultar()"
+                >
                   Historial de solicitudes
                 </a>
               </li>
@@ -32,56 +43,119 @@
                   <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
                       <div class="box-header">
-                        <h3 class="box-title">Mis solicitudes de servicio activas</h3>
+                        <h3 class="box-title">
+                          Mis solicitudes de servicio activas
+                        </h3>
                       </div>
                       <div class="box-body">
-                        <div class="table-responsive">
-                          <div *ngIf="!dataSource || dataSource.data.length === 0; else activeRequestTable"
-                            class="no-data">
-                            <h4>NO CUENTAS CON SOLICITUDES DE SERVICIO ACTIVAS</h4>
+                        <div class="table-responsive internal-table">
+                          <div
+                            *ngIf="
+                              !dataSource || dataSource.data.length === 0;
+                              else activeRequestTable
+                            "
+                            class="no-data"
+                          >
+                            <h4>
+                              NO CUENTAS CON SOLICITUDES DE SERVICIO ACTIVAS
+                            </h4>
                           </div>
                           <ng-template #activeRequestTable>
                             <div class="example-container mat-elevation-z8">
                               <div class="example-header">
                                 <mat-form-field>
-                                  <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)"
-                                    placeholder="Busca por cualquier valor que pueda tomar las columnas de la tabla">
+                                  <input
+                                    style="outline: none"
+                                    matInput
+                                    (keyup)="applyFilter($event.target.value)"
+                                    placeholder="Busca por cualquier valor que pueda tomar las columnas de la tabla"
+                                  />
                                 </mat-form-field>
                               </div>
-                              <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
+                              <mat-table
+                                #tableLabs
+                                #sort="matSort"
+                                [dataSource]="dataSource"
+                                matSort
+                              >
                                 <!-- Position Column -->
                                 <ng-container matColumnDef="nombre">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Nombre
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.nombre }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="precio">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Precio (COP) </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> ${{element.precio}} </mat-cell>
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Precio (COP)
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    ${{ element.precio }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="edicion">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Fecha Última Edición
                                   </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.fechaEdicion }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Weight Column -->
                                 <ng-container matColumnDef="estado">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Estado
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.status }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="aceptacion">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Fecha Aceptación
                                   </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.fechaAceptacion }}
+                                  </mat-cell>
                                 </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="mostrardata2(row)"
-                                  style="cursor: pointer;"></mat-row>
+                                <mat-header-row
+                                  *matHeaderRowDef="displayedColumns"
+                                ></mat-header-row>
+                                <mat-row
+                                  *matRowDef="
+                                    let row;
+                                    columns: displayedColumns
+                                  "
+                                  (click)="mostrardata2(row)"
+                                  style="cursor: pointer"
+                                ></mat-row>
                               </mat-table>
-                              <mat-paginator #paginator="matPaginator" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                                [showFirstLastButtons]="true">
+                              <mat-paginator
+                                #paginator="matPaginator"
+                                [pageSize]="10"
+                                [pageSizeOptions]="[5, 10, 20]"
+                                [showFirstLastButtons]="true"
+                              >
                               </mat-paginator>
                             </div>
                           </ng-template>
@@ -91,56 +165,120 @@
                     <div id="menu1" class="tab-pane fade">
                       <div class="box-header">
                         <!-- <i class="fa fa-flask"></i> -->
-                        <h3 class="box-title">Historial de mis solicitudes de servicio</h3>
+                        <h3 class="box-title">
+                          Historial de mis solicitudes de servicio
+                        </h3>
                       </div>
                       <div class="box-body">
-                        <div class="table-responsive">
-                          <div *ngIf="!dataSource2 || dataSource2.data.length === 0; else historyRequestTable"
-                            class="no-data">
-                            <h4>NO CUENTAS CON HISTORIAL DE SOLICITUDES DE SERVICIO</h4>
+                        <div class="table-responsive internal-table">
+                          <div
+                            *ngIf="
+                              !dataSource2 || dataSource2.data.length === 0;
+                              else historyRequestTable
+                            "
+                            class="no-data"
+                          >
+                            <h4>
+                              NO CUENTAS CON HISTORIAL DE SOLICITUDES DE
+                              SERVICIO
+                            </h4>
                           </div>
                           <ng-template #historyRequestTable>
                             <div class="example-container mat-elevation-z8">
                               <div class="example-header">
                                 <mat-form-field>
-                                  <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)"
-                                    placeholder="Busca por nombre, precio, fecha de última edición, estado o fecha de aceptación">
+                                  <input
+                                    style="outline: none"
+                                    matInput
+                                    (keyup)="applyFilter2($event.target.value)"
+                                    placeholder="Busca por nombre, precio, fecha de última edición, estado o fecha de aceptación"
+                                  />
                                 </mat-form-field>
                               </div>
-                              <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+                              <mat-table
+                                #table2
+                                #sort2="matSort"
+                                [dataSource]="dataSource2"
+                                matSort
+                              >
                                 <!-- Position Column -->
                                 <ng-container matColumnDef="nombre">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Nombre
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.nombre }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="precio">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.precio}} </mat-cell>
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Precio
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.precio }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="edicion">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Última Edición
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Fecha Última Edición
                                   </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.fechaEdicion}} </mat-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.fechaEdicion }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Weight Column -->
                                 <ng-container matColumnDef="estado">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Estado
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.status }}
+                                  </mat-cell>
                                 </ng-container>
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="aceptacion">
-                                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Aceptación
+                                  <mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                  >
+                                    Fecha Aceptación
                                   </mat-header-cell>
-                                  <mat-cell *matCellDef="let element"> {{element.fechaAceptacion}} </mat-cell>
+                                  <mat-cell *matCellDef="let element">
+                                    {{ element.fechaAceptacion }}
+                                  </mat-cell>
                                 </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="mostrardata(row)"
-                                  style="cursor: pointer;"></mat-row>
+                                <mat-header-row
+                                  *matHeaderRowDef="displayedColumns2"
+                                ></mat-header-row>
+                                <mat-row
+                                  *matRowDef="
+                                    let row;
+                                    columns: displayedColumns2
+                                  "
+                                  (click)="mostrardata(row)"
+                                  style="cursor: pointer"
+                                ></mat-row>
                               </mat-table>
-                              <mat-paginator #paginator2="matPaginator" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                                [showFirstLastButtons]="true">
+                              <mat-paginator
+                                #paginator2="matPaginator"
+                                [pageSize]="10"
+                                [pageSizeOptions]="[5, 10, 20]"
+                                [showFirstLastButtons]="true"
+                              >
                               </mat-paginator>
                             </div>
                           </ng-template>
@@ -179,7 +317,9 @@
                     <div class="box box-danger internal-shadow">
                       <div class="box-header">
                         <i class="fa fa-info-circle"></i>
-                        <h3 class="box-title">Información de servicio solicitado</h3>
+                        <h3 class="box-title">
+                          Información de servicio solicitado
+                        </h3>
                         <!-- <h4 (click)="cambiarIcono('info')" class="box-title">
                               <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#collapse" aria-expanded="false" class="collapsed">
                                   Información del servicio solicitado
@@ -191,52 +331,75 @@
                       </div>
                       <div id="collapse" aria-expanded="true">
                         <div class="box-body">
-                          <form id="form-workserv" class="" name="form-workserv" action="#">
+                          <form
+                            id="form-workserv"
+                            class=""
+                            name="form-workserv"
+                            action="#"
+                          >
                             <fieldset>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <!-- <label class="control-label" for="estado"><strong>Estado:</strong><div class="info-content">{{servsel.status}}</div></label> -->
-                                  <label class="control-label" for="estado"><strong>Estado de solicitud:</strong>
-                                    {{servsel.status}}</label>
+                                  <label class="control-label" for="estado"
+                                    ><strong>Estado de solicitud:</strong>
+                                    {{ servsel.status }}</label
+                                  >
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <!-- <label class="control-label" for="nombreserv"><strong>Nombre:</strong><div class="info-content">{{servsel.nombre}}</div></label> -->
-                                  <label class="control-label" for="nombreserv"><strong>Nombre de servicio:</strong>
-                                    {{servsel.nombre}}</label>
+                                  <label class="control-label" for="nombreserv"
+                                    ><strong>Nombre de servicio:</strong>
+                                    {{ servsel.nombre }}</label
+                                  >
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <!-- <label class="control-label" for="descripserv"><strong>Descripción:</strong><div class="info-content">{{servsel.descripcion}}</div></label> -->
-                                  <label class="control-label" for="descripserv">
+                                  <label
+                                    class="control-label"
+                                    for="descripserv"
+                                  >
                                     <strong>Descripción de servicio:</strong>
                                   </label>
-                                  <label class="description">
-                                    {{servsel.descripcion}}
+                                  <label
+                                    class="description"
+                                    [innerHTML]="servsel.descripcion"
+                                  >
+                                    <!-- {{ servsel.descripcion }} -->
                                   </label>
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <!-- <label class="control-label" for="descripserv"><strong>Fecha aceptación:</strong> <div class="info-content">{{servsel.fechaAceptacion}}</div></label> -->
-                                  <label class="control-label" for="descripserv"><strong>Fecha de aceptación:</strong>
-                                    {{servsel.fechaAceptacion}}</label>
+                                  <label class="control-label" for="descripserv"
+                                    ><strong>Fecha de aceptación:</strong>
+                                    {{ servsel.fechaAceptacion }}</label
+                                  >
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <!-- <label class="control-label" for="descripserv"><strong>Aceptado por:</strong> <div class="info-content">{{servsel.acepto}}</div></label> -->
-                                  <label class="control-label" for="descripserv"><strong>Aceptado por:</strong>
-                                    {{servsel.acepto}}</label>
+                                  <label class="control-label" for="descripserv"
+                                    ><strong>Aceptado por:</strong>
+                                    {{ servsel.acepto }}</label
+                                  >
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
                                   <!-- <label class="control-label" for="descripserv"><strong>Última edición de esta solicitud:</strong> <div class="info-content">{{servsel.fechaEdicion}}</div></label> -->
-                                  <label class="control-label" for="descripserv"><strong>Última edición de esta
-                                      solicitud:</strong> {{servsel.fechaEdicion}}</label>
+                                  <label class="control-label" for="descripserv"
+                                    ><strong
+                                      >Última edición de esta solicitud:</strong
+                                    >
+                                    {{ servsel.fechaEdicion }}</label
+                                  >
                                 </div>
                               </div>
                               <!-- <div class="form-group">
@@ -244,15 +407,34 @@
                                             <label class="control-label" for="descripserv"><strong>Descripción:</strong> <div class="info-content"></div></label>
                                           </div>
                                         </div> -->
-                              <div *ngIf="servsel.condicionesSrv.length != 0" class="form-group">
+                              <div
+                                *ngIf="servsel.condicionesSrv.length != 0"
+                                class="form-group"
+                              >
                                 <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Términos y
-                                      condiciones:</strong></label>
+                                  <label class="control-label" for="precioserv"
+                                    ><strong
+                                      >Términos y condiciones:</strong
+                                    ></label
+                                  >
                                   <div class="tCContainer">
-                                    <div class="form-group" *ngFor="let item of servsel.condicionesSrv; let i = index">
-                                      <mat-checkbox disabled name="{{'checkboxSrv' + i}}"
-                                        [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]">
-                                        <p>{{item.conditionText}}</p>
+                                    <div
+                                      class="form-group"
+                                      *ngFor="
+                                        let item of servsel.condicionesSrv;
+                                        let i = index
+                                      "
+                                    >
+                                      <mat-checkbox
+                                        disabled
+                                        name="{{ 'checkboxSrv' + i }}"
+                                        [(ngModel)]="
+                                          condicionesobjetoSrv[
+                                            'checkboxSrv' + i
+                                          ]
+                                        "
+                                      >
+                                        <p>{{ item.conditionText }}</p>
                                       </mat-checkbox>
                                       <!-- <label class="control-label" for="precioserv"><input disabled name="{{'checkboxSrv' + i}}" [(ngModel)]="condicionesobjetoSrv['checkboxSrv'+ i]" type="checkbox"> {{item.conditionText}}</label> -->
                                     </div>
@@ -261,46 +443,101 @@
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Precio Inicial: $</strong>
-                                    {{servsel.precioTotal}} (COP)</label>
+                                  <label class="control-label" for="precioserv"
+                                    ><strong>Precio Inicial: $</strong>
+                                    {{ servsel.precioTotal }} (COP)</label
+                                  >
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Descuento: $</strong>
-                                    {{servsel.descuento}} (COP)</label>
+                                  <label class="control-label" for="precioserv"
+                                    ><strong>Descuento: $</strong>
+                                    {{ servsel.descuento }} (COP)</label
+                                  >
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="col-md-12">
-                                  <label class="control-label" for="precioserv"><strong>Precio total con descuento:
-                                      $</strong> {{servsel.precio}} (COP)</label>
+                                  <label class="control-label" for="precioserv"
+                                    ><strong
+                                      >Precio total con descuento: $</strong
+                                    >
+                                    {{ servsel.precio }} (COP)</label
+                                  >
                                 </div>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group col-md-12">
                                 <div class="row">
                                   <div
-                                    *ngIf="(servsel.nombreParametros.length != 0 && servsel.parametrosSrv.length > 0)"
-                                    class="col-md-12">
-                                    <label class="control-label" for="precioserv">
-                                      <strong>Parámetros de variación:</strong>
+                                    *ngIf="
+                                      servsel.nombreParametros.length != 0 &&
+                                      servsel.parametrosSrv.length > 0
+                                    "
+                                    class="col-md-12"
+                                  >
+                                    <label
+                                      class="control-label"
+                                      for="precioserv"
+                                    >
+                                      <strong>Parámetros de servicio:</strong>
                                     </label>
                                     <div class="form-group">
-                                      <div class="col-md-6"
-                                        *ngFor="let item of servsel.nombreParametros; let i = index;">
-                                        <label class="control-label" for="parvar">{{item}}
-                                          <input class="form-control" id="item" name="item" disabled
-                                            value="{{this.servsel.parametrosSrv[i].value}}" type="text">
-                                        </label>
+                                      <div
+                                        class="col-md-12"
+                                        *ngFor="
+                                          let item of servsel.nombreParametros;
+                                          let i = index
+                                        "
+                                      >
+                                        <mat-form-field>
+                                          <mat-label>{{ item }}</mat-label>
+                                          <input
+                                            matInput
+                                            id="item"
+                                            name="item"
+                                            disabled
+                                            value="{{
+                                              this.servsel.parametrosSrv[i]
+                                                .value
+                                            }}"
+                                            type="text"
+                                          />
+                                        </mat-form-field>
+                                        <!-- <label
+                                          class="control-label"
+                                          for="parvar"
+                                          >{{ item }}
+                                          <input
+                                            class="form-control"
+                                            id="item"
+                                            name="item"
+                                            disabled
+                                            value="{{
+                                              this.servsel.parametrosSrv[i]
+                                                .value
+                                            }}"
+                                            type="text"
+                                          />
+                                        </label> -->
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div *ngIf="buttoncancel" class="row form-group" style="margin-top:20px;">
-                                <div class="col-md-12 text-center ">
-                                  <button class="btn btn-sm modal-button" type="button"
-                                    (click)="cancelarSolicitudServicio()">Cancelar esta solicitud</button>
+                              <div
+                                *ngIf="buttoncancel"
+                                class="row form-group"
+                                style="margin-top: 20px"
+                              >
+                                <div class="col-md-12 text-center">
+                                  <button
+                                    class="btn btn-sm modal-button"
+                                    type="button"
+                                    (click)="cancelarSolicitudServicio()"
+                                  >
+                                    Cancelar esta solicitud
+                                  </button>
                                 </div>
                               </div>
                             </fieldset>
@@ -309,11 +546,18 @@
                       </div>
                     </div>
                     <div
-                      *ngIf="((servsel.status == 'procesada') || (servsel.status == 'terminada')) && (servsel.path.length != 0)"
-                      class="box box-danger internal-shadow">
+                      *ngIf="
+                        (servsel.status == 'procesada' ||
+                          servsel.status == 'terminada') &&
+                        servsel.path.length != 0
+                      "
+                      class="box box-danger internal-shadow"
+                    >
                       <div class="box-header">
                         <i class="fa fa-file"></i>
-                        <h3 class="box-title"> Archivos adjuntos a esta solicitud</h3>
+                        <h3 class="box-title">
+                          Archivos adjuntos a esta solicitud
+                        </h3>
                         <!-- <h4 (click)="cambiarIcono('archivos')" class="box-title">
                           <a style="color:black;" data-toggle="collapse" data-parent="#accordion2" href="#archivos"
                             aria-expanded="false" class="collapsed">
@@ -328,28 +572,43 @@
                       </div>
                       <div id="archivos" aria-expanded="true">
                         <div class="box-body">
-                          <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                          <form
+                            id="form-workserv3"
+                            class=""
+                            name="form-workserv3"
+                            action="#"
+                          >
                             <fieldset>
                               <div class="form-group">
                                 <div class="col-md-12">
-                                  <label class="control-label" for="listfacul"><strong>Archivos Agregados
-                                      :</strong></label>
+                                  <label class="control-label" for="listfacul"
+                                    ><strong
+                                      >Archivos Agregados :</strong
+                                    ></label
+                                  >
                                   <ul class="nav nav-stacked">
-                                    <li *ngFor="let item of this.servsel.path; let i = index;">
-                                      <a> 
-                                        <span (click)="descargarArchivo(i)"
-                                          class="puntero pull-left badge bg-red">Descargar</span> 
-                                          <span style="margin-left: 10px;">{{item.replace('archivos/','')}}</span>
+                                    <li
+                                      *ngFor="
+                                        let item of this.servsel.path;
+                                        let i = index
+                                      "
+                                    >
+                                      <a>
+                                        <span
+                                          (click)="descargarArchivo(i)"
+                                          class="puntero pull-left badge bg-red"
+                                          >Descargar</span
+                                        >
+                                        <span style="margin-left: 10px">{{
+                                          item.replace("archivos/", "")
+                                        }}</span>
                                       </a>
+                                    </li>
                                   </ul>
                                 </div>
-
                               </div>
                             </fieldset>
-
-
                           </form>
-
                         </div>
                       </div>
                     </div>
@@ -361,33 +620,54 @@
                       <i class="fa fa-comments-o"></i>
                       <h3 class="box-title">Comentarios</h3>
                     </div>
-                    <div class="box-body">
+                    <div class="box-body chat-container">
                       <!-- Conversations are loaded here -->
-                      <div class="direct-chat-messages"
-                        *ngIf="servsel.comentario && servsel.comentario.length > 0 ;else noComments">
+                      <div
+                        class="direct-chat-messages"
+                        *ngIf="
+                          servsel.comentario && servsel.comentario.length > 0;
+                          else noComments
+                        "
+                      >
                         <!-- Message. Default to the left -->
-                        <div *ngFor="let item of servsel.comentario; let i = index">
-                          <div *ngIf="item.autor == 'lab'" class="direct-chat-msg">
+                        <div
+                          *ngFor="let item of servsel.comentario; let i = index"
+                        >
+                          <div
+                            *ngIf="item.autor == 'lab'"
+                            class="direct-chat-msg"
+                          >
                             <div class="direct-chat-info clearfix">
-                              <span class="direct-chat-name pull-left">{{servsel.lab}}</span>
-                              <span class="direct-chat-timestamp pull-right">{{item.fecha}}</span>
+                              <span class="direct-chat-name pull-left">{{
+                                servsel.lab
+                              }}</span>
+                              <span class="direct-chat-timestamp pull-right">{{
+                                item.fecha
+                              }}</span>
                             </div>
                             <!-- /.direct-chat-info -->
                             <div class="direct-chat-text">
-                              {{item.commentText}}
+                              {{ item.commentText }}
                             </div>
                             <!-- /.direct-chat-text -->
                           </div>
                           <!-- /.direct-chat-msg -->
                           <!-- Message to the right -->
-                          <div *ngIf="item.autor == 'usuario'" class="direct-chat-msg right">
+                          <div
+                            *ngIf="item.autor == 'usuario'"
+                            class="direct-chat-msg right"
+                          >
                             <div class="direct-chat-info clearfix">
-                              <span class="direct-chat-name pull-right">{{item.email}}</span>
-                              <span class="direct-chat-timestamp pull-left">{{item.fecha}}</span>
+                              <span class="direct-chat-name pull-right">{{
+                                item.email
+                              }}</span>
+                              <span class="direct-chat-timestamp pull-left">{{
+                                item.fecha
+                              }}</span>
                             </div>
                             <!-- /.direct-chat-info -->
                             <div class="direct-chat-text">
-                              {{item.commentText}}
+                              {{ item.commentText }}
                             </div>
                             <!-- /.direct-chat-text -->
                           </div>
@@ -400,35 +680,72 @@
                       </ng-template>
                     </div>
                     <!-- /.box-body -->
-                    <div *ngIf="(servsel.status != 'rechazada') && (servsel.status != 'cancelada')" class="box-footer">
+                    <div
+                      *ngIf="
+                        servsel.status != 'rechazada' &&
+                        servsel.status != 'cancelada'
+                      "
+                      class="box-footer"
+                    >
                       <form action="#" method="post">
                         <div class="input-group">
-                          <input type="text" name="message" [(ngModel)]="comentario"
-                            placeholder="Escribe comentario...." class="form-control">
+                          <input
+                            type="text"
+                            name="message"
+                            [(ngModel)]="comentario"
+                            placeholder="Escribe un comentario aquí...."
+                            class="form-control"
+                          />
                           <span class="input-group-btn">
-                            <button (click)="enviarComentario()" type="button" class="btn modal-button btn-flat"> <i
-                                class="fa fa-paper-plane" aria-hidden="true"></i> Enviar</button>
+                            <button
+                              (click)="enviarComentario()"
+                              type="button"
+                              class="btn modal-button btn-flat"
+                            >
+                              <i
+                                class="fa fa-paper-plane"
+                                aria-hidden="true"
+                              ></i>
+                              Enviar
+                            </button>
                           </span>
                         </div>
                       </form>
                     </div>
                   </div>
-                  <div *ngIf="servsel.variaciones.length != 0" class="box box-danger internal-shadow">
+                  <div
+                    *ngIf="servsel.variaciones.length != 0"
+                    class="box box-danger internal-shadow"
+                  >
                     <div class="box-header">
-                        <i class="fa fa-cogs"></i>
-                      <h3 class="box-title"> Información de variaciones de servicio solicitadas</h3>
+                      <i class="fa fa-cogs"></i>
+                      <h3 class="box-title">
+                        Información de variaciones de servicio solicitadas
+                      </h3>
                     </div>
                     <div>
                       <div class="box-body">
-                        <form id="form-workserv3" class="" name="form-workserv3" action="#">
+                        <form
+                          id="form-workserv3"
+                          class=""
+                          name="form-workserv3"
+                          action="#"
+                        >
                           <fieldset>
                             <div class="form-group">
                               <div class="col-md-12">
                                 <mat-form-field>
-                                  <mat-label>Variaciones solicitadas en este servicio:</mat-label>
+                                  <mat-label
+                                    >Variaciones solicitadas en este
+                                    servicio:</mat-label
+                                  >
                                   <mat-select name="variatio" id="variato">
-                                    <mat-option *ngFor="let item of servsel.variaciones" [value]="item.id" (click)="cambiarVariacion(item.id)">
-                                      {{item.nombre}}
+                                    <mat-option
+                                      *ngFor="let item of servsel.variaciones"
+                                      [value]="item.id"
+                                      (click)="cambiarVariacion(item.id)"
+                                    >
+                                      {{ item.nombre }}
                                     </mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -439,9 +756,10 @@
                           <fieldset *ngIf="variation">
                             <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="nombreserv"><strong>Nombre :</strong>
-                                  {{variation.nombre}}</label>
-
+                                <label class="control-label" for="nombreserv"
+                                  ><strong>Nombre :</strong>
+                                  {{ variation.nombre }}</label
+                                >
                               </div>
                             </div>
                             <div class="form-group">
@@ -450,20 +768,37 @@
                                   <strong>Descripción:</strong>
                                 </label>
                                 <label class="description">
-                                  {{variation.descripcion}}
+                                  {{ variation.descripcion }}
                                 </label>
                               </div>
                             </div>
                             <div *ngIf="condicion" class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="precioserv"><strong>Términos y
-                                    condiciones:</strong></label>
+                                <label class="control-label" for="precioserv"
+                                  ><strong
+                                    >Términos y condiciones:</strong
+                                  ></label
+                                >
                                 <div class="tCContainer">
-                                  <div class="form-group" *ngFor="let item of condicion.condicion; let i = index">
-                                    <label class="control-label" for="precioserv">
-                                      <mat-checkbox disabled name="{{'checkbox' + i}}"
-                                        [(ngModel)]="condicionesobjeto['checkbox'+ i]">
-                                        <p>{{item.conditionText}}</p>
+                                  <div
+                                    class="form-group"
+                                    *ngFor="
+                                      let item of condicion.condicion;
+                                      let i = index
+                                    "
+                                  >
+                                    <label
+                                      class="control-label"
+                                      for="precioserv"
+                                    >
+                                      <mat-checkbox
+                                        disabled
+                                        name="{{ 'checkbox' + i }}"
+                                        [(ngModel)]="
+                                          condicionesobjeto['checkbox' + i]
+                                        "
+                                      >
+                                        <p>{{ item.conditionText }}</p>
                                       </mat-checkbox>
                                       <!-- <input disabled name="{{'checkbox' + i}}" [(ngModel)]="condicionesobjeto['checkbox'+ i]" type="checkbox">
                                             <p>{{item.conditionText}}</p> -->
@@ -475,21 +810,40 @@
 
                             <div class="form-group">
                               <div class="col-md-12">
-                                <label class="control-label" for="precioserv"><strong>Precio: $</strong>
-                                  {{variation.precio}} (COP)</label>
+                                <label class="control-label" for="precioserv"
+                                  ><strong>Precio: $</strong>
+                                  {{ variation.precio }} (COP)</label
+                                >
                               </div>
                             </div>
                             <div class="form-group">
                               <div class="row">
-                                <div *ngIf="variation.parametros != 0" class="col-md-12">
+                                <div
+                                  *ngIf="variation.parametros != 0"
+                                  class="col-md-12"
+                                >
                                   <label class="control-label" for="precioserv">
                                     <strong>Parámetros de variación:</strong>
                                   </label>
                                   <div class="form-group">
-                                    <div class="col-md-6" *ngFor="let item of variation.parametros; let i = index;">
-                                      <label class="control-label" for="parvar">{{item}}
-                                        <input class="form-control" id="item" name="item" disabled
-                                          value="{{this.valorParametro[i]}}" type="text"> </label>
+                                    <div
+                                      class="col-md-6"
+                                      *ngFor="
+                                        let item of variation.parametros;
+                                        let i = index
+                                      "
+                                    >
+                                      <label class="control-label" for="parvar"
+                                        >{{ item }}
+                                        <input
+                                          class="form-control"
+                                          id="item"
+                                          name="item"
+                                          disabled
+                                          value="{{ this.valorParametro[i] }}"
+                                          type="text"
+                                        />
+                                      </label>
                                     </div>
                                   </div>
                                 </div>

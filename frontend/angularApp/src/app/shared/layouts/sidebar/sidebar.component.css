@@ -3,20 +3,24 @@
   height: 600px;
   max-height: auto;
 }
-divScroll::-webkit-scrollbar-track {
+
+.divScroll::-webkit-scrollbar-track {
   box-shadow: inset 0 0 3px #222d32;
   border-radius: 2px;
   background-color: #222d32;
 }
+
 .divScroll::-webkit-scrollbar {
   width: 5px;
   background-color: #222d32;
 }
+
 .divScroll::-webkit-scrollbar-thumb {
   border-radius: 2px;
   box-shadow: inset 0 0 3px#222d32;
   background-color: #babec0;
 }
+
 .sombra:hover {
   background-color: #222d32;
   cursor: pointer;
@@ -35,6 +39,10 @@ divScroll::-webkit-scrollbar-track {
   text-transform: capitalize;
 }
 
-.m-t-5{
+.m-t-5 {
   margin-top: 5px;
+}
+
+aside.main-sidebar {
+  overflow-y: auto;
 }

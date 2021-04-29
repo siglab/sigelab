@@ -13,7 +13,9 @@
         />
       </div>
       <div class="pull-left info user-name">
-        <p *ngIf="this.usuario.displayName;else noNameUser">{{ this.usuario.displayName.toLowerCase() }}</p>
+        <p *ngIf="this.usuario.displayName; else noNameUser">
+          {{ this.usuario.displayName.toLowerCase() }}
+        </p>
         <ng-template #noNameUser>
           <p>Usuario registrado</p>
         </ng-template>
@@ -21,21 +23,71 @@
       </div>
     </div>
     <!-- Sidebar user panel  ocultar  comoduloPrincipalmponentes segun el nivel  -->
-    <li class="header text-center" *ngIf="moduloPrincipal || moduloNivel2; else loggedOut">BÚSQUEDAS Y SOLICITUDES</li>
-    <ng-template #loggedOut><li class="header text-center">BÚSQUEDAS</li></ng-template>
+    <li
+      class="header text-center"
+      *ngIf="moduloPrincipal || moduloNivel2; else loggedOut"
+    >
+      BÚSQUEDAS Y SOLICITUDES
+    </li>
+    <ng-template #loggedOut
+      ><li class="header text-center">BÚSQUEDAS</li></ng-template
+    >
     <app-bar-busqueda></app-bar-busqueda>
     <!-- <li class="header text-center" *ngIf="moduloPrincipal || moduloNivel2">SOLICITUDES DE SERVICIO</li>
     <app-bar-admin-solicitudes *ngIf="moduloPrincipal || moduloNivel2"></app-bar-admin-solicitudes> -->
-    <li class="header text-center" *ngIf="moduloNivel2">ADMINISTRACIÓN DE LABORATORIOS</li>
-    <app-bar-admin-laboratorios *ngIf="moduloNivel2"></app-bar-admin-laboratorios>
-    <li *ngIf="moduloNivel3" class="header text-center">ADMINISTRACIÓN DE SIGELAB</li>
+    <li class="header text-center" *ngIf="moduloNivel2">
+      ADMINISTRACIÓN DE LABORATORIOS
+    </li>
+    <app-bar-admin-laboratorios
+      *ngIf="moduloNivel2"
+    ></app-bar-admin-laboratorios>
+    <li *ngIf="moduloNivel3" class="header text-center">
+      ADMINISTRACIÓN DE SIGELAB
+    </li>
     <app-bar-admin-usuarios *ngIf="moduloNivel3"></app-bar-admin-usuarios>
     <app-bard-admin-qr *ngIf="moduloQr || moduloNivel3"></app-bard-admin-qr>
-    <app-bar-comunicacion-masiva *ngIf="moduloComMasiva"></app-bar-comunicacion-masiva>
-    <li *ngIf="moduloNivel25" class="header text-center">ADMINISTRACIÓN DE FACULTAD</li>
-    <app-bar-admin-laboratorio-superior *ngIf="moduloNivel3 || moduloNivel25"></app-bar-admin-laboratorio-superior>
-    <app-bar-solicitudes-nivel3 *ngIf="moduloNivel3 || moduloNivel25"></app-bar-solicitudes-nivel3>
+    <app-bar-comunicacion-masiva
+      *ngIf="moduloComMasiva"
+    ></app-bar-comunicacion-masiva>
+    <li *ngIf="moduloNivel25" class="header text-center">
+      ADMINISTRACIÓN DE FACULTAD
+    </li>
+    <app-bar-admin-laboratorio-superior
+      *ngIf="moduloNivel3 || moduloNivel25"
+    ></app-bar-admin-laboratorio-superior>
+    <app-bar-solicitudes-nivel3
+      *ngIf="moduloNivel3 || moduloNivel25"
+    ></app-bar-solicitudes-nivel3>
     <li *ngIf="moduloNivel35" class="header text-center">NIVEL 3.5</li>
+    <li class="header text-center">INFORMACIÓN IMPORTANTE</li>
+    <ul
+      class="sidebar-menu"
+      data-widget="tree"
+      data-animation-speed="500"
+      style="width: 100%"
+    >
+      <li class="pointer" routerLinkActive="active">
+        <a
+          href="#"
+          [routerLink]="['noticias']"
+          (click)="(false)"
+          style="text-decoration: none; padding-left: 0"
+        >
+          <span
+            style="
+              margin-left: 2px;
+              font-weight: 700;
+              font-family: Noto;
+              font-size: 15px;
+              --animate-duration: 5s;
+            "
+            class="animate__animated animate__flash animate__infinite infinite"
+            >Acceso a laboratorios - Última información</span
+          >
+        </a>
+      </li>
+    </ul>
+
     <!-- <app-bar-indicadores *ngIf="moduloNivel3 || moduloNivel25 || moduloNivel35"></app-bar-indicadores> -->
   </section>
   <!-- /.sidebar -->

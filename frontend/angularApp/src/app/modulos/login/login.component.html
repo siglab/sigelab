@@ -1,61 +1,108 @@
 <div class="limiter">
-  <div class="bg-image">
-  </div>
+  <div class="bg-image"></div>
   <div class="black-filter"></div>
   <div class="container-login100">
-    <div class="wrap-login100 p-t-50 p-b-90">
+    <div class="wrap-login100">
       <form class="login100-form validate-form flex-sb flex-w">
-        <a href="#" [routerLink]="['/inicio']" (click)="false;"><img src="../../../assets/img/Propuesta_1_Sigelab-15.png" class="login100-form-logo" alt="SIGELab Logo"></a>
-        <img src="../../../assets/img/logo-univalle.png" class="login100-form-uv-logo p-b-40" alt="Vicerrectoría logo">
-        <!-- <div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
-          <input #em = 'ngModel' [(ngModel)]="email" class="input100" type="text" name="username" placeholder="Correo electrónico" required>
-          <span  class="focus-input100"></span>
-        </div>
-        <div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-          <input #ps = 'ngModel'  [(ngModel)]="pass" class="input100" type="password" name="pass" placeholder="Password" required>
-          <span class="focus-input100"></span>
-        </div> -->
-        <div class="info">
-          Si tienes cuenta de Google o tienes correo electrónico institucional de la Universidad del Valle,
-          ingresa a través del botón de Google sin necesidad de registrarte en el sistema.
-        </div>
-        <mat-form-field class="validate-input m-b-16" data-validate = "Username is required">
-          <input matInput placeholder="Correo electrónico" type="email" #em = 'ngModel' [(ngModel)]="email" name="username" required>
-          <!-- <mat-hint>Ingresa el correo electrónico con el que te registraste en el sistema</mat-hint> -->
-          <mat-error *ngIf="!email">Este campo es requerido para continuar</mat-error>
-        </mat-form-field>
-        <mat-form-field class="validate-input m-b-16" data-validate = "Password is required">
-          <input matInput placeholder="Contraseña" type="password" #ps = 'ngModel'  [(ngModel)]="pass" name="pass" required>
-          <mat-error *ngIf="!pass">Este campo es requerido para continuar</mat-error>
-        </mat-form-field>
-        <div class="flex-sb-m w-full p-t-3 p-b-24">
-          <div class="contact100-form-checkbox">
+        <a href="#" [routerLink]="['/inicio']" (click)="(false)"
+          ><img
+            src="../../../assets/img/Propuesta_1_Sigelab-15.png"
+            class="login100-form-logo"
+            alt="SigeLAB Logo"
+        /></a>
+        <img
+          src="../../../assets/img/logo-univalle.png"
+          class="login100-form-uv-logo p-b-40"
+          alt="Vicerrectoría logo"
+        />
+        <div *ngIf="institutionalAccount; else noAccountTemplate">
+          <div class="container-login100-form-btn m-t-17">
+            <button
+              class="login100-form-btn"
+              (click)="ingresar()"
+              style="min-height: 55px; font-weight: bold"
+            >
+              Tengo una cuenta institucional de la Universidad del Valle
+              (@correounivalle.edu.co)
+            </button>
           </div>
-          <div class="contact100-form-link">
-            <a [routerLink]="'/registro'" class="txt2">
-              Regístrate aquí!
-            </a>
+          <div class="container-login100-form-btn m-t-17">
+            <button
+              class="login100-form-btn"
+              (click)="noInstitutionalAccount()"
+              style="font-weight: bold"
+            >
+              No tengo cuenta institucional
+            </button>
           </div>
         </div>
-        <div class="container-login100-form-btn">
-          <button  (click)="ingresarEmail( em, ps)" class="login100-form-btn">
-            Iniciar sesión
-          </button>
-        </div>
-        <hr style="width: 100%; margin-top: 20px;">
-        <div class="container-login100-form-btn m-t-17">
-          <button class="login100-form-btn" (click)="ingresar()" >
-            <i class="fa fa-google">oogle</i>
-          </button>
-        </div>
+        <ng-template #noAccountTemplate>
+          <div class="info">
+            Si tienes cuenta de Google o tienes correo electrónico institucional
+            de la Universidad del Valle, ingresa a través del botón de Google
+            sin necesidad de registrarte en el sistema.
+          </div>
+          <mat-form-field
+            class="validate-input m-b-16"
+            data-validate="Username is required"
+          >
+            <input
+              matInput
+              placeholder="Correo electrónico"
+              type="email"
+              #em="ngModel"
+              [(ngModel)]="email"
+              name="username"
+              required
+            />
+            <mat-error *ngIf="!email"
+              >Este campo es requerido para continuar</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field
+            class="validate-input m-b-16"
+            data-validate="Password is required"
+          >
+            <input
+              matInput
+              placeholder="Contraseña"
+              type="password"
+              #ps="ngModel"
+              [(ngModel)]="pass"
+              name="pass"
+              required
+            />
+            <mat-error *ngIf="!pass"
+              >Este campo es requerido para continuar</mat-error
+            >
+          </mat-form-field>
+          <div class="flex-sb-m w-full p-t-3 p-b-24">
+            <div class="contact100-form-checkbox"></div>
+            <div class="contact100-form-link">
+              <a [routerLink]="'/registro'" class="txt2"> Regístrate aquí! </a>
+            </div>
+          </div>
+          <div class="container-login100-form-btn">
+            <button
+              (click)="ingresarEmail(em, ps)"
+              class="login100-form-btn"
+              style="font-weight: bold"
+            >
+              Iniciar sesión
+            </button>
+          </div>
+          <hr style="width: 100%; margin-top: 20px" />
+          <div class="container-login100-form-btn m-t-17">
+            <button
+              class="login100-form-btn"
+              (click)="ingresar()"
+              style="font-weight: bold"
+            >
+              <i class="fa fa-google">oogle</i>
+            </button>
+          </div>
+        </ng-template>
       </form>
     </div>
-
-
-      
-
-
   </div>
 </div>
-
-<!-- <div id="dropDownSelect1"></div> -->

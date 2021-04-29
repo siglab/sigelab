@@ -1,15 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-
-
-@import "~ngx-toastr/toastr.css";
 .puntero {
-cursor: pointer;
-
+  cursor: pointer;
 }
 .mat-row:hover {
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
 }
 
 /* switch css */
@@ -20,8 +14,9 @@ cursor: pointer;
   height: 34px;
 }
 
-
-.switch input {display:none;}
+.switch input {
+  display: none;
+}
 
 .slider {
   position: absolute;
@@ -31,8 +26,8 @@ cursor: pointer;
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -43,8 +38,8 @@ cursor: pointer;
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -70,29 +65,30 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-
-.customWidthClass{
+.customWidthClass {
   flex: 0 0 50px;
 }
 /* calendario */
-.cal{
+.cal {
   /* 		float: right; */
-          margin: 0 auto;
-          width: 800px;
-          background-color: #FFFFFF;
-          border-radius: 6px;
-          box-shadow: 0 2px 2px 2px #C3C3C3;
-          font-size: 14px;
-	       font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-      }
+  margin: 0 auto;
+  width: 800px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 2px 2px 2px #c3c3c3;
+  font-size: 14px;
+  font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+}
 
+.no-data {
+  text-align: center;
+  color: #7d7d7da8;
+}
 
-      .no-data {
-        text-align: center;
-        color: #7d7d7da8;
-      }
+.mat-checkbox-layout {
+  white-space: normal !important;
+}
 
-
-      .mat-checkbox-layout {
-        white-space: normal !important;
-      }
+.content-wrapper {
+  min-height: 93vh !important;
+}

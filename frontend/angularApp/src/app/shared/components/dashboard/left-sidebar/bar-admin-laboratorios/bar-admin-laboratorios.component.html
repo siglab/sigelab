@@ -1,6 +1,6 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
-<ul class="sidebar-menu" data-widget="tree" style="width: 100%;">
-  <li class="treeview" style="cursor:pointer;" routerLinkActive="active">
+<ul class="sidebar-menu" data-widget="tree" style="width: 100%">
+  <li class="treeview" style="cursor: pointer" routerLinkActive="active">
     <a>
       <i class="fa fa-briefcase"></i>
       <span>Administrar Laboratorios</span>
@@ -9,7 +9,11 @@
       </span>
     </a>
     <ul class="treeview-menu">
-      <li *ngFor="let item of this.laboratorios2" class="treeview" routerLinkActive="active">
+      <li
+        *ngFor="let item of this.laboratorios2"
+        class="treeview"
+        routerLinkActive="active"
+      >
         <a>
           <i class="fa fa-link"></i>
           <span
@@ -21,7 +25,11 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="treeview" (click)="enviaritemLab(item)" routerLinkActive="active">
+          <li
+            class="treeview"
+            (click)="enviaritemLab(item)"
+            routerLinkActive="active"
+          >
             <a [routerLink]="['adminlaboratorios']">
               <i class="fa fa-circle-o"></i>Panel principal de resumen
             </a>
@@ -68,11 +76,12 @@
             routerLinkActive="active"
             class="treeview"
           > -->
-          <li
+          <!-- <li
             *ngIf="item.labo.facilActivity.extension"
             routerLinkActive="active"
             class="treeview"
-          >
+          > -->
+          <li routerLinkActive="active" class="treeview">
             <a>
               <i class="fa fa-link"></i> Servicios de laboratorio
               <span class="pull-right-container">
@@ -88,7 +97,8 @@
               </li>
               <li routerLinkActive="active" (click)="enviaritemSolServ(item)">
                 <a [routerLink]="['adminserviciosolicitud']">
-                  <i class="fa fa-circle-o"></i> Solicitudes de servicios recibidas</a
+                  <i class="fa fa-circle-o"></i> Solicitudes de servicios
+                  recibidas</a
                 >
               </li>
             </ul>

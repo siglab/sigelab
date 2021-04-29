@@ -1,13 +1,18 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
-<ul class="sidebar-menu" data-widget="tree" data-animation-speed="500" style="width: 100%;">
+<ul
+  class="sidebar-menu"
+  data-widget="tree"
+  data-animation-speed="500"
+  style="width: 100%"
+>
   <li class="pointer" routerLinkActive="active">
-    <a href="#" [routerLink]="['busquedalaboratorio']" (click)="false;">
+    <a href="#" [routerLink]="['busquedalaboratorio']" (click)="(false)">
       <i class="fa fa-info-circle"></i>
       <span>Información de laboratorios</span>
     </a>
   </li>
   <li class="pointer" routerLinkActive="active">
-    <a href="#" [routerLink]="['busquedaservicio']" (click)="false;">
+    <a href="#" [routerLink]="['busquedaservicio']" (click)="(false)">
       <i class="fa fa-laptop"></i>
       <span>Información de servicios</span>
     </a>
@@ -19,8 +24,12 @@
     </a>
   </li> -->
   <!-- <app-bar-admin-solicitudes *ngIf="hasMainModule || hasLevel2Module"></app-bar-admin-solicitudes> -->
-  <li class="pointer" routerLinkActive="active" *ngIf="hasMainModule || hasLevel2Module">
-    <a href="#" [routerLink]="['adminsolicitudes']" (click)="false;">
+  <li
+    class="pointer"
+    routerLinkActive="active"
+    *ngIf="hasMainModule || hasLevel2Module"
+  >
+    <a href="#" [routerLink]="['adminsolicitudes']" (click)="(false)">
       <i class="fa fa-audio-description"></i>
       <span>Mis solicitudes de servicio</span>
     </a>

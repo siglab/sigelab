@@ -1,9 +1,7 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1>
-      Laboratorios de la Universidad del Valle
-    </h1>
+    <h1>Laboratorios de la Universidad del Valle</h1>
   </section>
   <!-- Main content -->
   <section class="content">
@@ -22,11 +20,20 @@
                 <div class="example-container mat-elevation-z8">
                   <div class="example-header">
                     <mat-form-field>
-                      <input style="outline: none;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Busca por nombre de laboratorio, escuela, línea de investigación o nombre del director"
+                      <input
+                        style="outline: none"
+                        matInput
+                        (keyup)="applyFilter($event.target.value)"
+                        placeholder="Busca por nombre de laboratorio, escuela, línea de investigación o nombre del director"
                       />
                     </mat-form-field>
                   </div>
-                  <mat-table #tableLabs #sort="matSort" [dataSource]="dataSource" matSort>
+                  <mat-table
+                    #tableLabs
+                    #sort="matSort"
+                    [dataSource]="dataSource"
+                    matSort
+                  >
                     <!-- Position Column -->
                     <ng-container matColumnDef="nombre">
                       <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -63,10 +70,21 @@
                         {{ element.director }}
                       </mat-cell>
                     </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)" style="cursor: pointer   "></mat-row>
+                    <mat-header-row
+                      *matHeaderRowDef="displayedColumns"
+                    ></mat-header-row>
+                    <mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                      (click)="selectRow(row)"
+                      style="cursor: pointer"
+                    ></mat-row>
                   </mat-table>
-                  <mat-paginator #paginator="matPaginator" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                  <mat-paginator
+                    #paginator="matPaginator"
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 20]"
+                    [showFirstLastButtons]="true"
+                  >
                   </mat-paginator>
                 </div>
               </div>
@@ -93,7 +111,7 @@
               <h3 class="box-title">Detalles del laboratorio seleccionado</h3>
             </div>
             <div class="col-md-12">
-              <div class="row" style="margin-top:20px;">
+              <div class="row" style="margin-top: 20px">
                 <!-- INFORMACION LABORATORIO -->
                 <div class="col-md-7 col-sm-12">
                   <div class="box box-danger internal-shadow">
@@ -107,36 +125,59 @@
                           <div class="form-group">
                             <div class="col-md-12">
                               <label><strong>Descripción:</strong></label>
-                              <label class="control-label" for="desc" class="description">
-                                {{ itemsel.desc ? itemsel.desc : 'Información no disponible' }}
-                              </label>
+                              <div
+                                class="control-label"
+                                for="desc"
+                                class="description"
+                                [innerHTML]="
+                                  itemsel.desc
+                                    ? itemsel.desc
+                                    : 'Información no disponible'
+                                "
+                              >
+                                <!-- {{ itemsel.desc ? itemsel.desc : 'Información no disponible' }} -->
+                              </div>
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="dir">
-                                <strong>Dirección: </strong>{{ itemsel.direspacio.dir ? itemsel.direspacio.dir : 'Información no disponible'}}</label>
+                                <strong>Dirección: </strong
+                                >{{
+                                  itemsel.direspacio.dir
+                                    ? itemsel.direspacio.dir
+                                    : "Información no disponible"
+                                }}</label
+                              >
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="esp">
-                                <strong>Espacio: </strong>{{ itemsel.direspacio.espa ? itemsel.direspacio.espa : 'Información no disponible' }}</label>
+                                <strong>Espacio: </strong
+                                >{{
+                                  itemsel.direspacio.espa
+                                    ? itemsel.direspacio.espa
+                                    : "Información no disponible"
+                                }}</label
+                              >
                             </div>
                           </div>
-                          <div class="form-group" style="margin-top: 20px;">
+                          <div class="form-group" style="margin-top: 20px">
                             <div class="col-md-12">
                               <label class="control-label" for="dispo">
                                 <strong>Disponibilidad:</strong>
                               </label>
                               <ul>
-                                <li *ngFor="let dispo of itemsel.disponibilidad">
+                                <li
+                                  *ngFor="let dispo of itemsel.disponibilidad"
+                                >
                                   {{ dispo.nombre }}
                                 </li>
                               </ul>
                             </div>
                           </div>
-                          <div class="form-group" style="margin-top: 20px;">
+                          <div class="form-group" style="margin-top: 20px">
                             <div class="col-md-12">
                               <label class="control-label" for="dispo">
                                 <strong>Teléfonos:</strong>
@@ -151,15 +192,31 @@
                           <div class="form-group">
                             <div class="col-md-12">
                               <label class="control-label" for="email">
-                                <strong>Email: </strong>{{ itemsel.info.email ? itemsel.info.email : 'Información no disponible' }}</label>
+                                <strong>Email: </strong
+                                >{{
+                                  itemsel.info.email
+                                    ? itemsel.info.email
+                                    : "Información no disponible"
+                                }}</label
+                              >
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="col-md-12">
-                              <label><strong>Términos, condiciones y/o recomendaciones:</strong></label>
-                              <label class="control-label" for="subsede" class="lab-terms">
-                                {{ itemsel.condiciones }}
-                              </label>
+                              <label
+                                ><strong
+                                  >Términos, condiciones y/o
+                                  recomendaciones:</strong
+                                ></label
+                              >
+                              <div
+                                class="control-label"
+                                for="subsede"
+                                class="lab-terms"
+                                [innerHTML]="itemsel.condiciones"
+                              >
+                                <!-- {{ itemsel.condiciones }} -->
+                              </div>
                             </div>
                           </div>
                         </fieldset>
@@ -173,8 +230,11 @@
                       <i class="fa fa-map"></i>
                       <h3 class="box-title">Detalles de ubicación</h3>
                     </div>
-                    <div class="box-body">
+                    <!-- <div class="box-body">
                       <div id="mapa" style="height:250px"></div>
+                    </div> -->
+                    <div class="no-data" style="height: 250px; display: flex">
+                      <h4 style="margin: auto">Información no disponible</h4>
                     </div>
                   </div>
                 </div>
@@ -190,7 +250,8 @@
                 <div class="box-body">
                   <div *ngIf="dataSource2.data.length == 0" class="no-data">
                     <h4>
-                      EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS ACTIVOS
+                      EL LABORATORIO SELECCIONADO NO CUENTA CON SERVICIOS
+                      ACTIVOS
                     </h4>
                   </div>
                   <div class="box-body" *ngIf="dataSource2.data.length != 0">
@@ -198,11 +259,20 @@
                       <div class="example-container mat-elevation-z8">
                         <div class="example-header">
                           <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter2($event.target.value)" placeholder="Buscar por nombre de servicio"
+                            <input
+                              style="outline: none"
+                              matInput
+                              (keyup)="applyFilter2($event.target.value)"
+                              placeholder="Buscar por nombre de servicio"
                             />
                           </mat-form-field>
                         </div>
-                        <mat-table #table2 #sort2="matSort" [dataSource]="dataSource2" matSort>
+                        <mat-table
+                          #table2
+                          #sort2="matSort"
+                          [dataSource]="dataSource2"
+                          matSort
+                        >
                           <!-- Position Column -->
                           <ng-container matColumnDef="nombre">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -212,11 +282,23 @@
                               {{ element.nombre }}
                             </mat-cell>
                           </ng-container>
-                          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumns2" style="cursor: pointer;" (click)="cambiarDataServicio(row)" data-toggle="modal"
-                            data-target="#myModalLabs"></mat-row>
+                          <mat-header-row
+                            *matHeaderRowDef="displayedColumns2"
+                          ></mat-header-row>
+                          <mat-row
+                            *matRowDef="let row; columns: displayedColumns2"
+                            style="cursor: pointer"
+                            (click)="cambiarDataServicio(row)"
+                            data-toggle="modal"
+                            data-target="#myModalLabs"
+                          ></mat-row>
                         </mat-table>
-                        <mat-paginator #paginator2="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        <mat-paginator
+                          #paginator2="matPaginator"
+                          [pageSize]="5"
+                          [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true"
+                        >
                         </mat-paginator>
                       </div>
                     </div>
@@ -235,7 +317,8 @@
                 <div class="box-body">
                   <div *ngIf="dataSource3.data.length == 0" class="no-data">
                     <h4>
-                      EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS PROGRAMADAS PARA EL SEMESTRE ACTUAL
+                      EL LABORATORIO SELECCIONADO NO CUENTA CON PRÁCTICAS
+                      PROGRAMADAS PARA EL SEMESTRE ACTUAL
                     </h4>
                   </div>
                   <div class="box-body" *ngIf="dataSource3.data.length != 0">
@@ -243,11 +326,20 @@
                       <div class="example-container mat-elevation-z8">
                         <div class="example-header">
                           <mat-form-field>
-                            <input style="outline: none;" matInput (keyup)="applyFilter3($event.target.value)" placeholder="Buscar por nomobre de prácticas de docencia"
+                            <input
+                              style="outline: none"
+                              matInput
+                              (keyup)="applyFilter3($event.target.value)"
+                              placeholder="Buscar por nomobre de prácticas de docencia"
                             />
                           </mat-form-field>
                         </div>
-                        <mat-table #tablepract #sort3="matSort" [dataSource]="dataSource3" matSort>
+                        <mat-table
+                          #tablepract
+                          #sort3="matSort"
+                          [dataSource]="dataSource3"
+                          matSort
+                        >
                           <ng-container matColumnDef="nombre">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>
                               Nombre
@@ -256,11 +348,23 @@
                               {{ element.nombre }}
                             </mat-cell>
                           </ng-container>
-                          <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumns3" style="cursor: pointer;" (click)="cambiarDataPrueba(row)" data-toggle="modal"
-                            data-target="#myModalLabs2"></mat-row>
+                          <mat-header-row
+                            *matHeaderRowDef="displayedColumns3"
+                          ></mat-header-row>
+                          <mat-row
+                            *matRowDef="let row; columns: displayedColumns3"
+                            style="cursor: pointer"
+                            (click)="cambiarDataPrueba(row)"
+                            data-toggle="modal"
+                            data-target="#myModalLabs2"
+                          ></mat-row>
                         </mat-table>
-                        <mat-paginator #paginator3="matPaginator" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                        <mat-paginator
+                          #paginator3="matPaginator"
+                          [pageSize]="5"
+                          [pageSizeOptions]="[5, 10, 20]"
+                          [showFirstLastButtons]="true"
+                        >
                         </mat-paginator>
                       </div>
                     </div>
@@ -276,7 +380,12 @@
   </section>
 </div>
 <!-- MODAL PARA VER INFORMACION DE SERVICIOS -->
-<div class="modal fade divScroll" id="myModalLabs" role="dialog" *ngIf="servsel">
+<div
+  class="modal fade divScroll"
+  id="myModalLabs"
+  role="dialog"
+  *ngIf="servsel"
+>
   <!-- SERVICIOS CON VARIACIONES -->
   <div *ngIf="servsel.variaciones.length != 0" class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -284,7 +393,11 @@
         <div class="box-header text-center">
           <i class="fa fa-laptop"></i>
           <h3 class="box-title">Información de servicio seleccionado</h3>
-          <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModalLabs')"></span>
+          <span
+            style="color: #dd4b39; float: right; cursor: pointer"
+            class="glyphicon glyphicon-remove"
+            (click)="cerrarModal('myModalLabs')"
+          ></span>
         </div>
         <div class="box-body">
           <div class="row">
@@ -298,13 +411,19 @@
                   </h3>
                 </div>
                 <div class="box-body">
-                  <form id="form-workserv" class="" name="form-workserv" action="#">
+                  <form
+                    id="form-workserv"
+                    class=""
+                    name="form-workserv"
+                    action="#"
+                  >
                     <fieldset>
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="nombreserv">
                             <strong>Nombre :</strong>
-                            {{ servsel.nombre }}</label>
+                            {{ servsel.nombre }}</label
+                          >
                         </div>
                       </div>
                       <div class="form-group">
@@ -312,24 +431,38 @@
                           <label class="control-label" for="descripserv">
                             <strong>Descripción:</strong>
                           </label>
-                          <label class="description">
-                            {{ servsel.descripcion }}
-                          </label>
+                          <div
+                            class="description"
+                            [innerHTML]="servsel.descripcion"
+                          >
+                            <!-- {{ servsel.descripcion }} -->
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
-                        <div *ngIf="servsel.condiciones.length != 0" class="col-md-12">
+                        <div
+                          *ngIf="servsel.condiciones.length != 0"
+                          class="col-md-12"
+                        >
                           <label class="control-label" for="precioserv">
-                            <strong>Términos y condiciones del servicio:</strong>
+                            <strong
+                              >Términos y condiciones del servicio:</strong
+                            >
                           </label>
                           <div class="tCContainer">
-                            <div class="form-group" *ngFor="
-                              let item of servsel.condiciones;
-                              let i = index
-                            ">
-                              <mat-checkbox name="{{ 'checkboxServ' + i }}" [(ngModel)]="
+                            <div
+                              class="form-group"
+                              *ngFor="
+                                let item of servsel.condiciones;
+                                let i = index
+                              "
+                            >
+                              <mat-checkbox
+                                name="{{ 'checkboxServ' + i }}"
+                                [(ngModel)]="
                                   condicionesobjetoServ['checkboxServ' + i]
-                                ">
+                                "
+                              >
                                 <p>{{ item }}</p>
                               </mat-checkbox>
                             </div>
@@ -340,33 +473,59 @@
                         <div class="col-md-12">
                           <label class="control-label" for="descripserv">
                             <strong>Descuento de usuario institucional:</strong>
-                            {{ servsel.descuento }} %</label>
+                            {{ servsel.descuento }} %</label
+                          >
                           <p class="modal-p">
-                            * Debido a que usted es un usuario institucional de la Universidad del Valle, tiene derecho a un descuento sobre el costo
-                            del servicio.
+                            * Debido a que usted es un usuario institucional de
+                            la Universidad del Valle, tiene derecho a un
+                            descuento sobre el costo del servicio.
                           </p>
                         </div>
                       </div>
                       <div class="form-group">
-                        <div *ngIf="servsel.parametros.length != 0" class="col-md-12">
+                        <div
+                          *ngIf="servsel.parametros.length != 0"
+                          class="col-md-12"
+                        >
                           <label class="control-label" for="precioserv">
-                            <strong>Parámetros de servicio: (Opcional)</strong>
+                            <strong>Parámetros de servicio:</strong>
                           </label>
-                          <div class="form-group" *ngFor="
+                          <div
+                            class="form-group"
+                            *ngFor="
                               let item of servsel.parametros;
                               let i = index
-                            ">
+                            "
+                          >
                             <div class="col-md-6">
-                              <label class="control-label" for="parserv">{{ item }}
-                                <input class="form-control" name="{{ 'inputServ' + i }}" [(ngModel)]="parametrosServ['inputServ' + i]" type="text" />
+                              <label class="control-label" for="parserv"
+                                >{{ item }}
+                                <input
+                                  class="form-control"
+                                  name="{{ 'inputServ' + i }}"
+                                  [(ngModel)]="parametrosServ['inputServ' + i]"
+                                  type="text"
+                                />
                               </label>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="servsel.equipos.length != 0" class="form-group">
-                        <div class="col-md-12 text-center" style="min-height: 25px">
-                          <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
+                      <div
+                        *ngIf="servsel.equipos.length != 0"
+                        class="form-group"
+                      >
+                        <div
+                          class="col-md-12 text-center"
+                          style="min-height: 25px"
+                        >
+                          <button
+                            class="btn btn-sm modal-button"
+                            style="float: right"
+                            type="button"
+                            data-toggle="modal"
+                            data-target="#modalEquips"
+                          >
                             Ver equipos asociados
                           </button>
                         </div>
@@ -386,7 +545,12 @@
                   </h3>
                 </div>
                 <div class="box-body">
-                  <form id="form-workserv2" class="" name="form-workserv2" action="#">
+                  <form
+                    id="form-workserv2"
+                    class=""
+                    name="form-workserv2"
+                    action="#"
+                  >
                     <fieldset>
                       <div class="form-group">
                         <div class="col-md-12">
@@ -398,10 +562,20 @@
                             <option *ngFor="let item of servsel.variaciones" value="{{ item.id }}">{{ item.data.cfName }}</option>
                           </select> -->
                           <mat-form-field>
-                            <mat-label>Variaciones de servicio disponibles:</mat-label>
-                            <mat-select name="variatio" id="variato" [(ngModel)]="variacionSel">
-                              <mat-option *ngFor="let item of servsel.variaciones" [value]="item.id" (click)="cambiarVariacion(item.id)">
-                                {{item.data.cfName}}
+                            <mat-label
+                              >Variaciones de servicio disponibles:</mat-label
+                            >
+                            <mat-select
+                              name="variatio"
+                              id="variato"
+                              [(ngModel)]="variacionSel"
+                            >
+                              <mat-option
+                                *ngFor="let item of servsel.variaciones"
+                                [value]="item.id"
+                                (click)="cambiarVariacion(item.id)"
+                              >
+                                {{ item.data.cfName }}
                               </mat-option>
                             </mat-select>
                           </mat-form-field>
@@ -413,7 +587,8 @@
                         <div class="col-md-12">
                           <label class="control-label" for="nombreserv">
                             <strong>Nombre :</strong>
-                            {{ variation.data.cfName }}</label>
+                            {{ variation.data.cfName }}</label
+                          >
                         </div>
                       </div>
                       <div class="form-group">
@@ -421,33 +596,51 @@
                           <label class="control-label" for="descripserv">
                             <strong>Descripción:</strong>
                           </label>
-                          <label class="description">
+                          <div class="description">
                             {{ variation.data.cfDescription }}
-                          </label>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
-                            <strong>Precio: </strong>${{ variation.data.cfPrice ? variation.data.cfPrice : '-' }} (COP)
+                            <strong>Precio: </strong>${{
+                              variation.data.cfPrice
+                                ? variation.data.cfPrice
+                                : "-"
+                            }}
+                            (COP)
                           </label>
                           <div class="price-text">
-                            Este es un costo calculado aproximado y podría variar.
+                            Este es un costo calculado aproximado y podría
+                            variar.
                           </div>
                         </div>
                       </div>
                       <div class="form-group">
-                        <div *ngIf="variation.data.parametros != 0" class="col-md-12">
+                        <div
+                          *ngIf="variation.data.parametros != 0"
+                          class="col-md-12"
+                        >
                           <label class="control-label" for="precioserv">
                             <strong>Parámetros de variación: (Opcional)</strong>
                           </label>
-                          <div class="form-group" *ngFor="
+                          <div
+                            class="form-group"
+                            *ngFor="
                               let item of variation.data.parametros;
                               let i = index
-                            ">
+                            "
+                          >
                             <div class="col-md-6">
-                              <label class="control-label" for="parvar">{{ item }}
-                                <input class="form-control" name="{{ 'input' + i }}" [(ngModel)]="parametros['input' + i]" type="text" />
+                              <label class="control-label" for="parvar"
+                                >{{ item }}
+                                <input
+                                  class="form-control"
+                                  name="{{ 'input' + i }}"
+                                  [(ngModel)]="parametros['input' + i]"
+                                  type="text"
+                                />
                               </label>
                             </div>
                           </div>
@@ -456,14 +649,22 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
-                            <strong>Términos y condiciones de variación:</strong>
+                            <strong
+                              >Términos y condiciones de variación:</strong
+                            >
                           </label>
                           <div class="tCContainer">
-                            <div class="form-group" *ngFor="
-                              let item of variation.data.cfConditions;
-                              let i = index
-                            ">
-                              <mat-checkbox name="{{ 'checkbox' + i }}" [(ngModel)]="condicionesobjeto['checkbox' + i]">
+                            <div
+                              class="form-group"
+                              *ngFor="
+                                let item of variation.data.cfConditions;
+                                let i = index
+                              "
+                            >
+                              <mat-checkbox
+                                name="{{ 'checkbox' + i }}"
+                                [(ngModel)]="condicionesobjeto['checkbox' + i]"
+                              >
                                 <p>{{ item }}</p>
                               </mat-checkbox>
                             </div>
@@ -472,7 +673,11 @@
                       </div>
                       <div class="form-group">
                         <div class="col-md-12 text-center">
-                          <button class="btn btn-sm modal-button" type="button" (click)="agregarSolicitudServicio()">
+                          <button
+                            class="btn btn-sm modal-button"
+                            type="button"
+                            (click)="agregarSolicitudServicio()"
+                          >
                             Agregar esta variación a la solicitud
                           </button>
                         </div>
@@ -483,8 +688,14 @@
               </div>
             </div>
             <!-- DETALLES DE SOLICITUD -->
-            <div class="col-md-12 col-sm-12" *ngIf="this.listaVariaciones.length != 0">
-              <div *ngIf="this.listaVariaciones.length != 0" class="box box-danger internal-shadow">
+            <div
+              class="col-md-12 col-sm-12"
+              *ngIf="this.listaVariaciones.length != 0"
+            >
+              <div
+                *ngIf="this.listaVariaciones.length != 0"
+                class="box box-danger internal-shadow"
+              >
                 <div class="box-header text-center">
                   <i class="fa fa-briefcase"></i>
                   <h3 class="box-title">Detalles de solicitud</h3>
@@ -494,14 +705,20 @@
                     <fieldset>
                       <div style="padding-left: 15px; padding-right: 15px">
                         <label class="control-label" for="condiciones">
-                          <strong>Variaciones incluídas en esta solicitud:
+                          <strong
+                            >Variaciones incluídas en esta solicitud:
                           </strong>
                         </label>
                         <ul class="nav nav-stacked">
                           <li *ngFor="let item of this.listaVariaciones">
                             <a>
                               {{ item.data.data.cfName }}
-                              <span style="cursor: pointer;" (click)="quitarVariacion(item.data.id)" class="pull-right badge bg-red">-</span>
+                              <span
+                                style="cursor: pointer"
+                                (click)="quitarVariacion(item.data.id)"
+                                class="pull-right badge bg-red"
+                                >-</span
+                              >
                             </a>
                           </li>
                         </ul>
@@ -513,7 +730,8 @@
                             {{ this.preciototal }} (COP)
                           </label>
                           <div class="price-text">
-                            Este es un costo calculado aproximado y podría variar.
+                            Este es un costo calculado aproximado y podría
+                            variar.
                           </div>
                         </div>
                       </div>
@@ -528,36 +746,64 @@
                       <div *ngIf="usuariounivalle" class="form-group">
                         <div class="col-md-12">
                           <label class="control-label" for="precioserv">
-                            <strong>Precio total con descuento incluído:
+                            <strong
+                              >Precio total con descuento incluído:
                             </strong>
                             ${{ this.preciocondescuento }} (COP)
                           </label>
                         </div>
                       </div>
                       <div *ngIf="usuariounivalle">
-                        <div class="form-group" style="margin-top: 20px;">
+                        <div class="form-group" style="margin-top: 20px">
                           <div class="col-md-12">
                             <label class="control-label">
-                              <strong>Financiación: </strong>
+                              <strong>Vínculo de solicitud: </strong>
                             </label>
                             <p class="modal-p">
-                              * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione una o varias de
-                              las opciones de financiación.
+                              * Debido a que usted es un usuario institucional
+                              de la Universidad del Valle, se requiere
+                              especificar a qué opción se encuentra vinculada su
+                              solicitud. Por favor seleccione una o más opciones
+                              según aplique.
                             </p>
                             <mat-form-field>
-                              <mat-select placeholder="Seleccione todas las opciones a las que aplique" [formControl]="selecunivallelab" multiple (change)="selectorunivalle()" required>
-                                <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
+                              <mat-select
+                                placeholder="Seleccione todas las opciones a las que aplique"
+                                [formControl]="selecunivallelab"
+                                multiple
+                                (change)="selectorunivalle()"
+                                required
+                              >
+                                <mat-option
+                                  *ngFor="
+                                    let opciones of univalle;
+                                    let i = index
+                                  "
+                                  [value]="i"
+                                  >{{ opciones }}</mat-option
+                                >
                               </mat-select>
                             </mat-form-field>
-
                           </div>
                         </div>
-                        <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
+                        <div
+                          *ngIf="habilitarci"
+                          class="form-group"
+                          style="margin-top: 20px"
+                        >
                           <div class="col-md-12">
                             <p>
-                              Como selecciono proyecto de investigación, por favor diligencie el respectivo CI
+                              Como selecciono proyecto de investigación, por
+                              favor diligencie el respectivo CI
                             </p>
-                            <input id="univ" (focusout)="ciCheck($event)" [(ngModel)]="this.valorci" name="univ" class="form-control" type="text" />
+                            <input
+                              id="univ"
+                              (focusout)="ciCheck($event)"
+                              [(ngModel)]="this.valorci"
+                              name="univ"
+                              class="form-control"
+                              type="text"
+                            />
                             <p>{{ status }}</p>
                           </div>
                         </div>
@@ -565,22 +811,42 @@
                       <div class="form-group">
                         <div class="col-md-12">
                           <p class="notice">
-                            Este servicio o prueba no cuenta con acreditación de alta calidad.
+                            Este servicio o prueba no cuenta con acreditación de
+                            alta calidad.
                           </p>
                         </div>
                       </div>
                       <div class="form-group">
-                        <div class="col-md-12" style="margin-top:10px">
+                        <div class="col-md-12" style="margin-top: 10px">
                           <label class="control-label" for="condiciones">
                             <strong>Comentarios adicionales:</strong>
                           </label>
-                          <textarea name="condiciones" rows="5" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;">
+                          <p
+                            class="modal-p"
+                            style="color: #000000b5; text-align: justify"
+                          >
+                            Ingrese a continuación toda la información que
+                            considere pertinente aclarar asociada a los recursos
+                            necesarios para llevar a cabo la actividad a
+                            realizar o la solicitud del servicio.
+                          </p>
+                          <textarea
+                            name="condiciones"
+                            rows="5"
+                            [(ngModel)]="campoCondicion"
+                            id="condiciones"
+                            style="width: 100%"
+                          >
                           </textarea>
                         </div>
                       </div>
                       <div class="form-group">
                         <div class="col-md-12 text-center">
-                          <button class="btn btn-sm modal-button" type="button" (click)="enviarSolicitudServicio('convariaciones')">
+                          <button
+                            class="btn btn-sm modal-button"
+                            type="button"
+                            (click)="enviarSolicitudServicio('convariaciones')"
+                          >
                             Enviar solicitud
                           </button>
                         </div>
@@ -603,7 +869,11 @@
           <div class="box-header text-center">
             <i class="fa fa-laptop"></i>
             <h3 class="box-title">Información de servicio seleccionado</h3>
-            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModalLabs')"></span>
+            <span
+              style="color: #dd4b39; float: right; cursor: pointer"
+              class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('myModalLabs')"
+            ></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -612,7 +882,8 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="nombreserv">
-                      <strong>Nombre :</strong> {{ servsel.nombre }}</label>
+                      <strong>Nombre :</strong> {{ servsel.nombre }}</label
+                    >
                   </div>
                 </div>
                 <div class="form-group">
@@ -620,17 +891,23 @@
                     <label class="control-label" for="descripserv">
                       <strong>Descripción:</strong>
                     </label>
-                    <label class="description">
-                      {{ servsel.descripcion }}
-                    </label>
+                    <div class="description" [innerHTML]="servsel.descripcion">
+                      <!-- {{ servsel.descripcion }} -->
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <div *ngIf="servsel.condiciones.length != 0" class="col-md-12">
+                  <div
+                    *ngIf="servsel.condiciones.length != 0"
+                    class="col-md-12"
+                  >
                     <label class="control-label" for="precioserv">
                       <strong>Términos y condiciones:</strong>
                     </label>
-                    <div class="form-group" *ngFor="let item of servsel.condiciones; let i = index">
+                    <div
+                      class="form-group"
+                      *ngFor="let item of servsel.condiciones; let i = index"
+                    >
                       <!-- <label class="control-label" for="precioserv">
                         <input
                           name="{{ 'checkboxServ' + i }}"
@@ -641,7 +918,10 @@
                         />
                         {{ item }}</label
                       > -->
-                      <mat-checkbox name="{{ 'checkboxServ' + i }}" [(ngModel)]="condicionesobjetoServ['checkboxServ' + i]">
+                      <mat-checkbox
+                        name="{{ 'checkboxServ' + i }}"
+                        [(ngModel)]="condicionesobjetoServ['checkboxServ' + i]"
+                      >
                         <p>{{ item }}</p>
                       </mat-checkbox>
                     </div>
@@ -650,10 +930,12 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Precio: </strong>$ {{ servsel.precio }} (COP)</label>
-                      <div class="price-text">
-                        Este es un costo calculado aproximado y podría variar.
-                      </div>
+                      <strong>Precio: </strong>$
+                      {{ servsel.precio ? servsel.precio : "-" }} (COP)</label
+                    >
+                    <div class="price-text">
+                      Este es un costo calculado aproximado y podría variar.
+                    </div>
                   </div>
                 </div>
                 <div *ngIf="usuariounivalle" class="form-group">
@@ -663,70 +945,127 @@
                       {{ servsel.descuento }}%
                     </label>
                     <p class="modal-p">
-                      * Debido a que usted es un usuario institucional de la Universidad del Valle, tiene derecho a un descuento sobre el costo
-                      del servicio.
+                      * Debido a que usted es un usuario institucional de la
+                      Universidad del Valle, tiene derecho a un descuento sobre
+                      el costo del servicio.
                     </p>
                   </div>
                 </div>
                 <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Total descuento: </strong>$ {{ this.descuento }} (COP)</label>
+                      <strong>Total descuento: </strong>$
+                      {{ this.descuento }} (COP)</label
+                    >
                   </div>
                 </div>
                 <div *ngIf="usuariounivalle" class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Precio total con descuento incluído: </strong>$ {{ this.preciocondescuento }} (COP)</label>
+                      <strong>Precio total con descuento incluído: </strong>$
+                      {{ this.preciocondescuento }} (COP)</label
+                    >
                   </div>
                 </div>
                 <div class="form-group">
                   <div *ngIf="servsel.parametros.length != 0" class="col-md-12">
                     <label class="control-label" for="precioserv">
-                      <strong>Parámetros de servicio: (Opcional)</strong>
+                      <strong>Parámetros de servicio:</strong>
                     </label>
-                    <div class="form-group" *ngFor="let item of servsel.parametros; let i = index">
-                      <div class="col-md-6">
-                        <label class="control-label" for="parserv">{{ item }}
+                    <div
+                      class="form-group"
+                      *ngFor="let item of servsel.parametros; let i = index"
+                    >
+                      <div class="col-md-12">
+                        <mat-form-field>
+                          <mat-label>{{ item }}</mat-label>
+                          <input
+                            matInput
+                            name="{{ 'inputServ' + i }}"
+                            [(ngModel)]="parametrosServ['inputServ' + i]"
+                            type="text"
+                          />
+                        </mat-form-field>
+                        <!-- <label class="control-label" for="parserv">{{ item }}
                           <input class="form-control" name="{{ 'inputServ' + i }}" [(ngModel)]="parametrosServ['inputServ' + i]" type="text" />
-                        </label>
+                        </label> -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div *ngIf="usuariounivalle">
-                  <div class="form-group" style="margin-top: 20px;">
+                  <div class="form-group" style="margin-top: 20px">
                     <div class="col-md-12">
                       <label class="control-label">
-                        <strong>Financiación: </strong>
+                        <strong>Vínculo de solicitud: </strong>
                       </label>
                       <p class="modal-p">
-                        * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione una de las opciones
-                        de financiación.
+                        * Debido a que usted es un usuario institucional de la
+                        Universidad del Valle, se requiere especificar a qué
+                        opción se encuentra vinculada su solicitud. Por favor
+                        seleccione una o más opciones según aplique.
                       </p>
                       <mat-form-field>
-                        <mat-select placeholder="Seleccione una o varias opciones" [formControl]="selecunivallelab" multiple (change)="selectorunivalle()">
-                          <mat-option *ngFor="let opciones of univalle; let i= index;" [value]="i">{{opciones}}</mat-option>
+                        <mat-select
+                          placeholder="Seleccione una o varias opciones"
+                          [formControl]="selecunivallelab"
+                          multiple
+                          (change)="selectorunivalle()"
+                        >
+                          <mat-option
+                            *ngFor="let opciones of univalle; let i = index"
+                            [value]="i"
+                            >{{ opciones }}</mat-option
+                          >
                         </mat-select>
                       </mat-form-field>
                     </div>
                   </div>
-                  <div *ngIf="habilitarci" class="form-group" style="margin-top: 20px;">
+                  <div
+                    *ngIf="habilitarci"
+                    class="form-group"
+                    style="margin-top: 20px"
+                  >
                     <div class="col-md-12">
-                      <p>
-                        Como selecciono proyecto de investigación, por favor diligencie el respectivo CI
+                      <p class="modal-p">
+                        * Debido a que usted indicó que su solicitud se
+                        encuentra relacionada a un proyecto de investigación,
+                        ingrese el número del SICOP a continuación.
+                      </p>
+                      <mat-form-field>
+                        <mat-label
+                          >Número de SICOP asociado al proyecto:</mat-label
+                        >
+                        <input
+                          matInput
+                          id="univ"
+                          (focusout)="ciCheck($event)"
+                          [(ngModel)]="this.valorci"
+                          name="univci"
+                          type="text"
+                        />
+                      </mat-form-field>
+                      <p class="modal-p">{{ status }}</p>
+                      <!-- <p class="modal-p">
+                      * Debido a que usted es un usuario institucional de la Universidad del Valle, se requiere que seleccione al menos una de las opciones de financiación. 
                       </p>
                       <label class="control-label" for="UNIV">
                         <strong>CI:</strong>
                       </label>
                       <input id="univ" (focusout)="ciCheck($event)" [(ngModel)]="this.valorci" name="univci" class="form-control" type="text" />
-                      <p>{{ status }}</p>
+                      <p>{{ status }}</p> -->
                     </div>
                   </div>
                 </div>
                 <div *ngIf="servsel.equipos.length != 0" class="form-group">
                   <div class="col-md-12 text-center" style="min-height: 25px">
-                    <button class="btn btn-sm modal-button" style="float: right;" type="button" data-toggle="modal" data-target="#modalEquips">
+                    <button
+                      class="btn btn-sm modal-button"
+                      style="float: right"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#modalEquips"
+                    >
                       Ver equipos asociados
                     </button>
                   </div>
@@ -734,21 +1073,41 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <p class="notice">
-                      Este servicio o prueba no cuenta con acreditación de alta calidad.
+                      Este servicio o prueba no cuenta con acreditación de alta
+                      calidad.
                     </p>
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="col-md-12" style="margin-top:10px">
+                  <div class="col-md-12" style="margin-top: 10px">
                     <label class="control-label" for="condiciones">
                       <strong>Comentarios adicionales:</strong>
                     </label>
-                    <textarea name="condiciones" rows="5" [(ngModel)]="campoCondicion" id="condiciones" style="width: 100%;"></textarea>
+                    <p
+                      class="modal-p"
+                      style="color: #000000b5; text-align: justify"
+                    >
+                      Ingrese a continuación toda la información que considere
+                      pertinente aclarar asociada a los recursos necesarios para
+                      llevar a cabo la actividad a realizar o la solicitud del
+                      servicio.
+                    </p>
+                    <textarea
+                      name="condiciones"
+                      rows="5"
+                      [(ngModel)]="campoCondicion"
+                      id="condiciones"
+                      style="width: 100%"
+                    ></textarea>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-md-12 text-center">
-                    <button class="btn btn-sm modal-button" type="button" (click)="enviarSolicitudServicio('sinvariaciones')">
+                    <button
+                      class="btn btn-sm modal-button"
+                      type="button"
+                      (click)="enviarSolicitudServicio('sinvariaciones')"
+                    >
                       Solicitar este servicio
                     </button>
                   </div>
@@ -762,7 +1121,12 @@
   </div>
 </div>
 <!-- MODAL PARA VER INFORMACION DE PRACTICAS -->
-<div class="modal fade divScroll" id="myModalLabs2" role="dialog" *ngIf="prubsel">
+<div
+  class="modal fade divScroll"
+  id="myModalLabs2"
+  role="dialog"
+  *ngIf="prubsel"
+>
   <div class="modal-dialog modal-md">
     <!-- Modal content-->
     <div class="modal-content">
@@ -770,8 +1134,14 @@
         <div class="box box-danger">
           <div class="box-header text-center">
             <i class="fa fa-address-card-o"></i>
-            <h3 class="box-title">Información de practica docente seleccionada</h3>
-            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('myModalLabs2')"></span>
+            <h3 class="box-title">
+              Información de practica docente seleccionada
+            </h3>
+            <span
+              style="color: #dd4b39; float: right; cursor: pointer"
+              class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('myModalLabs2')"
+            ></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -780,12 +1150,20 @@
                 <div class="form-group">
                   <div class="col-md-12">
                     <label class="control-label" for="nombreprub">
-                      <strong>Nombre de práctica:</strong> {{ prubsel.nombre }}</label>
+                      <strong>Nombre de práctica:</strong>
+                      {{ prubsel.nombre }}</label
+                    >
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="col-md-12" style="margin-top: 20px;">
-                    <button class="btn btn-sm modal-button" style="float: right;" data-toggle="modal" data-target="#practicaprog" type="button">
+                  <div class="col-md-12" style="margin-top: 20px">
+                    <button
+                      class="btn btn-sm modal-button"
+                      style="float: right"
+                      data-toggle="modal"
+                      data-target="#practicaprog"
+                      type="button"
+                    >
                       Ver Programación
                     </button>
                   </div>
@@ -807,19 +1185,39 @@
         <div class="box box-danger">
           <div class="box-header">
             <i class="fa fa-map"></i>
-            <h3 class="box-title">Información de equipos relacionados a este servicio</h3>
-            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('modalEquips')"></span>
+            <h3 class="box-title">
+              Información de equipos relacionados a este servicio
+            </h3>
+            <span
+              style="color: #dd4b39; float: right; cursor: pointer"
+              class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('modalEquips')"
+            ></span>
           </div>
           <div class="box-body">
             <div class="panel-group" id="accordion">
-              <div *ngFor="let item of servsel.equipos; let i = index" class="panel panel-default">
+              <div
+                *ngFor="let item of servsel.equipos; let i = index"
+                class="panel panel-default"
+              >
                 <div class="panel-heading equipment-header">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseEquipos{{ i }}">{{ item.nombre }}</a>
+                    <a
+                      data-toggle="collapse"
+                      data-parent="#accordion"
+                      href="#collapseEquipos{{ i }}"
+                      >{{ item.nombre }}</a
+                    >
                   </h4>
                 </div>
-                <div id="collapseEquipos{{ i }}" class="panel-collapse collapse">
-                  <div *ngIf="item.descripcion; else noDescription;" class="panel-body">
+                <div
+                  id="collapseEquipos{{ i }}"
+                  class="panel-collapse collapse"
+                >
+                  <div
+                    *ngIf="item.descripcion; else noDescription"
+                    class="panel-body"
+                  >
                     {{ item.descripcion }}
                   </div>
                   <ng-template #noDescription>
@@ -847,7 +1245,11 @@
             <i class="fa fa-calendar"></i>
 
             <h1 class="box-title">Programación de la Práctica</h1>
-            <span style="color:#dd4b39; float:right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="cerrarModal('practicaprog')"></span>
+            <span
+              style="color: #dd4b39; float: right; cursor: pointer"
+              class="glyphicon glyphicon-remove"
+              (click)="cerrarModal('practicaprog')"
+            ></span>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -856,14 +1258,16 @@
                 <div class="col-md-12">
                   <label class="control-label" for="semestre">
                     <strong>Semestre:</strong>
-                    {{ prubsel.programacion.semestre }}</label>
+                    {{ prubsel.programacion.semestre }}</label
+                  >
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-md-12">
                   <label class="control-label" for="numero">
                     <strong>No. estudiantes:</strong>
-                    {{ prubsel.programacion.estudiantes }}</label>
+                    {{ prubsel.programacion.estudiantes }}</label
+                  >
                 </div>
               </div>
             </div>

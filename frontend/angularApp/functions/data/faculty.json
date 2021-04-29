@@ -1,0 +1,451 @@
+{
+  "faculty": {
+    "9H5PkaBVtDDFMO85iybL": {
+      "updatedAt": "",
+      "facultyName": " FACULTAD DE CIENCAS DE LA ADMINISTRACION ",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T20:17:06.633Z",
+      "subCollection": {
+        "1RXm74qhEHxohyXEGWLY": {
+          "type": "department",
+          "departmentDesc": "",
+          "departmentName": "Departamento de Ciencias Sociales",
+          "relatedFacilities": {}
+        },
+        "EK2w6RZKdZ6CkMLDG4Pz": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "type": "department",
+          "departmentName": " Departamento de Administración y Organizaciones"
+        },
+        "MZloLxMsXC1CKGAdxKNl": {
+          "relatedFacilities": {},
+          "departmentName": " Departamento de Contabilidad y Finanzas",
+          "type": "department",
+          "departmentDesc": ""
+        },
+        "mW7JerEQNNtRwv0Su0ok": {
+          "type": "department",
+          "departmentDesc": "",
+          "departmentName": "Departamento de Economía",
+          "relatedFacilities": {}
+        },
+        "t7KA97xJQupE2Yavqqfv": {
+          "type": "department",
+          "departmentName": "FACULTAD DE CIENCIAS SOCIALES Y ECONOMICA:",
+          "relatedFacilities": {},
+          "departmentDesc": ""
+        }
+      }
+    },
+    "LKvbYjE3UQwkGokr1odq": {
+      "createdAt": "2018-08-19T20:09:20.717Z",
+      "subHq": {},
+      "updatedAt": "",
+      "facultyName": "FACULTAD DE CIENCIAS NATURALES Y EXACTAS  ",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "facultyDesc": "",
+      "subCollection": {
+        "CJjkdkqoOz4HKbEwXbKt": {
+          "type": "department",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": " Departamento de Física"
+        },
+        "W64IYK9nx21zksJdP1Up": {
+          "relatedFacilities": {},
+          "departmentName": " Departamento de Química",
+          "departmentDesc": "",
+          "type": "department"
+        },
+        "lm1ZrAFl8XsvlwihvGdX": {
+          "departmentName": " Departamento de Matemáticas",
+          "type": "department",
+          "departmentDesc": "",
+          "relatedFacilities": {}
+        },
+        "mGFnEYiktHQ6sghpmUse": {
+          "departmentDesc": "",
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentName": " Departamento de Biología"
+        }
+      }
+    },
+    "MfEg0efzGgM8sG9MlHM9": {
+      "updatedAt": "",
+      "createdAt": "2018-08-19T21:06:07.724Z",
+      "subHq": {},
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "facultyDesc": "",
+      "facultyName": "FACULTAD DE SALUD",
+      "subCollection": {
+        "7dEmEDOvNdPbsfxWt27d": {
+          "departmentName": "Departamento de Medicina Física y Rehabilitación",
+          "departmentDesc": "",
+          "type": "department",
+          "relatedFacilities": {}
+        },
+        "DsGXKwYDb3ctTJtjQ7Nw": {
+          "departmentName": " Escuela de Rehabilitación Humana",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "type": "department"
+        },
+        "ESB5Dp8UOcRSH9g64O5g": {
+          "departmentName": " Escuela de Enfermería",
+          "relatedFacilities": {},
+          "departmentDesc": "",
+          "type": "department"
+        },
+        "F1Vd6J5NJjECvIc7041J": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": "Departamento de Obstetricia y Ginecología",
+          "type": "department"
+        },
+        "KAL54laAaegxgMAjFiid": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": "Departamento de Medicina Familiar",
+          "type": "department"
+        },
+        "KTeMEBOvU4iBl1U93v1w": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": "Departamento de Ciencias Fisiológicas",
+          "type": "department"
+        },
+        "UaHLKUtlcvp7VBl02Cfg": {
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentName": "Escuela de Ciencias Básicas",
+          "departmentDesc": ""
+        },
+        "Y6BcLwzOGTHS3zdZwaWX": {
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentDesc": "",
+          "departmentName": "Departamento de Cirugía"
+        },
+        "ah70LnxXfXrb5hlRtctF": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "type": "department",
+          "departmentName": "Departamento de Morfología"
+        },
+        "aok2VDUT84N4DxiUVeBY": {
+          "departmentDesc": "",
+          "type": "department",
+          "departmentName": "Departamento de Pediatría",
+          "relatedFacilities": {}
+        },
+        "bXvEz5PHR1t85cRmAEfF": {
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentName": " Departamento de Medicina Interna",
+          "departmentDesc": ""
+        },
+        "btUSf0CjWtoSMaEZ05yY": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "type": "department",
+          "departmentName": " Departamento de Psiquiatría"
+        },
+        "id2yvioq5PnDxEi04El6": {
+          "departmentDesc": "",
+          "departmentName": "Escuela de Medicina",
+          "type": "school",
+          "relatedFacilities": {}
+        },
+        "mfcaibJHhc7ZwGDe4lJD": {
+          "departmentName": "Departamento de Anestesia",
+          "departmentDesc": "",
+          "type": "department",
+          "relatedFacilities": {}
+        },
+        "o32juaJmFLxs6h46Xjx7": {
+          "departmentName": "Departamento de Medicina Física y Rehabilitación",
+          "relatedFacilities": {},
+          "type": "department",
+          "departmentDesc": ""
+        },
+        "paKe8skYEjhzXzhTq35k": {
+          "type": "school",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": " Escuela de Bacteriología y Laboratorio Clínica"
+        },
+        "r6H5Y5ts1eFg7kjm0Te3": {
+          "type": "department",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": " Escuela de Odontología"
+        },
+        "r8PBOIqbFiBiVmt0uSo3": {
+          "relatedFacilities": {},
+          "departmentDesc": "",
+          "type": "department",
+          "departmentName": "Instituto de Inmunología"
+        },
+        "reyqlFVRCyhJ7mutInIm": {
+          "departmentName": "Departamento de Patología",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "type": "department"
+        },
+        "ydGlywqFKwx3tbpQPLdK": {
+          "relatedFacilities": {},
+          "departmentDesc": "",
+          "departmentName": "Departamento de Microbiologia",
+          "type": "department"
+        },
+        "zoW6EKJ1T9opYbDT0L7G": {
+          "type": "school",
+          "relatedFacilities": {},
+          "departmentName": "Escuela de Salud Publica",
+          "departmentDesc": ""
+        }
+      }
+    },
+    "Q0Le1WD5C8975PpoZo7E": {
+      "updatedAt": "",
+      "subHq": {},
+      "facultyName": "FACULTAD DE INGENIERIA",
+      "facultyDesc": "",
+      "createdAt": "2018-08-19T20:39:56.832Z",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "subCollection": {
+        "BQrAwlZE7LizAGq6vAMb": {
+          "departmentDesc": "",
+          "departmentName": "Escuela de Ingeniería de Recursos Naturales y del Ambiente",
+          "type": "school",
+          "relatedFacilities": {}
+        },
+        "BfTc6sUt2bqmHkAa6quT": {
+          "departmentName": " Escuela de Ingeniería de Alimentos",
+          "departmentDesc": "",
+          "type": "school",
+          "relatedFacilities": {}
+        },
+        "EvpITLa6zTr0gaH7A9kf": {
+          "departmentDesc": "",
+          "departmentName": "Escuela de Ingeniería de Materiales",
+          "relatedFacilities": {},
+          "type": "school"
+        },
+        "GcYXS4rl97JPl8xUaW9U": {
+          "relatedFacilities": {},
+          "departmentDesc": "",
+          "departmentName": "Escuela de Ingeniería Civil y Geomática",
+          "type": "school"
+        },
+        "IZma0L2FKVuZlC9nJl0b": {
+          "type": "school",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": "Escuela de Ingeniería Eléctrica y Electrónica"
+        },
+        "Nw7yXtTFUdHI09azLWEq": {
+          "relatedFacilities": {},
+          "departmentName": "Escuela de Ingeniería Química",
+          "departmentDesc": "",
+          "type": "school"
+        },
+        "WxXpP7pVio1NrE2dg8YN": {
+          "departmentName": "Escuela de Ingeniería Mecánica",
+          "departmentDesc": "",
+          "type": "school",
+          "relatedFacilities": {}
+        },
+        "hLnsHUU4RCg9TZDPkkr3": {
+          "type": "school",
+          "relatedFacilities": {},
+          "departmentName": " Escuela de Ingeniería Industrial",
+          "departmentDesc": ""
+        },
+        "p8CXBxWqh9rieZyOzVMQ": {
+          "relatedFacilities": {},
+          "departmentName": " Escuela de Ingeniería Estadística",
+          "departmentDesc": "",
+          "type": "school"
+        },
+        "zFgWqq69lYKDSLQzIbrD": {
+          "type": "department",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": " Instituto CINARA"
+        },
+        "zaO0mSVKW1hq8qcXMdXx": {
+          "departmentName": " Escuela de Ingeniería de Sistemas y Computación",
+          "departmentDesc": "",
+          "type": "school",
+          "relatedFacilities": {}
+        }
+      }
+    },
+    "SYemFJ4Zw1h4uxxL1wIG": {
+      "updatedAt": "",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "createdAt": "2018-08-19T21:31:43.058Z",
+      "facultyName": " INSTITUTO DE PSICOLOGIA",
+      "facultyDesc": "",
+      "subCollection": {
+        "9Jg74l1ZQxN29z9JYdqi": {
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentName": "Psicología Social",
+          "departmentDesc": ""
+        },
+        "pDnRmbmHKCtVAfmklYZH": {
+          "departmentName": "Psicología Clínica",
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentDesc": ""
+        },
+        "qBgsVJW91YzNRSApVW4D": {
+          "type": "department",
+          "departmentDesc": "",
+          "departmentName": " Psicología Cognitiva y Psicoanálisis",
+          "relatedFacilities": {}
+        },
+        "s8ElNsChcrq5YV3RpQNz": {
+          "departmentDesc": "",
+          "type": "department",
+          "departmentName": "Psicología Organizacional y del Trabajo",
+          "relatedFacilities": {}
+        }
+      }
+    },
+    "XhrbcomnkWezarvDxUzx": {
+      "updatedAt": "",
+      "facultyDesc": "",
+      "createdAt": "2018-04-19T21:27:00.964Z",
+      "facultyName": "INSTITUTO DE EDUACION Y PEDAGOGIA",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "subCollection": {
+        "1Hqo9U9MAhgC9NiHywiq": {
+          "relatedFacilities": {},
+          "departmentName": "Educación en Ciencia y Tecnología",
+          "departmentDesc": "",
+          "type": "department"
+        },
+        "4F0VfL3YNrjJdmym37W4": {
+          "departmentDesc": "",
+          "type": "department",
+          "departmentName": "Educación Matemática",
+          "relatedFacilities": {}
+        },
+        "oIaoGEu9wCgsn7KYAkX6": {
+          "type": "department",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": "Educación en Ciencias Sociales y Humanas"
+        },
+        "qNtDkIYnxkrs91ahtB8d": {
+          "relatedFacilities": {},
+          "departmentName": "Educación en Desarrollo y Comunidad",
+          "departmentDesc": "",
+          "type": "department"
+        },
+        "wWhtG4y9gxScdYJa6i0f": {
+          "type": "department",
+          "departmentName": "Educación Física y Deportes",
+          "departmentDesc": "",
+          "relatedFacilities": {}
+        }
+      }
+    },
+    "aEDYGROpm2SsLHCRkPgg": {
+      "updatedAt": "",
+      "createdAt": "2018-08-19T19:49:56.793Z",
+      "facultyDesc": "",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "facultyName": "FACULTAD DE ARTES INTEGRADAS  ",
+      "subCollection": {
+        "2fXmqb7NO9sISg7lV3AC": {
+          "departmentDesc": "",
+          "type": "department",
+          "relatedFacilities": {},
+          "departmentName": " Departamento de Artes Visuales y Estética"
+        },
+        "Qg351d28tm0sjYK1K1a4": {
+          "cfOrgUnit": "UK6cYXc1iYXCdSU30xmr",
+          "departmentDesc": "",
+          "departmentName": " Escuela de Arquitectura ",
+          "type": "school"
+        },
+        "d2zZdH1qcI8LZc3pokWi": {
+          "departmentName": " Departamento de Diseño",
+          "departmentDesc": "",
+          "type": "department",
+          "relatedFacilities": {}
+        },
+        "jtJdPPpWCmCtzEcrBIJf": {
+          "type": "department",
+          "departmentName": " Departamento de Artes Escénicas",
+          "relatedFacilities": {},
+          "departmentDesc": ""
+        },
+        "kS4c4eWu1Hsaovx4MtXD": {
+          "type": "school",
+          "departmentDesc": "",
+          "departmentName": " Escuela de Comunicación Social ",
+          "relatedFacilities": { "idFacilitie": true }
+        },
+        "sGBSJ3jAlkV1Gsg5HNPE": {
+          "departmentDesc": "",
+          "type": "school",
+          "departmentName": " Escuela de Música",
+          "relatedFacilities": { "idFacil": true }
+        }
+      }
+    },
+    "rkPWviC42PLlw3MBhymu": {
+      "facultyDesc": "",
+      "cfOrgUnit": "i9dzCErPCO4n9WUfjxR9",
+      "createdAt": "2018-08-19T20:34:09.892Z",
+      "facultyName": "FACULTAD DE HUMANIDADES ",
+      "updatedAt": "",
+      "subCollection": {
+        "3E2M3ytWAy5bQzYBRw7v": {
+          "type": "department",
+          "departmentDesc": "",
+          "departmentName": "Departamento de Historia",
+          "relatedFacilities": {}
+        },
+        "gjpkLxFkm7Mm5k1usvND": {
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "type": "school",
+          "departmentName": "Escuela de Trabajo Social y Desarrollo Humano"
+        },
+        "hQwIghvtlyOao9bPaUo6": {
+          "type": "department",
+          "departmentDesc": "",
+          "relatedFacilities": {},
+          "departmentName": "Departamento de Filosofía"
+        },
+        "hiFpAw4SclxEv2XNRmIp": {
+          "departmentDesc": "",
+          "departmentName": "Departamento de Geografía",
+          "type": "department",
+          "relatedFacilities": {}
+        },
+        "n1Do30B0oibl45lwNIi7": {
+          "relatedFacilities": {},
+          "departmentName": "Escuela de Ciencias del Lenguaje",
+          "departmentDesc": "",
+          "type": "school"
+        },
+        "o9cJoa4HnIA6vgj6Toxb": {
+          "type": "school",
+          "departmentName": "Escuela de Estudios Literarios",
+          "departmentDesc": "",
+          "relatedFacilities": {}
+        }
+      }
+    }
+  }
+}

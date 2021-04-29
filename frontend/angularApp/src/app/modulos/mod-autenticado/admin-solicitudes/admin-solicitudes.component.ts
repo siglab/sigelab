@@ -1,33 +1,32 @@
-import { ObserverAutenticadoService } from './../services/observer-autenticado.service';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { QuerysAutenticadoService } from './../services/querys-autenticado.service';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ObserverAutenticadoService } from "./../services/observer-autenticado.service";
+import { MatTableDataSource, MatPaginator, MatSort } from "@angular/material";
+import { QuerysAutenticadoService } from "./../services/querys-autenticado.service";
+import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 
-import swal from 'sweetalert2';
-import { Http } from '@angular/http';
-import { AngularFireStorage } from 'angularfire2/storage';
-import { URLCORREO } from '../../../config';
-import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component';
+import swal from "sweetalert2";
+import { Http } from "@angular/http";
+import { AngularFireStorage } from "angularfire2/storage";
+import { URLCORREO } from "../../../config";
+import { SpinnerComponent } from "../../../shared/components/spinner/spinner.component";
 
 declare var $: any;
 @Component({
-  selector: 'app-admin-solicitudes',
-  templateUrl: './admin-solicitudes.component.html',
-  styleUrls: ['./admin-solicitudes.component.css']
+  selector: "app-admin-solicitudes",
+  templateUrl: "./admin-solicitudes.component.html",
+  styleUrls: ["./admin-solicitudes.component.css"],
 })
 export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
-
   user: any;
   // INICIALIZACION DATATABLE SERVICIO ACTIVOS
-  displayedColumns = ['nombre', 'precio', 'edicion', 'estado', 'aceptacion'];
+  displayedColumns = ["nombre", "precio", "edicion", "estado", "aceptacion"];
   dataSource = new MatTableDataSource([]);
-  @ViewChild('paginator') paginator: MatPaginator;
-  @ViewChild('sort') sort: MatSort;
+  @ViewChild("paginator") paginator: MatPaginator;
+  @ViewChild("sort") sort: MatSort;
   // INICIALIZACION DATATABLE SERVICIOS
-  displayedColumns2 = ['nombre', 'precio', 'edicion', 'estado', 'aceptacion'];
+  displayedColumns2 = ["nombre", "precio", "edicion", "estado", "aceptacion"];
   dataSource2 = new MatTableDataSource([]);
-  @ViewChild('paginator2') paginator2: MatPaginator;
-  @ViewChild('sort2') sort2: MatSort;
+  @ViewChild("paginator2") paginator2: MatPaginator;
+  @ViewChild("sort2") sort2: MatSort;
   dtOptions: any = {};
   dtOptions1: any = {};
   moduloinfo = false;
@@ -41,37 +40,41 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   condicion: any;
   condicionesobjeto = {};
   condicionesobjetoSrv = {};
-  comentario = '';
+  comentario = "";
   iconos = {
     info: false,
-    sabs: false
+    sabs: false,
   };
   fecha = new Date();
   @ViewChild(SpinnerComponent) alert: SpinnerComponent;
 
-  constructor(private querys: QuerysAutenticadoService,
+  constructor(
+    private querys: QuerysAutenticadoService,
     private observer: ObserverAutenticadoService,
-    private http: Http, private storage: AngularFireStorage) {
-  }
+    private http: Http,
+    private storage: AngularFireStorage
+  ) {}
 
   ngOnInit() {
-    $('html, body').animate({ scrollTop: '0px' }, 'slow');
-    if (sessionStorage.getItem('usuario')) {
+    $("html, body").animate({ scrollTop: "0px" }, "slow");
+    if (sessionStorage.getItem("usuario")) {
       this.alert.show();
       // this.alertaCargando();
-      this.user = JSON.parse(sessionStorage.getItem('usuario'));
-      this.querys.getCollectionReserv(this.user.uid).subscribe(data => {
+      this.user = JSON.parse(sessionStorage.getItem("usuario"));
+      this.querys.getCollectionReserv(this.user.uid).subscribe((data) => {
         if (data.length !== 0) {
-          this.querys.estructurarSolicitudesServicios(this.user.email, data).then(datos => {
-            this.dataSource.data = datos['data'];
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-            this.dataSource2.data = datos['data2'];
-            this.dataSource2.sort = this.sort2;
-            this.dataSource2.paginator = this.paginator2;
-            // this.cerrarAlerta();
-            this.alert.hide();
-          });
+          this.querys
+            .estructurarSolicitudesServicios(this.user.email, data)
+            .then((datos) => {
+              this.dataSource.data = datos["data"];
+              this.dataSource.sort = this.sort;
+              this.dataSource.paginator = this.paginator;
+              this.dataSource2.data = datos["data2"];
+              this.dataSource2.sort = this.sort2;
+              this.dataSource2.paginator = this.paginator2;
+              // this.cerrarAlerta();
+              this.alert.hide();
+            });
         } else {
           this.alert.hide();
           // this.cerrarAlerta();
@@ -81,7 +84,7 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {}
 
   mostrardata(item) {
     this.servsel = item;
@@ -91,6 +94,12 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.estructurarCondicionesSrv(item.condicionesSrv);
     this.buttoncancel = false;
     this.moduloinfo = true;
+    setTimeout(() => {
+      $("html, body").animate(
+        { scrollTop: $("#detalle").offset().top - 55 },
+        1000
+      );
+    }, 200);
   }
 
   mostrardata2(item) {
@@ -100,21 +109,32 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
     this.estructurarCondiciones(item.condiciones);
     this.estructurarCondicionesSrv(item.condicionesSrv);
     this.moduloinfo = true;
-    if (this.servsel.status === 'pendiente') {
+    if (this.servsel.status === "pendiente") {
       this.buttoncancel = true;
     } else {
       this.buttoncancel = false;
     }
     setTimeout(() => {
-      $('html, body').animate({scrollTop: $('#detalle').offset().top - 55}, 1000);
+      $("html, body").animate(
+        { scrollTop: $("#detalle").offset().top - 55 },
+        1000
+      );
     }, 200);
   }
 
   cambiarVariacion(item) {
-    if (item !== 'inicial') {
+    if (item !== "inicial") {
       this.variation = this.buscarVariacion(item);
-      for (let i = 0; i < this.servsel.parametrosVar.find(o => o.id === this.variation.id).parametros.length; i++) {
-        const element = this.servsel.parametrosVar.find(o => o.id === this.variation.id).parametros[i];
+      for (
+        let i = 0;
+        i <
+        this.servsel.parametrosVar.find((o) => o.id === this.variation.id)
+          .parametros.length;
+        i++
+      ) {
+        const element = this.servsel.parametrosVar.find(
+          (o) => o.id === this.variation.id
+        ).parametros[i];
         this.valorParametro.push(element.value);
       }
       this.condicion = this.buscarCondicion(item);
@@ -147,9 +167,9 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarCondiciones(condiciones) {
     this.condicionesobjeto = {};
-    if (condiciones != undefined && condiciones.length > 0  ) {
+    if (condiciones != undefined && condiciones.length > 0) {
       for (let i = 0; i < condiciones.length; i++) {
-        this.condicionesobjeto['checkbox' + i] = condiciones[i].aceptada;
+        this.condicionesobjeto["checkbox" + i] = condiciones[i].aceptada;
       }
     }
   }
@@ -157,45 +177,40 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ESTRUCTURA OBJETO JSON QUE SE ENLAZA A LOS CHECKBOX DE LA VISTA DE MANERA DINAMICA
   estructurarCondicionesSrv(condiciones) {
     this.condicionesobjetoSrv = {};
-    if (condiciones != undefined && condiciones.length > 0 ) {
+    if (condiciones != undefined && condiciones.length > 0) {
       for (let i = 0; i < condiciones.length; i++) {
-        this.condicionesobjetoSrv['checkboxSrv' + i] = condiciones[i].aceptada;
+        this.condicionesobjetoSrv["checkboxSrv" + i] = condiciones[i].aceptada;
       }
     }
-
   }
 
   cancelarSolicitudServicio() {
     swal({
-      type: 'warning',
-      title: 'Esta seguro que desea cancelar este servicio',
+      type: "warning",
+      title: "Esta seguro que desea cancelar esta solicitud de servicio",
       showCancelButton: true,
-      confirmButtonText: 'Si',
-      cancelButtonText: 'No'
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.value) {
         const fecha = this.fecha.toISOString();
-        this.querys.cancerlarSolicitud(this.servsel.uidreserv, fecha).then(() => {
+        this.querys
+          .cancerlarSolicitud(this.servsel.uidreserv, fecha)
+          .then(() => {
+            swal({
+              type: "success",
+              title: "Solicitud de servicio cancelada",
+              showConfirmButton: true,
+            });
 
-          swal({
-            type: 'success',
-            title: 'Solicitud de servicio Cancelada',
-            showConfirmButton: true
+            this.moduloinfo = false;
+            this.incializarIconos();
           });
-
-          this.moduloinfo = false;
-          this.incializarIconos();
-        });
-
       } else if (
         // Read more about handling dismissals
         result.dismiss === swal.DismissReason.cancel
       ) {
-        swal(
-          'Cancelado',
-          '',
-          'error'
-        );
+        swal("Acción cancelada", "", "error");
       }
     });
   }
@@ -203,77 +218,99 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
   // ENVIA UN COMENTARIO A LA RESERVA DE SERVICIO CORRESPONDIENTE
   enviarComentario() {
     swal({
-      type: 'warning',
-      title: '¿Está seguro que desea enviar este comentario?',
+      type: "warning",
+      title: "¿Está seguro que desea enviar este comentario?",
       showCancelButton: true,
-      confirmButtonText: 'Sí, Solicitar',
-      cancelButtonText: 'No, Cancelar'
+      confirmButtonText: "Sí, Envíalo",
+      cancelButtonText: "No, Cancelar",
     }).then((result) => {
       if (result.value) {
         const fecha = new Date();
         const cfSrvReserv = {
-          comments: this.servsel.comentario
+          comments: this.servsel.comentario,
         };
         cfSrvReserv.comments.push({
           commentText: this.comentario,
-          fecha: fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear(),
-          autor: 'usuario',
+          fecha:
+            fecha.getDate() +
+            "/" +
+            (fecha.getMonth() + 1) +
+            "/" +
+            fecha.getFullYear(),
+          autor: "usuario",
           email: this.user.email,
-          uid: this.user.uid
+          uid: this.user.uid,
         });
-        this.querys.updateComments(this.servsel.uidreserv, cfSrvReserv).then(() => {
-          if (this.servsel.status !== 'pendiente') {
-            // this.enviarEmails();
-          }
-        });
+        this.querys
+          .updateComments(this.servsel.uidreserv, cfSrvReserv)
+          .then(() => {
+            // if (this.servsel.status !== "pendiente") {
+            this.alertaExito("Comentario enviado");
+            this.enviarEmails(this.comentario);
+            this.comentario = "";
+            // }
+          });
       } else if (result.dismiss === swal.DismissReason.cancel) {
-        swal(
-          'Solicitud Cancelada',
-          '',
-          'error'
-        );
+        swal("Acción cancelada", "", "error");
       }
     });
   }
 
-  enviarEmails() {
-    this.alertaCargando();
-    let emailSolicitante = '';
-    let emailAcepto = '';
-    let emailEncargado = '';
-    let emailLaboratorio = '';
+  enviarEmails(message) {
+    // this.alertaCargando();
+    let emailSolicitante = "";
+    let emailAcepto = "";
+    let emailEncargado = "";
+    let emailLaboratorio = "";
     const url = URLCORREO;
-    const asunto = 'NUEVO COMENTARIO AÑADIDO A SOLICITUD DE SERVICIO';
-    let destino = '';
-    this.querys.getLab(this.servsel.uidlab).subscribe(lab => {
+    const asunto =
+      "Notificación: Nuevo comentario agregado a solicitud de servicio";
+    let destino = "";
+    this.querys.getLab(this.servsel.uidlab).subscribe((lab) => {
       emailSolicitante = this.servsel.usuario;
       emailLaboratorio = lab.payload.data().otros.email;
       emailAcepto = this.servsel.acepto;
-      const mensaje = 'se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio ' +
-        this.servsel.nombre + ' solicitada la fecha ' + this.servsel.fecha +
-        ' por el usuario con el correo ' + emailSolicitante + '. a continuacion vera el comentario: " ' +
-        this.comentario + ' "';
-
-      this.querys.getPersona(lab.payload.data().facilityAdmin).subscribe(persona => {
-        emailEncargado = persona.payload.data().email;
-        destino = emailSolicitante + ',' + emailAcepto + ',' + emailEncargado + ',' + emailLaboratorio;
-        this.http.post(url, { para: destino, asunto: asunto, mensaje: mensaje }).subscribe((res) => {
-          if (res.status === 200) {
-            // this.cerrarAlerta();
-            this.alertaExito('Comentario enviado');
-            this.comentario = '';
-          } else {
-            this.alertaError('fallo al enviar correos');
-          }
+      const mensaje =
+        "Se le notifica que se ha agregado un nuevo comentario a la solicitud del servicio " +
+        this.servsel.nombre +
+        " realizada en la fecha " +
+        this.servsel.fecha +
+        " por el usuario con correo electrónico " +
+        emailSolicitante +
+        '.\nA continuación el comentario agregado: "' +
+        message +
+        '"';
+      this.querys
+        .getPersona(lab.payload.data().facilityAdmin)
+        .subscribe((persona) => {
+          emailEncargado = persona.payload.data().email;
+          destino =
+            emailSolicitante +
+            "," +
+            emailAcepto +
+            "," +
+            emailEncargado +
+            "," +
+            emailLaboratorio;
+          this.http
+            .post(url, { para: destino, asunto: asunto, mensaje: mensaje })
+            .subscribe((res) => {
+              if (res.status === 200) {
+                // this.cerrarAlerta();
+                this.comentario = "";
+              } else {
+                this.alertaError(
+                  "Fallo al enviar correo de notificación de adición de comentario"
+                );
+              }
+            });
         });
-
-      });
     });
   }
 
   descargarArchivo(index) {
     const ref = this.storage.ref(this.servsel.path[index]);
-    ref.getDownloadURL().subscribe(data => {
+    ref.getDownloadURL().subscribe((data) => {
       window.open(data);
     });
   }
@@ -310,27 +347,27 @@ export class AdminSolicitudesComponent implements OnInit, AfterViewInit {
 
   alertaCargando() {
     swal({
-      title: 'Cargando un momento...',
-      text: 'espere mientras se cargan los datos',
+      title: "Cargando un momento...",
+      text: "espere mientras se cargan los datos",
       onOpen: () => {
         swal.showLoading();
-      }
+      },
     });
   }
 
   alertaExito(mensaje) {
     swal({
-      type: 'success',
+      type: "success",
       title: mensaje,
-      showConfirmButton: true
+      showConfirmButton: true,
     });
   }
 
   alertaError(mensaje) {
     swal({
-      type: 'error',
+      type: "error",
       title: mensaje,
-      showConfirmButton: true
+      showConfirmButton: true,
     });
   }
 

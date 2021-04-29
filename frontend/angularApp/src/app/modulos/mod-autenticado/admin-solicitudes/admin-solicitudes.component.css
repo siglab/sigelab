@@ -170,25 +170,38 @@ label {
 }
 
 .description {
-  text-align: justify; 
-  max-height: 300px; 
-  overflow-y: auto; 
-  padding-right: 10px
+  text-align: justify;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 /* width */
 ::-webkit-scrollbar {
   width: 4px;
 }
-  
+
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 3px grey; 
+  box-shadow: inset 0 0 3px grey;
   border-radius: 10px;
 }
-  
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #c00; 
+  background: #c00;
   border-radius: 10px;
+}
+
+.internal-table {
+  overflow-x: hidden;
+}
+
+div.box-body.chat-container {
+  height: 100%;
+}
+
+div.direct-chat-messages {
+  height: 100%;
+  max-height: 450px;
 }
